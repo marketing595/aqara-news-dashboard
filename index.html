@@ -44,6 +44,7 @@
   <!-- ===== 설정: 여기에 구글 Apps Script 웹앱 URL ===== -->
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbznh3A1w90zh7-UkUhgGGELtPzmTaT9ag1bJcE36efs7CkBC0Qlv_dlRblC0bnnTO-C/exec";
+    const REFRESH_MINUTES = 30;   // 자동 새로고침 주기(분). 0이면 끔.
   </script>
 
   <!-- Header -->
@@ -151,21 +152,28 @@
 
     // ---- JSONP 로딩 (CORS 회피) ----
     let jsonpTimer = null;
-    function loadData() {
-      showLoading();
+    function loadData(silent) {
+      if (!silent) showLoading();
       window.__onAqaraData = function (payload) {
         clearTimeout(jsonpTimer);
-        if (!payload || !payload.ok) { showError('데이터 응답 오류: ' + (payload && payload.error || '알 수 없음')); return; }
+        if (!payload || !payload.ok) { if (!silent) showError('데이터 응답 오류: ' + (payload && payload.error || '알 수 없음')); return; }
         ALL = (payload.rows || []);
-        document.getElementById('updated').textContent = '업데이트: ' + (payload.generatedAt || new Date().toLocaleString('ko-KR'));
+        const stamp = payload.generatedAt || new Date().toLocaleString('ko-KR');
+        document.getElementById('updated').textContent = '업데이트: ' + stamp;
         render();
       };
       const s = document.createElement('script');
       s.src = API_URL + '?callback=__onAqaraData&_=' + Date.now();
-      s.onerror = function () { showError('네트워크 오류로 데이터를 불러오지 못했습니다. 웹앱 URL/배포 상태를 확인하세요.'); };
+      s.onerror = function () { if (!silent) showError('네트워크 오류로 데이터를 불러오지 못했습니다. 웹앱 URL/배포 상태를 확인하세요.'); };
       document.body.appendChild(s);
       s.onload = function () { s.remove(); };
-      jsonpTimer = setTimeout(function () { showError('응답 시간 초과. 웹앱이 배포되어 있고 GET 접근이 허용되는지 확인하세요.'); }, 15000);
+      jsonpTimer = setTimeout(function () { if (!silent) showError('응답 시간 초과. 웹앱이 배포되어 있고 GET 접근이 허용되는지 확인하세요.'); }, 15000);
+    }
+
+    // ---- 자동 새로고침 (조용히 갱신) ----
+    if (REFRESH_MINUTES > 0) {
+      setInterval(function () { loadData(true); }, REFRESH_MINUTES * 60 * 1000);
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) loadData(true); });
     }
 
     function showLoading() {
