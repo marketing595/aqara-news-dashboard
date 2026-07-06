@@ -1,0 +1,36 @@
+name: Aqara News Crawler
+
+# 매시간 실행 + 수동 실행(Actions 탭의 Run workflow) 가능
+on:
+  schedule:
+    - cron: '0 * * * *'      # 매시간 정각(UTC). 실제 실행은 몇 분 지연될 수 있음
+  workflow_dispatch: {}
+
+# 동시 실행 방지
+concurrency:
+  group: aqara-crawler
+  cancel-in-progress: false
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r crawler/requirements.txt
+
+      - name: Run crawler
+        env:
+          WEBAPP_URL:   ${{ secrets.WEBAPP_URL }}
+          WEBAPP_TOKEN: ${{ secrets.WEBAPP_TOKEN }}
+          NAVER_ID:     ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+          KEYWORDS: '아카라라이프,aqara,아카라'
+          DAYS: '7'
+        run: python crawler/aqara_crawler.py
