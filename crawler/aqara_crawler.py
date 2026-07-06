@@ -40,11 +40,13 @@ DOMAIN_PRESS = {
     "sedaily.com": "서울경제", "hankyung.com": "한국경제",
     "mydaily.co.kr": "마이데일리", "etnews.com": "전자신문",
     "seoul.co.kr": "서울신문", "asiatime.co.kr": "아시아타임즈",
-    "itbiz.co.kr": "아이티비즈", "zdnet.co.kr": "지디넷코리아",
+    "it-b.co.kr": "아이티비즈", "zdnet.co.kr": "지디넷코리아",
     "venturesquare.net": "벤처스퀘어", "thepowernews.co.kr": "더파워",
     "digitaltoday.co.kr": "디지털투데이", "getnews.co.kr": "글로벌경제",
-    "enewstoday.co.kr": "이넷뉴스", "newsroad.co.kr": "뉴스로드",
+    "enetnews.co.kr": "이넷뉴스", "newsroad.co.kr": "뉴스로드",
     "m2news.com": "엠투데이", "single-list.com": "싱글리스트",
+    "businesskorea.co.kr": "비지니스코리아", "socialvalue.kr": "소셜밸류",
+    "megaeconomy.co.kr": "메가경제", "biz.heraldcorp.com": "헤럴드경제",
 }
 # 네이버뉴스 oid → 언론사명 (원문 도메인 미상 시 보조)
 OID_PRESS = {
