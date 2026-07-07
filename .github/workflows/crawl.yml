@@ -32,5 +32,5 @@ jobs:
           NAVER_ID:     ${{ secrets.NAVER_ID }}
           NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
           KEYWORDS: '아카라라이프,aqara,아카라'
-          DAYS: '7'
+          DAYS: '90'
         run: python crawler/aqara_crawler.py
