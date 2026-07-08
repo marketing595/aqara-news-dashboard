@@ -1,9 +1,10 @@
 name: Aqara News Crawler
 
-# 매시간 실행 + 수동 실행(Actions 탭의 Run workflow) 가능
+# [일시중지됨] 수기 데이터 정리 중 충돌 방지를 위해 매시간 자동실행을 잠시 꺼둠.
+# 재개하려면 아래 schedule 블록의 주석(#)을 풀면 됩니다.
 on:
-  schedule:
-    - cron: '0 * * * *'      # 매시간 정각(UTC). 실제 실행은 몇 분 지연될 수 있음
+  # schedule:
+  #   - cron: '0 * * * *'      # 매시간 정각(UTC)
   workflow_dispatch: {}
 
 # 동시 실행 방지
