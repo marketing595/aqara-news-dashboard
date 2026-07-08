@@ -148,6 +148,7 @@
       if(/n\.news\.naver\.com/.test(u)) return '네이버뉴스';
       if(/v\.daum\.net/.test(u)) return '다음뉴스';
       if(/news\.nate\.com/.test(u)) return '네이트뉴스';
+      if(/news\.zum\.com/.test(u)) return '뉴스줌';
       if(u) return '원문'; return '(링크없음)'; }
     function linkOf(r){ return urlOf(r) || ('https://search.naver.com/search.naver?where=news&query='+encodeURIComponent(r['기사명']||'')); }
     const TOPIC_RULES=[['신제품·출시',['출시','신제품','론칭','공개','선봬','선보']],['트렌드·시장',['트렌드','대세','인기','확산','시장','주거','뜬다']],
