@@ -48,7 +48,16 @@
     </div>
   </header>
 
+  <!-- 탭 바 -->
+  <div class="bg-white border-b border-slate-200 sticky top-[60px] z-20">
+    <div class="max-w-[1400px] mx-auto px-5 flex gap-1">
+      <button id="tabBtn-analytics" onclick="switchTab('analytics')" class="tabbtn px-4 py-3 text-sm font-semibold border-b-2 border-brand text-brand">📊 통계 분석</button>
+      <button id="tabBtn-briefing" onclick="switchTab('briefing')" class="tabbtn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-600">📰 데일리 브리핑</button>
+    </div>
+  </div>
+
   <main class="max-w-[1400px] mx-auto px-5 py-5">
+   <div id="view-analytics">
     <div id="loading" class="text-center py-24 text-slate-400">데이터를 불러오는 중…</div>
     <div id="error" class="hidden text-center py-24 text-red-500"></div>
 
@@ -130,6 +139,21 @@
 
       <p class="text-center text-xs text-slate-400 pt-1">데이터 출처: 구글 시트 · 기사명 클릭 시 원문 이동 · 채널은 링크 주소로 자동 판별</p>
     </div>
+   </div><!-- /view-analytics -->
+
+   <!-- 데일리 브리핑 탭 -->
+   <div id="view-briefing" class="hidden">
+     <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+       <div>
+         <h2 class="text-xl font-extrabold text-slate-900" id="brDate">📅 데일리 뉴스 브리핑</h2>
+         <p class="text-xs text-slate-400 mt-0.5">스마트홈 & 인테리어 시장 · 4개 카테고리 자동 분류 + 아카라 Insight</p>
+       </div>
+       <button onclick="copyMail()" class="text-sm bg-slate-900 hover:bg-slate-700 transition text-white px-4 py-2 rounded-lg font-semibold">📧 메일 텍스트 복사</button>
+     </div>
+     <div id="brHeadline" class="card p-4 mb-5 bg-teal-50 border-teal-200"></div>
+     <div id="briefingBody" class="space-y-5"></div>
+     <p class="text-center text-xs text-slate-400 pt-4">요약·인사이트는 AI 분석 결과이며 참고용입니다 · 제목 클릭 시 원문으로 이동</p>
+   </div>
   </main>
 
   <script>
@@ -247,6 +271,94 @@
         <td class="px-3 py-2.5"><a href="${esc(linkOf(r))}" target="_blank" rel="noopener noreferrer" class="text-slate-800 hover:text-brand hover:underline">${esc(r['기사명'])} <span class="text-slate-300">↗</span></a>${chTag(r._chan)}</td></tr>`).join('')
         +(rows.length>700?`<tr><td colspan="5" class="text-center py-3 text-xs text-slate-400">상위 700건 표시</td></tr>`:'');
     }
+    // ================= 데일리 브리핑 =================
+    const BRIEFING = {
+      date: '2026-07-08',
+      headline: "삼성이 '스마트싱스 개방형 표준(매터)'을 전면화하며 생태계 확장에 나선 가운데, 스마트홈이 신축·모듈러·공공주택의 '기본 사양'과 '에너지 절감' 축으로 빠르게 편입되고 있습니다.",
+      sections: [
+        { icon:'🔍', title:'1. 자사 및 기술 생태계 동향 (아카라 & 표준 기술)', items:[
+          { t:"오픈 생태계의 '삼성' vs 가전 장인의 'LG'… 스마트홈 허브 대전", s:'디지털트렌드', d:'2026-07-08', link:'https://www.dailyt.co.kr/newsView/dlt202607070013',
+            sum:"스마트홈 허브 주도권 경쟁을 분석하며, 삼성이 글로벌 연동 표준 '매터(Matter) 1.3'을 앞세워 조명·홈카메라·전동커튼 등 다양한 브랜드 소형기기를 통합하는 개방형 허브를 지향한다고 진단.",
+            ins:"매터·스레드를 정식 지원하는 아카라에게 '표준 기반 멀티플랫폼 허브(M100/M200)'는 삼성·LG 대비 중립성·확장성이라는 명확한 차별점. 허브 라인업의 '표준 완전 호환'을 전면에 내세울 시점." },
+          { t:"'로봇의 안드로이드' 시대, 보안의 문법이 달라진다", s:'여시재', d:'2026-07-07', link:'http://www.ifs.or.kr/bbs/board.php?bo_table=News&wr_id=55891',
+            sum:"홈로봇·도어락·조명·가전이 하나의 네트워크 노드로 연결되며, 스마트홈 국제표준이 기기마다 위조 불가능한 전자 인증서를 심어 상호 인증하는 보안 체계로 진화 중이라고 분석.",
+            ins:"'연결이 늘수록 보안이 핵심'이라는 흐름은 도어락·카메라 중심 아카라에 유리. 매터 기반 기기 인증·프라이버시(로컬 처리)를 신뢰 포인트로 강화." },
+        ]},
+        { icon:'⚔️', title:'2. 경쟁사 동향 (삼성, LG, 빅테크, 샤오미 등)', items:[
+          { t:'삼성, 22일 런던서 갤럭시 언팩…"스마트싱스로 개방형 표준 구축"', s:'연합뉴스', d:'2026-07-08', link:'https://n.news.naver.com/mnews/article/001/0016182749?sid=105',
+            sum:'노태문 사장이 언팩을 예고하며 "스마트싱스를 통한 기기·서비스·파트너 연결과 개방형 표준 구축"을 강조. 개방이 혁신을 가속하고 보안(녹스)·사용자 통제권을 병행하겠다는 전략.',
+            ins:"삼성이 '개방·표준'을 전면화할수록 매터 생태계 자체가 커지는 순풍. 단, 삼성 허브에 종속되지 않는 '탈대기업 하이엔드 디자인·전문 설치' 포지션으로 프리미엄 차별화 필요." },
+          { t:"탄소중립 히트펌프·무풍…LG·삼성, '공조' 맞대결 (스마트싱스 프로 B2B)", s:'아시아타임즈', d:'2026-07-08', link:'https://www.asiatime.co.kr/article/20260708500284',
+            sum:"삼성이 AI와 '스마트싱스 프로' 등 차별화된 B2B 솔루션으로 글로벌 공조 시장 공략을 확대. 대기업의 B2B 스마트빌딩·공조 경쟁 심화.",
+            ins:"대기업이 B2B로 내려오는 만큼, 아카라는 인테리어·시공 파트너 채널(디자이너/리모델링사)이라는 결이 다른 B2B 접점을 선점·심화하는 것이 방어 전략." },
+        ]},
+        { icon:'🏠', title:'3. 스마트홈 인테리어 & B2B 시공 시장', items:[
+          { t:"[모듈러 주택의 진화] 로봇이 짓고, AI 가전 솔루션 결합…'스마트싱스 연동' 맞춤 탑재", s:'대한전문건설신문', d:'2026-07-07', link:'https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607061007483630032',
+            sum:"화성 삼성 'AI 모듈러 홈'이 공정 80%를 공장 생산하며 스마트싱스 연동기기를 맞춤 탑재. 신축·모듈러 단계에서 스마트홈이 '기본 옵션'으로 편입되는 흐름.",
+            ins:"준공 후가 아닌 설계·시공 단계 사전 임베드가 승부처. 건설·모듈러·인테리어사 대상 '무타공·표준호환' 패키지를 사전 제안 자료로 활용." },
+          { t:'거울 하나로 조명·살균까지…센서형 조명거울, 스마트 욕실 인테리어 부상', s:'굿뉴스', d:'2026-07-07', link:'https://www.goodnews1.com/news/articleView.html?idxno=461729',
+            sum:'센서형 LED 조명거울이 일반·살균조명을 자동 제어하며 스마트홈·프리미엄 욕실 인테리어 시장에서 주목. 욕실까지 스마트화가 확산.',
+            ins:"아카라 스마트 욕실 환풍기 T1·재실/온습도 센서와 자연 연계되는 공간. '스마트 욕실' 번들·시공 사례 콘텐츠로 연결 가능." },
+        ]},
+        { icon:'📈', title:'4. 거시 트렌드 (AI, IT, 유통, 에너지)', items:[
+          { t:'대전도시공사, AI 기반 스마트홈 국책과제 참여…공공임대주택 실증 추진', s:'신아일보', d:'2026-07-08', link:'https://www.shinailbo.co.kr/news/articleView.html?idxno=5038513',
+            sum:"산업부 국책 R&D 'AI 기반 에너지 고효율 스마트홈' 과제에 참여해 공공임대주택에서 냉난방 에너지 비용 절감을 실증. 정책 주도 에너지 절감형 스마트홈 확산.",
+            ins:"'에너지 절감'이 공공·정책 키워드로 부상. 아카라 에너지 모니터링/자동화 시나리오를 '절감 효과' 수치로 소구하면 B2G·공공주택 레퍼런스 확보 기회." },
+          { t:"현대차그룹, 전기차 활용 'V2G' 실증…전기차-태양광-스마트홈 에너지 플랫폼 확장", s:'그린포스트', d:'2026-07-08', link:'https://www.greened.kr/news/articleView.html?idxno=344498',
+            sum:'전기차를 태양광·스마트홈과 연계한 종합 에너지 플랫폼으로 확장하는 V2G 실증에 돌입.',
+            ins:"집이 '에너지 노드'가 되는 흐름. 아카라 자동화(재실 기반 소등·대기전력 차단)를 에너지 플랫폼의 실행 단(端)으로 포지셔닝하는 신제품/프로모션 테마." },
+        ]},
+      ],
+      mail: `[아카라라이프] 📢 금일의 스마트홈 & 인테리어 뉴스 브리핑 (2026-07-08)
+
+안녕하세요, 아카라라이프 임직원 여러분!
+오늘의 주요 스마트홈 및 인테리어 시장 동향을 전달해 드립니다.
+
+🎯 오늘의 핵심 한 줄 요약: 삼성이 '스마트싱스 개방형 표준(매터)'을 전면화하며 생태계 확장에 나선 가운데, 스마트홈이 신축·모듈러·공공주택의 '기본 사양'과 '에너지 절감' 축으로 빠르게 편입되고 있습니다.
+
+1. 🔍 자사 및 기술 생태계 (Matter/Thread/지그비)
+- 삼성 vs LG 스마트홈 허브 대전, 매터 1.3 표준 부상 (https://www.dailyt.co.kr/newsView/dlt202607070013) -> 아카라의 '표준 완전호환 멀티허브' 차별점 부각 적기
+- '로봇의 안드로이드' 시대, 기기 인증·보안 표준 진화 (http://www.ifs.or.kr/bbs/board.php?bo_table=News&wr_id=55891) -> 매터 기반 보안·로컬 프라이버시를 신뢰 포인트로
+
+2. ⚔️ 경쟁사 주요 행보 (삼성/LG/빅테크/샤오미)
+- 삼성 갤럭시 언팩(22일), 스마트싱스 개방형 표준 강조 (https://n.news.naver.com/mnews/article/001/0016182749?sid=105) -> 매터 생태계 순풍, 단 대기업 종속 탈피한 하이엔드 포지션 필요
+- LG·삼성 공조 맞대결, '스마트싱스 프로' B2B 확대 (https://www.asiatime.co.kr/article/20260708500284) -> 인테리어·시공 파트너 채널 선점으로 방어
+
+3. 🏠 스마트홈 인테리어 & 시공
+- 모듈러 주택, 로봇 시공+스마트싱스 연동 기본 탑재 (https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607061007483630032) -> 설계·시공 단계 사전 임베드가 승부처
+- 센서형 조명거울, 스마트 욕실 인테리어 부상 (https://www.goodnews1.com/news/articleView.html?idxno=461729) -> T1 환풍기·센서 연계 '스마트 욕실' 번들
+
+4. 📈 시장/AI 트렌드
+- 대전도시공사, AI 에너지 고효율 스마트홈 공공임대 실증 (https://www.shinailbo.co.kr/news/articleView.html?idxno=5038513) -> '에너지 절감' 수치 소구로 B2G 기회
+- 현대차 V2G, 전기차-스마트홈 에너지 플랫폼 확장 (https://www.greened.kr/news/articleView.html?idxno=344498) -> 아카라 자동화를 에너지 플랫폼 실행단으로 포지셔닝`
+    };
+
+    function renderBriefing(){
+      document.getElementById('brDate').textContent = '📅 ' + BRIEFING.date + ' 스마트홈 & 인테리어 데일리 브리핑';
+      document.getElementById('brHeadline').innerHTML = '<div class="flex gap-2"><span class="text-lg">🎯</span><div><p class="text-xs text-teal-700 font-semibold mb-0.5">오늘의 핵심 한 줄 요약</p><p class="text-sm text-slate-800 font-medium">'+esc(BRIEFING.headline)+'</p></div></div>';
+      document.getElementById('briefingBody').innerHTML = BRIEFING.sections.map(sec=>`
+        <div class="card p-5">
+          <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><span class="text-lg">${sec.icon}</span>${esc(sec.title)}</h3>
+          <div class="space-y-4">
+            ${sec.items.map(it=>`
+              <div class="pl-3 border-l-2 border-slate-200">
+                <a href="${esc(it.link)}" target="_blank" rel="noopener noreferrer" class="font-semibold text-slate-900 hover:text-brand hover:underline">${esc(it.t)} <span class="text-slate-300 text-xs">↗</span></a>
+                <p class="text-xs text-slate-400 mt-0.5">${esc(it.s)} · ${esc(it.d)}</p>
+                <p class="text-sm text-slate-600 mt-1.5">${esc(it.sum)}</p>
+                <div class="mt-2 bg-teal-50 rounded-lg px-3 py-2 text-sm text-teal-900"><span class="font-semibold">💡 아카라 Insight</span> · ${esc(it.ins)}</div>
+              </div>`).join('')}
+          </div>
+        </div>`).join('');
+    }
+    function copyMail(){ navigator.clipboard.writeText(BRIEFING.mail).then(()=>{ alert('메일 텍스트가 복사되었습니다. 메일에 붙여넣으세요.'); }).catch(()=>{ alert('복사 실패 - 브라우저 권한을 확인하세요.'); }); }
+    function switchTab(t){
+      document.getElementById('view-analytics').classList.toggle('hidden', t!=='analytics');
+      document.getElementById('view-briefing').classList.toggle('hidden', t!=='briefing');
+      document.getElementById('tabBtn-analytics').className='tabbtn px-4 py-3 text-sm font-semibold border-b-2 '+(t==='analytics'?'border-brand text-brand':'border-transparent text-slate-400 hover:text-slate-600');
+      document.getElementById('tabBtn-briefing').className='tabbtn px-4 py-3 text-sm font-semibold border-b-2 '+(t==='briefing'?'border-brand text-brand':'border-transparent text-slate-400 hover:text-slate-600');
+    }
+
+    renderBriefing();
     loadData();
   </script>
 </body>
