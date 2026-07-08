@@ -141,8 +141,9 @@
     function fType(r){ const g=(r['구분']||'').toString().trim(); return g || '(미분류)'; }         // 단신/기획/언급/매거진
     function fTopicVal(r){ let t=(r['종류']||'').toString().trim(); if(t){ return t.split(/[,\/·]/)[0].trim(); } return topicByTitle(r['기사명']); }
     function fMedia(r){ return (r['매체']||'').toString().replace(/\(.*?\)/g,'').trim() || '(미상)'; }
-    // 링크가 '링크'/'채널' 등 어느 칸에 있든 http 값을 자동 탐색 (혼합 구조 대응)
-    function urlOf(r){ for(const k of ['링크','채널','url','URL','링크주소','기사링크']){ const v=(r[k]||'').toString().trim(); if(/^https?:\/\//.test(v)) return v; } return ''; }
+    // 링크 자동 탐색: 셀에 박힌 하이퍼링크(_href) 우선, 그다음 텍스트 URL
+    function urlOf(r){ const h=(r['_href']||'').toString().trim(); if(/^https?:\/\//.test(h)) return h;
+      for(const k of ['링크','채널','url','URL','링크주소','기사링크']){ const v=(r[k]||'').toString().trim(); if(/^https?:\/\//.test(v)) return v; } return ''; }
     function fChannel(r){ const u=urlOf(r);
       if(/n\.news\.naver\.com/.test(u)) return '네이버뉴스';
       if(/v\.daum\.net/.test(u)) return '다음뉴스';
