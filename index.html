@@ -139,6 +139,11 @@
          </div>
        </div>
      </div>
+     <div class="card p-5 mb-5">
+       <h2 class="font-bold text-slate-700 mb-1">🔗 브랜드 × 인테리어 연관도 <span class="text-xs font-normal text-slate-400">(아카라가 인테리어 키워드와 함께 언급되는 정도)</span></h2>
+       <p class="text-sm mt-1 mb-3"><span class="font-semibold text-amber-600">종합: 아직 약함 → 미개척 기회 영역</span> <span class="text-slate-500">· 연관검색어엔 미노출, 뉴스 동시언급도 1% 미만. '스마트홈 브랜드' 인지는 강하나 '인테리어' 문맥 선점은 아직.</span></p>
+       <div id="assocBox" class="space-y-2.5"></div>
+     </div>
      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
        <div class="flex items-center gap-2"><label class="text-sm text-slate-500">날짜</label>
          <select id="brDateSel" onchange="renderBriefing(this.value)" class="border border-slate-300 rounded-lg px-3 py-2 text-sm font-semibold bg-white"></select></div>
@@ -408,6 +413,13 @@
         '스마트조명':[50.0,43.3,40.3,41.2,32.4,30.7,28.8,34.5,30.0,32.2,29.3,30.2,36.7,36.6,37.8,30.4,28.2,24.2,35.4,64.2,41.5,28.7,29.0,30.0,30.9,36.6,33.6,22.9,23.2,19.9,20.3,19.9,19.1,21.1,24.8,24.4,28.5,24.5,23.4,18.0,18.4,14.9,18.2,18.1,17.0,20.3,21.2,19.3,20.8,19.6,19.7,15.7,15.4,14.0,13.6,13.4,14.7,20.1,21.7,20.8,22.3,23.3,21.9,17.1,15.1,13.3]
       }};
     let trendN=0;
+    // 브랜드×인테리어 연관도 (최근 100건 뉴스 중 아카라 언급 / 전체 동시언급)
+    const ASSOC=[
+      {kw:'iot 인테리어', recent:3, total:165},
+      {kw:'스마트홈 인테리어', recent:2, total:193},
+      {kw:'스마트인테리어', recent:0, total:223},
+      {kw:'ai 인테리어', recent:0, total:119}
+    ];
     function buildMail(date){ const b=BRIEFINGS[date]; if(!b)return'';
       let m='[아카라라이프] 📢 금일의 스마트홈 & 인테리어 뉴스 브리핑 ('+date+')\n\n안녕하세요, 아카라라이프 임직원 여러분!\n오늘의 주요 스마트홈 및 인테리어 시장 동향을 전달해 드립니다.\n\n🎯 오늘의 핵심 한 줄 요약: '+b.headline+'\n';
       b.sections.forEach(sec=>{ m+='\n'+sec.icon+' '+sec.title+'\n'; sec.items.forEach(it=>{ m+='- '+it.t+' ('+it.link+') -> '+it.ins+'\n'; }); });
@@ -436,8 +448,16 @@
       document.querySelectorAll('#trendRangeBtns button').forEach(b=>{ const on=(+b.dataset.n===trendN); b.className='text-xs px-2.5 py-1 rounded-lg border '+(on?'border-brand bg-teal-50 text-brand font-semibold':'border-slate-300 hover:bg-slate-50'); });
     }
     function setTrendRange(n){ trendN=n; drawTrendChart(); }
+    function renderAssoc(){
+      document.getElementById('assocBox').innerHTML=ASSOC.map(a=>{ const pct=a.recent; const w=Math.min(100,pct*8+2);
+        return `<div class="flex items-center gap-3">
+          <div class="w-32 text-sm text-slate-700 whitespace-nowrap">${esc(a.kw)}</div>
+          <div class="flex-1 bg-slate-100 rounded-full h-4 overflow-hidden"><div class="h-4 ${pct>0?'bg-brand':'bg-slate-300'}" style="width:${w}%"></div></div>
+          <div class="text-xs text-slate-500 whitespace-nowrap w-40 text-right">최근100건 중 <b class="${pct>0?'text-brand':'text-slate-400'}">${a.recent}건</b> · 누적 ${a.total}건</div>
+        </div>`; }).join('');
+    }
     function renderSearchInsight(){
-      drawTrendChart();
+      drawTrendChart(); renderAssoc();
       draw('hotKwChart',{type:'bar',data:{labels:HOTKW.map(x=>x[0]),datasets:[{data:HOTKW.map(x=>x[1]),backgroundColor:'#00a3a3',borderRadius:4}]},
         options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}});
       document.getElementById('relatedBox').innerHTML=RELATED.map(g=>`<div class="flex flex-wrap items-center gap-1.5">
