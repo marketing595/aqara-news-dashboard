@@ -117,8 +117,18 @@
 
    <div id="view-briefing" class="hidden">
      <div class="card p-5 mb-5">
-       <h2 class="font-bold text-slate-700 mb-3">📈 주간 뉴스 트렌드 <span class="text-xs font-normal text-slate-400">(카테고리별 브리핑 건수)</span></h2>
-       <div class="h-56"><canvas id="briefTrendChart"></canvas></div>
+       <h2 class="font-bold text-slate-700 mb-1">🔎 검색어 · 키워드 인사이트 <span class="text-xs font-normal text-slate-400">(네이버 검색 기준)</span></h2>
+       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-3">
+         <div>
+           <p class="text-sm font-semibold text-slate-600 mb-2">📊 업계 핫 키워드 Top 15 <span class="text-xs font-normal text-slate-400">(최근 뉴스 빈도)</span></p>
+           <div class="h-80"><canvas id="hotKwChart"></canvas></div>
+         </div>
+         <div>
+           <p class="text-sm font-semibold text-slate-600 mb-2">🔗 연관검색어 <span class="text-xs font-normal text-slate-400">(자동완성 기준)</span></p>
+           <div id="relatedBox" class="space-y-2.5 max-h-80 overflow-auto pr-1"></div>
+         </div>
+       </div>
+       <p id="searchTrendNote" class="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2 mt-4"></p>
      </div>
      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
        <div class="flex items-center gap-2"><label class="text-sm text-slate-500">날짜</label>
@@ -366,15 +376,26 @@
              ins:"임대·신축에도 스마트홈 기본 탑재가 확산. 아카라의 무타공·센서 라인업으로 B2B 사전 제안 가능."}]}
         ]}
     };
-    let curDate=null, briefChart=null;
-    const CAT_ORDER=['🔍','⚔️','🏠','📈'], CAT_LABEL={'🔍':'자사·기술','⚔️':'경쟁사','🏠':'인테리어·시공','📈':'트렌드'};
+    let curDate=null, briefingReady=false;
+    // 업계 핫 키워드(최근 뉴스 제목 빈도) / 연관검색어(자동완성)
+    const HOTKW=[['AI',142],['삼성전자',133],['LG전자',89],['스마트코티지',72],['모듈러',65],['시니어',58],['주택',51],['신제품',49],['헬스케어',45],['갤럭시',43],['B2B',31],['SK에코플랜트',31],['매터',31],['이케아',29],['맞춤형',28]];
+    const RELATED=[
+      {seed:'아카라라이프', terms:['도어락','K100','조명','본사','고객센터','주식회사','위치']},
+      {seed:'아카라', terms:['도어락','K100','L100','홈캠','스위치','재실센서']},
+      {seed:'스마트홈인테리어', terms:['스마트 홈 인테리어 사례']},
+      {seed:'스마트홈', terms:['스마트홈 구축','삼성 스마트홈','U+스마트홈','스마트홈케어','스마트홈짐','직방 스마트홈','스마트홈카메라','LG 스마트홈']},
+      {seed:'스마트 도어락', terms:['LG 스마트도어락','삼성스마트도어락','아카라 스마트도어락','직방','추천','비번변경','지문인식']},
+      {seed:'스마트 조명', terms:['이케아 스마트조명','스위치','설치','스탠드','리모컨','앱','제어']},
+      {seed:'AI 인테리어', terms:['어플','무료','도면','프로그램','하는법','디자이너']},
+      {seed:'재실센서', terms:['아카라 재실센서','뜻','IoT','스위치']}
+    ];
     function buildMail(date){ const b=BRIEFINGS[date]; if(!b)return'';
       let m='[아카라라이프] 📢 금일의 스마트홈 & 인테리어 뉴스 브리핑 ('+date+')\n\n안녕하세요, 아카라라이프 임직원 여러분!\n오늘의 주요 스마트홈 및 인테리어 시장 동향을 전달해 드립니다.\n\n🎯 오늘의 핵심 한 줄 요약: '+b.headline+'\n';
       b.sections.forEach(sec=>{ m+='\n'+sec.icon+' '+sec.title+'\n'; sec.items.forEach(it=>{ m+='- '+it.t+' ('+it.link+') -> '+it.ins+'\n'; }); });
       return m; }
     function initBriefing(){ const dates=Object.keys(BRIEFINGS).sort().reverse();
       document.getElementById('brDateSel').innerHTML=dates.map(d=>`<option value="${d}">${d}</option>`).join('');
-      drawBriefTrend(); renderBriefing(dates[0]); }
+      renderBriefing(dates[0]); }
     function renderBriefing(date){ curDate=date; const b=BRIEFINGS[date]; if(!b)return;
       document.getElementById('brDateSel').value=date;
       document.getElementById('brDate').textContent='📅 '+date+' 스마트홈 & 인테리어 데일리 브리핑';
@@ -389,15 +410,21 @@
             <div class="mt-2 bg-teal-50 rounded-lg px-3 py-2 text-sm text-teal-900"><span class="font-semibold">💡 아카라 Insight</span> · ${esc(it.ins)}</div>
           </div>`).join('')}</div></div>`).join('');
     }
-    function drawBriefTrend(){ const dates=Object.keys(BRIEFINGS).sort();
-      const ds=CAT_ORDER.map((ic,i)=>({label:CAT_LABEL[ic],data:dates.map(d=>{const b=BRIEFINGS[d];const sec=b.sections.find(s=>s.icon===ic);return sec?sec.items.length:0;}),backgroundColor:PALETTE[i],borderRadius:3}));
-      if(briefChart)briefChart.destroy();
-      briefChart=new Chart(document.getElementById('briefTrendChart'),{type:'bar',data:{labels:dates,datasets:ds},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}},plugins:{legend:{position:'top',labels:{boxWidth:11}}}}}); }
+    function renderSearchInsight(){
+      draw('hotKwChart',{type:'bar',data:{labels:HOTKW.map(x=>x[0]),datasets:[{data:HOTKW.map(x=>x[1]),backgroundColor:'#00a3a3',borderRadius:4}]},
+        options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}});
+      document.getElementById('relatedBox').innerHTML=RELATED.map(g=>`<div class="flex flex-wrap items-center gap-1.5">
+        <span class="px-2 py-0.5 rounded-md bg-slate-900 text-white text-[11px] font-semibold whitespace-nowrap">${esc(g.seed)}</span>
+        ${g.terms.map(t=>`<span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[11px]">${esc(t)}</span>`).join('')}
+      </div>`).join('');
+      document.getElementById('searchTrendNote').textContent='📈 검색어 흐름(시간별 추이) 차트는 네이버 데이터랩(검색어 트렌드) API 권한 추가 후 붙습니다.';
+    }
     function copyMail(){ navigator.clipboard.writeText(buildMail(curDate)).then(()=>alert('메일 텍스트가 복사되었습니다. 메일에 붙여넣으세요.')).catch(()=>alert('복사 실패 - 브라우저 권한을 확인하세요.')); }
 
     function switchTab(t){
       document.getElementById('view-analytics').classList.toggle('hidden', t!=='analytics');
       document.getElementById('view-briefing').classList.toggle('hidden', t!=='briefing');
+      if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       document.getElementById('tabBtn-analytics').className='px-4 py-3 text-sm font-semibold border-b-2 '+(t==='analytics'?'border-brand text-brand':'border-transparent text-slate-400 hover:text-slate-600');
       document.getElementById('tabBtn-briefing').className='px-4 py-3 text-sm font-semibold border-b-2 '+(t==='briefing'?'border-brand text-brand':'border-transparent text-slate-400 hover:text-slate-600');
     }
