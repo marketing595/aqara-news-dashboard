@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: '20 9 * * *'
   workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/youtube.yml'
+      - 'crawler/youtube_fetch.py'
 
 permissions:
   contents: write
