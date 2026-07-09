@@ -483,10 +483,14 @@
           {n:'판다리뷰',t:'마이크로',title:'할머니 집을 스마트홈으로 바꿔봤습니다.. (아카라 L100+M200+W100)',views:354,likes:23,id:'JhPSS1RTRYk'},
           {n:'앱준',t:'마이크로',title:'집안 가전 다 제어하는 스마트홈 끝판왕 도어락 아카라 L100',views:210,likes:4,id:'SBs2sUJncpo'}
         ],
+        instaAsOf:'2026-07-09 16:45 기준 · 수기입력',
         insta:[
-          {n:'마켓피디아',u:'https://www.instagram.com/p/DY1WuZ-PH0-/'},{n:'하하홈',u:'https://www.instagram.com/reel/DY1oUtmRIeE/'},
-          {n:'민하쀼',u:'https://www.instagram.com/reel/DY4JhBkpVSa/'},{n:'예또맘',u:'https://www.instagram.com/reel/DZNAhiJJQDh/'},
-          {n:'히포맨션',u:'https://www.instagram.com/reel/DZtZeKeJHnN/'},{n:'하미로드',u:'https://www.instagram.com/reel/DZKPMmKyBd7/'}
+          {n:'마켓피디아',u:'https://www.instagram.com/p/DY1WuZ-PH0-/',views:293000,likes:903,comments:53},
+          {n:'하하홈',u:'https://www.instagram.com/reel/DY1oUtmRIeE/',views:182000,likes:178,comments:33},
+          {n:'민하쀼',u:'https://www.instagram.com/reel/DY4JhBkpVSa/',views:22000,likes:30,comments:4},
+          {n:'예또맘',u:'https://www.instagram.com/reel/DZNAhiJJQDh/',views:16000,likes:33,comments:8},
+          {n:'히포맨션',u:'https://www.instagram.com/reel/DZtZeKeJHnN/',views:8862,likes:45,comments:64},
+          {n:'하미로드',u:'https://www.instagram.com/reel/DZKPMmKyBd7/',views:2160,likes:null,comments:11}
         ] }
     };
     let curCampaign='l100';
@@ -594,14 +598,24 @@
       // 콘텐츠 성과 (유튜브 실측 + 인스타 링크)
       const cc=document.getElementById('campContentCard');
       if(c.videos && c.videos.length){ cc.classList.remove('hidden');
-        const vids=c.videos.slice().sort((a,b)=>b.views-a.views);
-        const tv=vids.reduce((s,x)=>s+x.views,0), tl=vids.reduce((s,x)=>s+x.likes,0), eng=tv?(tl/tv*100):0;
-        const kc=(lab,val)=>`<div class="card p-4"><p class="text-xs text-slate-500">${lab}</p><p class="num text-2xl font-extrabold text-slate-900 mt-0.5">${val}</p></div>`;
-        document.getElementById('campContentKpis').innerHTML=kc('유튜브 콘텐츠',vids.length+'편')+kc('누적 조회수',tv.toLocaleString())+kc('누적 좋아요',tl.toLocaleString())+kc('평균 참여율',eng.toFixed(2)+'%');
-        draw('campViewsChart',{type:'bar',data:{labels:vids.map(v=>v.n),datasets:[{label:'조회수',data:vids.map(v=>v.views),backgroundColor:vids.map(v=>v.t==='매크로'?'#00a3a3':'#94a3b8'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=1000?(v/1000)+'k':v}}}}});
-        document.getElementById('campVideoBody').innerHTML=vids.map(v=>{ const e=v.views?(v.likes/v.views*100).toFixed(2):0; const tb=v.t==='매크로'?'bg-teal-50 text-teal-700':'bg-slate-100 text-slate-500';
+        const yt=c.videos.slice().sort((a,b)=>b.views-a.views);
+        const ig=(c.insta||[]).slice().sort((a,b)=>(b.views||0)-(a.views||0));
+        const ytV=yt.reduce((s,x)=>s+x.views,0), ytL=yt.reduce((s,x)=>s+x.likes,0);
+        const igV=ig.reduce((s,x)=>s+(x.views||0),0), igL=ig.reduce((s,x)=>s+(x.likes||0),0), igC=ig.reduce((s,x)=>s+(x.comments||0),0);
+        const kc=(lab,val,sub)=>`<div class="card p-4"><p class="text-xs text-slate-500">${lab}</p><p class="num text-2xl font-extrabold text-slate-900 mt-0.5">${val}</p>${sub?`<p class="text-[11px] text-slate-400 mt-0.5">${sub}</p>`:''}</div>`;
+        document.getElementById('campContentKpis').innerHTML=
+          kc('전체 콘텐츠',(yt.length+ig.length)+'건','유튜브 '+yt.length+' · 인스타 '+ig.length)+
+          kc('누적 조회수',(ytV+igV).toLocaleString(),'YT '+Math.round(ytV/10000)+'만 · IG '+Math.round(igV/10000)+'만')+
+          kc('누적 좋아요',(ytL+igL).toLocaleString())+
+          kc('누적 댓글(인스타)',igC.toLocaleString());
+        const allc=yt.map(v=>({n:v.n,views:v.views,p:'YT'})).concat(ig.map(v=>({n:v.n,views:v.views||0,p:'IG'}))).sort((a,b)=>b.views-a.views);
+        draw('campViewsChart',{type:'bar',data:{labels:allc.map(v=>v.n),datasets:[{label:'조회수',data:allc.map(v=>v.views),backgroundColor:allc.map(v=>v.p==='YT'?'#00a3a3':'#ec4899'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{afterLabel:(ctx)=>allc[ctx.dataIndex].p}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000)+'만':v}}}}});
+        document.getElementById('campVideoBody').innerHTML=yt.map(v=>{ const e=v.views?(v.likes/v.views*100).toFixed(2):0; const tb=v.t==='매크로'?'bg-teal-50 text-teal-700':'bg-slate-100 text-slate-500';
           return `<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] ${tb}">${esc(v.t)}</span></td><td class="px-3 py-2 whitespace-nowrap font-medium text-slate-700">${esc(v.n)}</td><td class="px-3 py-2"><a href="https://youtu.be/${v.id}" target="_blank" rel="noopener" class="text-slate-800 hover:text-brand hover:underline">${esc(v.title)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2 text-right num">${v.views.toLocaleString()}</td><td class="px-3 py-2 text-right num">${v.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${e}%</td></tr>`; }).join('');
-        document.getElementById('campInsta').innerHTML=(c.insta&&c.insta.length)?('<p class="text-sm font-semibold text-slate-600 mb-2 mt-1">📷 인스타그램 협업 ('+c.insta.length+'건)</p><div class="flex flex-wrap gap-2">'+c.insta.map(x=>`<a href="${x.u}" target="_blank" rel="noopener" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">${esc(x.n)} ↗</a>`).join('')+'</div><p class="text-xs text-amber-600 mt-2">※ 인스타그램은 비공개 정책상 조회수·좋아요 자동수집이 불가합니다. 수치를 주시면 수동 반영하겠습니다.</p>'):'';
+        document.getElementById('campInsta').innerHTML='<p class="text-sm font-semibold text-slate-600 mb-2 mt-1">📷 인스타그램 협업 '+ig.length+'건 <span class="text-xs font-normal text-amber-600">('+(c.instaAsOf||'수기입력')+')</span></p>'+
+          '<div class="overflow-auto rounded-lg border border-slate-100"><table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2 font-semibold">채널</th><th class="px-3 py-2 font-semibold text-right">조회수</th><th class="px-3 py-2 font-semibold text-right">좋아요</th><th class="px-3 py-2 font-semibold text-right">댓글</th><th class="px-3 py-2 font-semibold">링크</th></tr></thead><tbody class="divide-y divide-slate-100">'+
+          ig.map(x=>`<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap font-medium text-slate-700">${esc(x.n)}</td><td class="px-3 py-2 text-right num">${x.views?x.views.toLocaleString():'-'}</td><td class="px-3 py-2 text-right num">${x.likes==null?'<span class=\'text-slate-400\'>비공개</span>':x.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${x.comments!=null?x.comments.toLocaleString():'-'}</td><td class="px-3 py-2"><a href="${x.u}" target="_blank" rel="noopener" class="text-brand hover:underline">보기 ↗</a></td></tr>`).join('')+
+          '</tbody></table></div>';
       } else { cc.classList.add('hidden'); }
       document.getElementById('campPos').innerHTML=c.pos;
     }
