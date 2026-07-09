@@ -177,17 +177,20 @@
      </div>
      <div id="campContentCard" class="card p-5 mb-5 hidden">
        <h2 class="font-bold text-slate-700 mb-3">🎬 인플루언서 콘텐츠 성과 <span class="text-xs font-normal text-slate-400">(유튜브 실측)</span></h2>
-       <div id="campContentKpis" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4"></div>
+       <div id="campContentKpis" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-3"></div>
+       <div id="campSentiment" class="mb-4"></div>
        <div class="h-56 mb-4"><canvas id="campViewsChart"></canvas></div>
        <div class="overflow-auto rounded-lg border border-slate-100">
          <table class="w-full text-sm">
            <thead class="bg-slate-50 text-slate-500"><tr class="text-left">
              <th class="px-3 py-2 font-semibold whitespace-nowrap">티어</th><th class="px-3 py-2 font-semibold whitespace-nowrap">채널</th>
              <th class="px-3 py-2 font-semibold">제목</th><th class="px-3 py-2 font-semibold text-right">조회수</th>
-             <th class="px-3 py-2 font-semibold text-right">좋아요</th><th class="px-3 py-2 font-semibold text-right">참여율</th>
+             <th class="px-3 py-2 font-semibold text-right">좋아요</th><th class="px-3 py-2 font-semibold text-right">댓글</th>
+             <th class="px-3 py-2 font-semibold text-right">참여율</th><th class="px-3 py-2 font-semibold whitespace-nowrap">댓글 감성</th>
            </tr></thead><tbody id="campVideoBody" class="divide-y divide-slate-100"></tbody>
          </table>
        </div>
+       <p class="text-xs text-slate-400 mt-2">※ <b>참여율 = (좋아요 ＋ 댓글) ÷ 조회수 × 100</b> · 댓글 감성은 상위 댓글 표본(영상당 최대 300개)을 자동 분류한 값입니다.</p>
        <div id="campInsta" class="mt-4"></div>
      </div>
      <div class="card p-5 mb-5">
@@ -474,14 +477,15 @@
           '스마트도어락':[25.2,30.6,31.7,30.1,29.2,27.7,32.5,32.4,29.2,26.1,30.1,31.8,28.9,26.3,26.8,27.2,26.6,24.5,29.5,28.3,26.6,33.6,33.6,39.7,38.2,37.0,31.1,13.4],
           'K100':[19.6,27.0,28.6,31.4,33.7,39.7,30.2,26.8,29.3,26.5,29.4,33.3,26.2,25.2,23.4,23.4,24.9,22.7,21.2,28.2,21.1,23.1,26.0,27.7,25.1,23.3,23.1,9.2]},
         pos:"<p>• <b>제품 검색 급등:</b> 'L100' 검색이 캠페인 중 <b class='text-brand'>약 2배(+89%)</b> 상승, 6월 초 피크(15.3). 캠페인이 L100 제품 인지에 직접 효과.</p><p>• <b>카테고리 동반 상승:</b> '아카라 도어락' +21%, '스마트도어락' +11% → 브랜드 도어락 전반으로 관심 확대.</p><p>• <b>구모델→신모델 전환:</b> 같은 기간 'K100'(구모델)은 −17% 하락 → 관심이 K100에서 L100으로 이동. 신제품 전환이라는 캠페인 목표에 부합.</p><p>• <b>콘텐츠 성과(아래):</b> 인플루언서 유튜브 7편 누적 <b class='text-brand'>133만 조회</b>. 동네친구강나미 1편이 115만 뷰로 견인.</p>",
+        videosAsOf:'2026-07-09 · YouTube API',
         videos:[
-          {n:'동네친구강나미',t:'매크로',title:'결국 촬영 중단했습니다..🚨 수술실까지 들어가게 된 사연',views:1152875,likes:12101,id:'URJrux1lc-M'},
-          {n:'30대의삶',t:'매크로',title:'아내에게 스마트홈 설득하기 (아카라 스마트홈 후기)',views:99660,likes:1608,id:'xH8VY4g3YeI'},
-          {n:'김한용의모카',t:'매크로',title:'이젠 테슬라가 집과 연동되는 시대! 아카라 도어락의 신박한 기능!',views:42424,likes:725,id:'m3f8bUOgx7w'},
-          {n:'지니스펙트럼',t:'매크로',title:'자폐 아이 가출 경험담과 가출 방지 아이템',views:39359,likes:837,id:'F1Nmnm8f4UY'},
-          {n:'리뷰닉',t:'마이크로',title:'가격은 낮추고 더 세련되게! 무타공 설치! 아카라 L100',views:2008,likes:30,id:'F3BkofA6J_A'},
-          {n:'판다리뷰',t:'마이크로',title:'할머니 집을 스마트홈으로 바꿔봤습니다.. (아카라 L100+M200+W100)',views:354,likes:23,id:'JhPSS1RTRYk'},
-          {n:'앱준',t:'마이크로',title:'집안 가전 다 제어하는 스마트홈 끝판왕 도어락 아카라 L100',views:210,likes:4,id:'SBs2sUJncpo'}
+          {n:'동네친구강나미',t:'매크로',title:'결국 촬영 중단했습니다..🚨 수술실까지 들어가게 된 사연',views:1152875,likes:12101,comments:796,pos:105,neu:160,neg:35,id:'URJrux1lc-M'},
+          {n:'30대의삶',t:'매크로',title:'아내에게 스마트홈 설득하기 (아카라 스마트홈 후기)',views:99660,likes:1608,comments:376,pos:75,neu:116,neg:16,id:'xH8VY4g3YeI'},
+          {n:'김한용의모카',t:'매크로',title:'이젠 테슬라가 집과 연동되는 시대! 아카라 도어락의 신박한 기능!',views:42424,likes:725,comments:327,pos:132,neu:157,neg:11,id:'m3f8bUOgx7w'},
+          {n:'지니스펙트럼',t:'매크로',title:'자폐 아이 가출 경험담과 가출 방지 아이템',views:39358,likes:837,comments:146,pos:36,neu:31,neg:8,id:'F1Nmnm8f4UY'},
+          {n:'리뷰닉',t:'마이크로',title:'가격은 낮추고 더 세련되게! 무타공 설치! 아카라 L100',views:2008,likes:30,comments:8,pos:3,neu:3,neg:0,id:'F3BkofA6J_A'},
+          {n:'판다리뷰',t:'마이크로',title:'할머니 집을 스마트홈으로 바꿔봤습니다.. (아카라 L100+M200+W100)',views:354,likes:23,comments:77,pos:24,neu:12,neg:2,id:'JhPSS1RTRYk'},
+          {n:'앱준',t:'마이크로',title:'집안 가전 다 제어하는 스마트홈 끝판왕 도어락 아카라 L100',views:210,likes:4,comments:1,pos:1,neu:0,neg:0,id:'SBs2sUJncpo'}
         ],
         instaAsOf:'2026-07-09 16:45 기준 · 수기입력',
         insta:[
@@ -600,21 +604,27 @@
       if(c.videos && c.videos.length){ cc.classList.remove('hidden');
         const yt=c.videos.slice().sort((a,b)=>b.views-a.views);
         const ig=(c.insta||[]).slice().sort((a,b)=>(b.views||0)-(a.views||0));
-        const ytV=yt.reduce((s,x)=>s+x.views,0), ytL=yt.reduce((s,x)=>s+x.likes,0);
+        const ytV=yt.reduce((s,x)=>s+x.views,0), ytL=yt.reduce((s,x)=>s+x.likes,0), ytC=yt.reduce((s,x)=>s+(x.comments||0),0);
         const igV=ig.reduce((s,x)=>s+(x.views||0),0), igL=ig.reduce((s,x)=>s+(x.likes||0),0), igC=ig.reduce((s,x)=>s+(x.comments||0),0);
+        const sp=yt.reduce((s,x)=>s+(x.pos||0),0), sn=yt.reduce((s,x)=>s+(x.neu||0),0), sg=yt.reduce((s,x)=>s+(x.neg||0),0), st=sp+sn+sg||1;
         const kc=(lab,val,sub)=>`<div class="card p-4"><p class="text-xs text-slate-500">${lab}</p><p class="num text-2xl font-extrabold text-slate-900 mt-0.5">${val}</p>${sub?`<p class="text-[11px] text-slate-400 mt-0.5">${sub}</p>`:''}</div>`;
         document.getElementById('campContentKpis').innerHTML=
           kc('전체 콘텐츠',(yt.length+ig.length)+'건','유튜브 '+yt.length+' · 인스타 '+ig.length)+
           kc('누적 조회수',(ytV+igV).toLocaleString(),'YT '+Math.round(ytV/10000)+'만 · IG '+Math.round(igV/10000)+'만')+
           kc('누적 좋아요',(ytL+igL).toLocaleString())+
-          kc('누적 댓글(인스타)',igC.toLocaleString());
+          kc('누적 댓글',(ytC+igC).toLocaleString(),'YT '+ytC.toLocaleString()+' · IG '+igC.toLocaleString());
+        document.getElementById('campSentiment').innerHTML='<span class="text-sm text-slate-600 mr-2">💬 유튜브 댓글 감성(표본 '+st+'):</span>'+
+          '<span class="px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-700 text-xs font-semibold">긍정 '+Math.round(sp/st*100)+'%</span> '+
+          '<span class="px-2 py-0.5 rounded-lg bg-slate-100 text-slate-500 text-xs font-semibold">중립 '+Math.round(sn/st*100)+'%</span> '+
+          '<span class="px-2 py-0.5 rounded-lg bg-red-100 text-red-700 text-xs font-semibold">부정 '+Math.round(sg/st*100)+'%</span>';
         const allc=yt.map(v=>({n:v.n,views:v.views,p:'YT'})).concat(ig.map(v=>({n:v.n,views:v.views||0,p:'IG'}))).sort((a,b)=>b.views-a.views);
         draw('campViewsChart',{type:'bar',data:{labels:allc.map(v=>v.n),datasets:[{label:'조회수',data:allc.map(v=>v.views),backgroundColor:allc.map(v=>v.p==='YT'?'#00a3a3':'#ec4899'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{afterLabel:(ctx)=>allc[ctx.dataIndex].p}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000)+'만':v}}}}});
-        document.getElementById('campVideoBody').innerHTML=yt.map(v=>{ const e=v.views?(v.likes/v.views*100).toFixed(2):0; const tb=v.t==='매크로'?'bg-teal-50 text-teal-700':'bg-slate-100 text-slate-500';
-          return `<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] ${tb}">${esc(v.t)}</span></td><td class="px-3 py-2 whitespace-nowrap font-medium text-slate-700">${esc(v.n)}</td><td class="px-3 py-2"><a href="https://youtu.be/${v.id}" target="_blank" rel="noopener" class="text-slate-800 hover:text-brand hover:underline">${esc(v.title)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2 text-right num">${v.views.toLocaleString()}</td><td class="px-3 py-2 text-right num">${v.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${e}%</td></tr>`; }).join('');
+        const sbar=(p,n,g)=>{ const t=p+n+g||1; return `<div class="flex h-2.5 w-24 rounded overflow-hidden" title="긍 ${p} · 중 ${n} · 부 ${g}"><div class="bg-emerald-400" style="width:${p/t*100}%"></div><div class="bg-slate-300" style="width:${n/t*100}%"></div><div class="bg-red-400" style="width:${g/t*100}%"></div></div>`; };
+        document.getElementById('campVideoBody').innerHTML=yt.map(v=>{ const e=v.views?((v.likes+(v.comments||0))/v.views*100).toFixed(2):0; const tb=v.t==='매크로'?'bg-teal-50 text-teal-700':'bg-slate-100 text-slate-500'; const yurl='https://youtu.be/'+v.id;
+          return `<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] ${tb}">${esc(v.t)}</span></td><td class="px-3 py-2 whitespace-nowrap"><a href="${yurl}" target="_blank" rel="noopener" class="font-medium text-slate-700 hover:text-brand hover:underline">${esc(v.n)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2"><a href="${yurl}" target="_blank" rel="noopener" class="text-slate-700 hover:text-brand hover:underline">${esc(v.title)}</a></td><td class="px-3 py-2 text-right num">${v.views.toLocaleString()}</td><td class="px-3 py-2 text-right num">${v.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${(v.comments||0).toLocaleString()}</td><td class="px-3 py-2 text-right num">${e}%</td><td class="px-3 py-2">${v.pos!=null?sbar(v.pos,v.neu,v.neg):'<span class="text-slate-300">-</span>'}</td></tr>`; }).join('');
         document.getElementById('campInsta').innerHTML='<p class="text-sm font-semibold text-slate-600 mb-2 mt-1">📷 인스타그램 협업 '+ig.length+'건 <span class="text-xs font-normal text-amber-600">('+(c.instaAsOf||'수기입력')+')</span></p>'+
-          '<div class="overflow-auto rounded-lg border border-slate-100"><table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2 font-semibold">채널</th><th class="px-3 py-2 font-semibold text-right">조회수</th><th class="px-3 py-2 font-semibold text-right">좋아요</th><th class="px-3 py-2 font-semibold text-right">댓글</th><th class="px-3 py-2 font-semibold">링크</th></tr></thead><tbody class="divide-y divide-slate-100">'+
-          ig.map(x=>`<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap font-medium text-slate-700">${esc(x.n)}</td><td class="px-3 py-2 text-right num">${x.views?x.views.toLocaleString():'-'}</td><td class="px-3 py-2 text-right num">${x.likes==null?'<span class=\'text-slate-400\'>비공개</span>':x.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${x.comments!=null?x.comments.toLocaleString():'-'}</td><td class="px-3 py-2"><a href="${x.u}" target="_blank" rel="noopener" class="text-brand hover:underline">보기 ↗</a></td></tr>`).join('')+
+          '<div class="overflow-auto rounded-lg border border-slate-100"><table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2 font-semibold">채널</th><th class="px-3 py-2 font-semibold text-right">조회수</th><th class="px-3 py-2 font-semibold text-right">좋아요</th><th class="px-3 py-2 font-semibold text-right">댓글</th></tr></thead><tbody class="divide-y divide-slate-100">'+
+          ig.map(x=>`<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap"><a href="${x.u}" target="_blank" rel="noopener" class="font-medium text-slate-700 hover:text-brand hover:underline">${esc(x.n)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2 text-right num">${x.views?x.views.toLocaleString():'-'}</td><td class="px-3 py-2 text-right num">${x.likes==null?'<span class="text-slate-400">비공개</span>':x.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${x.comments!=null?x.comments.toLocaleString():'-'}</td></tr>`).join('')+
           '</tbody></table></div>';
       } else { cc.classList.add('hidden'); }
       document.getElementById('campPos').innerHTML=c.pos;
