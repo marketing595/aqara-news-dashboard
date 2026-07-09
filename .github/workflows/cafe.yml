@@ -1,0 +1,36 @@
+name: Cafe Monitor
+
+# 매시간 카페 최신글 수집 → cafe.json 갱신 → 커밋(Vercel 자동 반영)
+on:
+  schedule:
+    - cron: '10 * * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cafe-monitor
+  cancel-in-progress: false
+
+jobs:
+  cafe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Fetch cafe posts
+        env:
+          NAVER_ID: ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+        run: python crawler/cafe_fetch.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add cafe.json
+          git diff --staged --quiet || git commit -m "cafe.json 자동 갱신"
+          git push
