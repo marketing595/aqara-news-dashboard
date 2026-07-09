@@ -179,14 +179,17 @@
      <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
        <div>
          <h2 class="text-xl font-extrabold text-slate-900">💬 아카라 스마트홈 카페 모니터링</h2>
-         <p class="text-sm text-slate-500 mt-1"><a href="https://cafe.naver.com/aqara" target="_blank" rel="noopener" class="text-brand hover:underline">cafe.naver.com/aqara ↗</a> · 제품·브랜드 관련 최신 글 (키워드 수집)</p>
+         <p class="text-sm text-slate-500 mt-1"><a href="https://cafe.naver.com/aqara" target="_blank" rel="noopener" class="text-brand hover:underline">cafe.naver.com/aqara ↗</a> · 전체 아카이브 (키워드 수집 · 게시일자 미제공, 글번호순)</p>
        </div>
        <div id="cafeStats" class="flex flex-wrap gap-1.5"></div>
      </div>
      <div class="card p-5">
        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
-         <h2 class="font-bold text-slate-700">최신 글 <span id="cafeCount" class="text-sm font-normal text-slate-400"></span></h2>
-         <select id="cafeFilter" onchange="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 유형</option></select>
+         <h2 class="font-bold text-slate-700">카페 글 <span id="cafeCount" class="text-sm font-normal text-slate-400"></span></h2>
+         <div class="flex flex-wrap gap-2">
+           <input id="cafeSearch" type="text" placeholder="제목·내용 검색" oninput="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 w-44 focus:outline-none focus:ring-2 focus:ring-brand" />
+           <select id="cafeFilter" onchange="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 감성</option></select>
+         </div>
        </div>
        <div id="cafeBody" class="divide-y divide-slate-100"></div>
      </div>
@@ -566,15 +569,17 @@
          <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500 text-xs font-semibold">중립 ${cnt['중립']}</span>
          <span class="px-2.5 py-1 rounded-lg bg-red-100 text-red-700 text-xs font-semibold">부정 ${cnt['부정']}</span>`;
       const fsel=document.getElementById('cafeFilter'); if(fsel.options.length<=1){ fsel.innerHTML='<option value="">전체 감성</option><option>긍정</option><option>중립</option><option>부정</option>'; }
-      const f=fsel.value; const rows=posts.filter(p=>!f||p.sen.k===f);
-      document.getElementById('cafeCount').textContent='('+rows.length+'건'+(window.__cafeStamp?(' · '+window.__cafeStamp):'')+')';
-      document.getElementById('cafeBody').innerHTML=rows.map(p=>`<div class="py-3 flex items-start gap-3">
+      const f=fsel.value; const q=(document.getElementById('cafeSearch').value||'').toLowerCase().trim();
+      let rows=posts.filter(p=>(!f||p.sen.k===f) && (!q||((p.title+' '+p.desc).toLowerCase().indexOf(q)>-1)));
+      document.getElementById('cafeCount').textContent='(전체 '+posts.length+'건 중 '+rows.length+'건'+(window.__cafeStamp?(' · '+window.__cafeStamp):'')+')';
+      const shown=rows.slice(0,200);
+      document.getElementById('cafeBody').innerHTML=shown.map(p=>`<div class="py-3 flex items-start gap-3">
         <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap ${p.sen.c}">${p.sen.k}</span>
         <div class="flex-1 min-w-0">
           <a href="${esc(p.link)}" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-800 hover:text-brand hover:underline">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
           <p class="text-xs text-slate-500 mt-0.5">${esc(p.desc)}</p>
           <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500">${esc(p.typ)}</span>
-        </div></div>`).join('');
+        </div></div>`).join('') + (rows.length>200?'<div class="text-center py-3 text-xs text-slate-400">상위 200건 표시 · 검색으로 좁혀보세요</div>':'');
     }
 
     function switchTab(t){
