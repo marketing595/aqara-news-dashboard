@@ -562,23 +562,24 @@
       }).catch(()=>{});
     }
     function renderCafe(){
-      const posts=CAFE_POSTS.map(p=>{ const sen=cafeSentiment(p.title,p.desc); return {...p, sen, typ:cafeType(p.title,p.desc)}; });
-      const cnt={긍정:0,중립:0,부정:0}; posts.forEach(p=>cnt[p.sen.k]++);
+      CAFE_POSTS.forEach(p=>{ if(!p._sen){ p._sen=cafeSentiment(p.title,p.desc); p._typ=cafeType(p.title,p.desc); } });
+      const posts=CAFE_POSTS;
+      const cnt={긍정:0,중립:0,부정:0}; posts.forEach(p=>cnt[p._sen.k]++);
       document.getElementById('cafeStats').innerHTML=
         `<span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 text-xs font-semibold">긍정 ${cnt['긍정']}</span>
          <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500 text-xs font-semibold">중립 ${cnt['중립']}</span>
          <span class="px-2.5 py-1 rounded-lg bg-red-100 text-red-700 text-xs font-semibold">부정 ${cnt['부정']}</span>`;
       const fsel=document.getElementById('cafeFilter'); if(fsel.options.length<=1){ fsel.innerHTML='<option value="">전체 감성</option><option>긍정</option><option>중립</option><option>부정</option>'; }
       const f=fsel.value; const q=(document.getElementById('cafeSearch').value||'').toLowerCase().trim();
-      let rows=posts.filter(p=>(!f||p.sen.k===f) && (!q||((p.title+' '+p.desc).toLowerCase().indexOf(q)>-1)));
+      let rows=posts.filter(p=>(!f||p._sen.k===f) && (!q||((p.title+' '+p.desc).toLowerCase().indexOf(q)>-1)));
       document.getElementById('cafeCount').textContent='(전체 '+posts.length+'건 중 '+rows.length+'건'+(window.__cafeStamp?(' · '+window.__cafeStamp):'')+')';
       const shown=rows.slice(0,200);
       document.getElementById('cafeBody').innerHTML=shown.map(p=>`<div class="py-3 flex items-start gap-3">
-        <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap ${p.sen.c}">${p.sen.k}</span>
+        <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap ${p._sen.c}">${p._sen.k}</span>
         <div class="flex-1 min-w-0">
           <a href="${esc(p.link)}" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-800 hover:text-brand hover:underline">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
           <p class="text-xs text-slate-500 mt-0.5">${esc(p.desc)}</p>
-          <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500">${esc(p.typ)}</span>
+          <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500">${esc(p._typ)}</span>
         </div></div>`).join('') + (rows.length>200?'<div class="text-center py-3 text-xs text-slate-400">상위 200건 표시 · 검색으로 좁혀보세요</div>':'');
     }
 
