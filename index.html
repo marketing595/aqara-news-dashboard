@@ -53,6 +53,7 @@
       <button id="tabBtn-analytics" onclick="switchTab('analytics')" class="px-4 py-3 text-sm font-semibold border-b-2 border-brand text-brand">📊 통계 분석</button>
       <button id="tabBtn-briefing" onclick="switchTab('briefing')" class="px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-600">📰 데일리 브리핑</button>
       <button id="tabBtn-campaign" onclick="switchTab('campaign')" class="px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-600">📣 캠페인 분석</button>
+      <button id="tabBtn-cafe" onclick="switchTab('cafe')" class="px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-600">💬 카페 모니터링</button>
     </div>
   </div>
 
@@ -173,6 +174,24 @@
      </div>
      <p class="text-xs text-slate-400">※ SNS(인스타·유튜브 등) 언급량은 별도 소셜 API 연동이 필요해 현재 미포함입니다. 검색량=네이버 데이터랩, 자사 커버리지=구글 시트 기준.</p>
    </div>
+
+   <div id="view-cafe" class="hidden">
+     <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
+       <div>
+         <h2 class="text-xl font-extrabold text-slate-900">💬 아카라 스마트홈 카페 모니터링</h2>
+         <p class="text-sm text-slate-500 mt-1"><a href="https://cafe.naver.com/aqara" target="_blank" rel="noopener" class="text-brand hover:underline">cafe.naver.com/aqara ↗</a> · 제품·브랜드 관련 최신 글 (키워드 수집)</p>
+       </div>
+       <div id="cafeStats" class="flex flex-wrap gap-1.5"></div>
+     </div>
+     <div class="card p-5">
+       <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+         <h2 class="font-bold text-slate-700">최신 글 <span id="cafeCount" class="text-sm font-normal text-slate-400"></span></h2>
+         <select id="cafeFilter" onchange="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 유형</option></select>
+       </div>
+       <div id="cafeBody" class="divide-y divide-slate-100"></div>
+     </div>
+     <p class="text-center text-xs text-slate-400 pt-4">※ 키워드 기반 수집 스냅샷이라 카페 '전체 글'은 아닙니다. 전체 글·자동갱신은 네이버 카페 API 인증(관리자 로그인) 연동이 필요합니다.</p>
+   </div>
   </main>
 
   <script>
@@ -215,7 +234,7 @@
     }
     function show(id){ ['loading','error','content'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id)); }
     function showErr(m){ document.getElementById('error').textContent='⚠ '+m; show('error'); }
-    if(REFRESH_MINUTES>0){ setInterval(()=>loadData(true),REFRESH_MINUTES*60000); document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadData(true);}); }
+    if(REFRESH_MINUTES>0){ setInterval(()=>{loadData(true);loadCafe(true);},REFRESH_MINUTES*60000); document.addEventListener('visibilitychange',()=>{if(!document.hidden){loadData(true);loadCafe(true);}}); }
 
     function sortedDates(){ return ALL.map(r=>r['게재일']).filter(Boolean).sort(); }
     function initRange(){ const ds=sortedDates(); if(!ds.length)return; const f=document.getElementById('fromDate'),t=document.getElementById('toDate');
@@ -519,13 +538,53 @@
         <p>• <b>인테리어 문맥 포지셔닝:</b> 뉴스에서 아카라가 인테리어 키워드와 함께 언급되는 비율은 여전히 1% 미만(📰 브리핑 탭 '브랜드×인테리어 연관도' 참조). 캠페인이 검색 반응은 만들었으나 '인테리어 문맥 내 브랜드 각인'은 초기 단계 → 다음 캠페인의 핵심 KPI로 추적 권장.</p>`;
     }
 
+    // ===== 카페 모니터링 (실시간: 웹앱 ?type=cafe 로드, 실패 시 스냅샷 폴백) =====
+    let CAFE_POSTS=[{"no":13155,"title":"아카라허브 , 스마트싱스 허브 중 어느게 필요할까요?","desc":"스마트싱스 허브만 있으면 K100과 G4가 스마트싱스에서 연동되서 기능을 다 쓸수 있나요?","link":"http://cafe.naver.com/aqara/13155"},{"no":13153,"title":"아카라 도어락 원격제어 할려면 무조건 아카라 허브 있어야 되나요?","desc":"애플티비나 삼성스마트싱스 이걸로도 제어 가능한가요?","link":"http://cafe.naver.com/aqara/13153"},{"no":13149,"title":"도어락 k100 vs L100","desc":"이사가면서 도어락 설치를 하려고 합니다. 도어락 초보라 어떤게 더 좋을지 모르겠더라구요.","link":"http://cafe.naver.com/aqara/13149"},{"no":13148,"title":"L100 도어락 스마트싱스 기기추가 오류발생.","desc":"스마트싱스에 직접 연결하려는데 오류코드 34-302 뜨면서 기기추가가 안돼요","link":"http://cafe.naver.com/aqara/13148"},{"no":13147,"title":"매터 방식이면 아카라 제품 아니라도 M3허브에 다 등록가능한가요?","desc":"매터 방식이면 아카라 제품 아니라도 M3허브에 다 등록가능한가요?","link":"http://cafe.naver.com/aqara/13147"},{"no":13146,"title":"아카라 서울 인근에 오프라인 매장이나 팝업스토어가 있을까요?","desc":"스마트플러그 2개를 급하게 구해야하는데 주말 오프라인 매장 정보를 부탁드립니다","link":"http://cafe.naver.com/aqara/13146"},{"no":13145,"title":"아카라 B1모터 떨어짐","desc":"이사하면서 이사업체에서 해체 조립을 하였는데 모터를 레일에 체결하고 작동시키니","link":"http://cafe.naver.com/aqara/13145"},{"no":13144,"title":"삼성에어컨 연동문제","desc":"해결 되셨나요? m200으로 교체 받았는데 이것도 마찬가지네요.","link":"http://cafe.naver.com/aqara/13144"},{"no":13136,"title":"g2h pro 홈킷에 등록하려면 아카라앱에서 삭제후 악세사리추가해야하나요?","desc":"카메라 총4대인데 테스트로 2대는 오류없이 등록했습니다","link":"http://cafe.naver.com/aqara/13136"},{"no":13133,"title":"안녕하세요 연동 문의드립니다","desc":"알리에서 직구한 M2+전동커튼 중국서버 사용중, 새로 도어락 E1+k100 한국서버로 사용중인데 한곳에","link":"http://cafe.naver.com/aqara/13133"},{"no":13131,"title":"애플tv 홈킷 g2h pro 연결질문입니다.","desc":"아카라앱에서 g2h pro 딜레이가 심해서 애플홈킷 이용하려고 애플tv를 구매했습니다","link":"http://cafe.naver.com/aqara/13131"},{"no":13129,"title":"도어락 설치중에 매우 불쾌한 경험을 했습니다.","desc":"네이버 판매자 홈앤락을 통해 도어락을 구매했는데 이번 경험으로 인해","link":"http://cafe.naver.com/aqara/13129"},{"no":13128,"title":"k100 펌웨어 업데이트 실패…","desc":"펌웨어 업데이트가 떠서 진행했는데 자꾸 에러가 발생하네요","link":"http://cafe.naver.com/aqara/13128"},{"no":13126,"title":"안녕하세요 가입인사 드립니다","desc":"스마트홈 구축하면서 H2 스위치, L100 도어락, G4 초인종, G100 카메라 사용","link":"http://cafe.naver.com/aqara/13126"},{"no":13124,"title":"gh2pro 아카라앱에서 연동하려니 딜레이가 너무심합니다.","desc":"집안 전체를 아카라제품으로 사용중, 아카라앱으로 gh2pro 실행시키면 너무 늦거나 연결이","link":"http://cafe.naver.com/aqara/13124"},{"no":13118,"title":"아카라 구축 궁금증","desc":"도어락k100, m3허브, 전동커튼, w100 하려는데 가전은 삼성ai제품 구매예정입니다","link":"http://cafe.naver.com/aqara/13118"},{"no":13115,"title":"K100 스마트싱스 직결시 구글홈 연동 되나요?","desc":"본가에는 아카라 허브가 없어서 스마트싱스 스테이션에 직결했는데","link":"http://cafe.naver.com/aqara/13115"},{"no":13111,"title":"모션센서 T1, 열림감지센서 T1 연결 안됨","desc":"이사하고 공유기 바꾸면서 다시 연결하려는데 모션센서가 연결이 안돼요","link":"http://cafe.naver.com/aqara/13111"},{"no":13106,"title":"RF447 월패드 4핀이 너무 뚱뚱합니다 ㅠㅠ","desc":"아카라 고객센터, 채팅상담 다 해봤는데 둘 다 모르겠다고 설치기사 부르라고만 하네요","link":"http://cafe.naver.com/aqara/13106"},{"no":13096,"title":"W100 온도 습도계 질문이요","desc":"W100 냉방 자동화 하려는데 에어컨이 자동으로 작동되나요? 다른 설정 방법 있나요?","link":"http://cafe.naver.com/aqara/13096"},{"no":13092,"title":"공식몰ㅣ(~30% OFF) 도어락 프로모션 + 슈퍼적립 (05.27~06.30)","desc":"아카라라이프입니다. 공식몰에서 도어락 프로모션을 진행합니다","link":"http://cafe.naver.com/aqara/13092"},{"no":13087,"title":"G3 보안문제","desc":"잘 쓰다가 최근에 여러번 아래 같은 메세지가 뜨더라구요 현재 아카라","link":"http://cafe.naver.com/aqara/13087"},{"no":13077,"title":"FP300 펌웨어 업데이트","desc":"펌웨어 업데이트 후 화장실 자동화 시 오류가 현저히 줄었습니다","link":"http://cafe.naver.com/aqara/13077"},{"no":13076,"title":"아카라 커튼 구성 문의 (실제 사용 경험 공유 요청)","desc":"거실 내 아카라 모터를 포함하여 구매하고자 합니다","link":"http://cafe.naver.com/aqara/13076"},{"no":13071,"title":"아카라 전동커튼 전원선","desc":"플러그가 없고 전선만 있던데 기본구성품에 플러그도 같이 있나요?","link":"http://cafe.naver.com/aqara/13071"},{"no":13064,"title":"공식몰ㅣ아카라 스마트 허브 M200 출시기념 할인 및 특별 혜택 (05.14~05.22)","desc":"추가 10% 할인: 재실센서 FP300, 조명스위치, 온습도센서, 카메라E1","link":"http://cafe.naver.com/aqara/13064"},{"no":13031,"title":"아카라를 통한 층간소음 해결 방법 아시는분?","desc":"센서를 건드리면 알람이 울려요 뛰는 진동을 감지 못하네요","link":"http://cafe.naver.com/aqara/13031"},{"no":13025,"title":"FP300 나온지 얼마 안됐는데...","desc":"FP310 버전이 나왔네요? 무슨 차이가 있나","link":"http://cafe.naver.com/aqara/13025"},{"no":12991,"title":"(해결완료) 아카라 이런 식으로 운영하지마세요.","desc":"고객 대응 관련 불만 글 (해결완료)","link":"http://cafe.naver.com/aqara/12991"},{"no":12969,"title":"FP300로 욕실센서 고민 종결","desc":"FP300으로 욕실센서 세팅하니 만족스럽습니다","link":"http://cafe.naver.com/aqara/12969"}];
+    function cafeSentiment(t,d){ const s=(t+' '+d).toLowerCase();
+      const neg=/불쾌|하지마|운영하지|불편|떨어짐|보안문제|실패|딜레이|너무\s*심|먹통|안와|현저히|뚱뚱|오류|에러|안됨|안돼|안되|연결\s*안|추가가\s*안|모르겠|ㅠ|ㅜ|불만|화나|짜증|최악|문제/;
+      const pos=/해결완료|해결됐|종결|장점|줄었|좋아|좋네|좋습|만족|추천|편하|편해|굿|훌륭|최고|감사|잘\s*되|덕분/;
+      if(pos.test(s)&&!neg.test(s)) return {k:'긍정',c:'bg-emerald-100 text-emerald-700'};
+      if(neg.test(s)&&!pos.test(s)) return {k:'부정',c:'bg-red-100 text-red-700'};
+      return {k:'중립',c:'bg-slate-100 text-slate-500'}; }
+    function cafeType(t,d){ const s=(t+' '+d).toLowerCase();
+      if(/공식몰|프로모션|할인|off|혜택|출시기념|적립/.test(s)) return '프로모션';
+      if(/오류|에러|안됨|안돼|안되|실패|연결\s*안|문제|불쾌|하지마/.test(s)) return '오류·불만';
+      if(/종결|해결완료|후기|공유|경험|장점|만족/.test(s)) return '후기';
+      if(/가입인사|가입했|정보\s*얻으러/.test(s)) return '가입인사';
+      if(/\?|궁금|문의|질문|나요|가요|하나요|되나요|있을까요|모르겠|부탁/.test(s)) return '문의';
+      return '일반'; }
+    function loadCafe(silent){
+      window.__onCafe=function(p){ if(p&&p.ok&&p.posts&&p.posts.length){ CAFE_POSTS=p.posts; if(p.generatedAt) window.__cafeStamp=p.generatedAt; renderCafe(); } };
+      const s=document.createElement('script'); s.src=API_URL+'?type=cafe&callback=__onCafe&_='+Date.now();
+      s.onload=()=>s.remove(); document.body.appendChild(s);
+    }
+    function renderCafe(){
+      const posts=CAFE_POSTS.map(p=>{ const sen=cafeSentiment(p.title,p.desc); return {...p, sen, typ:cafeType(p.title,p.desc)}; });
+      const cnt={긍정:0,중립:0,부정:0}; posts.forEach(p=>cnt[p.sen.k]++);
+      document.getElementById('cafeStats').innerHTML=
+        `<span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 text-xs font-semibold">긍정 ${cnt['긍정']}</span>
+         <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500 text-xs font-semibold">중립 ${cnt['중립']}</span>
+         <span class="px-2.5 py-1 rounded-lg bg-red-100 text-red-700 text-xs font-semibold">부정 ${cnt['부정']}</span>`;
+      const fsel=document.getElementById('cafeFilter'); if(fsel.options.length<=1){ fsel.innerHTML='<option value="">전체 감성</option><option>긍정</option><option>중립</option><option>부정</option>'; }
+      const f=fsel.value; const rows=posts.filter(p=>!f||p.sen.k===f);
+      document.getElementById('cafeCount').textContent='('+rows.length+'건'+(window.__cafeStamp?(' · '+window.__cafeStamp):'')+')';
+      document.getElementById('cafeBody').innerHTML=rows.map(p=>`<div class="py-3 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap ${p.sen.c}">${p.sen.k}</span>
+        <div class="flex-1 min-w-0">
+          <a href="${esc(p.link)}" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-800 hover:text-brand hover:underline">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
+          <p class="text-xs text-slate-500 mt-0.5">${esc(p.desc)}</p>
+          <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500">${esc(p.typ)}</span>
+        </div></div>`).join('');
+    }
+
     function switchTab(t){
-      ['analytics','briefing','campaign'].forEach(v=>{
+      ['analytics','briefing','campaign','cafe'].forEach(v=>{
         document.getElementById('view-'+v).classList.toggle('hidden', v!==t);
         document.getElementById('tabBtn-'+v).className='px-4 py-3 text-sm font-semibold border-b-2 '+(v===t?'border-brand text-brand':'border-transparent text-slate-400 hover:text-slate-600');
       });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       if(t==='campaign'){ renderCampaign(); }
+      if(t==='cafe'){ renderCafe(); loadCafe(); }
     }
 
     initBriefing();
