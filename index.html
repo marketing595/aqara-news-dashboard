@@ -554,9 +554,9 @@
       if(/\?|궁금|문의|질문|나요|가요|하나요|되나요|있을까요|모르겠|부탁/.test(s)) return '문의';
       return '일반'; }
     function loadCafe(silent){
-      window.__onCafe=function(p){ if(p&&p.ok&&p.posts&&p.posts.length){ CAFE_POSTS=p.posts; if(p.generatedAt) window.__cafeStamp=p.generatedAt; renderCafe(); } };
-      const s=document.createElement('script'); s.src=API_URL+'?type=cafe&callback=__onCafe&_='+Date.now();
-      s.onload=()=>s.remove(); document.body.appendChild(s);
+      fetch('cafe.json?_='+Date.now()).then(r=>r.json()).then(p=>{
+        if(p&&p.posts&&p.posts.length){ CAFE_POSTS=p.posts; if(p.generatedAt) window.__cafeStamp=p.generatedAt; renderCafe(); }
+      }).catch(()=>{});
     }
     function renderCafe(){
       const posts=CAFE_POSTS.map(p=>{ const sen=cafeSentiment(p.title,p.desc); return {...p, sen, typ:cafeType(p.title,p.desc)}; });
