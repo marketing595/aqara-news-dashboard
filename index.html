@@ -52,6 +52,7 @@
     <div class="max-w-[1400px] mx-auto px-5 flex gap-1">
       <button id="tabBtn-analytics" onclick="switchTab('analytics')" class="px-4 py-3 text-sm font-semibold border-b-2 border-brand text-brand">📊 통계 분석</button>
       <button id="tabBtn-briefing" onclick="switchTab('briefing')" class="px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-600">📰 데일리 브리핑</button>
+      <button id="tabBtn-campaign" onclick="switchTab('campaign')" class="px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-600">📣 캠페인 분석</button>
     </div>
   </div>
 
@@ -153,6 +154,24 @@
      <div id="brHeadline" class="card p-4 mb-5 bg-teal-50 border-teal-200"></div>
      <div id="briefingBody" class="space-y-5"></div>
      <p class="text-center text-xs text-slate-400 pt-4">요약·인사이트는 AI 분석 결과이며 참고용입니다 · 제목 클릭 시 원문으로 이동</p>
+   </div>
+
+   <div id="view-campaign" class="hidden">
+     <div class="card p-5 mb-5 bg-slate-900 text-white border-slate-900">
+       <p class="text-xs text-slate-400">CAMPAIGN</p>
+       <h2 class="text-xl font-extrabold">🏠 스마트홈 인테리어 캠페인 효과 분석</h2>
+       <p class="text-sm text-slate-300 mt-1">기간: <b>2026-04-13 ~ 06-30</b> (약 11주) · 검색량·자사 커버리지·포지셔닝을 캠페인 전/중 비교</p>
+     </div>
+     <section id="campKpis" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
+     <div class="card p-5 mb-5">
+       <h2 class="font-bold text-slate-700 mb-1">📈 주별 검색량 추이 <span class="text-xs font-normal text-slate-400">(네이버 데이터랩 · 음영 = 캠페인 기간)</span></h2>
+       <div class="h-72 mt-2"><canvas id="campTrendChart"></canvas></div>
+     </div>
+     <div class="card p-5 mb-5">
+       <h2 class="font-bold text-slate-700 mb-2">🎯 인테리어 포지셔닝 분석</h2>
+       <div id="campPos" class="text-sm text-slate-600 space-y-2"></div>
+     </div>
+     <p class="text-xs text-slate-400">※ SNS(인스타·유튜브 등) 언급량은 별도 소셜 API 연동이 필요해 현재 미포함입니다. 검색량=네이버 데이터랩, 자사 커버리지=구글 시트 기준.</p>
    </div>
   </main>
 
@@ -391,6 +410,15 @@
         ]}
     };
     let curDate=null, briefingReady=false;
+    // 캠페인 분석 (스마트홈 인테리어 캠페인 2026-04-13~06-30, 네이버 데이터랩 주별)
+    const CAMPAIGN={ start:'2026-04-13', end:'2026-06-30',
+      weeks:["2025-12-29","2026-01-05","2026-01-12","2026-01-19","2026-01-26","2026-02-02","2026-02-09","2026-02-16","2026-02-23","2026-03-02","2026-03-09","2026-03-16","2026-03-23","2026-03-30","2026-04-06","2026-04-13","2026-04-20","2026-04-27","2026-05-04","2026-05-11","2026-05-18","2026-05-25","2026-06-01","2026-06-08","2026-06-15","2026-06-22","2026-06-29","2026-07-06"],
+      series:{
+        '아카라':[73.9,80.7,79.4,86.0,89.5,90.2,84.0,69.0,78.2,75.6,80.7,83.5,77.9,79.7,80.9,83.4,76.3,68.9,70.6,76.7,78.0,83.9,98.8,100,89.4,79.7,92.1,39.6],
+        '아카라라이프':[10.9,14.7,16.9,17.6,13.7,13.5,11.7,8.7,12.6,9.6,13.2,14.5,13.2,12.4,14.0,14.2,11.5,10.2,9.0,10.1,9.1,11.7,11.7,13.7,11.2,11.1,15.9,5.9],
+        '스마트홈인테리어':[0,0.8,0.4,0,0.2,0,1.0,0,0.2,0.2,0.2,0,0.2,0,0.2,0.2,0,0,0,0,0,0,0,0,0,0,0,0.4],
+        '스마트홈':[23.3,25.4,25.2,24.1,26.1,24.9,28.1,23.0,23.5,26.2,35.2,36.0,30.7,31.1,35.4,30.7,25.5,23.6,26.4,31.4,27.8,26.5,25.4,24.1,28.3,24.2,25.0,12.5]
+      }};
     // 업계 핫 키워드(최근 뉴스 제목 빈도) / 연관검색어(자동완성)
     const HOTKW=[['AI',142],['삼성전자',133],['LG전자',89],['스마트코티지',72],['모듈러',65],['시니어',58],['주택',51],['신제품',49],['헬스케어',45],['갤럭시',43],['B2B',31],['SK에코플랜트',31],['매터',31],['이케아',29],['맞춤형',28]];
     const RELATED=[
@@ -468,12 +496,36 @@
     }
     function copyMail(){ navigator.clipboard.writeText(buildMail(curDate)).then(()=>alert('메일 텍스트가 복사되었습니다. 메일에 붙여넣으세요.')).catch(()=>alert('복사 실패 - 브라우저 권한을 확인하세요.')); }
 
+    function renderCampaign(){
+      const W=CAMPAIGN.weeks, S=CAMPAIGN.series, cs=CAMPAIGN.start, ce=CAMPAIGN.end, inC=w=>w>=cs&&w<=ce;
+      const keys=Object.keys(S);
+      const band={label:'캠페인 기간',type:'bar',data:W.map(w=>inC(w)?110:0),backgroundColor:'rgba(0,163,163,0.10)',borderWidth:0,barPercentage:1,categoryPercentage:1,order:1};
+      const lines=keys.map((k,i)=>({label:k,type:'line',data:S[k],borderColor:PALETTE[i],backgroundColor:'transparent',borderWidth:2,tension:0.3,pointRadius:0,order:0}));
+      draw('campTrendChart',{type:'bar',data:{labels:W,datasets:[band,...lines]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{position:'top',labels:{boxWidth:11,filter:it=>it.text!=='캠페인 기간'}}},scales:{y:{beginAtZero:true,suggestedMax:110},x:{ticks:{maxRotation:60,minRotation:60,font:{size:9}}}}}});
+      function avg(k,f){ let s=0,n=0; W.forEach((w,i)=>{ if(f(w)){s+=S[k][i];n++;} }); return n?s/n:0; }
+      let html=['아카라','아카라라이프','스마트홈인테리어'].map(k=>{ const pre=avg(k,w=>w<cs),dur=avg(k,w=>inC(w)); const pct=pre>0?Math.round((dur-pre)/pre*100):(dur>0?100:0),up=pct>=0;
+        return `<div class="card p-5"><p class="text-sm text-slate-500">${esc(k)} 검색량</p><p class="num text-xl font-extrabold text-slate-900 mt-1">전 ${pre.toFixed(1)} → 중 ${dur.toFixed(1)}</p><p class="text-xs mt-1 ${up?'text-emerald-600':'text-red-500'}">${up?'▲':'▼'} ${Math.abs(pct)}% <span class="text-slate-400">캠페인 중 변화</span></p></div>`; }).join('');
+      let cov='-',covDelta='';
+      if(ALL&&ALL.length){ const cw=ALL.filter(r=>{const d=r['게재일'];return d&&d>=cs&&d<=ce;}).length;
+        const isod=d=>d.toISOString().substring(0,10); const ps=isod(new Date(new Date(cs)-78*864e5)),pe=isod(new Date(new Date(cs)-864e5));
+        const pw=ALL.filter(r=>{const d=r['게재일'];return d&&d>=ps&&d<=pe;}).length; cov=cw+'건';
+        const dl=pw>0?Math.round((cw-pw)/pw*100):0; covDelta=`<p class="text-xs mt-1 ${dl>=0?'text-emerald-600':'text-red-500'}">${dl>=0?'▲':'▼'} ${Math.abs(dl)}% <span class="text-slate-400">직전 동기간(${pw}건) 대비</span></p>`; }
+      html+=`<div class="card p-5"><p class="text-sm text-slate-500">캠페인 기간 자사 커버리지</p><p class="num text-xl font-extrabold text-brand mt-1">${cov}</p>${covDelta}</div>`;
+      document.getElementById('campKpis').innerHTML=html;
+      document.getElementById('campPos').innerHTML=`
+        <p>• <b>브랜드 검색 반응:</b> '아카라' 검색이 캠페인 후반(6월 초) <b class="text-brand">연중 최고점(100)</b>에 도달 — 캠페인 기간과 브랜드 검색 피크가 겹칩니다. 다만 '아카라라이프'(정식 사명) 검색은 뚜렷한 상승이 없었습니다.</p>
+        <p>• <b>'스마트홈인테리어' 용어:</b> 검색량이 사실상 0(주별 0~1) — 소비자는 이 합성어로 검색하지 않습니다. 캠페인 메시지는 '아카라' 브랜드 검색으로 수렴시키는 편이 효율적입니다.</p>
+        <p>• <b>인테리어 문맥 포지셔닝:</b> 뉴스에서 아카라가 인테리어 키워드와 함께 언급되는 비율은 여전히 1% 미만(📰 브리핑 탭 '브랜드×인테리어 연관도' 참조). 캠페인이 검색 반응은 만들었으나 '인테리어 문맥 내 브랜드 각인'은 초기 단계 → 다음 캠페인의 핵심 KPI로 추적 권장.</p>`;
+    }
+
     function switchTab(t){
-      document.getElementById('view-analytics').classList.toggle('hidden', t!=='analytics');
-      document.getElementById('view-briefing').classList.toggle('hidden', t!=='briefing');
+      ['analytics','briefing','campaign'].forEach(v=>{
+        document.getElementById('view-'+v).classList.toggle('hidden', v!==t);
+        document.getElementById('tabBtn-'+v).className='px-4 py-3 text-sm font-semibold border-b-2 '+(v===t?'border-brand text-brand':'border-transparent text-slate-400 hover:text-slate-600');
+      });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
-      document.getElementById('tabBtn-analytics').className='px-4 py-3 text-sm font-semibold border-b-2 '+(t==='analytics'?'border-brand text-brand':'border-transparent text-slate-400 hover:text-slate-600');
-      document.getElementById('tabBtn-briefing').className='px-4 py-3 text-sm font-semibold border-b-2 '+(t==='briefing'?'border-brand text-brand':'border-transparent text-slate-400 hover:text-slate-600');
+      if(t==='campaign'){ renderCampaign(); }
     }
 
     initBriefing();
