@@ -723,7 +723,16 @@
       }).catch(()=>{});
     }
 
+    function loadBriefing(){
+      fetch('briefing.json?_='+Date.now()).then(r=>r.json()).then(p=>{
+        if(p&&p.briefings&&Object.keys(p.briefings).length){
+          Object.keys(p.briefings).forEach(d=>{ if(p.briefings[d]&&p.briefings[d].sections&&p.briefings[d].sections.length) BRIEFINGS[d]=p.briefings[d]; });
+          initBriefing();
+        }
+      }).catch(()=>{});
+    }
     initBriefing();
+    loadBriefing();
     loadData();
   </script>
 </body>

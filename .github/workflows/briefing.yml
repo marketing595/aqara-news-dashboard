@@ -1,0 +1,41 @@
+name: Daily Briefing
+
+# 매일 08:40(UTC)=한국 17:40 뉴스 수집 + Gemini 브리핑 생성 → briefing.json
+on:
+  schedule:
+    - cron: '40 8 * * *'
+  workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/briefing.yml'
+      - 'crawler/briefing_fetch.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-briefing
+  cancel-in-progress: false
+
+jobs:
+  briefing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Generate briefing
+        env:
+          NAVER_ID: ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python crawler/briefing_fetch.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add briefing.json
+          git diff --staged --quiet || git commit -m "briefing.json 자동 갱신"
+          git push
