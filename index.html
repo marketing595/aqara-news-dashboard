@@ -225,6 +225,7 @@
        </div>
        <div id="cafeStats" class="flex flex-wrap gap-1.5"></div>
      </div>
+     <div id="cafeInsight" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5"></div>
      <div class="card p-5">
        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
          <h2 class="font-bold text-slate-700">카페 글 <span id="cafeCount" class="text-sm font-normal text-slate-400"></span></h2>
@@ -719,6 +720,39 @@
       }).catch(()=>{});
     }
     const CAFE_BADGE={'아카라 스마트홈':'bg-teal-50 text-teal-700','모두의 스마트홈':'bg-violet-50 text-violet-700'};
+    const CAFE_STOP=new Set('아카라 아카라라이프 aqara 스마트홈 있나요 있을까요 되나요 하나요 가능 문의 질문 관련 방법 사용 하는 되는 이거 저거 그거 그리고 근데 하는데 해서 위해 대한 대해 인데 인가요 어떤 어떻게 무슨 진짜 정말 너무 다시 처음 이번 지금 오늘 어제 부탁 드립니다 합니다 습니다 해요 네요 어요 인지 하고 하면 하니 해도 있어요 없어요 같아요 같은 같이 이런 저런 그런 여기 거기 저기 하실 하시 하세요'.split(' '));
+    function cafeKeywords(posts,topN){
+      const freq={};
+      posts.forEach(p=>{ const words=(p.title+' '+p.desc).replace(/[^0-9A-Za-z가-힣 ]/g,' ').split(/\s+/);
+        words.forEach(w=>{ w=w.trim(); if(w.length<2) return; if(CAFE_STOP.has(w.toLowerCase())) return; if(/^\d+$/.test(w)) return; freq[w]=(freq[w]||0)+1; }); });
+      return Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,topN||8);
+    }
+    function renderCafeInsight(posts){
+      const groups=[['긍정','bg-emerald-50 border-emerald-100','text-emerald-700','bg-emerald-100 text-emerald-700'],
+                    ['중립','bg-slate-50 border-slate-200','text-slate-600','bg-slate-100 text-slate-500'],
+                    ['부정','bg-red-50 border-red-100','text-red-700','bg-red-100 text-red-700']];
+      document.getElementById('cafeInsight').innerHTML=groups.map(([k,cardc,titc,chip])=>{
+        const gp=posts.filter(p=>p._sen.k===k);
+        const kws=cafeKeywords(gp,8);
+        const top5=gp.slice(0,5);
+        const kwHtml=kws.length?kws.map(([w,c])=>`<span class="inline-block px-2 py-0.5 rounded-md text-[11px] ${chip} mr-1 mb-1">${esc(w)} <span class="opacity-60">${c}</span></span>`).join(''):'<span class="text-xs text-slate-400">데이터 없음</span>';
+        const topHtml=top5.length?top5.map((p,i)=>`<li class="text-xs text-slate-600 leading-snug mb-1.5 flex gap-1.5"><span class="${titc} font-bold">${i+1}</span><a href="${esc(p.link)}" target="_blank" rel="noopener" class="hover:underline line-clamp-1">${esc(p.title)}</a></li>`).join(''):'<li class="text-xs text-slate-400">데이터 없음</li>';
+        return `<div class="card p-4 border ${cardc}">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-bold ${titc}">${k}</span>
+            <span class="text-xs ${titc} font-semibold">${gp.length}건</span>
+          </div>
+          <div class="mb-3">
+            <div class="text-[11px] font-semibold text-slate-400 mb-1">주요 언급 키워드</div>
+            <div>${kwHtml}</div>
+          </div>
+          <div>
+            <div class="text-[11px] font-semibold text-slate-400 mb-1">주요 반응 TOP5</div>
+            <ol>${topHtml}</ol>
+          </div>
+        </div>`;
+      }).join('');
+    }
     function renderCafe(){
       CAFE_POSTS.forEach(p=>{ if(!p._sen){ p._sen=cafeSentiment(p.title,p.desc); p._typ=cafeType(p.title,p.desc); } if(!p.cafe) p.cafe='아카라 스마트홈'; });
       const posts=CAFE_POSTS;
@@ -732,6 +766,7 @@
       const csel=document.getElementById('cafeCafeFilter'); if(csel.options.length<=1&&cafes.length){ csel.innerHTML='<option value="">전체 카페</option>'+cafes.map(c=>`<option>${esc(c)}</option>`).join(''); }
       const fsel=document.getElementById('cafeFilter'); if(fsel.options.length<=1){ fsel.innerHTML='<option value="">전체 감성</option><option>긍정</option><option>중립</option><option>부정</option>'; }
       const f=fsel.value, cf=csel.value; const q=(document.getElementById('cafeSearch').value||'').toLowerCase().trim();
+      renderCafeInsight(posts.filter(p=>!cf||p.cafe===cf));
       let rows=posts.filter(p=>(!f||p._sen.k===f) && (!cf||p.cafe===cf) && (!q||((p.title+' '+p.desc).toLowerCase().indexOf(q)>-1)));
       document.getElementById('cafeCount').textContent='('+ccnt+' · 필터 '+rows.length+'건'+(window.__cafeStamp?(' · '+window.__cafeStamp):'')+')';
       const shown=rows.slice(0,200);
