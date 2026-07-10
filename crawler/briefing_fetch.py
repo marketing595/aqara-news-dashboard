@@ -93,12 +93,27 @@ def gemini(cand):
         '{"headlines":{"자사":"...","업계":"...","경쟁사":"..."},'
         '"rows":[{"id":"tech-0","cat":"자사","insight":"핵심 내용 및 시사점"}]}\n\n'
         "뉴스 후보:\n" + newsblock)
-    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + GKEY
+    if not GKEY:
+        raise SystemExit("ERROR: GEMINI_API_KEY 미설정")
     body = {"contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {"response_mime_type": "application/json", "temperature": 0.4}}
-    r = requests.post(url, json=body, timeout=90)
-    txt = r.json()["candidates"][0]["content"]["parts"][0]["text"]
-    return json.loads(txt)
+    last = ""
+    for model in ("gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-flash-latest"):
+        url = "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s" % (model, GKEY)
+        r = requests.post(url, json=body, timeout=90)
+        if r.status_code != 200:
+            last = "%s -> HTTP %s %s" % (model, r.status_code, r.text[:300])
+            print("Gemini", last)
+            continue
+        j = r.json()
+        if "candidates" not in j or not j["candidates"]:
+            last = "%s -> no candidates: %s" % (model, json.dumps(j)[:300])
+            print("Gemini", last)
+            continue
+        print("Gemini OK model:", model)
+        txt = j["candidates"][0]["content"]["parts"][0]["text"]
+        return json.loads(txt)
+    raise SystemExit("ERROR: 모든 Gemini 모델 실패 - " + last)
 
 
 def main():
