@@ -82,13 +82,15 @@ def gemini(cand):
             lines.append(f"[{key}-{i}] {it['title']} / {it['source']} / {it['date']} :: {it['snippet']}")
     newsblock = "\n".join(lines)
     prompt = (
-        "너는 스마트홈 AIoT·인테리어 기업 '아카라라이프'의 데일리 뉴스 브리핑 봇이다.\n"
-        "아래 카테고리별 뉴스 후보 중, 아카라라이프에 의미있는 기사만 카테고리별 1~3개 선별해 요약하고 '아카라 인사이트'를 써라.\n"
-        "무관하거나 중복이면 제외. 각 카테고리 최소 1개는 채우되 마땅한 게 없으면 비워도 된다.\n"
-        "요약은 2~3문장, 인사이트는 아카라 제품/전략 관점의 시사점 1~2문장.\n"
-        "반드시 아래 JSON 스키마로만 출력(선택한 기사는 대괄호 안 인덱스 문자열 id로 지정):\n"
-        '{"headline":"오늘 전체를 관통하는 핵심 한 줄", '
-        '"picks":{"tech":[{"id":"tech-0","summary":"...","insight":"..."}],"comp":[...],"intr":[...],"trend":[...]}}\n\n'
+        "너는 스마트홈 AIoT·인테리어 기업 '아카라라이프'의 홍보(PR)·언론 모니터링 전문가다.\n"
+        "아래 뉴스 후보 중 아카라라이프에 의미있는 기사만 8~12건 선별해 '일일 언론 모니터링 보고'를 작성하라.\n"
+        "무관/중복 기사는 제외. 각 기사는 [자사/경쟁사/시장/업계] 중 하나로 분류한다.\n"
+        "(자사=아카라 직접 관련, 경쟁사=삼성·LG·샤오미·구글·애플 등, 시장=인테리어·시공·B2B 등, 업계=정책·표준·거시 트렌드)\n"
+        "'insight'는 단순 요약을 넘어 아카라 비즈니스에 주는 시사점을 개조식으로 1~2문장.\n"
+        "headlines는 자사/업계/경쟁사 각 한 줄 종합 요약.\n"
+        "반드시 아래 JSON 스키마로만 출력(선택 기사는 후보의 대괄호 id로 지정):\n"
+        '{"headlines":{"자사":"...","업계":"...","경쟁사":"..."},'
+        '"rows":[{"id":"tech-0","cat":"자사","insight":"핵심 내용 및 시사점"}]}\n\n'
         "뉴스 후보:\n" + newsblock)
     url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + GKEY
     body = {"contents": [{"parts": [{"text": prompt}]}],
@@ -105,21 +107,16 @@ def main():
         for i, it in enumerate(cand.get(key, [])):
             idx[f"{key}-{i}"] = it
     res = gemini(cand)
-    sections = []
-    for key, icon, title, _k in CATS:
-        picks = (res.get("picks", {}) or {}).get(key, []) or []
-        items = []
-        for p in picks:
-            it = idx.get(p.get("id"))
-            if not it:
-                continue
-            items.append({"t": it["title"], "s": it["source"], "d": it["date"], "link": it["link"],
-                          "sum": p.get("summary", ""), "ins": p.get("insight", "")})
-        if items:
-            sections.append({"icon": icon, "title": title, "items": items})
+    rows = []
+    for p in (res.get("rows", []) or []):
+        it = idx.get(p.get("id"))
+        if not it:
+            continue
+        rows.append({"cat": p.get("cat", "시장"), "s": it["source"], "t": it["title"],
+                     "d": it["date"], "ins": p.get("insight", ""), "link": it["link"]})
     kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
     day = kst.strftime("%Y-%m-%d")
-    today = {"headline": res.get("headline", ""), "sections": sections}
+    today = {"headlines": res.get("headlines", {}), "rows": rows}
 
     path = os.path.join(os.path.dirname(__file__), "..", "briefing.json")
     store = {"generatedAt": kst.strftime("%Y-%m-%d %H:%M"), "briefings": {}}
@@ -135,7 +132,7 @@ def main():
     keys = sorted(store["briefings"].keys(), reverse=True)[:30]
     store["briefings"] = {k: store["briefings"][k] for k in keys}
     json.dump(store, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    print("briefing for", day, "sections:", len(sections))
+    print("briefing for", day, "rows:", len(rows))
 
 
 if __name__ == "__main__":
