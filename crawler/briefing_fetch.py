@@ -5,6 +5,7 @@
 import os, re, json, html, datetime
 import requests
 
+# 일일 언론 모니터링 보고 자동 생성 (네이버 뉴스 + Gemini)
 NID = os.environ.get("NAVER_ID", "")
 NSEC = os.environ.get("NAVER_SECRET", "")
 GKEY = os.environ.get("GEMINI_API_KEY", "")
