@@ -88,6 +88,15 @@
       <button id="tabBtn-briefing" onclick="switchTab('briefing')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">데일리 브리핑</button>
     </div>
   </div>
+  <!-- 온드미디어 하위탭 -->
+  <div id="subnav-owned" class="bg-[#FAFAF9] border-b border-[#E6E6E3] sticky top-[100px] z-10 hidden">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-2 py-2 overflow-x-auto">
+      <button id="ownBtn-overview" onclick="switchOwned('overview')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-ink text-white whitespace-nowrap transition">개요</button>
+      <button id="ownBtn-youtube" onclick="switchOwned('youtube')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">유튜브</button>
+      <button id="ownBtn-instagram" onclick="switchOwned('instagram')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">인스타그램</button>
+      <button id="ownBtn-blog" onclick="switchOwned('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">블로그</button>
+    </div>
+  </div>
 
   <main class="max-w-[1400px] mx-auto px-5 py-5">
    <div id="view-analytics">
@@ -288,7 +297,14 @@
        </div>
      </div>
 
+     <!-- 개요 -->
+     <div id="ownedSec-overview">
+       <section id="ownedOverviewKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
+       <section id="ownedOverviewCards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></section>
+     </div>
+
      <!-- YouTube 자사 채널 -->
+     <div id="ownedSec-youtube" class="hidden">
      <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">YouTube 채널 <span class="text-xs font-normal text-slate-400">자동 실측</span></h2>
      <section id="ownedYtKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
      <section class="card p-5 mb-6">
@@ -308,17 +324,21 @@
        </div>
        <p class="text-xs text-slate-400 mt-2">※ 참여율 = (좋아요+댓글) ÷ 조회수. YouTube Data API 매일 자동 갱신.</p>
      </section>
+     </div>
 
      <!-- Instagram 자사 채널 -->
+     <div id="ownedSec-instagram" class="hidden">
      <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">Instagram 채널 <span class="text-xs font-normal text-agray">수기 입력</span></h2>
      <section id="ownedIgKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4"></section>
      <div class="card p-4 bg-brand/5 border-brand/20 flex items-start gap-3">
        
        <p class="text-sm text-slate-600">인스타그램은 정책상(로그인 월) 지표 자동 수집이 불가합니다. 팔로워·게시물·주요 콘텐츠 반응은 <b class="text-ink">수기 입력</b>으로 관리됩니다. 최신 수치를 알려주시면 반영해 드릴게요. — <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">프로필 바로가기 ↗</a></p>
      </div>
+     </div>
 
      <!-- 네이버 블로그 -->
-     <h2 class="accent font-extrabold text-ink mb-3 mt-8 flex items-center gap-2">네이버 블로그 <span class="text-xs font-normal text-slate-400">RSS 자동 수집</span></h2>
+     <div id="ownedSec-blog" class="hidden">
+     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">네이버 블로그 <span class="text-xs font-normal text-slate-400">RSS 자동 수집</span></h2>
      <section id="ownedBlogKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
      <section class="card p-5">
        <div class="flex items-center justify-between mb-3 gap-3">
@@ -328,6 +348,7 @@
        <div id="ownedBlogBody" class="divide-y divide-slate-100 max-h-[560px] overflow-auto pr-1"></div>
        <p class="text-xs text-slate-400 mt-3">※ 네이버 블로그는 정책상 글별 조회수가 비공개입니다. 발행 현황(제목·일자) 중심으로 전체 글을 제공합니다.</p>
      </section>
+     </div>
    </div>
 
    <div id="view-cafe" class="hidden">
@@ -956,11 +977,20 @@
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
       ['pr','owned','cafe','campaign'].forEach(k=>{ document.getElementById('grpBtn-'+k).className=grpClass(k===g); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
+      document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       if(t==='campaign'){ renderCampaign(); loadYoutube(); }
-      if(t==='owned'){ renderOwned(); loadOwned(); }
+      if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
       if(t==='cafe'){ renderCafe(); loadCafe(); }
+    }
+    let ownedSection='overview';
+    function switchOwned(s){
+      ownedSection=s;
+      ['overview','youtube','instagram','blog'].forEach(x=>{
+        document.getElementById('ownedSec-'+x).classList.toggle('hidden', x!==s);
+        document.getElementById('ownBtn-'+x).className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(x===s?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium');
+      });
     }
     function loadYoutube(){
       fetch('youtube.json?_='+Date.now()).then(r=>r.json()).then(p=>{
@@ -1011,6 +1041,26 @@
         `<div class="card card-hover p-5"><p class="text-sm text-slate-500">최신 발행일</p><p class="num text-2xl font-extrabold text-ink mt-1">${bp[0]?esc(bp[0].date):'-'}</p><p class="text-xs text-slate-400 mt-1">가장 최근 포스팅</p></div>`+
         `<div class="card card-hover p-5 flex flex-col"><p class="text-sm text-slate-500">채널</p><a href="${esc(bl.url||'https://blog.naver.com/aqaralife')}" target="_blank" rel="noopener" class="text-lg font-extrabold text-ink mt-1 hover:underline">blog.naver.com/aqaralife ↗</a></div>`;
       renderOwnedBlog();
+      renderOwnedOverview();
+    }
+    function renderOwnedOverview(){
+      const y=OWNED.youtube||{}, ch=y.channel||{}, ig=OWNED.instagram||{}, bl=OWNED.blog||{};
+      const blTotal=bl.total!=null?bl.total:(bl.totalRecent||0), avg=ch.videos?Math.round(ch.views/ch.videos):0;
+      const kc=(label,val,sub)=>`<div class="card card-hover p-5"><p class="text-sm text-slate-500">${label}</p><p class="num text-3xl font-extrabold text-ink mt-1">${val}</p><p class="text-xs text-slate-400 mt-1">${sub}</p></div>`;
+      document.getElementById('ownedOverviewKpi').innerHTML=
+        kc('YouTube 구독자',(ch.subs!=null?ch.subs.toLocaleString():'-')+'명','@aqaralife')+
+        kc('YouTube 총조회',KO_UNIT(ch.views),'누적 조회수')+
+        kc('Instagram 팔로워',ig.followers!=null?ig.followers.toLocaleString()+'명':'<span class="text-slate-300 text-lg">수기 대기</span>','@aqaralife.official')+
+        kc('블로그 전체 글',blTotal.toLocaleString()+'건',(bl.recent30!=null?('최근 30일 '+bl.recent30+'건'):'네이버 블로그'));
+      const row=(k,v)=>`<div class="flex items-center justify-between text-sm"><span class="text-slate-500">${k}</span><span class="num font-semibold text-ink">${v}</span></div>`;
+      const card=(title,sub,rows,btn,color)=>`<div class="card p-5 flex flex-col">
+        <div class="flex items-center justify-between mb-3"><h3 class="font-bold text-ink">${title}</h3><span class="text-[11px] font-semibold ${color}">${sub}</span></div>
+        <div class="space-y-1.5 flex-1">${rows}</div>
+        <button onclick="switchOwned('${btn}')" class="mt-4 text-[13px] font-medium text-ink hover:underline text-left">자세히 보기 →</button></div>`;
+      document.getElementById('ownedOverviewCards').innerHTML=
+        card('YouTube','자동 실측', row('구독자',(ch.subs||0).toLocaleString()+'명')+row('업로드 영상',(ch.videos||0).toLocaleString()+'개')+row('영상 평균 조회',KO_UNIT(avg)),'youtube','text-red-600')+
+        card('Instagram','수기 입력', row('팔로워',ig.followers!=null?ig.followers.toLocaleString()+'명':'수기 대기')+row('게시물',ig.posts!=null?ig.posts.toLocaleString()+'개':'-')+row('기준일',ig.asOf||'수기'),'instagram','text-[#C13584]')+
+        card('네이버 블로그','RSS 자동', row('전체 글',blTotal.toLocaleString()+'건')+row('최근 30일 발행',(bl.recent30||0)+'건')+row('최신 발행일',(bl.recent&&bl.recent[0]?bl.recent[0].date:'-')),'blog','text-[#03C75A]');
     }
     function renderOwnedBlog(){
       const bp=(OWNED.blog&&OWNED.blog.recent)||[];
