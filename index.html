@@ -285,6 +285,15 @@
        <span class="text-lg">ℹ️</span>
        <p class="text-sm text-slate-600">인스타그램은 정책상(로그인 월) 지표 자동 수집이 불가합니다. 팔로워·게시물·주요 콘텐츠 반응은 <b class="text-brand-ink">수기 입력</b>으로 관리됩니다. 최신 수치를 알려주시면 반영해 드릴게요. — <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-brand-ink hover:underline font-medium">프로필 바로가기 ↗</a></p>
      </div>
+
+     <!-- 네이버 블로그 -->
+     <h2 class="accent font-extrabold text-ink mb-3 mt-8 flex items-center gap-2"><span class="text-[#03C75A] font-black">N</span> 네이버 블로그 <span class="text-xs font-normal text-slate-400">RSS 자동 수집</span></h2>
+     <section id="ownedBlogKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
+     <section class="card p-5">
+       <h3 class="accent font-extrabold text-ink mb-3">최근 발행 글 <span id="ownedBlogCount" class="text-sm font-normal text-slate-400"></span></h3>
+       <div id="ownedBlogBody" class="divide-y divide-slate-100"></div>
+       <p class="text-xs text-slate-400 mt-3">※ 네이버 블로그는 정책상 글별 조회수가 비공개입니다. 발행 현황(제목·일자) 중심으로 제공합니다.</p>
+     </section>
    </div>
 
    <div id="view-cafe" class="hidden">
@@ -875,7 +884,8 @@
 
     // ===== 온드미디어 (자사 YouTube 자동 실측 + Instagram 수기) =====
     let OWNED={ generatedAt:'', youtube:{ channel:{title:'아카라 라이프',subs:1370,views:944150,videos:131}, recent:[] },
-      instagram:{ asOf:'수기 입력 대기', followers:null, posts:null, following:null } };
+      instagram:{ asOf:'수기 입력 대기', followers:null, posts:null, following:null },
+      blog:{ url:'https://blog.naver.com/aqaralife', title:'아카라라이프 블로그', totalRecent:0, recent30:0, recent:[] } };
     const KO_UNIT=n=>{ n=+n||0; if(n>=100000000) return (n/100000000).toFixed(1)+'억'; if(n>=10000) return (n/10000).toFixed(1)+'만'; return n.toLocaleString(); };
     function renderOwned(){
       const y=OWNED.youtube||{}, ch=y.channel||{}, rec=y.recent||[];
@@ -900,6 +910,18 @@
         igkpi('게시물', ig.posts!=null?ig.posts.toLocaleString()+'개':wait, '누적 게시물')+
         igkpi('팔로잉', ig.following!=null?ig.following.toLocaleString()+'명':'<span class="text-slate-300">-</span>', '')+
         igkpi('기준일', ig.asOf||'수기', '인스타 지표 기준');
+      // 블로그
+      const bl=OWNED.blog||{}, bp=bl.recent||[];
+      document.getElementById('ownedBlogKpi').innerHTML=
+        kpi('최근 30일 발행', (bl.recent30!=null?bl.recent30:0)+'건', '블로그 포스팅 빈도')+
+        kpi('수집된 최근 글', (bl.totalRecent!=null?bl.totalRecent:bp.length)+'건', 'RSS 최신 목록')+
+        `<div class="card card-hover p-5"><p class="text-sm text-slate-500">최신 발행일</p><p class="num text-2xl font-extrabold text-ink mt-1">${bp[0]?esc(bp[0].date):'-'}</p><p class="text-xs text-slate-400 mt-1">가장 최근 포스팅</p></div>`+
+        `<div class="card card-hover p-5 flex flex-col"><p class="text-sm text-slate-500">채널</p><a href="${esc(bl.url||'https://blog.naver.com/aqaralife')}" target="_blank" rel="noopener" class="text-xl font-extrabold text-[#03C75A] mt-1 hover:underline">blog.naver.com<br>/aqaralife ↗</a></div>`;
+      document.getElementById('ownedBlogCount').textContent=bp.length?('· 최근 '+bp.length+'개'):'';
+      document.getElementById('ownedBlogBody').innerHTML=bp.length?bp.map(p=>`<div class="py-2.5 flex items-baseline gap-3">
+        <span class="text-xs text-slate-400 num whitespace-nowrap w-24 shrink-0">${esc(p.date||'-')}</span>
+        <a href="${esc(p.link)}" target="_blank" rel="noopener" class="lnk text-sm font-medium flex-1 min-w-0">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
+      </div>`).join(''):'<p class="text-sm text-slate-400 py-4 text-center">블로그 글을 불러오는 중…</p>';
     }
     function loadOwned(){
       fetch('owned.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.youtube){ OWNED=Object.assign(OWNED,p); renderOwned(); } }).catch(()=>{});
