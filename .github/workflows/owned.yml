@@ -1,0 +1,39 @@
+name: Owned Media
+
+# 매일 09:50(UTC)=한국 18:50 자사 유튜브 채널 지표 수집 → owned.json
+on:
+  schedule:
+    - cron: '50 9 * * *'
+  workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/owned.yml'
+      - 'crawler/owned_fetch.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: owned-media
+  cancel-in-progress: false
+
+jobs:
+  owned:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Fetch owned media stats
+        env:
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
+        run: python crawler/owned_fetch.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add owned.json
+          git diff --staged --quiet || git commit -m "owned.json 자동 갱신"
+          git push

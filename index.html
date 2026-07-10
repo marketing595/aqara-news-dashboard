@@ -80,6 +80,7 @@
       <button id="tabBtn-analytics" onclick="switchTab('analytics')" class="px-4 py-3 text-sm font-bold border-b-[3px] border-brand text-ink">📊 통계 분석</button>
       <button id="tabBtn-briefing" onclick="switchTab('briefing')" class="px-4 py-3 text-sm font-bold border-b-[3px] border-transparent text-slate-400 hover:text-ink transition">📰 데일리 브리핑</button>
       <button id="tabBtn-campaign" onclick="switchTab('campaign')" class="px-4 py-3 text-sm font-bold border-b-[3px] border-transparent text-slate-400 hover:text-ink transition">📣 캠페인 분석</button>
+      <button id="tabBtn-owned" onclick="switchTab('owned')" class="px-4 py-3 text-sm font-bold border-b-[3px] border-transparent text-slate-400 hover:text-ink transition">📺 온드미디어</button>
       <button id="tabBtn-cafe" onclick="switchTab('cafe')" class="px-4 py-3 text-sm font-bold border-b-[3px] border-transparent text-slate-400 hover:text-ink transition">💬 카페 모니터링</button>
     </div>
   </div>
@@ -242,6 +243,48 @@
        <div id="campPos" class="text-sm text-slate-600 space-y-2"></div>
      </div>
      <p class="text-xs text-slate-400">※ SNS(인스타·유튜브 등) 언급량은 별도 소셜 API 연동이 필요해 현재 미포함입니다. 검색량=네이버 데이터랩, 자사 커버리지=구글 시트 기준.</p>
+   </div>
+
+   <div id="view-owned" class="hidden">
+     <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
+       <div>
+         <h2 class="text-xl font-extrabold text-ink">📺 온드미디어 <span class="text-sm font-semibold text-agray">(자사 채널 성과)</span></h2>
+         <p class="text-sm text-slate-500 mt-1">
+           <a href="https://www.youtube.com/@aqaralife" target="_blank" rel="noopener" class="text-brand-ink hover:underline font-medium">YouTube @aqaralife</a> ·
+           <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-brand-ink hover:underline font-medium">Instagram @aqaralife.official</a>
+           <span id="ownedStamp" class="text-slate-400"></span>
+         </p>
+       </div>
+     </div>
+
+     <!-- YouTube 자사 채널 -->
+     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2"><span class="text-red-600">▶</span> YouTube 채널 <span class="text-xs font-normal text-slate-400">자동 실측</span></h2>
+     <section id="ownedYtKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
+     <section class="card p-5 mb-6">
+       <h3 class="accent font-extrabold text-ink mb-3">최근 업로드 영상 <span id="ownedYtCount" class="text-sm font-normal text-slate-400"></span></h3>
+       <div class="overflow-auto max-h-[560px] rounded-lg border border-[#ECE9E1]">
+         <table class="w-full text-sm">
+           <thead class="sticky top-0 z-10"><tr class="text-left">
+             <th class="px-3 py-3 whitespace-nowrap">영상 제목</th>
+             <th class="px-3 py-3 whitespace-nowrap">게시일</th>
+             <th class="px-3 py-3 text-right whitespace-nowrap">조회수</th>
+             <th class="px-3 py-3 text-right whitespace-nowrap">좋아요</th>
+             <th class="px-3 py-3 text-right whitespace-nowrap">댓글</th>
+             <th class="px-3 py-3 text-right whitespace-nowrap">참여율</th>
+           </tr></thead>
+           <tbody id="ownedYtBody" class="divide-y divide-slate-100"></tbody>
+         </table>
+       </div>
+       <p class="text-xs text-slate-400 mt-2">※ 참여율 = (좋아요+댓글) ÷ 조회수. YouTube Data API 매일 자동 갱신.</p>
+     </section>
+
+     <!-- Instagram 자사 채널 -->
+     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2"><span class="text-[#C13584]">◉</span> Instagram 채널 <span class="text-xs font-normal text-agray">수기 입력</span></h2>
+     <section id="ownedIgKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4"></section>
+     <div class="card p-4 bg-brand/5 border-brand/20 flex items-start gap-3">
+       <span class="text-lg">ℹ️</span>
+       <p class="text-sm text-slate-600">인스타그램은 정책상(로그인 월) 지표 자동 수집이 불가합니다. 팔로워·게시물·주요 콘텐츠 반응은 <b class="text-brand-ink">수기 입력</b>으로 관리됩니다. 최신 수치를 알려주시면 반영해 드릴게요. — <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-brand-ink hover:underline font-medium">프로필 바로가기 ↗</a></p>
+     </div>
    </div>
 
    <div id="view-cafe" class="hidden">
@@ -809,12 +852,13 @@
     }
 
     function switchTab(t){
-      ['analytics','briefing','campaign','cafe'].forEach(v=>{
+      ['analytics','briefing','campaign','owned','cafe'].forEach(v=>{
         document.getElementById('view-'+v).classList.toggle('hidden', v!==t);
-        document.getElementById('tabBtn-'+v).className='px-4 py-3 text-sm font-semibold border-b-2 '+(v===t?'border-brand text-ink':'border-transparent text-slate-400 hover:text-slate-600');
+        document.getElementById('tabBtn-'+v).className='px-4 py-3 text-sm font-bold border-b-[3px] '+(v===t?'border-brand text-ink':'border-transparent text-slate-400 hover:text-ink transition');
       });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       if(t==='campaign'){ renderCampaign(); loadYoutube(); }
+      if(t==='owned'){ renderOwned(); loadOwned(); }
       if(t==='cafe'){ renderCafe(); loadCafe(); }
     }
     function loadYoutube(){
@@ -827,6 +871,38 @@
           if(curCampaign==='l100' && !document.getElementById('view-campaign').classList.contains('hidden')) renderCampaign();
         }
       }).catch(()=>{});
+    }
+
+    // ===== 온드미디어 (자사 YouTube 자동 실측 + Instagram 수기) =====
+    let OWNED={ generatedAt:'', youtube:{ channel:{title:'아카라 라이프',subs:1370,views:944150,videos:131}, recent:[] },
+      instagram:{ asOf:'수기 입력 대기', followers:null, posts:null, following:null } };
+    const KO_UNIT=n=>{ n=+n||0; if(n>=100000000) return (n/100000000).toFixed(1)+'억'; if(n>=10000) return (n/10000).toFixed(1)+'만'; return n.toLocaleString(); };
+    function renderOwned(){
+      const y=OWNED.youtube||{}, ch=y.channel||{}, rec=y.recent||[];
+      document.getElementById('ownedStamp').textContent=OWNED.generatedAt?(' · '+OWNED.generatedAt+' 기준'):'';
+      const avg=ch.videos?Math.round(ch.views/ch.videos):0;
+      const kpi=(label,val,sub)=>`<div class="card card-hover p-5"><p class="text-sm text-slate-500">${label}</p><p class="num text-3xl font-extrabold text-ink mt-1">${val}</p><p class="text-xs text-slate-400 mt-1">${sub}</p></div>`;
+      document.getElementById('ownedYtKpi').innerHTML=
+        kpi('구독자', (ch.subs!=null?ch.subs.toLocaleString():'-')+'명', '@aqaralife')+
+        kpi('총 조회수', KO_UNIT(ch.views), (ch.views!=null?ch.views.toLocaleString():'')+'회 누적')+
+        kpi('업로드 영상', (ch.videos!=null?ch.videos.toLocaleString():'-')+'개', '전체 게시 영상')+
+        kpi('영상 평균 조회', KO_UNIT(avg), '총조회 ÷ 영상수');
+      document.getElementById('ownedYtCount').textContent=rec.length?('· 최근 '+rec.length+'개'):'';
+      document.getElementById('ownedYtBody').innerHTML=rec.length?rec.map(v=>{
+        const er=v.views?(((v.likes||0)+(v.comments||0))/v.views*100).toFixed(2):'0.00';
+        const url='https://youtu.be/'+v.id;
+        return `<tr class="hover:bg-[#FEFBEE]"><td class="px-3 py-2.5 min-w-[280px]"><a href="${url}" target="_blank" rel="noopener" class="lnk font-medium">${esc(v.title)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(v.date)}</td><td class="px-3 py-2.5 text-right num">${(v.views||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num">${(v.likes||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num">${(v.comments||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num font-semibold text-brand-ink">${er}%</td></tr>`;
+      }).join(''):'<tr><td colspan="6" class="text-center py-6 text-slate-400">데이터 로딩 중…</td></tr>';
+      const ig=OWNED.instagram||{}, wait='<span class="text-slate-300">수기 대기</span>';
+      const igkpi=(label,val,sub)=>`<div class="card p-5"><p class="text-sm text-slate-500">${label}</p><p class="num text-2xl font-extrabold text-ink mt-1">${val}</p><p class="text-xs text-slate-400 mt-1">${sub}</p></div>`;
+      document.getElementById('ownedIgKpi').innerHTML=
+        igkpi('팔로워', ig.followers!=null?ig.followers.toLocaleString()+'명':wait, '@aqaralife.official')+
+        igkpi('게시물', ig.posts!=null?ig.posts.toLocaleString()+'개':wait, '누적 게시물')+
+        igkpi('팔로잉', ig.following!=null?ig.following.toLocaleString()+'명':'<span class="text-slate-300">-</span>', '')+
+        igkpi('기준일', ig.asOf||'수기', '인스타 지표 기준');
+    }
+    function loadOwned(){
+      fetch('owned.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.youtube){ OWNED=Object.assign(OWNED,p); renderOwned(); } }).catch(()=>{});
     }
 
     function loadBriefing(){
