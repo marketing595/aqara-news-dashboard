@@ -103,6 +103,13 @@
     <div id="loading" class="text-center py-24 text-slate-400">데이터를 불러오는 중…</div>
     <div id="error" class="hidden text-center py-24 text-red-500"></div>
     <div id="content" class="hidden space-y-5">
+      <section class="card p-5 sm:p-6">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+          <h2 class="text-lg font-extrabold text-ink">이달의 발행 실적 <span id="perfHeroMonth" class="text-sm font-medium text-muted"></span></h2>
+          <span id="perfHeroSub" class="text-xs text-slate-400"></span>
+        </div>
+        <div id="perfHeroCards" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
+      </section>
       <section class="card p-4 flex flex-wrap items-end gap-3">
         <div><label class="block text-[11px] text-slate-500 mb-1">시작일</label>
           <input id="fromDate" type="date" onchange="applyAndRender()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm" /></div>
@@ -437,14 +444,38 @@
       const up=d>=0, col=up?'text-agreen':'text-ared', ar=up?'▲':'▼';
       return `<span class="${col} font-semibold">${ar} ${Math.abs(pct)}%</span> <span class="text-slate-400 num">(${base.toLocaleString()})</span>`;
     }
+    function dayOf(r){ const s=(r['게재일']||'').toString(); return s.length>=10?+s.slice(8,10):0; }
+    function heroTile(label, cur, base, curLbl, baseLbl, note){
+      const has=base!=null; const d=has?cur-base:0; const pct=has?(base?Math.round(d/base*100):(cur>0?100:0)):null;
+      const up=d>=0; const col=!has?'text-slate-400':up?'text-agreen':'text-ared';
+      const bg=!has?'bg-slate-50 border-slate-200':up?'bg-agreen/[0.06] border-agreen/25':'bg-ared/[0.06] border-ared/25';
+      const big=!has?'–':`${up?'▲':'▼'} ${Math.abs(pct)}%`;
+      const diff=has?`<span class="text-sm ${col} font-semibold ml-1">(${d>=0?'+':''}${d.toLocaleString()})</span>`:'';
+      return `<div class="rounded-2xl border ${bg} p-5">
+        <p class="text-[13px] font-semibold text-slate-500 mb-2">${label}</p>
+        <div class="flex items-baseline"><p class="text-[34px] leading-none font-extrabold ${col}">${big}</p>${diff}</div>
+        <p class="text-[13px] text-slate-600 mt-3">${curLbl} <b class="text-ink num">${cur.toLocaleString()}건</b> · ${baseLbl} <b class="text-ink num">${has?base.toLocaleString()+'건':'-'}</b></p>
+        ${note?`<p class="text-[11px] text-slate-400 mt-1">${note}</p>`:''}</div>`;
+    }
     function renderCompare(){
       const yms=[...new Set(ALL.map(r=>r._ym).filter(Boolean))].sort();
-      if(!yms.length){ document.getElementById('cmpBody').innerHTML=''; return; }
+      if(!yms.length){ document.getElementById('cmpBody').innerHTML=''; document.getElementById('perfHeroCards').innerHTML=''; return; }
       const ref=yms[yms.length-1], prev=ymShift(ref,-1), yoy=ymShift(ref,-12);
-      document.getElementById('cmpMonthLabel').textContent='· '+ref.replace('-','년 ')+'월 기준';
       const inM=ym=>ALL.filter(r=>r._ym===ym);
+      const refDay=Math.max(0,...inM(ref).map(dayOf));
+      const cntFull=ym=>yms.includes(ym)?inM(ym).length:null;
+      const cntMtd=ym=>yms.includes(ym)?inM(ym).filter(r=>dayOf(r)<=refDay).length:null;
+      const refN=inM(ref).length;
+      const yLabel=ref.slice(0,4)+'년 '+(+ref.slice(5,7))+'월';
+      document.getElementById('perfHeroMonth').textContent='· '+yLabel;
+      document.getElementById('perfHeroSub').textContent='데이터 최신월 · 1일~'+refDay+'일 집계 기준';
+      document.getElementById('perfHeroCards').innerHTML=
+        heroTile('전월 동기 대비', refN, cntMtd(prev), '이번 달', '지난달 같은 기간', (+prev.slice(5,7))+'월 1~'+refDay+'일과 비교')+
+        heroTile('전년 동월(동기) 대비', refN, cntMtd(yoy), '이번 달', '작년 같은 기간', yoy.slice(0,4)+'년 '+(+yoy.slice(5,7))+'월 1~'+refDay+'일과 비교')+
+        heroTile('전월 대비 (월 전체)', refN, cntFull(prev), '이번 달', '지난달 전체', '이번 달은 진행 중일 수 있어 참고');
+      document.getElementById('cmpMonthLabel').textContent='· '+yLabel+' 기준(월 전체)';
       const metric=(label,fn)=>{ const c=fn(inM(ref)), p=yms.includes(prev)?fn(inM(prev)):null, y=yms.includes(yoy)?fn(inM(yoy)):null;
-        return `<tr class="hover:bg-[#FEFBEE]"><td class="px-3 py-2.5 font-medium text-slate-700 whitespace-nowrap">${label}</td>
+        return `<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2.5 font-medium text-slate-700 whitespace-nowrap">${label}</td>
           <td class="px-3 py-2.5 text-right num font-bold text-ink">${c.toLocaleString()}</td>
           <td class="px-3 py-2.5 text-right whitespace-nowrap num">${cmpCell(c,p)}</td>
           <td class="px-3 py-2.5 text-right whitespace-nowrap num">${cmpCell(c,y)}</td></tr>`; };
