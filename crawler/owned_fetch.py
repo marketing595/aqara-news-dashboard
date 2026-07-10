@@ -4,43 +4,61 @@
    Instagram은 정책상 자동수집 불가 → 기존 owned.json의 instagram 블록을 보존(수기 관리).
    GitHub Actions 매일 실행. 키: YT_API_KEY."""
 import os, json, re, html, datetime
-import xml.etree.ElementTree as ET
+from urllib.parse import unquote_plus
 import requests
 
 KEY = os.environ.get("YT_API_KEY", "")
 HANDLE = "aqaralife"
+BLOG_ID = "aqaralife"
 BASE = "https://www.googleapis.com/youtube/v3/"
-BLOG_RSS = "https://rss.blog.naver.com/aqaralife.xml"
+BLOG_API = "https://blog.naver.com/PostTitleListAsync.naver"
+
+
+def _bdate(s):
+    """네이버 블로그 addDate('2026. 6. 26.' 또는 '21시간 전') → YYYY-MM-DD."""
+    s = (s or "").strip()
+    m = re.match(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\.", s)
+    if m:
+        return "%s-%02d-%02d" % (m.group(1), int(m.group(2)), int(m.group(3)))
+    kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
+    if "일 전" in s:
+        d = int(re.search(r"(\d+)\s*일", s).group(1))
+        return (kst - datetime.timedelta(days=d)).strftime("%Y-%m-%d")
+    if any(k in s for k in ("시간 전", "분 전", "초 전", "방금")):
+        return kst.strftime("%Y-%m-%d")
+    return ""
 
 
 def fetch_blog():
-    """네이버 블로그 RSS → 최근 글 목록(제목·발행일·링크). 조회수는 비공개라 미포함."""
+    """네이버 블로그 목록 API → 전체 글(제목·발행일·링크). 조회수는 정책상 비공개."""
     try:
-        r = requests.get(BLOG_RSS, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
-        root = ET.fromstring(r.content)
-        ch = root.find("channel")
-        title = (ch.findtext("title") or "아카라라이프 블로그").strip()
-        posts = []
-        for it in ch.findall("item"):
-            t = html.unescape((it.findtext("title") or "").strip())
-            link = (it.findtext("link") or "").strip()
-            pub = (it.findtext("pubDate") or "").strip()
-            date = ""
-            m = re.search(r"(\d{2}) (\w{3}) (\d{4})", pub)
-            if m:
-                mon = {"Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04", "May": "05", "Jun": "06",
-                       "Jul": "07", "Aug": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12"}.get(m.group(2), "01")
-                date = "%s-%s-%s" % (m.group(3), mon, m.group(1))
-            if t and link:
-                posts.append({"title": t, "date": date, "link": link})
+        posts, page, total = [], 1, None
+        while page <= 60:
+            r = requests.get(BLOG_API, timeout=20, headers={"User-Agent": "Mozilla/5.0"},
+                             params={"blogId": BLOG_ID, "viewdate": "", "currentPage": page,
+                                     "categoryNo": "", "parentCategoryNo": "", "countPerPage": 30})
+            j = r.json()
+            total = int(j.get("totalCount", 0) or 0)
+            lst = j.get("postList", []) or []
+            if not lst:
+                break
+            for it in lst:
+                logno = (it.get("logNo") or "").strip()
+                if not logno:
+                    continue
+                title = html.unescape(unquote_plus(it.get("title", "")).replace("+", " ")).strip()
+                posts.append({"title": title, "date": _bdate(it.get("addDate", "")),
+                              "link": "https://blog.naver.com/%s/%s" % (BLOG_ID, logno)})
+            if total and page * 30 >= total:
+                break
+            page += 1
         posts.sort(key=lambda x: x["date"], reverse=True)
-        # 최근 30일 발행 수
         cutoff = (datetime.datetime.utcnow() + datetime.timedelta(hours=9) - datetime.timedelta(days=30)).strftime("%Y-%m-%d")
         recent30 = sum(1 for p in posts if p["date"] >= cutoff)
-        return {"url": "https://blog.naver.com/aqaralife", "title": title,
-                "totalRecent": len(posts), "recent30": recent30, "recent": posts[:15]}
+        return {"url": "https://blog.naver.com/aqaralife", "title": "아카라라이프 블로그",
+                "total": total or len(posts), "totalRecent": len(posts), "recent30": recent30, "recent": posts}
     except Exception as e:
-        print("blog RSS 실패:", e)
+        print("blog API 실패:", e)
         return None
 
 

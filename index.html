@@ -15,8 +15,9 @@
     tailwind.config = { theme: { extend: {
       colors: {
         brand:  { DEFAULT:'#FBC400', ink:'#8A6A00' },   // 아카라 옐로우(포인트·강조·활성화) / 텍스트용 딥골드
-        ink:    '#26282A',                              // 기본 텍스트 차콜
-        agreen: '#716A3C', aorange:'#D68134', ablue:'#8FB9D8', ared:'#BF5332', agray:'#5E625F'
+        ink:    '#1D1D1F',                              // 기본 텍스트 차콜
+        muted:  '#6E6E73',                              // 보조 텍스트 그레이
+        agreen: '#5E7350', aorange:'#C77A34', ablue:'#5E85A6', ared:'#BF5332', agray:'#6E6E73'
       },
       fontFamily: { sans: ['"Pretendard Variable"','Pretendard','system-ui','"Malgun Gothic"','sans-serif'] },
       boxShadow: {
@@ -27,29 +28,28 @@
   </script>
   <style>
     :root{
-      --aqara:#FBC400; --green:#716A3C; --orange:#D68134; --blue:#8FB9D8; --red:#BF5332; --gray:#5E625F;
-      --ink:#26282A; --line:#ECE9E1; --bg:#F5F3EE; --gold-ink:#8A6A00;
+      --aqara:#FBC400; --ink:#1D1D1F; --muted:#6E6E73; --line:#E6E6E3; --bg:#F4F4F2;
     }
     body { background:var(--bg); color:var(--ink);
-      font-family:"Pretendard Variable",Pretendard,system-ui,"Malgun Gothic",sans-serif;
-      -webkit-font-smoothing:antialiased; letter-spacing:-0.012em; line-height:1.6; word-break:keep-all; font-feature-settings:"tnum" 1; }
-    h1,h2,h3 { letter-spacing:-0.022em; }
+      font-family:"Pretendard Variable",Pretendard,-apple-system,system-ui,"Malgun Gothic",sans-serif;
+      -webkit-font-smoothing:antialiased; letter-spacing:-0.015em; line-height:1.6; word-break:keep-all; font-feature-settings:"tnum" 1; }
+    h1,h2,h3 { letter-spacing:-0.025em; }
     .num { font-feature-settings:"tnum" 1; letter-spacing:-0.02em; }
-    .card { background:#fff; border:1px solid var(--line); border-radius:18px; box-shadow:0 1px 2px rgba(38,40,42,.04),0 1px 3px rgba(38,40,42,.05); }
-    .card-hover { transition:box-shadow .22s ease, transform .22s ease; }
-    .card-hover:hover { box-shadow:0 12px 32px -14px rgba(38,40,42,.22); transform:translateY(-2px); }
-    /* 좌측 브랜드 액센트 바 (카드 상단 타이틀 강조) */
-    .accent::before{ content:""; display:inline-block; width:4px; height:15px; border-radius:4px; background:var(--aqara); margin-right:9px; vertical-align:-2px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:0 1px 2px rgba(0,0,0,.03); }
+    .card-hover { transition:box-shadow .2s ease, transform .2s ease; }
+    .card-hover:hover { box-shadow:0 8px 24px -12px rgba(0,0,0,.14); transform:translateY(-1px); }
+    /* .accent 는 과거 옐로우 바 → 클린 정책상 표식 제거 */
+    .accent::before{ content:none; }
     /* 테이블 */
-    table thead th{ background:#FAF8F2; color:#7A7E79; font-weight:700; border-bottom:1px solid var(--line); }
+    table thead th{ background:#F7F7F5; color:#8A8A8E; font-weight:600; border-bottom:1px solid var(--line); }
     tbody tr{ transition:background .12s; }
-    tbody tr:hover{ background:#FEFBEE; }
-    th.sortable{ cursor:pointer; user-select:none; } th.sortable:hover{ color:var(--gold-ink); }
-    /* 링크 hover: 옐로우 밑줄 */
+    tbody tr:hover{ background:#F7F7F5; }
+    th.sortable{ cursor:pointer; user-select:none; } th.sortable:hover{ color:var(--ink); }
+    /* 링크 hover */
     a.lnk{ color:var(--ink); text-decoration:none; }
-    a.lnk:hover{ color:var(--gold-ink); text-decoration:underline; text-decoration-color:var(--aqara); text-underline-offset:3px; text-decoration-thickness:2px; }
-    ::selection{ background:rgba(251,196,0,.28); }
-    ::-webkit-scrollbar { width:10px; height:10px; } ::-webkit-scrollbar-thumb { background:#D6D2C6; border-radius:8px; border:2px solid var(--bg); } ::-webkit-scrollbar-thumb:hover{ background:#C0BCAF; }
+    a.lnk:hover{ text-decoration:underline; text-decoration-color:#C7C7C4; text-underline-offset:3px; text-decoration-thickness:1.5px; }
+    ::selection{ background:rgba(251,196,0,.25); }
+    ::-webkit-scrollbar { width:10px; height:10px; } ::-webkit-scrollbar-thumb { background:#D2D2CE; border-radius:8px; border:2px solid var(--bg); } ::-webkit-scrollbar-thumb:hover{ background:#BEBEB9; }
   </style>
 </head>
 <body class="text-ink">
@@ -59,29 +59,26 @@
     const REFRESH_MINUTES = 30;
   </script>
 
-  <header class="bg-ink text-white sticky top-0 z-30 shadow-lg">
-    <div class="max-w-[1400px] mx-auto px-5 py-3.5 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-brand flex items-center justify-center text-lg font-extrabold text-ink shadow-sm">A</div>
-        <div>
-          <h1 class="text-lg font-extrabold leading-tight tracking-tight">아카라라이프 뉴스 애널리틱스</h1>
-          <p class="text-[11px] text-white/45 leading-tight tracking-wide">AQARA LIFE · News Analytics</p>
-        </div>
+  <header class="bg-ink text-white sticky top-0 z-30 border-b border-white/10">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 py-4 flex items-center justify-between gap-4">
+      <div class="flex items-baseline gap-2.5">
+        <h1 class="text-[17px] font-bold leading-tight tracking-tight">아카라라이프 뉴스 애널리틱스</h1>
+        <span class="text-[11px] text-white/35 tracking-wide hidden sm:inline">AQARA LIFE</span>
       </div>
       <div class="flex items-center gap-3">
-        <span id="updated" class="text-[11px] text-white/45 hidden md:inline"></span>
-        <button onclick="loadData()" class="text-sm bg-brand hover:brightness-95 text-ink transition px-4 py-2 rounded-lg font-bold shadow-sm">새로고침</button>
+        <span id="updated" class="text-[11px] text-white/35 hidden md:inline"></span>
+        <button onclick="loadData()" class="text-[13px] bg-white/10 hover:bg-white/20 text-white transition px-3.5 py-2 rounded-lg font-medium border border-white/15">새로고침</button>
       </div>
     </div>
   </header>
 
-  <div class="bg-white border-b border-[#ECE9E1] sticky top-[60px] z-20 shadow-[0_1px_2px_rgba(38,40,42,.03)]">
-    <div class="max-w-[1400px] mx-auto px-5 flex gap-1">
-      <button id="tabBtn-analytics" onclick="switchTab('analytics')" class="px-4 py-3 text-sm font-bold border-b-[3px] border-brand text-ink">📊 통계 분석</button>
-      <button id="tabBtn-briefing" onclick="switchTab('briefing')" class="px-4 py-3 text-sm font-bold border-b-[3px] border-transparent text-slate-400 hover:text-ink transition">📰 데일리 브리핑</button>
-      <button id="tabBtn-campaign" onclick="switchTab('campaign')" class="px-4 py-3 text-sm font-bold border-b-[3px] border-transparent text-slate-400 hover:text-ink transition">📣 캠페인 분석</button>
-      <button id="tabBtn-owned" onclick="switchTab('owned')" class="px-4 py-3 text-sm font-bold border-b-[3px] border-transparent text-slate-400 hover:text-ink transition">📺 온드미디어</button>
-      <button id="tabBtn-cafe" onclick="switchTab('cafe')" class="px-4 py-3 text-sm font-bold border-b-[3px] border-transparent text-slate-400 hover:text-ink transition">💬 카페 모니터링</button>
+  <div class="bg-white border-b border-[#E6E6E3] sticky top-[53px] z-20">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-6 overflow-x-auto">
+      <button id="tabBtn-analytics" onclick="switchTab('analytics')" class="px-1 py-3.5 text-[14px] font-semibold border-b-2 border-brand text-ink whitespace-nowrap">통계 분석</button>
+      <button id="tabBtn-briefing" onclick="switchTab('briefing')" class="px-1 py-3.5 text-[14px] font-semibold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">데일리 브리핑</button>
+      <button id="tabBtn-campaign" onclick="switchTab('campaign')" class="px-1 py-3.5 text-[14px] font-semibold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">캠페인 분석</button>
+      <button id="tabBtn-owned" onclick="switchTab('owned')" class="px-1 py-3.5 text-[14px] font-semibold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
+      <button id="tabBtn-cafe" onclick="switchTab('cafe')" class="px-1 py-3.5 text-[14px] font-semibold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페 모니터링</button>
     </div>
   </div>
 
@@ -105,7 +102,7 @@
       </section>
       <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">기간 내 기사</p><p id="kpiTotal" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p id="kpiDelta" class="text-xs mt-1"></p></div>
-        <div class="card card-hover p-5"><p class="text-sm text-slate-500">활동 매체 수</p><p id="kpiMedia" class="num text-3xl font-extrabold text-brand-ink mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도된 고유 매체</p></div>
+        <div class="card card-hover p-5"><p class="text-sm text-slate-500">활동 매체 수</p><p id="kpiMedia" class="num text-3xl font-extrabold text-ink mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도된 고유 매체</p></div>
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">단신 : 기획</p><p id="kpiRatio" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도자료 대 기획·특집</p></div>
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">월 평균 발행</p><p id="kpiAvg" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">기간 내 월평균 건수</p></div>
       </section>
@@ -176,7 +173,7 @@
      <div class="card p-5 mb-5">
        <h2 class="accent font-extrabold text-ink mb-1">🔎 검색어 · 키워드 인사이트 <span class="text-xs font-normal text-slate-400">(네이버 검색 기준)</span></h2>
        <div class="flex items-center justify-between flex-wrap gap-2 mb-2 mt-3">
-         <p class="text-sm font-semibold text-slate-600">📈 검색어 흐름 <span class="text-xs font-normal text-slate-400">(월별 상대 검색량 · 네이버 데이터랩 · 최고점=100)</span></p>
+         <p class="text-sm font-semibold text-slate-600">검색어 흐름 <span class="text-xs font-normal text-slate-400">(월별 상대 검색량 · 네이버 데이터랩 · 최고점=100)</span></p>
          <div id="trendRangeBtns" class="flex gap-1">
            <button data-n="0" onclick="setTrendRange(0)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">전체(5년)</button>
            <button data-n="36" onclick="setTrendRange(36)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">최근 3년</button>
@@ -187,7 +184,7 @@
        <div class="h-64"><canvas id="searchTrendChart"></canvas></div>
        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
          <div>
-           <p class="text-sm font-semibold text-slate-600 mb-2">📊 업계 핫 키워드 Top 15 <span class="text-xs font-normal text-slate-400">(최근 뉴스 빈도)</span></p>
+           <p class="text-sm font-semibold text-slate-600 mb-2">업계 핫 키워드 Top 15 <span class="text-xs font-normal text-slate-400">(최근 뉴스 빈도)</span></p>
            <div class="h-80"><canvas id="hotKwChart"></canvas></div>
          </div>
          <div>
@@ -205,8 +202,8 @@
        <div class="flex items-center gap-2"><label class="text-sm text-slate-500">날짜</label>
          <select id="brDateSel" onchange="renderBriefing(this.value)" class="border border-slate-300 rounded-lg px-3 py-2 text-sm font-semibold bg-white"></select></div>
        <div class="flex items-center gap-2">
-         <button id="brEditBtn" onclick="toggleBrEdit()" class="text-sm border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg font-semibold">✏️ 편집</button>
-         <button onclick="copyMail()" class="text-sm bg-ink hover:brightness-125 transition text-white px-4 py-2 rounded-lg font-semibold">📧 메일 텍스트 복사</button>
+         <button id="brEditBtn" onclick="toggleBrEdit()" class="text-sm border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg font-semibold">편집</button>
+         <button onclick="copyMail()" class="text-sm bg-ink hover:brightness-125 transition text-white px-4 py-2 rounded-lg font-semibold">메일 텍스트 복사</button>
        </div>
      </div>
      <h2 class="text-lg font-extrabold text-slate-900 mb-2" id="brDate"></h2>
@@ -230,7 +227,7 @@
      </div>
      <section id="campKpis" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
      <div class="card p-5 mb-5">
-       <h2 class="accent font-extrabold text-ink mb-1">📈 주별 검색량 추이 <span class="text-xs font-normal text-slate-400">(네이버 데이터랩 · 음영 = 캠페인 기간)</span></h2>
+       <h2 class="accent font-extrabold text-ink mb-1">주별 검색량 추이 <span class="text-xs font-normal text-slate-400">(네이버 데이터랩 · 음영 = 캠페인 기간)</span></h2>
        <div class="h-72 mt-2"><canvas id="campTrendChart"></canvas></div>
      </div>
      <div id="campContentCard" class="card p-5 mb-5 hidden">
@@ -251,7 +248,7 @@
        <p class="text-xs text-slate-400 mt-2">※ <b>참여율 = (좋아요 ＋ 댓글) ÷ 조회수 × 100</b> · 댓글 감성은 상위 댓글 표본(영상당 최대 300개)을 자동 분류한 값입니다.</p>
        <div id="campInsta" class="mt-4"></div>
        <div id="campReaction" class="mt-6 hidden">
-         <h3 class="accent font-extrabold text-ink mb-1">💬 댓글 반응 상세</h3>
+         <h3 class="accent font-extrabold text-ink mb-1">댓글 반응 상세</h3>
          <p id="campReactionNote" class="text-xs text-slate-500 mb-3"></p>
          <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
            <div>
@@ -266,7 +263,7 @@
        </div>
      </div>
      <div class="card p-5 mb-5">
-       <h2 class="accent font-extrabold text-ink mb-2">🎯 포지셔닝 분석</h2>
+       <h2 class="accent font-extrabold text-ink mb-2">포지셔닝 분석</h2>
        <div id="campPos" class="text-sm text-slate-600 space-y-2"></div>
      </div>
      <p class="text-xs text-slate-400">※ SNS(인스타·유튜브 등) 언급량은 별도 소셜 API 연동이 필요해 현재 미포함입니다. 검색량=네이버 데이터랩, 자사 커버리지=구글 시트 기준.</p>
@@ -275,17 +272,17 @@
    <div id="view-owned" class="hidden">
      <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
        <div>
-         <h2 class="text-xl font-extrabold text-ink">📺 온드미디어 <span class="text-sm font-semibold text-agray">(자사 채널 성과)</span></h2>
+         <h2 class="text-xl font-extrabold text-ink">온드미디어 <span class="text-sm font-semibold text-agray">(자사 채널 성과)</span></h2>
          <p class="text-sm text-slate-500 mt-1">
-           <a href="https://www.youtube.com/@aqaralife" target="_blank" rel="noopener" class="text-brand-ink hover:underline font-medium">YouTube @aqaralife</a> ·
-           <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-brand-ink hover:underline font-medium">Instagram @aqaralife.official</a>
+           <a href="https://www.youtube.com/@aqaralife" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">YouTube @aqaralife</a> ·
+           <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">Instagram @aqaralife.official</a>
            <span id="ownedStamp" class="text-slate-400"></span>
          </p>
        </div>
      </div>
 
      <!-- YouTube 자사 채널 -->
-     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2"><span class="text-red-600">▶</span> YouTube 채널 <span class="text-xs font-normal text-slate-400">자동 실측</span></h2>
+     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">YouTube 채널 <span class="text-xs font-normal text-slate-400">자동 실측</span></h2>
      <section id="ownedYtKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
      <section class="card p-5 mb-6">
        <h3 class="accent font-extrabold text-ink mb-3">최근 업로드 영상 <span id="ownedYtCount" class="text-sm font-normal text-slate-400"></span></h3>
@@ -306,28 +303,31 @@
      </section>
 
      <!-- Instagram 자사 채널 -->
-     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2"><span class="text-[#C13584]">◉</span> Instagram 채널 <span class="text-xs font-normal text-agray">수기 입력</span></h2>
+     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">Instagram 채널 <span class="text-xs font-normal text-agray">수기 입력</span></h2>
      <section id="ownedIgKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4"></section>
      <div class="card p-4 bg-brand/5 border-brand/20 flex items-start gap-3">
-       <span class="text-lg">ℹ️</span>
-       <p class="text-sm text-slate-600">인스타그램은 정책상(로그인 월) 지표 자동 수집이 불가합니다. 팔로워·게시물·주요 콘텐츠 반응은 <b class="text-brand-ink">수기 입력</b>으로 관리됩니다. 최신 수치를 알려주시면 반영해 드릴게요. — <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-brand-ink hover:underline font-medium">프로필 바로가기 ↗</a></p>
+       
+       <p class="text-sm text-slate-600">인스타그램은 정책상(로그인 월) 지표 자동 수집이 불가합니다. 팔로워·게시물·주요 콘텐츠 반응은 <b class="text-ink">수기 입력</b>으로 관리됩니다. 최신 수치를 알려주시면 반영해 드릴게요. — <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">프로필 바로가기 ↗</a></p>
      </div>
 
      <!-- 네이버 블로그 -->
-     <h2 class="accent font-extrabold text-ink mb-3 mt-8 flex items-center gap-2"><span class="text-[#03C75A] font-black">N</span> 네이버 블로그 <span class="text-xs font-normal text-slate-400">RSS 자동 수집</span></h2>
+     <h2 class="accent font-extrabold text-ink mb-3 mt-8 flex items-center gap-2">네이버 블로그 <span class="text-xs font-normal text-slate-400">RSS 자동 수집</span></h2>
      <section id="ownedBlogKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
      <section class="card p-5">
-       <h3 class="accent font-extrabold text-ink mb-3">최근 발행 글 <span id="ownedBlogCount" class="text-sm font-normal text-slate-400"></span></h3>
-       <div id="ownedBlogBody" class="divide-y divide-slate-100"></div>
-       <p class="text-xs text-slate-400 mt-3">※ 네이버 블로그는 정책상 글별 조회수가 비공개입니다. 발행 현황(제목·일자) 중심으로 제공합니다.</p>
+       <div class="flex items-center justify-between mb-3 gap-3">
+         <h3 class="accent font-extrabold text-ink">전체 발행 글 <span id="ownedBlogCount" class="text-sm font-normal text-slate-400"></span></h3>
+         <input id="ownedBlogSearch" type="text" placeholder="제목 검색" oninput="renderOwnedBlog()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 w-40 focus:outline-none focus:ring-2 focus:ring-brand/50" />
+       </div>
+       <div id="ownedBlogBody" class="divide-y divide-slate-100 max-h-[560px] overflow-auto pr-1"></div>
+       <p class="text-xs text-slate-400 mt-3">※ 네이버 블로그는 정책상 글별 조회수가 비공개입니다. 발행 현황(제목·일자) 중심으로 전체 글을 제공합니다.</p>
      </section>
    </div>
 
    <div id="view-cafe" class="hidden">
      <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
        <div>
-         <h2 class="text-xl font-extrabold text-slate-900">💬 아카라 스마트홈 카페 모니터링</h2>
-         <p class="text-sm text-slate-500 mt-1"><a href="https://cafe.naver.com/aqara" target="_blank" rel="noopener" class="text-brand-ink hover:underline">아카라 스마트홈</a> · <a href="https://cafe.naver.com/stsmarthome" target="_blank" rel="noopener" class="text-brand-ink hover:underline">모두의 스마트홈</a>(아카라 언급) · 키워드 수집 · 글번호순</p>
+         <h2 class="text-xl font-extrabold text-slate-900">아카라 스마트홈 카페 모니터링</h2>
+         <p class="text-sm text-slate-500 mt-1"><a href="https://cafe.naver.com/aqara" target="_blank" rel="noopener" class="text-ink hover:underline">아카라 스마트홈</a> · <a href="https://cafe.naver.com/stsmarthome" target="_blank" rel="noopener" class="text-ink hover:underline">모두의 스마트홈</a>(아카라 언급) · 키워드 수집 · 글번호순</p>
        </div>
        <div id="cafeStats" class="flex flex-wrap gap-1.5"></div>
      </div>
@@ -437,7 +437,7 @@
       document.getElementById('cmpCompeteBody').innerHTML=items.map(i=>{
         const w=Math.max(3,Math.round(i.total/max*100));
         const bar=i.me?'bg-brand':'bg-slate-300';
-        const nm=i.me?'text-brand-ink font-bold':'text-slate-600 font-medium';
+        const nm=i.me?'text-ink font-bold':'text-slate-600 font-medium';
         return `<div class="flex items-center gap-3">
           <span class="text-xs ${nm} w-28 shrink-0 truncate">${esc(i.name)}</span>
           <div class="flex-1 bg-slate-100 rounded-full h-3.5 overflow-hidden"><div class="h-3.5 ${bar}" style="width:${w}%"></div></div>
@@ -474,7 +474,7 @@
       draw('topicChart',{type:'bar',data:{labels:ms,datasets:ds},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}},plugins:{legend:{position:'top',labels:{boxWidth:11}}}}}); }
     function renderKeywords(){ const c={}; FILTERED.forEach(r=>keywordsOf(r['기사명']).forEach(w=>c[w]=(c[w]||0)+1));
       const a=Object.entries(c).sort((x,y)=>y[1]-x[1]).slice(0,15);
-      draw('keywordChart',{type:'bar',data:{labels:a.map(x=>x[0]),datasets:[{data:a.map(x=>x[1]),backgroundColor:'#00a3a3',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}}); }
+      draw('keywordChart',{type:'bar',data:{labels:a.map(x=>x[0]),datasets:[{data:a.map(x=>x[1]),backgroundColor:'#1D1D1F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}}); }
     function populateFilters(){ const tops=[...new Set(ALL.map(r=>r._topic))].sort();
       document.getElementById('fTopic').innerHTML='<option value="">전체 종류</option>'+tops.map(t=>`<option>${esc(t)}</option>`).join('');
       const tys=[...new Set(ALL.map(r=>r._type))].sort();
@@ -495,7 +495,7 @@
         <td class="px-3 py-2.5 whitespace-nowrap font-medium text-slate-700">${esc(r['매체'])}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._topic,'bg-ablue/25 text-[#365b7a]')}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._type,r._type==='단신'?'bg-slate-100 text-slate-600':'bg-aorange/15 text-aorange')}</td>
-        <td class="px-3 py-2.5"><a href="${esc(linkOf(r))}" target="_blank" rel="noopener noreferrer" class="text-slate-800 hover:text-brand-ink hover:underline">${esc(r['기사명'])} <span class="text-slate-300">↗</span></a>${chTag(r._chan)}</td></tr>`).join('')
+        <td class="px-3 py-2.5"><a href="${esc(linkOf(r))}" target="_blank" rel="noopener noreferrer" class="text-slate-800 hover:text-ink hover:underline">${esc(r['기사명'])} <span class="text-slate-300">↗</span></a>${chTag(r._chan)}</td></tr>`).join('')
         +(rows.length>700?`<tr><td colspan="5" class="text-center py-3 text-xs text-slate-400">상위 700건 표시</td></tr>`:'');
     }
 
@@ -641,7 +641,7 @@
           '아카라라이프':[10.9,14.7,16.9,17.6,13.7,13.5,11.7,8.7,12.6,9.6,13.2,14.5,13.2,12.4,14.0,14.2,11.5,10.2,9.0,10.1,9.1,11.7,11.7,13.7,11.2,11.1,15.9,5.9],
           '스마트홈인테리어':[0,0.8,0.4,0,0.2,0,1.0,0,0.2,0.2,0.2,0,0.2,0,0.2,0.2,0,0,0,0,0,0,0,0,0,0,0,0.4],
           '스마트홈':[23.3,25.4,25.2,24.1,26.1,24.9,28.1,23.0,23.5,26.2,35.2,36.0,30.7,31.1,35.4,30.7,25.5,23.6,26.4,31.4,27.8,26.5,25.4,24.1,28.3,24.2,25.0,12.5]},
-        pos:"<p>• <b>브랜드 검색 반응:</b> '아카라' 검색이 캠페인 후반(6월 초) <b class='text-brand-ink'>연중 최고점(100)</b>에 도달 — 캠페인과 브랜드 검색 피크가 겹칩니다. 단, '아카라라이프'(정식 사명) 검색은 뚜렷한 상승 없음.</p><p>• <b>'스마트홈인테리어' 용어:</b> 검색량이 사실상 0 — 소비자는 이 합성어로 검색하지 않음. 캠페인 메시지는 '아카라' 브랜드 검색으로 수렴시키는 편이 효율적.</p><p>• <b>인테리어 문맥 포지셔닝:</b> 뉴스 동시언급 1% 미만 → '인테리어 문맥 내 브랜드 각인'은 초기 단계. 다음 캠페인의 핵심 KPI로 추적 권장.</p>" },
+        pos:"<p>• <b>브랜드 검색 반응:</b> '아카라' 검색이 캠페인 후반(6월 초) <b class='text-ink'>연중 최고점(100)</b>에 도달 — 캠페인과 브랜드 검색 피크가 겹칩니다. 단, '아카라라이프'(정식 사명) 검색은 뚜렷한 상승 없음.</p><p>• <b>'스마트홈인테리어' 용어:</b> 검색량이 사실상 0 — 소비자는 이 합성어로 검색하지 않음. 캠페인 메시지는 '아카라' 브랜드 검색으로 수렴시키는 편이 효율적.</p><p>• <b>인테리어 문맥 포지셔닝:</b> 뉴스 동시언급 1% 미만 → '인테리어 문맥 내 브랜드 각인'은 초기 단계. 다음 캠페인의 핵심 KPI로 추적 권장.</p>" },
       l100:{ name:'L100 스마트 도어락 캠페인', start:'2026-05-27', end:'2026-07-06', ongoing:true,
         content:'https://docs.google.com/spreadsheets/d/1XgFPdDClS_KhvsOENeyXC62zXnXrtscW/edit?gid=1129219134',
         kpi:['L100','아카라 도어락','스마트도어락'],
@@ -650,7 +650,7 @@
           'L100':[3.9,4.7,5.8,5.8,4.8,6.7,4.9,5.1,6.4,4.7,6.4,7.0,8.1,6.9,5.4,4.3,5.0,3.8,3.6,4.2,3.3,7.5,11.4,15.3,9.8,9.7,10.1,4.6],
           '스마트도어락':[25.2,30.6,31.7,30.1,29.2,27.7,32.5,32.4,29.2,26.1,30.1,31.8,28.9,26.3,26.8,27.2,26.6,24.5,29.5,28.3,26.6,33.6,33.6,39.7,38.2,37.0,31.1,13.4],
           'K100':[19.6,27.0,28.6,31.4,33.7,39.7,30.2,26.8,29.3,26.5,29.4,33.3,26.2,25.2,23.4,23.4,24.9,22.7,21.2,28.2,21.1,23.1,26.0,27.7,25.1,23.3,23.1,9.2]},
-        pos:"<p>• <b>제품 검색 급등:</b> 'L100' 검색이 캠페인 중 <b class='text-brand-ink'>약 2배(+89%)</b> 상승, 6월 초 피크(15.3). 캠페인이 L100 제품 인지에 직접 효과.</p><p>• <b>카테고리 동반 상승:</b> '아카라 도어락' +21%, '스마트도어락' +11% → 브랜드 도어락 전반으로 관심 확대.</p><p>• <b>구모델→신모델 전환:</b> 같은 기간 'K100'(구모델)은 −17% 하락 → 관심이 K100에서 L100으로 이동. 신제품 전환이라는 캠페인 목표에 부합.</p><p>• <b>콘텐츠 성과:</b> 인플루언서 유튜브 7편 누적 <b class='text-brand-ink'>133만 조회</b> + 인스타 6건 52만 조회. 댓글 감성은 부정 8%로 양호.</p><p>• <b>콘텐츠 기여도 (도달 ≠ 제품 관심):</b> 최대 도달 영상(동네친구강나미 115만뷰)은 댓글이 창작자 사연(디스크·수술)에 집중돼 <b>제품 인지 기여는 낮음</b>. 실제 제품 반응·설치 의향은 <b>김한용의모카(테슬라 연동)·지니스펙트럼(아동 실종 방지)</b> 등 '제품 맥락이 분명한' 영상에서 발생.</p><p>• <b>메가 유튜버 재활용 전략:</b> 동네친구강나미 같은 초대형 채널은 즉각 전환보다 '브랜드 노출·화제성' 자산에 가까움. 향후 <b class='text-brand-ink'>영상 2차 라이선스를 구매해 자사 채널·유료광고(퍼포먼스) 소재로 재확산</b>하면, 이미 검증된 고조회 콘텐츠로 도달을 재활용하며 전환까지 연결할 수 있음.</p><p>• <b>다음 캠페인 제언:</b> '초대형 1편' 의존을 낮추고, <b>제품 맥락이 뚜렷한 중형 크리에이터 다수 + 참여율 높은 마이크로 조합</b>으로 전환 효율을 높이는 편성 권장.</p>",
+        pos:"<p>• <b>제품 검색 급등:</b> 'L100' 검색이 캠페인 중 <b class='text-ink'>약 2배(+89%)</b> 상승, 6월 초 피크(15.3). 캠페인이 L100 제품 인지에 직접 효과.</p><p>• <b>카테고리 동반 상승:</b> '아카라 도어락' +21%, '스마트도어락' +11% → 브랜드 도어락 전반으로 관심 확대.</p><p>• <b>구모델→신모델 전환:</b> 같은 기간 'K100'(구모델)은 −17% 하락 → 관심이 K100에서 L100으로 이동. 신제품 전환이라는 캠페인 목표에 부합.</p><p>• <b>콘텐츠 성과:</b> 인플루언서 유튜브 7편 누적 <b class='text-ink'>133만 조회</b> + 인스타 6건 52만 조회. 댓글 감성은 부정 8%로 양호.</p><p>• <b>콘텐츠 기여도 (도달 ≠ 제품 관심):</b> 최대 도달 영상(동네친구강나미 115만뷰)은 댓글이 창작자 사연(디스크·수술)에 집중돼 <b>제품 인지 기여는 낮음</b>. 실제 제품 반응·설치 의향은 <b>김한용의모카(테슬라 연동)·지니스펙트럼(아동 실종 방지)</b> 등 '제품 맥락이 분명한' 영상에서 발생.</p><p>• <b>메가 유튜버 재활용 전략:</b> 동네친구강나미 같은 초대형 채널은 즉각 전환보다 '브랜드 노출·화제성' 자산에 가까움. 향후 <b class='text-ink'>영상 2차 라이선스를 구매해 자사 채널·유료광고(퍼포먼스) 소재로 재확산</b>하면, 이미 검증된 고조회 콘텐츠로 도달을 재활용하며 전환까지 연결할 수 있음.</p><p>• <b>다음 캠페인 제언:</b> '초대형 1편' 의존을 낮추고, <b>제품 맥락이 뚜렷한 중형 크리에이터 다수 + 참여율 높은 마이크로 조합</b>으로 전환 효율을 높이는 편성 권장.</p>",
         videosAsOf:'2026-07-09',
         videos:[
           {n:'동네친구강나미',t:'매크로',title:'결국 촬영 중단했습니다..🚨 수술실까지 들어가게 된 사연',views:1152875,likes:12101,comments:796,pos:105,neu:160,neg:35,id:'URJrux1lc-M'},
@@ -726,7 +726,7 @@
       {kw:'스마트인테리어', recent:0, total:223},
       {kw:'ai 인테리어', recent:0, total:119}
     ];
-    const CAT_COLOR={'자사':'bg-brand/20 text-brand-ink','경쟁사':'bg-ared/15 text-ared','시장':'bg-ablue/25 text-[#365b7a]','업계':'bg-aorange/15 text-aorange'};
+    const CAT_COLOR={'자사':'bg-brand/20 text-ink','경쟁사':'bg-ared/15 text-ared','시장':'bg-ablue/25 text-[#365b7a]','업계':'bg-aorange/15 text-aorange'};
     let brEdits=(()=>{ try{return JSON.parse(localStorage.getItem('brEdits')||'{}');}catch(e){return {};} })();
     let brEditMode=false;
     function toggleBrEdit(){
@@ -752,23 +752,23 @@
     function renderBriefing(date){ curDate=date; const b=BRIEFINGS[date]; if(!b)return;
       document.getElementById('brDateSel').value=date;
       const ed=brEdits[date]||{}; const edH=ed.headlines||{}; const edI=ed.ins||{};
-      const eb=document.getElementById('brEditBtn'); if(eb) eb.textContent=brEditMode?'💾 저장':'✏️ 편집';
+      const eb=document.getElementById('brEditBtn'); if(eb) eb.textContent=brEditMode?'저장':'편집';
       const ec=brEditMode?' bg-brand/10 ring-1 ring-brand/50 rounded px-1 outline-none':'';
-      document.getElementById('brDate').textContent='📄 [일일 언론 모니터링 보고] '+date.replace(/-/g,'.')+' ('+briefDow(date)+')';
+      document.getElementById('brDate').textContent='[일일 언론 모니터링 보고] '+date.replace(/-/g,'.')+' ('+briefDow(date)+')';
       const h=b.headlines||{};
-      document.getElementById('brHeadline').innerHTML='<p class="text-sm font-bold text-slate-800 mb-2">📌 종합 요약 (Headlines)'+(brEditMode?' <span class="text-[11px] font-normal text-brand-ink">· 편집 모드: 글자를 클릭해 수정 후 💾 저장</span>':'')+'</p>'+
+      document.getElementById('brHeadline').innerHTML='<p class="text-sm font-bold text-slate-800 mb-2">종합 요약 (Headlines)'+(brEditMode?' <span class="text-[11px] font-normal text-ink">· 편집 모드: 글자를 클릭해 수정 후 저장</span>':'')+'</p>'+
         ['자사','업계','경쟁사'].map(k=>{ const v=(edH[k]!=null?edH[k]:(h[k]||'')); if(!v&&!brEditMode)return''; return `<p class="text-sm text-slate-700 mb-1.5 flex gap-2"><span class="px-1.5 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[k]||'bg-slate-100 text-slate-500'} h-fit whitespace-nowrap">${k}</span><span data-eh="${k}" ${brEditMode?'contenteditable="true"':''} class="flex-1${ec}">${esc(v)}</span></p>`; }).join('');
       const rows=b.rows||[];
-      document.getElementById('briefingBody').innerHTML='<p class="text-sm font-bold text-slate-800 mb-2">📰 상세 내역</p><div class="card overflow-auto"><table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2.5 font-semibold whitespace-nowrap">구분</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">매체명</th><th class="px-3 py-2.5 font-semibold">기사 제목</th><th class="px-3 py-2.5 font-semibold">주요 내용 및 시사점</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">링크</th></tr></thead><tbody class="divide-y divide-slate-100">'+
-        rows.map((r,i)=>{ const iv=(edI[i]!=null?edI[i]:r.ins); return `<tr class="hover:bg-slate-50 align-top"><td class="px-3 py-3 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[r.cat]||'bg-slate-100 text-slate-500'}">${esc(r.cat)}</span></td><td class="px-3 py-3 whitespace-nowrap font-medium text-slate-600">${esc(r.s)}</td><td class="px-3 py-3 font-semibold text-slate-800 min-w-[180px]">${esc(r.t)}</td><td class="px-3 py-3 text-slate-600 min-w-[280px]" data-ei="${i}" ${brEditMode?'contenteditable="true"':''}><span class="${brEditMode?'':''}">${esc(iv)}</span></td><td class="px-3 py-3 whitespace-nowrap">${r.link?`<a href="${esc(r.link)}" target="_blank" rel="noopener noreferrer" class="text-brand-ink hover:underline font-medium">[이동]</a>`:'-'}</td></tr>`; }).join('')+
+      document.getElementById('briefingBody').innerHTML='<p class="text-sm font-bold text-slate-800 mb-2">상세 내역</p><div class="card overflow-auto"><table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2.5 font-semibold whitespace-nowrap">구분</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">매체명</th><th class="px-3 py-2.5 font-semibold">기사 제목</th><th class="px-3 py-2.5 font-semibold">주요 내용 및 시사점</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">링크</th></tr></thead><tbody class="divide-y divide-slate-100">'+
+        rows.map((r,i)=>{ const iv=(edI[i]!=null?edI[i]:r.ins); return `<tr class="hover:bg-slate-50 align-top"><td class="px-3 py-3 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[r.cat]||'bg-slate-100 text-slate-500'}">${esc(r.cat)}</span></td><td class="px-3 py-3 whitespace-nowrap font-medium text-slate-600">${esc(r.s)}</td><td class="px-3 py-3 font-semibold text-slate-800 min-w-[180px]">${esc(r.t)}</td><td class="px-3 py-3 text-slate-600 min-w-[280px]" data-ei="${i}" ${brEditMode?'contenteditable="true"':''}><span class="${brEditMode?'':''}">${esc(iv)}</span></td><td class="px-3 py-3 whitespace-nowrap">${r.link?`<a href="${esc(r.link)}" target="_blank" rel="noopener noreferrer" class="text-ink hover:underline font-medium">[이동]</a>`:'-'}</td></tr>`; }).join('')+
         (rows.length?'':'<tr><td colspan="5" class="text-center py-8 text-slate-400">해당 일자 기사가 없습니다.</td></tr>')+
-        '</tbody></table></div>'+(brEditMode?'<p class="text-xs text-brand-ink mt-2">✏️ 편집 내용은 이 브라우저에 저장됩니다(수동 수정 우선). 원문 자동갱신 시에도 유지됩니다.</p>':'');
+        '</tbody></table></div>'+(brEditMode?'<p class="text-xs text-ink mt-2">편집 내용은 이 브라우저에 저장됩니다(수동 수정 우선). 원문 자동갱신 시에도 유지됩니다.</p>':'');
     }
     function drawTrendChart(){ const P=TREND.periods, keys=Object.keys(TREND.series);
       const start=trendN>0?Math.max(0,P.length-trendN):0;
       draw('searchTrendChart',{type:'line',data:{labels:P.slice(start),datasets:keys.map((k,i)=>({label:k,data:TREND.series[k].slice(start),borderColor:PALETTE[i],backgroundColor:'transparent',borderWidth:2,tension:0.3,pointRadius:(trendN&&trendN<=24)?2:0}))},
         options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{beginAtZero:true}}}});
-      document.querySelectorAll('#trendRangeBtns button').forEach(b=>{ const on=(+b.dataset.n===trendN); b.className='text-xs px-2.5 py-1 rounded-lg border '+(on?'border-brand bg-brand/10 text-brand-ink font-bold':'border-slate-300 hover:bg-slate-50'); });
+      document.querySelectorAll('#trendRangeBtns button').forEach(b=>{ const on=(+b.dataset.n===trendN); b.className='text-xs px-2.5 py-1 rounded-lg border '+(on?'border-brand bg-brand/10 text-ink font-bold':'border-slate-300 hover:bg-slate-50'); });
     }
     function setTrendRange(n){ trendN=n; drawTrendChart(); }
     function renderAssoc(){
@@ -776,18 +776,18 @@
         return `<div class="flex items-center gap-3">
           <div class="w-32 text-sm text-slate-700 whitespace-nowrap">${esc(a.kw)}</div>
           <div class="flex-1 bg-slate-100 rounded-full h-4 overflow-hidden"><div class="h-4 ${pct>0?'bg-brand':'bg-slate-300'}" style="width:${w}%"></div></div>
-          <div class="text-xs text-slate-500 whitespace-nowrap w-40 text-right">최근100건 중 <b class="${pct>0?'text-brand-ink':'text-slate-400'}">${a.recent}건</b> · 누적 ${a.total}건</div>
+          <div class="text-xs text-slate-500 whitespace-nowrap w-40 text-right">최근100건 중 <b class="${pct>0?'text-ink':'text-slate-400'}">${a.recent}건</b> · 누적 ${a.total}건</div>
         </div>`; }).join('');
     }
     function renderSearchInsight(){
       drawTrendChart(); renderAssoc();
-      draw('hotKwChart',{type:'bar',data:{labels:HOTKW.map(x=>x[0]),datasets:[{data:HOTKW.map(x=>x[1]),backgroundColor:'#00a3a3',borderRadius:4}]},
+      draw('hotKwChart',{type:'bar',data:{labels:HOTKW.map(x=>x[0]),datasets:[{data:HOTKW.map(x=>x[1]),backgroundColor:'#1D1D1F',borderRadius:4}]},
         options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}});
       document.getElementById('relatedBox').innerHTML=RELATED.map(g=>`<div class="flex flex-wrap items-center gap-1.5">
         <span class="px-2 py-0.5 rounded-md bg-ink text-white text-[11px] font-semibold whitespace-nowrap">${esc(g.seed)}</span>
         ${g.terms.map(t=>`<span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[11px]">${esc(t)}</span>`).join('')}
       </div>`).join('');
-      document.getElementById('searchTrendNote').textContent='📈 검색어 흐름(시간별 추이) 차트는 네이버 데이터랩(검색어 트렌드) API 권한 추가 후 붙습니다.';
+      document.getElementById('searchTrendNote').textContent='검색어 흐름(시간별 추이) 차트는 네이버 데이터랩(검색어 트렌드) API 권한 추가 후 붙습니다.';
     }
     function copyMail(){ navigator.clipboard.writeText(buildMail(curDate)).then(()=>alert('메일 텍스트가 복사되었습니다. 메일에 붙여넣으세요.')).catch(()=>alert('복사 실패 - 브라우저 권한을 확인하세요.')); }
 
@@ -797,7 +797,7 @@
       const sel=document.getElementById('campSel');
       if(sel.options.length===0){ sel.innerHTML=Object.keys(CAMPAIGNS).map(k=>`<option value="${k}">${esc(CAMPAIGNS[k].name)}</option>`).join(''); }
       sel.value=curCampaign;
-      document.getElementById('campTitle').textContent='📣 '+c.name+' 효과 분석';
+      document.getElementById('campTitle').textContent=''+c.name+' 효과 분석';
       document.getElementById('campPeriod').innerHTML='기간: <b>'+c.start+' ~ '+(c.ongoing?'진행중':c.end)+'</b> · 검색량·자사 커버리지·포지셔닝을 캠페인 전/중 비교';
       const W=WEEKS, S=c.series, cs=c.start, ce=c.ongoing?W[W.length-1]:c.end, inC=w=>w>=cs&&w<=ce;
       const keys=Object.keys(S);
@@ -813,7 +813,7 @@
         const isod=d=>d.toISOString().substring(0,10); const span=(new Date(ce)-new Date(cs))/864e5+1; const ps=isod(new Date(new Date(cs)-span*864e5)),pe=isod(new Date(new Date(cs)-864e5));
         const pw=ALL.filter(r=>{const d=r['게재일'];return d&&d>=ps&&d<=pe;}).length; cov=cw+'건';
         const dl=pw>0?Math.round((cw-pw)/pw*100):0; covDelta=`<p class="text-xs mt-1 ${dl>=0?'text-agreen':'text-ared'}">${dl>=0?'▲':'▼'} ${Math.abs(dl)}% <span class="text-slate-400">직전 동기간(${pw}건) 대비</span></p>`; }
-      html+=`<div class="card card-hover p-5"><p class="text-sm text-slate-500">캠페인 기간 자사 커버리지</p><p class="num text-xl font-extrabold text-brand-ink mt-1">${cov}</p>${covDelta}</div>`;
+      html+=`<div class="card card-hover p-5"><p class="text-sm text-slate-500">캠페인 기간 자사 커버리지</p><p class="num text-xl font-extrabold text-ink mt-1">${cov}</p>${covDelta}</div>`;
       document.getElementById('campKpis').innerHTML=html;
       // 콘텐츠 성과 (유튜브 실측 + 인스타 링크)
       const cc=document.getElementById('campContentCard');
@@ -830,24 +830,24 @@
           kc('누적 조회수',(ytV+igV).toLocaleString(),'YT '+Math.round(ytV/10000)+'만 · IG '+Math.round(igV/10000)+'만')+
           kc('누적 좋아요',(ytL+igL).toLocaleString())+
           kc('누적 댓글',(ytC+igC).toLocaleString(),'YT '+ytC.toLocaleString()+' · IG '+igC.toLocaleString());
-        document.getElementById('campSentiment').innerHTML='<span class="text-sm text-slate-600 mr-2">💬 유튜브 댓글 감성(표본 '+st+'):</span>'+
+        document.getElementById('campSentiment').innerHTML='<span class="text-sm text-slate-600 mr-2">유튜브 댓글 감성(표본 '+st+'):</span>'+
           '<span class="px-2 py-0.5 rounded-lg bg-agreen/15 text-agreen text-xs font-semibold">긍정 '+Math.round(sp/st*100)+'%</span> '+
           '<span class="px-2 py-0.5 rounded-lg bg-agray/15 text-agray text-xs font-semibold">중립 '+Math.round(sn/st*100)+'%</span> '+
           '<span class="px-2 py-0.5 rounded-lg bg-ared/15 text-ared text-xs font-semibold">부정 '+Math.round(sg/st*100)+'%</span>';
         const allc=yt.map(v=>({n:v.n,views:v.views,p:'YT'})).concat(ig.map(v=>({n:v.n,views:v.views||0,p:'IG'}))).sort((a,b)=>b.views-a.views);
-        draw('campViewsChart',{type:'bar',data:{labels:allc.map(v=>v.n),datasets:[{label:'조회수',data:allc.map(v=>v.views),backgroundColor:allc.map(v=>v.p==='YT'?'#00a3a3':'#ec4899'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{afterLabel:(ctx)=>allc[ctx.dataIndex].p}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000)+'만':v}}}}});
+        draw('campViewsChart',{type:'bar',data:{labels:allc.map(v=>v.n),datasets:[{label:'조회수',data:allc.map(v=>v.views),backgroundColor:allc.map(v=>v.p==='YT'?'#1D1D1F':'#ec4899'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{afterLabel:(ctx)=>allc[ctx.dataIndex].p}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000)+'만':v}}}}});
         const sbar=(p,n,g)=>{ const t=p+n+g||1; return `<div class="flex h-2.5 w-24 rounded overflow-hidden" title="긍 ${p} · 중 ${n} · 부 ${g}"><div class="bg-agreen" style="width:${p/t*100}%"></div><div class="bg-slate-300" style="width:${n/t*100}%"></div><div class="bg-ared" style="width:${g/t*100}%"></div></div>`; };
-        document.getElementById('campVideoBody').innerHTML=yt.map(v=>{ const e=v.views?((v.likes+(v.comments||0))/v.views*100).toFixed(2):0; const tb=v.t==='매크로'?'bg-brand/20 text-brand-ink':'bg-slate-100 text-slate-500'; const yurl='https://youtu.be/'+v.id;
-          return `<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] ${tb}">${esc(v.t)}</span></td><td class="px-3 py-2 whitespace-nowrap"><a href="${yurl}" target="_blank" rel="noopener" class="font-medium text-slate-700 hover:text-brand-ink hover:underline">${esc(v.n)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2"><a href="${yurl}" target="_blank" rel="noopener" class="text-slate-700 hover:text-brand-ink hover:underline">${esc(v.title)}</a></td><td class="px-3 py-2 text-right num">${v.views.toLocaleString()}</td><td class="px-3 py-2 text-right num">${v.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${(v.comments||0).toLocaleString()}</td><td class="px-3 py-2 text-right num">${e}%</td><td class="px-3 py-2">${v.pos!=null?sbar(v.pos,v.neu,v.neg):'<span class="text-slate-300">-</span>'}</td></tr>`; }).join('');
-        document.getElementById('campInsta').innerHTML='<p class="text-sm font-semibold text-slate-600 mb-2 mt-1">📷 인스타그램 협업 '+ig.length+'건 <span class="text-xs font-normal text-agray">('+(c.instaAsOf||'수기입력')+')</span></p>'+
+        document.getElementById('campVideoBody').innerHTML=yt.map(v=>{ const e=v.views?((v.likes+(v.comments||0))/v.views*100).toFixed(2):0; const tb=v.t==='매크로'?'bg-brand/20 text-ink':'bg-slate-100 text-slate-500'; const yurl='https://youtu.be/'+v.id;
+          return `<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] ${tb}">${esc(v.t)}</span></td><td class="px-3 py-2 whitespace-nowrap"><a href="${yurl}" target="_blank" rel="noopener" class="font-medium text-slate-700 hover:text-ink hover:underline">${esc(v.n)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2"><a href="${yurl}" target="_blank" rel="noopener" class="text-slate-700 hover:text-ink hover:underline">${esc(v.title)}</a></td><td class="px-3 py-2 text-right num">${v.views.toLocaleString()}</td><td class="px-3 py-2 text-right num">${v.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${(v.comments||0).toLocaleString()}</td><td class="px-3 py-2 text-right num">${e}%</td><td class="px-3 py-2">${v.pos!=null?sbar(v.pos,v.neu,v.neg):'<span class="text-slate-300">-</span>'}</td></tr>`; }).join('');
+        document.getElementById('campInsta').innerHTML='<p class="text-sm font-semibold text-slate-600 mb-2 mt-1">인스타그램 협업 '+ig.length+'건 <span class="text-xs font-normal text-agray">('+(c.instaAsOf||'수기입력')+')</span></p>'+
           '<div class="overflow-auto rounded-lg border border-slate-100"><table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2 font-semibold">채널</th><th class="px-3 py-2 font-semibold text-right">조회수</th><th class="px-3 py-2 font-semibold text-right">좋아요</th><th class="px-3 py-2 font-semibold text-right">댓글</th></tr></thead><tbody class="divide-y divide-slate-100">'+
-          ig.map(x=>`<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap"><a href="${x.u}" target="_blank" rel="noopener" class="font-medium text-slate-700 hover:text-brand-ink hover:underline">${esc(x.n)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2 text-right num">${x.views?x.views.toLocaleString():'-'}</td><td class="px-3 py-2 text-right num">${x.likes==null?'<span class="text-slate-400">비공개</span>':x.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${x.comments!=null?x.comments.toLocaleString():'-'}</td></tr>`).join('')+
+          ig.map(x=>`<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap"><a href="${x.u}" target="_blank" rel="noopener" class="font-medium text-slate-700 hover:text-ink hover:underline">${esc(x.n)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2 text-right num">${x.views?x.views.toLocaleString():'-'}</td><td class="px-3 py-2 text-right num">${x.likes==null?'<span class="text-slate-400">비공개</span>':x.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${x.comments!=null?x.comments.toLocaleString():'-'}</td></tr>`).join('')+
           '</tbody></table></div>';
         const rc=document.getElementById('campReaction');
         if(c.keywords && c.keywords.length){ rc.classList.remove('hidden');
-          document.getElementById('campReactionNote').innerHTML='최대 도달 영상(동네친구강나미)의 댓글은 <b>디스크·수술 등 창작자 사연</b>이 지배 — 제품 언급은 김한용의모카·지니스펙트럼 등 제품 중심 영상에서 발생. <b class="text-brand-ink">도달 ≠ 제품 관심</b>임을 보여줍니다.';
+          document.getElementById('campReactionNote').innerHTML='최대 도달 영상(동네친구강나미)의 댓글은 <b>디스크·수술 등 창작자 사연</b>이 지배 — 제품 언급은 김한용의모카·지니스펙트럼 등 제품 중심 영상에서 발생. <b class="text-ink">도달 ≠ 제품 관심</b>임을 보여줍니다.';
           const kw=c.keywords.slice().sort((a,b)=>b[1]-a[1]);
-          draw('campKwChart',{type:'bar',data:{labels:kw.map(k=>k[0]),datasets:[{data:kw.map(k=>k[1]),backgroundColor:kw.map(k=>k[2]==='p'?'#00a3a3':'#cbd5e1'),borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}});
+          draw('campKwChart',{type:'bar',data:{labels:kw.map(k=>k[0]),datasets:[{data:kw.map(k=>k[1]),backgroundColor:kw.map(k=>k[2]==='p'?'#1D1D1F':'#cbd5e1'),borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}});
           document.getElementById('campTopComments').innerHTML=(c.topComments||[]).map(x=>`<div class="border-l-2 border-brand/50 pl-3 py-1"><p class="text-sm text-slate-700">"${esc(x.t)}"</p><p class="text-xs text-slate-400 mt-0.5">${esc(x.v)} · ♥ ${x.l}</p></div>`).join('');
         } else { rc.classList.add('hidden'); }
       } else { cc.classList.add('hidden'); }
@@ -928,7 +928,7 @@
       document.getElementById('cafeBody').innerHTML=shown.map(p=>`<div class="py-3 flex items-start gap-3">
         <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap ${p._sen.c}">${p._sen.k}</span>
         <div class="flex-1 min-w-0">
-          <a href="${esc(p.link)}" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-800 hover:text-brand-ink hover:underline">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
+          <a href="${esc(p.link)}" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-800 hover:text-ink hover:underline">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
           <p class="text-xs text-slate-500 mt-0.5">${esc(p.desc)}</p>
           <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] ${CAFE_BADGE[p.cafe]||'bg-slate-100 text-slate-500'}">${esc(p.cafe)}</span>
           <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500">${esc(p._typ)}</span>
@@ -938,7 +938,7 @@
     function switchTab(t){
       ['analytics','briefing','campaign','owned','cafe'].forEach(v=>{
         document.getElementById('view-'+v).classList.toggle('hidden', v!==t);
-        document.getElementById('tabBtn-'+v).className='px-4 py-3 text-sm font-bold border-b-[3px] '+(v===t?'border-brand text-ink':'border-transparent text-slate-400 hover:text-ink transition');
+        document.getElementById('tabBtn-'+v).className='px-1 py-3.5 text-[14px] font-semibold border-b-2 whitespace-nowrap '+(v===t?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition');
       });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       if(t==='campaign'){ renderCampaign(); loadYoutube(); }
@@ -976,7 +976,7 @@
       document.getElementById('ownedYtBody').innerHTML=rec.length?rec.map(v=>{
         const er=v.views?(((v.likes||0)+(v.comments||0))/v.views*100).toFixed(2):'0.00';
         const url='https://youtu.be/'+v.id;
-        return `<tr class="hover:bg-[#FEFBEE]"><td class="px-3 py-2.5 min-w-[280px]"><a href="${url}" target="_blank" rel="noopener" class="lnk font-medium">${esc(v.title)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(v.date)}</td><td class="px-3 py-2.5 text-right num">${(v.views||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num">${(v.likes||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num">${(v.comments||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num font-semibold text-brand-ink">${er}%</td></tr>`;
+        return `<tr class="hover:bg-[#FEFBEE]"><td class="px-3 py-2.5 min-w-[280px]"><a href="${url}" target="_blank" rel="noopener" class="lnk font-medium">${esc(v.title)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(v.date)}</td><td class="px-3 py-2.5 text-right num">${(v.views||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num">${(v.likes||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num">${(v.comments||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num font-semibold text-ink">${er}%</td></tr>`;
       }).join(''):'<tr><td colspan="6" class="text-center py-6 text-slate-400">데이터 로딩 중…</td></tr>';
       const ig=OWNED.instagram||{}, wait='<span class="text-slate-300">수기 대기</span>';
       const igkpi=(label,val,sub)=>`<div class="card p-5"><p class="text-sm text-slate-500">${label}</p><p class="num text-2xl font-extrabold text-ink mt-1">${val}</p><p class="text-xs text-slate-400 mt-1">${sub}</p></div>`;
@@ -987,16 +987,23 @@
         igkpi('기준일', ig.asOf||'수기', '인스타 지표 기준');
       // 블로그
       const bl=OWNED.blog||{}, bp=bl.recent||[];
+      const totalPosts=bl.total!=null?bl.total:(bl.totalRecent!=null?bl.totalRecent:bp.length);
       document.getElementById('ownedBlogKpi').innerHTML=
-        kpi('최근 30일 발행', (bl.recent30!=null?bl.recent30:0)+'건', '블로그 포스팅 빈도')+
-        kpi('수집된 최근 글', (bl.totalRecent!=null?bl.totalRecent:bp.length)+'건', 'RSS 최신 목록')+
+        kpi('전체 발행 글', totalPosts.toLocaleString()+'건', '블로그 누적 게시물')+
+        kpi('최근 30일 발행', (bl.recent30!=null?bl.recent30:0)+'건', '포스팅 빈도')+
         `<div class="card card-hover p-5"><p class="text-sm text-slate-500">최신 발행일</p><p class="num text-2xl font-extrabold text-ink mt-1">${bp[0]?esc(bp[0].date):'-'}</p><p class="text-xs text-slate-400 mt-1">가장 최근 포스팅</p></div>`+
-        `<div class="card card-hover p-5 flex flex-col"><p class="text-sm text-slate-500">채널</p><a href="${esc(bl.url||'https://blog.naver.com/aqaralife')}" target="_blank" rel="noopener" class="text-xl font-extrabold text-[#03C75A] mt-1 hover:underline">blog.naver.com<br>/aqaralife ↗</a></div>`;
-      document.getElementById('ownedBlogCount').textContent=bp.length?('· 최근 '+bp.length+'개'):'';
-      document.getElementById('ownedBlogBody').innerHTML=bp.length?bp.map(p=>`<div class="py-2.5 flex items-baseline gap-3">
+        `<div class="card card-hover p-5 flex flex-col"><p class="text-sm text-slate-500">채널</p><a href="${esc(bl.url||'https://blog.naver.com/aqaralife')}" target="_blank" rel="noopener" class="text-lg font-extrabold text-ink mt-1 hover:underline">blog.naver.com/aqaralife ↗</a></div>`;
+      renderOwnedBlog();
+    }
+    function renderOwnedBlog(){
+      const bp=(OWNED.blog&&OWNED.blog.recent)||[];
+      const q=(document.getElementById('ownedBlogSearch')?.value||'').toLowerCase().trim();
+      const rows=q?bp.filter(p=>(p.title||'').toLowerCase().indexOf(q)>-1):bp;
+      document.getElementById('ownedBlogCount').textContent=q?('· 검색 '+rows.length+'/'+bp.length+'개'):('· 총 '+bp.length+'개');
+      document.getElementById('ownedBlogBody').innerHTML=rows.length?rows.map(p=>`<div class="py-2.5 flex items-baseline gap-3">
         <span class="text-xs text-slate-400 num whitespace-nowrap w-24 shrink-0">${esc(p.date||'-')}</span>
         <a href="${esc(p.link)}" target="_blank" rel="noopener" class="lnk text-sm font-medium flex-1 min-w-0">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
-      </div>`).join(''):'<p class="text-sm text-slate-400 py-4 text-center">블로그 글을 불러오는 중…</p>';
+      </div>`).join(''):'<p class="text-sm text-slate-400 py-4 text-center">'+(bp.length?'검색 결과가 없습니다':'블로그 글을 불러오는 중…')+'</p>';
     }
     function loadOwned(){
       fetch('owned.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.youtube){ OWNED=Object.assign(OWNED,p); renderOwned(); } }).catch(()=>{});
