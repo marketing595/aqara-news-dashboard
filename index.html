@@ -109,6 +109,33 @@
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">단신 : 기획</p><p id="kpiRatio" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도자료 대 기획·특집</p></div>
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">월 평균 발행</p><p id="kpiAvg" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">기간 내 월평균 건수</p></div>
       </section>
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div class="card p-5">
+          <div class="flex items-baseline justify-between mb-3">
+            <h2 class="accent font-extrabold text-ink">발행 성과 비교 <span id="cmpMonthLabel" class="text-xs font-normal text-slate-400"></span></h2>
+          </div>
+          <div class="overflow-auto rounded-lg border border-[#ECE9E1]">
+            <table class="w-full text-sm">
+              <thead><tr class="text-left">
+                <th class="px-3 py-2.5 whitespace-nowrap">지표</th>
+                <th class="px-3 py-2.5 text-right whitespace-nowrap">당월</th>
+                <th class="px-3 py-2.5 text-right whitespace-nowrap">전월 대비</th>
+                <th class="px-3 py-2.5 text-right whitespace-nowrap">전년 동월 대비</th>
+              </tr></thead>
+              <tbody id="cmpBody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-400 mt-2">※ 데이터 내 최신 월 기준. 괄호는 전월/전년 동월 실제 건수. 최신 월이 진행 중이면 부분 집계일 수 있습니다.</p>
+        </div>
+        <div class="card p-5">
+          <div class="flex items-baseline justify-between mb-3">
+            <h2 class="accent font-extrabold text-ink">경쟁사 대비 언론 노출량 <span class="text-xs font-normal text-slate-400">(참고)</span></h2>
+            <span id="cmpCompeteStamp" class="text-xs text-slate-400"></span>
+          </div>
+          <div id="cmpCompeteBody" class="space-y-2.5"></div>
+          <p class="text-xs text-slate-400 mt-3">※ 네이버 뉴스 '브랜드 검색' 누적 노출량(스마트홈 맥락). 삼성·LG는 종합 대기업 특성상 절대량이 커 <b class="text-ink">점유율보다 추세 비교</b>에 활용하세요.</p>
+        </div>
+      </section>
       <section class="card p-5"><h2 class="accent font-extrabold text-ink mb-3">① 월별 발행 추이 <span class="text-xs font-normal text-slate-400">(성격별 누적)</span></h2><div class="h-72"><canvas id="trendChart"></canvas></div></section>
       <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="card p-5"><h2 class="accent font-extrabold text-ink mb-3">③ 기사 성격(구분)</h2><div class="h-60"><canvas id="typeChart"></canvas></div></div>
@@ -373,7 +400,55 @@
     function applyAndRender(){ const f=document.getElementById('fromDate').value,t=document.getElementById('toDate').value;
       FILTERED=ALL.filter(r=>{const d=r['게재일']; if(!d)return false; if(f&&d<f)return false; if(t&&d>t)return false; return true;});
       document.getElementById('rangeInfo').textContent=f+' ~ '+t+' · '+FILTERED.length+'건';
-      renderKPIs(f,t); renderTrend(); renderType(); renderMedia(); renderChannel(); renderTopic(); renderKeywords(); renderTable(); }
+      renderKPIs(f,t); renderCompare(); renderTrend(); renderType(); renderMedia(); renderChannel(); renderTopic(); renderKeywords(); renderTable(); }
+    // ===== 전월/전년 대비 비교표 =====
+    function ymShift(ym,delta){ let y=+ym.slice(0,4),m=+ym.slice(5,7)+delta; while(m<1){m+=12;y--;} while(m>12){m-=12;y++;} return y+'-'+String(m).padStart(2,'0'); }
+    function cmpCell(cur,base){
+      if(base==null) return '<span class="text-slate-300">–</span>';
+      const d=cur-base, pct=base?Math.round(d/base*100):(cur>0?100:0);
+      const up=d>=0, col=up?'text-agreen':'text-ared', ar=up?'▲':'▼';
+      return `<span class="${col} font-semibold">${ar} ${Math.abs(pct)}%</span> <span class="text-slate-400 num">(${base.toLocaleString()})</span>`;
+    }
+    function renderCompare(){
+      const yms=[...new Set(ALL.map(r=>r._ym).filter(Boolean))].sort();
+      if(!yms.length){ document.getElementById('cmpBody').innerHTML=''; return; }
+      const ref=yms[yms.length-1], prev=ymShift(ref,-1), yoy=ymShift(ref,-12);
+      document.getElementById('cmpMonthLabel').textContent='· '+ref.replace('-','년 ')+'월 기준';
+      const inM=ym=>ALL.filter(r=>r._ym===ym);
+      const metric=(label,fn)=>{ const c=fn(inM(ref)), p=yms.includes(prev)?fn(inM(prev)):null, y=yms.includes(yoy)?fn(inM(yoy)):null;
+        return `<tr class="hover:bg-[#FEFBEE]"><td class="px-3 py-2.5 font-medium text-slate-700 whitespace-nowrap">${label}</td>
+          <td class="px-3 py-2.5 text-right num font-bold text-ink">${c.toLocaleString()}</td>
+          <td class="px-3 py-2.5 text-right whitespace-nowrap num">${cmpCell(c,p)}</td>
+          <td class="px-3 py-2.5 text-right whitespace-nowrap num">${cmpCell(c,y)}</td></tr>`; };
+      document.getElementById('cmpBody').innerHTML=
+        metric('총 발행 건수', a=>a.length)+
+        metric('단신(보도자료)', a=>a.filter(r=>r._type==='단신').length)+
+        metric('기획·특집', a=>a.filter(r=>r._type!=='단신').length)+
+        metric('활동 매체 수', a=>new Set(a.map(r=>r._media)).size);
+    }
+    // ===== 경쟁사 언론 노출량(compete.json) =====
+    const COMPETE_FALLBACK={ items:[
+      {name:'아카라',total:1499,me:true},{name:'삼성 스마트싱스',total:66952},{name:'LG 씽큐',total:76513},
+      {name:'샤오미 스마트홈',total:5173},{name:'애플 홈킷',total:2678}], generatedAt:'' };
+    function renderCompete(data){
+      const items=(data.items||[]).slice().sort((a,b)=>b.total-a.total);
+      const max=Math.max(1,...items.map(i=>i.total));
+      document.getElementById('cmpCompeteStamp').textContent=data.generatedAt?(data.generatedAt+' 기준'):'';
+      document.getElementById('cmpCompeteBody').innerHTML=items.map(i=>{
+        const w=Math.max(3,Math.round(i.total/max*100));
+        const bar=i.me?'bg-brand':'bg-slate-300';
+        const nm=i.me?'text-brand-ink font-bold':'text-slate-600 font-medium';
+        return `<div class="flex items-center gap-3">
+          <span class="text-xs ${nm} w-28 shrink-0 truncate">${esc(i.name)}</span>
+          <div class="flex-1 bg-slate-100 rounded-full h-3.5 overflow-hidden"><div class="h-3.5 ${bar}" style="width:${w}%"></div></div>
+          <span class="text-xs text-slate-500 num w-16 text-right">${i.total.toLocaleString()}</span>
+        </div>`; }).join('');
+    }
+    function loadCompete(){
+      renderCompete(COMPETE_FALLBACK);
+      fetch('compete.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.items&&p.items.length) renderCompete(p); }).catch(()=>{});
+    }
+    loadCompete();
     function renderKPIs(f,t){ const n=FILTERED.length; document.getElementById('kpiTotal').textContent=n.toLocaleString(); let dh='';
       if(f&&t){ const days=(new Date(t)-new Date(f))/864e5+1; const pe=iso(new Date(new Date(f)-864e5)),ps=iso(new Date(new Date(f)-days*864e5));
         const prev=ALL.filter(r=>{const d=r['게재일'];return d&&d>=ps&&d<=pe;}).length;
