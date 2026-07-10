@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aqara 제품 호환성 — 스마트홈 플랫폼 연동 안내</title>
+<meta name="description" content="Aqara 제품이 지원하는 스마트홈 플랫폼(Matter, Apple 홈, Google 홈, SmartThings, Alexa)을 제품별로 확인하세요." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231d1d1f'/><text x='50' y='71' font-size='62' font-family='sans-serif' font-weight='700' fill='%23fff' text-anchor='middle'>a</text></svg>" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" as="style" crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: {
+      canvas:'#EDEDEC', surface:'#FBFBFA', ink:'#1D1D1F', muted:'#6E6E73',
+      hair:'#D6D6D2', line:'#E3E3E0', accent:'#0071E3'
+    },
+    fontFamily: { sans: ['"Pretendard Variable"','Pretendard','-apple-system','BlinkMacSystemFont','"SF Pro KR"','system-ui','sans-serif'] },
+    maxWidth: { '7xl':'1280px' }
+  } } };
+</script>
+<style>
+  html{ scroll-behavior:smooth; }
+  body{ font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    background:#EDEDEC; color:#1D1D1F; -webkit-font-smoothing:antialiased; letter-spacing:-0.02em; word-break:keep-all; }
+  .tabnum{ font-variant-numeric:tabular-nums; }
+  .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+  .no-scrollbar::-webkit-scrollbar{ display:none; }
+  .blur-head{ background:rgba(237,237,236,.72); backdrop-filter:saturate(180%) blur(20px); -webkit-backdrop-filter:saturate(180%) blur(20px); }
+  /* 세그먼트 탭 밑줄 */
+  .cat-tab{ position:relative; transition:color .2s ease; }
+  .cat-tab[aria-selected="true"]{ color:#1D1D1F; }
+  .cat-tab[aria-selected="true"]::after{ content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:#1D1D1F; border-radius:2px; }
+  .cat-tab[aria-selected="false"]{ color:#86868B; }
+  .cat-tab[aria-selected="false"]:hover{ color:#1D1D1F; }
+  /* 체크박스(플랫폼) */
+  .pf-chip{ transition:all .18s ease; }
+  .pf-chip:has(input:checked){ background:#1D1D1F; border-color:#1D1D1F; color:#fff; }
+  .pf-chip:has(input:focus-visible){ outline:2px solid #0071E3; outline-offset:2px; }
+  /* 제품 카드 진입 */
+  .card-enter{ opacity:0; transform:translateY(8px); animation:rise .5s cubic-bezier(.22,.61,.36,1) forwards; }
+  @keyframes rise{ to{ opacity:1; transform:none; } }
+  a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible{ outline:2px solid #0071E3; outline-offset:2px; }
+  @media (prefers-reduced-motion: reduce){ .card-enter{ animation:none; opacity:1; transform:none; } html{ scroll-behavior:auto; } }
+</style>
+</head>
+<body class="antialiased">
+
+  <!-- ===== 고정 헤더 ===== -->
+  <header class="fixed top-0 inset-x-0 z-40 blur-head border-b border-hair/70">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-lg bg-ink text-white grid place-items-center text-[15px] font-bold lowercase">a</div>
+          <span class="text-[15px] font-semibold tracking-tight">Aqara</span>
+          <span class="text-hair">·</span>
+          <span class="text-[15px] text-muted tracking-tight">제품 호환성</span>
+        </div>
+        <a href="#products" class="hidden sm:inline text-[13px] text-muted hover:text-ink tracking-tight transition">제품 찾기 ↓</a>
+      </div>
+      <!-- 카테고리 탭 (모바일 가로 스크롤) -->
+      <nav id="catTabs" class="flex gap-6 overflow-x-auto no-scrollbar h-11 items-center text-[13px] font-medium -mb-px" aria-label="제품 카테고리"></nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-5 sm:px-8 pt-32 sm:pt-36 pb-24">
+
+    <!-- ===== 히어로 ===== -->
+    <section class="mb-14 sm:mb-20">
+      <p class="text-[13px] font-semibold text-accent tracking-tight mb-4">Works with your smart home</p>
+      <h1 class="text-[40px] sm:text-[64px] leading-[1.04] font-extrabold tracking-[-0.03em] max-w-4xl" style="text-wrap:balance">
+        어떤 플랫폼이든,<br class="hidden sm:block" /> 끊김 없이 연결됩니다.
+      </h1>
+      <p class="mt-6 text-[17px] sm:text-[19px] leading-relaxed text-muted max-w-2xl tracking-tight">
+        Aqara는 Matter를 비롯해 Apple 홈, Google 홈, SmartThings, Amazon Alexa까지
+        폭넓게 지원합니다. 사용하시는 플랫폼을 선택하면 호환되는 제품만 골라 보여드립니다.
+      </p>
+    </section>
+
+    <!-- ===== 컨트롤러(필터) 박스 ===== -->
+    <section class="bg-surface border border-hair rounded-[22px] p-5 sm:p-7 shadow-[0_1px_2px_rgba(0,0,0,.04)]">
+      <div class="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-5 lg:gap-7">
+        <!-- 좌: 카테고리 드롭다운 + 검색 -->
+        <div class="flex flex-col gap-3">
+          <label class="text-[12px] font-semibold text-muted tracking-tight">카테고리</label>
+          <div class="relative">
+            <select id="catSelect" class="w-full appearance-none bg-white border border-hair rounded-xl pl-4 pr-9 py-2.5 text-[14px] tracking-tight text-ink cursor-pointer hover:border-muted transition"></select>
+            <svg class="w-4 h-4 text-muted absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <!-- 우: 검색 + 플랫폼 체크박스 -->
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-3">
+            <label for="searchInput" class="text-[12px] font-semibold text-muted tracking-tight">제품 검색</label>
+            <div class="relative">
+              <svg class="w-[18px] h-[18px] text-muted absolute left-3.5 top-1/2 -translate-y-1/2" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6.2" stroke="currentColor" stroke-width="1.6"/><path d="M14 14l3.2 3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <input id="searchInput" type="search" placeholder="제품명 또는 모델명 (예: M3, 도어락, FP2)"
+                     class="w-full bg-white border border-hair rounded-xl pl-11 pr-4 py-2.5 text-[14px] tracking-tight placeholder:text-muted/70 focus:border-accent transition" />
+            </div>
+          </div>
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <label class="text-[12px] font-semibold text-muted tracking-tight">스마트홈 플랫폼 <span class="font-normal">(선택 시 모두 지원하는 제품만)</span></label>
+              <button id="clearPf" class="text-[12px] text-accent hover:underline tracking-tight hidden">선택 해제</button>
+            </div>
+            <div id="pfGroup" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 안내(주석) 박스 ===== -->
+    <section class="mt-5 rounded-[18px] border border-hair bg-canvas/40 px-5 py-4">
+      <p class="text-[12px] font-semibold text-ink tracking-tight mb-2">참고 사항</p>
+      <ul class="text-[12px] leading-relaxed text-muted tracking-tight space-y-1.5">
+        <li>· 대부분의 지그비(Zigbee) 제품은 <b class="text-ink font-semibold">Aqara 허브</b>를 통해 각 플랫폼과 연동됩니다. 허브 없이 단독 연결되는 제품은 별도 표기됩니다.</li>
+        <li>· <b class="text-ink font-semibold">Matter</b> 연동은 지원 허브(M3·M2·M100·M200 등)의 브리지 기능 또는 Matter 네이티브 제품에 한합니다.</li>
+        <li>· Apple 홈의 <b class="text-ink font-semibold">HomeKit Secure Video</b>는 카메라·초인종 일부 모델에서 지원됩니다. 지역·펌웨어 버전에 따라 제공 범위가 다를 수 있습니다.</li>
+        <li>· 본 표는 참고용 안내이며 최신 지원 현황은 제품 상세 페이지 및 각 플랫폼 앱에서 최종 확인하시기 바랍니다.</li>
+      </ul>
+    </section>
+
+    <!-- ===== 결과 헤더 ===== -->
+    <div id="products" class="flex items-end justify-between mt-14 mb-6 scroll-mt-32">
+      <h2 class="text-[24px] sm:text-[28px] font-bold tracking-tight" id="resultTitle">전체 제품</h2>
+      <p class="text-[13px] text-muted tabnum tracking-tight"><span id="resultCount">0</span>개 제품</p>
+    </div>
+
+    <!-- ===== 제품 그리드 ===== -->
+    <section id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></section>
+
+    <!-- 빈 상태 -->
+    <div id="empty" class="hidden text-center py-24">
+      <p class="text-[17px] font-semibold tracking-tight">조건에 맞는 제품이 없습니다</p>
+      <p class="text-[14px] text-muted mt-2 tracking-tight">플랫폼 선택을 줄이거나 검색어를 확인해 보세요.</p>
+      <button id="resetAll" class="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-accent hover:underline tracking-tight">필터 초기화</button>
+    </div>
+  </main>
+
+  <footer class="border-t border-hair">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <p class="text-[12px] text-muted tracking-tight">© 2026 Aqara Life. 제품 호환성 안내 페이지 · 참고용 자료</p>
+      <p class="text-[12px] text-muted tracking-tight">Matter · Apple 홈 · Google 홈 · SmartThings · Alexa</p>
+    </div>
+  </footer>
+
+<script>
+  // ===== 플랫폼 정의 =====
+  const PLATFORMS = [
+    { id:'matter',      label:'Matter' },
+    { id:'apple',       label:'Apple 홈' },
+    { id:'google',      label:'Google 홈' },
+    { id:'smartthings', label:'SmartThings' },
+    { id:'alexa',       label:'Alexa' },
+    { id:'aqara',       label:'Aqara 홈' },
+  ];
+  const PF_LABEL = Object.fromEntries(PLATFORMS.map(p=>[p.id,p.label]));
+
+  // ===== 카테고리 =====
+  const CATS = ['허브·게이트웨이','센서','도어락','카메라·초인종','스위치·조명','커튼·모터','플러그·전원'];
+
+  // ===== 제품 데이터 (Aqara 대표 제품군 × 플랫폼 지원) =====
+  // hub:true → 허브 단독/브리지 기능 보유. standalone:true → 허브 없이 Wi-Fi 단독 연결.
+  const PRODUCTS = [
+    // 허브
+    { name:'스마트 허브 M3',        model:'M3',      cat:'허브·게이트웨이', hub:true,  pf:['matter','apple','google','smartthings','alexa','aqara'] },
+    { name:'스마트 허브 M2',        model:'M2',      cat:'허브·게이트웨이', hub:true,  pf:['apple','google','alexa','aqara'] },
+    { name:'스마트 허브 M200',      model:'M200',    cat:'허브·게이트웨이', hub:true,  pf:['matter','apple','google','smartthings','alexa','aqara'] },
+    { name:'스마트 허브 M100',      model:'M100',    cat:'허브·게이트웨이', hub:true,  pf:['matter','apple','google','alexa','aqara'] },
+    { name:'카메라 허브 G2H Pro',   model:'G2H Pro', cat:'허브·게이트웨이', hub:true,  standalone:true, pf:['apple','google','alexa','aqara'] },
+    { name:'스마트 허브 E1',        model:'E1',      cat:'허브·게이트웨이', hub:true,  pf:['apple','google','alexa','aqara'] },
+    // 센서
+    { name:'재실 센서 FP2',         model:'FP2',     cat:'센서', standalone:true, pf:['apple','google','alexa','aqara'] },
+    { name:'재실 센서 FP300',       model:'FP300',   cat:'센서', pf:['matter','apple','google','alexa','aqara'] },
+    { name:'모션 센서 P1',          model:'P1',      cat:'센서', pf:['apple','google','smartthings','alexa','aqara'] },
+    { name:'개폐 센서 P2',          model:'P2',      cat:'센서', pf:['apple','google','alexa','aqara'] },
+    { name:'온·습도 센서 T1',       model:'T1',      cat:'센서', pf:['apple','google','alexa','aqara'] },
+    { name:'누수 감지 센서',         model:'SJCGQ11LM', cat:'센서', pf:['apple','google','alexa','aqara'] },
+    { name:'공기질 센서 TVOC',      model:'AAQS-N01',cat:'센서', pf:['apple','google','alexa','aqara'] },
+    // 도어락
+    { name:'스마트 도어락 U100',    model:'U100',    cat:'도어락', standalone:true, pf:['apple','google','alexa','aqara'] },
+    { name:'스마트 도어락 U200',    model:'U200',    cat:'도어락', pf:['matter','apple','google','alexa','aqara'] },
+    { name:'스마트 도어락 U300',    model:'U300',    cat:'도어락', pf:['matter','apple','google','alexa','aqara'] },
+    { name:'스마트 도어락 K100',    model:'K100',    cat:'도어락', pf:['google','alexa','aqara'] },
+    { name:'스마트 도어락 L100',    model:'L100',    cat:'도어락', pf:['smartthings','google','aqara'] },
+    // 카메라·초인종
+    { name:'실외 카메라 G5 Pro',    model:'G5 Pro',  cat:'카메라·초인종', standalone:true, pf:['apple','google','alexa','aqara'] },
+    { name:'실내 카메라 G3',        model:'G3',      cat:'카메라·초인종', standalone:true, pf:['apple','google','alexa','aqara'] },
+    { name:'스마트 초인종 G4',      model:'G4',      cat:'카메라·초인종', standalone:true, pf:['apple','google','alexa','aqara'] },
+    { name:'실내 카메라 E1',        model:'E1',      cat:'카메라·초인종', standalone:true, pf:['apple','aqara'] },
+    // 스위치·조명
+    { name:'벽 스위치 H1',          model:'H1',      cat:'스위치·조명', pf:['apple','google','alexa','aqara'] },
+    { name:'스마트 디머 컨트롤러',   model:'T1-Dimmer', cat:'스위치·조명', pf:['apple','google','alexa','aqara'] },
+    { name:'무선 미니 스위치',       model:'WXKG11LM',cat:'스위치·조명', pf:['apple','google','alexa','aqara'] },
+    { name:'LED 스마트 전구 T1',    model:'LEDLBT1', cat:'스위치·조명', pf:['matter','apple','google','alexa','aqara'] },
+    // 커튼·모터
+    { name:'커튼 모터 E1',          model:'E1-Curtain', cat:'커튼·모터', pf:['matter','apple','google','alexa','aqara'] },
+    { name:'롤러 셰이드 드라이버 E1',model:'E1-Roller',  cat:'커튼·모터', pf:['apple','google','alexa','aqara'] },
+    // 플러그·전원
+    { name:'스마트 플러그',          model:'SP-EUC01',cat:'플러그·전원', pf:['matter','apple','google','alexa','aqara'] },
+    { name:'벽 콘센트 H1',          model:'H1-Outlet',cat:'플러그·전원', pf:['apple','google','alexa','aqara'] },
+  ];
+
+  // ===== 상태 =====
+  const state = { cat:'전체', q:'', pf:new Set() };
+
+  // ===== 렌더: 카테고리 탭 + 드롭다운 =====
+  const catList = ['전체', ...CATS];
+  const tabsEl = document.getElementById('catTabs');
+  const selEl  = document.getElementById('catSelect');
+  tabsEl.innerHTML = catList.map(c=>`<button role="tab" class="cat-tab whitespace-nowrap tracking-tight py-3" data-cat="${c}" aria-selected="${c===state.cat}">${c}</button>`).join('');
+  selEl.innerHTML  = catList.map(c=>`<option value="${c}">${c==='전체'?'전체 카테고리':c}</option>`).join('');
+  tabsEl.querySelectorAll('.cat-tab').forEach(b=> b.addEventListener('click', ()=>setCat(b.dataset.cat)) );
+  selEl.addEventListener('change', ()=>setCat(selEl.value));
+  function setCat(c){ state.cat=c; selEl.value=c;
+    tabsEl.querySelectorAll('.cat-tab').forEach(b=> b.setAttribute('aria-selected', String(b.dataset.cat===c)) );
+    render();
+  }
+
+  // ===== 렌더: 플랫폼 체크박스 =====
+  const pfEl = document.getElementById('pfGroup');
+  pfEl.innerHTML = PLATFORMS.map(p=>`
+    <label class="pf-chip inline-flex items-center gap-2 bg-white border border-hair rounded-full pl-3 pr-3.5 py-2 text-[13px] font-medium tracking-tight cursor-pointer select-none hover:border-muted">
+      <input type="checkbox" value="${p.id}" class="sr-only" />
+      <svg class="w-3.5 h-3.5 opacity-40" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      ${p.label}
+    </label>`).join('');
+  const clearBtn = document.getElementById('clearPf');
+  pfEl.querySelectorAll('input').forEach(inp=> inp.addEventListener('change', ()=>{
+    inp.checked ? state.pf.add(inp.value) : state.pf.delete(inp.value);
+    clearBtn.classList.toggle('hidden', state.pf.size===0);
+    render();
+  }));
+  clearBtn.addEventListener('click', ()=>{
+    state.pf.clear(); pfEl.querySelectorAll('input').forEach(i=>i.checked=false);
+    clearBtn.classList.add('hidden'); render();
+  });
+
+  // ===== 검색 =====
+  const searchEl = document.getElementById('searchInput');
+  searchEl.addEventListener('input', ()=>{ state.q = searchEl.value.trim().toLowerCase(); render(); });
+
+  // ===== 필터 =====
+  function filtered(){
+    return PRODUCTS.filter(p=>{
+      if(state.cat!=='전체' && p.cat!==state.cat) return false;
+      if(state.q){ const hay=(p.name+' '+p.model).toLowerCase(); if(hay.indexOf(state.q)===-1) return false; }
+      for(const need of state.pf){ if(!p.pf.includes(need)) return false; }   // AND 조건
+      return true;
+    });
+  }
+
+  // ===== 렌더: 카드 =====
+  const gridEl = document.getElementById('grid');
+  const emptyEl = document.getElementById('empty');
+  function pill(pfId, on){
+    return `<span class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11.5px] font-medium tracking-tight border ${
+      on ? 'bg-ink text-white border-ink' : 'bg-transparent text-muted/60 border-hair line-through decoration-muted/40'}">
+      ${on ? '<svg class="w-3 h-3" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}
+      ${PF_LABEL[pfId]}</span>`;
+  }
+  function card(p, i){
+    const badges = p.hub ? '<span class="text-[11px] font-semibold text-accent tracking-tight">허브</span>'
+                : (p.standalone ? '<span class="text-[11px] font-medium text-muted tracking-tight">단독 연결</span>' : '');
+    const pills = PLATFORMS.map(pf=>pill(pf.id, p.pf.includes(pf.id))).join('');
+    const count = p.pf.length;
+    return `<article class="card-enter bg-surface border border-hair rounded-[20px] p-5 flex flex-col gap-4 hover:border-muted/50 hover:shadow-[0_6px_20px_-8px_rgba(0,0,0,.12)] transition" style="animation-delay:${Math.min(i,12)*28}ms">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted mb-1.5">${p.cat}</p>
+          <h3 class="text-[17px] font-bold tracking-tight leading-snug">${p.name}</h3>
+          <p class="text-[12.5px] text-muted tracking-tight mt-0.5 tabnum">모델 ${p.model}</p>
+        </div>
+        ${badges ? `<div class="shrink-0 pt-0.5">${badges}</div>` : ''}
+      </div>
+      <div class="flex flex-wrap gap-1.5">${pills}</div>
+      <div class="pt-1 mt-auto border-t border-line flex items-center justify-between">
+        <span class="text-[12px] text-muted tracking-tight tabnum">${count}개 플랫폼 지원</span>
+        <span class="flex -space-x-1">${p.pf.slice(0,5).map(()=>'<span class="w-1.5 h-1.5 rounded-full bg-ink/70"></span>').join('')}</span>
+      </div>
+    </article>`;
+  }
+
+  function render(){
+    const rows = filtered();
+    document.getElementById('resultCount').textContent = rows.length;
+    document.getElementById('resultTitle').textContent = state.cat==='전체' ? '전체 제품' : state.cat;
+    if(rows.length===0){ gridEl.innerHTML=''; emptyEl.classList.remove('hidden'); return; }
+    emptyEl.classList.add('hidden');
+    gridEl.innerHTML = rows.map((p,i)=>card(p,i)).join('');
+  }
+
+  document.getElementById('resetAll').addEventListener('click', ()=>{
+    state.cat='전체'; state.q=''; state.pf.clear();
+    searchEl.value=''; selEl.value='전체';
+    pfEl.querySelectorAll('input').forEach(i=>i.checked=false);
+    clearBtn.classList.add('hidden');
+    tabsEl.querySelectorAll('.cat-tab').forEach(b=> b.setAttribute('aria-selected', String(b.dataset.cat==='전체')) );
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>
