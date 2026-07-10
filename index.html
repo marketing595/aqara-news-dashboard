@@ -72,13 +72,20 @@
     </div>
   </header>
 
+  <!-- 상위 GNB -->
   <div class="bg-white border-b border-[#E6E6E3] sticky top-[53px] z-20">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-6 overflow-x-auto">
-      <button id="tabBtn-analytics" onclick="switchTab('analytics')" class="px-1 py-3.5 text-[14px] font-semibold border-b-2 border-brand text-ink whitespace-nowrap">통계 분석</button>
-      <button id="tabBtn-briefing" onclick="switchTab('briefing')" class="px-1 py-3.5 text-[14px] font-semibold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">데일리 브리핑</button>
-      <button id="tabBtn-campaign" onclick="switchTab('campaign')" class="px-1 py-3.5 text-[14px] font-semibold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">캠페인 분석</button>
-      <button id="tabBtn-owned" onclick="switchTab('owned')" class="px-1 py-3.5 text-[14px] font-semibold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
-      <button id="tabBtn-cafe" onclick="switchTab('cafe')" class="px-1 py-3.5 text-[14px] font-semibold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페 모니터링</button>
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-7 overflow-x-auto">
+      <button id="grpBtn-pr" onclick="switchGroup('pr')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-brand text-ink whitespace-nowrap">PR</button>
+      <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
+      <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페 모니터링</button>
+      <button id="grpBtn-campaign" onclick="switchGroup('campaign')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">캠페인</button>
+    </div>
+  </div>
+  <!-- PR 하위탭 -->
+  <div id="subnav-pr" class="bg-[#FAFAF9] border-b border-[#E6E6E3] sticky top-[100px] z-10">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-2 py-2 overflow-x-auto">
+      <button id="tabBtn-analytics" onclick="switchTab('analytics')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-ink text-white whitespace-nowrap transition">통계 분석</button>
+      <button id="tabBtn-briefing" onclick="switchTab('briefing')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">데일리 브리핑</button>
     </div>
   </div>
 
@@ -935,11 +942,21 @@
         </div></div>`).join('') + (rows.length>200?'<div class="text-center py-3 text-xs text-slate-400">상위 200건 표시 · 검색·필터로 좁혀보세요</div>':'');
     }
 
+    // GNB: 상위 그룹 → 하위 뷰
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign' };
+    let prLastView='analytics';
+    function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
+    function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
+    function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
       ['analytics','briefing','campaign','owned','cafe'].forEach(v=>{
         document.getElementById('view-'+v).classList.toggle('hidden', v!==t);
-        document.getElementById('tabBtn-'+v).className='px-1 py-3.5 text-[14px] font-semibold border-b-2 whitespace-nowrap '+(v===t?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition');
       });
+      const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
+      ['pr','owned','cafe','campaign'].forEach(k=>{ document.getElementById('grpBtn-'+k).className=grpClass(k===g); });
+      document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
+      ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       if(t==='campaign'){ renderCampaign(); loadYoutube(); }
       if(t==='owned'){ renderOwned(); loadOwned(); }
