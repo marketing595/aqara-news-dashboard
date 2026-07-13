@@ -235,7 +235,7 @@
      <div id="brHeadline" class="card p-4 mb-5 bg-brand/10 border-brand/30"></div>
      <div id="briefingBody" class="space-y-5"></div>
      <div class="card p-4 mt-5 bg-[#FAFAF9] border-[#E6E6E3]">
-       <p class="text-[12px] font-bold text-ink mb-2">📋 수집·선별 기준</p>
+       <p class="text-[12px] font-bold text-ink mb-2">수집·선별 기준</p>
        <ul class="text-[12px] leading-relaxed text-slate-500 space-y-1">
          <li>· <b class="text-slate-700">출처·범위</b>: 네이버 뉴스 검색 API · 최근 2일 발행 기사 · 관련도 필터 후 중복 제거</li>
          <li>· <b class="text-slate-700">수집 키워드(카테고리별)</b></li>
@@ -518,7 +518,7 @@
        <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">콘텐츠 발행 추이 <span class="text-xs font-normal text-slate-400">(영상+블로그+인스타 누적)</span></h4><div class="h-56"><canvas id="rptContentChart"></canvas></div></div>
        <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">인스타 팔로워 · 카페 언급량 추이</h4><div class="h-56"><canvas id="rptFolCafeChart"></canvas></div></div>
      </section>
-     <p id="reportEditNote" class="text-center text-xs text-slate-400 pt-1 hidden">✏️ 편집 모드: 요약·인사이트 텍스트를 클릭해 수정 후 '저장' 버튼을 누르세요. 내용은 이 브라우저에 저장됩니다.</p>
+     <p id="reportEditNote" class="text-center text-xs text-slate-400 pt-1 hidden">편집 모드: 요약·인사이트 텍스트를 클릭해 수정 후 '저장' 버튼을 누르세요. 내용은 이 브라우저에 저장됩니다.</p>
      <p class="text-center text-xs text-slate-400 pt-4">수치는 자동 수집 기준 · 인사이트는 수정 가능(상부 보고 대체자료로 활용)</p>
    </div>
   </main>
@@ -1027,7 +1027,7 @@
     const INTERIOR_REPORT = `
       <div class="mt-1 mb-3 flex items-center justify-between flex-wrap gap-2">
         <h2 class="text-lg font-extrabold text-ink">스마트홈 인테리어 캠페인 리포트 <span class="text-sm font-normal text-slate-400">· 상반기 성과 &amp; 하반기 디벨롭</span></h2>
-        <span class="text-[11px] px-2 py-1 rounded-md bg-brand/15 text-brand-ink font-semibold">수치 [ ]는 검증 후 반영</span>
+        <button id="irEditBtn" onclick="toggleIrEdit()" class="text-[12px] px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50 font-semibold">수치·문구 편집</button>
       </div>
 
       <!-- 1. Overview -->
@@ -1035,10 +1035,10 @@
         <h3 class="accent font-extrabold text-ink mb-1">1 · Overview</h3>
         <p class="text-xs text-slate-500 mb-4">상단 지표는 하단 <b class="text-slate-700">온라인 광고 · PR · 콘텐츠</b> 성과와 연동됩니다. 확정 수치는 검증 후 [ ]에 채웁니다.</p>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">보도 실적</p><p class="num text-2xl font-extrabold text-ink mt-1">[ ]건</p><p class="text-[11px] text-slate-400 mt-1">← PR 섹션 합산</p></div>
-          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">총 노출수</p><p class="num text-2xl font-extrabold text-ink mt-1">[ ]</p><p class="text-[11px] text-slate-400 mt-1">← 광고 노출 + PR 도달</p></div>
-          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">전체 인입수 (리드)</p><p class="num text-2xl font-extrabold text-ink mt-1">[ ]</p><p class="text-[11px] text-slate-400 mt-1">← 홈페이지 유입·문의</p></div>
-          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">방문자 수 증가율</p><p class="num text-2xl font-extrabold text-ink mt-1">[ ]%</p><p class="text-[11px] text-slate-400 mt-1">← 캠페인 전·후 비교</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">보도 실적</p><p class="num text-2xl font-extrabold text-ink mt-1"><span class="ir-edit" data-k="kpiReport">[ ]건</span></p><p class="text-[11px] text-slate-400 mt-1">← PR 섹션 합산</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">총 노출수</p><p class="num text-2xl font-extrabold text-ink mt-1"><span class="ir-edit" data-k="kpiExposure">[ ]</span></p><p class="text-[11px] text-slate-400 mt-1">← 광고 노출 + PR 도달</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">전체 인입수 (리드)</p><p class="num text-2xl font-extrabold text-ink mt-1"><span class="ir-edit" data-k="kpiLead">[ ]</span></p><p class="text-[11px] text-slate-400 mt-1">← 홈페이지 유입·문의</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">방문자 수 증가율</p><p class="num text-2xl font-extrabold text-ink mt-1"><span class="ir-edit" data-k="kpiVisitor">[ ]%</span></p><p class="text-[11px] text-slate-400 mt-1">← 캠페인 전·후 비교</p></div>
         </div>
         <p class="text-[11px] font-semibold text-slate-400 mb-2">활동 및 기간 (2026 상반기)</p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
@@ -1058,7 +1058,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div class="rounded-lg bg-brand/5 border border-brand/20 p-4">
             <p class="text-sm font-bold text-ink mb-1">전환율(CVR) 중심 최적화</p>
-            <p class="text-[13px] text-slate-600">소비자 대상 <b>비디오 광고 소재</b> 중 전환율이 높았던 영역에 예산·노출을 집중. 단순 조회·CTR이 아니라 <b class="text-brand-ink">CVR(전환율)</b>을 핵심 지표로 승격. <span class="text-slate-400">[CVR 상위 소재/영역 · [ ]%]</span></p>
+            <p class="text-[13px] text-slate-600">소비자 대상 <b>비디오 광고 소재</b> 중 전환율이 높았던 영역에 예산·노출을 집중. 단순 조회·CTR이 아니라 <b class="text-brand-ink">CVR(전환율)</b>을 핵심 지표로 승격. <span class="text-slate-400">[CVR 상위 소재/영역 · <span class="ir-edit" data-k="cvr">[ ]</span>%]</span></p>
           </div>
           <div class="rounded-lg bg-[#FAFAF9] border border-[#E6E6E3] p-4">
             <p class="text-sm font-bold text-ink mb-1">전환 중심 키워드 세분화</p>
@@ -1074,7 +1074,7 @@
           <div>
             <p class="text-sm font-bold text-ink mb-2">PR 활동</p>
             <ul class="text-[13px] text-slate-600 space-y-1.5">
-              <li>· 스마트홈 <b>트렌드 리포트 발간</b> <span class="text-brand-ink font-semibold">( [ ]월 기준 )</span></li>
+              <li>· 스마트홈 <b>트렌드 리포트 발간</b> <span class="text-brand-ink font-semibold">( <span class="ir-edit" data-k="reportMonth">[ ]</span>월 기준 )</span></li>
               <li>· 인테리어 트렌드 <b>기획 기사</b> 배포 <span class="text-slate-400">[매체·건수 검증 후]</span></li>
               <li>· 브랜드·제품 <b>보도자료</b> 상시 배포</li>
             </ul>
@@ -1183,6 +1183,20 @@
       } else { cc.classList.add('hidden'); }
       document.getElementById('campPos').innerHTML=c.pos;
       document.getElementById('campReport').innerHTML=(curCampaign==='interior')?INTERIOR_REPORT:'';
+      if(curCampaign==='interior') applyIrEdits();
+    }
+    let irEdits={}; try{ irEdits=JSON.parse(localStorage.getItem('aqaraIrEdits')||'{}'); }catch(e){}
+    let irEditMode=false;
+    function applyIrEdits(){
+      document.querySelectorAll('#campReport .ir-edit').forEach(el=>{ const k=el.dataset.k;
+        if(irEdits[k]!=null && irEdits[k]!=='') el.textContent=irEdits[k];
+        el.contentEditable=irEditMode;
+        el.classList.toggle('bg-brand/10',irEditMode); el.classList.toggle('ring-1',irEditMode); el.classList.toggle('ring-brand/40',irEditMode); el.classList.toggle('rounded',irEditMode); el.classList.toggle('px-1',irEditMode); });
+      const b=document.getElementById('irEditBtn'); if(b) b.textContent=irEditMode?'저장':'수치·문구 편집';
+    }
+    function toggleIrEdit(){
+      if(irEditMode){ document.querySelectorAll('#campReport .ir-edit').forEach(el=>{ irEdits[el.dataset.k]=el.textContent.trim(); }); localStorage.setItem('aqaraIrEdits',JSON.stringify(irEdits)); }
+      irEditMode=!irEditMode; applyIrEdits();
     }
     function resetCampPeriod(){ document.getElementById('campFrom').value=''; document.getElementById('campTo').value=''; renderCampaign(curCampaign); }
     let CAMP_CONTENT=[], CAMP_PICK=[];
