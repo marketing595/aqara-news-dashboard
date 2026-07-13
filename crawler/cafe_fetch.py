@@ -24,6 +24,9 @@ STS_KWS = ("아카라,aqara,aqaralife,aqara 스마트홈,아카라 도어락,아
 CAFES = [
     {"url": "aqara", "name": "아카라 스마트홈", "require": False, "pages": (1, 101, 201, 301, 401, 501, 601, 701), "kws": AQARA_KWS, "cap": 3000},
     {"url": "stsmarthome", "name": "모두의 스마트홈", "require": True, "pages": (1, 101, 201, 301), "kws": STS_KWS, "cap": 800},
+    {"url": "overseer", "name": "셀프인테리어 마이홈", "require": True, "pages": (1, 101, 201, 301), "kws": STS_KWS, "cap": 500},
+    {"url": "appleiphone", "name": "아사모(애플)", "require": True, "pages": (1, 101, 201), "kws": STS_KWS, "cap": 400},
+    {"url": "pcarpenter", "name": "박목수의 열린견적서", "require": True, "pages": (1, 101), "kws": STS_KWS, "cap": 200},
 ]
 
 
