@@ -157,6 +157,23 @@ def fetch_instagram():
         return None
 
 
+def append_history(path, snapshot):
+    """날짜별 스냅샷 누적(같은 날은 갱신, 최근 400일 유지)."""
+    hist = []
+    if os.path.exists(path):
+        try:
+            hist = json.load(open(path, encoding="utf-8"))
+        except Exception:
+            hist = []
+    if not isinstance(hist, list):
+        hist = []
+    hist = [h for h in hist if h.get("date") != snapshot["date"]]
+    hist.append(snapshot)
+    hist.sort(key=lambda x: x.get("date", ""))
+    hist = hist[-400:]
+    json.dump(hist, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+
+
 def api(path, **params):
     params["key"] = KEY
     r = requests.get(BASE + path, params=params, timeout=20)
@@ -229,6 +246,14 @@ def main():
     if blog:
         data["blog"] = blog
     json.dump(data, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+
+    # 일별 추세 스냅샷 누적
+    append_history(os.path.join(os.path.dirname(__file__), "..", "owned_history.json"), {
+        "date": kst.strftime("%Y-%m-%d"),
+        "ytSubs": channel["subs"], "ytViews": channel["views"], "ytVideos": channel["videos"],
+        "igFollowers": insta.get("followers"), "igPosts": insta.get("posts"),
+        "blogTotal": (blog or {}).get("total"),
+    })
     print("owned.json OK — subs:%d videos:%d yt_recent:%d blogs:%d ig_followers:%s" % (
         channel["subs"], channel["videos"], len(recent),
         len((blog or {}).get("blogs", [])), str(insta.get("followers"))))

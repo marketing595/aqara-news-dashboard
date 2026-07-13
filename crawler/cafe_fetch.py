@@ -65,12 +65,32 @@ def main():
         posts.sort(key=lambda x: x["no"], reverse=True)
         out += posts[:cafe["cap"]]
 
-    data = {"ok": True, "generatedAt": (datetime.datetime.utcnow() + datetime.timedelta(hours=9)).strftime("%Y-%m-%d %H:%M"),
+    kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
+    data = {"ok": True, "generatedAt": kst.strftime("%Y-%m-%d %H:%M"),
             "count": len(out), "posts": out}
     path = os.path.join(os.path.dirname(__file__), "..", "cafe.json")
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=1)
-    print("wrote", len(out), "posts", {c["name"]: sum(1 for p in out if p["cafe"] == c["name"]) for c in CAFES})
+
+    # 일별 언급량 스냅샷 누적(같은 날은 갱신, 최근 400일)
+    cafes_cnt = {c["name"]: sum(1 for p in out if p["cafe"] == c["name"]) for c in CAFES}
+    maxno = {c["name"]: max([p["no"] for p in out if p["cafe"] == c["name"]] or [0]) for c in CAFES}
+    hpath = os.path.join(os.path.dirname(__file__), "..", "cafe_history.json")
+    hist = []
+    if os.path.exists(hpath):
+        try:
+            hist = json.load(open(hpath, encoding="utf-8"))
+        except Exception:
+            hist = []
+    if not isinstance(hist, list):
+        hist = []
+    day = kst.strftime("%Y-%m-%d")
+    hist = [h for h in hist if h.get("date") != day]
+    hist.append({"date": day, "total": len(out), "cafes": cafes_cnt, "maxNo": maxno})
+    hist.sort(key=lambda x: x.get("date", ""))
+    hist = hist[-400:]
+    json.dump(hist, open(hpath, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print("wrote", len(out), "posts", cafes_cnt)
 
 
 if __name__ == "__main__":
