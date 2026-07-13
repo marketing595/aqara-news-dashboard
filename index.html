@@ -170,7 +170,7 @@
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <h2 class="accent font-extrabold text-ink">뉴스 목록 <span id="listCount" class="text-sm font-normal text-slate-400"></span></h2>
           <div class="flex flex-wrap gap-2">
-            <input id="search" type="text" placeholder="기사명·매체 검색" oninput="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 w-44 focus:outline-none focus:ring-2 focus:ring-brand" />
+            <input id="search" type="text" placeholder="제목·매체·전체 검색 (띄어쓰기 무시)" oninput="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 w-56 focus:outline-none focus:ring-2 focus:ring-brand" />
             <select id="fTopic" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 종류</option></select>
             <select id="fType" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 성격</option></select>
           </div>
@@ -570,8 +570,9 @@
     function tag(txt,color){ return '<span class="px-2 py-0.5 rounded text-[11px] '+color+'">'+esc(txt)+'</span>'; }
     function renderTable(){ const q=(document.getElementById('search').value||'').toLowerCase().trim();
       const ft=document.getElementById('fTopic').value, fy=document.getElementById('fType').value;
+      const nq=q.replace(/\s+/g,'');
       let rows=FILTERED.filter(r=>{ if(ft&&r._topic!==ft)return false; if(fy&&r._type!==fy)return false;
-        if(q){const h=((r['기사명']||'')+' '+(r['매체']||'')).toLowerCase(); if(h.indexOf(q)<0)return false;} return true; });
+        if(nq){ const h=Object.keys(r).filter(k=>k[0]!=='_'&&!/링크|url|href|채널/i.test(k)).map(k=>r[k]).join(' ').toLowerCase().replace(/\s+/g,''); if(h.indexOf(nq)<0)return false; } return true; });
       rows.sort((a,b)=>{let x=(a[sortKey]||'').toString(),y=(b[sortKey]||'').toString(); return x<y?-sortDir:x>y?sortDir:0;});
       document.getElementById('listCount').textContent='('+rows.length+'건)';
       const tb=document.getElementById('tableBody');
