@@ -197,13 +197,17 @@
      <div class="card p-5 mb-5">
        <h2 class="accent font-extrabold text-ink mb-1">검색어 · 키워드 인사이트 <span class="text-xs font-normal text-slate-400">(네이버 검색 기준)</span></h2>
        <div class="flex items-center justify-between flex-wrap gap-2 mb-2 mt-3">
-         <p class="text-sm font-semibold text-slate-600">파워링크 키워드 합산 검색 트렌드 <span class="text-xs font-normal text-slate-400">(스마트홈·인테리어 100개 키워드 묶음 · 데이터랩 상대지수)</span></p>
+         <p class="text-sm font-semibold text-slate-600">파워링크 키워드 합산 검색 트렌드 <span class="text-xs font-normal text-slate-400">(스마트홈·인테리어 100개 키워드 묶음 · 데이터랩 상대지수)</span> <button onclick="document.getElementById('plkwBox').classList.toggle('hidden')" class="text-[11px] text-brand-ink font-semibold hover:underline ml-1">포함 키워드 보기 ▾</button></p>
          <div id="trendRangeBtns" class="flex gap-1">
            <button data-n="0" onclick="setTrendRange(0)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">전체(5년)</button>
            <button data-n="36" onclick="setTrendRange(36)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">최근 3년</button>
            <button data-n="24" onclick="setTrendRange(24)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">최근 2년</button>
            <button data-n="12" onclick="setTrendRange(12)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">최근 1년</button>
          </div>
+       </div>
+       <div id="plkwBox" class="hidden mb-3 rounded-lg border border-[#E6E6E3] bg-[#FAFAF9] p-3">
+         <p class="text-[11px] font-semibold text-slate-500 mb-1.5">합산에 포함된 파워링크 키워드 100개 (5개 묶음)</p>
+         <div id="plkwList" class="flex flex-wrap gap-1"></div>
        </div>
        <div class="h-64"><canvas id="searchTrendChart"></canvas></div>
        <p id="searchTrendNote" class="text-xs text-slate-400 mt-2"></p>
@@ -981,7 +985,9 @@
         '</tbody></table></div>'+(brEditMode?'<p class="text-xs text-ink mt-2">편집 내용은 이 브라우저에 저장됩니다(수동 수정 우선). 원문 자동갱신 시에도 유지됩니다.</p>':'');
     }
     let DATALAB={series:[]};
-    function loadDatalab(){ fetch('datalab.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d&&d.series&&d.series.length){ DATALAB=d; drawTrendChart();
+    const POWERLINK_KW='스마트홈구축,스마트홈설치,스마트홈,스마트홈인테리어,스마트홈시공,홈자동화,홈오토메이션,스마트홈솔루션,스마트홈시스템,스마트홈네트워크,스마트홈리모델링,스마트홈설계,스마트홈통합제어,공간자동화,주거자동화시스템,스마트홈만들기,스마트홈추천,스마트홈서비스,스마트홈도입,스마트홈구축방법,IOT구축,홈IOT구축,IOT인테리어,IoT설치,홈IOT,iot스마트홈구축,IOT시공,IOT리모델링,스마트인테리어,인테리어IOT,IoT인테리어업체,IOT오피스시공,스마트오피스,스마트오피스구축,조명제어시스템,스마트스위치시공,스마트조명시공,스마트커튼설치,스마트도어락설치,IOT시공업체,스마트홈인테리어시공,인테리어스마트홈시공,스마트홈인테리어견적,스마트홈견적,스마트홈시공견적,스마트홈업체,스마트홈업체추천,스마트홈설치업체,스마트홈구축업체,스마트홈설계업체,인테리어업체스마트홈,전기시공스마트홈,스마트홈파트너,스마트홈시공파트너,스마트홈B2B,스마트홈사업자몰,스마트홈외주,스마트홈공사,스마트홈시공사,스마트홈시공문의,스마트홈상담,스마트홈문의,스마트홈구축문의,스마트홈상담문의,스마트홈비용,스마트홈구축비용,스마트홈설치비용,iot상담,스마트홈앱설정,스마트홈앱연동,스마트홈연동,스마트홈연동방법,스마트홈허브추천,스마트홈브랜드,스마트홈트렌드,스마트홈기술교육,스마트홈교육,스마트홈자격증,아카라라이프시공,아카라설치,스마트홈인테리어교육,IOT교육,인테리어교육,인테리어배우기,인테리어기술,인테리어자격증,집수리교육,집수리아카데미,인테리어디자인,인테리어종류,구경하는집,스마트홈구경하는집,25평인테리어,신혼인테리어,아파트구경하는집,리모델링견적,구옥리모델링,노후아파트인테리어,침실인테리어,아기방인테리어'.split(',');
+    function renderPlkwList(){ const el=document.getElementById('plkwList'); if(el&&!el.innerHTML) el.innerHTML=POWERLINK_KW.map(k=>`<span class="text-[11px] px-1.5 py-0.5 rounded bg-white border border-[#E6E6E3] text-slate-600">${esc(k)}</span>`).join(''); }
+    function loadDatalab(){ renderPlkwList(); fetch('datalab.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d&&d.series&&d.series.length){ DATALAB=d; drawTrendChart();
       document.getElementById('searchTrendNote').textContent='※ 파워링크 100개 키워드(스마트홈·인테리어·IoT 시공/교육/상담 등)를 5개 묶음으로 합산한 상대 관심도 · 네이버 데이터랩 검색어트렌드 · 매월 자동 갱신 · 절대 검색량 아님'; } }).catch(()=>{}); }
     function drawTrendChart(){
       const S=DATALAB.series||[];
@@ -1034,10 +1040,23 @@
         <button id="irEditBtn" onclick="toggleIrEdit()" class="text-[12px] px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50 font-semibold">수치·문구 편집</button>
       </div>
 
+      <!-- 0. 핵심 인사이트 (최상단) -->
+      <div class="card p-5 mb-5 bg-brand/5 border-brand/30">
+        <h3 class="accent font-extrabold text-ink mb-3">핵심 인사이트 (PR)</h3>
+        <p class="text-sm text-slate-700 mb-3 leading-relaxed">상반기 전체 보도자료 <b class="text-ink num"><span class="ir-auto" data-a="repTotal">[ ]</span>건</b> — 인테리어/트렌드 <b class="text-ink"><span class="ir-auto" data-a="repInterior">[ ]</span>건</b>(<span class="ir-auto" data-a="repInteriorPct">[ ]</span>%), 회사이슈 <b class="text-ink"><span class="ir-auto" data-a="repCompany">[ ]</span>건</b>(<span class="ir-auto" data-a="repCompanyPct">[ ]</span>%), 제품/서비스 <b class="text-ink"><span class="ir-auto" data-a="repProduct">[ ]</span>건</b>(<span class="ir-auto" data-a="repProductPct">[ ]</span>%)</p>
+        <ul class="text-[13px] text-slate-600 space-y-1.5 leading-relaxed">
+          <li>· <b class="text-slate-800">스마트홈 트렌드 리포트 발간·배포</b> (<span class="ir-edit" data-k="reportMonth2">[ ]</span>월 기준)</li>
+          <li>· <b class="text-slate-800">포털 노출 극대화</b>: 6월 '더메종' 및 '학회' 아이템을 네이버·다음·네이트 등 3대 포털에 동시 노출</li>
+          <li>· <b class="text-slate-800">기획기사 구체화</b>: 인터뷰 / 최신 트렌드 키워드 활용 기사를 통해 스마트홈 노출 강화</li>
+          <li>· <b class="text-slate-800">공신력 PR</b>: 실내디자인학회·더메종 전시회 등 공신력 있는 행사 참여로 <b>대세감 극대화</b></li>
+          <li>· <b class="text-slate-800">브랜드 검색 피크</b>: '아카라' 검색이 캠페인 후반(6월 초) 연중 최고점에 도달 — 캠페인과 브랜드 검색 피크가 동조</li>
+        </ul>
+      </div>
+
       <!-- 1. Overview -->
       <div class="card p-5 mb-5">
         <h3 class="accent font-extrabold text-ink mb-1">1 · Overview</h3>
-        <p class="text-xs text-slate-500 mb-4">상단 지표는 하단 <b class="text-slate-700">온라인 광고 · PR · 콘텐츠</b> 성과와 연동됩니다. 확정 수치는 검증 후 [ ]에 채웁니다.</p>
+        <p class="text-xs text-slate-500 mb-4"><b class="text-slate-700">보도 실적</b>은 시트 데이터에서 캠페인 기간(4/13~6/30) 자동 집계됩니다. <b class="text-slate-700">총 노출수·인입수·방문 증가율</b>은 광고·GA(구글 애널리틱스) 연동 전이라 <b class="text-brand-ink">[ ]</b>이며, 우측 <b>'수치·문구 편집'</b> 버튼으로 검증된 값을 직접 입력·저장할 수 있습니다.</p>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
           <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">보도 실적</p><p class="num text-2xl font-extrabold text-ink mt-1"><span class="ir-edit" data-k="kpiReport">[ ]건</span></p><p class="text-[11px] text-slate-400 mt-1">← PR 섹션 합산</p></div>
           <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">총 노출수</p><p class="num text-2xl font-extrabold text-ink mt-1"><span class="ir-edit" data-k="kpiExposure">[ ]</span></p><p class="text-[11px] text-slate-400 mt-1">← 광고 노출 + PR 도달</p></div>
@@ -1192,8 +1211,17 @@
     let irEdits={}; try{ irEdits=JSON.parse(localStorage.getItem('aqaraIrEdits')||'{}'); }catch(e){}
     let irEditMode=false;
     function applyIrEdits(){
+      // 캠페인 기간(4/13~6/30) 시트 데이터에서 보도자료 자동 집계
+      const ci=CAMPAIGNS.interior, camp=ALL.filter(r=>{const d=r['게재일'];return d&&d>=ci.start&&d<=ci.end;});
+      const tot=camp.length, cnt=re=>camp.filter(r=>re.test((r['종류']||'')+' '+(r['구분']||''))).length;
+      const nInt=cnt(/트렌드|인테리어/), nCo=cnt(/회사|이슈|MOU|행사|수상|협약|투자|매거진/), nPr=cnt(/신제품|제품|서비스|출시|앱|기술/);
+      const pct=n=>tot?(Math.round(n/tot*1000)/10):0;
+      const A={ repTotal:tot||'[ ]', repInterior:nInt, repInteriorPct:pct(nInt), repCompany:nCo, repCompanyPct:pct(nCo), repProduct:nPr, repProductPct:pct(nPr) };
+      document.querySelectorAll('#campReport .ir-auto').forEach(el=>{ const a=el.dataset.a; if(A[a]!=null && tot) el.textContent=A[a]; });
+      const auto={ kpiReport: tot?tot.toLocaleString()+'건':'[ ]건' };
       document.querySelectorAll('#campReport .ir-edit').forEach(el=>{ const k=el.dataset.k;
         if(irEdits[k]!=null && irEdits[k]!=='') el.textContent=irEdits[k];
+        else if(auto[k]!=null) el.textContent=auto[k];
         el.contentEditable=irEditMode;
         el.classList.toggle('bg-brand/10',irEditMode); el.classList.toggle('ring-1',irEditMode); el.classList.toggle('ring-brand/40',irEditMode); el.classList.toggle('rounded',irEditMode); el.classList.toggle('px-1',irEditMode); });
       const b=document.getElementById('irEditBtn'); if(b) b.textContent=irEditMode?'저장':'수치·문구 편집';
