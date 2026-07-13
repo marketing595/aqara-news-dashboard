@@ -322,7 +322,20 @@
      <!-- 개요 -->
      <div id="ownedSec-overview">
        <section id="ownedOverviewKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
-       <section id="ownedOverviewCards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></section>
+       <section id="ownedOverviewCards" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"></section>
+       <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
+         <h3 class="accent font-extrabold text-ink">채널 성장 추이 <span class="text-xs font-normal text-slate-400">(매일 자동 기록 · 데이터가 쌓일수록 정밀)</span></h3>
+         <select id="ownedTrendPeriod" onchange="renderOwnedTrends()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 bg-white">
+           <option value="all">전체 기간</option>
+           <option value="quarter">최근 분기(3개월)</option>
+           <option value="half">최근 반년(6개월)</option>
+         </select>
+       </div>
+       <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+         <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">구독자 추이 <span class="text-xs font-normal text-slate-400">(YouTube)</span></h4><div class="h-52"><canvas id="ovSubsChart"></canvas></div></div>
+         <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">조회수 추이 <span class="text-xs font-normal text-slate-400">(YouTube 누적)</span></h4><div class="h-52"><canvas id="ovViewsChart"></canvas></div></div>
+         <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">콘텐츠 추이 <span class="text-xs font-normal text-slate-400">(영상+블로그+인스타)</span></h4><div class="h-52"><canvas id="ovContentChart"></canvas></div></div>
+       </section>
      </div>
 
      <!-- YouTube 자사 채널 -->
@@ -1281,6 +1294,20 @@
         card('YouTube','자동 실측', row('구독자',(ch.subs||0).toLocaleString()+'명')+row('업로드 영상',(ch.videos||0).toLocaleString()+'개')+row('영상 평균 조회',KO_UNIT(avg)),'youtube','text-red-600')+
         card('Instagram','수기 입력', row('팔로워',ig.followers!=null?ig.followers.toLocaleString()+'명':'수기 대기')+row('게시물',ig.posts!=null?ig.posts.toLocaleString()+'개':'-')+row('기준일',ig.asOf||'수기'),'instagram','text-[#C13584]')+
         card('네이버 블로그','관리 '+nBlogs+'개', row('전체 글',blTotal.toLocaleString()+'건')+row('최근 30일 발행',(bl.recent30||0)+'건')+row('최신 발행일',(_all[0]?_all[0].date:'-')),'blog','text-[#03C75A]');
+      renderOwnedTrends();
+    }
+    function renderOwnedTrends(){
+      if(!document.getElementById('ovSubsChart')) return;
+      const p=document.getElementById('ownedTrendPeriod')?.value||'all';
+      let cut='0000-00-00';
+      if(OWNED_HIST.length){ const now=OWNED_HIST[OWNED_HIST.length-1].date;
+        if(p==='quarter'){ const d=new Date(now); d.setMonth(d.getMonth()-3); cut=d.toISOString().slice(0,10); }
+        else if(p==='half'){ const d=new Date(now); d.setMonth(d.getMonth()-6); cut=d.toISOString().slice(0,10); } }
+      const oh=OWNED_HIST.filter(h=>h.date>=cut), lab=oh.map(h=>h.date);
+      const opt=color=>({label:'',data:[],borderColor:color,backgroundColor:'transparent',borderWidth:2,tension:.3});
+      rline('ovSubsChart',lab,[{...opt('#BF5332'),label:'구독자',data:oh.map(h=>h.ytSubs),pointRadius:oh.length<=1?4:2}]);
+      rline('ovViewsChart',lab,[{...opt('#D68134'),label:'총조회',data:oh.map(h=>h.ytViews),pointRadius:oh.length<=1?4:2}]);
+      rline('ovContentChart',lab,[{...opt('#1D1D1F'),label:'콘텐츠',data:oh.map(h=>(h.ytVideos||0)+(h.blogTotal||0)+(h.igPosts||0)),pointRadius:oh.length<=1?4:2}]);
     }
     function renderOwnedBlog(){
       const all=blogAll();
