@@ -195,9 +195,9 @@
 
    <div id="view-briefing" class="hidden">
      <div class="card p-5 mb-5">
-       <h2 class="accent font-extrabold text-ink mb-1">🔎 검색어 · 키워드 인사이트 <span class="text-xs font-normal text-slate-400">(네이버 검색 기준)</span></h2>
+       <h2 class="accent font-extrabold text-ink mb-1">검색어 · 키워드 인사이트 <span class="text-xs font-normal text-slate-400">(네이버 검색 기준)</span></h2>
        <div class="flex items-center justify-between flex-wrap gap-2 mb-2 mt-3">
-         <p class="text-sm font-semibold text-slate-600">검색어 흐름 <span class="text-xs font-normal text-slate-400">(월별 상대 검색량 · 네이버 데이터랩 · 최고점=100)</span></p>
+         <p class="text-sm font-semibold text-slate-600">파워링크 키워드 합산 검색 트렌드 <span class="text-xs font-normal text-slate-400">(스마트홈·인테리어 100개 키워드 묶음 · 데이터랩 상대지수)</span></p>
          <div id="trendRangeBtns" class="flex gap-1">
            <button data-n="0" onclick="setTrendRange(0)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">전체(5년)</button>
            <button data-n="36" onclick="setTrendRange(36)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">최근 3년</button>
@@ -206,13 +206,14 @@
          </div>
        </div>
        <div class="h-64"><canvas id="searchTrendChart"></canvas></div>
+       <p id="searchTrendNote" class="text-xs text-slate-400 mt-2"></p>
        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
          <div>
-           <p class="text-sm font-semibold text-slate-600 mb-2">업계 핫 키워드 Top 15 <span class="text-xs font-normal text-slate-400">(최근 뉴스 빈도)</span></p>
+           <p class="text-sm font-semibold text-slate-600 mb-2">업계 핫 키워드 Top 15 <span id="hotKwNote" class="text-xs font-normal text-slate-400">(최근 뉴스 빈도)</span></p>
            <div class="h-80"><canvas id="hotKwChart"></canvas></div>
          </div>
          <div>
-           <p class="text-sm font-semibold text-slate-600 mb-2">🔗 연관검색어 <span class="text-xs font-normal text-slate-400">(자동완성 기준)</span></p>
+           <p class="text-sm font-semibold text-slate-600 mb-2">연관검색어 <span class="text-xs font-normal text-slate-400">(자동완성 기준)</span></p>
            <div id="relatedBox" class="space-y-2.5 max-h-80 overflow-auto pr-1"></div>
          </div>
        </div>
@@ -406,6 +407,15 @@
          <p class="text-sm text-slate-500 mt-1"><a href="https://cafe.naver.com/aqara" target="_blank" rel="noopener" class="text-ink hover:underline">아카라 스마트홈</a> · <a href="https://cafe.naver.com/stsmarthome" target="_blank" rel="noopener" class="text-ink hover:underline">모두의 스마트홈</a>(아카라 언급) · 키워드 수집 · 글번호순</p>
        </div>
        <div id="cafeStats" class="flex flex-wrap gap-1.5"></div>
+     </div>
+     <div class="card p-4 mb-5 bg-[#FAFAF9] border-[#E6E6E3]">
+       <p class="text-[12px] font-bold text-ink mb-1.5">감성 분류 기준 <span class="font-normal text-slate-400">(제목·내용 키워드 규칙 기반 자동 분류 · 참고용)</span></p>
+       <ul class="text-[12px] leading-relaxed text-slate-500 space-y-1">
+         <li>· <b class="text-agreen">긍정</b>: 해결완료·해결됨·만족·추천·좋아요·편하다·굿·최고·감사·잘 됨·덕분 등 <b>긍정 표현이 있고 부정 표현이 없을 때</b></li>
+         <li>· <b class="text-ared">부정</b>: 오류·에러·안됨·안돼·실패·딜레이·먹통·불편·불만·최악·문제·하지마·ㅠㅠ 등 <b>부정 표현이 있고 긍정 표현이 없을 때</b></li>
+         <li>· <b class="text-agray">중립</b>: 위 둘에 해당하지 않거나(단순 문의·정보), 긍정·부정이 함께 있는 경우</li>
+         <li>· ※ 규칙 기반 자동 분류라 문맥상 오분류가 있을 수 있어 <b>추세 참고용</b>입니다. 정밀 분석이 필요하면 개별 글을 확인하세요.</li>
+       </ul>
      </div>
      <div id="cafeInsight" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5"></div>
      <div class="card p-5">
@@ -923,10 +933,20 @@
         (rows.length?'':'<tr><td colspan="5" class="text-center py-8 text-slate-400">해당 일자 기사가 없습니다.</td></tr>')+
         '</tbody></table></div>'+(brEditMode?'<p class="text-xs text-ink mt-2">편집 내용은 이 브라우저에 저장됩니다(수동 수정 우선). 원문 자동갱신 시에도 유지됩니다.</p>':'');
     }
-    function drawTrendChart(){ const P=TREND.periods, keys=Object.keys(TREND.series);
-      const start=trendN>0?Math.max(0,P.length-trendN):0;
-      draw('searchTrendChart',{type:'line',data:{labels:P.slice(start),datasets:keys.map((k,i)=>({label:k,data:TREND.series[k].slice(start),borderColor:PALETTE[i],backgroundColor:'transparent',borderWidth:2,tension:0.3,pointRadius:(trendN&&trendN<=24)?2:0}))},
-        options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{beginAtZero:true}}}});
+    let DATALAB={series:[]};
+    function loadDatalab(){ fetch('datalab.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d&&d.series&&d.series.length){ DATALAB=d; drawTrendChart();
+      document.getElementById('searchTrendNote').textContent='※ 파워링크 100개 키워드(스마트홈·인테리어·IoT 시공/교육/상담 등)를 5개 묶음으로 합산한 상대 관심도 · 네이버 데이터랩 검색어트렌드 · 매월 자동 갱신 · 절대 검색량 아님'; } }).catch(()=>{}); }
+    function drawTrendChart(){
+      const S=DATALAB.series||[];
+      if(S.length){
+        const start=trendN>0?Math.max(0,S.length-trendN):0; const rows=S.slice(start);
+        draw('searchTrendChart',{type:'line',data:{labels:rows.map(x=>x.date),datasets:[{label:'파워링크 키워드 합산 관심도',data:rows.map(x=>x.value),borderColor:'#8A6A00',backgroundColor:'rgba(251,196,0,.15)',fill:true,borderWidth:2.5,tension:0.3,pointRadius:(trendN&&trendN<=24)?2:0}]},
+          options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{beginAtZero:true}}}});
+      } else {
+        const P=TREND.periods, keys=Object.keys(TREND.series); const start=trendN>0?Math.max(0,P.length-trendN):0;
+        draw('searchTrendChart',{type:'line',data:{labels:P.slice(start),datasets:keys.map((k,i)=>({label:k,data:TREND.series[k].slice(start),borderColor:PALETTE[i],backgroundColor:'transparent',borderWidth:2,tension:0.3,pointRadius:(trendN&&trendN<=24)?2:0}))},
+          options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{beginAtZero:true}}}});
+      }
       document.querySelectorAll('#trendRangeBtns button').forEach(b=>{ const on=(+b.dataset.n===trendN); b.className='text-xs px-2.5 py-1 rounded-lg border '+(on?'border-brand bg-brand/10 text-ink font-bold':'border-slate-300 hover:bg-slate-50'); });
     }
     function setTrendRange(n){ trendN=n; drawTrendChart(); }
@@ -938,15 +958,26 @@
           <div class="text-xs text-slate-500 whitespace-nowrap w-40 text-right">최근100건 중 <b class="${pct>0?'text-ink':'text-slate-400'}">${a.recent}건</b> · 누적 ${a.total}건</div>
         </div>`; }).join('');
     }
+    const HOTKW_STOP=new Set('스마트홈 스마트 인테리어 아파트 그리고 위해 통해 대한 관련 이번 최대 최고 지원 출시 사업 기술 시장 서비스 제품 브랜드 오픈 공개 진행 예정 확대 강화 개발 도입 적용'.split(' '));
+    function computeHotKw(){
+      const freq={};
+      Object.values(BRIEFINGS).forEach(b=>(b.rows||[]).forEach(r=>{
+        (r.t||'').replace(/[^0-9A-Za-z가-힣 ]/g,' ').split(/\s+/).forEach(w=>{ w=w.trim(); if(w.length<2||HOTKW_STOP.has(w)||/^\d+$/.test(w))return; freq[w]=(freq[w]||0)+1; });
+      }));
+      const arr=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,15);
+      return arr.length>=8?arr:HOTKW;
+    }
     function renderSearchInsight(){
-      drawTrendChart(); renderAssoc();
-      draw('hotKwChart',{type:'bar',data:{labels:HOTKW.map(x=>x[0]),datasets:[{data:HOTKW.map(x=>x[1]),backgroundColor:'#1D1D1F',borderRadius:4}]},
+      drawTrendChart(); renderAssoc(); loadDatalab();
+      const HK=computeHotKw(), live=(HK!==HOTKW);
+      draw('hotKwChart',{type:'bar',data:{labels:HK.map(x=>x[0]),datasets:[{data:HK.map(x=>x[1]),backgroundColor:'#1D1D1F',borderRadius:4}]},
         options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}});
+      const hn=document.getElementById('hotKwNote'); if(hn) hn.textContent=live?'(최근 브리핑 선별 기사 제목의 키워드 빈도 · 매일 갱신)':'(최근 뉴스 빈도)';
       document.getElementById('relatedBox').innerHTML=RELATED.map(g=>`<div class="flex flex-wrap items-center gap-1.5">
         <span class="px-2 py-0.5 rounded-md bg-ink text-white text-[11px] font-semibold whitespace-nowrap">${esc(g.seed)}</span>
         ${g.terms.map(t=>`<span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[11px]">${esc(t)}</span>`).join('')}
       </div>`).join('');
-      document.getElementById('searchTrendNote').textContent='검색어 흐름(시간별 추이) 차트는 네이버 데이터랩(검색어 트렌드) API 권한 추가 후 붙습니다.';
+      document.getElementById('searchTrendNote').textContent='데이터랩 로딩 중…';
     }
     function copyMail(){ navigator.clipboard.writeText(buildMail(curDate)).then(()=>alert('메일 텍스트가 복사되었습니다. 메일에 붙여넣으세요.')).catch(()=>alert('복사 실패 - 브라우저 권한을 확인하세요.')); }
 
