@@ -1,0 +1,40 @@
+name: Competitor Analysis
+
+# 매일 08:20(UTC)=한국 17:20 경쟁사 뉴스·연관어·트렌드 수집 → competitor.json
+on:
+  schedule:
+    - cron: '20 8 * * *'
+  workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/competitor.yml'
+      - 'crawler/competitor_fetch.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: competitor-analysis
+  cancel-in-progress: false
+
+jobs:
+  competitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Fetch competitor analysis
+        env:
+          NAVER_ID: ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+        run: python crawler/competitor_fetch.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add competitor.json
+          git diff --staged --quiet || git commit -m "competitor.json 자동 갱신"
+          git push
