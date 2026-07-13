@@ -34,6 +34,47 @@ def clean(s):
     return html.unescape(re.sub(r"<[^>]+>", "", s or "")).strip()
 
 
+CLIEN_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+CLIEN_QUERIES = ["아카라", "aqara", "아카라 도어락", "아카라 허브"]
+
+
+def fetch_clien():
+    """클리앙(네이버 아님) 검색 파싱 → 아카라 언급글. 실패 시 빈 리스트."""
+    seen, posts = set(), []
+    for q in CLIEN_QUERIES:
+        for p in range(0, 5):
+            try:
+                r = requests.get("https://www.clien.net/service/search",
+                                 params={"q": q, "sort": "recency", "p": p},
+                                 headers={"User-Agent": CLIEN_UA, "Accept-Language": "ko-KR,ko;q=0.9"}, timeout=20)
+                txt = r.text
+            except Exception:
+                break
+            items = re.findall(r'(?s)<a([^>]*data-role="list-title-text"[^>]*)>(.*?)</a>', txt)
+            if not items:
+                break
+            hit = 0
+            for attrs, inner in items:
+                title = html.unescape(re.sub(r"<[^>]+>", "", inner)).strip()
+                m = re.search(r'href="(/service/board/[^"?]+)', attrs)
+                if not m:
+                    continue
+                href = m.group(1)
+                link = "https://www.clien.net" + href
+                if link in seen or not REQ.search(title):
+                    continue
+                hit += 1
+                seen.add(link)
+                mid = re.search(r"/(\d+)$", href)
+                mb = re.search(r"/service/board/([^/]+)/", href)
+                posts.append({"no": int(mid.group(1)) if mid else 0, "title": title,
+                              "desc": "클리앙 · " + (mb.group(1) if mb else ""), "link": link, "cafe": "클리앙"})
+            if hit == 0 and p > 0:
+                break
+    posts.sort(key=lambda x: x["no"], reverse=True)
+    return posts
+
+
 def main():
     out = []
     for cafe in CAFES:
@@ -68,16 +109,35 @@ def main():
         posts.sort(key=lambda x: x["no"], reverse=True)
         out += posts[:cafe["cap"]]
 
+    path = os.path.join(os.path.dirname(__file__), "..", "cafe.json")
+    # 클리앙(네이버 아님) — 실패/차단 시 직전 cafe.json의 클리앙 글 보존
+    clien = []
+    try:
+        clien = fetch_clien()
+    except Exception as e:
+        print("clien 실패:", e)
+    if not clien and os.path.exists(path):
+        try:
+            prev = json.load(open(path, encoding="utf-8"))
+            clien = [p for p in prev.get("posts", []) if p.get("cafe") == "클리앙"]
+            print("clien 신규 수집 실패 → 직전 클리앙 글 보존:", len(clien))
+        except Exception:
+            pass
+    out += clien
+
     kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
     data = {"ok": True, "generatedAt": kst.strftime("%Y-%m-%d %H:%M"),
             "count": len(out), "posts": out}
-    path = os.path.join(os.path.dirname(__file__), "..", "cafe.json")
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=1)
 
     # 일별 언급량 스냅샷 누적(같은 날은 갱신, 최근 400일)
-    cafes_cnt = {c["name"]: sum(1 for p in out if p["cafe"] == c["name"]) for c in CAFES}
-    maxno = {c["name"]: max([p["no"] for p in out if p["cafe"] == c["name"]] or [0]) for c in CAFES}
+    names = []
+    for p in out:
+        if p["cafe"] not in names:
+            names.append(p["cafe"])
+    cafes_cnt = {n: sum(1 for p in out if p["cafe"] == n) for n in names}
+    maxno = {n: max([p["no"] for p in out if p["cafe"] == n] or [0]) for n in names}
     hpath = os.path.join(os.path.dirname(__file__), "..", "cafe_history.json")
     hist = []
     if os.path.exists(hpath):
