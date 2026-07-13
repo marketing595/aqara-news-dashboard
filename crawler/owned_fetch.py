@@ -9,9 +9,15 @@ import requests
 
 KEY = os.environ.get("YT_API_KEY", "")
 HANDLE = "aqaralife"
-BLOG_ID = "aqaralife"
 BASE = "https://www.googleapis.com/youtube/v3/"
 BLOG_API = "https://blog.naver.com/PostTitleListAsync.naver"
+
+# 관리 블로그 목록 (공식 + 협업/체험단 블로그)
+BLOGS = [
+    {"id": "aqaralife", "name": "아카라라이프 (공식)"},
+    {"id": "sksmsehfehfdl", "name": "수니집 일상기록"},
+    {"id": "untorn", "name": "미니멀라이프"},
+]
 
 
 def _bdate(s):
@@ -31,21 +37,19 @@ def _bdate(s):
 
 BLOG_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
-    "Referer": "https://blog.naver.com/%s" % BLOG_ID,
     "Accept": "application/json, text/plain, */*",
     "Accept-Language": "ko-KR,ko;q=0.9",
 }
 
 
-def _blog_via_api():
+def _blog_via_api(bid):
     posts, page, total = [], 1, 0
+    hdr = dict(BLOG_HEADERS, Referer="https://blog.naver.com/%s" % bid)
     while page <= 60:
-        r = requests.get(BLOG_API, timeout=20, headers=BLOG_HEADERS,
-                         params={"blogId": BLOG_ID, "viewdate": "", "currentPage": page,
+        r = requests.get(BLOG_API, timeout=20, headers=hdr,
+                         params={"blogId": bid, "viewdate": "", "currentPage": page,
                                  "categoryNo": "", "parentCategoryNo": "", "countPerPage": 30})
-        txt = r.text.strip()
-        if txt.startswith("﻿"):
-            txt = txt.lstrip("﻿")
+        txt = r.text.strip().lstrip("﻿")
         j = json.loads(txt)
         total = int(j.get("totalCount", 0) or 0)
         lst = j.get("postList", []) or []
@@ -57,17 +61,17 @@ def _blog_via_api():
                 continue
             title = html.unescape(unquote_plus(it.get("title", "")).replace("+", " ")).strip()
             posts.append({"title": title, "date": _bdate(it.get("addDate", "")),
-                          "link": "https://blog.naver.com/%s/%s" % (BLOG_ID, logno)})
+                          "link": "https://blog.naver.com/%s/%s" % (bid, logno)})
         if total and page * 30 >= total:
             break
         page += 1
     return posts, total
 
 
-def _blog_via_rss():
+def _blog_via_rss(bid):
     """API 차단 시 폴백: RSS(최근 ~50개)."""
     import xml.etree.ElementTree as ET
-    r = requests.get("https://rss.blog.naver.com/%s.xml" % BLOG_ID, timeout=20, headers=BLOG_HEADERS)
+    r = requests.get("https://rss.blog.naver.com/%s.xml" % bid, timeout=20, headers=BLOG_HEADERS)
     root = ET.fromstring(r.content)
     ch = root.find("channel")
     posts = []
@@ -83,26 +87,39 @@ def _blog_via_rss():
     return posts, len(posts)
 
 
-def fetch_blog():
-    """네이버 블로그 전체 글(제목·발행일·링크). API 우선, 실패 시 RSS 폴백. 조회수는 정책상 비공개."""
+def _one_blog(bid):
     posts, total = [], 0
     try:
-        posts, total = _blog_via_api()
+        posts, total = _blog_via_api(bid)
     except Exception as e:
-        print("blog API 실패:", e)
+        print("blog API 실패(%s):" % bid, e)
     if not posts:
         try:
-            posts, total = _blog_via_rss()
-            print("blog RSS 폴백 사용:", len(posts))
+            posts, total = _blog_via_rss(bid)
+            print("blog RSS 폴백(%s):" % bid, len(posts))
         except Exception as e:
-            print("blog RSS 실패:", e)
-    if not posts:
-        return None
+            print("blog RSS 실패(%s):" % bid, e)
     posts.sort(key=lambda x: x["date"], reverse=True)
+    return posts, (total or len(posts))
+
+
+def fetch_blog():
+    """관리 블로그 여러 개의 전체 글 수집 → {blogs:[...], total, recent30}. 조회수는 정책상 비공개."""
     cutoff = (datetime.datetime.utcnow() + datetime.timedelta(hours=9) - datetime.timedelta(days=30)).strftime("%Y-%m-%d")
-    recent30 = sum(1 for p in posts if p["date"] >= cutoff)
-    return {"url": "https://blog.naver.com/aqaralife", "title": "아카라라이프 블로그",
-            "total": total or len(posts), "totalRecent": len(posts), "recent30": recent30, "recent": posts}
+    blogs = []
+    for b in BLOGS:
+        posts, total = _one_blog(b["id"])
+        if not posts and total == 0:
+            print("blog 건너뜀(글없음):", b["id"])
+            continue
+        r30 = sum(1 for p in posts if p["date"] >= cutoff)
+        blogs.append({"id": b["id"], "name": b["name"], "url": "https://blog.naver.com/%s" % b["id"],
+                      "total": total, "recent30": r30, "recent": posts})
+    if not blogs:
+        return None
+    return {"blogs": blogs,
+            "total": sum(x["total"] for x in blogs),
+            "recent30": sum(x["recent30"] for x in blogs)}
 
 
 def api(path, **params):
@@ -163,7 +180,7 @@ def main():
 
     # blog: 신규 수집 실패/빈값이면 직전 blog 보존(자동 워크플로가 블로그를 지우지 않도록)
     blog = fetch_blog()
-    if (not blog or not blog.get("recent")) and isinstance(prev.get("blog"), dict) and prev["blog"].get("recent"):
+    if (not blog or not blog.get("blogs")) and isinstance(prev.get("blog"), dict) and prev["blog"].get("blogs"):
         print("blog 신규 수집 실패/빈값 → 직전 owned.json의 blog 보존")
         blog = prev["blog"]
 
