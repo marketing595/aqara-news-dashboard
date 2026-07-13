@@ -1,0 +1,1248 @@
+{
+    "generatedAt":  "2026-07-14 08:32",
+    "brands":  [
+                   {
+                       "name":  "아카라",
+                       "me":  true,
+                       "query":  "아카라 스마트홈",
+                       "total":  1499,
+                       "sentiment":  {
+                                         "pos":  0,
+                                         "neu":  58,
+                                         "neg":  0
+                                     },
+                       "keywords":  [
+                                        [
+                                            "IoT",
+                                            21
+                                        ],
+                                        [
+                                            "AIoT",
+                                            18
+                                        ],
+                                        [
+                                            "인테리어",
+                                            16
+                                        ],
+                                        [
+                                            "기업",
+                                            14
+                                        ],
+                                        [
+                                            "공간",
+                                            14
+                                        ],
+                                        [
+                                            "국내",
+                                            14
+                                        ],
+                                        [
+                                            "도어락",
+                                            13
+                                        ],
+                                        [
+                                            "공간디자인",
+                                            11
+                                        ],
+                                        [
+                                            "자동화",
+                                            11
+                                        ],
+                                        [
+                                            "이상헌",
+                                            10
+                                        ],
+                                        [
+                                            "설치",
+                                            9
+                                        ],
+                                        [
+                                            "있다",
+                                            9
+                                        ],
+                                        [
+                                            "구축",
+                                            8
+                                        ],
+                                        [
+                                            "산학협력",
+                                            8
+                                        ],
+                                        [
+                                            "조명",
+                                            8
+                                        ],
+                                        [
+                                            "가톨릭대",
+                                            8
+                                        ],
+                                        [
+                                            "가전",
+                                            7
+                                        ],
+                                        [
+                                            "글로벌",
+                                            7
+                                        ]
+                                    ],
+                       "posWords":  [
+                                        [
+                                            "0",
+                                            60
+                                        ]
+                                    ],
+                       "related":  [
+                                       "아카라이브",
+                                       "아카라 도어락",
+                                       "아카라",
+                                       "아카라 k100",
+                                       "아카라 스위치",
+                                       "아카라 홈캠",
+                                       "아카라 l100",
+                                       "명조 아카라이브",
+                                       "니케 아카라이브",
+                                       "아카라카"
+                                   ],
+                       "recent":  [
+                                      {
+                                          "title":  "가톨릭대, 산학협력 업무협약 체결...스마트 공간디자인 교육 본격화",
+                                          "source":  "kyosu.net",
+                                          "date":  "2026-07-09",
+                                          "link":  "https://www.kyosu.net/news/articleView.html?idxno=207478"
+                                      },
+                                      {
+                                          "title":  "[대학 뉴스브리핑] 삼육대·서강대·가톨릭대",
+                                          "source":  "asiatime.co.kr",
+                                          "date":  "2026-07-09",
+                                          "link":  "https://www.asiatime.co.kr/article/20260709500392"
+                                      },
+                                      {
+                                          "title":  "가톨릭대, 국내 최초 AIoT 공간디자인 실습실 구축…산학협력 MOU 체결",
+                                          "source":  "edu.donga.com",
+                                          "date":  "2026-07-09",
+                                          "link":  "https://edu.donga.com/news/articleView.html?idxno=109801"
+                                      },
+                                      {
+                                          "title":  "가톨릭대, 국내 첫 \u0027AIoT 융합 공간디자인 실습실\u0027 구축, \"스마트 공간디...",
+                                          "source":  "enewstoday.co.kr",
+                                          "date":  "2026-07-09",
+                                          "link":  "http://www.enewstoday.co.kr/news/articleView.html?idxno=2447221"
+                                      },
+                                      {
+                                          "title":  "가톨릭대, 국내 첫 \u0027AI+사물인터넷\u0027 융합 공간디자인 실습실 구축",
+                                          "source":  "news1.kr",
+                                          "date":  "2026-07-09",
+                                          "link":  "https://n.news.naver.com/mnews/article/421/0009050321?sid=102"
+                                      },
+                                      {
+                                          "title":  "가톨릭대, 스마트홈·IoT 기업와 \u0027AIoT 공간디자인 실습실\u0027 구축",
+                                          "source":  "머니투데이",
+                                          "date":  "2026-07-09",
+                                          "link":  "https://n.news.naver.com/mnews/article/008/0005383764?sid=102"
+                                      },
+                                      {
+                                          "title":  "[기획 리포트] 오픈 생태계의 ‘삼성’ vs 가전 장인의 ‘LG’… 스마트...",
+                                          "source":  "dailyt.co.kr",
+                                          "date":  "2026-07-08",
+                                          "link":  "https://www.dailyt.co.kr/newsView/dlt202607070013"
+                                      },
+                                      {
+                                          "title":  "“지문으로 0.3초 만에 인식” 280만 유튜버 \u0027잇섭\u0027도 꽂힌 그 제품 뭐길...",
+                                          "source":  "전자신문",
+                                          "date":  "2026-06-30",
+                                          "link":  "https://n.news.naver.com/mnews/article/030/0003442917?sid=105"
+                                      },
+                                      {
+                                          "title":  "2030 세대 홈 IoT 수요 증가…스마트 도어락 시장 변화",
+                                          "source":  "seoul.co.kr",
+                                          "date":  "2026-06-30",
+                                          "link":  "https://n.news.naver.com/mnews/article/081/0003657077?sid=101"
+                                      },
+                                      {
+                                          "title":  "아카라라이프, \u00272026 더 메종\u0027서 스마트홈 인테리어 선봬",
+                                          "source":  "머니투데이",
+                                          "date":  "2026-06-26",
+                                          "link":  "https://n.news.naver.com/mnews/article/008/0005377766?sid=101"
+                                      },
+                                      {
+                                          "title":  "[르포] \"가구 보러 왔다가 스마트폰 켰다\"…\u00272026 더 메종\u0027 흔든 스마트...",
+                                          "source":  "bizwnews.com",
+                                          "date":  "2026-06-26",
+                                          "link":  "http://www.bizwnews.com/news/articleView.html?idxno=139412"
+                                      },
+                                      {
+                                          "title":  "아카라라이프, 더메종서 스마트홈 인테리어 체험 공간 선보인다",
+                                          "source":  "thepowernews.co.kr",
+                                          "date":  "2026-06-25",
+                                          "link":  "https://www.thepowernews.co.kr/view.php?ud=2026062514104660596cf2d78c68_7"
+                                      },
+                                      {
+                                          "title":  "[현장] \u0027중개\u0027 넘어 \u0027직접 시공\u0027으로…오늘의집, 판교 거점으로 시공 사...",
+                                          "source":  "news2day.co.kr",
+                                          "date":  "2026-06-25",
+                                          "link":  "https://www.news2day.co.kr/article/20260624500207"
+                                      },
+                                      {
+                                          "title":  "운동화·뷰티·건기식부터 스마트홈까지…유통가 관통하는 \u0027도어인(Door...",
+                                          "source":  "전자신문",
+                                          "date":  "2026-06-22",
+                                          "link":  "https://n.news.naver.com/mnews/article/030/0003439990?sid=103"
+                                      },
+                                      {
+                                          "title":  "[산업 이모저모] 아카라라이프, 코레일유통, 한국앤컴퍼니",
+                                          "source":  "bizwnews.com",
+                                          "date":  "2026-06-16",
+                                          "link":  "http://www.bizwnews.com/news/articleView.html?idxno=138822"
+                                      }
+                                  ]
+                   },
+                   {
+                       "name":  "헤이홈",
+                       "me":  false,
+                       "query":  "헤이홈",
+                       "total":  958,
+                       "sentiment":  {
+                                         "pos":  0,
+                                         "neu":  56,
+                                         "neg":  0
+                                     },
+                       "keywords":  [
+                                        [
+                                            "홈캠",
+                                            38
+                                        ],
+                                        [
+                                            "움직임",
+                                            35
+                                        ],
+                                        [
+                                            "KT",
+                                            32
+                                        ],
+                                        [
+                                            "모바일",
+                                            27
+                                        ],
+                                        [
+                                            "영상",
+                                            24
+                                        ],
+                                        [
+                                            "실시간",
+                                            24
+                                        ],
+                                        [
+                                            "감지",
+                                            23
+                                        ],
+                                        [
+                                            "카메라가",
+                                            23
+                                        ],
+                                        [
+                                            "알림",
+                                            22
+                                        ],
+                                        [
+                                            "양방향",
+                                            22
+                                        ],
+                                        [
+                                            "대상을",
+                                            22
+                                        ],
+                                        [
+                                            "Hejhome",
+                                            22
+                                        ],
+                                        [
+                                            "음성",
+                                            21
+                                        ],
+                                        [
+                                            "자동으로",
+                                            21
+                                        ],
+                                        [
+                                            "통화",
+                                            20
+                                        ],
+                                        [
+                                            "프라이버시",
+                                            20
+                                        ],
+                                        [
+                                            "아기상어",
+                                            20
+                                        ],
+                                        [
+                                            "모드",
+                                            19
+                                        ]
+                                    ],
+                       "posWords":  [
+                                        [
+                                            "0",
+                                            54
+                                        ]
+                                    ],
+                       "related":  [
+                                       "헤이홈 홈캠",
+                                       "헤이홈",
+                                       "헤이홈 sd카드",
+                                       "헤이홈 거치대",
+                                       "헤이홈 연결",
+                                       "헤이홈 공유",
+                                       "헤이홈 중국",
+                                       "헤이홈 오프라인",
+                                       "헤이홈 g2",
+                                       "헤이홈 프로"
+                                   ],
+                       "recent":  [
+                                      {
+                                          "title":  "한정판 ‘KT 홈캠 아기상어 에디션’ 10일 출시",
+                                          "source":  "서울경제",
+                                          "date":  "2026-07-09",
+                                          "link":  "https://n.news.naver.com/mnews/article/011/0004639721?sid=105"
+                                      },
+                                      {
+                                          "title":  "KT 홈캠이 핑크퐁 아기상어를 만났다?…핑크퐁 굿즈 패키지 등 선착순 ...",
+                                          "source":  "financialpost.co.kr",
+                                          "date":  "2026-07-09",
+                                          "link":  "https://www.financialpost.co.kr/news/articleView.html?idxno=265631"
+                                      },
+                                      {
+                                          "title":  "[ICT 종합] 네이버클라우드 및 비피엠지 소식 외",
+                                          "source":  "gamevu.co.kr",
+                                          "date":  "2026-07-08",
+                                          "link":  "https://www.gamevu.co.kr/news/articleView.html?idxno=59205"
+                                      },
+                                      {
+                                          "title":  "KT-더핑크퐁컴퍼니, \u0027홈캠 아기상어 에디션\u0027 출시…가족 친화형 서비스...",
+                                          "source":  "efnews.co.kr",
+                                          "date":  "2026-07-08",
+                                          "link":  "http://www.efnews.co.kr/news/articleView.html?idxno=130837"
+                                      },
+                                      {
+                                          "title":  "KT, 홈캠 아기상어 에디션으로 육아템 시장 노크",
+                                          "source":  "dizzotv.com",
+                                          "date":  "2026-07-08",
+                                          "link":  "https://www.dizzotv.com/site/data/html_dir/2026/07/08/2026070880152.html"
+                                      },
+                                      {
+                                          "title":  "KT, 더핑크퐁컴퍼니와 협업해 한정판 \u0027KT 홈캠 아기상어 에디션\u0027 출시",
+                                          "source":  "betanews.net",
+                                          "date":  "2026-07-08",
+                                          "link":  "https://www.betanews.net/article/view/beta202607080088"
+                                      },
+                                      {
+                                          "title":  "[Telecom \u0026 Now] KT, 작년 정보보호에 1276억원 투자…통신사 최대 규모 ...",
+                                          "source":  "ebn.co.kr",
+                                          "date":  "2026-07-08",
+                                          "link":  "https://www.ebn.co.kr/news/articleView.html?idxno=1715597"
+                                      },
+                                      {
+                                          "title":  "[오늘의 통신] KT·SKT·LG유플러스",
+                                          "source":  "financialreview.co.kr",
+                                          "date":  "2026-07-08",
+                                          "link":  "http://www.financialreview.co.kr/news/articleView.html?idxno=43422"
+                                      },
+                                      {
+                                          "title":  "KT·넷마블 \u0027KT 홈캠 아기상어 에디션\u0027 출시...\u0027나 혼자만 레벨업: 카르...",
+                                          "source":  "wsobi.com",
+                                          "date":  "2026-07-08",
+                                          "link":  "http://www.wsobi.com/news/articleView.html?idxno=314937"
+                                      },
+                                      {
+                                          "title":  "KT, \u0027홈캠 아기상어 에디션\u0027 출시···\"더핑크퐁컴퍼니와 협업\"",
+                                          "source":  "enewstoday.co.kr",
+                                          "date":  "2026-07-08",
+                                          "link":  "http://www.enewstoday.co.kr/news/articleView.html?idxno=2446785"
+                                      },
+                                      {
+                                          "title":  "KT, 더핑크퐁컴퍼니와 맞손···선착순 3천 대 한정 \u0027홈캠 아기상어 에...",
+                                          "source":  "ngonews.kr",
+                                          "date":  "2026-07-08",
+                                          "link":  "https://www.ngonews.kr/news/articleView.html?idxno=232437"
+                                      },
+                                      {
+                                          "title":  "KT, 더핑크퐁컴퍼니와 한정판 ‘KT 홈캠 아기상어 에디션’ 출시",
+                                          "source":  "inthenews.co.kr",
+                                          "date":  "2026-07-08",
+                                          "link":  "https://www.inthenews.co.kr/news/article.html?no=89090"
+                                      },
+                                      {
+                                          "title":  "KT, 3000대 한정판 \u0027KT 홈캠 아기상어 에디션\u0027 10일 출시",
+                                          "source":  "womentimes.co.kr",
+                                          "date":  "2026-07-08",
+                                          "link":  "https://www.womentimes.co.kr/news/articleView.html?idxno=104238"
+                                      },
+                                      {
+                                          "title":  "KT, 가족용 홈캠 상품 확대...\u0027아기상어 에디션\u0027 선보여",
+                                          "source":  "hbnpress.com",
+                                          "date":  "2026-07-08",
+                                          "link":  "https://hbnpress.com/news/view/1065590168485577"
+                                      },
+                                      {
+                                          "title":  "“우리집 홈캠은 아기상어“…KT, 더핑크퐁컴퍼니와 협업",
+                                          "source":  "ddaily.co.kr",
+                                          "date":  "2026-07-08",
+                                          "link":  "https://n.news.naver.com/mnews/article/138/0002233542?sid=105"
+                                      }
+                                  ]
+                   },
+                   {
+                       "name":  "삼성 스마트싱스",
+                       "me":  false,
+                       "query":  "삼성 스마트싱스",
+                       "total":  66968,
+                       "sentiment":  {
+                                         "pos":  0,
+                                         "neu":  60,
+                                         "neg":  0
+                                     },
+                       "keywords":  [
+                                        [
+                                            "AI",
+                                            76
+                                        ],
+                                        [
+                                            "갤럭시",
+                                            24
+                                        ],
+                                        [
+                                            "사장은",
+                                            22
+                                        ],
+                                        [
+                                            "개방형",
+                                            18
+                                        ],
+                                        [
+                                            "모듈러",
+                                            17
+                                        ],
+                                        [
+                                            "플랫폼",
+                                            16
+                                        ],
+                                        [
+                                            "노태문",
+                                            15
+                                        ],
+                                        [
+                                            "하나의",
+                                            15
+                                        ],
+                                        [
+                                            "언팩",
+                                            14
+                                        ],
+                                        [
+                                            "기기와",
+                                            13
+                                        ],
+                                        [
+                                            "삼성전자는",
+                                            13
+                                        ],
+                                        [
+                                            "기기",
+                                            13
+                                        ],
+                                        [
+                                            "있다",
+                                            12
+                                        ],
+                                        [
+                                            "아는",
+                                            12
+                                        ],
+                                        [
+                                            "22일",
+                                            12
+                                        ],
+                                        [
+                                            "SmartThings",
+                                            11
+                                        ],
+                                        [
+                                            "개방",
+                                            11
+                                        ],
+                                        [
+                                            "파트너를",
+                                            11
+                                        ]
+                                    ],
+                       "posWords":  [
+                                        [
+                                            "0",
+                                            33
+                                        ]
+                                    ],
+                       "related":  [
+                                       "삼성 스마트싱스 허브",
+                                       "삼성 스마트싱스 스테이션",
+                                       "삼성 스마트싱스 에어컨",
+                                       "삼성 스마트싱스",
+                                       "삼성 스마트싱스 파인드",
+                                       "삼성 스마트싱스 공유",
+                                       "삼성 스마트싱스 세탁기",
+                                       "삼성 스마트싱스 아이폰",
+                                       "삼성 스마트싱스 선풍기",
+                                       "삼성 스마트싱스 전력량"
+                                   ],
+                       "recent":  [
+                                      {
+                                          "title":  "폭염보다 뜨거운 \u0027발열\u0027…삼성은 공조, LG는 데이터센터 주력",
+                                          "source":  "itdaily.kr",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://www.itdaily.kr/news/articleView.html?idxno=240372"
+                                      },
+                                      {
+                                          "title":  "AI, 家치를 키운다",
+                                          "source":  "동아",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/020/0003733616?sid=101"
+                                      },
+                                      {
+                                          "title":  "LG전자, GS건설과 ‘AI 아파트’ 짓는다",
+                                          "source":  "khan.co.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://n.news.naver.com/mnews/article/032/0003457868?sid=105"
+                                      },
+                                      {
+                                          "title":  "이제는 \u0027AI홈\u0027 전쟁이다… 삼성·LG, 미래 주거 플랫폼 격돌",
+                                          "source":  "파이낸셜뉴스",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://n.news.naver.com/mnews/article/014/0005547546?sid=101"
+                                      },
+                                      {
+                                          "title":  "스마트폰·자동차 넘어 ‘집’으로 간 AI…LG·삼성·빅테크 ‘AI 홈’ 총...",
+                                          "source":  "동아",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://n.news.naver.com/mnews/article/020/0003733541?sid=101"
+                                      },
+                                      {
+                                          "title":  "LG전자 “GS건설과 차세대 AI홈 공동개발”…‘집 짓기’ 나선 가전업체",
+                                          "source":  "khan.co.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://n.news.naver.com/mnews/article/032/0003457807?sid=105"
+                                      },
+                                      {
+                                          "title":  "AI가 체감온도 읽고, 쿨링포그 뿜고…기업들 폭염 대응 진화(종합)",
+                                          "source":  "news1.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://n.news.naver.com/mnews/article/421/0009056820?sid=101"
+                                      },
+                                      {
+                                          "title":  "얼음조끼·체감온도 측정, 하루 40톤 물 뿌리기…기업 혹서기 대책 진화",
+                                          "source":  "news1.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://n.news.naver.com/mnews/article/421/0009056661?sid=101"
+                                      },
+                                      {
+                                          "title":  "가전 넘어 주거 플랫폼 경쟁…삼성·LG, AI홈서 B2B 확전",
+                                          "source":  "pointdaily.co.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://www.pointdaily.co.kr/news/articleView.html?idxno=311689"
+                                      },
+                                      {
+                                          "title":  "LG전자·GS건설, \u0027자이\u0027 차세대 AI홈 공동 개발",
+                                          "source":  "4th.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "http://www.4th.kr/news/articleView.html?idxno=2114639"
+                                      },
+                                      {
+                                          "title":  "삼성 ‘무풍 공조’ vs LG ‘상업용 세탁’⋯ 결 다른 K-가전 글로벌 ‘...",
+                                          "source":  "viva100.com",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://www.viva100.com/article/20260712500366"
+                                      },
+                                      {
+                                          "title":  "\"우리집 어항 탈출\"…장마철 \u0027잘산템\u0027 삼성 제습기[써봤어요]",
+                                          "source":  "이데일리",
+                                          "date":  "2026-07-12",
+                                          "link":  "https://n.news.naver.com/mnews/article/018/0006328362?sid=101"
+                                      },
+                                      {
+                                          "title":  "삼성전자가 22일 꺼내는 \u0027비장의 카드\u0027... 뭐길래?",
+                                          "source":  "ggilbo.com",
+                                          "date":  "2026-07-12",
+                                          "link":  "https://www.ggilbo.com/news/articleView.html?idxno=1168220"
+                                      },
+                                      {
+                                          "title":  "[주간AI노트] ‘연결’ 넘어 ‘판단’으로…AI 가전의 정의가 바뀐다",
+                                          "source":  "inthenews.co.kr",
+                                          "date":  "2026-07-12",
+                                          "link":  "https://www.inthenews.co.kr/news/article.html?no=89184"
+                                      },
+                                      {
+                                          "title":  "‘40도 폭염’, 유럽 냉방시장 달군다…삼성·LG, 친환경 에어컨 인기 집...",
+                                          "source":  "ceoscoredaily.com",
+                                          "date":  "2026-07-12",
+                                          "link":  "https://www.ceoscoredaily.com/page/view/2026071017071431042"
+                                      }
+                                  ]
+                   },
+                   {
+                       "name":  "LG 씽큐",
+                       "me":  false,
+                       "query":  "LG 씽큐",
+                       "total":  76730,
+                       "sentiment":  {
+                                         "pos":  0,
+                                         "neu":  59,
+                                         "neg":  0
+                                     },
+                       "keywords":  [
+                                        [
+                                            "AI홈",
+                                            93
+                                        ],
+                                        [
+                                            "단지",
+                                            66
+                                        ],
+                                        [
+                                            "자이",
+                                            58
+                                        ],
+                                        [
+                                            "GS건설",
+                                            47
+                                        ],
+                                        [
+                                            "인프라와",
+                                            42
+                                        ],
+                                        [
+                                            "LG전자",
+                                            42
+                                        ],
+                                        [
+                                            "AI",
+                                            42
+                                        ],
+                                        [
+                                            "세대",
+                                            37
+                                        ],
+                                        [
+                                            "기기",
+                                            35
+                                        ],
+                                        [
+                                            "ThinQ",
+                                            34
+                                        ],
+                                        [
+                                            "LG전자의",
+                                            34
+                                        ],
+                                        [
+                                            "서비스를",
+                                            33
+                                        ],
+                                        [
+                                            "차세대",
+                                            33
+                                        ],
+                                        [
+                                            "주거",
+                                            30
+                                        ],
+                                        [
+                                            "허브",
+                                            25
+                                        ],
+                                        [
+                                            "생활",
+                                            23
+                                        ],
+                                        [
+                                            "IoT",
+                                            22
+                                        ],
+                                        [
+                                            "연동해",
+                                            21
+                                        ]
+                                    ],
+                       "posWords":  [
+                                        [
+                                            "0",
+                                            8
+                                        ]
+                                    ],
+                       "related":  [
+                                       "lg 씽큐 오류",
+                                       "lg 씽큐 어플 오류",
+                                       "lg 씽큐",
+                                       "lg 씽큐 e1031 오류",
+                                       "lg 씽큐온",
+                                       "lg 씽큐 연결",
+                                       "lg 씽큐 앱 오류",
+                                       "lg 씽큐 앱 에러",
+                                       "lg 씽큐 어플 안됨",
+                                       "lg 씽큐 오프라인"
+                                   ],
+                       "recent":  [
+                                      {
+                                          "title":  "AI홈 호재도 ‘검은 월요일’ 못 막았다…GS건설, LG전자와 맞손에도 급...",
+                                          "source":  "sportsseoul.com",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/468/0001253467?sid=101"
+                                      },
+                                      {
+                                          "title":  "GS건설-LG전자, \u0027차세대 AI홈\u0027으로 미래 주거 표준 제시",
+                                          "source":  "ilyoseoul.co.kr",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://www.ilyoseoul.co.kr/news/articleView.html?idxno=519794"
+                                      },
+                                      {
+                                          "title":  "[증시키워드]SK하이닉스 200만원 붕괴·삼성전자 10%↓…HLB 이틀 연속 하...",
+                                          "source":  "etoday.co.kr",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://www.etoday.co.kr/news/view/2603297"
+                                      },
+                                      {
+                                          "title":  "중국산 가짜 공기청정기 필터 일부서 금지 유해물질 검출…가전업계 정...",
+                                          "source":  "한국경제",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/015/0005309602?sid=101"
+                                      },
+                                      {
+                                          "title":  "GS건설, LG전자와 차세대 AI홈 공동개발 맞손",
+                                          "source":  "munhwa.com",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/021/0002804425?sid=101"
+                                      },
+                                      {
+                                          "title":  "GS건설·LG전자, 미래형 AI홈 공동개발",
+                                          "source":  "segye.com",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/022/0004142851?sid=101"
+                                      },
+                                      {
+                                          "title":  "‘GS 자이’에 ‘LG AI홈’ 들어선다",
+                                          "source":  "seoul.co.kr",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/081/0003660884?sid=101"
+                                      },
+                                      {
+                                          "title":  "“GS자이에 LG전자 AI 들어간다”",
+                                          "source":  "kmib.co.kr",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/005/0001860765?sid=101"
+                                      },
+                                      {
+                                          "title":  "AI, 家치를 키운다",
+                                          "source":  "동아",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/020/0003733616?sid=101"
+                                      },
+                                      {
+                                          "title":  "GS건설·LG전자, AI·로봇 기반 미래 주거 표준 만든다",
+                                          "source":  "조선",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/023/0003987383?sid=101"
+                                      },
+                                      {
+                                          "title":  "GS건설·LG전자, 공동주택 AI홈 서비스 개발 추진",
+                                          "source":  "thedailypost.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://www.thedailypost.kr/news/articleView.html?idxno=114659"
+                                      },
+                                      {
+                                          "title":  "LG전자, GS건설과 ‘AI 아파트’ 짓는다",
+                                          "source":  "khan.co.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://n.news.naver.com/mnews/article/032/0003457868?sid=105"
+                                      },
+                                      {
+                                          "title":  "GS건설, LG전자와 맞손… \u0027차세대 AI홈\u0027 공동개발 나선다",
+                                          "source":  "ebn.co.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://www.ebn.co.kr/news/articleView.html?idxno=1716210"
+                                      },
+                                      {
+                                          "title":  "GS건설, LG전자와 손잡고 차세대 AI홈 공동개발… 자이에 미래 주거 서비...",
+                                          "source":  "s-journal.co.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://www.s-journal.co.kr/news/articleView.html?idxno=42370"
+                                      },
+                                      {
+                                          "title":  "GS건설-LG전자 \u0027차세대 AI 홈\u0027 MOU...\"\u0027미래주거표준\u0027 만들 것\"",
+                                          "source":  "popcornnews.net",
+                                          "date":  "2026-07-13",
+                                          "link":  "http://www.popcornnews.net/news/articleView.html?idxno=126485"
+                                      }
+                                  ]
+                   },
+                   {
+                       "name":  "구글홈",
+                       "me":  false,
+                       "query":  "구글 홈",
+                       "total":  75073,
+                       "sentiment":  {
+                                         "pos":  0,
+                                         "neu":  60,
+                                         "neg":  0
+                                     },
+                       "keywords":  [
+                                        [
+                                            "AI",
+                                            37
+                                        ],
+                                        [
+                                            "제미나이",
+                                            21
+                                        ],
+                                        [
+                                            "있다",
+                                            14
+                                        ],
+                                        [
+                                            "결제",
+                                            14
+                                        ],
+                                        [
+                                            "홈플러스",
+                                            13
+                                        ],
+                                        [
+                                            "영문",
+                                            13
+                                        ],
+                                        [
+                                            "클로드",
+                                            11
+                                        ],
+                                        [
+                                            "Google",
+                                            10
+                                        ],
+                                        [
+                                            "등을",
+                                            10
+                                        ],
+                                        [
+                                            "Gemini",
+                                            9
+                                        ],
+                                        [
+                                            "MBK",
+                                            9
+                                        ],
+                                        [
+                                            "챗GPT",
+                                            9
+                                        ],
+                                        [
+                                            "이미지",
+                                            9
+                                        ],
+                                        [
+                                            "번역",
+                                            9
+                                        ],
+                                        [
+                                            "화면",
+                                            9
+                                        ],
+                                        [
+                                            "활용",
+                                            8
+                                        ],
+                                        [
+                                            "번역한",
+                                            8
+                                        ],
+                                        [
+                                            "그록",
+                                            8
+                                        ]
+                                    ],
+                       "posWords":  [
+                                        [
+                                            "0",
+                                            36
+                                        ]
+                                    ],
+                       "related":  [
+                                       "구글 홈 스피커",
+                                       "구글 홈",
+                                       "구글 홈페이지",
+                                       "구글 홈 미니",
+                                       "구글 홈 허브",
+                                       "구글 홈 어시스턴트",
+                                       "구글 홈 미니 1세대",
+                                       "구글 홈 스피커 연결",
+                                       "구글 홈 미니 초기화",
+                                       "구글 홈 미니 연결"
+                                   ],
+                       "recent":  [
+                                      {
+                                          "title":  "[미국 특징주] 오픈AI, 애플 소송 한 방에 \u0027기기 야심\u0027 급제동",
+                                          "source":  "newspim.com",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://www.newspim.com/news/view/20260714000053"
+                                      },
+                                      {
+                                          "title":  "미국증시 DOW도 \u0027하락\u0027...SW주 \u0027활짝\u0027 vs CAT · 엔비디아 \u0027뚝\u0027",
+                                          "source":  "choicenews.co.kr",
+                                          "date":  "2026-07-14",
+                                          "link":  "http://www.choicenews.co.kr/news/articleView.html?idxno=168114"
+                                      },
+                                      {
+                                          "title":  "\"포스트 아이폰 싹 자른다\"…애플, 오픈AI 하드웨어 야심 \u0027맹공\u0027[모닝폰...",
+                                          "source":  "이데일리",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/018/0006329532?sid=105"
+                                      },
+                                      {
+                                          "title":  "텐서G6, TSMC 2나노 최초 탑재… 애플 A20보다 한 달 앞선다",
+                                          "source":  "wikitree.co.kr",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://www.wikitree.co.kr/articles/1146258"
+                                      },
+                                      {
+                                          "title":  "[금융신상] 우리은행·국민카드·하나카드 등",
+                                          "source":  "bizwnews.com",
+                                          "date":  "2026-07-14",
+                                          "link":  "http://www.bizwnews.com/news/articleView.html?idxno=140544"
+                                      },
+                                      {
+                                          "title":  "AI, 家치를 키운다",
+                                          "source":  "동아",
+                                          "date":  "2026-07-14",
+                                          "link":  "https://n.news.naver.com/mnews/article/020/0003733616?sid=101"
+                                      },
+                                      {
+                                          "title":  "[IT애정남] 삼성 브라우저의 유튜브 백그라운드 재생·광고 차단 기능, ...",
+                                          "source":  "it.donga.com",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://it.donga.com/109182/"
+                                      },
+                                      {
+                                          "title":  "검색 안에서 끝나는 AI탭…네이버, 원문 유입 더 줄어드나",
+                                          "source":  "insightkorea.co.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://www.insightkorea.co.kr/news/articleView.html?idxno=250113"
+                                      },
+                                      {
+                                          "title":  "충북도, IBK기업은행과 맞손…중소기업 자금난 해소 위해 최대 3.8% 금리...",
+                                          "source":  "breaknews.com",
+                                          "date":  "2026-07-13",
+                                          "link":  "http://www.breaknews.com/1221316"
+                                      },
+                                      {
+                                          "title":  "스마트폰·자동차 넘어 ‘집’으로 간 AI…LG·삼성·빅테크 ‘AI 홈’ 총...",
+                                          "source":  "동아",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://n.news.naver.com/mnews/article/020/0003733541?sid=101"
+                                      },
+                                      {
+                                          "title":  "[카드 NOW] 삼성카드·국민카드·하나카드",
+                                          "source":  "wikileaks-kr.org",
+                                          "date":  "2026-07-13",
+                                          "link":  "http://www.wikileaks-kr.org/news/articleView.html?idxno=189701"
+                                      },
+                                      {
+                                          "title":  "가전 넘어 주거 플랫폼 경쟁…삼성·LG, AI홈서 B2B 확전",
+                                          "source":  "pointdaily.co.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://www.pointdaily.co.kr/news/articleView.html?idxno=311689"
+                                      },
+                                      {
+                                          "title":  "[보험·카드24시] MG신용정보, 매입약정 자회사 설립 外",
+                                          "source":  "news.dealsitetv.com",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://news.dealsitetv.com/articles/173220"
+                                      },
+                                      {
+                                          "title":  "홈플러스 파산, 시작은 MBK 차입매수…10년간 이자 2조7000억·현금 5조원...",
+                                          "source":  "joongangenews.com",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://www.joongangenews.com/news/articleView.html?idxno=532485"
+                                      },
+                                      {
+                                          "title":  "[카드 PICK] 카드사, 일상 속 디지털 혁신… 간편결제·AI로 고객 접점 ...",
+                                          "source":  "lcnews.co.kr",
+                                          "date":  "2026-07-13",
+                                          "link":  "https://www.lcnews.co.kr/news/articleView.html?idxno=204864"
+                                      }
+                                  ]
+                   }
+               ],
+    "trend":  {
+                  "dates":  [
+                                "2023-01-01",
+                                "2023-02-01",
+                                "2023-03-01",
+                                "2023-04-01",
+                                "2023-05-01",
+                                "2023-06-01",
+                                "2023-07-01",
+                                "2023-08-01",
+                                "2023-09-01",
+                                "2023-10-01",
+                                "2023-11-01",
+                                "2023-12-01",
+                                "2024-01-01",
+                                "2024-02-01",
+                                "2024-03-01",
+                                "2024-04-01",
+                                "2024-05-01",
+                                "2024-06-01",
+                                "2024-07-01",
+                                "2024-08-01",
+                                "2024-09-01",
+                                "2024-10-01",
+                                "2024-11-01",
+                                "2024-12-01",
+                                "2025-01-01",
+                                "2025-02-01",
+                                "2025-03-01",
+                                "2025-04-01",
+                                "2025-05-01",
+                                "2025-06-01",
+                                "2025-07-01",
+                                "2025-08-01",
+                                "2025-09-01",
+                                "2025-10-01",
+                                "2025-11-01",
+                                "2025-12-01",
+                                "2026-01-01",
+                                "2026-02-01",
+                                "2026-03-01",
+                                "2026-04-01",
+                                "2026-05-01",
+                                "2026-06-01"
+                            ],
+                  "series":  {
+                                 "아카라":  [
+                                             7,
+                                             7.96,
+                                             6.44,
+                                             6.2,
+                                             6.66,
+                                             7.28,
+                                             6.98,
+                                             6.89,
+                                             6.14,
+                                             6.54,
+                                             9.87,
+                                             10.24,
+                                             9.24,
+                                             7.97,
+                                             7.59,
+                                             7.1,
+                                             12,
+                                             8.91,
+                                             10.8,
+                                             10.06,
+                                             9.88,
+                                             10.39,
+                                             9.97,
+                                             9.69,
+                                             9.06,
+                                             8.65,
+                                             8.91,
+                                             11.34,
+                                             11.64,
+                                             10.05,
+                                             10.22,
+                                             10.4,
+                                             10.07,
+                                             8.91,
+                                             10.19,
+                                             10.13,
+                                             10.64,
+                                             9.46,
+                                             10.3,
+                                             9.97,
+                                             9.78,
+                                             11.75
+                                         ],
+                                 "헤이홈":  [
+                                             44.57,
+                                             43.71,
+                                             47.16,
+                                             42.77,
+                                             53.41,
+                                             63.85,
+                                             55.68,
+                                             49.38,
+                                             39.52,
+                                             43.94,
+                                             47.21,
+                                             47.14,
+                                             52.66,
+                                             49.22,
+                                             51.42,
+                                             45.64,
+                                             48.89,
+                                             48.73,
+                                             51.66,
+                                             47.3,
+                                             42.42,
+                                             43.87,
+                                             47.12,
+                                             41.15,
+                                             41.5,
+                                             46.86,
+                                             43.46,
+                                             40.17,
+                                             39.56,
+                                             42.47,
+                                             52.54,
+                                             45.47,
+                                             43.15,
+                                             42.55,
+                                             58.1,
+                                             54.62,
+                                             52.23,
+                                             49.5,
+                                             55.47,
+                                             45.13,
+                                             49,
+                                             53.28
+                                         ],
+                                 "삼성 스마트싱스":  [
+                                                  15.63,
+                                                  100,
+                                                  29.47,
+                                                  12.87,
+                                                  12.57,
+                                                  11.64,
+                                                  14.74,
+                                                  17.44,
+                                                  12.93,
+                                                  10.88,
+                                                  9.75,
+                                                  9.8,
+                                                  20.2,
+                                                  13.9,
+                                                  11.9,
+                                                  10.39,
+                                                  10.38,
+                                                  10.46,
+                                                  12.69,
+                                                  11.64,
+                                                  8.72,
+                                                  13.52,
+                                                  6.94,
+                                                  7.01,
+                                                  7.35,
+                                                  7.29,
+                                                  8.69,
+                                                  7.12,
+                                                  7.24,
+                                                  9.01,
+                                                  11.03,
+                                                  8.58,
+                                                  7.18,
+                                                  6.35,
+                                                  5.65,
+                                                  5.85,
+                                                  6.16,
+                                                  5.63,
+                                                  7.05,
+                                                  8.58,
+                                                  14.34,
+                                                  16.6
+                                              ],
+                                 "LG 씽큐":  [
+                                               1.79,
+                                               1.61,
+                                               1.8,
+                                               1.61,
+                                               2.09,
+                                               2.68,
+                                               3.53,
+                                               2.7,
+                                               2.34,
+                                               1.43,
+                                               1.59,
+                                               1.5,
+                                               1.62,
+                                               1.43,
+                                               1.64,
+                                               1.88,
+                                               1.84,
+                                               2.6,
+                                               3.02,
+                                               2.59,
+                                               1.64,
+                                               1.45,
+                                               1.41,
+                                               1.49,
+                                               1.47,
+                                               1.54,
+                                               1.52,
+                                               1.4,
+                                               1.39,
+                                               2.62,
+                                               2.47,
+                                               1.59,
+                                               1.05,
+                                               0.86,
+                                               0.72,
+                                               0.55,
+                                               0.65,
+                                               0.59,
+                                               0.83,
+                                               0.79,
+                                               1.09,
+                                               1.06
+                                           ],
+                                 "구글홈":  [
+                                             7.28,
+                                             6.6,
+                                             6.21,
+                                             6.86,
+                                             5.6,
+                                             5.05,
+                                             5.65,
+                                             5.64,
+                                             4.7,
+                                             4.59,
+                                             5,
+                                             5.6,
+                                             6.06,
+                                             5.89,
+                                             5.9,
+                                             4.79,
+                                             4.8,
+                                             4.56,
+                                             5.15,
+                                             4.74,
+                                             4.21,
+                                             4.53,
+                                             4.48,
+                                             4.5,
+                                             4.57,
+                                             4.98,
+                                             4.72,
+                                             3.73,
+                                             4.03,
+                                             3.84,
+                                             3.82,
+                                             3.92,
+                                             3.31,
+                                             3.48,
+                                             3.47,
+                                             3.5,
+                                             3.74,
+                                             3.52,
+                                             3.34,
+                                             2.9,
+                                             3.16,
+                                             2.52
+                                         ]
+                             }
+              }
+}

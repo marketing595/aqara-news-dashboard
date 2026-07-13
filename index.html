@@ -79,6 +79,7 @@
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
       <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페 모니터링</button>
       <button id="grpBtn-campaign" onclick="switchGroup('campaign')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">캠페인</button>
+      <button id="grpBtn-competitor" onclick="switchGroup('competitor')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">경쟁사 분석</button>
       <button id="grpBtn-report" onclick="switchGroup('report')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">종합 리포트</button>
     </div>
   </div>
@@ -466,6 +467,43 @@
        <div id="cafeBody" class="divide-y divide-slate-100"></div>
      </div>
      <p class="text-center text-xs text-slate-400 pt-4">※ 키워드 기반 수집 스냅샷이라 카페 '전체 글'은 아닙니다. 전체 글·자동갱신은 네이버 카페 API 인증(관리자 로그인) 연동이 필요합니다.</p>
+   </div>
+
+   <div id="view-competitor" class="hidden">
+     <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
+       <div>
+         <h2 class="text-xl font-extrabold text-ink">경쟁사 분석 <span class="text-sm font-semibold text-agray">(자사 포함 5개 브랜드)</span></h2>
+         <p class="text-sm text-slate-500 mt-1">아카라 · 헤이홈 · 삼성 스마트싱스 · LG 씽큐 · 구글홈 <span id="compStamp" class="text-slate-400"></span></p>
+       </div>
+     </div>
+     <section id="compKpi" class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-5"></section>
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">언론 언급량 비교 <span class="text-xs font-normal text-slate-400">(네이버 뉴스 누적)</span></h3><p class="text-[11px] text-slate-400 mb-2">※ 삼성·LG·구글은 종합 대기업이라 절대량이 큼 — 자사(아카라)는 스마트홈 전문 브랜드 관점</p><div class="h-64"><canvas id="compVolChart"></canvas></div></div>
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">긍·부정 속성 분석 <span class="text-xs font-normal text-slate-400">(연관검색어 기반 검색의도)</span></h3><p class="text-[11px] text-slate-400 mb-2">※ 사용자가 함께 검색하는 연관어의 부정어(오류·에러·안됨 등) 비중</p><div class="h-64"><canvas id="compSentChart"></canvas></div></div>
+     </div>
+     <div class="card p-5 mb-5">
+       <div class="flex items-center justify-between flex-wrap gap-2 mb-1">
+         <h3 class="accent font-extrabold text-ink">검색 관심도 트렌드 <span class="text-xs font-normal text-slate-400">(네이버 데이터랩 · 월별 상대지수)</span></h3>
+         <div id="compTrendBtns" class="flex gap-1">
+           <button data-n="0" onclick="setCompTrend(0)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">전체</button>
+           <button data-n="24" onclick="setCompTrend(24)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">최근 2년</button>
+           <button data-n="12" onclick="setCompTrend(12)" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-50">최근 1년</button>
+         </div>
+       </div>
+       <div class="h-72 mt-2"><canvas id="compTrendChart"></canvas></div>
+     </div>
+     <h3 class="accent font-extrabold text-ink mb-3">브랜드별 언론 기조 &amp; 주요 키워드</h3>
+     <section id="compBrands" class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5"></section>
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-3">공통 연관어 순위 <span class="text-xs font-normal text-slate-400">(여러 브랜드에 걸쳐 등장)</span></h3><div id="compCommon" class="space-y-2"></div></div>
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-3">연관검색어 비교 <span class="text-xs font-normal text-slate-400">(자동완성 기준)</span></h3><div id="compRelated" class="space-y-3 max-h-96 overflow-auto pr-1"></div></div>
+     </div>
+     <div class="card p-5">
+       <h3 class="accent font-extrabold text-ink mb-3">대표 헤드라인 <span id="compHeadTab" class="text-xs font-normal text-slate-400"></span></h3>
+       <div id="compHeadBtns" class="flex flex-wrap gap-1.5 mb-3"></div>
+       <div id="compHeadlines" class="divide-y divide-slate-100"></div>
+     </div>
+     <p class="text-center text-xs text-slate-400 pt-4">뉴스·연관검색어·데이터랩 자동 수집 · 기조 분석은 수집 키워드 기반 요약(참고용)</p>
    </div>
 
    <div id="view-report" class="hidden">
@@ -1351,18 +1389,18 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], report:['report'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', report:'report' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], competitor:['competitor'], report:['report'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', competitor:'competitor', report:'report' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
-      ['analytics','briefing','campaign','owned','cafe','report'].forEach(v=>{
+      ['analytics','briefing','campaign','owned','cafe','report','competitor'].forEach(v=>{
         document.getElementById('view-'+v).classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','campaign','report'].forEach(k=>{ document.getElementById('grpBtn-'+k).className=grpClass(k===g); });
+      ['pr','owned','cafe','campaign','report','competitor'].forEach(k=>{ document.getElementById('grpBtn-'+k).className=grpClass(k===g); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
@@ -1371,6 +1409,7 @@
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
       if(t==='cafe'){ renderCafe(); loadCafe(); }
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
+      if(t==='competitor'){ loadCompetitor(); }
     }
     let ownedSection='overview';
     function switchOwned(s){
@@ -1627,6 +1666,70 @@
       document.getElementById('reportEditBtn').textContent=reportEditMode?'저장':'인사이트 편집';
       document.getElementById('reportEditNote').classList.toggle('hidden',!reportEditMode);
       renderReport();
+    }
+
+    // ===== 경쟁사 분석 =====
+    let COMPETITOR={brands:[],trend:{dates:[],series:{}}}, compTrendN=0, compHeadIdx=0;
+    const COMP_COLOR={'아카라':'#FBC400','헤이홈':'#5E85A6','삼성 스마트싱스':'#1D1D1F','LG 씽큐':'#BF5332','구글홈':'#C77A34'};
+    const KIJO={
+      '아카라':'IoT·AIoT 기술력을 <b>스마트홈 인테리어·공간 디자인</b>과 결합해 전문 브랜드로 포지셔닝. 도어락 등 제품과 B2B 공간 사업을 병행하며 \'기업·공간\' 맥락의 노출.',
+      '헤이홈':'<b>KT와 협업한 홈캠(보안 카메라)</b>을 전면에 내세운 B2C 마케팅. \'아기상어 에디션\' 등 육아·가족 친화 굿즈 협업으로 화제성 확보. (연관어에 원산지 \'중국\' 존재)',
+      '삼성 스마트싱스':'<b>AI + 갤럭시 생태계 + 개방형 표준(매터)</b>을 축으로, 노태문 사장이 직접 \'개방형 스마트홈 플랫폼\'을 강조. 모듈러·B2B로 생태계 확장.',
+      'LG 씽큐':'<b>AI홈(씽큐온) + 건설사(GS건설·자이) 협업</b>으로 아파트 단지 빌트인 B2B를 공격적으로 전개. 단, 연관검색어가 \'오류·앱 에러\'에 집중돼 사용성 이슈가 노출됨.',
+      '구글홈':'<b>AI(제미나이) 중심</b>으로 어시스턴트를 고도화하고 결제·서비스 연계 등 플랫폼을 확장. 하드웨어보다 AI 소프트웨어 내러티브가 우세.'
+    };
+    const RNEG=/오류|에러|안됨|안돼|안되|불편|문제|먹통|고장|불량|버그|장애|끊김|느림|중국|초기화|안될/;
+    const RPOS=/추천|후기|비교|리뷰|정품|가격|best|할인/;
+    function loadCompetitor(){
+      fetch('competitor.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d&&d.brands){ COMPETITOR=d; renderCompetitor(); } }).catch(()=>{ renderCompetitor(); });
+    }
+    function relSent(rel){ let p=0,n=0,u=0; (rel||[]).forEach(k=>{ if(RNEG.test(k))n++; else if(RPOS.test(k))p++; else u++; }); return {p,n,u}; }
+    function setCompTrend(n){ compTrendN=n; drawCompTrend(); }
+    function drawCompTrend(){ const T=COMPETITOR.trend||{}; const D=T.dates||[]; if(!D.length){ return; }
+      const start=compTrendN>0?Math.max(0,D.length-compTrendN):0;
+      const ds=Object.keys(T.series||{}).map(k=>({label:k,data:T.series[k].slice(start),borderColor:COMP_COLOR[k]||'#999',backgroundColor:'transparent',borderWidth:k==='아카라'?3:1.8,tension:.3,pointRadius:0}));
+      draw('compTrendChart',{type:'line',data:{labels:D.slice(start),datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{beginAtZero:true},x:{ticks:{maxTicksLimit:10,font:{size:9}}}}}});
+      document.querySelectorAll('#compTrendBtns button').forEach(b=>{ const on=(+b.dataset.n===compTrendN); b.className='text-xs px-2.5 py-1 rounded-lg border '+(on?'border-brand bg-brand/10 text-ink font-bold':'border-slate-300 hover:bg-slate-50'); });
+    }
+    function renderCompetitor(){
+      const B=COMPETITOR.brands||[]; if(!B.length){ document.getElementById('compKpi').innerHTML='<p class="text-sm text-slate-400 col-span-full">데이터 로딩 중…</p>'; return; }
+      document.getElementById('compStamp').textContent=COMPETITOR.generatedAt?(' · '+COMPETITOR.generatedAt+' 기준'):'';
+      // KPI
+      document.getElementById('compKpi').innerHTML=B.map(b=>`<div class="card ${b.me?'bg-brand/10 border-brand/40':''} card-hover p-4"><p class="text-sm ${b.me?'text-brand-ink font-bold':'text-slate-500'}">${esc(b.name)}${b.me?' (자사)':''}</p><p class="num text-2xl font-extrabold text-ink mt-1">${(b.total||0).toLocaleString()}</p><p class="text-[11px] text-slate-400 mt-0.5">누적 언론 언급</p></div>`).join('');
+      // 언급량 bar
+      draw('compVolChart',{type:'bar',data:{labels:B.map(b=>b.name),datasets:[{data:B.map(b=>b.total||0),backgroundColor:B.map(b=>b.me?'#FBC400':'#cbd5e1'),borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000)+'만':v}}}}});
+      // 긍부정(연관어 기반)
+      const sents=B.map(b=>relSent(b.related));
+      draw('compSentChart',{type:'bar',data:{labels:B.map(b=>b.name),datasets:[
+        {label:'긍정/탐색',data:sents.map(s=>s.p),backgroundColor:'#5E7350',stack:'s'},
+        {label:'중립',data:sents.map(s=>s.u),backgroundColor:'#cbd5e1',stack:'s'},
+        {label:'부정/불만',data:sents.map(s=>s.n),backgroundColor:'#BF5332',stack:'s'}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,font:{size:10}}}},scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}}});
+      drawCompTrend();
+      // 브랜드별 기조 + 키워드
+      document.getElementById('compBrands').innerHTML=B.map(b=>`<div class="card p-5 ${b.me?'border-brand/40':''}">
+        <div class="flex items-center gap-2 mb-2"><span class="w-3 h-3 rounded-full" style="background:${COMP_COLOR[b.name]||'#999'}"></span><h4 class="font-bold text-ink">${esc(b.name)}${b.me?' <span class="text-[11px] text-brand-ink">자사</span>':''}</h4></div>
+        <p class="text-[13px] text-slate-600 leading-relaxed mb-3">${KIJO[b.name]||''}</p>
+        <div class="flex flex-wrap gap-1">${(b.keywords||[]).slice(0,12).map(k=>`<span class="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc(k[0])} <span class="text-slate-400">${k[1]}</span></span>`).join('')}</div>
+      </div>`).join('');
+      // 공통 연관어
+      const kwMap={};
+      B.forEach(b=>{ const set=new Set((b.keywords||[]).map(k=>k[0])); set.forEach(w=>{ if(!kwMap[w])kwMap[w]={c:0,brands:[]}; kwMap[w].c++; kwMap[w].brands.push(b.name); }); });
+      const common=Object.entries(kwMap).filter(([w,o])=>o.c>=2).sort((a,b)=>b[1].c-a[1].c).slice(0,12);
+      document.getElementById('compCommon').innerHTML=common.length?common.map(([w,o])=>`<div class="flex items-center gap-2 text-sm"><span class="w-6 text-center font-bold text-brand-ink">${o.c}</span><span class="font-medium text-ink w-24">${esc(w)}</span><span class="text-[11px] text-slate-400">${o.brands.map(esc).join(' · ')}</span></div>`).join(''):'<p class="text-sm text-slate-400">공통 키워드가 적습니다(브랜드별 기조 차별화)</p>';
+      // 연관검색어 비교
+      document.getElementById('compRelated').innerHTML=B.map(b=>`<div><p class="text-xs font-semibold mb-1" style="color:${COMP_COLOR[b.name]||'#333'}">${esc(b.name)}</p><div class="flex flex-wrap gap-1">${(b.related||[]).map(t=>`<span class="text-[11px] px-1.5 py-0.5 rounded ${RNEG.test(t)?'bg-ared/10 text-ared':'bg-slate-100 text-slate-600'}">${esc(t)}</span>`).join('')}</div></div>`).join('');
+      // 헤드라인 탭
+      document.getElementById('compHeadBtns').innerHTML=B.map((b,i)=>`<button onclick="compHeadShow(${i})" data-hi="${i}" class="text-[12px] px-3 py-1.5 rounded-full border ${i===compHeadIdx?'bg-ink text-white border-ink':'bg-white text-slate-500 border-slate-300'}">${esc(b.name)}</button>`).join('');
+      compHeadShow(compHeadIdx<B.length?compHeadIdx:0);
+    }
+    function compHeadShow(i){ compHeadIdx=i; const B=COMPETITOR.brands||[]; const b=B[i]; if(!b)return;
+      document.querySelectorAll('#compHeadBtns button').forEach(x=>{ const on=(+x.dataset.hi===i); x.className='text-[12px] px-3 py-1.5 rounded-full border '+(on?'bg-ink text-white border-ink':'bg-white text-slate-500 border-slate-300'); });
+      document.getElementById('compHeadTab').textContent='· '+esc(b.name);
+      document.getElementById('compHeadlines').innerHTML=(b.recent||[]).map(a=>`<div class="py-2.5 flex items-baseline gap-3">
+        <span class="text-xs text-slate-400 num whitespace-nowrap w-20 shrink-0">${esc(a.date||'')}</span>
+        <span class="text-xs text-slate-500 w-20 shrink-0 truncate">${esc(a.source||'')}</span>
+        <a href="${esc(a.link)}" target="_blank" rel="noopener" class="lnk text-sm font-medium flex-1 min-w-0">${esc(a.title)} <span class="text-slate-300 text-xs">↗</span></a></div>`).join('')||'<p class="text-sm text-slate-400 py-3">헤드라인 없음</p>';
     }
 
     function loadBriefing(){
