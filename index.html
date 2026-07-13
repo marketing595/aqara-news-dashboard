@@ -347,12 +347,22 @@
      <div id="ownedSec-blog" class="hidden">
      <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">네이버 블로그 <span class="text-xs font-normal text-slate-400">관리 블로그 · 자동 수집</span></h2>
      <section id="ownedBlogKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
+     <section class="card p-5 sm:p-6 mb-5">
+       <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+         <h3 class="accent font-extrabold text-ink">블로그 발행 실적 <span id="blogCmpMonth" class="text-sm font-normal text-muted"></span></h3>
+       </div>
+       <div id="blogCmpCards" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
+       <p class="text-xs text-slate-400 mt-3">※ 관리 블로그 3개 합산 발행 글 수 기준. 최신 월 집계일과 동일 기간으로 공정 비교(동기간).</p>
+     </section>
      <section class="card p-5">
        <div class="flex flex-wrap items-center justify-between mb-3 gap-3">
          <h3 class="accent font-extrabold text-ink">발행 글 <span id="ownedBlogCount" class="text-sm font-normal text-slate-400"></span></h3>
-         <div class="flex gap-2">
+         <div class="flex flex-wrap gap-2 items-center">
+           <input id="ownedBlogFrom" type="date" onchange="renderOwnedBlog()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" />
+           <span class="text-slate-400 text-xs">~</span>
+           <input id="ownedBlogTo" type="date" onchange="renderOwnedBlog()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" />
            <select id="ownedBlogFilter" onchange="renderOwnedBlog()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 bg-white"><option value="">전체 블로그</option></select>
-           <input id="ownedBlogSearch" type="text" placeholder="제목 검색" oninput="renderOwnedBlog()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 w-40 focus:outline-none focus:ring-2 focus:ring-brand/50" />
+           <input id="ownedBlogSearch" type="text" placeholder="제목 검색" oninput="renderOwnedBlog()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 w-36 focus:outline-none focus:ring-2 focus:ring-brand/50" />
          </div>
        </div>
        <div id="ownedBlogBody" class="divide-y divide-slate-100 max-h-[560px] overflow-auto pr-1"></div>
@@ -1080,7 +1090,23 @@
         `<div class="card card-hover p-5"><p class="text-sm text-slate-500">최신 발행일</p><p class="num text-2xl font-extrabold text-ink mt-1">${all[0]?esc(all[0].date):'-'}</p><p class="text-xs text-slate-400 mt-1">${all[0]?esc(all[0].blogName):'가장 최근'}</p></div>`+
         kpi('관리 블로그', nBlogs+'개', '공식 + 협업 블로그');
       renderOwnedBlog();
+      renderBlogCompare();
       renderOwnedOverview();
+    }
+    function renderBlogCompare(){
+      const all=blogAll().filter(p=>p.date&&p.date.length>=10);
+      const box=document.getElementById('blogCmpCards'); if(!box) return;
+      if(!all.length){ box.innerHTML='<p class="text-sm text-slate-400">발행일 데이터가 없습니다</p>'; return; }
+      const yms=[...new Set(all.map(p=>p.date.slice(0,7)))].sort();
+      const ref=yms[yms.length-1], prev=ymShift(ref,-1), yoy=ymShift(ref,-12);
+      const refDay=Math.max(...all.filter(p=>p.date.slice(0,7)===ref).map(p=>+p.date.slice(8,10)));
+      const cnt=(ym,cap)=>all.filter(p=>p.date.slice(0,7)===ym && (!cap||+p.date.slice(8,10)<=cap)).length;
+      const refN=cnt(ref), has=ym=>yms.includes(ym);
+      document.getElementById('blogCmpMonth').textContent='· '+ref.slice(0,4)+'년 '+(+ref.slice(5,7))+'월 (1~'+refDay+'일)';
+      box.innerHTML=
+        heroTile('전월 동기 대비', refN, has(prev)?cnt(prev,refDay):null, '이번 달','지난달 동기','발행 글 수')+
+        heroTile('전년 동월 대비', refN, has(yoy)?cnt(yoy,refDay):null, '이번 달','작년 동기','발행 글 수')+
+        heroTile('전월 대비(월 전체)', refN, has(prev)?cnt(prev):null, '이번 달','지난달 전체','발행 글 수');
     }
     function renderOwnedOverview(){
       const y=OWNED.youtube||{}, ch=y.channel||{}, ig=OWNED.instagram||{}, bl=OWNED.blog||{};
@@ -1108,8 +1134,10 @@
       if(fsel && fsel.options.length!==blogs.length+1){ const cur=fsel.value; fsel.innerHTML='<option value="">전체 블로그</option>'+blogs.map(b=>`<option value="${esc(b.name)}">${esc(b.name)} (${b.total})</option>`).join(''); if(blogs.some(b=>b.name===cur)) fsel.value=cur; }
       const bf=fsel?fsel.value:'';
       const q=(document.getElementById('ownedBlogSearch')?.value||'').toLowerCase().trim();
-      const rows=all.filter(p=>(!bf||p.blogName===bf)&&(!q||(p.title||'').toLowerCase().indexOf(q)>-1));
-      document.getElementById('ownedBlogCount').textContent=(bf||q)?('· '+rows.length+'/'+all.length+'개'):('· 총 '+all.length+'개');
+      const from=document.getElementById('ownedBlogFrom')?.value||'', to=document.getElementById('ownedBlogTo')?.value||'';
+      const rows=all.filter(p=>(!bf||p.blogName===bf)&&(!q||(p.title||'').toLowerCase().indexOf(q)>-1)&&(!from||(p.date&&p.date>=from))&&(!to||(p.date&&p.date<=to)));
+      const filt=bf||q||from||to;
+      document.getElementById('ownedBlogCount').textContent=filt?('· '+rows.length+'/'+all.length+'개'):('· 총 '+all.length+'개');
       document.getElementById('ownedBlogBody').innerHTML=rows.length?rows.map(p=>`<div class="py-2.5 flex items-baseline gap-3">
         <span class="text-xs text-slate-400 num whitespace-nowrap w-24 shrink-0">${esc(p.date||'-')}</span>
         <a href="${esc(p.link)}" target="_blank" rel="noopener" class="lnk text-sm font-medium flex-1 min-w-0">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
