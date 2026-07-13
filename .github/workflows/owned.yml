@@ -29,6 +29,7 @@ jobs:
       - name: Fetch owned media stats
         env:
           YT_API_KEY: ${{ secrets.YT_API_KEY }}
+          INSTA_TOKEN: ${{ secrets.INSTA_TOKEN }}
         run: python crawler/owned_fetch.py
       - name: Commit if changed
         run: |

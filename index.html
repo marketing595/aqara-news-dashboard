@@ -335,11 +335,25 @@
 
      <!-- Instagram 자사 채널 -->
      <div id="ownedSec-instagram" class="hidden">
-     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">Instagram 채널 <span class="text-xs font-normal text-agray">수기 입력</span></h2>
-     <section id="ownedIgKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4"></section>
-     <div class="card p-4 bg-brand/5 border-brand/20 flex items-start gap-3">
-       
-       <p class="text-sm text-slate-600">인스타그램은 정책상(로그인 월) 지표 자동 수집이 불가합니다. 팔로워·게시물·주요 콘텐츠 반응은 <b class="text-ink">수기 입력</b>으로 관리됩니다. 최신 수치를 알려주시면 반영해 드릴게요. — <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">프로필 바로가기 ↗</a></p>
+     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">Instagram 채널 <span class="text-xs font-normal text-slate-400">Graph API 실측</span></h2>
+     <section id="ownedIgKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
+     <section id="ownedIgPostsWrap" class="card p-5 hidden">
+       <h3 class="accent font-extrabold text-ink mb-3">최근 게시물 <span id="ownedIgCount" class="text-sm font-normal text-slate-400"></span></h3>
+       <div class="overflow-auto max-h-[520px] rounded-lg border border-[#E6E6E3]">
+         <table class="w-full text-sm">
+           <thead class="sticky top-0 z-10"><tr class="text-left">
+             <th class="px-3 py-3 whitespace-nowrap">게시일</th>
+             <th class="px-3 py-3 whitespace-nowrap">유형</th>
+             <th class="px-3 py-3">내용</th>
+             <th class="px-3 py-3 text-right whitespace-nowrap">좋아요</th>
+             <th class="px-3 py-3 text-right whitespace-nowrap">댓글</th>
+           </tr></thead>
+           <tbody id="ownedIgBody" class="divide-y divide-slate-100"></tbody>
+         </table>
+       </div>
+     </section>
+     <div id="ownedIgManualNote" class="card p-4 bg-brand/5 border-brand/20 hidden">
+       <p class="text-sm text-slate-600">아직 자동 토큰이 연결되지 않았습니다. GitHub Secrets에 <b class="text-ink">INSTA_TOKEN</b>을 등록하면 팔로워·게시물 반응이 매일 자동 갱신됩니다. — <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">프로필 바로가기 ↗</a></p>
      </div>
      </div>
 
@@ -1080,6 +1094,18 @@
         igkpi('게시물', ig.posts!=null?ig.posts.toLocaleString()+'개':wait, '누적 게시물')+
         igkpi('팔로잉', ig.following!=null?ig.following.toLocaleString()+'명':'<span class="text-slate-300">-</span>', '')+
         igkpi('기준일', ig.asOf||'수기', '인스타 지표 기준');
+      const igPosts=ig.recent||[];
+      document.getElementById('ownedIgPostsWrap').classList.toggle('hidden', !igPosts.length);
+      document.getElementById('ownedIgManualNote').classList.toggle('hidden', igPosts.length>0);
+      if(igPosts.length){
+        document.getElementById('ownedIgCount').textContent='· 최근 '+igPosts.length+'개';
+        document.getElementById('ownedIgBody').innerHTML=igPosts.map(p=>`<tr class="hover:bg-[#FEFBEE]">
+          <td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(p.date||'-')}</td>
+          <td class="px-3 py-2.5 whitespace-nowrap"><span class="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${esc(p.type||'')}</span></td>
+          <td class="px-3 py-2.5 min-w-[240px]">${p.permalink?`<a href="${esc(p.permalink)}" target="_blank" rel="noopener" class="lnk">${esc(p.caption||'(내용 없음)')} <span class="text-slate-300 text-xs">↗</span></a>`:esc(p.caption||'')}</td>
+          <td class="px-3 py-2.5 text-right num">${(p.likes||0).toLocaleString()}</td>
+          <td class="px-3 py-2.5 text-right num">${(p.comments||0).toLocaleString()}</td></tr>`).join('');
+      }
       // 블로그 (관리 블로그 여러 개)
       const bl=OWNED.blog||{}, all=blogAll();
       const totalPosts=bl.total!=null?bl.total:all.length;

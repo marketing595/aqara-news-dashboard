@@ -122,6 +122,41 @@ def fetch_blog():
             "recent30": sum(x["recent30"] for x in blogs)}
 
 
+IG_ID = "17841461594818226"          # @aqaralife.official 비즈니스 계정 ID
+ITOKEN = os.environ.get("INSTA_TOKEN", "")
+GRAPH = "https://graph.facebook.com/v21.0"
+
+
+def fetch_instagram():
+    """Instagram Graph API로 팔로워·게시물·최근 미디어 반응 수집. 토큰(INSTA_TOKEN) 없으면 None."""
+    if not ITOKEN:
+        return None
+    try:
+        acc = requests.get("%s/%s" % (GRAPH, IG_ID),
+                           params={"fields": "username,followers_count,follows_count,media_count",
+                                   "access_token": ITOKEN}, timeout=20).json()
+        if "error" in acc:
+            print("IG API 오류:", acc["error"].get("message"))
+            return None
+        med = requests.get("%s/%s/media" % (GRAPH, IG_ID),
+                           params={"fields": "id,caption,timestamp,media_type,permalink,like_count,comments_count",
+                                   "limit": 12, "access_token": ITOKEN}, timeout=20).json()
+        recent = []
+        for m in med.get("data", []):
+            cap = re.sub(r"\s+", " ", (m.get("caption") or "")).strip()[:70]
+            recent.append({"date": (m.get("timestamp") or "")[:10], "type": m.get("media_type", ""),
+                           "caption": cap, "likes": int(m.get("like_count", 0) or 0),
+                           "comments": int(m.get("comments_count", 0) or 0),
+                           "permalink": m.get("permalink", "")})
+        kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
+        return {"asOf": kst.strftime("%Y-%m-%d") + " (자동)", "username": acc.get("username"),
+                "followers": acc.get("followers_count"), "following": acc.get("follows_count"),
+                "posts": acc.get("media_count"), "recent": recent}
+    except Exception as e:
+        print("IG 수집 실패:", e)
+        return None
+
+
 def api(path, **params):
     params["key"] = KEY
     r = requests.get(BASE + path, params=params, timeout=20)
@@ -173,10 +208,12 @@ def main():
         except Exception:
             prev = {}
 
-    # instagram(수기) 블록 보존
-    insta = {"asOf": "수기 입력 대기", "followers": None, "posts": None, "following": None}
-    if isinstance(prev.get("instagram"), dict):
+    # instagram: 토큰 있으면 자동 수집, 없거나 실패면 직전 값(수기 포함) 보존
+    insta = fetch_instagram()
+    if not insta and isinstance(prev.get("instagram"), dict):
         insta = prev["instagram"]
+    if not insta:
+        insta = {"asOf": "수기 입력 대기", "followers": None, "posts": None, "following": None}
 
     # blog: 신규 수집 실패/빈값이면 직전 blog 보존(자동 워크플로가 블로그를 지우지 않도록)
     blog = fetch_blog()
@@ -192,9 +229,9 @@ def main():
     if blog:
         data["blog"] = blog
     json.dump(data, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    print("owned.json OK — subs:%d views:%d videos:%d recent:%d blog:%d" % (
-        channel["subs"], channel["views"], channel["videos"], len(recent),
-        len((blog or {}).get("recent", []))))
+    print("owned.json OK — subs:%d videos:%d yt_recent:%d blogs:%d ig_followers:%s" % (
+        channel["subs"], channel["videos"], len(recent),
+        len((blog or {}).get("blogs", [])), str(insta.get("followers"))))
 
 
 if __name__ == "__main__":
