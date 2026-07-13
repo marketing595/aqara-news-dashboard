@@ -277,7 +277,7 @@
        <div class="h-72 mt-2"><canvas id="campTrendChart"></canvas></div>
      </div>
      <div id="campContentCard" class="card p-5 mb-5 hidden">
-       <h2 id="campContentTitle" class="accent font-extrabold text-ink mb-3">🎬 인플루언서 콘텐츠 성과</h2>
+       <h2 id="campContentTitle" class="accent font-extrabold text-ink mb-3">인플루언서 콘텐츠 성과</h2>
        <div id="campContentKpis" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-3"></div>
        <div id="campSentiment" class="mb-4"></div>
        <div class="h-56 mb-4"><canvas id="campViewsChart"></canvas></div>
@@ -302,7 +302,7 @@
              <div class="h-72"><canvas id="campKwChart"></canvas></div>
            </div>
            <div>
-             <p class="text-sm font-semibold text-slate-600 mb-2">🗨️ 제품 관련 대표 댓글 <span class="text-xs font-normal text-slate-400">(좋아요순)</span></p>
+             <p class="text-sm font-semibold text-slate-600 mb-2">제품 관련 대표 댓글 <span class="text-xs font-normal text-slate-400">(좋아요순)</span></p>
              <div id="campTopComments" class="space-y-2"></div>
            </div>
          </div>
@@ -312,6 +312,7 @@
        <h2 class="accent font-extrabold text-ink mb-2">포지셔닝 분석</h2>
        <div id="campPos" class="text-sm text-slate-600 space-y-2"></div>
      </div>
+     <div id="campReport" class="mb-5"></div>
      <p class="text-xs text-slate-400">※ SNS(인스타·유튜브 등) 언급량은 별도 소셜 API 연동이 필요해 현재 미포함입니다. 검색량=네이버 데이터랩, 자사 커버리지=구글 시트 기준.</p>
    </div>
 
@@ -1006,6 +1007,98 @@
     }
     function copyMail(){ navigator.clipboard.writeText(buildMail(curDate)).then(()=>alert('메일 텍스트가 복사되었습니다. 메일에 붙여넣으세요.')).catch(()=>alert('복사 실패 - 브라우저 권한을 확인하세요.')); }
 
+    const INTERIOR_REPORT = `
+      <div class="mt-1 mb-3 flex items-center justify-between flex-wrap gap-2">
+        <h2 class="text-lg font-extrabold text-ink">스마트홈 인테리어 캠페인 리포트 <span class="text-sm font-normal text-slate-400">· 상반기 성과 &amp; 하반기 디벨롭</span></h2>
+        <span class="text-[11px] px-2 py-1 rounded-md bg-brand/15 text-brand-ink font-semibold">수치 [ ]는 검증 후 반영</span>
+      </div>
+
+      <!-- 1. Overview -->
+      <div class="card p-5 mb-5">
+        <h3 class="accent font-extrabold text-ink mb-1">1 · Overview</h3>
+        <p class="text-xs text-slate-500 mb-4">상단 지표는 하단 <b class="text-slate-700">온라인 광고 · PR · 콘텐츠</b> 성과와 연동됩니다. 확정 수치는 검증 후 [ ]에 채웁니다.</p>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">보도 실적</p><p class="num text-2xl font-extrabold text-ink mt-1">[ ]건</p><p class="text-[11px] text-slate-400 mt-1">← PR 섹션 합산</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">총 노출수</p><p class="num text-2xl font-extrabold text-ink mt-1">[ ]</p><p class="text-[11px] text-slate-400 mt-1">← 광고 노출 + PR 도달</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">전체 인입수 (리드)</p><p class="num text-2xl font-extrabold text-ink mt-1">[ ]</p><p class="text-[11px] text-slate-400 mt-1">← 홈페이지 유입·문의</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">방문자 수 증가율</p><p class="num text-2xl font-extrabold text-ink mt-1">[ ]%</p><p class="text-[11px] text-slate-400 mt-1">← 캠페인 전·후 비교</p></div>
+        </div>
+        <p class="text-[11px] font-semibold text-slate-400 mb-2">활동 및 기간 (2026 상반기)</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+          <div class="rounded-lg bg-[#FAFAF9] border border-[#E6E6E3] p-3"><p class="font-bold text-ink mb-1">1) 온라인 광고</p><p class="text-slate-500 text-[13px]">파워링크(스마트홈·인테리어 키워드) + 소비자 대상 비디오 소재 · 전환 키워드 중심 운영</p></div>
+          <div class="rounded-lg bg-[#FAFAF9] border border-[#E6E6E3] p-3"><p class="font-bold text-ink mb-1">2) 콘텐츠</p><p class="text-slate-500 text-[13px]">인플루언서 협업(유튜브·인스타) · 스마트홈 인테리어 시공/구축 후기 확산</p></div>
+          <div class="rounded-lg bg-[#FAFAF9] border border-[#E6E6E3] p-3"><p class="font-bold text-ink mb-1">3) PR</p><p class="text-slate-500 text-[13px]">상반기 트렌드 리포트 발간 · 인테리어 트렌드 기획 기사 배포 · <b class="text-slate-700">더메종 전시회 참여</b></p></div>
+        </div>
+      </div>
+
+      <!-- 2. 온라인 광고 성과 요약 -->
+      <div class="card p-5 mb-5">
+        <h3 class="accent font-extrabold text-ink mb-3">2 · 온라인 광고 성과 요약</h3>
+        <div class="rounded-lg border border-[#E6E6E3] p-4 mb-3">
+          <p class="text-sm font-bold text-ink mb-1">노출·클릭 추이 — <span class="text-brand-ink">주간(Weekly) 단위</span>로 표기</p>
+          <p class="text-[13px] text-slate-500">일자별 편차가 커 해석이 어려우므로, 노출·클릭·CTR을 <b class="text-slate-700">주 단위로 묶어</b> 캠페인 흐름(도입 → 성숙 → 마감)을 보여줍니다. <span class="text-slate-400">[주차별 노출/클릭/CTR 표 · 검증 후 반영]</span></p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="rounded-lg bg-brand/5 border border-brand/20 p-4">
+            <p class="text-sm font-bold text-ink mb-1">전환율(CVR) 중심 최적화</p>
+            <p class="text-[13px] text-slate-600">소비자 대상 <b>비디오 광고 소재</b> 중 전환율이 높았던 영역에 예산·노출을 집중. 단순 조회·CTR이 아니라 <b class="text-brand-ink">CVR(전환율)</b>을 핵심 지표로 승격. <span class="text-slate-400">[CVR 상위 소재/영역 · [ ]%]</span></p>
+          </div>
+          <div class="rounded-lg bg-[#FAFAF9] border border-[#E6E6E3] p-4">
+            <p class="text-sm font-bold text-ink mb-1">전환 중심 키워드 세분화</p>
+            <p class="text-[13px] text-slate-600">전환이 낮은 <b>교육용 키워드</b>(스마트홈교육·IOT교육 등)는 제외하고, 구매·문의 의도가 분명한 <b class="text-ink">「IOT구축 · 스마트홈 업체 · 스마트홈 시공」</b> 등 전환 중심 키워드로 재편.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. PR & 오프라인(더메종) -->
+      <div class="card p-5 mb-5">
+        <h3 class="accent font-extrabold text-ink mb-3">3 · PR &amp; 오프라인 전시회</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm font-bold text-ink mb-2">PR 활동</p>
+            <ul class="text-[13px] text-slate-600 space-y-1.5">
+              <li>· 스마트홈 <b>트렌드 리포트 발간</b> <span class="text-brand-ink font-semibold">( [ ]월 기준 )</span></li>
+              <li>· 인테리어 트렌드 <b>기획 기사</b> 배포 <span class="text-slate-400">[매체·건수 검증 후]</span></li>
+              <li>· 브랜드·제품 <b>보도자료</b> 상시 배포</li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-sm font-bold text-ink mb-2">더메종 전시회 <span class="text-xs font-normal text-slate-400">(2026.06)</span></p>
+            <p class="text-[13px] text-slate-600 mb-2">홈스타일링 전시회 '더메종' 참여 — 스마트홈 인테리어 실물 시연으로 오프라인 접점 확대. <span class="text-slate-400">[관람객·현장 리드 [ ]건 검증 후]</span></p>
+            <div class="rounded-lg border border-dashed border-slate-300 p-3 text-center">
+              <p class="text-[12px] text-slate-400">[ 더메종 디렉토리 / 현장 리포트 링크 삽입 ]</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Insight & Develop (하반기 전략) -->
+      <div class="card p-5 mb-2 bg-ink text-white border-ink">
+        <h3 class="font-extrabold text-white mb-1 text-lg">4 · Insight &amp; Develop <span class="text-sm font-normal text-white/50">하반기 전략</span></h3>
+        <p class="text-[13px] text-white/60 mb-4">상반기 학습을 바탕으로, <b class="text-brand">홈페이지 리드 확보</b>를 중심축으로 재정렬합니다.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="text-brand font-bold text-sm mb-1.5">목표</p>
+            <p class="text-[13px] text-white/80">단순 노출·조회가 아닌 <b>홈페이지 리드(문의·상담) 확보</b>를 핵심 KPI로 설정. 인입 → 리드 → 전환의 퍼널을 기준으로 성과를 측정.</p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="text-brand font-bold text-sm mb-1.5">키워드 전략</p>
+            <p class="text-[13px] text-white/80">당장 전환이 낮아도 <b>대세감 형성을 위한 지속 노출</b> 유지. '스마트커튼·자동커튼·스마트조명' 등 <b>부분 인테리어 수요층</b>까지 키워드 확장. 방향성은 <b class="text-white">일반 키워드 ↔ 브랜드 특화 키워드 이원화</b>로 전개.</p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="text-brand font-bold text-sm mb-1.5">콘텐츠 전략</p>
+            <p class="text-[13px] text-white/80"><b>다건 외주 계약</b>으로 프로세스 단축(촬영→게재 <b>3주 이내</b>) · 컨셉 다각화 · <b>리드 유입 강화형 콘텐츠</b> 별도 분리 · <b>AI 활용 브랜딩 콘텐츠</b> 제작 기획.</p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="text-brand font-bold text-sm mb-1.5">PR · 커뮤니티 전략</p>
+            <p class="text-[13px] text-white/80">리포트 <b>발행 주기 정립</b>(분기별 vs 6개월). 타겟 커뮤니티(예: <b>다이렉트 웨딩</b>) 및 <b>오늘의집 오하우스</b> 멤버 활용 협업 채널 개설.</p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4 lg:col-span-2">
+            <p class="text-brand font-bold text-sm mb-1.5">오프라인</p>
+            <p class="text-[13px] text-white/80"><b>9월 리뉴얼 쇼룸 활성화</b> <span class="text-white/40">(TBD)</span> — 오프라인 체험 접점을 리드 전환 채널로 연계.</p>
+          </div>
+        </div>
+      </div>`;
     function renderCampaign(id){
       if(id) curCampaign=id;
       const c=CAMPAIGNS[curCampaign];
@@ -1036,7 +1129,7 @@
       // 콘텐츠 성과 (유튜브 실측 + 인스타 링크)
       const cc=document.getElementById('campContentCard');
       if(c.videos && c.videos.length){ cc.classList.remove('hidden');
-        document.getElementById('campContentTitle').innerHTML='🎬 인플루언서 콘텐츠 성과 <span class="text-xs font-normal text-slate-400">('+(c.videosAsOf||'')+' 기준 · 유튜브 API 실측)</span>';
+        document.getElementById('campContentTitle').innerHTML='인플루언서 콘텐츠 성과 <span class="text-xs font-normal text-slate-400">('+(c.videosAsOf||'')+' 기준 · 유튜브 API 실측)</span>';
         const yt=c.videos.slice().sort((a,b)=>b.views-a.views);
         const ig=(c.insta||[]).slice().sort((a,b)=>(b.views||0)-(a.views||0));
         const ytV=yt.reduce((s,x)=>s+x.views,0), ytL=yt.reduce((s,x)=>s+x.likes,0), ytC=yt.reduce((s,x)=>s+(x.comments||0),0);
@@ -1070,6 +1163,7 @@
         } else { rc.classList.add('hidden'); }
       } else { cc.classList.add('hidden'); }
       document.getElementById('campPos').innerHTML=c.pos;
+      document.getElementById('campReport').innerHTML=(curCampaign==='interior')?INTERIOR_REPORT:'';
     }
     function resetCampPeriod(){ document.getElementById('campFrom').value=''; document.getElementById('campTo').value=''; renderCampaign(curCampaign); }
 
