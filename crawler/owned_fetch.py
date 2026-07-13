@@ -234,9 +234,23 @@ def main():
 
     # blog: 신규 수집 실패/빈값이면 직전 blog 보존(자동 워크플로가 블로그를 지우지 않도록)
     blog = fetch_blog()
-    if (not blog or not blog.get("blogs")) and isinstance(prev.get("blog"), dict) and prev["blog"].get("blogs"):
+    prev_blog = prev.get("blog") if isinstance(prev.get("blog"), dict) else None
+    # Actions에서 API 차단→RSS 폴백으로 글 수가 줄어드는 것 방지: 블로그별로 직전보다 적으면 직전 데이터 유지
+    if blog and blog.get("blogs") and prev_blog and prev_blog.get("blogs"):
+        prevmap = {b.get("id"): b for b in prev_blog["blogs"]}
+        merged = []
+        for b in blog["blogs"]:
+            pb = prevmap.get(b.get("id"))
+            if pb and (pb.get("total", 0) > b.get("total", 0) or len(pb.get("recent", [])) > len(b.get("recent", []))):
+                print("blog[%s] 직전(%d) > 신규(%d) → 직전 유지" % (b.get("id"), pb.get("total", 0), b.get("total", 0)))
+                merged.append(pb)
+            else:
+                merged.append(b)
+        blog = {"blogs": merged, "total": sum(x.get("total", 0) for x in merged),
+                "recent30": sum(x.get("recent30", 0) for x in merged)}
+    if (not blog or not blog.get("blogs")) and prev_blog and prev_blog.get("blogs"):
         print("blog 신규 수집 실패/빈값 → 직전 owned.json의 blog 보존")
-        blog = prev["blog"]
+        blog = prev_blog
 
     data = {
         "generatedAt": kst.strftime("%Y-%m-%d %H:%M"),
