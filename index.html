@@ -471,12 +471,16 @@
          <p class="text-sm text-slate-500 mt-1"><span id="reportStamp"></span> · PR·온드미디어·카페 통합 (상부 보고용)</p>
        </div>
        <div class="flex flex-wrap items-center gap-2">
-         <select id="reportPeriod" onchange="renderReport()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-2 bg-white font-semibold">
+         <select id="reportPeriod" onchange="reportPreset()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-2 bg-white font-semibold">
            <option value="all">전체 기간</option>
            <option value="quarter">최근 분기(3개월)</option>
            <option value="half">최근 반년(6개월)</option>
            <option value="ytd">올해(YTD)</option>
+           <option value="custom">직접 선택</option>
          </select>
+         <input id="reportFrom" type="date" onchange="reportCustom()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-2" />
+         <span class="text-slate-400 text-xs">~</span>
+         <input id="reportTo" type="date" onchange="reportCustom()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-2" />
          <button id="reportEditBtn" onclick="toggleReportEdit()" class="text-sm border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg font-semibold">인사이트 편집</button>
          <button onclick="window.print()" class="text-sm bg-ink hover:brightness-125 transition text-white px-4 py-2 rounded-lg font-semibold">인쇄 / PDF</button>
        </div>
@@ -1490,19 +1494,28 @@
     // ===== 종합 리포트 =====
     let reportEdits={}; try{ reportEdits=JSON.parse(localStorage.getItem('aqaraReportEdits')||'{}'); }catch(e){}
     let reportEditMode=false;
-    function reportCutoff(){ const p=document.getElementById('reportPeriod')?.value||'all';
-      const now=(OWNED_HIST.length?OWNED_HIST[OWNED_HIST.length-1].date:(new Date().toISOString().slice(0,10)));
-      if(p==='all') return '0000-00-00';
-      if(p==='ytd') return now.slice(0,4)+'-01-01';
-      const d=new Date(now); d.setMonth(d.getMonth()-(p==='quarter'?3:6)); return d.toISOString().slice(0,10);
+    function reportToday(){ return (OWNED_HIST.length?OWNED_HIST[OWNED_HIST.length-1].date:(new Date().toISOString().slice(0,10))); }
+    function reportPreset(){ const p=document.getElementById('reportPeriod').value; const now=reportToday();
+      const fromEl=document.getElementById('reportFrom'), toEl=document.getElementById('reportTo');
+      if(p==='custom'){ renderReport(); return; }
+      toEl.value=now;
+      if(p==='all'){ const dts=ALL.map(r=>r['게재일']).filter(Boolean).sort(); fromEl.value=dts[0]||'2021-01-01'; }
+      else if(p==='ytd'){ fromEl.value=now.slice(0,4)+'-01-01'; }
+      else { const d=new Date(now); d.setMonth(d.getMonth()-(p==='quarter'?3:6)); fromEl.value=d.toISOString().slice(0,10); }
+      renderReport();
     }
+    function reportCustom(){ document.getElementById('reportPeriod').value='custom'; renderReport(); }
+    function reportRange(){ const dts=ALL.map(r=>r['게재일']).filter(Boolean).sort();
+      const lo=document.getElementById('reportFrom')?.value||dts[0]||'0000-00-00';
+      const hi=document.getElementById('reportTo')?.value||reportToday();
+      return [lo,hi]; }
     function cafeSentCounts(posts){ const c={긍정:0,중립:0,부정:0}; posts.forEach(p=>{ const s=(p._sen?p._sen.k:cafeSentiment(p.title,p.desc).k); c[s]++; }); return c; }
     function rline(id,labels,datasets){ draw(id,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,labels:{boxWidth:10,font:{size:10}}}},scales:{y:{beginAtZero:false,ticks:{font:{size:10}}},x:{ticks:{maxTicksLimit:8,font:{size:9}}}}}}); }
     function renderReport(){
-      const cut=reportCutoff();
-      document.getElementById('reportStamp').textContent='생성일 '+(new Date().toISOString().slice(0,10))+(OWNED.generatedAt?(' · 데이터 '+OWNED.generatedAt):'');
+      const [lo,hi]=reportRange(); const cut=lo;
+      document.getElementById('reportStamp').textContent='생성일 '+(new Date().toISOString().slice(0,10))+' · 기간 '+lo+'~'+hi+(OWNED.generatedAt?(' · 데이터 '+OWNED.generatedAt):'');
       // PR
-      const prPeriod=ALL.filter(r=>{const d=r['게재일']; return d&&d>=cut;}).length;
+      const prPeriod=ALL.filter(r=>{const d=r['게재일']; return d&&d>=lo&&d<=hi;}).length;
       const yms=[...new Set(ALL.map(r=>r._ym).filter(Boolean))].sort();
       let prMonth='-', prMoM='', prYoY='';
       if(yms.length){ const ref=yms[yms.length-1],prev=ymShift(ref,-1),yoy=ymShift(ref,-12);
@@ -1513,13 +1526,13 @@
         const pc=x=>x==null?'<span class="text-slate-300">-</span>':`<span class="${c-x>=0?'text-agreen':'text-ared'} font-semibold">${c-x>=0?'▲':'▼'} ${Math.abs(c-x)}</span>`;
         prMoM=pc(p); prYoY=pc(y);
       }
-      const prMedia=new Set(ALL.filter(r=>{const d=r['게재일'];return d&&d>=cut;}).map(r=>r._media)).size;
+      const prMedia=new Set(ALL.filter(r=>{const d=r['게재일'];return d&&d>=lo&&d<=hi;}).map(r=>r._media)).size;
       const rr=(k,v)=>`<div class="flex justify-between"><span class="text-slate-500">${k}</span><span class="num font-semibold text-ink">${v}</span></div>`;
       document.getElementById('reportPrBody').innerHTML=rr('기간 내 언론 보도',prPeriod.toLocaleString()+'건')+rr('당월 발행',prMonth)+rr('전월 동기 대비',prMoM)+rr('전년 동기 대비',prYoY)+rr('활동 매체 수',prMedia+'개');
       // 온드미디어
       const ch=(OWNED.youtube&&OWNED.youtube.channel)||{}, ig=OWNED.instagram||{}, bl=OWNED.blog||{};
       const blTot=bl.total!=null?bl.total:0;
-      const db=(f,u)=>{ const dl=histDeltaSince(OWNED_HIST,f,cut); return dl?` <span class="text-[11px] ${dl.d>=0?'text-agreen':'text-ared'} font-semibold">(${dl.d>=0?'+':''}${dl.d.toLocaleString()}${u})</span>`:''; };
+      const db=(f,u)=>{ const dl=histDeltaSince(OWNED_HIST,f,lo,hi); return dl?` <span class="text-[11px] ${dl.d>=0?'text-agreen':'text-ared'} font-semibold">(${dl.d>=0?'+':''}${dl.d.toLocaleString()}${u})</span>`:''; };
       document.getElementById('reportOwnedBody').innerHTML=
         rr('YouTube 구독자',(ch.subs||0).toLocaleString()+'명'+db('ytSubs','명'))+
         rr('YouTube 총조회',KO_UNIT(ch.views)+db('ytViews','회'))+
@@ -1527,7 +1540,7 @@
         rr('블로그 발행 글',blTot.toLocaleString()+'건'+db('blogTotal','건'));
       // 카페
       const sc=cafeSentCounts(CAFE_POSTS), st=CAFE_POSTS.length||1;
-      const cdl=histDeltaSince(CAFE_HIST,'total',cut);
+      const cdl=histDeltaSince(CAFE_HIST,'total',lo,hi);
       document.getElementById('reportCafeBody').innerHTML=
         rr('총 언급(수집)',CAFE_POSTS.length.toLocaleString()+'건'+(cdl?` <span class="text-[11px] ${cdl.d>=0?'text-agreen':'text-ared'} font-semibold">(${cdl.d>=0?'+':''}${cdl.d})</span>`:''))+
         rr('긍정',sc.긍정+'건 ('+Math.round(sc.긍정/st*100)+'%)')+
@@ -1541,12 +1554,12 @@
         kc('Instagram 팔로워',(ig.followers!=null?ig.followers.toLocaleString():'-')+'명','@aqaralife.official')+
         kc('카페 언급',CAFE_POSTS.length.toLocaleString()+'건','2개 카페 모니터링');
       // 추이 차트
-      const oh=OWNED_HIST.filter(h=>h.date>=cut), lab=oh.map(h=>h.date);
+      const oh=OWNED_HIST.filter(h=>h.date>=lo&&h.date<=hi), lab=oh.map(h=>h.date);
       rline('rptSubsChart',lab,[{label:'구독자',data:oh.map(h=>h.ytSubs),borderColor:'#BF5332',backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:oh.length<=1?4:2}]);
       rline('rptViewsChart',lab,[{label:'총조회',data:oh.map(h=>h.ytViews),borderColor:'#D68134',backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:oh.length<=1?4:2}]);
       rline('rptContentChart',lab,[{label:'콘텐츠 누적',data:oh.map(h=>(h.ytVideos||0)+(h.blogTotal||0)+(h.igPosts||0)),borderColor:'#1D1D1F',backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:oh.length<=1?4:2}]);
       // 팔로워 + 카페 언급 (날짜 합집합)
-      const ch2=CAFE_HIST.filter(h=>h.date>=cut);
+      const ch2=CAFE_HIST.filter(h=>h.date>=lo&&h.date<=hi);
       const allDates=[...new Set([...oh.map(h=>h.date),...ch2.map(h=>h.date)])].sort();
       const folMap={}; oh.forEach(h=>folMap[h.date]=h.igFollowers); const cafeMap={}; ch2.forEach(h=>cafeMap[h.date]=h.total);
       rline('rptFolCafeChart',allDates,[
@@ -1562,7 +1575,7 @@
       };
       document.querySelectorAll('.rpt-edit').forEach(el=>{ const k=el.dataset.rk; el.innerHTML=esc(reportEdits[k]!=null?reportEdits[k]:def[k]).replace(/\n/g,'<br>'); el.contentEditable=reportEditMode; el.classList.toggle('bg-brand/10',reportEditMode); el.classList.toggle('ring-1',reportEditMode); el.classList.toggle('ring-brand/40',reportEditMode); el.classList.toggle('rounded',reportEditMode); el.classList.toggle('px-2',reportEditMode); el.classList.toggle('py-1',reportEditMode); });
     }
-    function histDeltaSince(hist, field, cut){ if(!hist||hist.length<2)return null; const rows=hist.filter(h=>h.date>=cut&&h[field]!=null); if(rows.length<2)return null; const a=rows[0],b=rows[rows.length-1]; return {d:b[field]-a[field], from:a.date}; }
+    function histDeltaSince(hist, field, lo, hi){ if(!hist||hist.length<2)return null; const rows=hist.filter(h=>h.date>=lo&&(!hi||h.date<=hi)&&h[field]!=null); if(rows.length<2)return null; const a=rows[0],b=rows[rows.length-1]; return {d:b[field]-a[field], from:a.date}; }
     function toggleReportEdit(){
       if(reportEditMode){ document.querySelectorAll('.rpt-edit').forEach(el=>{ reportEdits[el.dataset.rk]=el.innerText.trim(); }); localStorage.setItem('aqaraReportEdits',JSON.stringify(reportEdits)); }
       reportEditMode=!reportEditMode;
