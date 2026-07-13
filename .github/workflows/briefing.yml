@@ -1,9 +1,9 @@
 name: Daily Briefing
 
-# 매일 08:40(UTC)=한국 17:40 뉴스 수집 + Gemini 브리핑 생성 → briefing.json
+# 매일 23:00(UTC)=한국 오전 08:00 뉴스 수집 + Gemini 브리핑 생성 → briefing.json
 on:
   schedule:
-    - cron: '40 8 * * *'
+    - cron: '0 23 * * *'
   workflow_dispatch: {}
   push:
     paths:
