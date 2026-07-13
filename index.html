@@ -79,6 +79,7 @@
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
       <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페 모니터링</button>
       <button id="grpBtn-campaign" onclick="switchGroup('campaign')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">캠페인</button>
+      <button id="grpBtn-report" onclick="switchGroup('report')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">종합 리포트</button>
     </div>
   </div>
   <!-- PR 하위탭 -->
@@ -419,6 +420,64 @@
        <div id="cafeBody" class="divide-y divide-slate-100"></div>
      </div>
      <p class="text-center text-xs text-slate-400 pt-4">※ 키워드 기반 수집 스냅샷이라 카페 '전체 글'은 아닙니다. 전체 글·자동갱신은 네이버 카페 API 인증(관리자 로그인) 연동이 필요합니다.</p>
+   </div>
+
+   <div id="view-report" class="hidden">
+     <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
+       <div>
+         <h2 class="text-xl font-extrabold text-ink">아카라라이프 통합 성과 리포트</h2>
+         <p class="text-sm text-slate-500 mt-1"><span id="reportStamp"></span> · PR·온드미디어·카페 통합 (상부 보고용)</p>
+       </div>
+       <div class="flex flex-wrap items-center gap-2">
+         <select id="reportPeriod" onchange="renderReport()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-2 bg-white font-semibold">
+           <option value="all">전체 기간</option>
+           <option value="quarter">최근 분기(3개월)</option>
+           <option value="half">최근 반년(6개월)</option>
+           <option value="ytd">올해(YTD)</option>
+         </select>
+         <button id="reportEditBtn" onclick="toggleReportEdit()" class="text-sm border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg font-semibold">인사이트 편집</button>
+         <button onclick="window.print()" class="text-sm bg-ink hover:brightness-125 transition text-white px-4 py-2 rounded-lg font-semibold">인쇄 / PDF</button>
+       </div>
+     </div>
+
+     <!-- 핵심 요약 (수정 가능) -->
+     <div class="card p-5 mb-5">
+       <h3 class="accent font-extrabold text-ink mb-2">핵심 요약 (Executive Summary)</h3>
+       <div id="rpt-summary" data-rk="summary" class="text-sm text-slate-700 leading-relaxed rpt-edit"></div>
+     </div>
+
+     <!-- 통합 KPI -->
+     <section id="reportKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
+
+     <!-- 섹션별 요약 + 인사이트 -->
+     <section class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+       <div class="card p-5">
+         <h3 class="accent font-extrabold text-ink mb-3">PR 언론 성과</h3>
+         <div id="reportPrBody" class="space-y-1.5 text-sm mb-3"></div>
+         <div class="pt-3 border-t border-[#E6E6E3]"><p class="text-[11px] font-semibold text-slate-400 mb-1">인사이트</p><div id="rpt-pr" data-rk="pr" class="text-sm text-slate-700 leading-relaxed rpt-edit"></div></div>
+       </div>
+       <div class="card p-5">
+         <h3 class="accent font-extrabold text-ink mb-3">온드미디어</h3>
+         <div id="reportOwnedBody" class="space-y-1.5 text-sm mb-3"></div>
+         <div class="pt-3 border-t border-[#E6E6E3]"><p class="text-[11px] font-semibold text-slate-400 mb-1">인사이트</p><div id="rpt-owned" data-rk="owned" class="text-sm text-slate-700 leading-relaxed rpt-edit"></div></div>
+       </div>
+       <div class="card p-5">
+         <h3 class="accent font-extrabold text-ink mb-3">카페 반응</h3>
+         <div id="reportCafeBody" class="space-y-1.5 text-sm mb-3"></div>
+         <div class="pt-3 border-t border-[#E6E6E3]"><p class="text-[11px] font-semibold text-slate-400 mb-1">인사이트</p><div id="rpt-cafe" data-rk="cafe" class="text-sm text-slate-700 leading-relaxed rpt-edit"></div></div>
+       </div>
+     </section>
+
+     <!-- 추이 그래프 모음 -->
+     <h3 class="accent font-extrabold text-ink mb-3">채널 성장 추이 <span class="text-xs font-normal text-slate-400">(매일 자동 기록 · 데이터가 쌓일수록 정밀해집니다)</span></h3>
+     <section class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+       <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">YouTube 구독자 추이</h4><div class="h-56"><canvas id="rptSubsChart"></canvas></div></div>
+       <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">YouTube 총 조회수 추이</h4><div class="h-56"><canvas id="rptViewsChart"></canvas></div></div>
+       <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">콘텐츠 발행 추이 <span class="text-xs font-normal text-slate-400">(영상+블로그+인스타 누적)</span></h4><div class="h-56"><canvas id="rptContentChart"></canvas></div></div>
+       <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">인스타 팔로워 · 카페 언급량 추이</h4><div class="h-56"><canvas id="rptFolCafeChart"></canvas></div></div>
+     </section>
+     <p id="reportEditNote" class="text-center text-xs text-slate-400 pt-1 hidden">✏️ 편집 모드: 요약·인사이트 텍스트를 클릭해 수정 후 '저장' 버튼을 누르세요. 내용은 이 브라우저에 저장됩니다.</p>
+     <p class="text-center text-xs text-slate-400 pt-4">수치는 자동 수집 기준 · 인사이트는 수정 가능(상부 보고 대체자료로 활용)</p>
    </div>
   </main>
 
@@ -971,9 +1030,9 @@
       return '일반'; }
     function loadCafe(silent){
       fetch('cafe.json?_='+Date.now()).then(r=>r.json()).then(p=>{
-        if(p&&p.posts&&p.posts.length){ CAFE_POSTS=p.posts; if(p.generatedAt) window.__cafeStamp=p.generatedAt; renderCafe(); }
+        if(p&&p.posts&&p.posts.length){ CAFE_POSTS=p.posts; if(p.generatedAt) window.__cafeStamp=p.generatedAt; renderCafe(); maybeRenderReport(); }
       }).catch(()=>{});
-      fetch('cafe_history.json?_='+Date.now()).then(r=>r.json()).then(h=>{ if(Array.isArray(h)){ CAFE_HIST=h; renderCafe(); } }).catch(()=>{});
+      fetch('cafe_history.json?_='+Date.now()).then(r=>r.json()).then(h=>{ if(Array.isArray(h)){ CAFE_HIST=h; renderCafe(); maybeRenderReport(); } }).catch(()=>{});
     }
     const CAFE_BADGE={'아카라 스마트홈':'bg-ablue/25 text-[#365b7a]','모두의 스마트홈':'bg-agreen/15 text-agreen'};
     const CAFE_STOP=new Set('아카라 아카라라이프 aqara 스마트홈 있나요 있을까요 되나요 하나요 가능 문의 질문 관련 방법 사용 하는 되는 이거 저거 그거 그리고 근데 하는데 해서 위해 대한 대해 인데 인가요 어떤 어떻게 무슨 진짜 정말 너무 다시 처음 이번 지금 오늘 어제 부탁 드립니다 합니다 습니다 해요 네요 어요 인지 하고 하면 하니 해도 있어요 없어요 같아요 같은 같이 이런 저런 그런 여기 거기 저기 하실 하시 하세요'.split(' '));
@@ -1040,18 +1099,18 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], report:['report'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', report:'report' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
-      ['analytics','briefing','campaign','owned','cafe'].forEach(v=>{
+      ['analytics','briefing','campaign','owned','cafe','report'].forEach(v=>{
         document.getElementById('view-'+v).classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','campaign'].forEach(k=>{ document.getElementById('grpBtn-'+k).className=grpClass(k===g); });
+      ['pr','owned','cafe','campaign','report'].forEach(k=>{ document.getElementById('grpBtn-'+k).className=grpClass(k===g); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
@@ -1059,6 +1118,7 @@
       if(t==='campaign'){ renderCampaign(); loadYoutube(); }
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
       if(t==='cafe'){ renderCafe(); loadCafe(); }
+      if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
     }
     let ownedSection='overview';
     function switchOwned(s){
@@ -1205,8 +1265,93 @@
       </div>`).join(''):'<p class="text-sm text-slate-400 py-4 text-center">'+(all.length?'검색 결과가 없습니다':'블로그 글을 불러오는 중…')+'</p>';
     }
     function loadOwned(){
-      fetch('owned.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.youtube){ OWNED=Object.assign(OWNED,p); renderOwned(); } }).catch(()=>{});
-      fetch('owned_history.json?_='+Date.now()).then(r=>r.json()).then(h=>{ if(Array.isArray(h)){ OWNED_HIST=h; renderOwned(); } }).catch(()=>{});
+      fetch('owned.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.youtube){ OWNED=Object.assign(OWNED,p); renderOwned(); maybeRenderReport(); } }).catch(()=>{});
+      fetch('owned_history.json?_='+Date.now()).then(r=>r.json()).then(h=>{ if(Array.isArray(h)){ OWNED_HIST=h; renderOwned(); maybeRenderReport(); } }).catch(()=>{});
+    }
+    function maybeRenderReport(){ const v=document.getElementById('view-report'); if(v && !v.classList.contains('hidden')) renderReport(); }
+
+    // ===== 종합 리포트 =====
+    let reportEdits={}; try{ reportEdits=JSON.parse(localStorage.getItem('aqaraReportEdits')||'{}'); }catch(e){}
+    let reportEditMode=false;
+    function reportCutoff(){ const p=document.getElementById('reportPeriod')?.value||'all';
+      const now=(OWNED_HIST.length?OWNED_HIST[OWNED_HIST.length-1].date:(new Date().toISOString().slice(0,10)));
+      if(p==='all') return '0000-00-00';
+      if(p==='ytd') return now.slice(0,4)+'-01-01';
+      const d=new Date(now); d.setMonth(d.getMonth()-(p==='quarter'?3:6)); return d.toISOString().slice(0,10);
+    }
+    function cafeSentCounts(posts){ const c={긍정:0,중립:0,부정:0}; posts.forEach(p=>{ const s=(p._sen?p._sen.k:cafeSentiment(p.title,p.desc).k); c[s]++; }); return c; }
+    function rline(id,labels,datasets){ draw(id,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,labels:{boxWidth:10,font:{size:10}}}},scales:{y:{beginAtZero:false,ticks:{font:{size:10}}},x:{ticks:{maxTicksLimit:8,font:{size:9}}}}}}); }
+    function renderReport(){
+      const cut=reportCutoff();
+      document.getElementById('reportStamp').textContent='생성일 '+(new Date().toISOString().slice(0,10))+(OWNED.generatedAt?(' · 데이터 '+OWNED.generatedAt):'');
+      // PR
+      const prPeriod=ALL.filter(r=>{const d=r['게재일']; return d&&d>=cut;}).length;
+      const yms=[...new Set(ALL.map(r=>r._ym).filter(Boolean))].sort();
+      let prMonth='-', prMoM='', prYoY='';
+      if(yms.length){ const ref=yms[yms.length-1],prev=ymShift(ref,-1),yoy=ymShift(ref,-12);
+        const refDay=Math.max(0,...ALL.filter(r=>r._ym===ref).map(dayOf));
+        const mtd=(ym)=>ALL.filter(r=>r._ym===ym&&dayOf(r)<=refDay).length;
+        const c=ALL.filter(r=>r._ym===ref).length; prMonth=(+ref.slice(5,7))+'월 '+c+'건';
+        const p=yms.includes(prev)?mtd(prev):null, y=yms.includes(yoy)?mtd(yoy):null;
+        const pc=x=>x==null?'<span class="text-slate-300">-</span>':`<span class="${c-x>=0?'text-agreen':'text-ared'} font-semibold">${c-x>=0?'▲':'▼'} ${Math.abs(c-x)}</span>`;
+        prMoM=pc(p); prYoY=pc(y);
+      }
+      const prMedia=new Set(ALL.filter(r=>{const d=r['게재일'];return d&&d>=cut;}).map(r=>r._media)).size;
+      const rr=(k,v)=>`<div class="flex justify-between"><span class="text-slate-500">${k}</span><span class="num font-semibold text-ink">${v}</span></div>`;
+      document.getElementById('reportPrBody').innerHTML=rr('기간 내 언론 보도',prPeriod.toLocaleString()+'건')+rr('당월 발행',prMonth)+rr('전월 동기 대비',prMoM)+rr('전년 동기 대비',prYoY)+rr('활동 매체 수',prMedia+'개');
+      // 온드미디어
+      const ch=(OWNED.youtube&&OWNED.youtube.channel)||{}, ig=OWNED.instagram||{}, bl=OWNED.blog||{};
+      const blTot=bl.total!=null?bl.total:0;
+      const db=(f,u)=>{ const dl=histDeltaSince(OWNED_HIST,f,cut); return dl?` <span class="text-[11px] ${dl.d>=0?'text-agreen':'text-ared'} font-semibold">(${dl.d>=0?'+':''}${dl.d.toLocaleString()}${u})</span>`:''; };
+      document.getElementById('reportOwnedBody').innerHTML=
+        rr('YouTube 구독자',(ch.subs||0).toLocaleString()+'명'+db('ytSubs','명'))+
+        rr('YouTube 총조회',KO_UNIT(ch.views)+db('ytViews','회'))+
+        rr('Instagram 팔로워',(ig.followers!=null?ig.followers.toLocaleString():'-')+'명'+db('igFollowers','명'))+
+        rr('블로그 발행 글',blTot.toLocaleString()+'건'+db('blogTotal','건'));
+      // 카페
+      const sc=cafeSentCounts(CAFE_POSTS), st=CAFE_POSTS.length||1;
+      const cdl=histDeltaSince(CAFE_HIST,'total',cut);
+      document.getElementById('reportCafeBody').innerHTML=
+        rr('총 언급(수집)',CAFE_POSTS.length.toLocaleString()+'건'+(cdl?` <span class="text-[11px] ${cdl.d>=0?'text-agreen':'text-ared'} font-semibold">(${cdl.d>=0?'+':''}${cdl.d})</span>`:''))+
+        rr('긍정',sc.긍정+'건 ('+Math.round(sc.긍정/st*100)+'%)')+
+        rr('중립',sc.중립+'건 ('+Math.round(sc.중립/st*100)+'%)')+
+        rr('부정',sc.부정+'건 ('+Math.round(sc.부정/st*100)+'%)');
+      // 통합 KPI
+      const kc=(l,v,s)=>`<div class="card card-hover p-5"><p class="text-sm text-slate-500">${l}</p><p class="num text-3xl font-extrabold text-ink mt-1">${v}</p><p class="text-xs text-slate-400 mt-1">${s}</p></div>`;
+      document.getElementById('reportKpi').innerHTML=
+        kc('언론 보도(기간)',prPeriod.toLocaleString()+'건','PR 커버리지')+
+        kc('YouTube 구독자',(ch.subs||0).toLocaleString()+'명','자사 채널')+
+        kc('Instagram 팔로워',(ig.followers!=null?ig.followers.toLocaleString():'-')+'명','@aqaralife.official')+
+        kc('카페 언급',CAFE_POSTS.length.toLocaleString()+'건','2개 카페 모니터링');
+      // 추이 차트
+      const oh=OWNED_HIST.filter(h=>h.date>=cut), lab=oh.map(h=>h.date);
+      rline('rptSubsChart',lab,[{label:'구독자',data:oh.map(h=>h.ytSubs),borderColor:'#BF5332',backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:oh.length<=1?4:2}]);
+      rline('rptViewsChart',lab,[{label:'총조회',data:oh.map(h=>h.ytViews),borderColor:'#D68134',backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:oh.length<=1?4:2}]);
+      rline('rptContentChart',lab,[{label:'콘텐츠 누적',data:oh.map(h=>(h.ytVideos||0)+(h.blogTotal||0)+(h.igPosts||0)),borderColor:'#1D1D1F',backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:oh.length<=1?4:2}]);
+      // 팔로워 + 카페 언급 (날짜 합집합)
+      const ch2=CAFE_HIST.filter(h=>h.date>=cut);
+      const allDates=[...new Set([...oh.map(h=>h.date),...ch2.map(h=>h.date)])].sort();
+      const folMap={}; oh.forEach(h=>folMap[h.date]=h.igFollowers); const cafeMap={}; ch2.forEach(h=>cafeMap[h.date]=h.total);
+      rline('rptFolCafeChart',allDates,[
+        {label:'IG 팔로워',data:allDates.map(d=>folMap[d]??null),borderColor:'#C13584',backgroundColor:'transparent',borderWidth:2,tension:.3,spanGaps:true,pointRadius:allDates.length<=1?4:2},
+        {label:'카페 언급',data:allDates.map(d=>cafeMap[d]??null),borderColor:'#5E85A6',backgroundColor:'transparent',borderWidth:2,tension:.3,spanGaps:true,pointRadius:allDates.length<=1?4:2}
+      ]);
+      // 인사이트(수정 가능) — 저장값 우선, 없으면 자동 기본문안
+      const def={
+        summary:`아카라라이프 통합 성과 요약입니다. 선택 기간 내 언론 보도 ${prPeriod.toLocaleString()}건, YouTube 구독자 ${(ch.subs||0).toLocaleString()}명, Instagram 팔로워 ${(ig.followers!=null?ig.followers.toLocaleString():'-')}명, 관리 블로그 발행 ${blTot.toLocaleString()}건, 카페 언급 ${CAFE_POSTS.length.toLocaleString()}건입니다. (아래 인사이트는 편집 버튼으로 수정해 보고자료로 활용하세요.)`,
+        pr:`당월 언론 노출은 전월 동기 대비 ${prMoM.replace(/<[^>]+>/g,'')}건 수준입니다. 매체 다변화와 기획기사 비중을 점검해 노출 품질을 관리할 필요가 있습니다.`,
+        owned:`자사 채널은 YouTube ${(ch.subs||0).toLocaleString()}명, Instagram ${(ig.followers!=null?ig.followers.toLocaleString():'-')}명 규모입니다. 블로그(공식+협업) 발행이 꾸준히 누적되고 있어, 콘텐츠 발행량과 반응(좋아요·댓글) 추세를 함께 관리하면 좋습니다.`,
+        cafe:`카페 언급 ${CAFE_POSTS.length.toLocaleString()}건 중 긍정 ${Math.round(sc.긍정/st*100)}% · 부정 ${Math.round(sc.부정/st*100)}%입니다. 부정 언급의 주요 사유(오류·불만)를 모니터링해 CS·제품 개선에 연계할 수 있습니다.`
+      };
+      document.querySelectorAll('.rpt-edit').forEach(el=>{ const k=el.dataset.rk; el.innerHTML=esc(reportEdits[k]!=null?reportEdits[k]:def[k]).replace(/\n/g,'<br>'); el.contentEditable=reportEditMode; el.classList.toggle('bg-brand/10',reportEditMode); el.classList.toggle('ring-1',reportEditMode); el.classList.toggle('ring-brand/40',reportEditMode); el.classList.toggle('rounded',reportEditMode); el.classList.toggle('px-2',reportEditMode); el.classList.toggle('py-1',reportEditMode); });
+    }
+    function histDeltaSince(hist, field, cut){ if(!hist||hist.length<2)return null; const rows=hist.filter(h=>h.date>=cut&&h[field]!=null); if(rows.length<2)return null; const a=rows[0],b=rows[rows.length-1]; return {d:b[field]-a[field], from:a.date}; }
+    function toggleReportEdit(){
+      if(reportEditMode){ document.querySelectorAll('.rpt-edit').forEach(el=>{ reportEdits[el.dataset.rk]=el.innerText.trim(); }); localStorage.setItem('aqaraReportEdits',JSON.stringify(reportEdits)); }
+      reportEditMode=!reportEditMode;
+      document.getElementById('reportEditBtn').textContent=reportEditMode?'저장':'인사이트 편집';
+      document.getElementById('reportEditNote').classList.toggle('hidden',!reportEditMode);
+      renderReport();
     }
 
     function loadBriefing(){
