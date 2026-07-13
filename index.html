@@ -1011,9 +1011,9 @@
          <span class="px-2.5 py-1 rounded-lg bg-ared/15 text-ared text-xs font-semibold">부정 ${cnt['부정']}</span>`+mtrend;
       const csel=document.getElementById('cafeCafeFilter'); if(csel.options.length!==cafes.length+1){ const cur=csel.value; csel.innerHTML='<option value="">전체 카페</option>'+cafes.map(c=>`<option>${esc(c)}</option>`).join(''); if(cafes.indexOf(cur)>-1) csel.value=cur; }
       const fsel=document.getElementById('cafeFilter'); if(fsel.options.length<=1){ fsel.innerHTML='<option value="">전체 감성</option><option>긍정</option><option>중립</option><option>부정</option>'; }
-      const f=fsel.value, cf=csel.value; const q=(document.getElementById('cafeSearch').value||'').toLowerCase().trim();
+      const f=fsel.value, cf=csel.value; const nq=(document.getElementById('cafeSearch').value||'').toLowerCase().replace(/\s+/g,'');
       renderCafeInsight(posts.filter(p=>!cf||p.cafe===cf));
-      let rows=posts.filter(p=>(!f||p._sen.k===f) && (!cf||p.cafe===cf) && (!q||((p.title+' '+p.desc).toLowerCase().indexOf(q)>-1)));
+      let rows=posts.filter(p=>(!f||p._sen.k===f) && (!cf||p.cafe===cf) && (!nq||((p.title+' '+p.desc).toLowerCase().replace(/\s+/g,'').indexOf(nq)>-1)));
       document.getElementById('cafeCount').textContent='('+ccnt+' · 필터 '+rows.length+'건'+(window.__cafeStamp?(' · '+window.__cafeStamp):'')+')';
       const shown=rows.slice(0,200);
       document.getElementById('cafeBody').innerHTML=shown.map(p=>`<div class="py-3 flex items-start gap-3">
@@ -1180,10 +1180,10 @@
       const fsel=document.getElementById('ownedBlogFilter');
       if(fsel && fsel.options.length!==blogs.length+1){ const cur=fsel.value; fsel.innerHTML='<option value="">전체 블로그</option>'+blogs.map(b=>`<option value="${esc(b.name)}">${esc(b.name)} (${b.total})</option>`).join(''); if(blogs.some(b=>b.name===cur)) fsel.value=cur; }
       const bf=fsel?fsel.value:'';
-      const q=(document.getElementById('ownedBlogSearch')?.value||'').toLowerCase().trim();
+      const nq=(document.getElementById('ownedBlogSearch')?.value||'').toLowerCase().replace(/\s+/g,'');
       const from=document.getElementById('ownedBlogFrom')?.value||'', to=document.getElementById('ownedBlogTo')?.value||'';
-      const rows=all.filter(p=>(!bf||p.blogName===bf)&&(!q||(p.title||'').toLowerCase().indexOf(q)>-1)&&(!from||(p.date&&p.date>=from))&&(!to||(p.date&&p.date<=to)));
-      const filt=bf||q||from||to;
+      const rows=all.filter(p=>(!bf||p.blogName===bf)&&(!nq||(p.title||'').toLowerCase().replace(/\s+/g,'').indexOf(nq)>-1)&&(!from||(p.date&&p.date>=from))&&(!to||(p.date&&p.date<=to)));
+      const filt=bf||nq||from||to;
       document.getElementById('ownedBlogCount').textContent=filt?('· '+rows.length+'/'+all.length+'개'):('· 총 '+all.length+'개');
       document.getElementById('ownedBlogBody').innerHTML=rows.length?rows.map(p=>`<div class="py-2.5 flex items-baseline gap-3">
         <span class="text-xs text-slate-400 num whitespace-nowrap w-24 shrink-0">${esc(p.date||'-')}</span>
