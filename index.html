@@ -106,7 +106,7 @@
     <div id="content" class="hidden space-y-5">
       <section class="card p-5 sm:p-6">
         <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
-          <h2 class="text-lg font-extrabold text-ink">이달의 발행 실적 <span id="perfHeroMonth" class="text-sm font-medium text-muted"></span></h2>
+          <h2 class="text-lg font-extrabold text-ink">발행 실적 요약 <span id="perfHeroMonth" class="text-sm font-medium text-muted"></span></h2>
           <span id="perfHeroSub" class="text-xs text-slate-400"></span>
         </div>
         <div id="perfHeroCards" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
@@ -139,14 +139,14 @@
             <table class="w-full text-sm">
               <thead><tr class="text-left">
                 <th class="px-3 py-2.5 whitespace-nowrap">지표</th>
-                <th class="px-3 py-2.5 text-right whitespace-nowrap">당월</th>
+                <th class="px-3 py-2.5 text-right whitespace-nowrap">선택 기간</th>
                 <th class="px-3 py-2.5 text-right whitespace-nowrap">전월 대비</th>
-                <th class="px-3 py-2.5 text-right whitespace-nowrap">전년 동월 대비</th>
+                <th class="px-3 py-2.5 text-right whitespace-nowrap">전년 대비</th>
               </tr></thead>
               <tbody id="cmpBody" class="divide-y divide-slate-100"></tbody>
             </table>
           </div>
-          <p class="text-xs text-slate-400 mt-2">※ 데이터 내 최신 월 기준. 괄호는 전월/전년 동월 실제 건수. 최신 월이 진행 중이면 부분 집계일 수 있습니다.</p>
+          <p class="text-xs text-slate-400 mt-2">※ 위 시작일~종료일(선택 기간) 기준. 전월/전년은 같은 길이의 기간을 1개월/1년 앞으로 이동해 비교. 괄호는 비교 기간 실제 건수.</p>
         </div>
         <div class="card p-5">
           <div class="flex items-baseline justify-between mb-3">
@@ -598,24 +598,31 @@
         <p class="text-[13px] text-slate-600 mt-3">${curLbl} <b class="text-ink num">${cur.toLocaleString()}건</b> · ${baseLbl} <b class="text-ink num">${has?base.toLocaleString()+'건':'-'}</b></p>
         ${note?`<p class="text-[11px] text-slate-400 mt-1">${note}</p>`:''}</div>`;
     }
+    function shiftPeriod(lo,hi,m,y){ const a=new Date(lo),b=new Date(hi);
+      a.setFullYear(a.getFullYear()-y); a.setMonth(a.getMonth()-m);
+      b.setFullYear(b.getFullYear()-y); b.setMonth(b.getMonth()-m);
+      return [a.toISOString().slice(0,10),b.toISOString().slice(0,10)]; }
     function renderCompare(){
-      const yms=[...new Set(ALL.map(r=>r._ym).filter(Boolean))].sort();
-      if(!yms.length){ document.getElementById('cmpBody').innerHTML=''; document.getElementById('perfHeroCards').innerHTML=''; return; }
-      const ref=yms[yms.length-1], prev=ymShift(ref,-1), yoy=ymShift(ref,-12);
-      const inM=ym=>ALL.filter(r=>r._ym===ym);
-      const refDay=Math.max(0,...inM(ref).map(dayOf));
-      const cntFull=ym=>yms.includes(ym)?inM(ym).length:null;
-      const cntMtd=ym=>yms.includes(ym)?inM(ym).filter(r=>dayOf(r)<=refDay).length:null;
-      const refN=inM(ref).length;
-      const yLabel=ref.slice(0,4)+'년 '+(+ref.slice(5,7))+'월';
-      document.getElementById('perfHeroMonth').textContent='· '+yLabel;
-      document.getElementById('perfHeroSub').textContent='데이터 최신월 · 1일~'+refDay+'일 집계 기준';
+      const dts=ALL.map(r=>r['게재일']).filter(Boolean).sort();
+      if(!dts.length){ document.getElementById('cmpBody').innerHTML=''; document.getElementById('perfHeroCards').innerHTML=''; return; }
+      const f=document.getElementById('fromDate').value, t=document.getElementById('toDate').value;
+      const lo=f||dts[0], hi=t||dts[dts.length-1];
+      const rows=(a,b)=>ALL.filter(r=>{const d=r['게재일'];return d&&d>=a&&d<=b;});
+      const [pmLo,pmHi]=shiftPeriod(lo,hi,1,0);   // 전월 동기간
+      const [pyLo,pyHi]=shiftPeriod(lo,hi,0,1);   // 전년 동기간
+      const iso=d=>d.toISOString().slice(0,10);
+      const span=Math.round((new Date(hi)-new Date(lo))/864e5);
+      const prevHi=iso(new Date(new Date(lo).getTime()-864e5)), prevLo=iso(new Date(new Date(lo).getTime()-(span+1)*864e5));
+      const cr=rows(lo,hi), pmr=rows(pmLo,pmHi), pyr=rows(pyLo,pyHi), ppr=rows(prevLo,prevHi);
+      const cN=cr.length;
+      document.getElementById('perfHeroMonth').textContent='· '+lo+' ~ '+hi;
+      document.getElementById('perfHeroSub').textContent='선택 기간 기준 · 총 '+cN.toLocaleString()+'건';
       document.getElementById('perfHeroCards').innerHTML=
-        heroTile('전월 동기 대비', refN, cntMtd(prev), '이번 달', '지난달 같은 기간', (+prev.slice(5,7))+'월 1~'+refDay+'일과 비교')+
-        heroTile('전년 동월(동기) 대비', refN, cntMtd(yoy), '이번 달', '작년 같은 기간', yoy.slice(0,4)+'년 '+(+yoy.slice(5,7))+'월 1~'+refDay+'일과 비교')+
-        heroTile('전월 대비 (월 전체)', refN, cntFull(prev), '이번 달', '지난달 전체', '이번 달은 진행 중일 수 있어 참고');
-      document.getElementById('cmpMonthLabel').textContent='· '+yLabel+' 기준(월 전체)';
-      const metric=(label,fn)=>{ const c=fn(inM(ref)), p=yms.includes(prev)?fn(inM(prev)):null, y=yms.includes(yoy)?fn(inM(yoy)):null;
+        heroTile('전월 대비', cN, pmr.length, '선택 기간', '전월 동기간', pmLo+' ~ '+pmHi)+
+        heroTile('전년 대비', cN, pyr.length, '선택 기간', '전년 동기간', pyLo+' ~ '+pyHi)+
+        heroTile('직전 기간 대비', cN, ppr.length, '선택 기간', '직전 동기간', prevLo+' ~ '+prevHi);
+      document.getElementById('cmpMonthLabel').textContent='· '+lo+' ~ '+hi+' 기준';
+      const metric=(label,fn)=>{ const c=fn(cr),p=fn(pmr),y=fn(pyr);
         return `<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2.5 font-medium text-slate-700 whitespace-nowrap">${label}</td>
           <td class="px-3 py-2.5 text-right num font-bold text-ink">${c.toLocaleString()}</td>
           <td class="px-3 py-2.5 text-right whitespace-nowrap num">${cmpCell(c,p)}</td>
