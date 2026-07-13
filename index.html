@@ -1074,10 +1074,24 @@
       <!-- 2. 온라인 광고 성과 요약 -->
       <div class="card p-5 mb-5">
         <h3 class="accent font-extrabold text-ink mb-3">2 · 온라인 광고 성과 요약</h3>
-        <div class="rounded-lg border border-[#E6E6E3] p-4 mb-3">
-          <p class="text-sm font-bold text-ink mb-1">노출·클릭 추이 — <span class="text-brand-ink">주간(Weekly) 단위</span>로 표기</p>
-          <p class="text-[13px] text-slate-500">일자별 편차가 커 해석이 어려우므로, 노출·클릭·CTR을 <b class="text-slate-700">주 단위로 묶어</b> 캠페인 흐름(도입 → 성숙 → 마감)을 보여줍니다. <span class="text-slate-400">[주차별 노출/클릭/CTR 표 · 검증 후 반영]</span></p>
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">총 노출수</p><p class="num text-xl font-extrabold text-ink mt-1">2,799,004</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">총 클릭수</p><p class="num text-xl font-extrabold text-ink mt-1">36,227</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">평균 CTR</p><p class="num text-xl font-extrabold text-ink mt-1">1.29%</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">전환수</p><p class="num text-xl font-extrabold text-ink mt-1">41건</p></div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4"><p class="text-xs text-slate-500">집행 예산</p><p class="num text-xl font-extrabold text-ink mt-1">2,500만원</p></div>
         </div>
+        <div class="overflow-auto rounded-lg border border-[#E6E6E3] mb-1">
+          <table class="w-full text-sm"><thead class="bg-[#F7F7F5] text-slate-500"><tr class="text-left">
+            <th class="px-3 py-2 whitespace-nowrap">매체·영역</th><th class="px-3 py-2 text-right">노출</th><th class="px-3 py-2 text-right">클릭</th><th class="px-3 py-2 text-right">CTR</th><th class="px-3 py-2 text-right">전환</th><th class="px-3 py-2 text-right">CVR</th></tr></thead>
+          <tbody class="divide-y divide-slate-100 num">
+            <tr class="bg-brand/5"><td class="px-3 py-2 font-semibold text-ink whitespace-nowrap">파워링크 <span class="text-[10px] text-brand-ink">전환 견인</span></td><td class="px-3 py-2 text-right">36,434</td><td class="px-3 py-2 text-right">450</td><td class="px-3 py-2 text-right">1.24%</td><td class="px-3 py-2 text-right">15</td><td class="px-3 py-2 text-right font-bold text-brand-ink">3.33%</td></tr>
+            <tr><td class="px-3 py-2 whitespace-nowrap text-slate-700">인스타 사업자(이미지)</td><td class="px-3 py-2 text-right">361,033</td><td class="px-3 py-2 text-right">5,652</td><td class="px-3 py-2 text-right">1.57%</td><td class="px-3 py-2 text-right">8</td><td class="px-3 py-2 text-right">0.14%</td></tr>
+            <tr><td class="px-3 py-2 whitespace-nowrap text-slate-700">인스타 소비자(영상) <span class="text-[10px] text-slate-400">도달형</span></td><td class="px-3 py-2 text-right">2,401,537</td><td class="px-3 py-2 text-right">30,125</td><td class="px-3 py-2 text-right">1.25%</td><td class="px-3 py-2 text-right">18</td><td class="px-3 py-2 text-right">0.06%</td></tr>
+            <tr class="bg-[#FAFAF9] font-bold"><td class="px-3 py-2 text-ink">합계</td><td class="px-3 py-2 text-right">2,799,004</td><td class="px-3 py-2 text-right">36,227</td><td class="px-3 py-2 text-right">1.29%</td><td class="px-3 py-2 text-right">41</td><td class="px-3 py-2 text-right">0.11%</td></tr>
+          </tbody></table>
+        </div>
+        <p class="text-[11px] text-slate-400 mb-3">※ 2026 인테리어&B2C 온라인 캠페인(4/13~6/30) 실측 · 소비자 영상은 조회 91.6만·VTR 38.1%의 <b>도달형</b>, 전환은 <b class="text-brand-ink">파워링크(CVR 3.33%)</b>가 견인. 비용 VAT 미포함.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div class="rounded-lg bg-brand/5 border border-brand/20 p-4">
             <p class="text-sm font-bold text-ink mb-1">전환율(CVR) 중심 최적화</p>
@@ -1211,14 +1225,17 @@
     let irEdits={}; try{ irEdits=JSON.parse(localStorage.getItem('aqaraIrEdits')||'{}'); }catch(e){}
     let irEditMode=false;
     function applyIrEdits(){
-      // 캠페인 기간(4/13~6/30) 시트 데이터에서 보도자료 자동 집계
-      const ci=CAMPAIGNS.interior, camp=ALL.filter(r=>{const d=r['게재일'];return d&&d>=ci.start&&d<=ci.end;});
-      const tot=camp.length, cnt=re=>camp.filter(r=>re.test((r['종류']||'')+' '+(r['구분']||''))).length;
-      const nInt=cnt(/트렌드|인테리어/), nCo=cnt(/회사|이슈|MOU|행사|수상|협약|투자|매거진/), nPr=cnt(/신제품|제품|서비스|출시|앱|기술/);
+      const ci=CAMPAIGNS.interior;
+      // 인사이트: 상반기 전체(H1, 1/1~6/30) 보도자료 종류별 집계
+      const h1lo=ci.end.slice(0,4)+'-01-01', h1=ALL.filter(r=>{const d=r['게재일'];return d&&d>=h1lo&&d<=ci.end;});
+      const tot=h1.length, cnt=re=>h1.filter(r=>re.test((r['종류']||'')+' '+(r['구분']||''))).length;
+      const nInt=cnt(/트렌드|인테리어/), nCo=cnt(/회사|이슈|MOU|행사|수상|협약|투자|매거진/), nPr=cnt(/신제품|제품|서비스|출시|앱|기술|컨설팅/);
       const pct=n=>tot?(Math.round(n/tot*1000)/10):0;
       const A={ repTotal:tot||'[ ]', repInterior:nInt, repInteriorPct:pct(nInt), repCompany:nCo, repCompanyPct:pct(nCo), repProduct:nPr, repProductPct:pct(nPr) };
       document.querySelectorAll('#campReport .ir-auto').forEach(el=>{ const a=el.dataset.a; if(A[a]!=null && tot) el.textContent=A[a]; });
-      const auto={ kpiReport: tot?tot.toLocaleString()+'건':'[ ]건' };
+      // 보도 실적(Overview): 캠페인 기간(4/13~6/30)
+      const campN=ALL.filter(r=>{const d=r['게재일'];return d&&d>=ci.start&&d<=ci.end;}).length;
+      const auto={ kpiReport: campN?campN.toLocaleString()+'건':'[ ]건', kpiExposure:'2,799,004', kpiLead:'36,227', cvr:'3.33' };
       document.querySelectorAll('#campReport .ir-edit').forEach(el=>{ const k=el.dataset.k;
         if(irEdits[k]!=null && irEdits[k]!=='') el.textContent=irEdits[k];
         else if(auto[k]!=null) el.textContent=auto[k];
