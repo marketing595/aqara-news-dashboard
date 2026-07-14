@@ -17,6 +17,7 @@ BLOGS = [
     {"id": "aqaralife", "name": "아카라라이프 (공식)"},
     {"id": "sksmsehfehfdl", "name": "수니집 일상기록"},
     {"id": "untorn", "name": "미니멀라이프"},
+    {"id": "gogetthat", "name": "하다 일상"},
 ]
 
 # 유튜브 시리즈(재생목록) — 온드미디어 유튜브 하위 성과 분석용
