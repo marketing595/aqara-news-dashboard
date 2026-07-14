@@ -495,7 +495,7 @@
      </div>
      <section id="compKpi" class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-5"></section>
      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
-       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">언론 언급량 비교 <span class="text-xs font-normal text-slate-400">(네이버 뉴스 누적)</span></h3><p class="text-[11px] text-slate-400 mb-2">※ 삼성·LG·구글은 종합 대기업이라 절대량이 큼 — 자사(아카라)는 스마트홈 전문 브랜드 관점</p><div class="h-64"><canvas id="compVolChart"></canvas></div></div>
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">언론 언급량 비교 <span class="text-xs font-normal text-slate-400">(네이버 뉴스 전체 기간 누적)</span></h3><p class="text-[11px] text-slate-400 mb-2">※ '누적'은 <b>특정 시작일 없이</b> 네이버 뉴스에 인덱싱된 전체 기간의 브랜드 검색 결과 총량(수집일 기준). 삼성·LG·구글은 종합 대기업이라 절대량이 커, 자사(아카라)는 스마트홈 전문 브랜드 관점으로 해석. 기간별 비교는 아래 '검색 관심도 트렌드' 참고.</p><div class="h-64"><canvas id="compVolChart"></canvas></div></div>
        <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">긍·부정 속성 분석 <span class="text-xs font-normal text-slate-400">(연관검색어 기반 검색의도)</span></h3><p class="text-[11px] text-slate-400 mb-2">※ 사용자가 함께 검색하는 연관어의 부정어(오류·에러·안됨 등) 비중</p><div class="h-64"><canvas id="compSentChart"></canvas></div></div>
      </div>
      <div class="card p-5 mb-5">
@@ -1739,9 +1739,9 @@
     }
     function renderCompetitor(){
       const B=COMPETITOR.brands||[]; if(!B.length){ document.getElementById('compKpi').innerHTML='<p class="text-sm text-slate-400 col-span-full">데이터 로딩 중…</p>'; return; }
-      document.getElementById('compStamp').textContent=COMPETITOR.generatedAt?(' · '+COMPETITOR.generatedAt+' 기준'):'';
+      document.getElementById('compStamp').textContent=COMPETITOR.generatedAt?(' · 수집일 '+COMPETITOR.generatedAt+' · 언급량=네이버 뉴스 전체 기간 누적(특정 시작일 없음)'):'';
       // KPI
-      document.getElementById('compKpi').innerHTML=B.map(b=>`<div class="card ${b.me?'bg-brand/10 border-brand/40':''} card-hover p-4"><p class="text-sm ${b.me?'text-brand-ink font-bold':'text-slate-500'}">${esc(b.name)}${b.me?' (자사)':''}</p><p class="num text-2xl font-extrabold text-ink mt-1">${(b.total||0).toLocaleString()}</p><p class="text-[11px] text-slate-400 mt-0.5">누적 언론 언급</p></div>`).join('');
+      document.getElementById('compKpi').innerHTML=B.map(b=>`<div class="card ${b.me?'bg-brand/10 border-brand/40':''} card-hover p-4"><p class="text-sm ${b.me?'text-brand-ink font-bold':'text-slate-500'}">${esc(b.name)}${b.me?' (자사)':''}</p><p class="num text-2xl font-extrabold text-ink mt-1">${(b.total||0).toLocaleString()}</p><p class="text-[11px] text-slate-400 mt-0.5">전체 기간 누적</p></div>`).join('');
       // 언급량 bar
       draw('compVolChart',{type:'bar',data:{labels:B.map(b=>b.name),datasets:[{data:B.map(b=>b.total||0),backgroundColor:B.map(b=>b.me?'#FBC400':'#cbd5e1'),borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000)+'만':v}}}}});
       // 긍부정(연관어 기반)
