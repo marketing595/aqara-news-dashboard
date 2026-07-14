@@ -587,6 +587,11 @@
      <!-- 통합 KPI -->
      <section id="reportKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
 
+     <!-- 파생 마케팅 지표 -->
+     <h3 class="accent font-extrabold text-ink mb-1">핵심 마케팅 지표 <span class="text-xs font-normal text-slate-400">(선택 기간 파생)</span></h3>
+     <p class="text-xs text-slate-400 mb-3">※ 단순 건수가 아니라 활동의 <b>속도·다양성·오디언스·여론 품질</b>을 보는 지표입니다.</p>
+     <section id="reportDerived" class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6"></section>
+
      <!-- 섹션별 요약 + 인사이트 -->
      <section class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
        <div class="card p-5">
@@ -604,6 +609,15 @@
          <div id="reportCafeBody" class="space-y-1.5 text-sm mb-3"></div>
          <div class="pt-3 border-t border-[#E6E6E3]"><p class="text-[11px] font-semibold text-slate-400 mb-1">인사이트</p><div id="rpt-cafe" data-rk="cafe" class="text-sm text-slate-700 leading-relaxed rpt-edit"></div></div>
        </div>
+     </section>
+
+     <!-- 비교 도표 -->
+     <h3 class="accent font-extrabold text-ink mb-3">비교 도표 <span class="text-xs font-normal text-slate-400">(선택 기간 기준)</span></h3>
+     <section class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+       <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">월별 언론 발행 추이 <span class="text-xs font-normal text-slate-400">(기간 내)</span></h4><div class="h-56"><canvas id="rptPrMonthChart"></canvas></div></div>
+       <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">자사 채널 규모 <span class="text-xs font-normal text-slate-400">(구독자·팔로워·글수)</span></h4><div class="h-56"><canvas id="rptChannelBarChart"></canvas></div></div>
+       <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">콘텐츠 발행 소스 구성 <span class="text-xs font-normal text-slate-400">(기간 내)</span></h4><div class="h-56"><canvas id="rptContentMixChart"></canvas></div></div>
+       <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">카페 여론 감성 구성</h4><div class="h-56"><canvas id="rptCafeSentChart"></canvas></div></div>
      </section>
 
      <!-- 추이 그래프 모음 -->
@@ -1790,12 +1804,42 @@
         {label:'IG 팔로워',data:allDates.map(d=>folMap[d]??null),borderColor:'#C13584',backgroundColor:'transparent',borderWidth:2,tension:.3,spanGaps:true,pointRadius:allDates.length<=1?4:2},
         {label:'카페 언급',data:allDates.map(d=>cafeMap[d]??null),borderColor:'#5E85A6',backgroundColor:'transparent',borderWidth:2,tension:.3,spanGaps:true,pointRadius:allDates.length<=1?4:2}
       ]);
+      // ── 파생 마케팅 지표 계산 ──
+      const days=Math.max(1,Math.round((new Date(hi)-new Date(lo))/86400000)+1);
+      const prPerMonth=prPeriod/(days/30.44);
+      const cmTot=cm.reduce((a,m)=>a+(m.total||0),0), cmBlog=cm.reduce((a,m)=>a+(m.blog||0),0), cmYt=cm.reduce((a,m)=>a+(m.youtube||0),0), cmIg=cm.reduce((a,m)=>a+(m.instagram||0),0);
+      const contentPerMonth=cm.length?cmTot/cm.length:0;
+      const rec=(OWNED.youtube&&OWNED.youtube.recent)||[];
+      let vv=0,ve=0; rec.forEach(v=>{ vv+=(v.views||0); ve+=((v.likes||0)+(v.comments||0)); });
+      const engRate=vv?ve/vv*100:0;
+      const audience=(ch.subs||0)+(ig.followers!=null?ig.followers:0);
+      const posR=Math.round(sc.긍정/st*100), negR=Math.round(sc.부정/st*100), netSent=posR-negR;
+      const diversity=prPeriod?Math.round(prMedia/prPeriod*100):0;
+      const shB=cmTot?Math.round(cmBlog/cmTot*100):0, shY=cmTot?Math.round(cmYt/cmTot*100):0, shI=cmTot?Math.round(cmIg/cmTot*100):0;
+      const domSrc=(shB>=shY&&shB>=shI)?'블로그':(shY>=shI?'영상':'인스타');
+      const dc=(l,v,s,tone)=>`<div class="card card-hover p-4"><p class="text-xs text-slate-500">${l}</p><p class="num text-2xl font-extrabold ${tone||'text-ink'} mt-1">${v}</p><p class="text-[11px] text-slate-400 mt-0.5">${s}</p></div>`;
+      document.getElementById('reportDerived').innerHTML=
+        dc('언론 발행 속도',prPerMonth.toFixed(1)+'<span class="text-sm">건/월</span>','기간 환산 발행량')+
+        dc('매체 다양성',prMedia+'<span class="text-sm">개</span>','발행당 매체비 '+diversity+'%')+
+        dc('콘텐츠 발행 속도',contentPerMonth.toFixed(1)+'<span class="text-sm">건/월</span>','블로그+영상+인스타')+
+        dc('총 오디언스',KO_UNIT(audience)+'<span class="text-sm">명</span>','구독자+팔로워')+
+        dc('영상 참여율',engRate.toFixed(2)+'%','(좋아요+댓글)÷조회')+
+        dc('긍정률',posR+'%','카페 여론',posR>=negR?'text-agreen':'text-ink')+
+        dc('부정률',negR+'%','카페 여론',negR>posR?'text-ared':'text-ink')+
+        dc('순감성',(netSent>=0?'+':'')+netSent+'%p','긍정%−부정%',netSent>=0?'text-agreen':'text-ared');
+      // ── 비교 도표 ──
+      const prM={}; ALL.forEach(r=>{ const d=r['게재일']; if(d&&d>=lo&&d<=hi&&r._ym){ prM[r._ym]=(prM[r._ym]||0)+1; } });
+      const prMk=Object.keys(prM).sort();
+      draw('rptPrMonthChart',{type:'bar',data:{labels:prMk,datasets:[{label:'발행 건수',data:prMk.map(k=>prM[k]),backgroundColor:'#8A6A00',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:12,font:{size:9}}},y:{beginAtZero:true,ticks:{font:{size:10}}}}}});
+      draw('rptChannelBarChart',{type:'bar',data:{labels:['YT 구독자','IG 팔로워','블로그 글'],datasets:[{data:[ch.subs||0,ig.followers||0,blTot],backgroundColor:['#BF5332','#C13584','#5E7350'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000)+'만':v,font:{size:9}}}}}});
+      draw('rptContentMixChart',{type:'doughnut',data:{labels:['블로그','영상','인스타'],datasets:[{data:[cmBlog,cmYt,cmIg],backgroundColor:['#5E7350','#BF5332','#C13584'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}});
+      draw('rptCafeSentChart',{type:'doughnut',data:{labels:['긍정','중립','부정'],datasets:[{data:[sc.긍정,sc.중립,sc.부정],backgroundColor:['#5E7350','#cbd5e1','#BF5332'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}});
       // 인사이트(수정 가능) — 저장값 우선, 없으면 자동 기본문안
       const def={
-        summary:`아카라라이프 통합 성과 요약입니다. 선택 기간 내 언론 보도 ${prPeriod.toLocaleString()}건, YouTube 구독자 ${(ch.subs||0).toLocaleString()}명, Instagram 팔로워 ${(ig.followers!=null?ig.followers.toLocaleString():'-')}명, 관리 블로그 발행 ${blTot.toLocaleString()}건, 카페 언급 ${CAFE_POSTS.length.toLocaleString()}건입니다. (아래 인사이트는 편집 버튼으로 수정해 보고자료로 활용하세요.)`,
-        pr:`당월 언론 노출은 전월 동기 대비 ${prMoM.replace(/<[^>]+>/g,'')}건 수준입니다. 매체 다변화와 기획기사 비중을 점검해 노출 품질을 관리할 필요가 있습니다.`,
-        owned:`자사 채널은 YouTube ${(ch.subs||0).toLocaleString()}명, Instagram ${(ig.followers!=null?ig.followers.toLocaleString():'-')}명 규모입니다. 블로그(공식+협업) 발행이 꾸준히 누적되고 있어, 콘텐츠 발행량과 반응(좋아요·댓글) 추세를 함께 관리하면 좋습니다.`,
-        cafe:`카페 언급 ${CAFE_POSTS.length.toLocaleString()}건 중 긍정 ${Math.round(sc.긍정/st*100)}% · 부정 ${Math.round(sc.부정/st*100)}%입니다. 부정 언급의 주요 사유(오류·불만)를 모니터링해 CS·제품 개선에 연계할 수 있습니다.`
+        summary:`선택 기간(${lo}~${hi}, ${days}일) 동안 언론 보도 ${prPeriod.toLocaleString()}건을 ${prMedia}개 매체에서 확보했습니다(월 환산 ${prPerMonth.toFixed(1)}건). 자사 채널 총 오디언스는 ${audience.toLocaleString()}명(YouTube 구독자 ${(ch.subs||0).toLocaleString()} + Instagram 팔로워 ${(ig.followers!=null?ig.followers.toLocaleString():'-')})이며, 콘텐츠는 월 평균 ${contentPerMonth.toFixed(1)}건(${domSrc} 중심) 발행됐습니다. 카페 여론은 긍정 ${posR}% · 부정 ${negR}%로 순감성 ${netSent>=0?'+':''}${netSent}%p, ${netSent>=0?'전반적으로 우호적':'부정 신호에 주의가 필요한'} 국면입니다. (아래 인사이트는 편집 버튼으로 수정해 대체자료로 활용하세요.)`,
+        pr:`월 환산 발행량은 ${prPerMonth.toFixed(1)}건, 활동 매체 ${prMedia}개(발행당 매체 비율 ${diversity}%)입니다. 전월 동기 대비 ${prMoM.replace(/<[^>]+>/g,'')}건, 전년 동기 대비 ${prYoY.replace(/<[^>]+>/g,'')}건. ${diversity<50?'특정 매체 의존도가 높아 매체 다변화 여지가 있습니다.':'매체 분산은 양호합니다.'} 기획기사·인터뷰 비중을 높여 노출의 질을 관리하세요.`,
+        owned:`총 오디언스 ${audience.toLocaleString()}명, 최근 영상 참여율 ${engRate.toFixed(2)}%입니다. 콘텐츠 발행 구성은 블로그 ${shB}% · 영상 ${shY}% · 인스타 ${shI}%로 ${domSrc}에 집중돼 있어, ${domSrc==='블로그'?'영상·릴스 등 노출형 콘텐츠 비중 확대':'채널 간 균형'}를 검토할 만합니다. 발행량과 반응(좋아요·댓글)을 함께 추적하세요.`,
+        cafe:`긍정률 ${posR}% · 부정률 ${negR}%, 순감성 ${netSent>=0?'+':''}${netSent}%p입니다. ${netSent>=10?'여론이 우호적이나 방심은 금물입니다.':netSent>=0?'긍·부정이 팽팽해 관리가 필요합니다.':'부정 우세로 즉각적 대응이 필요합니다.'} 부정 사유(오류·불만)를 유형별로 집계해 CS·제품 개선 과제로 연계하세요.`
       };
       document.querySelectorAll('.rpt-edit').forEach(el=>{ const k=el.dataset.rk; el.innerHTML=esc(reportEdits[k]!=null?reportEdits[k]:def[k]).replace(/\n/g,'<br>'); el.contentEditable=reportEditMode; el.classList.toggle('bg-brand/10',reportEditMode); el.classList.toggle('ring-1',reportEditMode); el.classList.toggle('ring-brand/40',reportEditMode); el.classList.toggle('rounded',reportEditMode); el.classList.toggle('px-2',reportEditMode); el.classList.toggle('py-1',reportEditMode); });
     }
