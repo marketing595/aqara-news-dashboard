@@ -728,11 +728,29 @@
    <div id="view-medialist" class="hidden">
      <div class="card p-5 mb-5">
        <h2 class="text-xl font-extrabold text-ink">미디어리스트 <span class="text-sm font-semibold text-agray">(매체·기자·연락처)</span></h2>
-       <p class="text-sm text-slate-500 mt-1">보도 노출 매체를 <b>부동산·인테리어·IT·AI</b> 담당으로 분류해 관리합니다. 매체·기자명은 수집 뉴스 기준 자동 집계, <b>이메일은 직접 입력</b>(네이버 API로 자동수집 불가).</p>
+       <p class="text-sm text-slate-500 mt-1">보도 노출 매체를 <b>부동산·인테리어·IT·AI</b> 담당으로 분류해 관리합니다. 매체는 자동 집계, <b>기자·이메일은 아래 기사 링크로 확인</b>해 입력하세요(이메일은 개인정보라 API 자동수집 불가 → 기사 하단 바이라인·매체 기자페이지에서 확인).</p>
      </div>
      <div id="mediaListAuto" class="card p-5 mb-5">
-       <h3 class="accent font-extrabold text-ink mb-3">수집 매체 현황 <span class="text-xs font-normal text-slate-400">(PR 데이터 기준 · 발행 건수순)</span></h3>
+       <h3 class="accent font-extrabold text-ink mb-1">수집 매체 현황 <span class="text-xs font-normal text-slate-400">(PR 데이터 기준 · 발행 건수순 · 매체 클릭 시 네이버 뉴스 검색)</span></h3>
+       <p class="text-[11px] text-slate-400 mb-3">매체명을 누르면 해당 매체의 아카라 기사 목록이 열립니다. 기사 하단에 <b>담당 기자명·이메일</b>이 대부분 표기돼 있어, 이를 확인해 아래에 입력하세요.</p>
        <div id="mediaListAgg" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+     </div>
+     <div class="card p-5 mb-5">
+       <h3 class="accent font-extrabold text-ink mb-1">기자 확인용 최근 보도 <span class="text-xs font-normal text-slate-400">(기사 열어 하단 기자·이메일 확인)</span></h3>
+       <p class="text-[11px] text-slate-400 mb-3">분야 필터로 좁혀서 기사를 열고, 담당 기자와 이메일을 확인해 아래 표에 추가하세요.</p>
+       <div class="flex flex-wrap gap-2 mb-3">
+         <select id="mlArtBeat" onchange="renderMediaList()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 bg-white"><option value="">전체 분야</option><option>부동산</option><option>인테리어</option><option>IT</option><option>AI</option></select>
+         <input id="mlArtSearch" oninput="renderMediaList()" placeholder="매체·제목 검색" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 w-44" />
+       </div>
+       <div id="mediaListArticles" class="divide-y divide-slate-100 max-h-96 overflow-auto"></div>
+       <div class="mt-3 pt-3 border-t border-[#E6E6E3] text-[11px] text-slate-500 leading-relaxed">
+         <b class="text-ink">기자 이메일 찾는 법</b> · ① 위 기사 열기 → 본문 <b>맨 아래 기자 바이라인</b>(이름·이메일) 확인 ② 매체 홈페이지의 '기자 페이지/프로필' ③ 아래 검색 도구 활용:
+         <span class="inline-flex flex-wrap gap-1.5 mt-1.5">
+           <a href="https://www.bigkinds.or.kr/" target="_blank" rel="noopener" class="px-2 py-0.5 rounded bg-white border border-[#E6E6E3] hover:border-brand text-slate-600">빅카인즈(언론진흥재단)</a>
+           <a href="https://www.journalist.or.kr/" target="_blank" rel="noopener" class="px-2 py-0.5 rounded bg-white border border-[#E6E6E3] hover:border-brand text-slate-600">한국기자협회</a>
+           <a href="https://search.naver.com/search.naver?where=news&query=%EC%95%84%EC%B9%B4%EB%9D%BC%20%EC%8A%A4%EB%A7%88%ED%8A%B8%ED%99%88" target="_blank" rel="noopener" class="px-2 py-0.5 rounded bg-white border border-[#E6E6E3] hover:border-brand text-slate-600">네이버 뉴스 검색</a>
+         </span>
+       </div>
      </div>
      <div class="card p-5">
        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
@@ -1777,11 +1795,24 @@
     function mlAdd(){ const beat=document.getElementById('mlBeat').value, media=(document.getElementById('mlMedia').value||'').trim(), name=(document.getElementById('mlName').value||'').trim(), email=(document.getElementById('mlEmail').value||'').trim(); if(!media&&!name) return; mlContacts.push({beat,media,name,email}); mlSave(); ['mlMedia','mlName','mlEmail'].forEach(id=>document.getElementById(id).value=''); renderMediaList(); }
     function mlDel(i){ mlContacts.splice(i,1); mlSave(); renderMediaList(); }
     function mlExport(){ const head=['분야','매체','기자','이메일']; const lines=[head].concat(mlContacts.map(c=>[c.beat,c.media,c.name,c.email])); const csv=lines.map(r=>r.map(x=>'"'+String(x||'').replace(/"/g,'""')+'"').join(',')).join('\r\n'); dlBlob(csv,'아카라_미디어리스트.csv','text/csv'); }
+    function mlBeatOf(t){ const s=(t||'').toLowerCase();
+      if(/아파트|분양|임대|청약|건설|주택|재건축|부동산|입주|단지|빌트인|시행|시공사|건자재/.test(s)) return '부동산';
+      if(/인테리어|리모델링|공간|홈스타일|가구|집꾸미|시공|데코|리빙/.test(s)) return '인테리어';
+      if(/\bai\b|인공지능|지능형|생성형|챗gpt|제미나이|온디바이스|매터|스레드/.test(s)) return 'AI';
+      return 'IT'; }
+    function nvSearch(q){ return 'https://search.naver.com/search.naver?where=news&query='+encodeURIComponent(q); }
     function renderMediaList(){
       const agg={}; (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{ const md=(r['매체']||'').toString().replace(/\(.*?\)/g,'').trim(); if(md&&md!=='(미상)') agg[md]=(agg[md]||0)+1; });
       const arr=Object.entries(agg).sort((a,b)=>b[1]-a[1]);
       const box=document.getElementById('mediaListAgg');
-      if(box) box.innerHTML=arr.length?arr.map(([m,c])=>`<div class="flex items-center justify-between rounded-lg border border-[#E6E6E3] px-3 py-2"><span class="text-sm text-ink truncate pr-2">${esc(m)}</span><span class="num text-sm font-bold text-slate-500 whitespace-nowrap">${c}건</span></div>`).join(''):'<p class="text-sm text-slate-400">PR 데이터 로딩 후 표시됩니다.</p>';
+      if(box) box.innerHTML=arr.length?arr.map(([m,c])=>`<a href="${nvSearch(m+' 아카라')}" target="_blank" rel="noopener" class="flex items-center justify-between rounded-lg border border-[#E6E6E3] px-3 py-2 hover:border-brand hover:bg-brand/5 transition"><span class="text-sm text-ink truncate pr-2">${esc(m)} <span class="text-slate-300 text-xs">↗</span></span><span class="num text-sm font-bold text-slate-500 whitespace-nowrap">${c}건</span></a>`).join(''):'<p class="text-sm text-slate-400">PR 데이터 로딩 후 표시됩니다.</p>';
+      // 기자 확인용 최근 보도 리스트
+      const beatF=(document.getElementById('mlArtBeat')||{}).value||'', q=((document.getElementById('mlArtSearch')||{}).value||'').toLowerCase().trim();
+      const arts=(typeof ALL!=='undefined'?ALL:[]).slice().filter(r=>r['기사명']).map(r=>({t:r['기사명'],m:(r['매체']||'').replace(/\(.*?\)/g,'').trim(),d:r['게재일']||'',j:(r['기자']||'').trim(),link:(typeof linkOf==='function'?linkOf(r):''),beat:mlBeatOf(r['기사명']+' '+(r['종류']||''))}))
+        .filter(a=>(!beatF||a.beat===beatF)&&(!q||((a.m+' '+a.t).toLowerCase().indexOf(q)>-1)))
+        .sort((a,b)=>(b.d||'').localeCompare(a.d||'')).slice(0,120);
+      const al=document.getElementById('mediaListArticles');
+      if(al) al.innerHTML=arts.length?arts.map(a=>`<div class="py-2 flex items-baseline gap-2 text-sm"><span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 shrink-0">${esc(a.beat)}</span><span class="text-slate-400 text-xs w-20 shrink-0 truncate">${esc(a.m||'-')}</span><a href="${esc(a.link)}" target="_blank" rel="noopener" class="lnk flex-1 line-clamp-1">${esc(a.t)} <span class="text-slate-300 text-xs">↗</span></a>${a.j?`<span class="text-[11px] text-brand-ink shrink-0">${esc(a.j)}</span>`:''}<span class="text-[11px] text-slate-400 shrink-0">${esc((a.d||'').slice(5))}</span></div>`).join(''):'<p class="text-sm text-slate-400 py-4 text-center">해당 조건의 기사가 없습니다.</p>';
       const tb=document.getElementById('mlBody');
       if(tb) tb.innerHTML=mlContacts.length?mlContacts.map((c,i)=>`<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2"><span class="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc(c.beat||'')}</span></td><td class="px-3 py-2 text-ink">${esc(c.media||'')}</td><td class="px-3 py-2 text-slate-600">${esc(c.name||'')}</td><td class="px-3 py-2 text-slate-500">${c.email?`<a href="mailto:${esc(c.email)}" class="lnk">${esc(c.email)}</a>`:'-'}</td><td class="px-3 py-2 text-right"><button onclick="mlDel(${i})" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join(''):'<tr><td colspan="5" class="px-3 py-6 text-center text-slate-400">아직 등록된 연락처가 없습니다. 위에서 추가하세요.</td></tr>';
     }
