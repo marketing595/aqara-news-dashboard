@@ -48,6 +48,11 @@
     /* 링크 hover */
     a.lnk{ color:var(--ink); text-decoration:none; }
     a.lnk:hover{ text-decoration:underline; text-decoration-color:#C7C7C4; text-underline-offset:3px; text-decoration-thickness:1.5px; }
+    .chart-dl{ position:absolute; top:-2px; right:0; display:flex; gap:3px; z-index:5; opacity:0; transition:opacity .15s; }
+    [data-dl]:hover .chart-dl, .chart-dl:hover{ opacity:1; }
+    .chart-dl button{ font-size:10px; font-weight:600; color:#6E6E73; background:#fff; border:1px solid #E6E6E3; border-radius:5px; padding:2px 6px; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+    .chart-dl button:hover{ color:#1D1D1F; border-color:#c9c9c6; }
+    @media print{ .chart-dl{ display:none; } }
     ::selection{ background:rgba(251,196,0,.25); }
     ::-webkit-scrollbar { width:10px; height:10px; } ::-webkit-scrollbar-thumb { background:#D2D2CE; border-radius:8px; border:2px solid var(--bg); } ::-webkit-scrollbar-thumb:hover{ background:#BEBEB9; }
   </style>
@@ -724,6 +729,21 @@
       document.getElementById('kpiRatio').textContent=n?(Math.round(dan/n*100)+' : '+Math.round(gi/n*100)):'–';
       const mset=new Set(FILTERED.map(r=>r._ym).filter(Boolean)); document.getElementById('kpiAvg').textContent=mset.size?(n/mset.size).toFixed(1):'–'; }
     function draw(id,cfg){ if(charts[id])charts[id].destroy(); charts[id]=new Chart(document.getElementById(id),cfg); }
+    // ===== 차트 다운로드(PNG/CSV) =====
+    function dlBlob(content,filename,type){ const b=new Blob([type.indexOf('csv')>-1?'﻿'+content:content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1500); }
+    function chartCSV(ch){ const d=ch.data||{}, ls=d.labels||[], dss=d.datasets||[];
+      const head=['구분'].concat(dss.map((x,i)=>(x.label||('값'+(i+1)))));
+      const lines=[head]; ls.forEach((lab,i)=>{ lines.push([lab].concat(dss.map(x=>{ const v=x.data[i]; return (v&&typeof v==='object')?(v.y!=null?v.y:'') : (v==null?'':v); }))); });
+      return lines.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n'); }
+    function chartDL(id,fmt){ const ch=charts[id]; if(!ch)return;
+      if(fmt==='png'){ const a=document.createElement('a'); a.href=ch.toBase64Image('image/png',1); a.download=id+'_'+(new Date().toISOString().slice(0,10))+'.png'; document.body.appendChild(a); a.click(); a.remove(); }
+      else { dlBlob(chartCSV(ch), id+'_'+(new Date().toISOString().slice(0,10))+'.csv','text/csv;charset=utf-8'); } }
+    function attachChartDownloaders(){ document.querySelectorAll('canvas').forEach(cv=>{ const id=cv.id; if(!id||!charts[id])return;
+      const wrap=cv.parentElement; if(!wrap||wrap.dataset.dl)return; wrap.dataset.dl='1'; if(getComputedStyle(wrap).position==='static') wrap.style.position='relative';
+      const box=document.createElement('div'); box.className='chart-dl';
+      box.innerHTML='<button title="이미지(PNG)로 저장" onclick="chartDL(\''+id+'\',\'png\')">PNG</button><button title="데이터(CSV)로 저장" onclick="chartDL(\''+id+'\',\'csv\')">CSV</button>';
+      wrap.appendChild(box); }); }
+    setInterval(attachChartDownloaders, 1500);
     function months(){ return [...new Set(FILTERED.map(r=>r._ym).filter(Boolean))].sort(); }
     function renderTrend(){ const ms=months(); const cats=[...new Set(ALL.map(r=>r._type))];
       const ds=cats.map((c,i)=>({label:c,data:ms.map(m=>FILTERED.filter(r=>r._ym===m&&r._type===c).length),backgroundColor:PALETTE[i%PALETTE.length],borderRadius:3}));
@@ -1286,8 +1306,12 @@
       const ci=CAMPAIGNS.interior;
       // 인사이트: 상반기 전체(H1, 1/1~6/30) 보도자료 종류별 집계
       const h1lo=ci.end.slice(0,4)+'-01-01', h1=ALL.filter(r=>{const d=r['게재일'];return d&&d>=h1lo&&d<=ci.end;});
-      const tot=h1.length, cnt=re=>h1.filter(r=>re.test((r['종류']||'')+' '+(r['구분']||''))).length;
-      const nInt=cnt(/트렌드|인테리어/), nCo=cnt(/회사|이슈|MOU|행사|수상|협약|투자|매거진/), nPr=cnt(/신제품|제품|서비스|출시|앱|기술|컨설팅/);
+      const tot=h1.length;
+      let nInt=0,nCo=0,nPr=0;   // 상호배타 분류(우선순위: 회사이슈 → 제품/서비스 → 인테리어/트렌드)
+      h1.forEach(r=>{ const s=(r['종류']||'')+' '+(r['구분']||'');
+        if(/MOU|행사|회사|이슈|수상|협약|투자|매거진|인터뷰/.test(s)) nCo++;
+        else if(/신제품|제품|서비스|출시|컨설팅|앱/.test(s)) nPr++;
+        else if(/트렌드|인테리어|시공/.test(s)) nInt++; });
       const pct=n=>tot?(Math.round(n/tot*1000)/10):0;
       const A={ repTotal:tot||'[ ]', repInterior:nInt, repInteriorPct:pct(nInt), repCompany:nCo, repCompanyPct:pct(nCo), repProduct:nPr, repProductPct:pct(nPr) };
       document.querySelectorAll('#campReport .ir-auto').forEach(el=>{ const a=el.dataset.a; if(A[a]!=null && tot) el.textContent=A[a]; });
