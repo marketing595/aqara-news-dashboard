@@ -619,7 +619,8 @@
         ALL=(p.rows||[]).filter(r=>r['기사명']).map(r=>{ r._ym=(r['게재일']||'').toString().substring(0,7);
           r._type=fType(r); r._topic=fTopicVal(r); r._media=fMedia(r); r._chan=fChannel(r); return r; });
         document.getElementById('updated').textContent='업데이트: '+(p.generatedAt||'')+' · 총 '+ALL.length+'건';
-        initRange(); populateFilters(); applyAndRender(); show('content');
+        try{ initRange(); populateFilters(); applyAndRender(); }catch(e){ console.error('render 오류:', e); }
+        show('content');   // 렌더 중 일부 오류가 나도 화면은 표시
       };
       const s=document.createElement('script'); s.src=API_URL+'?callback=__onAqaraData&_='+Date.now();
       s.onerror=function(){ if(!silent) showErr('네트워크 오류. 웹앱 배포/GET 접근을 확인하세요.'); };
