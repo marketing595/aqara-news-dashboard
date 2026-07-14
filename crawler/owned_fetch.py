@@ -157,6 +157,59 @@ def fetch_instagram():
         return None
 
 
+def build_content_history(uploads_playlist, blog):
+    """발행일 기준 월별 콘텐츠 발행량(블로그·영상·인스타) 소급 집계."""
+    hist = {}
+
+    def add(ym, field):
+        hist.setdefault(ym, {"blog": 0, "youtube": 0, "instagram": 0})[field] += 1
+
+    # YouTube 전체 영상
+    try:
+        token = ""
+        while True:
+            kw = {"part": "contentDetails", "maxResults": 50, "playlistId": uploads_playlist}
+            if token:
+                kw["pageToken"] = token
+            pl = api("playlistItems", **kw)
+            for it in pl.get("items", []):
+                d = it.get("contentDetails", {}).get("videoPublishedAt", "")
+                if d:
+                    add(d[:7], "youtube")
+            token = pl.get("nextPageToken")
+            if not token:
+                break
+    except Exception as e:
+        print("content YT 실패:", e)
+    # Instagram 전체 게시물
+    if ITOKEN:
+        try:
+            url = "%s/%s/media" % (GRAPH, IG_ID)
+            params = {"fields": "timestamp", "limit": 100, "access_token": ITOKEN}
+            while url:
+                m = requests.get(url, params=params, timeout=20).json()
+                if "error" in m:
+                    break
+                for x in m.get("data", []):
+                    t = x.get("timestamp", "")
+                    if t:
+                        add(t[:7], "instagram")
+                url = m.get("paging", {}).get("next")
+                params = None
+        except Exception as e:
+            print("content IG 실패:", e)
+    # 블로그
+    if blog:
+        for bg in blog.get("blogs", []):
+            for p in bg.get("recent", []):
+                d = p.get("date", "")
+                if len(d) >= 7:
+                    add(d[:7], "blog")
+    months = sorted(hist.keys())
+    return [{"month": ym, "blog": hist[ym]["blog"], "youtube": hist[ym]["youtube"],
+             "instagram": hist[ym]["instagram"], "total": sum(hist[ym].values())} for ym in months]
+
+
 def append_history(path, snapshot):
     """날짜별 스냅샷 누적(같은 날은 갱신, 최근 400일 유지)."""
     hist = []
@@ -268,6 +321,17 @@ def main():
         "igFollowers": insta.get("followers"), "igPosts": insta.get("posts"),
         "blogTotal": (blog or {}).get("total"),
     })
+
+    # 콘텐츠 발행 추이(월별 소급) 재생성
+    try:
+        ch_months = build_content_history(uploads, blog)
+        if ch_months:
+            json.dump({"generatedAt": kst.strftime("%Y-%m-%d %H:%M"), "months": ch_months},
+                      open(os.path.join(os.path.dirname(__file__), "..", "content_history.json"), "w", encoding="utf-8"),
+                      ensure_ascii=False, indent=1)
+            print("content_history.json OK — %d개월" % len(ch_months))
+    except Exception as e:
+        print("content_history 실패:", e)
     print("owned.json OK — subs:%d videos:%d yt_recent:%d blogs:%d ig_followers:%s" % (
         channel["subs"], channel["videos"], len(recent),
         len((blog or {}).get("blogs", [])), str(insta.get("followers"))))

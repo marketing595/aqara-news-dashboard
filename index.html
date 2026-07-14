@@ -1786,10 +1786,18 @@
       document.getElementById('compHeadBtns').innerHTML=B.map((b,i)=>`<button onclick="compHeadShow(${i})" data-hi="${i}" class="text-[12px] px-3 py-1.5 rounded-full border ${i===compHeadIdx?'bg-ink text-white border-ink':'bg-white text-slate-500 border-slate-300'}">${esc(b.name)}</button>`).join('');
       compHeadShow(compHeadIdx<B.length?compHeadIdx:0);
     }
+    const HEAD_INSIGHT={
+      '아카라':'IoT·공간디자인을 결합해 \'스마트홈 인테리어 전문 브랜드\'로 각인 — B2B·기업 맥락 노출이 중심.',
+      '헤이홈':'KT 협업 홈캠과 \'아기상어\' 굿즈 등 화제성 중심의 B2C 마케팅에 집중.',
+      '삼성 스마트싱스':'AI·갤럭시·개방형 표준(매터)으로 \'플랫폼 리더십\'을 강조 — 노태문 사장이 전면.',
+      'LG 씽큐':'AI홈 + 건설사(자이) 협업으로 아파트 빌트인 B2B 공세 — 단, 앱 오류 등 UX 이슈도 노출.',
+      '구글홈':'제미나이(AI) 중심 어시스턴트 고도화 — 하드웨어보다 AI 소프트웨어 내러티브.'
+    };
     function compHeadShow(i){ compHeadIdx=i; const B=COMPETITOR.brands||[]; const b=B[i]; if(!b)return;
       document.querySelectorAll('#compHeadBtns button').forEach(x=>{ const on=(+x.dataset.hi===i); x.className='text-[12px] px-3 py-1.5 rounded-full border '+(on?'bg-ink text-white border-ink':'bg-white text-slate-500 border-slate-300'); });
       document.getElementById('compHeadTab').textContent='· '+esc(b.name);
-      document.getElementById('compHeadlines').innerHTML=(b.recent||[]).map(a=>`<div class="py-2.5 flex items-baseline gap-3">
+      const ins=HEAD_INSIGHT[b.name]?`<div class="rounded-lg bg-brand/5 border border-brand/20 px-3 py-2 mb-3 text-[13px] text-slate-700"><b class="text-brand-ink">한 줄 인사이트</b> · ${HEAD_INSIGHT[b.name]}</div>`:'';
+      document.getElementById('compHeadlines').innerHTML=ins+(b.recent||[]).map(a=>`<div class="py-2.5 flex items-baseline gap-3">
         <span class="text-xs text-slate-400 num whitespace-nowrap w-20 shrink-0">${esc(a.date||'')}</span>
         <span class="text-xs text-slate-500 w-20 shrink-0 truncate">${esc(a.source||'')}</span>
         <a href="${esc(a.link)}" target="_blank" rel="noopener" class="lnk text-sm font-medium flex-1 min-w-0">${esc(a.title)} <span class="text-slate-300 text-xs">↗</span></a></div>`).join('')||'<p class="text-sm text-slate-400 py-3">헤드라인 없음</p>';
