@@ -353,8 +353,7 @@
        <div>
          <h2 class="text-xl font-extrabold text-ink">온드미디어 <span class="text-sm font-semibold text-agray">(자사 채널 성과)</span></h2>
          <p class="text-sm text-slate-500 mt-1">
-           <a href="https://www.youtube.com/@aqaralife" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">YouTube @aqaralife</a> ·
-           <a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">Instagram @aqaralife.official</a>
+           <span id="ownedChannels"></span>
            <span id="ownedStamp" class="text-slate-400"></span>
          </p>
        </div>
@@ -381,7 +380,13 @@
 
      <!-- YouTube 자사 채널 -->
      <div id="ownedSec-youtube" class="hidden">
-     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">YouTube 채널 <span class="text-xs font-normal text-slate-400">자동 실측</span></h2>
+     <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+       <h2 class="accent font-extrabold text-ink flex items-center gap-2">YouTube 채널 <span class="text-xs font-normal text-slate-400">자동 실측</span></h2>
+       <div id="ytSeriesToggle" class="flex flex-wrap gap-1.5"></div>
+     </div>
+
+     <!-- 채널 전체 뷰 -->
+     <div id="ytChannelView">
      <section id="ownedYtKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
      <section class="card p-5 mb-6">
        <h3 class="accent font-extrabold text-ink mb-3">최근 업로드 영상 <span id="ownedYtCount" class="text-sm font-normal text-slate-400"></span></h3>
@@ -400,6 +405,33 @@
        </div>
        <p class="text-xs text-slate-400 mt-2">※ 참여율 = (좋아요+댓글) ÷ 조회수. YouTube Data API 매일 자동 갱신.</p>
      </section>
+     </div>
+
+     <!-- 시리즈(재생목록) 뷰 -->
+     <div id="ytSeriesView" class="hidden">
+       <section id="ytSeriesKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4"></section>
+       <div id="ytSeriesInsight" class="card p-4 mb-5 bg-[#FAFAF9] border-[#E6E6E3]"></div>
+       <section class="card p-5">
+         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+           <h3 class="accent font-extrabold text-ink">시리즈 영상 <span id="ytSeriesCount" class="text-sm font-normal text-slate-400"></span></h3>
+           <a id="ytSeriesLink" href="#" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium">재생목록 열기 ↗</a>
+         </div>
+         <div class="overflow-auto max-h-[560px] rounded-lg border border-[#ECE9E1]">
+           <table class="w-full text-sm">
+             <thead class="sticky top-0 z-10"><tr class="text-left">
+               <th class="px-3 py-3 whitespace-nowrap">영상 제목</th>
+               <th class="px-3 py-3 whitespace-nowrap">게시일</th>
+               <th class="px-3 py-3 text-right whitespace-nowrap">조회수</th>
+               <th class="px-3 py-3 text-right whitespace-nowrap">좋아요</th>
+               <th class="px-3 py-3 text-right whitespace-nowrap">댓글</th>
+               <th class="px-3 py-3 text-right whitespace-nowrap">참여율</th>
+             </tr></thead>
+             <tbody id="ytSeriesBody" class="divide-y divide-slate-100"></tbody>
+           </table>
+         </div>
+         <p class="text-xs text-slate-400 mt-2">※ 참여율 = (좋아요+댓글) ÷ 조회수. 재생목록 소속 영상만 집계 · 매일 자동 갱신.</p>
+       </section>
+     </div>
      </div>
 
      <!-- Instagram 자사 채널 -->
@@ -528,7 +560,7 @@
      <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
        <div>
          <h2 class="text-xl font-extrabold text-ink">아카라라이프 통합 성과 리포트</h2>
-         <p class="text-sm text-slate-500 mt-1"><span id="reportStamp"></span> · PR·온드미디어·카페 통합 (상부 보고용)</p>
+         <p class="text-sm text-slate-500 mt-1"><span id="reportStamp"></span> · PR·온드미디어·카페 통합</p>
        </div>
        <div class="flex flex-wrap items-center gap-2">
          <select id="reportPeriod" onchange="reportPreset()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-2 bg-white font-semibold">
@@ -584,7 +616,7 @@
        <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">인스타 팔로워 · 카페 언급량 추이</h4><div class="h-56"><canvas id="rptFolCafeChart"></canvas></div></div>
      </section>
      <p id="reportEditNote" class="text-center text-xs text-slate-400 pt-1 hidden">편집 모드: 요약·인사이트 텍스트를 클릭해 수정 후 '저장' 버튼을 누르세요. 내용은 이 브라우저에 저장됩니다.</p>
-     <p class="text-center text-xs text-slate-400 pt-4">수치는 자동 수집 기준 · 인사이트는 수정 가능(상부 보고 대체자료로 활용)</p>
+     <p class="text-center text-xs text-slate-400 pt-4">수치는 자동 수집 기준 · 인사이트는 수정 가능(대체자료로 활용)</p>
    </div>
   </main>
 
@@ -1459,12 +1491,25 @@
       if(t==='competitor'){ loadCompetitor(); }
     }
     let ownedSection='overview';
+    function ownedChannelLinks(s){
+      const yt='<a href="https://www.youtube.com/@aqaralife" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">YouTube @aqaralife</a>';
+      const ig='<a href="https://www.instagram.com/aqaralife.official/" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">Instagram @aqaralife.official</a>';
+      if(s==='youtube') return yt;
+      if(s==='instagram') return ig;
+      if(s==='blog'){
+        const bs=(OWNED.blog&&OWNED.blog.blogs)||[];
+        const list = bs.length?bs:[{name:'아카라라이프 (공식)',url:'https://blog.naver.com/aqaralife'},{name:'수니집 일상기록',url:'https://blog.naver.com/sksmsehfehfdl'},{name:'미니멀라이프',url:'https://blog.naver.com/untorn'}];
+        return list.map(b=>`<a href="${esc(b.url||('https://blog.naver.com/'+b.id))}" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">${esc(b.name)}</a>`).join(' · ');
+      }
+      return yt+' · '+ig; // 개요
+    }
     function switchOwned(s){
       ownedSection=s;
       ['overview','youtube','instagram','blog'].forEach(x=>{
         document.getElementById('ownedSec-'+x).classList.toggle('hidden', x!==s);
         document.getElementById('ownBtn-'+x).className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(x===s?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium');
       });
+      const ch=document.getElementById('ownedChannels'); if(ch) ch.innerHTML=ownedChannelLinks(s);
     }
     function loadYoutube(){
       fetch('youtube.json?_='+Date.now()).then(r=>r.json()).then(p=>{
@@ -1506,6 +1551,8 @@
     function renderOwned(){
       const y=OWNED.youtube||{}, ch=y.channel||{}, rec=y.recent||[];
       document.getElementById('ownedStamp').textContent=OWNED.generatedAt?(' · '+OWNED.generatedAt+' 기준'):'';
+      const _oc=document.getElementById('ownedChannels'); if(_oc) _oc.innerHTML=ownedChannelLinks(ownedSection);
+      renderOwnedPlaylists();
       const avg=ch.videos?Math.round(ch.views/ch.videos):0;
       const kpi=(label,val,sub)=>`<div class="card card-hover p-5"><p class="text-sm text-slate-500">${label}</p><p class="num text-3xl font-extrabold text-ink mt-1">${val}</p><p class="text-xs text-slate-400 mt-1">${sub}</p></div>`;
       document.getElementById('ownedYtKpi').innerHTML=
@@ -1550,6 +1597,42 @@
       renderOwnedBlog();
       renderBlogCompare();
       renderOwnedOverview();
+    }
+    let ytSeriesSel=null; // null = 채널 전체, 아니면 재생목록 key
+    function selectYtSeries(k){ ytSeriesSel=k; renderOwnedPlaylists(); }
+    function renderOwnedPlaylists(){
+      const pls=(OWNED.youtube&&OWNED.youtube.playlists)||[];
+      const tog=document.getElementById('ytSeriesToggle'); if(!tog) return;
+      const chView=document.getElementById('ytChannelView'), sView=document.getElementById('ytSeriesView');
+      if(!pls.length){ tog.innerHTML=''; chView.classList.remove('hidden'); sView.classList.add('hidden'); return; }
+      const mk=(k,label)=>`<button onclick="selectYtSeries(${k===null?'null':`'${k}'`})" class="px-3 py-1.5 rounded-full text-[13px] whitespace-nowrap transition ${ytSeriesSel===k?'bg-ink text-white font-semibold':'bg-white border border-[#E6E6E3] text-muted hover:text-ink font-medium'}">${label}</button>`;
+      tog.innerHTML=mk(null,'채널 전체')+pls.map(p=>mk(p.key,esc(p.name)+' <span class="opacity-60">'+p.count+'</span>')).join('');
+      const isSeries=ytSeriesSel!==null;
+      chView.classList.toggle('hidden', isSeries);
+      sView.classList.toggle('hidden', !isSeries);
+      if(!isSeries) return;
+      const p=pls.find(x=>x.key===ytSeriesSel); if(!p){ ytSeriesSel=null; return renderOwnedPlaylists(); }
+      const eng=p.views?(((p.likes||0)+(p.comments||0))/p.views*100).toFixed(2):'0.00';
+      const kpi=(label,val,sub)=>`<div class="card card-hover p-5"><p class="text-sm text-slate-500">${label}</p><p class="num text-2xl font-extrabold text-ink mt-1">${val}</p><p class="text-xs text-slate-400 mt-1">${sub}</p></div>`;
+      document.getElementById('ytSeriesKpi').innerHTML=
+        kpi('영상 수',p.count+'편','재생목록 내')+
+        kpi('총 조회수',KO_UNIT(p.views),(p.views||0).toLocaleString()+'회')+
+        kpi('영상 평균 조회',KO_UNIT(p.avgViews),'총조회 ÷ 편수')+
+        kpi('평균 참여율',eng+'%','(좋아요+댓글)÷조회');
+      const ch=OWNED.youtube.channel||{}, chAvg=ch.videos?Math.round(ch.views/ch.videos):0;
+      const best=(p.videos||[]).slice().sort((a,b)=>b.views-a.views)[0];
+      const ratio=chAvg?(p.avgViews/chAvg):0;
+      const cmp=ratio>=1?`채널 평균 대비 <b class="text-agreen">${ratio.toFixed(1)}배</b>`:`채널 평균의 <b class="text-aorange">${Math.round(ratio*100)}%</b>`;
+      document.getElementById('ytSeriesInsight').innerHTML=
+        `<p class="text-[13px] text-slate-600 leading-relaxed"><b class="text-ink">${esc(p.name)}</b> 시리즈는 총 <b>${p.count}편</b>, 누적 <b>${(p.views||0).toLocaleString()}회</b> 조회됐습니다. 편당 평균 <b>${(p.avgViews||0).toLocaleString()}회</b>로 ${cmp} 수준입니다.`+
+        (best?` 최고 조회 영상은 <b class="text-ink">'${esc(best.title)}'</b>(${(best.views||0).toLocaleString()}회)입니다.`:'')+`</p>`;
+      document.getElementById('ytSeriesCount').textContent='· '+p.count+'편';
+      document.getElementById('ytSeriesLink').href=p.url||'#';
+      document.getElementById('ytSeriesBody').innerHTML=(p.videos||[]).map(v=>{
+        const er=v.views?(((v.likes||0)+(v.comments||0))/v.views*100).toFixed(2):'0.00';
+        const url='https://youtu.be/'+v.id;
+        return `<tr class="hover:bg-[#FEFBEE]"><td class="px-3 py-2.5 min-w-[280px]"><a href="${url}" target="_blank" rel="noopener" class="lnk font-medium">${esc(v.title)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(v.date)}</td><td class="px-3 py-2.5 text-right num">${(v.views||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num">${(v.likes||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num">${(v.comments||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num font-semibold text-ink">${er}%</td></tr>`;
+      }).join('')||'<tr><td colspan="6" class="text-center py-6 text-slate-400">영상 없음</td></tr>';
     }
     function renderBlogCompare(){
       const all=blogAll().filter(p=>p.date&&p.date.length>=10);

@@ -19,6 +19,12 @@ BLOGS = [
     {"id": "untorn", "name": "미니멀라이프"},
 ]
 
+# 유튜브 시리즈(재생목록) — 온드미디어 유튜브 하위 성과 분석용
+PLAYLISTS = [
+    {"key": "lansun", "name": "랜선집들이", "id": "PLspz0DF4fSvufRMB1s3JrgwRPZJX9ZEO5"},
+    {"key": "bible", "name": "바이블 교육", "id": "PLspz0DF4fSvu5FTIQLVqeb4nAw7UKxhpM"},
+]
+
 
 def _bdate(s):
     """네이버 블로그 addDate('2026. 6. 26.' 또는 '21시간 전') → YYYY-MM-DD."""
@@ -155,6 +161,45 @@ def fetch_instagram():
     except Exception as e:
         print("IG 수집 실패:", e)
         return None
+
+
+def fetch_playlists():
+    """지정 재생목록별 성과 집계 → [{key,name,url,count,views,likes,comments,avgViews,videos:[...]}]."""
+    out = []
+    for p in PLAYLISTS:
+        try:
+            ids, token = [], ""
+            while True:
+                kw = {"part": "contentDetails", "maxResults": 50, "playlistId": p["id"]}
+                if token:
+                    kw["pageToken"] = token
+                pl = api("playlistItems", **kw)
+                for it in pl.get("items", []):
+                    vid = it.get("contentDetails", {}).get("videoId")
+                    if vid:
+                        ids.append(vid)
+                token = pl.get("nextPageToken")
+                if not token:
+                    break
+            vids = []
+            for i in range(0, len(ids), 50):
+                vs = api("videos", part="snippet,statistics", id=",".join(ids[i:i + 50]))
+                for it in vs.get("items", []):
+                    st = it.get("statistics", {})
+                    vids.append({"id": it["id"], "title": it["snippet"]["title"],
+                                 "date": it["snippet"]["publishedAt"][:10],
+                                 "views": int(st.get("viewCount", 0)), "likes": int(st.get("likeCount", 0)),
+                                 "comments": int(st.get("commentCount", 0))})
+            vids.sort(key=lambda x: x["date"], reverse=True)
+            tv = sum(v["views"] for v in vids)
+            out.append({"key": p["key"], "name": p["name"],
+                        "url": "https://www.youtube.com/playlist?list=" + p["id"],
+                        "count": len(vids), "views": tv, "likes": sum(v["likes"] for v in vids),
+                        "comments": sum(v["comments"] for v in vids),
+                        "avgViews": round(tv / len(vids)) if vids else 0, "videos": vids})
+        except Exception as e:
+            print("playlist 실패(%s):" % p["key"], e)
+    return out
 
 
 def build_content_history(uploads_playlist, blog):
@@ -305,9 +350,19 @@ def main():
         print("blog 신규 수집 실패/빈값 → 직전 owned.json의 blog 보존")
         blog = prev_blog
 
+    # 재생목록(시리즈) 성과: 실패/빈값이면 직전 owned.json의 playlists 보존
+    playlists = fetch_playlists()
+    prev_pl = (prev.get("youtube") or {}).get("playlists") if isinstance(prev.get("youtube"), dict) else None
+    if (not playlists) and prev_pl:
+        print("playlists 신규 수집 실패 → 직전 값 보존")
+        playlists = prev_pl
+
+    yt = {"channel": channel, "recent": recent}
+    if playlists:
+        yt["playlists"] = playlists
     data = {
         "generatedAt": kst.strftime("%Y-%m-%d %H:%M"),
-        "youtube": {"channel": channel, "recent": recent},
+        "youtube": yt,
         "instagram": insta,
     }
     if blog:
