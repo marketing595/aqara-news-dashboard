@@ -33,6 +33,35 @@ GROUPS = [
 ]
 
 
+# 테마별 비교 그룹(각 그룹 내부는 OR 합산되어 하나의 상대지수) — 인테리어 vs 스마트홈
+THEME_GROUPS = {
+    "인테리어": ["인테리어", "홈인테리어", "셀프인테리어", "집꾸미기", "홈스타일링", "인테리어소품", "아파트인테리어",
+              "거실인테리어", "주방인테리어", "침실인테리어", "인테리어시공", "리모델링", "홈데코", "인테리어디자인",
+              "구경하는집", "신혼인테리어", "원룸인테리어", "인테리어업체", "인테리어견적", "인테리어트렌드"],
+    "스마트홈": ["스마트홈", "스마트조명", "스마트도어락", "스마트스위치", "스마트플러그", "홈캠", "홈오토메이션",
+              "스마트커튼", "스마트홈허브", "매터", "스마트가전", "스마트홈기기", "홈네트워크", "스마트홈앱",
+              "재실센서", "스마트콘센트", "스마트홈시스템", "월패드", "스마트홈구축", "스마트홈설치"],
+}
+
+
+def fetch_themes(start, end):
+    """인테리어·스마트홈 테마 그룹의 월별 상대지수(서로 비교 가능하도록 한 번의 호출로 수집)."""
+    body = {"startDate": start, "endDate": end, "timeUnit": "month",
+            "keywordGroups": [{"groupName": k, "keywords": v} for k, v in THEME_GROUPS.items()]}
+    r = requests.post("https://openapi.naver.com/v1/datalab/search",
+                      data=json.dumps(body).encode("utf-8"), headers=H, timeout=30)
+    if r.status_code != 200:
+        print("테마 데이터랩 오류", r.status_code, r.text[:200])
+        return {"dates": [], "series": {}}
+    res = r.json().get("results", [])
+    dates, series = [], {}
+    for g in res:
+        series[g["title"]] = [round(float(x["ratio"]), 2) for x in g.get("data", [])]
+    if res:
+        dates = [x["period"] for x in res[0].get("data", [])]
+    return {"dates": dates, "series": series}
+
+
 def last_complete_month_end(today):
     first = today.replace(day=1)
     prev_end = first - datetime.timedelta(days=1)
@@ -62,11 +91,16 @@ def main():
             summed[d["period"]] = summed.get(d["period"], 0) + float(d["ratio"])
     series = [{"date": p, "value": round(summed[p], 2)} for p in sorted(summed.keys())]
 
+    # 인테리어 vs 스마트홈 테마 비교 트렌드
+    themes = fetch_themes("2022-01-01", end.strftime("%Y-%m-%d"))
+
     kw_count = sum(len(g) for g in GROUPS)
     data = {"generatedAt": kst.strftime("%Y-%m-%d %H:%M"), "period": "month",
             "keywordCount": kw_count, "endDate": end.strftime("%Y-%m-%d"),
             "note": "네이버 데이터랩 검색어트렌드 · 100개 파워링크 키워드 합산 상대 관심도(절대 검색량 아님)",
-            "series": series}
+            "series": series,
+            "themes": themes,
+            "themeKeywords": {k: v for k, v in THEME_GROUPS.items()}}
     path = os.path.join(os.path.dirname(__file__), "..", "datalab.json")
     json.dump(data, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("datalab.json OK — %d개월, 키워드 %d개" % (len(series), kw_count))
