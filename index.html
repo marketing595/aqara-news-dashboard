@@ -641,7 +641,18 @@
     const PALETTE=['#FBC400','#8FB9D8','#D68134','#716A3C','#BF5332','#5E625F','#E3A93C','#B4915E','#A9C7DE','#9A9169'];
 
     function fType(r){ return (r['구분']||'').toString().trim() || '(미분류)'; }
-    function fTopicVal(r){ let t=(r['종류']||'').toString().trim(); if(t) return t.split(/[,\/·]/)[0].trim(); return topicByTitle(r['기사명']); }
+    // 보도자료 종류 8분류 정규화(요청 기준): 대외협력 / 기타 / [인테리어] 쇼룸·시공사례·서비스·트렌드 / 회사 이슈 / 신제품
+    const TOPIC_ORDER=['대외협력','신제품','회사 이슈','[인테리어] 쇼룸','[인테리어] 시공사례','[인테리어] 서비스','[인테리어] 트렌드','기타'];
+    function canonTopic(t){ const s=(t||'').toString().toLowerCase();
+      if(/mou|협약|대외|파트너|협력|간담회|세미나|웨비나|전시|페어|참가|공동/.test(s)) return '대외협력';
+      if(/쇼룸/.test(s)) return '[인테리어] 쇼룸';
+      if(/시공|사례|현장/.test(s)) return '[인테리어] 시공사례';
+      if(/서비스|컨설팅|솔루션|설치|구축|앱|캠페인/.test(s)) return '[인테리어] 서비스';
+      if(/트렌드|시장|대세|주거/.test(s)) return '[인테리어] 트렌드';
+      if(/회사|이슈|수상|투자|실적|매출|인터뷰|인물|매거진|특허|성장/.test(s)) return '회사 이슈';
+      if(/신제품|제품|출시|론칭|공개|선봬|선보/.test(s)) return '신제품';
+      return '기타'; }
+    function fTopicVal(r){ let t=(r['종류']||'').toString().trim(); if(!t) t=topicByTitle(r['기사명']); return canonTopic(t); }
     function fMedia(r){ return (r['매체']||'').toString().replace(/\(.*?\)/g,'').trim() || '(미상)'; }
     function urlOf(r){ const h=(r['_href']||'').toString().trim(); if(/^https?:\/\//.test(h)) return h;
       for(const k of ['링크','채널','url','URL']){ const v=(r[k]||'').toString().trim(); if(/^https?:\/\//.test(v)) return v; } return ''; }
@@ -803,7 +814,7 @@
     function renderType(){ const c={}; FILTERED.forEach(r=>c[r._type]=(c[r._type]||0)+1); donutFrom(c,'typeChart'); }
     function renderMedia(){ const c={}; FILTERED.forEach(r=>c[r._media]=(c[r._media]||0)+1); donutFrom(c,'mediaChart'); }
     function renderChannel(){ const c={}; FILTERED.forEach(r=>c[r._chan]=(c[r._chan]||0)+1); donutFrom(c,'channelChart'); }
-    function renderTopic(){ const ms=months(); const tops=[...new Set(FILTERED.map(r=>r._topic))].slice(0,8);
+    function renderTopic(){ const ms=months(); const tops=[...new Set(FILTERED.map(r=>r._topic))].sort((a,b)=>{const ia=TOPIC_ORDER.indexOf(a),ib=TOPIC_ORDER.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib);}).slice(0,8);
       const ds=tops.map((tp,i)=>({label:tp,data:ms.map(m=>FILTERED.filter(r=>r._ym===m&&r._topic===tp).length),backgroundColor:PALETTE[i%PALETTE.length],borderRadius:3}));
       draw('topicChart',{type:'bar',data:{labels:ms,datasets:ds},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}},plugins:{legend:{position:'top',labels:{boxWidth:11}}}}}); }
     function renderYearly(){ const c={}; FILTERED.forEach(r=>{ const y=(r['게재일']||'').toString().slice(0,4); if(/^\d{4}$/.test(y)) c[y]=(c[y]||0)+1; });
@@ -813,7 +824,7 @@
     function renderKeywords(){ const c={}; FILTERED.forEach(r=>keywordsOf(r['기사명']).forEach(w=>c[w]=(c[w]||0)+1));
       const a=Object.entries(c).sort((x,y)=>y[1]-x[1]).slice(0,15);
       draw('keywordChart',{type:'bar',data:{labels:a.map(x=>x[0]),datasets:[{data:a.map(x=>x[1]),backgroundColor:'#1D1D1F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}}); }
-    function populateFilters(){ const tops=[...new Set(ALL.map(r=>r._topic))].sort();
+    function populateFilters(){ const tops=[...new Set(ALL.map(r=>r._topic))].sort((a,b)=>{const ia=TOPIC_ORDER.indexOf(a),ib=TOPIC_ORDER.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib);});
       document.getElementById('fTopic').innerHTML='<option value="">전체 종류</option>'+tops.map(t=>`<option>${esc(t)}</option>`).join('');
       const tys=[...new Set(ALL.map(r=>r._type))].sort();
       document.getElementById('fType').innerHTML='<option value="">전체 성격</option>'+tys.map(t=>`<option>${esc(t)}</option>`).join(''); }
