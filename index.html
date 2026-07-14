@@ -711,11 +711,14 @@
        <div class="card p-5">
          <h3 class="accent font-extrabold text-ink mb-3">이벤트 추가</h3>
          <div class="flex flex-wrap gap-2 items-center">
-           <input id="calEvDate" type="date" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" />
+           <input id="calEvDate" type="date" title="시작일" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" />
+           <span class="text-slate-400 text-xs">~</span>
+           <input id="calEvEnd" type="date" title="종료일(선택)" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" />
            <select id="calEvType" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 bg-white"><option>캠페인</option><option>전시·행사</option><option>제품·출시</option><option>이슈</option><option>기타</option></select>
            <input id="calEvText" type="text" placeholder="내용" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 flex-1 min-w-[140px]" />
            <button onclick="calAddEvent()" class="text-sm bg-ink text-white px-4 py-1.5 rounded-lg font-semibold">추가</button>
          </div>
+         <p class="text-xs text-slate-400 mt-2">※ 종료일을 비우면 하루 일정. 기간을 넣으면 여러 날에 걸쳐 표시됩니다.</p>
        </div>
        <div class="card p-5">
          <h3 class="accent font-extrabold text-ink mb-3" id="calMonthTitle">이번 달 일정</h3>
@@ -1762,13 +1765,17 @@
     // ===== 브랜드 이슈 캘린더 =====
     const CAL_COLOR={'보도자료':'#8A6A00','캠페인':'#BF5332','전시·행사':'#7C5CFF','제품·출시':'#5E7350','이슈':'#C13584','기타':'#5E85A6'};
     let calYM=null;
-    let calEvents=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraCalEvents')||'{}');}catch(e){return {};} })();
+    // 이벤트 모델: [{start,end,type,text}] (기간 지원). 구 버전 {date:[{type,text}]} 자동 마이그레이션.
+    let calEvents=(()=>{ try{ const v=JSON.parse(localStorage.getItem('aqaraCalEvents')||'[]');
+      if(Array.isArray(v)) return v;
+      const arr=[]; Object.keys(v||{}).forEach(d=>(v[d]||[]).forEach(e=>arr.push({start:d,end:d,type:e.type,text:e.text}))); return arr;
+    }catch(e){return [];} })();
     function calSave(){ try{ localStorage.setItem('aqaraCalEvents',JSON.stringify(calEvents)); }catch(e){} }
     function calToday(){ const t=todayStr(); calYM={y:+t.slice(0,4),m:+t.slice(5,7)-1}; renderCalendar(); }
     function calShift(d){ if(!calYM){ calToday(); return; } let m=calYM.m+d,y=calYM.y; if(m<0){m=11;y--;} if(m>11){m=0;y++;} calYM={y,m}; renderCalendar(); }
     function calPrCounts(){ const c={}; (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{ const d=r['게재일']; if(d) c[d]=(c[d]||0)+1; }); return c; }
-    function calAddEvent(){ const d=document.getElementById('calEvDate').value, ty=document.getElementById('calEvType').value, tx=(document.getElementById('calEvText').value||'').trim(); if(!d||!tx) return; (calEvents[d]=calEvents[d]||[]).push({type:ty,text:tx}); calSave(); document.getElementById('calEvText').value=''; renderCalendar(); }
-    function calDelEvent(d,i){ if(calEvents[d]){ calEvents[d].splice(i,1); if(!calEvents[d].length) delete calEvents[d]; calSave(); renderCalendar(); } }
+    function calAddEvent(){ const s=document.getElementById('calEvDate').value, eRaw=document.getElementById('calEvEnd').value, ty=document.getElementById('calEvType').value, tx=(document.getElementById('calEvText').value||'').trim(); if(!s||!tx) return; const e=eRaw||s, en=(e<s?s:e); calEvents.push({start:s,end:en,type:ty,text:tx}); calSave(); document.getElementById('calEvText').value=''; document.getElementById('calEvEnd').value=''; renderCalendar(); }
+    function calDelEvent(i){ calEvents.splice(i,1); calSave(); renderCalendar(); }
     function renderCalendar(){
       if(!calYM){ calToday(); return; }
       const y=calYM.y,m=calYM.m, pad=n=>(''+n).padStart(2,'0'), ymd=d=>y+'-'+pad(m+1)+'-'+pad(d);
@@ -1777,16 +1784,21 @@
       const startDow=new Date(y,m,1).getDay(), daysIn=new Date(y,m+1,0).getDate(), prc=calPrCounts(), today=todayStr();
       let cells='';
       for(let i=0;i<startDow;i++) cells+='<div class="min-h-[74px] rounded-lg bg-[#FAFAF9]"></div>';
-      for(let d=1;d<=daysIn;d++){ const key=ymd(d), pr=prc[key]||0, evs=calEvents[key]||[], isT=key===today, dow=(startDow+d-1)%7;
+      for(let d=1;d<=daysIn;d++){ const key=ymd(d), pr=prc[key]||0, isT=key===today, dow=(startDow+d-1)%7;
+        const dayEvs=calEvents.filter(ev=>ev.start<=key&&ev.end>=key);
         let chips=''; if(pr) chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR['보도자료']}">보도 ${pr}건</div>`;
-        evs.forEach(e=>{ chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR[e.type]||'#5E85A6'}" title="${esc(e.text)}">${esc(e.text)}</div>`; });
+        dayEvs.forEach(ev=>{ const isStart=key===ev.start, multi=ev.start!==ev.end;
+          chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white ${isStart?'':'opacity-55'}" style="background:${CAL_COLOR[ev.type]||'#5E85A6'}" title="${esc(ev.text)} (${ev.start}~${ev.end})">${isStart?esc(ev.text):(multi?'···':esc(ev.text))}</div>`; });
         cells+=`<div class="min-h-[74px] rounded-lg border ${isT?'border-brand bg-brand/5':'border-[#EDEBE6]'} p-1 overflow-hidden"><div class="text-[11px] font-semibold ${dow===0?'text-ared':dow===6?'text-ablue':'text-slate-500'} mb-0.5">${d}</div>${chips}</div>`;
       }
       document.getElementById('calGrid').innerHTML=cells;
+      // 이 달 일정 리스트 (PR 자동 + 이 달과 겹치는 기간 이벤트)
+      const mp=y+'-'+pad(m+1);
       const items=[];
-      for(let d=1;d<=daysIn;d++){ const key=ymd(d); if(prc[key]) items.push({date:key,type:'보도자료',text:prc[key]+'건 발행',auto:true}); (calEvents[key]||[]).forEach((e,i)=>items.push({date:key,type:e.type,text:e.text,idx:i})); }
-      items.sort((a,b)=>a.date.localeCompare(b.date));
-      document.getElementById('calEventList').innerHTML=items.length?items.map(it=>`<div class="flex items-center gap-2 text-sm border-b border-[#F2EFE9] pb-1.5"><span class="text-[11px] text-slate-400 w-12 shrink-0">${it.date.slice(5)}</span><span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:${CAL_COLOR[it.type]||'#5E85A6'}"></span><span class="flex-1 ${it.auto?'text-slate-500':'text-ink'}">${esc(it.text)} <span class="text-[10px] text-slate-400">${esc(it.type)}</span></span>${it.auto?'':`<button onclick="calDelEvent('${it.date}',${it.idx})" class="text-[11px] text-slate-300 hover:text-ared">✕</button>`}</div>`).join(''):'<p class="text-sm text-slate-400">이 달 일정이 없습니다.</p>';
+      for(let d=1;d<=daysIn;d++){ const key=ymd(d); if(prc[key]) items.push({sort:key,label:key.slice(5),type:'보도자료',text:prc[key]+'건 발행',auto:true}); }
+      calEvents.forEach((ev,i)=>{ if(ev.start.slice(0,7)<=mp&&ev.end.slice(0,7)>=mp){ const rng=ev.start===ev.end?ev.start.slice(5):(ev.start.slice(5)+'~'+ev.end.slice(5)); items.push({sort:ev.start,label:rng,type:ev.type,text:ev.text,idx:i}); } });
+      items.sort((a,b)=>a.sort.localeCompare(b.sort));
+      document.getElementById('calEventList').innerHTML=items.length?items.map(it=>`<div class="flex items-center gap-2 text-sm border-b border-[#F2EFE9] pb-1.5"><span class="text-[11px] text-slate-400 w-20 shrink-0">${esc(it.label)}</span><span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:${CAL_COLOR[it.type]||'#5E85A6'}"></span><span class="flex-1 ${it.auto?'text-slate-500':'text-ink'}">${esc(it.text)} <span class="text-[10px] text-slate-400">${esc(it.type)}</span></span>${it.auto?'':`<button onclick="calDelEvent(${it.idx})" class="text-[11px] text-slate-300 hover:text-ared">✕</button>`}</div>`).join(''):'<p class="text-sm text-slate-400">이 달 일정이 없습니다.</p>';
     }
 
     // ===== 미디어리스트 =====
