@@ -493,7 +493,8 @@
          <p class="text-sm text-slate-500 mt-1">아카라 · 헤이홈 · 삼성 스마트싱스 · LG 씽큐 · 구글홈 <span id="compStamp" class="text-slate-400"></span></p>
        </div>
      </div>
-     <section id="compKpi" class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-5"></section>
+     <section id="compKpi" class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-3"></section>
+     <div id="compBasis" class="card p-4 mb-5 bg-[#FAFAF9] border-[#E6E6E3]"></div>
      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
        <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">언론 언급량 비교 <span class="text-xs font-normal text-slate-400">(네이버 뉴스 전체 기간 누적)</span></h3><p class="text-[11px] text-slate-400 mb-2">※ '누적'은 <b>특정 시작일 없이</b> 네이버 뉴스에 인덱싱된 전체 기간의 브랜드 검색 결과 총량(수집일 기준). 삼성·LG·구글은 종합 대기업이라 절대량이 커, 자사(아카라)는 스마트홈 전문 브랜드 관점으로 해석. 기간별 비교는 아래 '검색 관심도 트렌드' 참고.</p><div class="h-64"><canvas id="compVolChart"></canvas></div></div>
        <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">긍·부정 속성 분석 <span class="text-xs font-normal text-slate-400">(연관검색어 기반 검색의도)</span></h3><p class="text-[11px] text-slate-400 mb-2">※ 사용자가 함께 검색하는 연관어의 부정어(오류·에러·안됨 등) 비중</p><div class="h-64"><canvas id="compSentChart"></canvas></div></div>
@@ -608,7 +609,7 @@
       ['인터뷰·인물',['인터뷰','대표','ceo']],['실적·수상',['수상','특허','성과','매출','성장','투자','계약','유치']]];
     function topicByTitle(t){ const s=(t||'').toLowerCase(); for(const[n,ks]of TOPIC_RULES){for(const k of ks){if(s.indexOf(k)>-1)return n;}} return '기타'; }
     const STOP=new Set(['아카라','아카라라이프','aqara','aqaralife','스마트','출시','서비스','위한','통해','대한','오픈','확대','공개','발표','진행','지원','제공','시작','새로운','스마트홈']);
-    function keywordsOf(t){ const out=[]; (t||'').replace(/[^0-9A-Za-z가-힣 ]/g,' ').split(/\s+/).forEach(w=>{w=w.trim().toLowerCase(); if(w.length>=2&&!STOP.has(w))out.push(w);}); return out; }
+    function keywordsOf(t){ const out=[]; (t||'').replace(/[^0-9A-Za-z가-힣 ]/g,' ').split(/\s+/).forEach(w=>{w=w.trim().toLowerCase(); if(w.length>=2&&!STOP.has(w)&&!/^\d+$/.test(w)&&!/^20\d{2}년?$/.test(w))out.push(w);}); return out; }
     function esc(s){ return (s||'').toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
     let jt=null;
@@ -1753,7 +1754,16 @@
       const B=COMPETITOR.brands||[]; if(!B.length){ document.getElementById('compKpi').innerHTML='<p class="text-sm text-slate-400 col-span-full">데이터 로딩 중…</p>'; return; }
       document.getElementById('compStamp').textContent=COMPETITOR.generatedAt?(' · 수집일 '+COMPETITOR.generatedAt+' · 언급량=네이버 뉴스 전체 기간 누적(특정 시작일 없음)'):'';
       // KPI
-      document.getElementById('compKpi').innerHTML=B.map(b=>`<div class="card ${b.me?'bg-brand/10 border-brand/40':''} card-hover p-4"><p class="text-sm ${b.me?'text-brand-ink font-bold':'text-slate-500'}">${esc(b.name)}${b.me?' (자사)':''}</p><p class="num text-2xl font-extrabold text-ink mt-1">${(b.total||0).toLocaleString()}</p><p class="text-[11px] text-slate-400 mt-0.5">전체 기간 누적</p></div>`).join('');
+      document.getElementById('compKpi').innerHTML=B.map(b=>`<div class="card ${b.me?'bg-brand/10 border-brand/40':''} card-hover p-4"><p class="text-sm ${b.me?'text-brand-ink font-bold':'text-slate-500'}">${esc(b.name)}${b.me?' (자사)':''}</p><p class="num text-2xl font-extrabold text-ink mt-1">${(b.total||0).toLocaleString()}</p><p class="text-[11px] text-slate-400 mt-0.5">건 · 전체 기간 누적</p></div>`).join('');
+      // 상단 수치가 '무엇을 더한 것'인지 정확한 기준 명시
+      const gen=COMPETITOR.generatedAt||'-';
+      document.getElementById('compBasis').innerHTML=
+        `<p class="text-[13px] font-bold text-ink mb-2">📌 위 수치는 어떻게 집계됐나요?</p>`+
+        `<p class="text-[12px] text-slate-600 leading-relaxed mb-2">여러 키워드를 더한 값이 <b>아닙니다.</b> 각 브랜드마다 <b>검색어 1개</b>로 네이버 뉴스 API에 질의했을 때 돌려주는 <b>전체 검색 결과 건수(total)</b>입니다. 특정 시작일 없이 네이버 뉴스에 인덱싱된 <b>전체 기간(과거 전체)</b> 기준이며, <b>수집일 ${esc(gen)}</b> 시점의 값입니다.</p>`+
+        `<div class="overflow-x-auto"><table class="text-[12px] w-full"><thead><tr class="text-slate-400 border-b border-[#E6E6E3]"><th class="text-left py-1 pr-3 font-semibold">브랜드</th><th class="text-left py-1 pr-3 font-semibold">집계 검색어</th><th class="text-right py-1 font-semibold">누적 건수</th></tr></thead><tbody>`+
+        B.map(b=>`<tr class="border-b border-[#F0F0EE]"><td class="py-1 pr-3 ${b.me?'font-bold text-brand-ink':'text-slate-600'}">${esc(b.name)}${b.me?' (자사)':''}</td><td class="py-1 pr-3 text-slate-500">"${esc(b.query||b.name)}"</td><td class="py-1 text-right num font-semibold text-ink">${(b.total||0).toLocaleString()}</td></tr>`).join('')+
+        `</tbody></table></div>`+
+        `<p class="text-[11px] text-slate-400 mt-2 leading-relaxed">※ 검색어가 브랜드마다 달라 <b>절대 건수 단순 비교는 주의</b>가 필요합니다(예: '삼성 스마트싱스'는 삼성 종합 기사에 폭넓게 매칭). 정확한 기간별 추세 비교는 아래 <b>'검색 관심도 트렌드'(데이터랩)</b>를 사용하세요.</p>`;
       // 언급량 bar
       draw('compVolChart',{type:'bar',data:{labels:B.map(b=>b.name),datasets:[{data:B.map(b=>b.total||0),backgroundColor:B.map(b=>b.me?'#FBC400':'#cbd5e1'),borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000)+'만':v}}}}});
       // 긍부정(연관어 기반)
