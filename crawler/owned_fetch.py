@@ -145,15 +145,17 @@ def fetch_instagram():
             print("IG API 오류:", acc["error"].get("message"))
             return None
         med = requests.get("%s/%s/media" % (GRAPH, IG_ID),
-                           params={"fields": "id,caption,timestamp,media_type,permalink,like_count,comments_count",
+                           params={"fields": "id,caption,timestamp,media_type,media_url,thumbnail_url,permalink,like_count,comments_count",
                                    "limit": 12, "access_token": ITOKEN}, timeout=20).json()
         recent = []
         for m in med.get("data", []):
             cap = re.sub(r"\s+", " ", (m.get("caption") or "")).strip()[:70]
+            # 이미지: 동영상/릴스는 thumbnail_url, 사진은 media_url
+            img = m.get("thumbnail_url") or (m.get("media_url") if m.get("media_type") != "VIDEO" else "")
             recent.append({"date": (m.get("timestamp") or "")[:10], "type": m.get("media_type", ""),
                            "caption": cap, "likes": int(m.get("like_count", 0) or 0),
                            "comments": int(m.get("comments_count", 0) or 0),
-                           "permalink": m.get("permalink", "")})
+                           "image": img or "", "permalink": m.get("permalink", "")})
         kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
         return {"asOf": kst.strftime("%Y-%m-%d") + " (자동)", "username": acc.get("username"),
                 "followers": acc.get("followers_count"), "following": acc.get("follows_count"),
