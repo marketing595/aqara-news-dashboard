@@ -84,7 +84,6 @@
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
       <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페 모니터링</button>
       <button id="grpBtn-campaign" onclick="switchGroup('campaign')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">캠페인</button>
-      <button id="grpBtn-competitor" onclick="switchGroup('competitor')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">경쟁사 분석</button>
       <button id="grpBtn-report" onclick="switchGroup('report')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">종합 리포트</button>
     </div>
   </div>
@@ -102,6 +101,13 @@
       <button id="ownBtn-youtube" onclick="switchOwned('youtube')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">유튜브</button>
       <button id="ownBtn-instagram" onclick="switchOwned('instagram')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">인스타그램</button>
       <button id="ownBtn-blog" onclick="switchOwned('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">블로그</button>
+    </div>
+  </div>
+  <!-- 종합 리포트 하위탭 -->
+  <div id="subnav-report" class="bg-[#FAFAF9] border-b border-[#E6E6E3] sticky top-[100px] z-10 hidden">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-2 py-2 overflow-x-auto">
+      <button id="rptBtn-report" onclick="switchTab('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-ink text-white whitespace-nowrap transition">통합 리포트</button>
+      <button id="rptBtn-competitor" onclick="switchTab('competitor')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">경쟁사 분석</button>
     </div>
   </div>
 
@@ -542,6 +548,15 @@
        </div>
        <div class="h-72 mt-2"><canvas id="compTrendChart"></canvas></div>
      </div>
+     <div class="card p-5 mb-5">
+       <div class="flex items-center justify-between flex-wrap gap-2 mb-1">
+         <h3 class="accent font-extrabold text-ink">브랜드 포지셔닝 맵 <span class="text-xs font-normal text-slate-400">(지각도 · Perceptual Map)</span></h3>
+         <button id="posEditBtn" onclick="togglePosEdit()" class="text-xs border border-slate-300 hover:bg-slate-50 px-3 py-1.5 rounded-lg font-semibold">위치·축 편집</button>
+       </div>
+       <p class="text-[11px] text-slate-400 mb-3">스마트홈 <b>구매결정 핵심 속성</b> 2가지를 축으로, 소비자 인식상 각 브랜드의 상대적 위치를 배치했습니다. 위치는 언론 기조 분석 기반 추정치이며 <b>편집 버튼</b>으로 조정할 수 있습니다.</p>
+       <div id="posMap"></div>
+       <div id="posInsight" class="mt-4 pt-3 border-t border-[#E6E6E3] text-[13px] text-slate-600 leading-relaxed"></div>
+     </div>
      <h3 class="accent font-extrabold text-ink mb-3">브랜드별 언론 기조 &amp; 주요 키워드</h3>
      <section id="compBrands" class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5"></section>
      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
@@ -788,6 +803,17 @@
       const dan=FILTERED.filter(r=>r._type==='단신').length, gi=n-dan;
       document.getElementById('kpiRatio').textContent=n?(Math.round(dan/n*100)+' : '+Math.round(gi/n*100)):'–';
       const mset=new Set(FILTERED.map(r=>r._ym).filter(Boolean)); document.getElementById('kpiAvg').textContent=mset.size?(n/mset.size).toFixed(1):'–'; }
+    // 원형(도넛·파이) 조각 위에 퍼센트를 상시 표기(마우스 오버 없이 즉시 보이게)
+    const PCT_LABELS={ id:'pctLabels', afterDatasetsDraw(chart){
+      const tp=chart.config.type; if(tp!=='doughnut'&&tp!=='pie') return;
+      const meta=chart.getDatasetMeta(0); if(!meta||!meta.data||!meta.data.length) return;
+      const ds=chart.data.datasets[0]||{}; const arr=(ds.data||[]).map(v=>+v||0); const tot=arr.reduce((a,b)=>a+b,0); if(!tot) return;
+      const ctx=chart.ctx; ctx.save(); ctx.font='bold 12px Pretendard,system-ui,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      meta.data.forEach((arc,i)=>{ const p=arr[i]/tot*100; if(p<6) return; const pos=arc.tooltipPosition(); const t=Math.round(p)+'%';
+        ctx.lineWidth=3; ctx.strokeStyle='rgba(255,255,255,0.9)'; ctx.strokeText(t,pos.x,pos.y);
+        ctx.fillStyle='#1D1D1F'; ctx.fillText(t,pos.x,pos.y); });
+      ctx.restore(); } };
+    if(window.Chart) Chart.register(PCT_LABELS);
     function draw(id,cfg){ if(charts[id])charts[id].destroy(); charts[id]=new Chart(document.getElementById(id),cfg); }
     // ===== 차트 다운로드(PNG/CSV) =====
     function dlBlob(content,filename,type){ const b=new Blob([type.indexOf('csv')>-1?'﻿'+content:content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1500); }
@@ -1493,8 +1519,8 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], competitor:['competitor'], report:['report'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', competitor:'competitor', report:'report' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], report:['report','competitor'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', competitor:'report', report:'report' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
@@ -1504,10 +1530,12 @@
         document.getElementById('view-'+v).classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','campaign','report','competitor'].forEach(k=>{ document.getElementById('grpBtn-'+k).className=grpClass(k===g); });
+      ['pr','owned','cafe','campaign','report'].forEach(k=>{ document.getElementById('grpBtn-'+k).className=grpClass(k===g); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
+      document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
+      ['report','competitor'].forEach(v=>{ document.getElementById('rptBtn-'+v).className=subClass(v===t); });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       if(t==='campaign'){ renderCampaign(); loadYoutube(); }
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
@@ -1928,6 +1956,70 @@
       // 헤드라인 탭
       document.getElementById('compHeadBtns').innerHTML=B.map((b,i)=>`<button onclick="compHeadShow(${i})" data-hi="${i}" class="text-[12px] px-3 py-1.5 rounded-full border ${i===compHeadIdx?'bg-ink text-white border-ink':'bg-white text-slate-500 border-slate-300'}">${esc(b.name)}</button>`).join('');
       compHeadShow(compHeadIdx<B.length?compHeadIdx:0);
+      renderPositioning();
+    }
+    // ===== 브랜드 포지셔닝 맵(지각도) =====
+    const POS_DEFAULT={
+      axisX:{left:'전문·틈새 (스마트홈 특화)', right:'대중·종합 (대기업 생태계)'},
+      axisY:{top:'공간·인테리어 지향', bottom:'기기·제품 중심'},
+      brands:{'아카라':{x:32,y:78},'헤이홈':{x:42,y:28},'삼성 스마트싱스':{x:88,y:58},'LG 씽큐':{x:84,y:44},'구글홈':{x:80,y:34}}
+    };
+    let posEditMode=false;
+    function posMap(){ try{ return JSON.parse(localStorage.getItem('aqaraPosMap'))||null; }catch(e){ return null; } }
+    function togglePosEdit(){
+      if(posEditMode){ const m=posMap()||JSON.parse(JSON.stringify(POS_DEFAULT));
+        document.querySelectorAll('#posEdit [data-pb]').forEach(inp=>{ const pr=inp.dataset.pb.split('|'),n=pr[0],ax=pr[1]; m.brands[n]=m.brands[n]||{x:50,y:50}; m.brands[n][ax]=Math.max(0,Math.min(100,+inp.value||0)); });
+        document.querySelectorAll('#posEdit [data-pa]').forEach(el=>{ const pr=el.dataset.pa.split('.'); m[pr[0]][pr[1]]=el.value; });
+        localStorage.setItem('aqaraPosMap',JSON.stringify(m));
+      }
+      posEditMode=!posEditMode; renderPositioning();
+    }
+    function renderPositioning(){
+      const cont=document.getElementById('posMap'); if(!cont) return;
+      const B=COMPETITOR.brands||[]; const m=posMap()||JSON.parse(JSON.stringify(POS_DEFAULT));
+      B.forEach(b=>{ if(!m.brands[b.name]) m.brands[b.name]=POS_DEFAULT.brands[b.name]||{x:50,y:50}; });
+      const L=60,R=420,T=36,Bt=264, W=R-L, H=Bt-T, midX=L+W/2, midY=T+H/2;
+      const px=x=>L+x/100*W, py=y=>Bt-y/100*H;
+      const COL={'아카라':'#FBC400','헤이홈':'#5E85A6','삼성 스마트싱스':'#1D1D1F','LG 씽큐':'#BF5332','구글홈':'#C77A34'};
+      let dots='';
+      Object.keys(m.brands).forEach(name=>{ const p=m.brands[name],me=name==='아카라',cx=px(p.x),cy=py(p.y),c=COL[name]||'#888';
+        dots+=`<circle cx="${cx}" cy="${cy}" r="${me?10:7}" fill="${c}" stroke="#fff" stroke-width="2"/>`+
+          `<text x="${cx}" y="${cy-(me?15:12)}" text-anchor="middle" font-size="${me?13:11}" font-weight="${me?'800':'600'}" fill="${me?'#8A6A00':'#334155'}">${esc(name)}${me?' ★':''}</text>`; });
+      const svg=`<svg viewBox="0 0 480 300" class="w-full" style="max-height:440px">
+        <rect x="${L}" y="${T}" width="${W/2}" height="${H/2}" fill="#F1EDFF"/>
+        <rect x="${midX}" y="${T}" width="${W/2}" height="${H/2}" fill="#FBFAF8"/>
+        <rect x="${L}" y="${midY}" width="${W/2}" height="${H/2}" fill="#FBFAF8"/>
+        <rect x="${midX}" y="${midY}" width="${W/2}" height="${H/2}" fill="#FDF3EF"/>
+        <line x1="${midX}" y1="${T}" x2="${midX}" y2="${Bt}" stroke="#CBD5E1" stroke-width="1"/>
+        <line x1="${L}" y1="${midY}" x2="${R}" y2="${midY}" stroke="#CBD5E1" stroke-width="1"/>
+        <rect x="${L}" y="${T}" width="${W}" height="${H}" fill="none" stroke="#E2E8F0"/>
+        <text x="${L+8}" y="${T+16}" font-size="10" fill="#7C5CFF" font-weight="700">🔵 블루오션</text>
+        <text x="${R-8}" y="${midY+16}" text-anchor="end" font-size="10" fill="#BF5332" font-weight="700">🔴 레드오션(경쟁 밀집)</text>
+        ${dots}
+        <text x="${L}" y="${Bt+22}" font-size="10.5" fill="#64748B">◀ ${esc(m.axisX.left)}</text>
+        <text x="${R}" y="${Bt+22}" text-anchor="end" font-size="10.5" fill="#64748B">${esc(m.axisX.right)} ▶</text>
+        <text x="${midX}" y="${T-14}" text-anchor="middle" font-size="10.5" fill="#64748B">▲ ${esc(m.axisY.top)}</text>
+        <text x="${midX}" y="${Bt+38}" text-anchor="middle" font-size="10.5" fill="#64748B">▼ ${esc(m.axisY.bottom)}</text>
+      </svg>`;
+      let edit='';
+      if(posEditMode){
+        edit=`<div id="posEdit" class="mt-3 p-3 rounded-lg bg-[#FAFAF9] border border-[#E6E6E3] text-xs space-y-2">
+          <div class="grid grid-cols-2 gap-2">
+            <label class="block">X축 왼쪽<input data-pa="axisX.left" value="${esc(m.axisX.left)}" class="w-full border border-slate-300 rounded px-2 py-1 mt-0.5"/></label>
+            <label class="block">X축 오른쪽<input data-pa="axisX.right" value="${esc(m.axisX.right)}" class="w-full border border-slate-300 rounded px-2 py-1 mt-0.5"/></label>
+            <label class="block">Y축 위<input data-pa="axisY.top" value="${esc(m.axisY.top)}" class="w-full border border-slate-300 rounded px-2 py-1 mt-0.5"/></label>
+            <label class="block">Y축 아래<input data-pa="axisY.bottom" value="${esc(m.axisY.bottom)}" class="w-full border border-slate-300 rounded px-2 py-1 mt-0.5"/></label>
+          </div>
+          <div class="pt-2 border-t border-[#E6E6E3] grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+            ${Object.keys(m.brands).map(n=>`<div class="flex items-center gap-1.5"><span class="w-28 truncate ${n==='아카라'?'font-bold text-brand-ink':''}">${esc(n)}</span>X<input type="number" min="0" max="100" data-pb="${esc(n)}|x" value="${m.brands[n].x}" class="w-14 border border-slate-300 rounded px-1 py-0.5"/>Y<input type="number" min="0" max="100" data-pb="${esc(n)}|y" value="${m.brands[n].y}" class="w-14 border border-slate-300 rounded px-1 py-0.5"/></div>`).join('')}
+          </div>
+          <p class="text-slate-400">※ 0~100 값 · X 클수록 오른쪽, Y 클수록 위쪽. '저장'을 누르면 이 브라우저에 저장됩니다.</p>
+        </div>`;
+      }
+      cont.innerHTML=svg+edit;
+      const btn=document.getElementById('posEditBtn'); if(btn) btn.textContent=posEditMode?'저장':'위치·축 편집';
+      const ins=document.getElementById('posInsight');
+      if(ins) ins.innerHTML=`<b class="text-ink">전략 인사이트</b> · 삼성·LG·구글은 <b>우측(대형 생태계)</b>에 밀집해 레드오션을 형성합니다. 아카라는 <b class="text-aorange">좌상단(전문 × 공간·인테리어)</b>에 사실상 단독 포지션으로, 경쟁 밀도가 낮은 <b class="text-[#7C5CFF]">블루오션</b>입니다. '인테리어·공간 스마트홈' 문맥을 선점·강화하는 것이 차별화의 핵심입니다.`;
     }
     const HEAD_INSIGHT={
       '아카라':'IoT·공간디자인을 결합해 \'스마트홈 인테리어 전문 브랜드\'로 각인 — B2B·기업 맥락 노출이 중심.',
