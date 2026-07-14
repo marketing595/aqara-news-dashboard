@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-14 09:52",
+ "generatedAt": "2026-07-14 19:12",
  "brands": [
   {
    "name": "아카라",
@@ -451,59 +451,51 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 66968,
+   "total": 66971,
    "sentiment": {
-    "pos": 22,
-    "neu": 37,
+    "pos": 20,
+    "neu": 39,
     "neg": 1
    },
    "keywords": [
     [
      "AI",
-     76
+     73
     ],
     [
      "갤럭시",
-     24
-    ],
-    [
-     "개방형",
-     18
+     21
     ],
     [
      "모듈러",
-     17
+     18
     ],
     [
      "플랫폼",
-     16
-    ],
-    [
-     "노태문",
-     15
-    ],
-    [
-     "언팩",
-     14
+     18
     ],
     [
      "삼성전자는",
-     13
+     16
+    ],
+    [
+     "개방형",
+     16
     ],
     [
      "기기",
      13
     ],
     [
-     "기기와",
+     "노태문",
      13
     ],
     [
-     "22일",
+     "기기와",
      12
     ],
     [
-     "아는",
+     "언팩",
      12
     ],
     [
@@ -515,16 +507,24 @@
      11
     ],
     [
-     "파트너를",
+     "아는",
      11
+    ],
+    [
+     "22일",
+     10
     ],
     [
      "원칙으로",
      10
     ],
     [
-     "그는",
+     "파트너를",
      10
+    ],
+    [
+     "주택",
+     9
     ],
     [
      "가전과",
@@ -534,7 +534,7 @@
    "posWords": [
     [
      "혁신",
-     13
+     11
     ],
     [
      "확대",
@@ -546,7 +546,7 @@
     ],
     [
      "강화",
-     3
+     2
     ],
     [
      "프리미엄",
@@ -578,6 +578,24 @@
     "삼성 스마트싱스 전력량"
    ],
    "recent": [
+    {
+     "title": "'빌트인 락인' LG전자냐, '생태계 확장' 삼성전자인가…갈라진 AI 홈 방...",
+     "source": "newsquest.co.kr",
+     "date": "2026-07-14",
+     "link": "https://www.newsquest.co.kr/news/articleView.html?idxno=269751"
+    },
+    {
+     "title": "파트너 늘리고, 채널 넓히고…삼성·LG TV 플랫폼 경쟁 가속화",
+     "source": "파이낸셜뉴스",
+     "date": "2026-07-14",
+     "link": "https://n.news.naver.com/mnews/article/014/0005548071?sid=101"
+    },
+    {
+     "title": "삼성전자, HVAC 밸류체인 재정비",
+     "source": "전자신문",
+     "date": "2026-07-14",
+     "link": "https://n.news.naver.com/mnews/article/030/0003447732?sid=105"
+    },
     {
      "title": "폭염보다 뜨거운 '발열'…삼성은 공조, LG는 데이터센터 주력",
      "source": "itdaily.kr",
@@ -649,24 +667,6 @@
      "source": "이데일리",
      "date": "2026-07-12",
      "link": "https://n.news.naver.com/mnews/article/018/0006328362?sid=101"
-    },
-    {
-     "title": "삼성전자가 22일 꺼내는 '비장의 카드'... 뭐길래?",
-     "source": "ggilbo.com",
-     "date": "2026-07-12",
-     "link": "https://www.ggilbo.com/news/articleView.html?idxno=1168220"
-    },
-    {
-     "title": "[주간AI노트] ‘연결’ 넘어 ‘판단’으로…AI 가전의 정의가 바뀐다",
-     "source": "inthenews.co.kr",
-     "date": "2026-07-12",
-     "link": "https://www.inthenews.co.kr/news/article.html?no=89184"
-    },
-    {
-     "title": "‘40도 폭염’, 유럽 냉방시장 달군다…삼성·LG, 친환경 에어컨 인기 집...",
-     "source": "ceoscoredaily.com",
-     "date": "2026-07-12",
-     "link": "https://www.ceoscoredaily.com/page/view/2026071017071431042"
     }
    ]
   },
@@ -674,101 +674,105 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76732,
+   "total": 76741,
    "sentiment": {
-    "pos": 10,
-    "neu": 49,
+    "pos": 12,
+    "neu": 47,
     "neg": 1
    },
    "keywords": [
     [
      "AI홈",
-     90
+     83
     ],
     [
      "단지",
-     67
-    ],
-    [
-     "자이",
      58
     ],
     [
-     "GS건설",
-     49
+     "자이",
+     53
     ],
     [
      "AI",
-     44
+     48
+    ],
+    [
+     "GS건설",
+     45
     ],
     [
      "LG전자",
-     42
-    ],
-    [
-     "세대",
-     40
+     39
     ],
     [
      "LG전자의",
-     36
-    ],
-    [
-     "ThinQ",
      35
     ],
     [
+     "ThinQ",
+     34
+    ],
+    [
+     "세대",
+     32
+    ],
+    [
      "차세대",
-     34
-    ],
-    [
-     "기기",
-     34
-    ],
-    [
-     "서비스를",
-     33
+     32
     ],
     [
      "주거",
+     31
+    ],
+    [
+     "서비스를",
      30
     ],
     [
-     "생활",
-     25
-    ],
-    [
-     "연동해",
-     23
-    ],
-    [
-     "빌트인",
-     23
+     "기기",
+     27
     ],
     [
      "허브",
-     23
+     26
     ],
     [
-     "플랫폼을",
-     21
+     "난방",
+     24
+    ],
+    [
+     "빌트인",
+     20
+    ],
+    [
+     "IoT",
+     20
+    ],
+    [
+     "조명",
+     20
     ]
    ],
    "posWords": [
     [
      "확대",
-     6
+     7
+    ],
+    [
+     "성장",
+     2
     ],
     [
      "글로벌",
      2
     ],
     [
-     "공략",
-     2
+     "혁신",
+     1
     ],
     [
-     "혁신",
+     "공략",
      1
     ]
    ],
@@ -785,6 +789,60 @@
     "lg 씽큐 오프라인"
    ],
    "recent": [
+    {
+     "title": "'빌트인 락인' LG전자냐, '생태계 확장' 삼성전자인가…갈라진 AI 홈 방...",
+     "source": "newsquest.co.kr",
+     "date": "2026-07-14",
+     "link": "https://www.newsquest.co.kr/news/articleView.html?idxno=269751"
+    },
+    {
+     "title": "[카드뉴스] AI는 집을 움직이고 웹OS는 수익을 만든다.. 달라진 LG전자의...",
+     "source": "techm.kr",
+     "date": "2026-07-14",
+     "link": "https://www.techm.kr/news/articleView.html?idxno=153380"
+    },
+    {
+     "title": "李 대통령이 웃으며 언급한 ‘그 집’ 난리 났다…삼성·LG 모듈러 주택...",
+     "source": "매일경제",
+     "date": "2026-07-14",
+     "link": "https://n.news.naver.com/mnews/article/009/0005707374?sid=101"
+    },
+    {
+     "title": "이 대통령 4번째 거론 힘 실리는 ‘히트펌프’ 시장서 삼성·LG 격돌",
+     "source": "vop.co.kr",
+     "date": "2026-07-14",
+     "link": "https://vop.co.kr/A00001695817.html"
+    },
+    {
+     "title": "[이슈플러스]아이로봇 인수한 피세아…글로벌 '로청' 공장으로",
+     "source": "전자신문",
+     "date": "2026-07-14",
+     "link": "https://n.news.naver.com/mnews/article/030/0003447729?sid=105"
+    },
+    {
+     "title": "자이와 씽큐가 함께 지으면 얼마나 편할까··· GS건설·LG전자 'AI 아파...",
+     "source": "greenpostkorea.co.kr",
+     "date": "2026-07-14",
+     "link": "https://www.greenpostkorea.co.kr/news/articleView.html?idxno=307099"
+    },
+    {
+     "title": "허윤홍 손에 명맥 잇는 GS·LG '허·구(許·具) 동맹'",
+     "source": "newsway.co.kr",
+     "date": "2026-07-14",
+     "link": "https://www.newsway.co.kr/news/view?ud=2026071415151280727"
+    },
+    {
+     "title": "LG전자, AI 홈·플랫폼 사업 확대...신성장동력 확보 '잰걸음'",
+     "source": "techm.kr",
+     "date": "2026-07-14",
+     "link": "https://www.techm.kr/news/articleView.html?idxno=153344"
+    },
+    {
+     "title": "127억달러 키트루다SC 시장…삼성·셀트리온 승부수",
+     "source": "서울경제",
+     "date": "2026-07-14",
+     "link": "https://n.news.naver.com/mnews/article/011/0004641318?sid=101"
+    },
     {
      "title": "GS건설·LG전자, 차세대 주거 AI홈 공동개발",
      "source": "handmk.com",
@@ -820,60 +878,6 @@
      "source": "한국경제",
      "date": "2026-07-14",
      "link": "https://n.news.naver.com/mnews/article/015/0005309602?sid=101"
-    },
-    {
-     "title": "GS건설, LG전자와 차세대 AI홈 공동개발 맞손",
-     "source": "munhwa.com",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/021/0002804425?sid=101"
-    },
-    {
-     "title": "GS건설·LG전자, 미래형 AI홈 공동개발",
-     "source": "segye.com",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/022/0004142851?sid=101"
-    },
-    {
-     "title": "‘GS 자이’에 ‘LG AI홈’ 들어선다",
-     "source": "seoul.co.kr",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/081/0003660884?sid=101"
-    },
-    {
-     "title": "“GS자이에 LG전자 AI 들어간다”",
-     "source": "kmib.co.kr",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/005/0001860765?sid=101"
-    },
-    {
-     "title": "AI, 家치를 키운다",
-     "source": "donga.com",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/020/0003733616?sid=101"
-    },
-    {
-     "title": "GS건설·LG전자, AI·로봇 기반 미래 주거 표준 만든다",
-     "source": "chosun.com",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/023/0003987383?sid=101"
-    },
-    {
-     "title": "GS건설·LG전자, 공동주택 AI홈 서비스 개발 추진",
-     "source": "thedailypost.kr",
-     "date": "2026-07-13",
-     "link": "https://www.thedailypost.kr/news/articleView.html?idxno=114659"
-    },
-    {
-     "title": "LG전자, GS건설과 ‘AI 아파트’ 짓는다",
-     "source": "khan.co.kr",
-     "date": "2026-07-13",
-     "link": "https://n.news.naver.com/mnews/article/032/0003457868?sid=105"
-    },
-    {
-     "title": "GS건설, LG전자와 맞손… '차세대 AI홈' 공동개발 나선다",
-     "source": "ebn.co.kr",
-     "date": "2026-07-13",
-     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1716210"
     }
    ]
   },
@@ -881,11 +885,11 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75075,
+   "total": 75083,
    "sentiment": {
-    "pos": 19,
+    "pos": 20,
     "neu": 28,
-    "neg": 13
+    "neg": 12
    },
    "keywords": [
     [
@@ -894,7 +898,7 @@
     ],
     [
      "제미나이",
-     21
+     23
     ],
     [
      "결제",
@@ -905,23 +909,27 @@
      12
     ],
     [
-     "클로드",
-     11
+     "챗GPT",
+     10
     ],
     [
      "Google",
      10
     ],
     [
+     "번역한",
+     9
+    ],
+    [
+     "활용",
+     9
+    ],
+    [
      "화면",
      9
     ],
     [
-     "챗GPT",
-     9
-    ],
-    [
-     "번역",
+     "클로드",
      9
     ],
     [
@@ -933,53 +941,53 @@
      9
     ],
     [
-     "생성형",
+     "아래는",
      8
     ],
     [
-     "엣지패널",
+     "으로",
      8
     ],
     [
-     "바로가기",
+     "기사의",
      8
     ],
     [
-     "빠르게",
+     "전문",
      8
     ],
     [
-     "전용",
+     "입니다",
      8
     ],
     [
-     "그록",
-     8
-    ],
-    [
-     "번역한",
+     "오류가",
      8
     ]
    ],
    "posWords": [
     [
-     "글로벌",
-     5
-    ],
-    [
      "투자",
      5
     ],
     [
-     "확대",
+     "글로벌",
+     4
+    ],
+    [
+     "협업",
      3
     ],
     [
-     "강화",
-     3
+     "1위",
+     2
     ],
     [
      "선도",
+     2
+    ],
+    [
+     "확대",
      2
     ],
     [
@@ -987,11 +995,7 @@
      2
     ],
     [
-     "첨단",
-     1
-    ],
-    [
-     "최초",
+     "기대",
      1
     ]
    ],
@@ -1008,6 +1012,54 @@
     "구글 홈 미니 연결"
    ],
    "recent": [
+    {
+     "title": "'폴더블 아이폰' 기대…애플 주가 사상 최고치·시총 975조원 증가",
+     "source": "kado.net",
+     "date": "2026-07-14",
+     "link": "https://n.news.naver.com/mnews/article/654/0000190418?sid=101"
+    },
+    {
+     "title": "'테크 기업' 내세운 무신사, 10조 밸류 설득 가능할까",
+     "source": "bloter.net",
+     "date": "2026-07-14",
+     "link": "https://n.news.naver.com/mnews/article/293/0000087629?sid=101"
+    },
+    {
+     "title": "\"로봇이 옷 만드는 시대\" 피지컬 AI, 패션 공급망 다시 짠다",
+     "source": "ktnews.com",
+     "date": "2026-07-14",
+     "link": "http://www.ktnews.com/news/articleView.html?idxno=147180"
+    },
+    {
+     "title": "유한양행, 온라인몰 '버들장터'서 장마철 기획전 진행",
+     "source": "breaknews.com",
+     "date": "2026-07-14",
+     "link": "http://www.breaknews.com/1221640"
+    },
+    {
+     "title": "에블린, 일러스트레이터 수수진과 협업 컬렉션 출시",
+     "source": "breaknews.com",
+     "date": "2026-07-14",
+     "link": "http://www.breaknews.com/1221652"
+    },
+    {
+     "title": "KT, 지니 TV ‘우리동네 혜택+’ 고도화..AI 지역정보 도입",
+     "source": "breaknews.com",
+     "date": "2026-07-14",
+     "link": "http://www.breaknews.com/1221560"
+    },
+    {
+     "title": "챗GPT, 상반기 앱 신규설치 1위… 유튜브·카톡·네이버 '3강' 굳건",
+     "source": "newscj.com",
+     "date": "2026-07-14",
+     "link": "https://www.newscj.com/news/articleView.html?idxno=3416826"
+    },
+    {
+     "title": "127억달러 키트루다SC 시장…삼성·셀트리온 승부수",
+     "source": "서울경제",
+     "date": "2026-07-14",
+     "link": "https://n.news.naver.com/mnews/article/011/0004641318?sid=101"
+    },
     {
      "title": "[출근길 브리핑-7월 14일] 미래대응기금 신설·코스피 7번째 서킷브레이...",
      "source": "newsworks.co.kr",
@@ -1049,54 +1101,6 @@
      "source": "bizwnews.com",
      "date": "2026-07-14",
      "link": "http://www.bizwnews.com/news/articleView.html?idxno=140544"
-    },
-    {
-     "title": "AI, 家치를 키운다",
-     "source": "donga.com",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/020/0003733616?sid=101"
-    },
-    {
-     "title": "[IT애정남] 삼성 브라우저의 유튜브 백그라운드 재생·광고 차단 기능, ...",
-     "source": "it.donga.com",
-     "date": "2026-07-13",
-     "link": "https://it.donga.com/109182/"
-    },
-    {
-     "title": "검색 안에서 끝나는 AI탭…네이버, 원문 유입 더 줄어드나",
-     "source": "insightkorea.co.kr",
-     "date": "2026-07-13",
-     "link": "https://www.insightkorea.co.kr/news/articleView.html?idxno=250113"
-    },
-    {
-     "title": "충북도, IBK기업은행과 맞손…중소기업 자금난 해소 위해 최대 3.8% 금리...",
-     "source": "breaknews.com",
-     "date": "2026-07-13",
-     "link": "http://www.breaknews.com/1221316"
-    },
-    {
-     "title": "스마트폰·자동차 넘어 ‘집’으로 간 AI…LG·삼성·빅테크 ‘AI 홈’ 총...",
-     "source": "donga.com",
-     "date": "2026-07-13",
-     "link": "https://n.news.naver.com/mnews/article/020/0003733541?sid=101"
-    },
-    {
-     "title": "[카드 NOW] 삼성카드·국민카드·하나카드",
-     "source": "wikileaks-kr.org",
-     "date": "2026-07-13",
-     "link": "http://www.wikileaks-kr.org/news/articleView.html?idxno=189701"
-    },
-    {
-     "title": "가전 넘어 주거 플랫폼 경쟁…삼성·LG, AI홈서 B2B 확전",
-     "source": "pointdaily.co.kr",
-     "date": "2026-07-13",
-     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=311689"
-    },
-    {
-     "title": "[보험·카드24시] MG신용정보, 매입약정 자회사 설립 外",
-     "source": "news.dealsitetv.com",
-     "date": "2026-07-13",
-     "link": "https://news.dealsitetv.com/articles/173220"
     }
    ]
   }
