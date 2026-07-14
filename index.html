@@ -563,6 +563,21 @@
        <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-3">공통 연관어 순위 <span class="text-xs font-normal text-slate-400">(여러 브랜드에 걸쳐 등장)</span></h3><div id="compCommon" class="space-y-2"></div></div>
        <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-3">연관검색어 비교 <span class="text-xs font-normal text-slate-400">(자동완성 기준)</span></h3><div id="compRelated" class="space-y-3 max-h-96 overflow-auto pr-1"></div></div>
      </div>
+     <div class="card p-5 mb-5">
+       <div class="flex items-center justify-between flex-wrap gap-2 mb-1">
+         <h3 class="font-extrabold text-ink" style="border-left:3px solid #7C5CFF;padding-left:8px">핵심 키워드 연관어 분석 <span class="text-xs font-normal text-slate-400">(뉴스 동시언급 빈도 기반)</span></h3>
+         <select id="kwNetBrand" onchange="renderKwNetwork()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 bg-white"></select>
+       </div>
+       <p class="text-[11px] text-slate-400 mb-3">선택 브랜드와 함께 언급된 <b>연관어</b>를 빈도순으로 정리하고 관계망으로 시각화합니다. 수치는 수집된 뉴스 본문 내 <b>동시 언급 건수</b>입니다.</p>
+       <div class="grid grid-cols-1 lg:grid-cols-[34%_1fr] gap-4">
+         <div class="rounded-lg border border-[#E1DBFF] overflow-hidden self-start">
+           <div class="px-3 py-2 text-sm font-bold text-white" style="background:#7C5CFF">전체 순위</div>
+           <div class="grid grid-cols-[2.2rem_1fr_auto] px-3 py-1.5 text-[11px] font-semibold text-slate-400 border-b border-[#EDE9FF] bg-[#FBFAFF]"><span>순위</span><span>연관어</span><span class="text-right">건수</span></div>
+           <div id="kwNetList" class="max-h-[420px] overflow-auto"></div>
+         </div>
+         <div class="rounded-lg border border-[#ECE9FF] bg-[#FBFAFF] p-2 flex items-center justify-center"><div id="kwNetMap" class="w-full"></div></div>
+       </div>
+     </div>
      <div class="card p-5">
        <h3 class="accent font-extrabold text-ink mb-3">대표 헤드라인 <span id="compHeadTab" class="text-xs font-normal text-slate-400"></span></h3>
        <div id="compHeadBtns" class="flex flex-wrap gap-1.5 mb-3"></div>
@@ -1957,6 +1972,30 @@
       document.getElementById('compHeadBtns').innerHTML=B.map((b,i)=>`<button onclick="compHeadShow(${i})" data-hi="${i}" class="text-[12px] px-3 py-1.5 rounded-full border ${i===compHeadIdx?'bg-ink text-white border-ink':'bg-white text-slate-500 border-slate-300'}">${esc(b.name)}</button>`).join('');
       compHeadShow(compHeadIdx<B.length?compHeadIdx:0);
       renderPositioning();
+      renderKwNetwork();
+    }
+    // ===== 핵심 키워드 연관어 네트워크 맵 =====
+    function renderKwNetwork(){
+      const B=COMPETITOR.brands||[]; const sel=document.getElementById('kwNetBrand'); if(!sel||!B.length) return;
+      if(sel.options.length!==B.length){ const cur=sel.value; sel.innerHTML=B.map(b=>`<option value="${esc(b.name)}">${esc(b.name)}${b.me?' (자사)':''}</option>`).join(''); if(B.some(b=>b.name===cur)) sel.value=cur; }
+      const name=sel.value||(B.find(b=>b.me)||B[0]).name; if(!sel.value) sel.value=name;
+      const b=B.find(x=>x.name===name)||B[0];
+      const kws=(b.keywords||[]).slice(0,15);
+      document.getElementById('kwNetList').innerHTML=kws.length?kws.map((k,i)=>
+        `<div class="grid grid-cols-[2.2rem_1fr_auto] items-center px-3 py-2 text-sm border-b border-[#F2EFFF] ${i<3?'bg-[#F7F5FF]':''}"><span class="text-center font-bold ${i<3?'text-[#7C5CFF]':'text-slate-400'}">${i+1}</span><span class="truncate ${i<3?'font-semibold text-ink':'text-slate-600'}">${esc(k[0])}</span><span class="num text-right text-slate-500">${(k[1]||0).toLocaleString()}</span></div>`
+      ).join(''):'<p class="text-sm text-slate-400 p-4 text-center">연관어 데이터 없음</p>';
+      // 네트워크 맵(SVG)
+      const n=kws.length, cx=260, cy=195, ringR=150;
+      let links='',nodes='';
+      kws.forEach((k,i)=>{ const ang=(i/Math.max(1,n))*Math.PI*2 - Math.PI/2; const r=ringR*((i%2)?0.68:1);
+        const x=cx+Math.cos(ang)*r, y=cy+Math.sin(ang)*r, big=i<3;
+        const label=big?(k[0]+' '+(k[1]||0).toLocaleString()):k[0];
+        const w=Math.max(46, label.length*8.6+18), h=big?26:22;
+        links+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#D9D2FF" stroke-width="${big?1.6:1}"/>`;
+        nodes+=`<g><rect x="${(x-w/2).toFixed(1)}" y="${(y-h/2).toFixed(1)}" width="${w.toFixed(1)}" height="${h}" rx="${h/2}" fill="${big?'#4B32C3':'#EDE9FF'}" stroke="${big?'#4B32C3':'#C9BEFF'}" stroke-width="1"/><text x="${x.toFixed(1)}" y="${(y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${big?11:10}" font-weight="${big?'700':'500'}" fill="${big?'#fff':'#4B32C3'}">${esc(label)}</text></g>`;
+      });
+      const center=`<circle cx="${cx}" cy="${cy}" r="46" fill="#7C5CFF"/><circle cx="${cx}" cy="${cy}" r="46" fill="none" stroke="#ECE9FF" stroke-width="4" opacity="0.6"/><text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" font-size="15" font-weight="800" fill="#fff">${esc(name)}</text>`;
+      document.getElementById('kwNetMap').innerHTML=kws.length?`<svg viewBox="0 0 520 390" class="w-full" style="max-height:440px">${links}${center}${nodes}</svg>`:'<p class="text-sm text-slate-400 py-16 text-center">연관어 데이터 없음</p>';
     }
     // ===== 브랜드 포지셔닝 맵(지각도) =====
     const POS_DEFAULT={
