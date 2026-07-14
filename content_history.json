@@ -1,306 +1,306 @@
 {
-    "generatedAt":  "2026-07-14 10:34",
-    "months":  [
-                   {
-                       "month":  "2021-03",
-                       "blog":  0,
-                       "youtube":  1,
-                       "instagram":  0,
-                       "total":  1
-                   },
-                   {
-                       "month":  "2021-04",
-                       "blog":  0,
-                       "youtube":  5,
-                       "instagram":  0,
-                       "total":  5
-                   },
-                   {
-                       "month":  "2021-05",
-                       "blog":  0,
-                       "youtube":  6,
-                       "instagram":  0,
-                       "total":  6
-                   },
-                   {
-                       "month":  "2021-06",
-                       "blog":  0,
-                       "youtube":  1,
-                       "instagram":  0,
-                       "total":  1
-                   },
-                   {
-                       "month":  "2021-07",
-                       "blog":  0,
-                       "youtube":  1,
-                       "instagram":  0,
-                       "total":  1
-                   },
-                   {
-                       "month":  "2021-10",
-                       "blog":  0,
-                       "youtube":  1,
-                       "instagram":  0,
-                       "total":  1
-                   },
-                   {
-                       "month":  "2021-12",
-                       "blog":  0,
-                       "youtube":  1,
-                       "instagram":  0,
-                       "total":  1
-                   },
-                   {
-                       "month":  "2023-02",
-                       "blog":  0,
-                       "youtube":  1,
-                       "instagram":  0,
-                       "total":  1
-                   },
-                   {
-                       "month":  "2023-07",
-                       "blog":  0,
-                       "youtube":  1,
-                       "instagram":  0,
-                       "total":  1
-                   },
-                   {
-                       "month":  "2023-08",
-                       "blog":  0,
-                       "youtube":  1,
-                       "instagram":  0,
-                       "total":  1
-                   },
-                   {
-                       "month":  "2023-11",
-                       "blog":  0,
-                       "youtube":  5,
-                       "instagram":  2,
-                       "total":  7
-                   },
-                   {
-                       "month":  "2023-12",
-                       "blog":  0,
-                       "youtube":  1,
-                       "instagram":  1,
-                       "total":  2
-                   },
-                   {
-                       "month":  "2024-01",
-                       "blog":  34,
-                       "youtube":  17,
-                       "instagram":  7,
-                       "total":  58
-                   },
-                   {
-                       "month":  "2024-02",
-                       "blog":  27,
-                       "youtube":  1,
-                       "instagram":  13,
-                       "total":  41
-                   },
-                   {
-                       "month":  "2024-03",
-                       "blog":  12,
-                       "youtube":  11,
-                       "instagram":  9,
-                       "total":  32
-                   },
-                   {
-                       "month":  "2024-04",
-                       "blog":  3,
-                       "youtube":  11,
-                       "instagram":  6,
-                       "total":  20
-                   },
-                   {
-                       "month":  "2024-05",
-                       "blog":  2,
-                       "youtube":  3,
-                       "instagram":  5,
-                       "total":  10
-                   },
-                   {
-                       "month":  "2024-06",
-                       "blog":  5,
-                       "youtube":  3,
-                       "instagram":  2,
-                       "total":  10
-                   },
-                   {
-                       "month":  "2024-07",
-                       "blog":  3,
-                       "youtube":  3,
-                       "instagram":  5,
-                       "total":  11
-                   },
-                   {
-                       "month":  "2024-08",
-                       "blog":  5,
-                       "youtube":  4,
-                       "instagram":  7,
-                       "total":  16
-                   },
-                   {
-                       "month":  "2024-09",
-                       "blog":  3,
-                       "youtube":  0,
-                       "instagram":  0,
-                       "total":  3
-                   },
-                   {
-                       "month":  "2024-10",
-                       "blog":  10,
-                       "youtube":  0,
-                       "instagram":  0,
-                       "total":  10
-                   },
-                   {
-                       "month":  "2024-11",
-                       "blog":  2,
-                       "youtube":  1,
-                       "instagram":  0,
-                       "total":  3
-                   },
-                   {
-                       "month":  "2024-12",
-                       "blog":  4,
-                       "youtube":  0,
-                       "instagram":  0,
-                       "total":  4
-                   },
-                   {
-                       "month":  "2025-01",
-                       "blog":  1,
-                       "youtube":  1,
-                       "instagram":  0,
-                       "total":  2
-                   },
-                   {
-                       "month":  "2025-02",
-                       "blog":  2,
-                       "youtube":  0,
-                       "instagram":  1,
-                       "total":  3
-                   },
-                   {
-                       "month":  "2025-03",
-                       "blog":  5,
-                       "youtube":  0,
-                       "instagram":  1,
-                       "total":  6
-                   },
-                   {
-                       "month":  "2025-04",
-                       "blog":  6,
-                       "youtube":  2,
-                       "instagram":  4,
-                       "total":  12
-                   },
-                   {
-                       "month":  "2025-05",
-                       "blog":  6,
-                       "youtube":  1,
-                       "instagram":  4,
-                       "total":  11
-                   },
-                   {
-                       "month":  "2025-06",
-                       "blog":  4,
-                       "youtube":  4,
-                       "instagram":  3,
-                       "total":  11
-                   },
-                   {
-                       "month":  "2025-07",
-                       "blog":  8,
-                       "youtube":  4,
-                       "instagram":  2,
-                       "total":  14
-                   },
-                   {
-                       "month":  "2025-08",
-                       "blog":  3,
-                       "youtube":  2,
-                       "instagram":  2,
-                       "total":  7
-                   },
-                   {
-                       "month":  "2025-09",
-                       "blog":  3,
-                       "youtube":  5,
-                       "instagram":  0,
-                       "total":  8
-                   },
-                   {
-                       "month":  "2025-10",
-                       "blog":  7,
-                       "youtube":  3,
-                       "instagram":  2,
-                       "total":  12
-                   },
-                   {
-                       "month":  "2025-11",
-                       "blog":  12,
-                       "youtube":  10,
-                       "instagram":  2,
-                       "total":  24
-                   },
-                   {
-                       "month":  "2025-12",
-                       "blog":  24,
-                       "youtube":  4,
-                       "instagram":  3,
-                       "total":  31
-                   },
-                   {
-                       "month":  "2026-01",
-                       "blog":  20,
-                       "youtube":  0,
-                       "instagram":  1,
-                       "total":  21
-                   },
-                   {
-                       "month":  "2026-02",
-                       "blog":  16,
-                       "youtube":  4,
-                       "instagram":  1,
-                       "total":  21
-                   },
-                   {
-                       "month":  "2026-03",
-                       "blog":  2,
-                       "youtube":  1,
-                       "instagram":  2,
-                       "total":  5
-                   },
-                   {
-                       "month":  "2026-04",
-                       "blog":  4,
-                       "youtube":  2,
-                       "instagram":  7,
-                       "total":  13
-                   },
-                   {
-                       "month":  "2026-05",
-                       "blog":  0,
-                       "youtube":  0,
-                       "instagram":  2,
-                       "total":  2
-                   },
-                   {
-                       "month":  "2026-06",
-                       "blog":  2,
-                       "youtube":  5,
-                       "instagram":  2,
-                       "total":  9
-                   },
-                   {
-                       "month":  "2026-07",
-                       "blog":  1,
-                       "youtube":  4,
-                       "instagram":  0,
-                       "total":  5
-                   }
-               ]
+ "generatedAt": "2026-07-14 10:42",
+ "months": [
+  {
+   "month": "2021-03",
+   "blog": 0,
+   "youtube": 1,
+   "instagram": 0,
+   "total": 1
+  },
+  {
+   "month": "2021-04",
+   "blog": 0,
+   "youtube": 5,
+   "instagram": 0,
+   "total": 5
+  },
+  {
+   "month": "2021-05",
+   "blog": 0,
+   "youtube": 6,
+   "instagram": 0,
+   "total": 6
+  },
+  {
+   "month": "2021-06",
+   "blog": 0,
+   "youtube": 1,
+   "instagram": 0,
+   "total": 1
+  },
+  {
+   "month": "2021-07",
+   "blog": 0,
+   "youtube": 1,
+   "instagram": 0,
+   "total": 1
+  },
+  {
+   "month": "2021-10",
+   "blog": 0,
+   "youtube": 1,
+   "instagram": 0,
+   "total": 1
+  },
+  {
+   "month": "2021-12",
+   "blog": 0,
+   "youtube": 1,
+   "instagram": 0,
+   "total": 1
+  },
+  {
+   "month": "2023-02",
+   "blog": 0,
+   "youtube": 1,
+   "instagram": 0,
+   "total": 1
+  },
+  {
+   "month": "2023-07",
+   "blog": 0,
+   "youtube": 1,
+   "instagram": 0,
+   "total": 1
+  },
+  {
+   "month": "2023-08",
+   "blog": 0,
+   "youtube": 1,
+   "instagram": 0,
+   "total": 1
+  },
+  {
+   "month": "2023-11",
+   "blog": 0,
+   "youtube": 5,
+   "instagram": 2,
+   "total": 7
+  },
+  {
+   "month": "2023-12",
+   "blog": 0,
+   "youtube": 1,
+   "instagram": 1,
+   "total": 2
+  },
+  {
+   "month": "2024-01",
+   "blog": 34,
+   "youtube": 17,
+   "instagram": 7,
+   "total": 58
+  },
+  {
+   "month": "2024-02",
+   "blog": 27,
+   "youtube": 1,
+   "instagram": 13,
+   "total": 41
+  },
+  {
+   "month": "2024-03",
+   "blog": 12,
+   "youtube": 11,
+   "instagram": 9,
+   "total": 32
+  },
+  {
+   "month": "2024-04",
+   "blog": 3,
+   "youtube": 11,
+   "instagram": 6,
+   "total": 20
+  },
+  {
+   "month": "2024-05",
+   "blog": 2,
+   "youtube": 3,
+   "instagram": 5,
+   "total": 10
+  },
+  {
+   "month": "2024-06",
+   "blog": 5,
+   "youtube": 3,
+   "instagram": 2,
+   "total": 10
+  },
+  {
+   "month": "2024-07",
+   "blog": 3,
+   "youtube": 3,
+   "instagram": 5,
+   "total": 11
+  },
+  {
+   "month": "2024-08",
+   "blog": 5,
+   "youtube": 4,
+   "instagram": 7,
+   "total": 16
+  },
+  {
+   "month": "2024-09",
+   "blog": 3,
+   "youtube": 0,
+   "instagram": 0,
+   "total": 3
+  },
+  {
+   "month": "2024-10",
+   "blog": 10,
+   "youtube": 0,
+   "instagram": 0,
+   "total": 10
+  },
+  {
+   "month": "2024-11",
+   "blog": 2,
+   "youtube": 1,
+   "instagram": 0,
+   "total": 3
+  },
+  {
+   "month": "2024-12",
+   "blog": 4,
+   "youtube": 0,
+   "instagram": 0,
+   "total": 4
+  },
+  {
+   "month": "2025-01",
+   "blog": 1,
+   "youtube": 1,
+   "instagram": 0,
+   "total": 2
+  },
+  {
+   "month": "2025-02",
+   "blog": 2,
+   "youtube": 0,
+   "instagram": 1,
+   "total": 3
+  },
+  {
+   "month": "2025-03",
+   "blog": 5,
+   "youtube": 0,
+   "instagram": 1,
+   "total": 6
+  },
+  {
+   "month": "2025-04",
+   "blog": 6,
+   "youtube": 2,
+   "instagram": 4,
+   "total": 12
+  },
+  {
+   "month": "2025-05",
+   "blog": 6,
+   "youtube": 1,
+   "instagram": 4,
+   "total": 11
+  },
+  {
+   "month": "2025-06",
+   "blog": 4,
+   "youtube": 4,
+   "instagram": 3,
+   "total": 11
+  },
+  {
+   "month": "2025-07",
+   "blog": 8,
+   "youtube": 4,
+   "instagram": 2,
+   "total": 14
+  },
+  {
+   "month": "2025-08",
+   "blog": 3,
+   "youtube": 2,
+   "instagram": 2,
+   "total": 7
+  },
+  {
+   "month": "2025-09",
+   "blog": 3,
+   "youtube": 5,
+   "instagram": 0,
+   "total": 8
+  },
+  {
+   "month": "2025-10",
+   "blog": 7,
+   "youtube": 3,
+   "instagram": 2,
+   "total": 12
+  },
+  {
+   "month": "2025-11",
+   "blog": 12,
+   "youtube": 10,
+   "instagram": 2,
+   "total": 24
+  },
+  {
+   "month": "2025-12",
+   "blog": 24,
+   "youtube": 4,
+   "instagram": 3,
+   "total": 31
+  },
+  {
+   "month": "2026-01",
+   "blog": 20,
+   "youtube": 0,
+   "instagram": 1,
+   "total": 21
+  },
+  {
+   "month": "2026-02",
+   "blog": 16,
+   "youtube": 4,
+   "instagram": 1,
+   "total": 21
+  },
+  {
+   "month": "2026-03",
+   "blog": 2,
+   "youtube": 1,
+   "instagram": 2,
+   "total": 5
+  },
+  {
+   "month": "2026-04",
+   "blog": 4,
+   "youtube": 2,
+   "instagram": 7,
+   "total": 13
+  },
+  {
+   "month": "2026-05",
+   "blog": 0,
+   "youtube": 0,
+   "instagram": 2,
+   "total": 2
+  },
+  {
+   "month": "2026-06",
+   "blog": 2,
+   "youtube": 5,
+   "instagram": 2,
+   "total": 9
+  },
+  {
+   "month": "2026-07",
+   "blog": 1,
+   "youtube": 4,
+   "instagram": 0,
+   "total": 5
+  }
+ ]
 }
