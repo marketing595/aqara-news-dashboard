@@ -681,6 +681,10 @@
        <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">콘텐츠 발행 추이 <span class="text-xs font-normal text-slate-400">(월별 · 2021~ 소급)</span></h4><div class="h-56"><canvas id="rptContentChart"></canvas></div></div>
        <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">인스타 팔로워 · 카페 언급량 추이</h4><div class="h-56"><canvas id="rptFolCafeChart"></canvas></div></div>
      </section>
+     <h3 class="accent font-extrabold text-ink mt-6 mb-1">고객 구매 여정(CDJ) · 도메인 가시성 <span class="text-xs font-normal text-slate-400">(단계별 자사 노출 근사)</span></h3>
+     <p class="text-xs text-slate-400 mb-3">※ 인지→탐색→비교→구매 각 단계의 자사 노출을 <b>보유 데이터로 근사</b>한 지표입니다(절대 전환수 아님). 노출이 약한 단계를 콘텐츠·채널로 메우는 데 활용하세요.</p>
+     <div id="cdjFunnel" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3"></div>
+     <div class="card p-4 mb-5"><p class="text-[11px] font-semibold text-slate-400 mb-1">여정 인사이트</p><div id="rpt-cdj" data-rk="cdj" class="text-sm text-slate-700 leading-relaxed rpt-edit"></div></div>
      <p id="reportEditNote" class="text-center text-xs text-slate-400 pt-1 hidden">편집 모드: 요약·인사이트 텍스트를 클릭해 수정 후 '저장' 버튼을 누르세요. 내용은 이 브라우저에 저장됩니다.</p>
      <p class="text-center text-xs text-slate-400 pt-4">수치는 자동 수집 기준 · 인사이트는 수정 가능(대체자료로 활용)</p>
    </div>
@@ -2215,8 +2219,27 @@
       draw('rptChannelBarChart',{type:'bar',data:{labels:['YT 구독자','IG 팔로워','블로그 글'],datasets:[{data:[ch.subs||0,ig.followers||0,blTot],backgroundColor:['#BF5332','#C13584','#5E7350'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000)+'만':v,font:{size:9}}}}}});
       draw('rptContentMixChart',{type:'doughnut',data:{labels:['블로그','영상','인스타'],datasets:[{data:[cmBlog,cmYt,cmIg],backgroundColor:['#5E7350','#BF5332','#C13584'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}});
       draw('rptCafeSentChart',{type:'doughnut',data:{labels:['긍정','중립','부정'],datasets:[{data:[sc.긍정,sc.중립,sc.부정],backgroundColor:['#5E7350','#cbd5e1','#BF5332'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}});
+      // ── 고객 구매 여정(CDJ) · 도메인 가시성 근사 ──
+      const awareness=(typeof TREND!=='undefined'&&TREND.series['아카라'])?(TREND.series['아카라'].slice(-1)[0]||0):0;
+      const stages=[
+        {k:'인지',icon:'👀',metric:awareness?awareness.toFixed(0):'-',unit:'검색관심도',vis:awareness>=60?'강':awareness>=30?'중':'약',pain:'"스마트홈이 뭘 해주지?" 브랜드·카테고리 인지',resp:'검색량 피크 활용, 뉴스·데이터랩 노출 확대'},
+        {k:'탐색',icon:'🔎',metric:KO_UNIT(ch.views||0),unit:'콘텐츠 누적조회',vis:(ch.views||0)>=500000?'강':(ch.views||0)>=100000?'중':'약',pain:'"어떻게 설치·연동하지?" 기능·후기 탐색',resp:'유튜브·블로그 가이드/후기 콘텐츠 지속 발행'},
+        {k:'비교',icon:'⚖️',metric:CAFE_POSTS.length.toLocaleString(),unit:'커뮤니티 언급',vis:CAFE_POSTS.length>=100?'강':CAFE_POSTS.length>=30?'중':'약',pain:'"삼성·LG 대비 뭐가 낫지?" 경쟁 비교',resp:'카페·연관검색어 대응, 비교 콘텐츠·리뷰 확보'},
+        {k:'구매',icon:'🛒',metric:'3.33',unit:'파워링크 CVR(%)',vis:'중',pain:'"어디서 사지? 설치는?" 구매·설치 결정',resp:'파워링크·자사몰 동선 최적화, 설치 안내 강화'}
+      ];
+      const visColor={'강':'text-agreen bg-agreen/10','중':'text-aorange bg-aorange/10','약':'text-ared bg-ared/10'};
+      const cdjBox=document.getElementById('cdjFunnel');
+      if(cdjBox) cdjBox.innerHTML=stages.map((s,i)=>`<div class="card p-4 relative">${i<3?'<div class="hidden md:block absolute -right-2 top-1/2 -translate-y-1/2 text-slate-300 z-10">▶</div>':''}
+        <div class="flex items-center justify-between mb-1"><span class="text-sm font-bold text-ink">${s.icon} ${s.k}</span><span class="text-[10px] px-1.5 py-0.5 rounded font-semibold ${visColor[s.vis]}">가시성 ${s.vis}</span></div>
+        <div class="num text-2xl font-extrabold text-ink">${s.metric}</div>
+        <div class="text-[11px] text-slate-400 mb-2">${s.unit}</div>
+        <div class="text-[11px] text-slate-500 leading-snug border-t border-[#F0F0EE] pt-1.5"><b class="text-slate-600">소비자 고민</b><br>${esc(s.pain)}</div>
+        <div class="text-[11px] text-brand-ink leading-snug mt-1.5"><b>대응</b> · ${esc(s.resp)}</div>
+      </div>`).join('');
+      const weak=stages.filter(s=>s.vis==='약').map(s=>s.k);
       // 인사이트(수정 가능) — 저장값 우선, 없으면 자동 기본문안
       const def={
+        cdj:`고객 구매 여정 4단계 중 자사 노출이 상대적으로 약한 구간은 ${weak.length?('<b class="text-ared">'+weak.join('·')+'</b> 단계'):'뚜렷이 없습니다(전반적으로 양호)'}입니다. ${weak.length?'해당 단계에 최적화된 콘텐츠·메시지(예: 비교 리뷰, 설치 가이드)를 배치해 이탈을 줄이는 것이 우선 과제입니다.':'각 단계의 노출을 유지하며 전환(구매) 동선의 마찰을 줄이는 데 집중하세요.'} ※ 지표는 보유 데이터 근사치로, 정밀 전환 분석은 자사몰 GA/파워링크 실적 연동이 필요합니다.`,
         summary:`선택 기간(${lo}~${hi}, ${days}일) 동안 언론 보도 ${prPeriod.toLocaleString()}건을 ${prMedia}개 매체에서 확보했습니다(월 환산 ${prPerMonth.toFixed(1)}건). 자사 채널 총 오디언스는 ${audience.toLocaleString()}명(YouTube 구독자 ${(ch.subs||0).toLocaleString()} + Instagram 팔로워 ${(ig.followers!=null?ig.followers.toLocaleString():'-')})이며, 콘텐츠는 월 평균 ${contentPerMonth.toFixed(1)}건(${domSrc} 중심) 발행됐습니다. 카페 여론은 긍정 ${posR}% · 부정 ${negR}%로 순감성 ${netSent>=0?'+':''}${netSent}%p, ${netSent>=0?'전반적으로 우호적':'부정 신호에 주의가 필요한'} 국면입니다. (아래 인사이트는 편집 버튼으로 수정해 대체자료로 활용하세요.)`,
         pr:`월 환산 발행량은 ${prPerMonth.toFixed(1)}건, 활동 매체 ${prMedia}개(발행당 매체 비율 ${diversity}%)입니다. 전월 동기 대비 ${prMoM.replace(/<[^>]+>/g,'')}건, 전년 동기 대비 ${prYoY.replace(/<[^>]+>/g,'')}건. ${diversity<50?'특정 매체 의존도가 높아 매체 다변화 여지가 있습니다.':'매체 분산은 양호합니다.'} 기획기사·인터뷰 비중을 높여 노출의 질을 관리하세요.`,
         owned:`총 오디언스 ${audience.toLocaleString()}명, 최근 영상 참여율 ${engRate.toFixed(2)}%입니다. 콘텐츠 발행 구성은 블로그 ${shB}% · 영상 ${shY}% · 인스타 ${shI}%로 ${domSrc}에 집중돼 있어, ${domSrc==='블로그'?'영상·릴스 등 노출형 콘텐츠 비중 확대':'채널 간 균형'}를 검토할 만합니다. 발행량과 반응(좋아요·댓글)을 함께 추적하세요.`,
