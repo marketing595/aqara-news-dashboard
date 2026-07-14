@@ -1477,9 +1477,9 @@
       }).catch(()=>{});
     }
 
-    // ===== 온드미디어 (자사 YouTube 자동 실측 + Instagram 수기) =====
+    // ===== 온드미디어 (자사 YouTube·Instagram·블로그 자동 실측) =====
     let OWNED={ generatedAt:'', youtube:{ channel:{title:'아카라 라이프',subs:1370,views:944150,videos:131}, recent:[] },
-      instagram:{ asOf:'수기 입력 대기', followers:null, posts:null, following:null },
+      instagram:{ asOf:'수집 대기', followers:null, posts:null, following:null },
       blog:{ blogs:[], total:0, recent30:0 } };
     const KO_UNIT=n=>{ n=+n||0; if(n>=100000000) return (n/100000000).toFixed(1)+'억'; if(n>=10000) return (n/10000).toFixed(1)+'만'; return n.toLocaleString(); };
     let OWNED_HIST=[], CAFE_HIST=[];
@@ -1518,13 +1518,13 @@
         const url='https://youtu.be/'+v.id;
         return `<tr class="hover:bg-[#FEFBEE]"><td class="px-3 py-2.5 min-w-[280px]"><a href="${url}" target="_blank" rel="noopener" class="lnk font-medium">${esc(v.title)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(v.date)}</td><td class="px-3 py-2.5 text-right num">${(v.views||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num">${(v.likes||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num">${(v.comments||0).toLocaleString()}</td><td class="px-3 py-2.5 text-right num font-semibold text-ink">${er}%</td></tr>`;
       }).join(''):'<tr><td colspan="6" class="text-center py-6 text-slate-400">데이터 로딩 중…</td></tr>';
-      const ig=OWNED.instagram||{}, wait='<span class="text-slate-300">수기 대기</span>';
+      const ig=OWNED.instagram||{}, wait='<span class="text-slate-300">수집 대기</span>';
       const igkpi=(label,val,sub)=>`<div class="card p-5"><p class="text-sm text-slate-500">${label}</p><p class="num text-2xl font-extrabold text-ink mt-1">${val}</p><p class="text-xs text-slate-400 mt-1">${sub}</p></div>`;
       document.getElementById('ownedIgKpi').innerHTML=
         igkpi('팔로워', ig.followers!=null?ig.followers.toLocaleString()+'명':wait, '@aqaralife.official')+
         igkpi('게시물', ig.posts!=null?ig.posts.toLocaleString()+'개':wait, '누적 게시물')+
         igkpi('팔로잉', ig.following!=null?ig.following.toLocaleString()+'명':'<span class="text-slate-300">-</span>', '')+
-        igkpi('기준일', ig.asOf||'수기', '인스타 지표 기준');
+        igkpi('기준일', ig.asOf||'-', '인스타 지표 기준');
       const igPosts=ig.recent||[];
       document.getElementById('ownedIgPostsWrap').classList.toggle('hidden', !igPosts.length);
       document.getElementById('ownedIgManualNote').classList.toggle('hidden', igPosts.length>0);
@@ -1572,7 +1572,7 @@
       document.getElementById('ownedOverviewKpi').innerHTML=
         kc('YouTube 구독자',(ch.subs!=null?ch.subs.toLocaleString():'-')+'명',deltaBadge(histDelta(OWNED_HIST,'ytSubs',7),'명'))+
         kc('YouTube 총조회',KO_UNIT(ch.views),deltaBadge(histDelta(OWNED_HIST,'ytViews',7),'회'))+
-        kc('Instagram 팔로워',ig.followers!=null?ig.followers.toLocaleString()+'명':'<span class="text-slate-300 text-lg">수기 대기</span>',deltaBadge(histDelta(OWNED_HIST,'igFollowers',7),'명'))+
+        kc('Instagram 팔로워',ig.followers!=null?ig.followers.toLocaleString()+'명':'<span class="text-slate-300 text-lg">수집 대기</span>',deltaBadge(histDelta(OWNED_HIST,'igFollowers',7),'명'))+
         kc('블로그 전체 글',blTotal.toLocaleString()+'건',deltaBadge(histDelta(OWNED_HIST,'blogTotal',7),'건'));
       const row=(k,v)=>`<div class="flex items-center justify-between text-sm"><span class="text-slate-500">${k}</span><span class="num font-semibold text-ink">${v}</span></div>`;
       const card=(title,sub,rows,btn,color)=>`<div class="card p-5 flex flex-col">
@@ -1581,7 +1581,7 @@
         <button onclick="switchOwned('${btn}')" class="mt-4 text-[13px] font-medium text-ink hover:underline text-left">자세히 보기 →</button></div>`;
       document.getElementById('ownedOverviewCards').innerHTML=
         card('YouTube','자동 실측', row('구독자',(ch.subs||0).toLocaleString()+'명')+row('업로드 영상',(ch.videos||0).toLocaleString()+'개')+row('영상 평균 조회',KO_UNIT(avg)),'youtube','text-red-600')+
-        card('Instagram','수기 입력', row('팔로워',ig.followers!=null?ig.followers.toLocaleString()+'명':'수기 대기')+row('게시물',ig.posts!=null?ig.posts.toLocaleString()+'개':'-')+row('기준일',ig.asOf||'수기'),'instagram','text-[#C13584]')+
+        card('Instagram','Graph API 실측', row('팔로워',ig.followers!=null?ig.followers.toLocaleString()+'명':'-')+row('게시물',ig.posts!=null?ig.posts.toLocaleString()+'개':'-')+row('기준일',ig.asOf||'-'),'instagram','text-[#C13584]')+
         card('네이버 블로그','관리 '+nBlogs+'개', row('전체 글',blTotal.toLocaleString()+'건')+row('최근 30일 발행',(bl.recent30||0)+'건')+row('최신 발행일',(_all[0]?_all[0].date:'-')),'blog','text-[#03C75A]');
       renderOwnedTrends();
     }
