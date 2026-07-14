@@ -1600,11 +1600,8 @@
       const monShift=(ym,n)=>{ let y=+ym.slice(0,4),m=+ym.slice(5,7)-n; while(m<1){m+=12;y--;} return y+'-'+String(m).padStart(2,'0'); };
       const mcut = p==='quarter'?monShift(cNow,2) : p==='half'?monShift(cNow,5) : '0000-00';
       const cm=CONTENT_HIST.filter(m=>m.month>=mcut);
-      draw('ovContentChart',{type:'bar',data:{labels:cm.map(m=>m.month),datasets:[
-        {label:'블로그',data:cm.map(m=>m.blog),backgroundColor:'#5E7350',stack:'c'},
-        {label:'영상',data:cm.map(m=>m.youtube),backgroundColor:'#BF5332',stack:'c'},
-        {label:'인스타',data:cm.map(m=>m.instagram),backgroundColor:'#C13584',stack:'c'}]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{maxTicksLimit:10,font:{size:8}}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:9}}}}});
+      const ovDs=[{label:'블로그',data:cm.map(m=>m.blog),backgroundColor:'#5E7350',stack:'c'},{label:'영상',data:cm.map(m=>m.youtube),backgroundColor:'#BF5332',stack:'c'},{label:'인스타',data:cm.map(m=>m.instagram),backgroundColor:'#C13584',stack:'c'}];
+      draw('ovContentChart',{type:'bar',data:{labels:cm.map(m=>m.month),datasets:ovDs},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{maxTicksLimit:10,font:{size:8}}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:9}}}}}});
     }
     function renderOwnedBlog(){
       const all=blogAll();
@@ -1699,11 +1696,8 @@
       rline('rptViewsChart',lab,[{label:'총조회',data:oh.map(h=>h.ytViews),borderColor:'#D68134',backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:oh.length<=1?4:2}]);
       // 콘텐츠 발행 추이 — 월별 소급 데이터(2021~), 소스별 stacked
       const cm=CONTENT_HIST.filter(m=>m.month>=lo.slice(0,7)&&m.month<=hi.slice(0,7));
-      draw('rptContentChart',{type:'bar',data:{labels:cm.map(m=>m.month),datasets:[
-        {label:'블로그',data:cm.map(m=>m.blog),backgroundColor:'#5E7350',stack:'c'},
-        {label:'영상',data:cm.map(m=>m.youtube),backgroundColor:'#BF5332',stack:'c'},
-        {label:'인스타',data:cm.map(m=>m.instagram),backgroundColor:'#C13584',stack:'c'}]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,font:{size:10}}}},scales:{x:{stacked:true,ticks:{maxTicksLimit:12,font:{size:9}}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:10}}}}});
+      const rptDs=[{label:'블로그',data:cm.map(m=>m.blog),backgroundColor:'#5E7350',stack:'c'},{label:'영상',data:cm.map(m=>m.youtube),backgroundColor:'#BF5332',stack:'c'},{label:'인스타',data:cm.map(m=>m.instagram),backgroundColor:'#C13584',stack:'c'}];
+      draw('rptContentChart',{type:'bar',data:{labels:cm.map(m=>m.month),datasets:rptDs},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,font:{size:10}}}},scales:{x:{stacked:true,ticks:{maxTicksLimit:12,font:{size:9}}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:10}}}}}});
       // 팔로워 + 카페 언급 (날짜 합집합)
       const ch2=CAFE_HIST.filter(h=>h.date>=lo&&h.date<=hi);
       const allDates=[...new Set([...oh.map(h=>h.date),...ch2.map(h=>h.date)])].sort();
