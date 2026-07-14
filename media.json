@@ -1,0 +1,4 @@
+{
+ "note": "미디어 라이브러리 자산 목록. web/media/ 에 파일을 넣고 아래 items 에 항목을 추가하면 대시보드에 표시됩니다. 필드: title, category, url(다운로드 경로), thumb(선택·미리보기), size(선택).",
+ "items": []
+}

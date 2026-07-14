@@ -82,9 +82,12 @@
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-7 overflow-x-auto">
       <button id="grpBtn-pr" onclick="switchGroup('pr')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-brand text-ink whitespace-nowrap">PR</button>
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
-      <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페 모니터링</button>
       <button id="grpBtn-campaign" onclick="switchGroup('campaign')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">캠페인</button>
       <button id="grpBtn-report" onclick="switchGroup('report')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">종합 리포트</button>
+      <button id="grpBtn-calendar" onclick="switchGroup('calendar')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">이슈 캘린더</button>
+      <button id="grpBtn-medialist" onclick="switchGroup('medialist')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어리스트</button>
+      <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
+      <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
     </div>
   </div>
   <!-- PR 하위탭 -->
@@ -680,6 +683,126 @@
      </section>
      <p id="reportEditNote" class="text-center text-xs text-slate-400 pt-1 hidden">편집 모드: 요약·인사이트 텍스트를 클릭해 수정 후 '저장' 버튼을 누르세요. 내용은 이 브라우저에 저장됩니다.</p>
      <p class="text-center text-xs text-slate-400 pt-4">수치는 자동 수집 기준 · 인사이트는 수정 가능(대체자료로 활용)</p>
+   </div>
+
+   <!-- 브랜드 이슈 캘린더 -->
+   <div id="view-calendar" class="hidden">
+     <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
+       <div>
+         <h2 class="text-xl font-extrabold text-ink">브랜드 이슈 캘린더 <span class="text-sm font-semibold text-agray">(발행·캠페인·전시·이슈)</span></h2>
+         <p class="text-sm text-slate-500 mt-1">보도자료 발행일은 <b>자동</b> 표시 · 캠페인/전시/이슈는 직접 추가(이 브라우저 저장)</p>
+       </div>
+       <div class="flex items-center gap-2">
+         <button onclick="calShift(-1)" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50 text-sm">◀</button>
+         <span id="calLabel" class="font-bold text-ink text-lg w-28 text-center"></span>
+         <button onclick="calShift(1)" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50 text-sm">▶</button>
+         <button onclick="calToday()" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50 text-sm">오늘</button>
+       </div>
+     </div>
+     <div class="card p-3 sm:p-5 mb-5">
+       <div class="grid grid-cols-7 text-center text-[11px] font-semibold text-slate-400 mb-1"><div class="text-ared">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div class="text-ablue">토</div></div>
+       <div id="calGrid" class="grid grid-cols-7 gap-1"></div>
+     </div>
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+       <div class="card p-5">
+         <h3 class="accent font-extrabold text-ink mb-3">이벤트 추가</h3>
+         <div class="flex flex-wrap gap-2 items-center">
+           <input id="calEvDate" type="date" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" />
+           <select id="calEvType" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 bg-white"><option>캠페인</option><option>전시·행사</option><option>제품·출시</option><option>이슈</option><option>기타</option></select>
+           <input id="calEvText" type="text" placeholder="내용" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 flex-1 min-w-[140px]" />
+           <button onclick="calAddEvent()" class="text-sm bg-ink text-white px-4 py-1.5 rounded-lg font-semibold">추가</button>
+         </div>
+       </div>
+       <div class="card p-5">
+         <h3 class="accent font-extrabold text-ink mb-3" id="calMonthTitle">이번 달 일정</h3>
+         <div id="calEventList" class="space-y-2 max-h-80 overflow-auto"></div>
+       </div>
+     </div>
+   </div>
+
+   <!-- 미디어리스트 -->
+   <div id="view-medialist" class="hidden">
+     <div class="card p-5 mb-5">
+       <h2 class="text-xl font-extrabold text-ink">미디어리스트 <span class="text-sm font-semibold text-agray">(매체·기자·연락처)</span></h2>
+       <p class="text-sm text-slate-500 mt-1">보도 노출 매체를 <b>부동산·인테리어·IT·AI</b> 담당으로 분류해 관리합니다. 매체·기자명은 수집 뉴스 기준 자동 집계, <b>이메일은 직접 입력</b>(네이버 API로 자동수집 불가).</p>
+     </div>
+     <div id="mediaListAuto" class="card p-5 mb-5">
+       <h3 class="accent font-extrabold text-ink mb-3">수집 매체 현황 <span class="text-xs font-normal text-slate-400">(PR 데이터 기준 · 발행 건수순)</span></h3>
+       <div id="mediaListAgg" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+     </div>
+     <div class="card p-5">
+       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+         <h3 class="accent font-extrabold text-ink">기자 연락처 <span class="text-xs font-normal text-slate-400">(직접 관리)</span></h3>
+         <div class="flex flex-wrap gap-2 items-center">
+           <select id="mlBeat" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 bg-white"><option>부동산</option><option>인테리어</option><option>IT</option><option>AI</option><option>기타</option></select>
+           <input id="mlMedia" placeholder="매체" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 w-24" />
+           <input id="mlName" placeholder="기자명" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 w-24" />
+           <input id="mlEmail" placeholder="이메일" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 w-40" />
+           <button onclick="mlAdd()" class="text-sm bg-ink text-white px-4 py-1.5 rounded-lg font-semibold">추가</button>
+         </div>
+       </div>
+       <div class="overflow-auto rounded-lg border border-[#E6E6E3]">
+         <table class="w-full text-sm"><thead class="bg-[#F7F7F5] text-slate-500"><tr class="text-left"><th class="px-3 py-2">분야</th><th class="px-3 py-2">매체</th><th class="px-3 py-2">기자</th><th class="px-3 py-2">이메일</th><th class="px-3 py-2"></th></tr></thead><tbody id="mlBody" class="divide-y divide-slate-100"></tbody></table>
+       </div>
+       <p class="text-xs text-slate-400 mt-2">※ 입력 내용은 이 브라우저에 저장됩니다. 팀 공유가 필요하면 CSV로 내보내 관리하세요. <button onclick="mlExport()" class="text-ink font-semibold hover:underline">CSV 내보내기</button></p>
+     </div>
+   </div>
+
+   <!-- 미디어 라이브러리 -->
+   <div id="view-library" class="hidden">
+     <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
+       <div>
+         <h2 class="text-xl font-extrabold text-ink">미디어 라이브러리 <span class="text-sm font-semibold text-agray">(다운로드용 자산)</span></h2>
+         <p class="text-sm text-slate-500 mt-1">제품 이미지·로고·보도자료 등 <b>외부 배포용 자산</b>을 모아 다운로드합니다.</p>
+       </div>
+       <div class="flex gap-2 items-center">
+         <select id="libCat" onchange="renderLibrary()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 bg-white"><option value="">전체 카테고리</option></select>
+         <input id="libSearch" oninput="renderLibrary()" placeholder="검색" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 w-36" />
+       </div>
+     </div>
+     <div id="libGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+     <div class="card p-4 mt-5 bg-[#FAFAF9] border-[#E6E6E3]">
+       <p class="text-[12px] font-bold text-ink mb-1">자산 업로드(수동) 방법</p>
+       <p class="text-[12px] text-slate-500 leading-relaxed">정적 사이트라 화면에서 직접 업로드는 안 됩니다. 파일을 <code class="bg-white px-1 rounded border">web/media/</code> 폴더에 넣고 <code class="bg-white px-1 rounded border">media.json</code>에 항목을 추가하면 여기에 자동 노출됩니다. (담당자가 파일 전달 주시면 제가 등록해 드립니다.)</p>
+     </div>
+   </div>
+
+   <!-- ONLY MKT (팀 전용) -->
+   <div id="view-mkt" class="hidden">
+     <div id="mktGate" class="max-w-md mx-auto card p-8 mt-8 text-center">
+       <div class="text-3xl mb-2">🔒</div>
+       <h2 class="text-xl font-extrabold text-ink mb-1">ONLY MKT · 팀 전용</h2>
+       <p class="text-sm text-slate-500 mb-4">마케팅팀 작업 도구입니다. 접근 비밀번호를 입력하세요.</p>
+       <div class="flex gap-2 max-w-xs mx-auto">
+         <input id="mktPw" type="password" onkeydown="if(event.key==='Enter')mktUnlock()" placeholder="비밀번호" class="flex-1 text-sm border border-[#E6E6E3] rounded-lg px-3 py-2" />
+         <button onclick="mktUnlock()" class="text-sm bg-[#7C5CFF] text-white px-4 py-2 rounded-lg font-semibold">입장</button>
+       </div>
+       <p id="mktPwErr" class="text-xs text-ared mt-2 hidden">비밀번호가 올바르지 않습니다.</p>
+       <p class="text-[11px] text-slate-400 mt-4">※ 정적 사이트 특성상 이 잠금은 <b>화면 가림 수준</b>입니다(진짜 보안 아님). 민감 정보는 별도 관리 권장.</p>
+     </div>
+     <div id="mktInner" class="hidden">
+       <div class="bg-[#F4F1FF] border-b border-[#E1DBFF] -mt-5 mb-5">
+         <div class="max-w-[1400px] mx-auto px-1 flex gap-2 py-2 overflow-x-auto">
+           <button id="mktBtn-cafe" onclick="mktSub('cafe')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-[#7C5CFF] text-white whitespace-nowrap">카페 모니터링</button>
+           <button id="mktBtn-insta" onclick="mktSub('insta')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
+           <button id="mktBtn-blog" onclick="mktSub('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
+           <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
+         </div>
+       </div>
+       <div id="mktCafeSlot"></div>
+       <div id="mktSec-insta" class="hidden">
+         <div class="card p-5 mb-5"><h3 class="accent font-extrabold text-ink mb-1">인스타그램 콘텐츠 자동 제안 <span class="text-xs font-normal text-slate-400">(주제·카피·해시태그)</span></h3>
+           <p class="text-[12px] text-slate-400 mb-3">최근 업계 핫키워드·자사 제품·시즌 이슈를 반영한 릴스/피드 아이디어입니다. 편집해 사용하세요(이 브라우저 저장).</p>
+           <div id="mktInstaIdeas" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+         </div>
+       </div>
+       <div id="mktSec-blog" class="hidden">
+         <div class="card p-5 mb-5"><h3 class="accent font-extrabold text-ink mb-1">블로그 글 자동 제안 <span class="text-xs font-normal text-slate-400">(관리 블로그 4개 컨셉별)</span></h3>
+           <p class="text-[12px] text-slate-400 mb-3">블로그별 컨셉에 맞춘 <b>초안·SEO 키워드·이미지 방향</b> 제안입니다. 편집 가능(이 브라우저 저장).</p>
+           <div id="mktBlogIdeas" class="space-y-4"></div>
+         </div>
+       </div>
+     </div>
    </div>
   </main>
 
@@ -1584,18 +1707,18 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], report:['report','competitor'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', competitor:'report', report:'report' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], campaign:['campaign'], report:['report','competitor'], calendar:['calendar'], medialist:['medialist'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', campaign:'campaign', competitor:'report', report:'report', calendar:'calendar', medialist:'medialist', library:'library', mkt:'mkt', cafe:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
-      ['analytics','briefing','campaign','owned','cafe','report','competitor'].forEach(v=>{
-        document.getElementById('view-'+v).classList.toggle('hidden', v!==t);
+      ['analytics','briefing','campaign','owned','cafe','report','competitor','calendar','medialist','library','mkt'].forEach(v=>{
+        const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','campaign','report'].forEach(k=>{ document.getElementById('grpBtn-'+k).className=grpClass(k===g); });
+      ['pr','owned','campaign','report','calendar','medialist','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
@@ -1607,6 +1730,142 @@
       if(t==='cafe'){ renderCafe(); loadCafe(); }
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
       if(t==='competitor'){ loadCompetitor(); }
+      if(t==='calendar'){ renderCalendar(); }
+      if(t==='medialist'){ renderMediaList(); }
+      if(t==='library'){ loadLibrary(); }
+      if(t==='mkt'){ mktEnter(); }
+    }
+    function todayStr(){ return (typeof reportToday==='function')?reportToday():new Date().toISOString().slice(0,10); }
+
+    // ===== 브랜드 이슈 캘린더 =====
+    const CAL_COLOR={'보도자료':'#8A6A00','캠페인':'#BF5332','전시·행사':'#7C5CFF','제품·출시':'#5E7350','이슈':'#C13584','기타':'#5E85A6'};
+    let calYM=null;
+    let calEvents=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraCalEvents')||'{}');}catch(e){return {};} })();
+    function calSave(){ try{ localStorage.setItem('aqaraCalEvents',JSON.stringify(calEvents)); }catch(e){} }
+    function calToday(){ const t=todayStr(); calYM={y:+t.slice(0,4),m:+t.slice(5,7)-1}; renderCalendar(); }
+    function calShift(d){ if(!calYM){ calToday(); return; } let m=calYM.m+d,y=calYM.y; if(m<0){m=11;y--;} if(m>11){m=0;y++;} calYM={y,m}; renderCalendar(); }
+    function calPrCounts(){ const c={}; (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{ const d=r['게재일']; if(d) c[d]=(c[d]||0)+1; }); return c; }
+    function calAddEvent(){ const d=document.getElementById('calEvDate').value, ty=document.getElementById('calEvType').value, tx=(document.getElementById('calEvText').value||'').trim(); if(!d||!tx) return; (calEvents[d]=calEvents[d]||[]).push({type:ty,text:tx}); calSave(); document.getElementById('calEvText').value=''; renderCalendar(); }
+    function calDelEvent(d,i){ if(calEvents[d]){ calEvents[d].splice(i,1); if(!calEvents[d].length) delete calEvents[d]; calSave(); renderCalendar(); } }
+    function renderCalendar(){
+      if(!calYM){ calToday(); return; }
+      const y=calYM.y,m=calYM.m, pad=n=>(''+n).padStart(2,'0'), ymd=d=>y+'-'+pad(m+1)+'-'+pad(d);
+      document.getElementById('calLabel').textContent=y+'년 '+(m+1)+'월';
+      document.getElementById('calMonthTitle').textContent=(m+1)+'월 일정';
+      const startDow=new Date(y,m,1).getDay(), daysIn=new Date(y,m+1,0).getDate(), prc=calPrCounts(), today=todayStr();
+      let cells='';
+      for(let i=0;i<startDow;i++) cells+='<div class="min-h-[74px] rounded-lg bg-[#FAFAF9]"></div>';
+      for(let d=1;d<=daysIn;d++){ const key=ymd(d), pr=prc[key]||0, evs=calEvents[key]||[], isT=key===today, dow=(startDow+d-1)%7;
+        let chips=''; if(pr) chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR['보도자료']}">보도 ${pr}건</div>`;
+        evs.forEach(e=>{ chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR[e.type]||'#5E85A6'}" title="${esc(e.text)}">${esc(e.text)}</div>`; });
+        cells+=`<div class="min-h-[74px] rounded-lg border ${isT?'border-brand bg-brand/5':'border-[#EDEBE6]'} p-1 overflow-hidden"><div class="text-[11px] font-semibold ${dow===0?'text-ared':dow===6?'text-ablue':'text-slate-500'} mb-0.5">${d}</div>${chips}</div>`;
+      }
+      document.getElementById('calGrid').innerHTML=cells;
+      const items=[];
+      for(let d=1;d<=daysIn;d++){ const key=ymd(d); if(prc[key]) items.push({date:key,type:'보도자료',text:prc[key]+'건 발행',auto:true}); (calEvents[key]||[]).forEach((e,i)=>items.push({date:key,type:e.type,text:e.text,idx:i})); }
+      items.sort((a,b)=>a.date.localeCompare(b.date));
+      document.getElementById('calEventList').innerHTML=items.length?items.map(it=>`<div class="flex items-center gap-2 text-sm border-b border-[#F2EFE9] pb-1.5"><span class="text-[11px] text-slate-400 w-12 shrink-0">${it.date.slice(5)}</span><span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:${CAL_COLOR[it.type]||'#5E85A6'}"></span><span class="flex-1 ${it.auto?'text-slate-500':'text-ink'}">${esc(it.text)} <span class="text-[10px] text-slate-400">${esc(it.type)}</span></span>${it.auto?'':`<button onclick="calDelEvent('${it.date}',${it.idx})" class="text-[11px] text-slate-300 hover:text-ared">✕</button>`}</div>`).join(''):'<p class="text-sm text-slate-400">이 달 일정이 없습니다.</p>';
+    }
+
+    // ===== 미디어리스트 =====
+    let mlContacts=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraMediaList')||'[]');}catch(e){return [];} })();
+    function mlSave(){ try{ localStorage.setItem('aqaraMediaList',JSON.stringify(mlContacts)); }catch(e){} }
+    function mlAdd(){ const beat=document.getElementById('mlBeat').value, media=(document.getElementById('mlMedia').value||'').trim(), name=(document.getElementById('mlName').value||'').trim(), email=(document.getElementById('mlEmail').value||'').trim(); if(!media&&!name) return; mlContacts.push({beat,media,name,email}); mlSave(); ['mlMedia','mlName','mlEmail'].forEach(id=>document.getElementById(id).value=''); renderMediaList(); }
+    function mlDel(i){ mlContacts.splice(i,1); mlSave(); renderMediaList(); }
+    function mlExport(){ const head=['분야','매체','기자','이메일']; const lines=[head].concat(mlContacts.map(c=>[c.beat,c.media,c.name,c.email])); const csv=lines.map(r=>r.map(x=>'"'+String(x||'').replace(/"/g,'""')+'"').join(',')).join('\r\n'); dlBlob(csv,'아카라_미디어리스트.csv','text/csv'); }
+    function renderMediaList(){
+      const agg={}; (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{ const md=(r['매체']||'').toString().replace(/\(.*?\)/g,'').trim(); if(md&&md!=='(미상)') agg[md]=(agg[md]||0)+1; });
+      const arr=Object.entries(agg).sort((a,b)=>b[1]-a[1]);
+      const box=document.getElementById('mediaListAgg');
+      if(box) box.innerHTML=arr.length?arr.map(([m,c])=>`<div class="flex items-center justify-between rounded-lg border border-[#E6E6E3] px-3 py-2"><span class="text-sm text-ink truncate pr-2">${esc(m)}</span><span class="num text-sm font-bold text-slate-500 whitespace-nowrap">${c}건</span></div>`).join(''):'<p class="text-sm text-slate-400">PR 데이터 로딩 후 표시됩니다.</p>';
+      const tb=document.getElementById('mlBody');
+      if(tb) tb.innerHTML=mlContacts.length?mlContacts.map((c,i)=>`<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2"><span class="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc(c.beat||'')}</span></td><td class="px-3 py-2 text-ink">${esc(c.media||'')}</td><td class="px-3 py-2 text-slate-600">${esc(c.name||'')}</td><td class="px-3 py-2 text-slate-500">${c.email?`<a href="mailto:${esc(c.email)}" class="lnk">${esc(c.email)}</a>`:'-'}</td><td class="px-3 py-2 text-right"><button onclick="mlDel(${i})" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join(''):'<tr><td colspan="5" class="px-3 py-6 text-center text-slate-400">아직 등록된 연락처가 없습니다. 위에서 추가하세요.</td></tr>';
+    }
+
+    // ===== 미디어 라이브러리 =====
+    let LIBRARY={items:[]};
+    function loadLibrary(){ fetch('media.json?_='+Date.now()).then(r=>r.json()).then(d=>{ LIBRARY=d&&d.items?d:{items:[]}; renderLibrary(); }).catch(()=>{ LIBRARY={items:[]}; renderLibrary(); }); }
+    function renderLibrary(){
+      const items=LIBRARY.items||[]; const cats=[...new Set(items.map(x=>x.category).filter(Boolean))];
+      const csel=document.getElementById('libCat'); if(csel&&csel.options.length!==cats.length+1){ const cur=csel.value; csel.innerHTML='<option value="">전체 카테고리</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join(''); if(cats.indexOf(cur)>-1)csel.value=cur; }
+      const cf=csel?csel.value:'', q=(document.getElementById('libSearch').value||'').toLowerCase().trim();
+      const rows=items.filter(x=>(!cf||x.category===cf)&&(!q||((x.title||'')+(x.category||'')).toLowerCase().indexOf(q)>-1));
+      const grid=document.getElementById('libGrid');
+      grid.innerHTML=rows.length?rows.map(x=>`<div class="card overflow-hidden group"><div class="aspect-square bg-[#F4F1EA] overflow-hidden flex items-center justify-center">${x.thumb||x.url?`<img src="${esc(x.thumb||x.url)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.parentNode.innerHTML='<span class=\\'text-4xl\\'>🖼️</span>'"/>`:'<span class="text-4xl">🖼️</span>'}</div><div class="p-3"><div class="text-sm font-medium text-ink truncate">${esc(x.title||'무제')}</div><div class="text-[11px] text-slate-400 mb-2">${esc(x.category||'')}${x.size?(' · '+esc(x.size)):''}</div><a href="${esc(x.url||'#')}" download class="block text-center text-[13px] bg-ink text-white rounded-lg py-1.5 font-semibold hover:brightness-125">다운로드 ↓</a></div></div>`).join(''):'<div class="col-span-full text-center py-16 text-slate-400"><div class="text-4xl mb-2">📁</div>등록된 자산이 없습니다. <code class="bg-slate-100 px-1 rounded">media.json</code>에 항목을 추가하면 여기에 표시됩니다.</div>';
+    }
+
+    // ===== ONLY MKT (팀 전용) =====
+    const MKT_PW='aqara2026';   // 팀 공유 비밀번호(정적 사이트=화면 가림 수준). 변경 시 이 값 수정.
+    let mktSection='cafe';
+    let mktCafeMoved=false;
+    function mktMoveCafe(){ if(mktCafeMoved) return; const cafe=document.getElementById('view-cafe'), slot=document.getElementById('mktCafeSlot'); if(cafe&&slot){ slot.appendChild(cafe); mktCafeMoved=true; } }
+    function mktEnter(){ const ok=sessionStorage.getItem('mktUnlocked')==='1';
+      document.getElementById('mktGate').classList.toggle('hidden', ok);
+      document.getElementById('mktInner').classList.toggle('hidden', !ok);
+      if(ok){ mktMoveCafe(); mktSub(mktSection); } else { const pw=document.getElementById('mktPw'); if(pw){ pw.value=''; pw.focus(); } }
+    }
+    function mktUnlock(){ const v=document.getElementById('mktPw').value; if(v===MKT_PW){ sessionStorage.setItem('mktUnlocked','1'); document.getElementById('mktPwErr').classList.add('hidden'); mktEnter(); } else { document.getElementById('mktPwErr').classList.remove('hidden'); } }
+    function mktLock(){ sessionStorage.removeItem('mktUnlocked'); mktEnter(); }
+    function mktSub(s){ mktSection=s;
+      const cafe=document.getElementById('view-cafe'); if(cafe) cafe.classList.toggle('hidden', s!=='cafe');
+      document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
+      document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
+      ['cafe','insta','blog'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap '+(x===s?'bg-[#7C5CFF] text-white font-semibold':'text-[#5B44C7] hover:bg-[#EDE9FF] font-medium'); });
+      if(s==='cafe'){ renderCafe(); loadCafe(); }
+      if(s==='insta'){ renderMktInsta(); }
+      if(s==='blog'){ renderMktBlog(); }
+    }
+    let mktEdits=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraMktEdits')||'{}');}catch(e){return {};} })();
+    function mktSaveEdit(el){ mktEdits[el.dataset.mk]=el.innerText.trim(); try{ localStorage.setItem('aqaraMktEdits',JSON.stringify(mktEdits)); }catch(e){} }
+    function mktHotKw(){ try{ return computeHotKw().slice(0,6).map(x=>x[0]); }catch(e){ return ['스마트홈','도어락','매터','AI홈','인테리어','재실센서']; } }
+    function renderMktInsta(){
+      const hk=mktHotKw();
+      const ideas=[
+        {t:'릴스: 30초 무타공 설치 타임랩스',d:'L100/도어락 설치 과정을 빠르게. "구멍 안 뚫어요" 후킹',tags:['스마트도어락','무타공','자취템','인테리어']},
+        {t:'카드뉴스: 스마트홈 오해 3가지',d:'"비싸다/어렵다/전세는 안된다" 반박 → 아카라 해결',tags:['스마트홈','전세','원룸','자취']},
+        {t:'릴스: 아침 루틴 자동화',d:'재실센서·스마트조명으로 기상~출근 동선 자동화 브이로그',tags:['갓생','루틴','스마트조명','재실센서']},
+        {t:'비포/애프터: 센서 하나로 바뀐 공간',d:'설치 전후 비교. 감성 인테리어 톤',tags:['홈스타일링','비포애프터','집꾸미기']},
+        {t:'이슈 픽업: '+(hk[0]||'매터')+' 쉽게 설명',d:'업계 핫키워드를 소비자 눈높이로. 저장 유도',tags:hk.slice(0,4)},
+        {t:'제품 컷: 색감 통일 무드샷',d:'제품을 인테리어 소품처럼. 디자인 강조',tags:['스마트홈인테리어','제품컷','무드']}
+      ];
+      document.getElementById('mktInstaIdeas').innerHTML=ideas.map((x,i)=>`<div class="rounded-lg border border-[#EDE9FF] p-3 bg-[#FBFAFF]">
+        <div class="text-sm font-bold text-ink mb-1" contenteditable="true" data-mk="insta-t-${i}" oninput="mktSaveEdit(this)">${esc(mktEdits['insta-t-'+i]||x.t)}</div>
+        <div class="text-[12px] text-slate-500 mb-2" contenteditable="true" data-mk="insta-d-${i}" oninput="mktSaveEdit(this)">${esc(mktEdits['insta-d-'+i]||x.d)}</div>
+        <div>${x.tags.map(tg=>`<span class="inline-block text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7] mr-1 mb-1">#${esc(tg)}</span>`).join('')}</div>
+      </div>`).join('');
+    }
+    const BLOG_CONCEPTS=[
+      {id:'aqaralife',name:'아카라라이프 (공식)',concept:'제품·기능 중심 · 설치/연동 가이드 · 신뢰감 있는 전문 톤',
+       drafts:['[가이드] 아카라 L100 도어락 설치부터 앱 연동까지 A to Z','[비교] 매터(Matter) 허브 M100 vs M200, 우리 집엔 뭐가 맞을까','[꿀팁] 재실센서로 완성하는 자동 소등·대기전력 차단'],
+       seo:['아카라 도어락','매터 허브','스마트홈 구축','스마트스위치 설치','재실센서'],
+       img:'제품 단독컷(화이트 배경) + 설치 단계별 스크린샷 + 앱 UI 캡처'},
+      {id:'sooni',name:'수니집 일상기록',concept:'실사용 일상 브이로그 · 솔직 후기 · 공감형 스토리',
+       drafts:['스마트홈 3개월 써보니… 진짜 편해진 것 5가지','아이 키우는 집, 도어락 실종방지 기능이 이렇게 든든할 줄','퇴근하면 불이 켜져있는 집 (재실센서 실사용기)'],
+       seo:['스마트홈 후기','아이 있는 집','스마트도어락 실사용','워킹맘 살림템'],
+       img:'실제 집 공간 사진 + 사용 순간 스냅 + 손 디테일컷'},
+      {id:'minimal',name:'미니멀라이프',concept:'미니멀 인테리어 · 선 없는 깔끔함 · 공간 정돈',
+       drafts:['선 없는 집 만들기: 스마트 스위치로 벽을 비우다','미니멀 침실 완성하는 무드등·자동 커튼 세팅','가전 리모컨 없애기 프로젝트 (허브 하나로 통합)'],
+       seo:['미니멀 인테리어','스마트조명','선정리','스마트커튼','홈스타일링'],
+       img:'여백 많은 공간샷 + 제품이 인테리어에 녹아든 컷 + 톤온톤'},
+      {id:'hada',name:'하다 일상',concept:'라이프스타일 루틴 · 갓생 · 소소한 자동화',
+       drafts:['아침을 바꾼 스마트홈 루틴 (기상~출근 자동화)','집순이의 주말, 조명 씬 하나로 분위기 전환','작은 원룸도 스마트홈 되나요? (자취생 셋업)'],
+       seo:['스마트홈 루틴','갓생','원룸 스마트홈','자취템','조명 씬'],
+       img:'라이프스타일 무드 + 루틴 순간 + 아늑한 조명 분위기'}
+    ];
+    function renderMktBlog(){
+      document.getElementById('mktBlogIdeas').innerHTML=BLOG_CONCEPTS.map((b,bi)=>`
+        <div class="rounded-lg border border-[#EDE9FF] overflow-hidden">
+          <div class="px-4 py-2.5 bg-[#F4F1FF] flex items-center justify-between"><span class="font-bold text-[#4B32C3]">${esc(b.name)}</span><span class="text-[11px] text-[#7C5CFF]">블로그 컨셉</span></div>
+          <div class="p-4">
+            <div class="text-[12px] text-slate-500 mb-3" contenteditable="true" data-mk="blog-c-${bi}" oninput="mktSaveEdit(this)"><b class="text-ink">컨셉</b> · ${esc(mktEdits['blog-c-'+bi]||b.concept)}</div>
+            <p class="text-[12px] font-bold text-ink mb-1">📝 글 초안 아이디어</p>
+            <ul class="mb-3 space-y-1">${b.drafts.map((d,di)=>`<li class="text-[13px] text-slate-700 leading-snug" contenteditable="true" data-mk="blog-d-${bi}-${di}" oninput="mktSaveEdit(this)">· ${esc(mktEdits['blog-d-'+bi+'-'+di]||d)}</li>`).join('')}</ul>
+            <p class="text-[12px] font-bold text-ink mb-1">🔍 SEO 키워드</p>
+            <div class="mb-3">${b.seo.map(k=>`<span class="inline-block text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7] mr-1 mb-1">${esc(k)}</span>`).join('')}</div>
+            <p class="text-[12px] font-bold text-ink mb-1">🖼️ 이미지 방향</p>
+            <div class="text-[12px] text-slate-500" contenteditable="true" data-mk="blog-i-${bi}" oninput="mktSaveEdit(this)">${esc(mktEdits['blog-i-'+bi]||b.img)}</div>
+          </div>
+        </div>`).join('');
     }
     let ownedSection='overview';
     function ownedChannelLinks(s){
