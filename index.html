@@ -232,17 +232,10 @@
          <div class="h-64"><canvas id="themeTrendChart"></canvas></div>
          <p id="themeTrendNote" class="text-xs text-slate-400 mt-2"></p>
        </div>
-       <div class="mt-5">
-         <p class="text-sm font-semibold text-slate-600 mb-2">주요 개별 키워드 추이 <span class="text-xs font-normal text-slate-400">(데이터랩 · 최근값 · 전월/전년 대비)</span></p>
-         <div class="overflow-auto rounded-lg border border-[#E6E6E3]">
-           <table class="w-full text-sm">
-             <thead class="bg-[#F7F7F5] text-slate-500"><tr class="text-left">
-               <th class="px-3 py-2 whitespace-nowrap">키워드</th><th class="px-3 py-2 text-right whitespace-nowrap">최근 관심도</th>
-               <th class="px-3 py-2 text-right whitespace-nowrap">전월 대비</th><th class="px-3 py-2 text-right whitespace-nowrap">전년 대비</th><th class="px-3 py-2 whitespace-nowrap">최근 추이</th></tr></thead>
-             <tbody id="kwTrendBody" class="divide-y divide-slate-100"></tbody>
-           </table>
-         </div>
-         <p class="text-[11px] text-slate-400 mt-1.5">※ 상대 관심도(키워드별 자체 최고점=100 기준) · 스파크라인은 최근 12개월</p>
+       <div class="mt-6">
+         <p class="text-sm font-semibold text-slate-600 mb-2">주요 개별 키워드 월별 검색 추이 <span class="text-xs font-normal text-slate-400">(네이버 데이터랩 · 월별 쿼리 상대지수 · 2021~)</span></p>
+         <div class="h-72"><canvas id="kwTrendChart"></canvas></div>
+         <p class="text-[11px] text-slate-400 mt-1.5">※ 아카라·아카라라이프·스마트홈·스마트도어락·스마트조명의 <b>월별 검색 관심도</b>. 각 키워드는 자체 최고점=100 기준이라 절대 크기 비교가 아닌 <b>추이(흐름)</b>로 해석하세요. 상단 기간 버튼과 연동됩니다.</p>
        </div>
        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
          <div>
@@ -1324,7 +1317,12 @@
     }
     let DATALAB={series:[]};
     const POWERLINK_KW='스마트홈구축,스마트홈설치,스마트홈,스마트홈인테리어,스마트홈시공,홈자동화,홈오토메이션,스마트홈솔루션,스마트홈시스템,스마트홈네트워크,스마트홈리모델링,스마트홈설계,스마트홈통합제어,공간자동화,주거자동화시스템,스마트홈만들기,스마트홈추천,스마트홈서비스,스마트홈도입,스마트홈구축방법,IOT구축,홈IOT구축,IOT인테리어,IoT설치,홈IOT,iot스마트홈구축,IOT시공,IOT리모델링,스마트인테리어,인테리어IOT,IoT인테리어업체,IOT오피스시공,스마트오피스,스마트오피스구축,조명제어시스템,스마트스위치시공,스마트조명시공,스마트커튼설치,스마트도어락설치,IOT시공업체,스마트홈인테리어시공,인테리어스마트홈시공,스마트홈인테리어견적,스마트홈견적,스마트홈시공견적,스마트홈업체,스마트홈업체추천,스마트홈설치업체,스마트홈구축업체,스마트홈설계업체,인테리어업체스마트홈,전기시공스마트홈,스마트홈파트너,스마트홈시공파트너,스마트홈B2B,스마트홈사업자몰,스마트홈외주,스마트홈공사,스마트홈시공사,스마트홈시공문의,스마트홈상담,스마트홈문의,스마트홈구축문의,스마트홈상담문의,스마트홈비용,스마트홈구축비용,스마트홈설치비용,iot상담,스마트홈앱설정,스마트홈앱연동,스마트홈연동,스마트홈연동방법,스마트홈허브추천,스마트홈브랜드,스마트홈트렌드,스마트홈기술교육,스마트홈교육,스마트홈자격증,아카라라이프시공,아카라설치,스마트홈인테리어교육,IOT교육,인테리어교육,인테리어배우기,인테리어기술,인테리어자격증,집수리교육,집수리아카데미,인테리어디자인,인테리어종류,구경하는집,스마트홈구경하는집,25평인테리어,신혼인테리어,아파트구경하는집,리모델링견적,구옥리모델링,노후아파트인테리어,침실인테리어,아기방인테리어'.split(',');
-    function renderPlkwList(){ const el=document.getElementById('plkwList'); if(el&&!el.innerHTML) el.innerHTML=POWERLINK_KW.map(k=>`<span class="text-[11px] px-1.5 py-0.5 rounded bg-white border border-[#E6E6E3] text-slate-600">${esc(k)}</span>`).join(''); }
+    function renderPlkwList(){ const el=document.getElementById('plkwList'); if(!el||el.dataset.done)return; el.dataset.done='1';
+      const rows=POWERLINK_KW.map((k,i)=>`<tr class="border-b border-[#EFEDE7]"><td class="px-2 py-1 text-right text-slate-400 num w-7">${i+1}</td><td class="px-2 py-1 text-slate-700">${esc(k)}</td></tr>`);
+      const n=POWERLINK_KW.length, per=Math.ceil(n/4);
+      let cols=''; for(let c=0;c<4;c++){ const seg=rows.slice(c*per,(c+1)*per).join(''); if(seg) cols+=`<table class="w-full text-[12px] align-top"><tbody>${seg}</tbody></table>`; }
+      el.innerHTML=`<div class="grid grid-cols-2 md:grid-cols-4 gap-x-5">${cols}</div>`;
+    }
     function kwSpark(series){ const s=(series||[]).slice(-12); if(s.length<2)return ''; const mx=Math.max(...s,1),mn=Math.min(...s),w=90,h=22;
       const pts=s.map((v,i)=>((i/(s.length-1))*w).toFixed(1)+','+(h-2-((v-mn)/((mx-mn)||1))*(h-4)).toFixed(1)).join(' ');
       const up=s[s.length-1]>=s[0];
@@ -1359,7 +1357,13 @@
       }
       document.querySelectorAll('#trendRangeBtns button').forEach(b=>{ const on=(+b.dataset.n===trendN); b.className='text-xs px-2.5 py-1 rounded-lg border '+(on?'border-brand bg-brand/10 text-ink font-bold':'border-slate-300 hover:bg-slate-50'); });
     }
-    function setTrendRange(n){ trendN=n; drawTrendChart(); drawThemeTrend(); }
+    function setTrendRange(n){ trendN=n; drawTrendChart(); drawThemeTrend(); renderKwTrendChart(); }
+    function renderKwTrendChart(){
+      if(typeof TREND==='undefined'||!TREND.periods) return;
+      const P=TREND.periods, keys=Object.keys(TREND.series||{}); const start=trendN>0?Math.max(0,P.length-trendN):0;
+      draw('kwTrendChart',{type:'line',data:{labels:P.slice(start),datasets:keys.map((k,i)=>({label:k,data:(TREND.series[k]||[]).slice(start),borderColor:PALETTE[i%PALETTE.length],backgroundColor:'transparent',borderWidth:k==='아카라'?2.6:1.6,tension:.3,pointRadius:0}))},
+        options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{beginAtZero:true}}}});
+    }
     function renderAssoc(){
       document.getElementById('assocBox').innerHTML=ASSOC.map(a=>{ const pct=a.recent; const w=Math.min(100,pct*8+2);
         return `<div class="flex items-center gap-3">
@@ -1378,7 +1382,7 @@
       return arr.length>=8?arr:HOTKW;
     }
     function renderSearchInsight(){
-      drawTrendChart(); renderAssoc(); loadDatalab(); loadKwTrend();
+      drawTrendChart(); renderAssoc(); loadDatalab(); renderKwTrendChart();
       const HK=computeHotKw(), live=(HK!==HOTKW);
       draw('hotKwChart',{type:'bar',data:{labels:HK.map(x=>x[0]),datasets:[{data:HK.map(x=>x[1]),backgroundColor:'#1D1D1F',borderRadius:4}]},
         options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}});
