@@ -110,6 +110,7 @@
   <div id="subnav-report" class="bg-[#FAFAF9] border-b border-[#E6E6E3] sticky top-[100px] z-10 hidden">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-2 py-2 overflow-x-auto">
       <button id="rptBtn-report" onclick="switchTab('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-ink text-white whitespace-nowrap transition">통합 리포트</button>
+      <button id="rptBtn-market" onclick="switchTab('market')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">시장 분석</button>
       <button id="rptBtn-competitor" onclick="switchTab('competitor')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">경쟁사 분석</button>
     </div>
   </div>
@@ -706,6 +707,62 @@
      <div class="card p-4 mb-5"><p class="text-[11px] font-semibold text-slate-400 mb-1">여정 인사이트</p><div id="rpt-cdj" data-rk="cdj" class="text-sm text-slate-700 leading-relaxed rpt-edit"></div></div>
      <p id="reportEditNote" class="text-center text-xs text-slate-400 pt-1 hidden">편집 모드: 요약·인사이트 텍스트를 클릭해 수정 후 '저장' 버튼을 누르세요. 내용은 이 브라우저에 저장됩니다.</p>
      <p class="text-center text-xs text-slate-400 pt-4">수치는 자동 수집 기준 · 인사이트는 수정 가능(대체자료로 활용)</p>
+   </div>
+
+   <!-- 시장 분석 -->
+   <div id="view-market" class="hidden">
+     <div class="card p-5 mb-5">
+       <h2 class="text-xl font-extrabold text-ink">시장 분석 <span class="text-sm font-semibold text-agray">(스마트홈 인테리어 · 인테리어 · 스마트홈 · IoT·IoT구축)</span></h2>
+       <p class="text-sm text-slate-500 mt-1">거시(PEST)·미시(5 Forces)·SWOT·4P·4C 프레임워크로 시장을 다각 분석합니다. <b>텍스트는 클릭해 수정</b>(이 브라우저 저장), 차트는 자동 데이터.</p>
+       <div class="mt-3 p-3 rounded-lg bg-[#FAFAF9] border border-[#E6E6E3] text-[13px] text-slate-700 leading-relaxed me-edit" data-k="thesis" contenteditable="true" oninput="meSave(this)">핵심 논지: 스마트홈은 '기기 판매' 시장에서 <b>공간·인테리어와 결합된 솔루션</b> 시장으로 이동 중이다. 삼성·LG·구글 등 대기업이 '플랫폼·생태계'를 장악한 레드오션에서, 아카라는 <b>매터·스레드 표준 개방성 + 인테리어·시공 결합</b>이라는 미개척 축으로 차별화할 여지가 크다.</div>
+     </div>
+
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">시장 관심도 추이 <span class="text-xs font-normal text-slate-400">(데이터랩 상대지수)</span></h3><p class="text-[11px] text-slate-400 mb-2">스마트홈·스마트도어락·스마트조명 검색 관심도(자체 최고점=100)</p><div class="h-64"><canvas id="mktTrendChart"></canvas></div></div>
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">인테리어 vs 스마트홈 테마 <span class="text-xs font-normal text-slate-400">(데이터랩 비교)</span></h3><p class="text-[11px] text-slate-400 mb-2">두 테마 키워드 묶음의 상대 관심도 비교</p><div class="h-64"><canvas id="mktThemeChart"></canvas></div></div>
+     </div>
+
+     <h3 class="accent font-extrabold text-ink mb-1">거시환경 분석 (PEST)</h3>
+     <p class="text-xs text-slate-400 mb-3">정치·경제·사회·기술 요인이 시장에 주는 영향</p>
+     <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+       <div class="card p-4"><p class="font-bold text-ink mb-1">🏛️ 정치·정책 (P)</p><div class="text-[13px] text-slate-600 leading-relaxed me-edit" data-k="pest_p" contenteditable="true" oninput="meSave(this)">공공임대·신축의 <b>스마트홈 기본사양 편입</b>, 제로에너지·에너지절감 규제 강화(B2G·B2B 기회). 매터 등 개방형 표준 확산이 정책·산업 방향과 정렬.</div></div>
+       <div class="card p-4"><p class="font-bold text-ink mb-1">💰 경제 (E)</p><div class="text-[13px] text-slate-600 leading-relaxed me-edit" data-k="pest_e" contenteditable="true" oninput="meSave(this)">고금리·부동산 침체로 신축보다 <b>리모델링·부분시공</b> 수요 확대(가성비 스마트홈에 유리). 1~2인 가구 증가로 '작은 집' 자동화 니치 성장.</div></div>
+       <div class="card p-4"><p class="font-bold text-ink mb-1">👥 사회 (S)</p><div class="text-[13px] text-slate-600 leading-relaxed me-edit" data-k="pest_s" contenteditable="true" oninput="meSave(this)">홈코노미·안전(도어락·홈캠) 관심 증가, 인테리어의 '자기표현' 문화. 시니어 케어·반려동물 등 목적형 스마트홈 수요 다변화.</div></div>
+       <div class="card p-4"><p class="font-bold text-ink mb-1">🔬 기술 (T)</p><div class="text-[13px] text-slate-600 leading-relaxed me-edit" data-k="pest_t" contenteditable="true" oninput="meSave(this)"><b>매터·스레드</b> 표준화로 이종기기 통합 가속, 온디바이스 AI·에너지 최적화. 무타공·무선 설치 기술로 전월세·DIY 시장 확장.</div></div>
+     </section>
+
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">미시환경 (5 Forces)</h3><p class="text-[11px] text-slate-400 mb-2">1(약)~5(강) · 산업 매력도 진단</p><div class="h-64"><canvas id="mkt5ForcesChart"></canvas></div><div class="text-[12px] text-slate-600 leading-relaxed mt-2 me-edit" data-k="forces" contenteditable="true" oninput="meSave(this)"><b>경쟁강도 高</b>(삼성·LG·구글·샤오미 생태계 경쟁), <b>구매자 교섭력 高</b>(대체 브랜드 다수), <b>공급자 교섭력 中</b>(칩셋 의존). 대기업 브랜드파워가 <b>신규진입 장벽</b>. 아카라는 '표준 개방성+전문시공'으로 대체 위협을 방어.</div></div>
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-1">경쟁 구도 (SOV) <span class="text-xs font-normal text-slate-400">(뉴스 언급 점유)</span></h3><div class="h-64"><canvas id="mktSovChart"></canvas></div><div class="text-[12px] text-slate-600 leading-relaxed mt-2 me-edit" data-k="stp" contenteditable="true" oninput="meSave(this)"><b>STP</b> · 세분화: 신축빌트인/리모델링/전월세DIY. 타깃: <b>인테리어를 중시하는 2030·리모델링 가구</b>. 포지셔닝: '<b>인테리어에 녹아드는 스마트홈 전문가</b>'.</div></div>
+     </div>
+
+     <h3 class="accent font-extrabold text-ink mb-1">SWOT 분석 <span class="text-xs font-normal text-slate-400">(아카라 관점)</span></h3>
+     <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+       <div class="card p-4 border-l-4 border-agreen"><p class="font-bold text-agreen mb-1">S · 강점</p><div class="text-[13px] text-slate-600 leading-relaxed me-edit" data-k="sw_s" contenteditable="true" oninput="meSave(this)">매터·스레드 완전호환 멀티허브(중립성·확장성), 무타공·디자인 제품군, 스마트홈 인테리어 시공 역량, 도어락 등 히트 카테고리.</div></div>
+       <div class="card p-4 border-l-4 border-ared"><p class="font-bold text-ared mb-1">W · 약점</p><div class="text-[13px] text-slate-600 leading-relaxed me-edit" data-k="sw_w" contenteditable="true" oninput="meSave(this)">대기업 대비 낮은 브랜드 인지도·마케팅 물량, '인테리어 문맥' 각인 초기 단계, 오프라인 체험접점 부족, 정식 사명(아카라라이프) 검색 약함.</div></div>
+       <div class="card p-4 border-l-4 border-[#8FB9D8]"><p class="font-bold text-[#365b7a] mb-1">O · 기회</p><div class="text-[13px] text-slate-600 leading-relaxed me-edit" data-k="sw_o" contenteditable="true" oninput="meSave(this)">리모델링·전월세 DIY 수요 확대, 매터 생태계 순풍, 인테리어×스마트홈 융합 카테고리 미선점(블루오션), B2B(건설·인테리어사) 사전제안.</div></div>
+       <div class="card p-4 border-l-4 border-aorange"><p class="font-bold text-aorange mb-1">T · 위협</p><div class="text-[13px] text-slate-600 leading-relaxed me-edit" data-k="sw_t" contenteditable="true" oninput="meSave(this)">삼성·LG·구글·샤오미의 생태계 종속·가격 공세, 저가 중국산 유입, 대기업 빌트인 선점, 표준 파편화 리스크.</div></div>
+     </section>
+
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-2">마케팅 믹스 4P</h3>
+         <div class="space-y-2 text-[13px]">
+           <div><b class="text-ink">Product</b> · <span class="me-edit" data-k="p_product" contenteditable="true" oninput="meSave(this)">매터 허브·도어락·센서 등 표준호환 라인업 + 인테리어 친화 디자인. '솔루션 패키지(공간별)'로 묶음.</span></div>
+           <div><b class="text-ink">Price</b> · <span class="me-edit" data-k="p_price" contenteditable="true" oninput="meSave(this)">대기업과 저가 중국산 사이 '<b>합리적 프리미엄</b>'. 부분시공·패키지로 진입장벽 낮춤.</span></div>
+           <div><b class="text-ink">Place</b> · <span class="me-edit" data-k="p_place" contenteditable="true" oninput="meSave(this)">자사몰·발주몰(B2B) + 쇼룸 체험 + 인테리어사·건설사 채널. 온·오프 옴니채널.</span></div>
+           <div><b class="text-ink">Promotion</b> · <span class="me-edit" data-k="p_promo" contenteditable="true" oninput="meSave(this)">시공 콘텐츠·인플루언서·퍼포먼스광고 + PR로 '인테리어 전문' 메시지 일관 배포.</span></div>
+         </div></div>
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-2">고객 관점 4C</h3>
+         <div class="space-y-2 text-[13px]">
+           <div><b class="text-ink">Customer</b> · <span class="me-edit" data-k="c_customer" contenteditable="true" oninput="meSave(this)">'예쁘고 편한 집'을 원하는 2030·리모델링 가구. 기기보다 <b>완성된 공간 경험</b>을 구매.</span></div>
+           <div><b class="text-ink">Cost</b> · <span class="me-edit" data-k="c_cost" contenteditable="true" oninput="meSave(this)">구매가+설치+학습비용 총소유비용 관점. 무타공·간편연동으로 <b>비금전 비용</b> 절감 소구.</span></div>
+           <div><b class="text-ink">Convenience</b> · <span class="me-edit" data-k="c_conv" contenteditable="true" oninput="meSave(this)">상담→시공→AS 원스톱, 앱 연동 난이도 최소화. 전월세도 가능한 이동성.</span></div>
+           <div><b class="text-ink">Communication</b> · <span class="me-edit" data-k="c_comm" contenteditable="true" oninput="meSave(this)">일방 광고보다 <b>후기·사례·커뮤니티</b> 양방향. 채널별(PR·SNS·블로그) 메시지 변주.</span></div>
+         </div></div>
+     </div>
+
+     <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-2">종합 전략 시사점</h3><div class="text-[13px] text-slate-700 leading-relaxed me-edit" data-k="conclusion" contenteditable="true" oninput="meSave(this)">① '인테리어×스마트홈' 블루오션을 언어·콘텐츠로 <b>선점</b>(용어·해시태그·SEO 표준화). ② 리모델링·전월세 DIY 수요에 <b>무타공·패키지</b>로 대응. ③ 건설·인테리어사 대상 <b>B2B 사전제안</b> 자산화. ④ 매터 개방성을 대기업 종속의 대안으로 <b>신뢰 메시지화</b>. ⑤ 쇼룸·후기 등 <b>체험·증거</b>로 브랜드 인지 격차 축소.</div></div>
+     <p class="text-center text-xs text-slate-400 pt-4">※ 프레임워크 텍스트는 참고 초안이며 클릭해 수정 가능 · 차트는 네이버 데이터랩·뉴스 자동 수집</p>
    </div>
 
    <!-- 브랜드 이슈 캘린더 -->
@@ -1870,14 +1927,14 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], report:['report','competitor'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', competitor:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], report:['report','market','competitor'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', competitor:'report', market:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
-      ['analytics','briefing','campaign','owned','cafe','report','competitor','calendar','medialist','library','mkt','kpi'].forEach(v=>{
+      ['analytics','briefing','campaign','owned','cafe','report','competitor','market','calendar','medialist','library','mkt','kpi'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
@@ -1886,13 +1943,14 @@
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
-      ['report','competitor'].forEach(v=>{ document.getElementById('rptBtn-'+v).className=subClass(v===t); });
+      ['report','market','competitor'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       if(t==='campaign'){ renderCampaign(); loadYoutube(); }
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
       if(t==='cafe'){ renderCafe(); loadCafe(); }
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
       if(t==='competitor'){ loadCompetitor(); }
+      if(t==='market'){ loadCompetitor(); renderMarket(); }
       if(t==='library'){ loadLibrary(); }
       if(t==='mkt'){ mktEnter(); }
     }
@@ -2071,6 +2129,21 @@
       ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}}}});
       draw('kpiMixChart',{type:'doughnut',data:{labels:['PR','블로그','인스타','홈페이지','웹문서'],datasets:[{data:[pr,blog,ins,hp,wd],backgroundColor:['#FBC400','#5E7350','#C13584','#5E85A6','#BF5332'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}});
       renderKpiScorecard();
+    }
+
+    // ===== 시장 분석 =====
+    let marketEdits=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraMarketEdits')||'{}');}catch(e){return {};} })();
+    function meSave(el){ marketEdits[el.dataset.k]=el.innerHTML; try{ localStorage.setItem('aqaraMarketEdits',JSON.stringify(marketEdits)); }catch(e){} }
+    function renderMarket(){
+      document.querySelectorAll('#view-market .me-edit').forEach(el=>{ const k=el.dataset.k; if(marketEdits[k]!=null) el.innerHTML=marketEdits[k]; });
+      if(typeof TREND!=='undefined'&&TREND.periods){ const P=TREND.periods, s=Math.max(0,P.length-24), keys=['스마트홈','스마트도어락','스마트조명'];
+        draw('mktTrendChart',{type:'line',data:{labels:P.slice(s),datasets:keys.map((k,i)=>({label:k,data:(TREND.series[k]||[]).slice(s),borderColor:PALETTE[i],backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:0}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{beginAtZero:true},x:{ticks:{maxTicksLimit:8,font:{size:9}}}}}}); }
+      const T=(typeof DATALAB!=='undefined'&&DATALAB.themes)?DATALAB.themes:{dates:[],series:{}};
+      if(T.dates&&T.dates.length){ const keys=Object.keys(T.series||{}), COL={'인테리어':'#BF5332','스마트홈':'#5E7350'};
+        draw('mktThemeChart',{type:'line',data:{labels:T.dates,datasets:keys.map((k,i)=>({label:k,data:T.series[k],borderColor:COL[k]||PALETTE[i],backgroundColor:'transparent',borderWidth:2.5,tension:.3,pointRadius:0}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{beginAtZero:true},x:{ticks:{maxTicksLimit:8,font:{size:9}}}}}}); }
+      draw('mkt5ForcesChart',{type:'radar',data:{labels:['경쟁강도','신규진입 위협','대체재 위협','공급자 교섭력','구매자 교섭력'],datasets:[{label:'강도(1~5)',data:[5,4,3,3,4],borderColor:'#FBC400',backgroundColor:'rgba(251,196,0,.18)',borderWidth:2,pointBackgroundColor:'#8A6A00'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{min:0,max:5,ticks:{stepSize:1,font:{size:9}}}}}});
+      const B=(typeof COMPETITOR!=='undefined'&&COMPETITOR.brands)?COMPETITOR.brands:[];
+      if(B.length){ const cc=['#5E85A6','#1D1D1F','#BF5332','#C77A34','#9A9169']; draw('mktSovChart',{type:'doughnut',data:{labels:B.map(b=>b.name),datasets:[{data:B.map(b=>b.total||0),backgroundColor:B.map((b,i)=>b.me?'#FBC400':cc[i%5]),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}}); }
     }
 
     // ===== 미디어 라이브러리 (구글드라이브 연동 · 카테고리별) =====
