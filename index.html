@@ -2245,8 +2245,8 @@
     function libItemUrl(it){ return it.kind==='folder'?('https://drive.google.com/drive/folders/'+it.id):('https://drive.google.com/file/d/'+it.id+'/view'); }
     function libCard(it){
       const url=libItemUrl(it), isFolder=it.kind==='folder';
-      const thumb = it.kind==='image' ? `<img src="https://drive.google.com/thumbnail?id=${esc(it.id)}&sz=w400" loading="lazy" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='<span class=\\'text-2xl\\'>🖼️</span>'"/>` : `<span class="text-2xl">${libIcon(it.kind)}</span>`;
-      return `<div class="card overflow-hidden flex flex-col"><div class="aspect-[4/3] bg-[#F4F1EA] flex items-center justify-center overflow-hidden">${thumb}</div><div class="p-3 flex flex-col flex-1"><div class="text-[13px] font-medium text-ink line-clamp-2 mb-0.5" title="${esc(it.title)}">${esc(it.title)}</div><div class="text-[11px] text-slate-400 mb-2">${isFolder?'폴더':(it.kind||'파일').toUpperCase()}${it.size?(' · '+esc(it.size)):''}</div><a href="${url}" target="_blank" rel="noopener" class="mt-auto block text-center text-[13px] bg-ink text-white rounded-lg py-1.5 font-semibold hover:brightness-125">${isFolder?'열기 ↗':'다운로드 ↗'}</a></div></div>`;
+      const thumb = it.kind==='image' ? `<img src="https://drive.google.com/thumbnail?id=${esc(it.id)}&sz=w200" loading="lazy" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='<span class=\\'text-2xl\\'>🖼️</span>'"/>` : `<span class="text-2xl">${libIcon(it.kind)}</span>`;
+      return `<a href="${url}" target="_blank" rel="noopener" title="${esc(it.title)}${it.size?(' · '+esc(it.size)):''}" class="flex flex-col items-center text-center p-1.5 rounded-lg hover:bg-brand/5 transition"><div class="w-14 h-14 rounded-lg bg-[#F4F1EA] border border-[#ECE9E1] flex items-center justify-center overflow-hidden mb-1">${thumb}</div><div class="text-[11px] text-ink leading-tight line-clamp-2 w-full">${esc(it.title)}</div></a>`;
     }
     function renderLibrary(){
       const cats=(LIBRARY.categories||[]);
@@ -2271,7 +2271,7 @@
             <h3 class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)} <span class="text-xs font-normal text-slate-400 ml-1">${esc(c.desc||'')}</span></h3>
             <a href="${folderUrl}" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium whitespace-nowrap">드라이브 폴더 열기 ↗</a>
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${items.map(libCard).join('')}</div>
+          <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-1">${items.map(libCard).join('')}</div>
         </section>`;
       });
       flush();
