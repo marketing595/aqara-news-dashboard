@@ -103,6 +103,7 @@
       <button id="ownBtn-youtube" onclick="switchOwned('youtube')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">유튜브</button>
       <button id="ownBtn-instagram" onclick="switchOwned('instagram')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">인스타그램</button>
       <button id="ownBtn-blog" onclick="switchOwned('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">블로그</button>
+      <button id="ownBtn-newsletter" onclick="switchOwned('newsletter')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">뉴스레터</button>
     </div>
   </div>
   <!-- 종합 리포트 하위탭 -->
@@ -504,6 +505,27 @@
        <div id="ownedBlogBody" class="divide-y divide-slate-100 max-h-[560px] overflow-auto pr-1"></div>
        <p class="text-xs text-slate-400 mt-3">※ 네이버 블로그는 정책상 글별 조회수가 비공개입니다. 발행 현황(제목·일자) 중심으로 전체 글을 제공합니다.</p>
      </section>
+     </div>
+
+     <!-- 뉴스레터 -->
+     <div id="ownedSec-newsletter" class="hidden">
+     <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">뉴스레터 <span class="text-xs font-normal text-slate-400">B2B·B2C · Stibee 아카이브</span></h2>
+     <section id="nlKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+       <div class="card p-5">
+         <div class="flex items-center justify-between mb-1"><h3 class="accent font-extrabold text-ink">B2B · 아카라레터</h3><a href="https://aqaralife.stibee.com/" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium">아카이브 열기 ↗</a></div>
+         <p class="text-[12px] text-slate-400 mb-3">파트너·업계 대상 B2B 뉴스레터</p>
+         <div id="nlB2B" class="divide-y divide-slate-100 max-h-[520px] overflow-auto"></div>
+       </div>
+       <div class="card p-5">
+         <div class="flex items-center justify-between mb-1"><h3 class="accent font-extrabold text-ink">B2C · 시절레터</h3><a href="https://sijeol.stibee.com/" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium">아카이브 열기 ↗</a></div>
+         <p class="text-[12px] text-slate-400 mb-3">소비자 대상 B2C 뉴스레터</p>
+         <div id="nlB2C" class="divide-y divide-slate-100 max-h-[520px] overflow-auto"></div>
+       </div>
+     </div>
+     <div class="card p-4 mt-5 bg-[#FAFAF9] border-[#E6E6E3]">
+       <p class="text-[12px] text-slate-500 leading-relaxed">※ Stibee 아카이브는 자바스크립트로 렌더돼 자동 수집이 불안정합니다. 발행 이슈는 <code class="bg-white px-1 rounded border">newsletter.json</code>으로 관리합니다. 담당자가 이슈(제목·날짜·링크)를 알려주시면 등록해 드리며, 위 '아카이브 열기'로 전체 확인이 가능합니다.</p>
+     </div>
      </div>
    </div>
 
@@ -1880,6 +1902,11 @@
     const CAL_COLOR={'보도자료':'#8A6A00','캠페인':'#BF5332','전시·행사':'#7C5CFF','제품·출시':'#5E7350','이슈':'#C13584','기타':'#5E85A6'};
     let calYM=null;
     // 이벤트 모델: [{start,end,type,text}] (기간 지원). 구 버전 {date:[{type,text}]} 자동 마이그레이션.
+    // 기본 표시 이벤트(캠페인 기간 등) — 삭제 불가, 항상 표시
+    const CAL_DEFAULT_EVENTS=[
+      {start:'2026-04-13',end:'2026-06-30',type:'캠페인',text:'스마트홈 인테리어 캠페인',_def:true},
+      {start:'2026-05-27',end:'2026-07-06',type:'캠페인',text:'L100 스마트 도어락 캠페인',_def:true}
+    ];
     let calEvents=(()=>{ try{ const v=JSON.parse(localStorage.getItem('aqaraCalEvents')||'[]');
       if(Array.isArray(v)) return v;
       const arr=[]; Object.keys(v||{}).forEach(d=>(v[d]||[]).forEach(e=>arr.push({start:d,end:d,type:e.type,text:e.text}))); return arr;
@@ -1900,7 +1927,7 @@
       let cells='';
       for(let i=0;i<startDow;i++) cells+='<div class="min-h-[74px] rounded-lg bg-[#FAFAF9]"></div>';
       for(let d=1;d<=daysIn;d++){ const key=ymd(d), arts=pra[key]||[], pr=arts.length, isT=key===today, dow=(startDow+d-1)%7;
-        const dayEvs=calEvents.filter(ev=>ev.start<=key&&ev.end>=key);
+        const dayEvs=[...CAL_DEFAULT_EVENTS,...calEvents].filter(ev=>ev.start<=key&&ev.end>=key);
         let chips=''; if(pr){ const f=arts[0]; chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR['보도자료']}" title="${esc(arts.map(a=>a.title).join(' / '))}">${esc(f.title)}${pr>1?' +'+(pr-1):''}</div>`; }
         dayEvs.forEach(ev=>{ const isStart=key===ev.start, multi=ev.start!==ev.end;
           chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white ${isStart?'':'opacity-55'}" style="background:${CAL_COLOR[ev.type]||'#5E85A6'}" title="${esc(ev.text)} (${ev.start}~${ev.end})">${isStart?esc(ev.text):(multi?'···':esc(ev.text))}</div>`; });
@@ -1911,12 +1938,14 @@
       const mp=y+'-'+pad(m+1);
       const items=[];
       for(let d=1;d<=daysIn;d++){ const key=ymd(d), arts=pra[key]||[]; arts.forEach((a,ai)=>items.push({sort:key+'a'+ai,label:ai===0?key.slice(5):'',type:'보도자료',text:a.title,link:a.link,count:arts.length,first:ai===0,auto:true})); }
+      CAL_DEFAULT_EVENTS.forEach(ev=>{ if(ev.start.slice(0,7)<=mp&&ev.end.slice(0,7)>=mp){ const rng=ev.start.slice(5)+'~'+ev.end.slice(5); items.push({sort:ev.start,label:rng,type:ev.type,text:ev.text,def:true}); } });
       calEvents.forEach((ev,i)=>{ if(ev.start.slice(0,7)<=mp&&ev.end.slice(0,7)>=mp){ const rng=ev.start===ev.end?ev.start.slice(5):(ev.start.slice(5)+'~'+ev.end.slice(5)); items.push({sort:ev.start,label:rng,type:ev.type,text:ev.text,idx:i}); } });
       items.sort((a,b)=>a.sort.localeCompare(b.sort));
       document.getElementById('calEventList').innerHTML=items.length?items.map(it=>{
         const cnt=(it.auto&&it.first)?` <span class="text-[11px] text-brand-ink font-semibold whitespace-nowrap">(보도 ${it.count}건)</span>`:'';
         const body=it.link?`<a href="${esc(it.link)}" target="_blank" rel="noopener" class="hover:underline">${esc(it.text)} <span class="text-slate-300 text-xs">↗</span></a>`:`${esc(it.text)} <span class="text-[10px] text-slate-400">${esc(it.type)}</span>`;
-        return `<div class="flex items-baseline gap-2 text-sm border-b border-[#F2EFE9] pb-1.5"><span class="text-[11px] text-slate-400 w-14 shrink-0">${esc(it.label)}</span><span class="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5" style="background:${CAL_COLOR[it.type]||'#5E85A6'}"></span><span class="flex-1 ${it.auto?'text-slate-600':'text-ink'}">${body}${cnt}</span>${it.auto?'':`<button onclick="calDelEvent(${it.idx})" class="text-[11px] text-slate-300 hover:text-ared">✕</button>`}</div>`;
+        const delBtn=(it.auto||it.def)?'':`<button onclick="calDelEvent(${it.idx})" class="text-[11px] text-slate-300 hover:text-ared">✕</button>`;
+        return `<div class="flex items-baseline gap-2 text-sm border-b border-[#F2EFE9] pb-1.5"><span class="text-[11px] text-slate-400 w-14 shrink-0">${esc(it.label)}</span><span class="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5" style="background:${CAL_COLOR[it.type]||'#5E85A6'}"></span><span class="flex-1 ${it.auto?'text-slate-600':'text-ink'}">${body}${cnt}</span>${delBtn}</div>`;
       }).join(''):'<p class="text-sm text-slate-400">이 달 자사보도·일정이 없습니다.</p>';
     }
 
@@ -2176,15 +2205,30 @@
         const list = bs.length?bs:[{name:'아카라라이프 (공식)',url:'https://blog.naver.com/aqaralife'},{name:'수니집 일상기록',url:'https://blog.naver.com/sksmsehfehfdl'},{name:'미니멀라이프',url:'https://blog.naver.com/untorn'}];
         return list.map(b=>`<a href="${esc(b.url||('https://blog.naver.com/'+b.id))}" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">${esc(b.name)}</a>`).join(' · ');
       }
+      if(s==='newsletter') return '<a href="https://aqaralife.stibee.com/" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">아카라레터(B2B)</a> · <a href="https://sijeol.stibee.com/" target="_blank" rel="noopener" class="text-ink hover:underline font-medium">시절레터(B2C)</a>';
       return yt+' · '+ig; // 개요
     }
     function switchOwned(s){
       ownedSection=s;
-      ['overview','youtube','instagram','blog'].forEach(x=>{
-        document.getElementById('ownedSec-'+x).classList.toggle('hidden', x!==s);
-        document.getElementById('ownBtn-'+x).className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(x===s?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium');
+      ['overview','youtube','instagram','blog','newsletter'].forEach(x=>{
+        const sec=document.getElementById('ownedSec-'+x); if(sec) sec.classList.toggle('hidden', x!==s);
+        const b=document.getElementById('ownBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(x===s?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium');
       });
       const ch=document.getElementById('ownedChannels'); if(ch) ch.innerHTML=ownedChannelLinks(s);
+      if(s==='newsletter') loadNewsletter();
+    }
+    let NEWSLETTER={b2b:[],b2c:[]};
+    function loadNewsletter(){ fetch('newsletter.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d){ NEWSLETTER=d; renderNewsletter(); } }).catch(()=>{ renderNewsletter(); }); }
+    function nlRows(arr,arch){ if(!arr||!arr.length) return `<p class="text-sm text-slate-400 py-6 text-center">등록된 이슈가 없습니다. <a href="${arch}" target="_blank" rel="noopener" class="lnk">아카이브에서 확인 ↗</a></p>`;
+      return arr.map(it=>`<div class="py-2.5 flex items-baseline gap-3"><span class="text-[11px] text-slate-400 w-20 shrink-0">${esc(it.date||'')}</span><a href="${esc(it.link||arch)}" target="_blank" rel="noopener" class="lnk flex-1 line-clamp-2">${esc(it.title||'(제목 없음)')} <span class="text-slate-300 text-xs">↗</span></a></div>`).join(''); }
+    function renderNewsletter(){
+      const b2b=NEWSLETTER.b2b||[], b2c=NEWSLETTER.b2c||[];
+      const el2b=document.getElementById('nlB2B'); if(el2b) el2b.innerHTML=nlRows(b2b,'https://aqaralife.stibee.com/');
+      const el2c=document.getElementById('nlB2C'); if(el2c) el2c.innerHTML=nlRows(b2c,'https://sijeol.stibee.com/');
+      const kc=(l,v,s)=>`<div class="card card-hover p-5"><p class="text-sm text-slate-500">${l}</p><p class="num text-3xl font-extrabold text-ink mt-1">${v}</p><p class="text-xs text-slate-400 mt-1">${s}</p></div>`;
+      const kpi=document.getElementById('nlKpi'); if(kpi) kpi.innerHTML=
+        kc('B2B 발행',b2b.length+'회','아카라레터')+kc('B2C 발행',b2c.length+'회','시절레터')+
+        kc('총 발행',(b2b.length+b2c.length)+'회','뉴스레터 합산')+kc('채널',NEWSLETTER.subscribers!=null?NEWSLETTER.subscribers.toLocaleString()+'명':'-','구독자(수기)');
     }
     function loadYoutube(){
       fetch('youtube.json?_='+Date.now()).then(r=>r.json()).then(p=>{
