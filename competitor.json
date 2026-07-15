@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-14 19:12",
+ "generatedAt": "2026-07-15 19:16",
  "brands": [
   {
    "name": "아카라",
@@ -127,9 +127,9 @@
     "아카라 스위치",
     "아카라 홈캠",
     "아카라 l100",
-    "명조 아카라이브",
-    "니케 아카라이브",
-    "아카라카"
+    "아카라카",
+    "이환 아카라이브",
+    "니케 아카라이브"
    ],
    "recent": [
     {
@@ -346,8 +346,8 @@
     "헤이홈 홈캠",
     "헤이홈",
     "헤이홈 sd카드",
-    "헤이홈 거치대",
     "헤이홈 연결",
+    "헤이홈 거치대",
     "헤이홈 공유",
     "헤이홈 중국",
     "헤이홈 오프라인",
@@ -451,98 +451,102 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 66971,
+   "total": 66978,
    "sentiment": {
-    "pos": 20,
-    "neu": 39,
+    "pos": 19,
+    "neu": 40,
     "neg": 1
    },
    "keywords": [
     [
      "AI",
-     73
-    ],
-    [
-     "갤럭시",
-     21
+     76
     ],
     [
      "모듈러",
-     18
+     22
     ],
     [
      "플랫폼",
-     18
+     21
     ],
     [
      "삼성전자는",
      16
     ],
     [
-     "개방형",
+     "갤럭시",
      16
     ],
     [
-     "기기",
-     13
-    ],
-    [
-     "노태문",
-     13
-    ],
-    [
-     "기기와",
-     12
-    ],
-    [
-     "언팩",
-     12
+     "개방형",
+     15
     ],
     [
      "SmartThings",
-     11
-    ],
-    [
-     "개방",
-     11
-    ],
-    [
-     "아는",
-     11
-    ],
-    [
-     "22일",
-     10
-    ],
-    [
-     "원칙으로",
-     10
-    ],
-    [
-     "파트너를",
-     10
+     12
     ],
     [
      "주택",
-     9
+     12
+    ],
+    [
+     "기기",
+     12
     ],
     [
      "가전과",
+     11
+    ],
+    [
+     "기반",
+     10
+    ],
+    [
+     "개방",
+     10
+    ],
+    [
+     "노태문",
+     10
+    ],
+    [
+     "에너지",
+     9
+    ],
+    [
+     "가전",
+     9
+    ],
+    [
+     "22일",
+     9
+    ],
+    [
+     "원칙으로",
+     9
+    ],
+    [
+     "기기와",
      9
     ]
    ],
    "posWords": [
     [
-     "혁신",
-     11
+     "확대",
+     8
     ],
     [
-     "확대",
-     7
+     "혁신",
+     6
+    ],
+    [
+     "돌파",
+     2
     ],
     [
      "글로벌",
-     4
+     2
     ],
     [
      "강화",
@@ -550,10 +554,6 @@
     ],
     [
      "프리미엄",
-     2
-    ],
-    [
-     "주목",
      2
     ],
     [
@@ -566,18 +566,60 @@
     ]
    ],
    "related": [
-    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 선풍기",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 아이폰",
-    "삼성 스마트싱스 선풍기",
-    "삼성 스마트싱스 전력량"
+    "삼성 스마트싱스 에어컨 연동"
    ],
    "recent": [
+    {
+     "title": "\"AI 홈 시장을 잡아라\" 국내외 기업 경쟁 치열",
+     "source": "ekoreanews.co.kr",
+     "date": "2026-07-15",
+     "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=87052"
+    },
+    {
+     "title": "'가전만으론 한계'…삼성·LG, AI홈으로 돌파구 찾는다",
+     "source": "sidae.com",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/417/0001151795?sid=101"
+    },
+    {
+     "title": "삼성, 암스테르담에 '유럽 최대 규모' 냉난방 설비 전문 교육 센터 설립",
+     "source": "theguru.co.kr",
+     "date": "2026-07-15",
+     "link": "https://www.theguru.co.kr/news/article.html?no=104479"
+    },
+    {
+     "title": "오픈AI, 화면 없는 AI 스피커로 애플에 도전장",
+     "source": "ddaily.co.kr",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/138/0002234291?sid=105"
+    },
+    {
+     "title": "“영국 주택난, 한국 AI 스마트주택이 해법”…킹스톤 시의원, 한영 협...",
+     "source": "ekn.kr",
+     "date": "2026-07-15",
+     "link": "https://www.ekn.kr/web/view.php?key=20260715026042506"
+    },
+    {
+     "title": "\"가전 마진 한계 극복\" 삼성·LG전자, 집·스크린 묶는 플랫폼 전쟁",
+     "source": "asiaa.co.kr",
+     "date": "2026-07-15",
+     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=255272"
+    },
+    {
+     "title": "개발도사, AI 기반 ‘바이브 코딩’으로 소프트웨어 개발·교육 사업 확...",
+     "source": "isplus.com",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/241/0003520132?sid=101"
+    },
     {
      "title": "'빌트인 락인' LG전자냐, '생태계 확장' 삼성전자인가…갈라진 AI 홈 방...",
      "source": "newsquest.co.kr",
@@ -625,48 +667,6 @@
      "source": "donga.com",
      "date": "2026-07-13",
      "link": "https://n.news.naver.com/mnews/article/020/0003733541?sid=101"
-    },
-    {
-     "title": "LG전자 “GS건설과 차세대 AI홈 공동개발”…‘집 짓기’ 나선 가전업체",
-     "source": "khan.co.kr",
-     "date": "2026-07-13",
-     "link": "https://n.news.naver.com/mnews/article/032/0003457807?sid=105"
-    },
-    {
-     "title": "AI가 체감온도 읽고, 쿨링포그 뿜고…기업들 폭염 대응 진화(종합)",
-     "source": "news1.kr",
-     "date": "2026-07-13",
-     "link": "https://n.news.naver.com/mnews/article/421/0009056820?sid=101"
-    },
-    {
-     "title": "얼음조끼·체감온도 측정, 하루 40톤 물 뿌리기…기업 혹서기 대책 진화",
-     "source": "news1.kr",
-     "date": "2026-07-13",
-     "link": "https://n.news.naver.com/mnews/article/421/0009056661?sid=101"
-    },
-    {
-     "title": "가전 넘어 주거 플랫폼 경쟁…삼성·LG, AI홈서 B2B 확전",
-     "source": "pointdaily.co.kr",
-     "date": "2026-07-13",
-     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=311689"
-    },
-    {
-     "title": "LG전자·GS건설, '자이' 차세대 AI홈 공동 개발",
-     "source": "4th.kr",
-     "date": "2026-07-13",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2114639"
-    },
-    {
-     "title": "삼성 ‘무풍 공조’ vs LG ‘상업용 세탁’⋯ 결 다른 K-가전 글로벌 ‘...",
-     "source": "viva100.com",
-     "date": "2026-07-13",
-     "link": "https://www.viva100.com/article/20260712500366"
-    },
-    {
-     "title": "\"우리집 어항 탈출\"…장마철 '잘산템' 삼성 제습기[써봤어요]",
-     "source": "이데일리",
-     "date": "2026-07-12",
-     "link": "https://n.news.naver.com/mnews/article/018/0006328362?sid=101"
     }
    ]
   },
@@ -674,84 +674,84 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76741,
+   "total": 76750,
    "sentiment": {
-    "pos": 12,
-    "neu": 47,
-    "neg": 1
+    "pos": 13,
+    "neu": 45,
+    "neg": 2
    },
    "keywords": [
     [
      "AI홈",
-     83
-    ],
-    [
-     "단지",
-     58
-    ],
-    [
-     "자이",
-     53
+     68
     ],
     [
      "AI",
-     48
+     54
+    ],
+    [
+     "단지",
+     51
+    ],
+    [
+     "자이",
+     47
     ],
     [
      "GS건설",
-     45
+     41
     ],
     [
      "LG전자",
-     39
+     37
     ],
     [
      "LG전자의",
-     35
+     32
     ],
     [
      "ThinQ",
-     34
+     32
     ],
     [
      "세대",
-     32
-    ],
-    [
-     "차세대",
-     32
-    ],
-    [
-     "주거",
      31
     ],
     [
-     "서비스를",
-     30
+     "주거",
+     29
     ],
     [
-     "기기",
+     "서비스를",
      27
     ],
     [
      "허브",
-     26
-    ],
-    [
-     "난방",
      24
     ],
     [
-     "빌트인",
+     "기기",
+     24
+    ],
+    [
+     "차세대",
+     23
+    ],
+    [
+     "난방",
+     22
+    ],
+    [
+     "양사는",
      20
     ],
     [
-     "IoT",
+     "LG전자는",
      20
     ],
     [
-     "조명",
-     20
+     "환기",
+     19
     ]
    ],
    "posWords": [
@@ -768,6 +768,10 @@
      2
     ],
     [
+     "돌파",
+     1
+    ],
+    [
      "혁신",
      1
     ],
@@ -782,13 +786,67 @@
     "lg 씽큐",
     "lg 씽큐 e1031 오류",
     "lg 씽큐온",
-    "lg 씽큐 연결",
+    "lg 씽큐앱",
     "lg 씽큐 앱 오류",
-    "lg 씽큐 앱 에러",
-    "lg 씽큐 어플 안됨",
-    "lg 씽큐 오프라인"
+    "lg 씽큐 어플",
+    "lg 씽큐 연결",
+    "lg 씽큐 앱 에러"
    ],
    "recent": [
+    {
+     "title": "입주민 미래 주거 AI 플랫폼 각축전…현대·삼성 주도 속 포스코·GS 가세",
+     "source": "sateconomy.co.kr",
+     "date": "2026-07-15",
+     "link": "http://sateconomy.co.kr/news/view/1065598952212238"
+    },
+    {
+     "title": "\"AI 홈 시장을 잡아라\" 국내외 기업 경쟁 치열",
+     "source": "ekoreanews.co.kr",
+     "date": "2026-07-15",
+     "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=87052"
+    },
+    {
+     "title": "가전 넘어 공간·인프라·로봇으로…LG전자, B2B 전환 가속",
+     "source": "ddaily.co.kr",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/138/0002234314?sid=105"
+    },
+    {
+     "title": "'가전만으론 한계'…삼성·LG, AI홈으로 돌파구 찾는다",
+     "source": "sidae.com",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/417/0001151795?sid=101"
+    },
+    {
+     "title": "오픈AI, 화면 없는 AI 스피커로 애플에 도전장",
+     "source": "ddaily.co.kr",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/138/0002234291?sid=105"
+    },
+    {
+     "title": "“앱도 가전 품질인데”…폭염에 접속 몰리자 스마트홈 ‘먹통’",
+     "source": "biz.chosun.com",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/366/0001179410?sid=102"
+    },
+    {
+     "title": "“무더위에 사용자 폭증”…스마트가전 앱 심야 접속 장애",
+     "source": "ekn.kr",
+     "date": "2026-07-15",
+     "link": "https://www.ekn.kr/web/view.php?key=20260715027302700"
+    },
+    {
+     "title": "“영국 주택난, 한국 AI 스마트주택이 해법”…킹스톤 시의원, 한영 협...",
+     "source": "ekn.kr",
+     "date": "2026-07-15",
+     "link": "https://www.ekn.kr/web/view.php?key=20260715026042506"
+    },
+    {
+     "title": "\"가전 마진 한계 극복\" 삼성·LG전자, 집·스크린 묶는 플랫폼 전쟁",
+     "source": "asiaa.co.kr",
+     "date": "2026-07-15",
+     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=255272"
+    },
     {
      "title": "'빌트인 락인' LG전자냐, '생태계 확장' 삼성전자인가…갈라진 AI 홈 방...",
      "source": "newsquest.co.kr",
@@ -824,60 +882,6 @@
      "source": "greenpostkorea.co.kr",
      "date": "2026-07-14",
      "link": "https://www.greenpostkorea.co.kr/news/articleView.html?idxno=307099"
-    },
-    {
-     "title": "허윤홍 손에 명맥 잇는 GS·LG '허·구(許·具) 동맹'",
-     "source": "newsway.co.kr",
-     "date": "2026-07-14",
-     "link": "https://www.newsway.co.kr/news/view?ud=2026071415151280727"
-    },
-    {
-     "title": "LG전자, AI 홈·플랫폼 사업 확대...신성장동력 확보 '잰걸음'",
-     "source": "techm.kr",
-     "date": "2026-07-14",
-     "link": "https://www.techm.kr/news/articleView.html?idxno=153344"
-    },
-    {
-     "title": "127억달러 키트루다SC 시장…삼성·셀트리온 승부수",
-     "source": "서울경제",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/011/0004641318?sid=101"
-    },
-    {
-     "title": "GS건설·LG전자, 차세대 주거 AI홈 공동개발",
-     "source": "handmk.com",
-     "date": "2026-07-14",
-     "link": "https://www.handmk.com/news/articleView.html?idxno=41324"
-    },
-    {
-     "title": "LG전자-GS건설, '미래 주거표준' 만든다…'차세대 AI홈' 공동개발 MOU",
-     "source": "biztribune.co.kr",
-     "date": "2026-07-14",
-     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=355901"
-    },
-    {
-     "title": "AI홈 호재도 ‘검은 월요일’ 못 막았다…GS건설, LG전자와 맞손에도 약...",
-     "source": "sportsseoul.com",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/468/0001253467?sid=101"
-    },
-    {
-     "title": "GS건설-LG전자, '차세대 AI홈'으로 미래 주거 표준 제시",
-     "source": "ilyoseoul.co.kr",
-     "date": "2026-07-14",
-     "link": "https://www.ilyoseoul.co.kr/news/articleView.html?idxno=519794"
-    },
-    {
-     "title": "[증시키워드]SK하이닉스 200만원 붕괴·삼성전자 10%↓…HLB 이틀 연속 하...",
-     "source": "etoday.co.kr",
-     "date": "2026-07-14",
-     "link": "https://www.etoday.co.kr/news/view/2603297"
-    },
-    {
-     "title": "중국산 가짜 공기청정기 필터 일부서 금지 유해물질 검출…가전업계 정...",
-     "source": "한국경제",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/015/0005309602?sid=101"
     }
    ]
   },
@@ -885,101 +889,97 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75083,
+   "total": 75113,
    "sentiment": {
-    "pos": 20,
-    "neu": 28,
-    "neg": 12
+    "pos": 15,
+    "neu": 30,
+    "neg": 15
    },
    "keywords": [
     [
      "AI",
-     39
+     52
+    ],
+    [
+     "하드웨어",
+     18
+    ],
+    [
+     "아마존",
+     18
+    ],
+    [
+     "오픈AI",
+     15
     ],
     [
      "제미나이",
-     23
-    ],
-    [
-     "결제",
-     14
-    ],
-    [
-     "홈플러스",
-     12
-    ],
-    [
-     "챗GPT",
-     10
-    ],
-    [
-     "Google",
-     10
-    ],
-    [
-     "번역한",
-     9
-    ],
-    [
-     "활용",
-     9
+     15
     ],
     [
      "화면",
+     14
+    ],
+    [
+     "스피커",
+     14
+    ],
+    [
+     "미국",
+     14
+    ],
+    [
+     "결제",
+     13
+    ],
+    [
+     "애플은",
+     10
+    ],
+    [
+     "오픈AI의",
      9
     ],
     [
-     "클로드",
+     "오픈AI와",
      9
     ],
     [
-     "MBK",
-     9
-    ],
-    [
-     "이미지",
-     9
-    ],
-    [
-     "아래는",
+     "기기",
      8
     ],
     [
-     "으로",
+     "생성형",
      8
     ],
     [
-     "기사의",
+     "오픈AI로",
      8
     ],
     [
-     "전문",
+     "챗GPT",
      8
     ],
     [
-     "입니다",
-     8
+     "이동식",
+     7
     ],
     [
-     "오류가",
-     8
+     "시장을",
+     7
     ]
    ],
    "posWords": [
-    [
-     "투자",
-     5
-    ],
-    [
-     "글로벌",
-     4
-    ],
     [
      "협업",
      3
     ],
     [
-     "1위",
+     "확대",
+     2
+    ],
+    [
+     "기대",
      2
     ],
     [
@@ -987,15 +987,19 @@
      2
     ],
     [
-     "확대",
-     2
+     "성장",
+     1
     ],
     [
-     "프리미엄",
-     2
+     "강화",
+     1
     ],
     [
-     "기대",
+     "투자",
+     1
+    ],
+    [
+     "글로벌",
      1
     ]
    ],
@@ -1005,102 +1009,102 @@
     "구글 홈페이지",
     "구글 홈 미니",
     "구글 홈 허브",
-    "구글 홈 어시스턴트",
     "구글 홈 미니 1세대",
+    "구글 홈 어시스턴트",
     "구글 홈 스피커 연결",
     "구글 홈 미니 초기화",
     "구글 홈 미니 연결"
    ],
    "recent": [
     {
-     "title": "'폴더블 아이폰' 기대…애플 주가 사상 최고치·시총 975조원 증가",
-     "source": "kado.net",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/654/0000190418?sid=101"
+     "title": "화면 없는 이동식 AI 스피커…오픈AI, 첫 하드웨어 승부수",
+     "source": "뉴시스",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/003/0014069505?sid=104"
     },
     {
-     "title": "'테크 기업' 내세운 무신사, 10조 밸류 설득 가능할까",
-     "source": "bloter.net",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/293/0000087629?sid=101"
-    },
-    {
-     "title": "\"로봇이 옷 만드는 시대\" 피지컬 AI, 패션 공급망 다시 짠다",
-     "source": "ktnews.com",
-     "date": "2026-07-14",
-     "link": "http://www.ktnews.com/news/articleView.html?idxno=147180"
-    },
-    {
-     "title": "유한양행, 온라인몰 '버들장터'서 장마철 기획전 진행",
-     "source": "breaknews.com",
-     "date": "2026-07-14",
-     "link": "http://www.breaknews.com/1221640"
-    },
-    {
-     "title": "에블린, 일러스트레이터 수수진과 협업 컬렉션 출시",
-     "source": "breaknews.com",
-     "date": "2026-07-14",
-     "link": "http://www.breaknews.com/1221652"
-    },
-    {
-     "title": "KT, 지니 TV ‘우리동네 혜택+’ 고도화..AI 지역정보 도입",
-     "source": "breaknews.com",
-     "date": "2026-07-14",
-     "link": "http://www.breaknews.com/1221560"
-    },
-    {
-     "title": "챗GPT, 상반기 앱 신규설치 1위… 유튜브·카톡·네이버 '3강' 굳건",
-     "source": "newscj.com",
-     "date": "2026-07-14",
-     "link": "https://www.newscj.com/news/articleView.html?idxno=3416826"
-    },
-    {
-     "title": "127억달러 키트루다SC 시장…삼성·셀트리온 승부수",
-     "source": "서울경제",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/011/0004641318?sid=101"
-    },
-    {
-     "title": "[출근길 브리핑-7월 14일] 미래대응기금 신설·코스피 7번째 서킷브레이...",
-     "source": "newsworks.co.kr",
-     "date": "2026-07-14",
-     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=847081"
-    },
-    {
-     "title": "[미국 특징주] 오픈AI, 애플 소송 한 방에 '기기 야심' 급제동",
-     "source": "newspim.com",
-     "date": "2026-07-14",
-     "link": "https://www.newspim.com/news/view/20260714000053"
-    },
-    {
-     "title": "세수 대박? 800조+알파, 확실하게 돈 쓰는 정부로 간다: 슬로우레터 7월...",
-     "source": "slownews.kr",
-     "date": "2026-07-14",
-     "link": "https://slownews.kr/163158"
-    },
-    {
-     "title": "미국증시 DOW도 '하락'...SW주 '활짝' vs CAT · 엔비디아 '뚝'",
-     "source": "choicenews.co.kr",
-     "date": "2026-07-14",
-     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=168114"
-    },
-    {
-     "title": "\"포스트 아이폰 싹 자른다\"…애플, 오픈AI 하드웨어 야심 '맹공'[모닝폰...",
+     "title": "개인용 공유기 출하 4년 연속 감소…메시·게이밍은 성장",
      "source": "이데일리",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/018/0006329532?sid=105"
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/018/0006331084?sid=105"
     },
     {
-     "title": "텐서G6, TSMC 2나노 최초 탑재… 애플 A20보다 한 달 앞선다",
-     "source": "wikitree.co.kr",
-     "date": "2026-07-14",
-     "link": "https://www.wikitree.co.kr/articles/1146258"
+     "title": "\"AI 홈 시장을 잡아라\" 국내외 기업 경쟁 치열",
+     "source": "ekoreanews.co.kr",
+     "date": "2026-07-15",
+     "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=87052"
     },
     {
-     "title": "[금융신상] 우리은행·국민카드·하나카드 등",
-     "source": "bizwnews.com",
-     "date": "2026-07-14",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=140544"
+     "title": "\"스마트폰 다음은 글라스\"… 삼성, '항상 연결된 AI' 구축",
+     "source": "mediapen.com",
+     "date": "2026-07-15",
+     "link": "https://www.mediapen.com/news/view/1110338"
+    },
+    {
+     "title": "오픈AI 첫 하드웨어 제품은 '화면없는 이동식 스마트 스피커'...블룸버그...",
+     "source": "beyondpost.co.kr",
+     "date": "2026-07-15",
+     "link": "http://www.beyondpost.co.kr/view.php?ud=2026071514491768552aaae0046f_30"
+    },
+    {
+     "title": "“앱도 가전 품질인데”…폭염에 접속 몰리자 스마트홈 ‘먹통’",
+     "source": "biz.chosun.com",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/366/0001179410?sid=102"
+    },
+    {
+     "title": "“무더위에 사용자 폭증”…스마트가전 앱 심야 접속 장애",
+     "source": "ekn.kr",
+     "date": "2026-07-15",
+     "link": "https://www.ekn.kr/web/view.php?key=20260715027302700"
+    },
+    {
+     "title": "오픈AI, 첫 AI 하드웨어 승부수…화면 없는 스피커 내년 출시",
+     "source": "etoday.co.kr",
+     "date": "2026-07-15",
+     "link": "https://www.etoday.co.kr/news/view/2604065"
+    },
+    {
+     "title": "뷰소닉, 넓은 장소에 특화...200만원대 고휘도 레이저 빔프로젝터 'LSD50...",
+     "source": "betanews.net",
+     "date": "2026-07-15",
+     "link": "https://www.betanews.net/article/view/beta202607130022"
+    },
+    {
+     "title": "오픈AI 첫 하드웨어 기기는 ‘이동식 AI 스피커’…내년 출시 목표",
+     "source": "biz.chosun.com",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/366/0001179386?sid=105"
+    },
+    {
+     "title": "\"AI가 월가에 돈을 뿌리고 있다\"…사상 최대 실적 찍은 투자은행들 [외...",
+     "source": "한국경제",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/015/0005310258?sid=104"
+    },
+    {
+     "title": "“오픈AI 첫 하드웨어는 '무화면 이동식 스마트 스피커'”",
+     "source": "전자신문",
+     "date": "2026-07-15",
+     "link": "https://n.news.naver.com/mnews/article/030/0003448053?sid=105"
+    },
+    {
+     "title": "한병도 민주당 원내대표 \"전대 관리 및 검찰개혁·홈플러스 등 현안 총...",
+     "source": "breaknews.com",
+     "date": "2026-07-15",
+     "link": "http://www.breaknews.com/1221853"
+    },
+    {
+     "title": "오픈AI, 차세대 스마트 스피커로 AI 기기 시장 진입",
+     "source": "tokenpost.kr",
+     "date": "2026-07-15",
+     "link": "https://www.tokenpost.kr/news/ai/377969"
+    },
+    {
+     "title": "오픈AI 첫 하드웨어는 AI 스피커…이번엔 성공할까",
+     "source": "byline.network",
+     "date": "2026-07-15",
+     "link": "https://byline.network/?p=9004111222612139"
     }
    ]
   }
