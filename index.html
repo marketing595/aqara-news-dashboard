@@ -191,7 +191,7 @@
             <select id="fOrigin" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 배포</option><option>자사보도</option><option>오가닉</option></select>
           </div>
         </div>
-        <p class="text-[11px] text-slate-400 mb-3">※ <b>배포 구분</b>: 기사 제목이 '아카라라이프'로 시작하면 <b class="text-brand-ink">자사보도</b>(우리가 배포), 그 외는 <b>오가닉</b>(제3자 작성)으로 자동 분류. 편집으로 제목 수정 시 자동 반영됩니다.</p>
+        <p class="text-[11px] text-slate-400 mb-3">※ <b>배포 구분</b>: 기본은 <b class="text-brand-ink">자사보도</b>(우리가 배포), 제목이 <b>타사 발신사</b> 이름으로 시작하면 <b>오가닉</b>(제3자 발행)으로 분류. <button onclick="addOriginOther()" class="text-ink font-semibold hover:underline">오가닉 발신사 추가 +</button></p>
         <div class="overflow-auto max-h-[600px] rounded-lg border border-slate-100">
           <table class="w-full text-sm">
             <thead class="bg-slate-50 text-slate-500 sticky top-0 z-10"><tr class="text-left">
@@ -1042,7 +1042,16 @@
     let rowEdits=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraRowEdits')||'{}');}catch(e){return {};} })();
     let editingKey=null, TABLE_ROWS=[];
     function applyRowEdit(r){ const e=rowEdits[r._key]; if(e){ ['게재일','매체','종류','구분','기사명'].forEach(k=>{ if(e[k]!=null&&e[k]!=='') r[k]=e[k]; }); } }
-    function deriveRow(r){ r._ym=(r['게재일']||'').toString().substring(0,7); r._type=fType(r); r._topic=fTopicVal(r); r._media=fMedia(r); r._chan=fChannel(r); r._origin=/^\s*\[?\s*아카라라이프/.test((r['기사명']||'').toString())?'자사보도':'오가닉'; }
+    // 오가닉 판별: 기사 제목이 '타사 발신사' 이름으로 시작하면 오가닉(제3자 발행), 그 외는 자사보도(우리가 배포)
+    const ORIGIN_OTHERS_DEFAULT=['에스알테크','마이워크스페이스','홈즈컴퍼니','버킷스튜디오'];
+    let originOthers=(()=>{ try{ const u=JSON.parse(localStorage.getItem('aqaraOriginOthers')||'[]'); return [...new Set([...ORIGIN_OTHERS_DEFAULT,...(Array.isArray(u)?u:[])])]; }catch(e){ return ORIGIN_OTHERS_DEFAULT.slice(); } })();
+    function isOrganic(title){ const t=(title||'').toString().replace(/^[\[\('"\s]+/,'').trim(); return originOthers.some(n=>n&&t.startsWith(n)); }
+    function addOriginOther(){ const v=(prompt('오가닉(타사 발행)으로 분류할 발신사 이름을 입력하세요.\n예: 에스알테크, 홈즈컴퍼니')||'').trim(); if(!v) return;
+      const u=(()=>{ try{ return JSON.parse(localStorage.getItem('aqaraOriginOthers')||'[]'); }catch(e){ return []; } })(); if(u.indexOf(v)<0) u.push(v);
+      try{ localStorage.setItem('aqaraOriginOthers',JSON.stringify(u)); }catch(x){}
+      originOthers=[...new Set([...ORIGIN_OTHERS_DEFAULT,...u])];
+      ALL.forEach(deriveRow); applyAndRender(); }
+    function deriveRow(r){ r._ym=(r['게재일']||'').toString().substring(0,7); r._type=fType(r); r._topic=fTopicVal(r); r._media=fMedia(r); r._chan=fChannel(r); r._origin=isOrganic(r['기사명'])?'오가닉':'자사보도'; }
     function startRowEdit(i){ const r=TABLE_ROWS[i]; if(r){ editingKey=r._key; renderTable(); } }
     function cancelRowEdit(){ editingKey=null; renderTable(); }
     function saveRowEdit(){ if(!editingKey) return;
