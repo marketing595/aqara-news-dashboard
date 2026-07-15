@@ -1996,8 +1996,8 @@
     // 이벤트 모델: [{start,end,type,text}] (기간 지원). 구 버전 {date:[{type,text}]} 자동 마이그레이션.
     // 기본 표시 이벤트(캠페인 기간 등) — 삭제 불가, 항상 표시
     const CAL_DEFAULT_EVENTS=[
-      {start:'2026-04-13',end:'2026-06-30',type:'캠페인',text:'스마트홈 인테리어 캠페인',_def:true},
-      {start:'2026-05-27',end:'2026-07-06',type:'캠페인',text:'L100 스마트 도어락 캠페인',_def:true}
+      {start:'2026-04-13',end:'2026-06-30',type:'캠페인',text:'스마트홈 인테리어 캠페인',color:'#BF5332',_def:true},
+      {start:'2026-05-27',end:'2026-07-06',type:'캠페인',text:'L100 스마트 도어락 캠페인',color:'#5E85A6',_def:true}
     ];
     let calEvents=(()=>{ try{ const v=JSON.parse(localStorage.getItem('aqaraCalEvents')||'[]');
       if(Array.isArray(v)) return v;
@@ -2024,7 +2024,7 @@
         const spans=dayEvs.filter(ev=>ev.start!==ev.end);   // 기간(캠페인 등) → 얇은 띠
         const chipEvs=dayEvs.filter(ev=>ev.start===ev.end);  // 단발 → 칩
         // 기간 띠: 텍스트 없이 색만, 시작일엔 라벨 살짝
-        let bars=spans.map(ev=>{ const col=CAL_COLOR[ev.type]||'#5E85A6', isStart=key===ev.start;
+        let bars=spans.map(ev=>{ const col=ev.color||CAL_COLOR[ev.type]||'#5E85A6', isStart=key===ev.start;
           return `<div class="h-1.5 rounded-sm mb-0.5 ${isStart?'':'opacity-70'}" style="background:${col}" title="${esc(ev.text)} (${ev.start}~${ev.end})"></div>`; }).join('');
         let chips=''; if(pr){ const f=arts[0]; chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR['보도자료']}" title="${esc(arts.map(a=>a.title).join(' / '))}">${esc(f.title)}${pr>1?' +'+(pr-1):''}</div>`; }
         chipEvs.forEach(ev=>{ chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR[ev.type]||'#5E85A6'}" title="${esc(ev.text)}">${esc(ev.text)}</div>`; });
@@ -2034,20 +2034,20 @@
       const mpx=y+'-'+pad(m+1);
       const spansM=allEvs.filter(ev=>ev.start!==ev.end && ev.start.slice(0,7)<=mpx && ev.end.slice(0,7)>=mpx);
       const legEl=document.getElementById('calCampBar');
-      if(legEl) legEl.innerHTML=spansM.length?('<div class="flex flex-wrap gap-x-4 gap-y-1">'+spansM.map(ev=>`<span class="inline-flex items-center gap-1.5 text-[12px] text-slate-600"><span class="w-3 h-3 rounded-sm" style="background:${CAL_COLOR[ev.type]||'#5E85A6'}"></span>${esc(ev.text)} <span class="text-slate-400">(${ev.start.slice(5)}~${ev.end.slice(5)})</span></span>`).join('')+'</div>'):'';
+      if(legEl) legEl.innerHTML=spansM.length?('<div class="flex flex-wrap gap-x-4 gap-y-1">'+spansM.map(ev=>`<span class="inline-flex items-center gap-1.5 text-[12px] text-slate-600"><span class="w-3 h-3 rounded-sm" style="background:${ev.color||CAL_COLOR[ev.type]||'#5E85A6'}"></span>${esc(ev.text)} <span class="text-slate-400">(${ev.start.slice(5)}~${ev.end.slice(5)})</span></span>`).join('')+'</div>'):'';
       document.getElementById('calGrid').innerHTML=cells;
       // 이 달 일정 리스트: 자사보도 헤드라인 + (보도 N건) + 기간 이벤트
       const mp=y+'-'+pad(m+1);
       const items=[];
       for(let d=1;d<=daysIn;d++){ const key=ymd(d), arts=pra[key]||[]; arts.forEach((a,ai)=>items.push({sort:key+'a'+ai,label:ai===0?key.slice(5):'',type:'보도자료',text:a.title,link:a.link,count:arts.length,first:ai===0,auto:true})); }
-      CAL_DEFAULT_EVENTS.forEach(ev=>{ if(ev.start.slice(0,7)<=mp&&ev.end.slice(0,7)>=mp){ const rng=ev.start.slice(5)+'~'+ev.end.slice(5); items.push({sort:ev.start,label:rng,type:ev.type,text:ev.text,def:true}); } });
+      CAL_DEFAULT_EVENTS.forEach(ev=>{ if(ev.start.slice(0,7)<=mp&&ev.end.slice(0,7)>=mp){ const rng=ev.start.slice(5)+'~'+ev.end.slice(5); items.push({sort:ev.start,label:rng,type:ev.type,text:ev.text,color:ev.color,def:true}); } });
       calEvents.forEach((ev,i)=>{ if(ev.start.slice(0,7)<=mp&&ev.end.slice(0,7)>=mp){ const rng=ev.start===ev.end?ev.start.slice(5):(ev.start.slice(5)+'~'+ev.end.slice(5)); items.push({sort:ev.start,label:rng,type:ev.type,text:ev.text,idx:i}); } });
       items.sort((a,b)=>a.sort.localeCompare(b.sort));
       document.getElementById('calEventList').innerHTML=items.length?items.map(it=>{
         const cnt=(it.auto&&it.first)?` <span class="text-[11px] text-brand-ink font-semibold whitespace-nowrap">(보도 ${it.count}건)</span>`:'';
         const body=it.link?`<a href="${esc(it.link)}" target="_blank" rel="noopener" class="hover:underline">${esc(it.text)} <span class="text-slate-300 text-xs">↗</span></a>`:`${esc(it.text)} <span class="text-[10px] text-slate-400">${esc(it.type)}</span>`;
         const delBtn=(it.auto||it.def)?'':`<button onclick="calDelEvent(${it.idx})" class="text-[11px] text-slate-300 hover:text-ared">✕</button>`;
-        return `<div class="flex items-baseline gap-2 text-sm border-b border-[#F2EFE9] pb-1.5"><span class="text-[11px] text-slate-400 w-14 shrink-0">${esc(it.label)}</span><span class="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5" style="background:${CAL_COLOR[it.type]||'#5E85A6'}"></span><span class="flex-1 ${it.auto?'text-slate-600':'text-ink'}">${body}${cnt}</span>${delBtn}</div>`;
+        return `<div class="flex items-baseline gap-2 text-sm border-b border-[#F2EFE9] pb-1.5"><span class="text-[11px] text-slate-400 w-14 shrink-0">${esc(it.label)}</span><span class="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5" style="background:${it.color||CAL_COLOR[it.type]||'#5E85A6'}"></span><span class="flex-1 ${it.auto?'text-slate-600':'text-ink'}">${body}${cnt}</span>${delBtn}</div>`;
       }).join(''):'<p class="text-sm text-slate-400">이 달 자사보도·일정이 없습니다.</p>';
     }
 
