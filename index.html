@@ -199,7 +199,7 @@
             <select id="fType" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 성격</option></select>
             <select id="fOrigin" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 배포</option><option>자사보도</option><option>오가닉</option></select>
             <select id="bulkTopic" onchange="applyBulk('종류',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 종류 일괄 지정"><option value="">종류 일괄…</option><option>대외협력</option><option>신제품</option><option>회사 이슈</option><option>[인테리어] 쇼룸</option><option>[인테리어] 시공사례</option><option>[인테리어] 서비스</option><option>[인테리어] 트렌드</option><option>기타</option></select>
-            <select id="bulkType" onchange="applyBulk('구분',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 성격 일괄 지정"><option value="">성격 일괄…</option><option>단신</option><option>기획</option><option>특집</option><option>인터뷰</option><option>기고</option></select>
+            <select id="bulkType" onchange="applyBulk('구분',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 성격 일괄 지정"><option value="">성격 일괄…</option><option>단신</option><option>기획</option><option>매거진</option><option>언급</option></select>
             <select id="bulkOrigin" onchange="applyBulk('배포',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 배포 일괄 지정"><option value="">배포 일괄…</option><option>자사보도</option><option>오가닉</option></select>
             <button onclick="deleteSelected()" class="text-sm border border-ared/40 text-ared hover:bg-ared/5 px-3 py-2 rounded-lg font-semibold" title="체크한 기사 삭제"><span id="delSelCount">선택 삭제</span></button>
             <button onclick="restoreDeleted()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg text-slate-500" title="숨긴(삭제한) 기사 모두 복원">삭제 복원</button>
@@ -1263,7 +1263,7 @@
             <td class="px-2 py-1.5"><input id="ed-date" type="date" value="${esc((r['게재일']||'').toString().slice(0,10))}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-32"/></td>
             <td class="px-2 py-1.5"><input id="ed-media" value="${esc(r['매체']||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-24"/></td>
             <td class="px-2 py-1.5"><select id="ed-topic" class="border border-slate-300 rounded px-1 py-0.5 text-xs">${topOpts}</select></td>
-            <td class="px-2 py-1.5"><input id="ed-type" value="${esc(r['구분']||r._type||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-20"/></td>
+            <td class="px-2 py-1.5"><select id="ed-type" class="border border-slate-300 rounded px-1 py-0.5 text-xs">${['단신','기획','매거진','언급'].map(o=>`<option ${((r['구분']||r._type)===o)?'selected':''}>${o}</option>`).join('')}${['단신','기획','매거진','언급'].indexOf(r['구분']||r._type)<0&&(r['구분']||r._type)?`<option selected>${esc(r['구분']||r._type)}</option>`:''}</select></td>
             <td class="px-2 py-1.5 text-[10px] text-slate-400 whitespace-nowrap">${esc(r._origin||'')}<br>(제목따라 자동)</td>
             <td class="px-2 py-1.5"><input id="ed-title" value="${esc(r['기사명']||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-full min-w-[220px]"/></td>
             <td class="px-2 py-1.5 whitespace-nowrap text-right"><button onclick="saveRowEdit()" class="text-[11px] bg-ink text-white px-2 py-1 rounded font-semibold">저장</button> <button onclick="cancelRowEdit()" class="text-[11px] text-slate-400 hover:text-ink">취소</button> <button onclick="deleteRow()" class="text-[11px] text-ared hover:underline">삭제</button>${rowEdits[r._key]?' <button onclick="resetRowEdit()" class="text-[11px] text-slate-400 hover:underline">원복</button>':''}</td></tr>`;
@@ -2195,7 +2195,7 @@
       const pr=Object.values(prM).reduce((a,b)=>a+b,0), blog=Object.values(blM).reduce((a,b)=>a+b,0), ins=Object.values(inM).reduce((a,b)=>a+b,0);
       const hp=+kpiManual.homepage||0, wd=+kpiManual.webdoc||0, target=+kpiManual.target||600;
       const total=pr+blog+ins+hp+wd, pct=target?Math.round(total/target*100):0;
-      const planPR=(typeof ALL!=='undefined'?ALL:[]).filter(r=>r._origin==='자사보도'&&(r._ym||'').indexOf(Y)===0&&/기획|특집|인터뷰|기고/.test((r._type||'')+' '+(r['구분']||'')+' '+(r['종류']||''))).length;
+      const planPR=(typeof ALL!=='undefined'?ALL:[]).filter(r=>r._origin==='자사보도'&&(r._ym||'').indexOf(Y)===0&&/기획|매거진|특집|인터뷰|기고/.test((r._type||'')+' '+(r['구분']||'')+' '+(r['종류']||''))).length;
       KPI_AUTO={selfPR:pr,planPR:planPR,content600:total};
       document.getElementById('kpiTotal').textContent=total.toLocaleString();
       document.getElementById('kpiTarget').textContent=target.toLocaleString();
