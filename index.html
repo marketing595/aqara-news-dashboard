@@ -1028,7 +1028,9 @@
     }
     function show(id){ ['loading','error','content'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id)); }
     function showErr(m){ document.getElementById('error').textContent='⚠ '+m; show('error'); }
-    if(REFRESH_MINUTES>0){ setInterval(()=>{loadData(true);loadCafe(true);},REFRESH_MINUTES*60000); document.addEventListener('visibilitychange',()=>{if(!document.hidden){loadData(true);loadCafe(true);}}); }
+    // 분류·편집 중(체크됨/편집중)에는 자동 갱신을 건너뛰어 작업이 끊기지 않게 함
+    function busyEditing(){ return (typeof editingKey!=='undefined'&&editingKey) || (typeof checkedKeys!=='undefined'&&checkedKeys.size>0); }
+    if(REFRESH_MINUTES>0){ setInterval(()=>{ if(busyEditing())return; loadData(true);loadCafe(true);},REFRESH_MINUTES*60000); document.addEventListener('visibilitychange',()=>{ if(!document.hidden && !busyEditing()){ loadData(true);loadCafe(true);} }); }
 
     function sortedDates(){ return ALL.map(r=>r['게재일']).filter(Boolean).sort(); }
     function initRange(){ const ds=sortedDates(); if(!ds.length)return; const f=document.getElementById('fromDate'),t=document.getElementById('toDate');
@@ -1237,7 +1239,7 @@
         }
         const edited=rowEdits[r._key]?' <span class="text-[9px] text-brand-ink align-middle">•수정됨</span>':'';
         return `<tr class="hover:bg-slate-50 transition">
-        <td class="px-2 py-2.5"><input type="checkbox" class="rowchk" data-k="${esc(r._key)}" onchange="updateDelCount()"/></td>
+        <td class="px-2 py-2.5"><input type="checkbox" class="rowchk" data-k="${esc(r._key)}" ${checkedKeys.has(r._key)?'checked':''} onchange="onRowCheck(this)"/></td>
         <td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(r['게재일'])}</td>
         <td class="px-3 py-2.5 whitespace-nowrap font-medium text-slate-700">${esc(r._media||r['매체'])}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._topic,'bg-ablue/25 text-[#365b7a]')}</td>
@@ -1249,18 +1251,20 @@
         +(rows.length>700?`<tr><td colspan="8" class="text-center py-3 text-xs text-slate-400">상위 700건 표시</td></tr>`:'');
       const ca=document.getElementById('chkAll'); if(ca) ca.checked=false; updateDelCount();
     }
-    function toggleAllRows(cb){ document.querySelectorAll('#tableBody .rowchk').forEach(c=>{ c.checked=cb.checked; }); updateDelCount(); }
+    let checkedKeys=new Set();
+    function onRowCheck(cb){ if(cb.checked) checkedKeys.add(cb.dataset.k); else checkedKeys.delete(cb.dataset.k); updateDelCount(); }
+    function toggleAllRows(cb){ document.querySelectorAll('#tableBody .rowchk').forEach(c=>{ c.checked=cb.checked; if(cb.checked) checkedKeys.add(c.dataset.k); else checkedKeys.delete(c.dataset.k); }); updateDelCount(); }
     function updateDelCount(){ const n=document.querySelectorAll('#tableBody .rowchk:checked').length; const el=document.getElementById('delSelCount'); if(el) el.textContent=n?('선택 삭제 ('+n+')'):'선택 삭제'; }
     function deleteSelected(){ const chk=[...document.querySelectorAll('#tableBody .rowchk:checked')]; if(!chk.length){ alert('삭제할 기사를 체크하세요.'); return; }
       if(!confirm(chk.length+'건을 목록에서 삭제할까요? (이 브라우저에서만 숨김 · \'삭제 복원\'으로 되돌리기)')) return;
-      chk.forEach(c=>deletedRows.add(c.dataset.k)); saveDeleted(); ALL=ALL.filter(r=>!deletedRows.has(r._key)); applyAndRender(); }
+      chk.forEach(c=>deletedRows.add(c.dataset.k)); saveDeleted(); checkedKeys.clear(); ALL=ALL.filter(r=>!deletedRows.has(r._key)); applyAndRender(); }
     function applyBulk(field, sel){ const v=sel.value; sel.value=''; if(!v) return;
       const disp=field==='구분'?'성격':field;
       const chk=[...document.querySelectorAll('#tableBody .rowchk:checked')]; if(!chk.length){ alert('먼저 분류할 기사를 체크하세요.'); return; }
       if(!confirm(chk.length+'건을 '+disp+' = "'+v+'"(으)로 일괄 지정할까요?')) return;
       chk.forEach(c=>{ const k=c.dataset.k; rowEdits[k]=rowEdits[k]||{}; rowEdits[k][field]=v; });
       try{ localStorage.setItem('aqaraRowEdits',JSON.stringify(rowEdits)); }catch(e){}
-      ALL.forEach(r=>{ if(rowEdits[r._key]){ applyRowEdit(r); deriveRow(r); } }); applyAndRender(); }
+      ALL.forEach(r=>{ if(rowEdits[r._key]){ applyRowEdit(r); deriveRow(r); } }); checkedKeys.clear(); applyAndRender(); }
 
     /* ================= 데일리 브리핑 (7/1~7/8) ================= */
     const _OLD_BRIEFINGS = {
