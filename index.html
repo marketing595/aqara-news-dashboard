@@ -785,6 +785,7 @@
        </div>
      </div>
      <div class="card p-3 sm:p-5 mb-5">
+       <div id="calCampBar" class="mb-3"></div>
        <div class="grid grid-cols-7 text-center text-[11px] font-semibold text-slate-400 mb-1"><div class="text-ared">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div class="text-ablue">토</div></div>
        <div id="calGrid" class="grid grid-cols-7 gap-1"></div>
      </div>
@@ -1042,7 +1043,8 @@
     function applyAndRender(){ const f=document.getElementById('fromDate').value,t=document.getElementById('toDate').value;
       FILTERED=ALL.filter(r=>{const d=r['게재일']; if(!d)return false; if(f&&d<f)return false; if(t&&d>t)return false; return true;});
       document.getElementById('rangeInfo').textContent=f+' ~ '+t+' · '+FILTERED.length+'건';
-      renderKPIs(f,t); renderCompare(); renderTrend(); renderType(); renderMedia(); renderChannel(); renderTopic(); renderYearly(); renderTable(); }
+      renderKPIs(f,t); renderCompare(); renderTrend(); renderType(); renderMedia(); renderChannel(); renderTopic(); renderYearly(); renderTable();
+      if(typeof maybeRenderKpi==='function') maybeRenderKpi(); }
     // ===== 전월/전년 대비 비교표 =====
     function ymShift(ym,delta){ let y=+ym.slice(0,4),m=+ym.slice(5,7)+delta; while(m<1){m+=12;y--;} while(m>12){m-=12;y++;} return y+'-'+String(m).padStart(2,'0'); }
     function cmpCell(cur,base){
@@ -2016,13 +2018,23 @@
       const startDow=new Date(y,m,1).getDay(), daysIn=new Date(y,m+1,0).getDate(), pra=calPrArticles(), today=todayStr();
       let cells='';
       for(let i=0;i<startDow;i++) cells+='<div class="min-h-[74px] rounded-lg bg-[#FAFAF9]"></div>';
+      const allEvs=[...CAL_DEFAULT_EVENTS,...calEvents];
       for(let d=1;d<=daysIn;d++){ const key=ymd(d), arts=pra[key]||[], pr=arts.length, isT=key===today, dow=(startDow+d-1)%7;
-        const dayEvs=[...CAL_DEFAULT_EVENTS,...calEvents].filter(ev=>ev.start<=key&&ev.end>=key);
+        const dayEvs=allEvs.filter(ev=>ev.start<=key&&ev.end>=key);
+        const spans=dayEvs.filter(ev=>ev.start!==ev.end);   // 기간(캠페인 등) → 얇은 띠
+        const chipEvs=dayEvs.filter(ev=>ev.start===ev.end);  // 단발 → 칩
+        // 기간 띠: 텍스트 없이 색만, 시작일엔 라벨 살짝
+        let bars=spans.map(ev=>{ const col=CAL_COLOR[ev.type]||'#5E85A6', isStart=key===ev.start;
+          return `<div class="h-1.5 rounded-sm mb-0.5 ${isStart?'':'opacity-70'}" style="background:${col}" title="${esc(ev.text)} (${ev.start}~${ev.end})"></div>`; }).join('');
         let chips=''; if(pr){ const f=arts[0]; chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR['보도자료']}" title="${esc(arts.map(a=>a.title).join(' / '))}">${esc(f.title)}${pr>1?' +'+(pr-1):''}</div>`; }
-        dayEvs.forEach(ev=>{ const isStart=key===ev.start, multi=ev.start!==ev.end;
-          chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white ${isStart?'':'opacity-55'}" style="background:${CAL_COLOR[ev.type]||'#5E85A6'}" title="${esc(ev.text)} (${ev.start}~${ev.end})">${isStart?esc(ev.text):(multi?'···':esc(ev.text))}</div>`; });
-        cells+=`<div class="min-h-[74px] rounded-lg border ${isT?'border-brand bg-brand/5':'border-[#EDEBE6]'} p-1 overflow-hidden"><div class="text-[11px] font-semibold ${dow===0?'text-ared':dow===6?'text-ablue':'text-slate-500'} mb-0.5">${d}</div>${chips}</div>`;
+        chipEvs.forEach(ev=>{ chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR[ev.type]||'#5E85A6'}" title="${esc(ev.text)}">${esc(ev.text)}</div>`; });
+        cells+=`<div class="min-h-[74px] rounded-lg border ${isT?'border-brand bg-brand/5':'border-[#EDEBE6]'} p-1 overflow-hidden"><div class="text-[11px] font-semibold ${dow===0?'text-ared':dow===6?'text-ablue':'text-slate-500'} mb-0.5">${d}</div>${bars}${chips}</div>`;
       }
+      // 이 달과 겹치는 캠페인/기간 이벤트 범례(타임라인)
+      const mpx=y+'-'+pad(m+1);
+      const spansM=allEvs.filter(ev=>ev.start!==ev.end && ev.start.slice(0,7)<=mpx && ev.end.slice(0,7)>=mpx);
+      const legEl=document.getElementById('calCampBar');
+      if(legEl) legEl.innerHTML=spansM.length?('<div class="flex flex-wrap gap-x-4 gap-y-1">'+spansM.map(ev=>`<span class="inline-flex items-center gap-1.5 text-[12px] text-slate-600"><span class="w-3 h-3 rounded-sm" style="background:${CAL_COLOR[ev.type]||'#5E85A6'}"></span>${esc(ev.text)} <span class="text-slate-400">(${ev.start.slice(5)}~${ev.end.slice(5)})</span></span>`).join('')+'</div>'):'';
       document.getElementById('calGrid').innerHTML=cells;
       // 이 달 일정 리스트: 자사보도 헤드라인 + (보도 N건) + 기간 이벤트
       const mp=y+'-'+pad(m+1);
