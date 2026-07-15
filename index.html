@@ -82,6 +82,7 @@
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-7 overflow-x-auto">
       <button id="grpBtn-pr" onclick="switchGroup('pr')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-brand text-ink whitespace-nowrap">PR</button>
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
+      <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페·커뮤니티</button>
       <button id="grpBtn-report" onclick="switchGroup('report')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">종합 리포트</button>
       <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
       <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
@@ -188,6 +189,8 @@
           <h2 class="accent font-extrabold text-ink">뉴스 목록 <span id="listCount" class="text-sm font-normal text-slate-400"></span></h2>
           <div class="flex flex-wrap gap-2">
             <input id="search" type="text" placeholder="제목·매체·전체 검색 (띄어쓰기 무시)" oninput="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 w-56 focus:outline-none focus:ring-2 focus:ring-brand" />
+            <input id="fDate" type="date" onchange="renderTable()" title="게재일로 검색(해당 날짜만)" class="text-sm border border-slate-300 rounded-lg px-2.5 py-2" />
+            <button onclick="document.getElementById('fDate').value='';renderTable()" class="text-sm border border-slate-300 hover:bg-slate-50 px-2.5 py-2 rounded-lg text-slate-500" title="날짜 필터 해제">날짜×</button>
             <select id="fTopic" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 종류</option></select>
             <select id="fType" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 성격</option></select>
             <select id="fOrigin" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 배포</option><option>자사보도</option><option>오가닉</option></select>
@@ -942,7 +945,6 @@
          <div class="max-w-[1400px] mx-auto px-1 flex gap-2 py-2 overflow-x-auto">
            <button id="mktBtn-kpi" onclick="mktSub('kpi')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-[#7C5CFF] text-white whitespace-nowrap">2026 KPI</button>
            <button id="mktBtn-weekly" onclick="mktSub('weekly')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">주간보고</button>
-           <button id="mktBtn-cafe" onclick="mktSub('cafe')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">카페·커뮤니티 모니터링</button>
            <button id="mktBtn-medialist" onclick="mktSub('medialist')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">미디어리스트</button>
            <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
            <button id="mktBtn-insta" onclick="mktSub('insta')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
@@ -1254,9 +1256,9 @@
     }
     function resetRowEdit(){ if(!editingKey) return; delete rowEdits[editingKey]; try{ localStorage.setItem('aqaraRowEdits',JSON.stringify(rowEdits)); }catch(x){} editingKey=null; loadData(true); }
     function renderTable(){ const q=(document.getElementById('search').value||'').toLowerCase().trim();
-      const ft=document.getElementById('fTopic').value, fy=document.getElementById('fType').value, fo=(document.getElementById('fOrigin')||{}).value||'';
+      const ft=document.getElementById('fTopic').value, fy=document.getElementById('fType').value, fo=(document.getElementById('fOrigin')||{}).value||'', fd=(document.getElementById('fDate')||{}).value||'';
       const nq=q.replace(/\s+/g,'');
-      let rows=FILTERED.filter(r=>{ if(ft&&r._topic!==ft)return false; if(fy&&r._type!==fy)return false; if(fo&&r._origin!==fo)return false;
+      let rows=FILTERED.filter(r=>{ if(ft&&r._topic!==ft)return false; if(fy&&r._type!==fy)return false; if(fo&&r._origin!==fo)return false; if(fd&&(r['게재일']||'').slice(0,10)!==fd)return false;
         if(nq){ const h=Object.keys(r).filter(k=>k[0]!=='_'&&!/링크|url|href|채널/i.test(k)).map(k=>r[k]).join(' ').toLowerCase().replace(/\s+/g,''); if(h.indexOf(nq)<0)return false; } return true; });
       rows.sort((a,b)=>{let x=(a[sortKey]||'').toString(),y=(b[sortKey]||'').toString(); return x<y?-sortDir:x>y?sortDir:0;});
       document.getElementById('listCount').textContent='('+rows.length+'건)';
@@ -2014,8 +2016,8 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], report:['report','campaign','market','competitor'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'mkt', campaign:'report', competitor:'report', market:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], report:['report','campaign','market','competitor'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'report', competitor:'report', market:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
@@ -2025,7 +2027,7 @@
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','report','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
+      ['pr','owned','cafe','report','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
@@ -2034,6 +2036,7 @@
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       if(t==='campaign'){ renderCampaign(); loadYoutube(); }
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
+      if(t==='cafe'){ renderCafe(); loadCafe(); loadDcinside(); }
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
       if(t==='competitor'){ loadCompetitor(); }
       if(t==='market'){ loadCompetitor(); renderMarket(); }
@@ -2290,8 +2293,7 @@
       const ml=document.getElementById('view-medialist'), mls=document.getElementById('mktMedialistSlot');
       const cal=document.getElementById('view-calendar'), cals=document.getElementById('mktCalendarSlot');
       const kp=document.getElementById('view-kpi'), kps=document.getElementById('mktKpiSlot');
-      const cf=document.getElementById('view-cafe'), cfs=document.getElementById('mktCafeSlot');
-      if(kp&&kps) kps.appendChild(kp); if(cf&&cfs) cfs.appendChild(cf); if(ml&&mls) mls.appendChild(ml); if(cal&&cals) cals.appendChild(cal); mktMoved=true; }
+      if(kp&&kps) kps.appendChild(kp); if(ml&&mls) mls.appendChild(ml); if(cal&&cals) cals.appendChild(cal); mktMoved=true; }
     function mktEnter(){ const ok=sessionStorage.getItem('mktUnlocked')==='1';
       document.getElementById('mktGate').classList.toggle('hidden', ok);
       document.getElementById('mktInner').classList.toggle('hidden', !ok);
@@ -2301,16 +2303,14 @@
     function mktLock(){ sessionStorage.removeItem('mktUnlocked'); mktEnter(); }
     function mktSub(s){ mktSection=s;
       const kp=document.getElementById('view-kpi'); if(kp) kp.classList.toggle('hidden', s!=='kpi');
-      const cf=document.getElementById('view-cafe'); if(cf) cf.classList.toggle('hidden', s!=='cafe');
       const ml=document.getElementById('view-medialist'); if(ml) ml.classList.toggle('hidden', s!=='medialist');
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
       document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
       document.getElementById('mktSec-weekly').classList.toggle('hidden', s!=='weekly');
-      ['kpi','weekly','cafe','medialist','calendar','insta','blog','prpitch'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap '+(x===s?'bg-[#7C5CFF] text-white font-semibold':'text-[#5B44C7] hover:bg-[#EDE9FF] font-medium'); });
+      ['kpi','weekly','medialist','calendar','insta','blog','prpitch'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap '+(x===s?'bg-[#7C5CFF] text-white font-semibold':'text-[#5B44C7] hover:bg-[#EDE9FF] font-medium'); });
       if(s==='weekly'){ renderMktWeekly(); }
-      if(s==='cafe'){ renderCafe(); loadCafe(); loadDcinside(); }
       if(s==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
