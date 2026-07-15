@@ -981,7 +981,7 @@
              </div>
            </div>
            <p class="text-[12px] text-slate-400 mb-3">각 칸을 클릭해 작성하세요. 주차별로 이 브라우저에 저장됩니다(팀 공유는 '보고 텍스트 복사'로).</p>
-           <div id="mktWeeklyBody" class="grid grid-cols-1 lg:grid-cols-3 gap-4"></div>
+           <div id="mktWeeklyBody" class="space-y-4"></div>
          </div>
        </div>
        <div id="mktSec-prpitch" class="hidden">
@@ -2393,43 +2393,52 @@
         </div>`).join('')}
       </div>`).join('');
     }
-    // ===== 주간보고 =====
-    const WK_MEMBERS=[{name:'강유선',role:'팀장'},{name:'정여진',role:'마케터'},{name:'홍수영',role:'디자이너'}];
-    const WK_FIELDS=[{k:'done',label:'금주 진행·성과'},{k:'plan',label:'차주 계획'},{k:'issue',label:'이슈·공유'}];
+    // ===== 주간보고 (블록별 · 체크박스+담당자) =====
+    const WK_FIELDS=[{k:'done',label:'금주 진행 · 성과'},{k:'plan',label:'차주 계획'},{k:'issue',label:'이슈 · 공유'}];
     let weeklyData=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraWeekly')||'{}');}catch(e){return {};} })();
     let wkCur=null;
-    function wkMondayOf(dstr){ const d=new Date(dstr); const day=(d.getDay()+6)%7; d.setDate(d.getDate()-day); return d.toISOString().slice(0,10); }
-    function wkThis(){ wkCur=wkMondayOf(todayStr()); renderMktWeekly(); }
-    function wkShift(n){ if(!wkCur) wkCur=wkMondayOf(todayStr()); const d=new Date(wkCur); d.setDate(d.getDate()+n*7); wkCur=d.toISOString().slice(0,10); renderMktWeekly(); }
-    function wkSave(el){ const pr=el.dataset.wk.split('|'),p=pr[0],f=pr[1]; weeklyData[wkCur]=weeklyData[wkCur]||{}; weeklyData[wkCur][p]=weeklyData[wkCur][p]||{}; weeklyData[wkCur][p][f]=el.innerText.trim(); try{ localStorage.setItem('aqaraWeekly',JSON.stringify(weeklyData)); }catch(e){} }
     const WK_DOW=['일','월','화','수','목','금','토'];
+    function wkMondayOf(dstr){ const d=new Date(dstr); const day=(d.getDay()+6)%7; d.setDate(d.getDate()-day); return d.toISOString().slice(0,10); }
     function wkRange(){ const mon=new Date(wkCur), fri=new Date(wkCur); fri.setDate(fri.getDate()+4);
       return (mon.getMonth()+1)+'/'+mon.getDate()+'('+WK_DOW[mon.getDay()]+') ~ '+(fri.getMonth()+1)+'/'+fri.getDate()+'('+WK_DOW[fri.getDay()]+')'; }
-    function renderMktWeekly(){
-      if(!wkCur) wkCur=wkMondayOf(todayStr());
+    function wkThis(){ wkCur=wkMondayOf(todayStr()); renderMktWeekly(); }
+    function wkShift(n){ if(!wkCur) wkCur=wkMondayOf(todayStr()); const d=new Date(wkCur); d.setDate(d.getDate()+n*7); wkCur=d.toISOString().slice(0,10); renderMktWeekly(); }
+    function wkEnsure(){ if(!wkCur) wkCur=wkMondayOf(todayStr()); weeklyData[wkCur]=weeklyData[wkCur]||{}; WK_FIELDS.forEach(f=>{ if(!Array.isArray(weeklyData[wkCur][f.k])) weeklyData[wkCur][f.k]=[]; }); }
+    function wkPersist(){ try{ localStorage.setItem('aqaraWeekly',JSON.stringify(weeklyData)); }catch(e){} }
+    function wkAddRow(bk){ wkEnsure(); weeklyData[wkCur][bk].push({t:'',w:'',c:false}); wkPersist(); renderMktWeekly(); }
+    function wkDelRow(bk,i){ wkEnsure(); weeklyData[wkCur][bk].splice(i,1); wkPersist(); renderMktWeekly(); }
+    function wkToggle(bk,i,cb){ wkEnsure(); (weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{}).c=cb.checked; wkPersist(); const row=cb.closest('.wk-row'); if(row){ const td=row.querySelector('.wk-txt'); if(td){ td.classList.toggle('line-through',cb.checked); td.classList.toggle('text-slate-400',cb.checked); td.classList.toggle('text-slate-700',!cb.checked); } } }
+    function wkEditRow(bk,i,field,el){ wkEnsure(); (weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{})[field]=(el.tagName==='INPUT'?el.value:el.innerText).trim(); wkPersist(); }
+    function renderMktWeekly(){ wkEnsure();
       const lab=document.getElementById('wkLabel'); if(lab) lab.textContent=wkRange();
-      const wd=weeklyData[wkCur]||{};
-      document.getElementById('mktWeeklyBody').innerHTML=WK_MEMBERS.map(m=>{ const pd=wd[m.name]||{};
-        return `<div class="rounded-lg border border-[#EDE9FF] overflow-hidden">
-          <div class="px-4 py-2 bg-[#F4F1FF] flex items-center gap-2"><span class="font-bold text-[#4B32C3]">${esc(m.name)}</span><span class="text-[11px] px-1.5 py-0.5 rounded bg-white text-[#7C5CFF]">${esc(m.role)}</span></div>
-          <div class="p-3 grid grid-cols-1 sm:grid-cols-3 gap-3">${WK_FIELDS.map(f=>`<div><p class="text-[11px] font-bold text-slate-500 mb-1">${esc(f.label)}</p><div class="text-[13px] text-slate-700 leading-relaxed min-h-[64px] rounded-lg border border-[#E6E6E3] px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-brand/40" contenteditable="true" data-wk="${esc(m.name)}|${f.k}" oninput="wkSave(this)">${esc(pd[f.k]||'')}</div></div>`).join('')}</div>
-        </div>`; }).join('');
+      document.getElementById('mktWeeklyBody').innerHTML=WK_FIELDS.map(f=>{
+        const items=weeklyData[wkCur][f.k]||[];
+        const rows=items.map((it,i)=>`<div class="wk-row flex items-center gap-2 py-1.5 border-b border-[#F2EFE9]">
+          <input type="checkbox" ${it.c?'checked':''} onchange="wkToggle('${f.k}',${i},this)" class="shrink-0 w-4 h-4"/>
+          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none ${it.c?'line-through text-slate-400':'text-slate-700'}" contenteditable="true" oninput="wkEditRow('${f.k}',${i},'t',this)">${esc(it.t||'')}</div>
+          <input value="${esc(it.w||'')}" oninput="wkEditRow('${f.k}',${i},'w',this)" placeholder="담당자" class="w-20 text-[12px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0"/>
+          <button onclick="wkDelRow('${f.k}',${i})" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="삭제">✕</button>
+        </div>`).join('');
+        return `<div class="card p-4">
+          <div class="flex items-center justify-between mb-1"><h4 class="font-bold text-ink">${esc(f.label)}</h4><button onclick="wkAddRow('${f.k}')" class="text-[12px] text-[#7C5CFF] font-semibold hover:underline">＋ 항목 추가</button></div>
+          <div>${rows||'<p class="text-[12px] text-slate-400 py-2">＋ 항목 추가로 작성하세요.</p>'}</div>
+        </div>`;
+      }).join('');
     }
-    function wkShareLink(){ const payload={week:wkCur,range:wkRange(),data:weeklyData[wkCur]||{}};
+    function wkShareLink(){ wkEnsure(); const payload={week:wkCur,range:wkRange(),data:weeklyData[wkCur]||{}};
       const enc=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
       const url=location.origin+location.pathname+'#wkreport='+enc;
-      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(()=>alert('공유 링크를 복사했습니다.\n이 링크를 받은 사람은 로그인 없이 이번 주 보고를 읽기전용으로 볼 수 있습니다.'),()=>prompt('아래 링크를 복사하세요',url)); } else prompt('아래 링크를 복사하세요',url); }
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(()=>alert('공유 링크를 복사했습니다.\n링크를 받은 사람은 로그인 없이 이번 주 보고를 읽기전용으로 볼 수 있습니다.'),()=>prompt('아래 링크를 복사하세요',url)); } else prompt('아래 링크를 복사하세요',url); }
     function wkShowShared(){ if(location.hash.indexOf('#wkreport=')!==0) return false;
       try{ const p=JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(10)))));
         const ov=document.getElementById('wkShareView'); if(!ov) return false; ov.classList.remove('hidden');
         ov.innerHTML='<div class="max-w-3xl mx-auto"><div class="flex items-center justify-between mb-4"><h1 class="text-xl font-extrabold text-ink">마케팅팀 주간보고 <span class="text-sm font-normal text-slate-400">'+esc(p.range||'')+'</span></h1><a href="'+location.pathname+'" class="text-sm text-ink hover:underline">대시보드로 →</a></div>'+
-          WK_MEMBERS.map(m=>{ const pd=(p.data&&p.data[m.name])||{}; return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">'+esc(m.name)+' <span class="text-[11px] font-normal text-slate-400">'+esc(m.role)+'</span></div><div class="p-3 space-y-2">'+WK_FIELDS.map(f=>'<div><p class="text-[11px] font-bold text-slate-500">'+esc(f.label)+'</p><p class="text-[13px] text-slate-700 whitespace-pre-wrap">'+(esc(pd[f.k]||'-'))+'</p></div>').join('')+'</div></div>'; }).join('')+
+          WK_FIELDS.map(f=>{ const items=(p.data&&p.data[f.k])||[]; return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">'+esc(f.label)+'</div><div class="p-3 space-y-1">'+(items.length?items.map(it=>'<div class="text-[13px] text-slate-700">'+(it.c?'✅':'⬜')+' '+esc(it.t||'')+(it.w?' <span class="text-slate-400">('+esc(it.w)+')</span>':'')+'</div>').join(''):'<p class="text-[12px] text-slate-400">-</p>')+'</div></div>'; }).join('')+
           '<p class="text-center text-xs text-slate-400 pt-4">읽기전용 공유 보고 · 링크를 가진 사람만 열람</p></div>';
         return true;
       }catch(e){ return false; } }
-    function wkCopy(){ const wd=weeklyData[wkCur]||{};
-      let t='[마케팅팀 주간보고] '+wkRange()+'\n\n';
-      WK_MEMBERS.forEach(m=>{ const pd=wd[m.name]||{}; t+='■ '+m.name+' ('+m.role+')\n'; WK_FIELDS.forEach(f=>{ if(pd[f.k]) t+=' · '+f.label+': '+pd[f.k]+'\n'; }); t+='\n'; });
+    function wkCopy(){ wkEnsure(); let t='[마케팅팀 주간보고] '+wkRange()+'\n\n';
+      WK_FIELDS.forEach(f=>{ t+='■ '+f.label+'\n'; (weeklyData[wkCur][f.k]||[]).forEach(it=>{ t+='  '+(it.c?'[완료] ':'[  ] ')+(it.t||'')+(it.w?(' ('+it.w+')'):'')+'\n'; }); t+='\n'; });
       if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(()=>alert('주간보고 텍스트를 복사했습니다.'),()=>alert(t)); } else alert(t); }
     let ownedSection='overview';
     function ownedChannelLinks(s){
