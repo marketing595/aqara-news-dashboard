@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-07-15 10:16",
- "count": 1332,
+ "generatedAt": "2026-07-15 11:03",
+ "count": 1330,
  "note": "네이버 뉴스 2021~2026 아카라 관련 수집(제목 중복제거). 대시보드가 시트 기사와 재중복제거 후 추가분을 오가닉으로 병합.",
  "items": [
   {
@@ -101,7 +101,7 @@
   },
   {
    "기사명": "아카라라이프, 한국실내디자인학회 '2026 트렌드살롱'에서 시니어 AIoT 솔...",
-   "매체": "businesskorea.co.kr",
+   "매체": "비지니스코리아",
    "게재일": "2026-06-15",
    "link": "https://www.businesskorea.co.kr/news/articleView.html?idxno=271307"
   },
@@ -149,7 +149,7 @@
   },
   {
    "기사명": "아카라라이프, 대전·충청 스마트홈 세미나 성료…지역 전문가 네트워크...",
-   "매체": "businesskorea.co.kr",
+   "매체": "비지니스코리아",
    "게재일": "2026-05-13",
    "link": "https://www.businesskorea.co.kr/news/articleView.html?idxno=269359"
   },
@@ -550,16 +550,16 @@
    "link": "https://www.aitimes.kr/news/articleView.html?idxno=37791"
   },
   {
-   "기사명": "삼성 스마트싱스, 매터 1.5 기반 카메라 표준 지원",
-   "매체": "nspna.com",
-   "게재일": "2025-12-19",
-   "link": "https://www.nspna.com/news/?mode=view&newsid=793782"
-  },
-  {
    "기사명": "삼성 '스마트싱스', 업계 최초 '매터 1.5' 기반 카메라 표준 지원",
    "매체": "itbiznews.com",
    "게재일": "2025-12-19",
    "link": "https://www.itbiznews.com/news/articleView.html?idxno=190964"
+  },
+  {
+   "기사명": "삼성 스마트싱스, 매터 1.5 기반 카메라 표준 지원",
+   "매체": "nspna.com",
+   "게재일": "2025-12-19",
+   "link": "https://www.nspna.com/news/?mode=view&newsid=793782"
   },
   {
    "기사명": "삼성전자, 업계 첫 스마트홈에 카메라 적용…IoT 생태계확장",
@@ -2092,28 +2092,22 @@
    "link": "http://kpenews.com/View.aspx?No=3483312"
   },
   {
-   "기사명": "\"누구나 쉽게\"…LG전자, 스마트홈 플랫폼 '씽큐 API' 개방",
-   "매체": "이데일리",
-   "게재일": "2024-12-17",
-   "link": "http://www.edaily.co.kr/news/newspath.asp?newsid=02315686639119504"
-  },
-  {
    "기사명": "LG전자, 스마트홈 플랫폼 ‘씽큐 API’ 전면 개방… “누구나 쉽게 공간...",
    "매체": "조선일보",
    "게재일": "2024-12-17",
    "link": "https://biz.chosun.com/it-science/ict/2024/12/17/CAFP4ITHBJBVVC7XPKLET3QSJQ/?utm_source=naver&utm_medium=original&utm_campaign=biz"
   },
   {
-   "기사명": "LG전자, 스마트홈 플랫폼 씽큐 API 전면 개방…\"손쉽게 스마트한 공간 구...",
-   "매체": "businessplus.kr",
+   "기사명": "\"누구나 쉽게\"…LG전자, 스마트홈 플랫폼 '씽큐 API' 개방",
+   "매체": "이데일리",
    "게재일": "2024-12-17",
-   "link": "https://www.businessplus.kr/news/articleView.html?idxno=77000"
+   "link": "http://www.edaily.co.kr/news/newspath.asp?newsid=02315686639119504"
   },
   {
-   "기사명": "LG전자, 씽큐 API 전면 개방…개발자 웹사이트 오픈",
-   "매체": "womentimes.co.kr",
+   "기사명": "LG전자, 씽큐 API 전면 개방",
+   "매체": "newsclaim.co.kr",
    "게재일": "2024-12-17",
-   "link": "http://www.womentimes.co.kr/news/articleView.html?idxno=82600"
+   "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3038626"
   },
   {
    "기사명": "\"누구나 스마트한 공간 구현을\"…LG전자, 스마트홈 플랫폼 씽큐 API 전면...",
@@ -2128,10 +2122,10 @@
    "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1646135"
   },
   {
-   "기사명": "LG전자, 씽큐 API 전면 개방",
-   "매체": "newsclaim.co.kr",
+   "기사명": "LG전자, 씽큐 API 전면 개방…개발자 웹사이트 오픈",
+   "매체": "womentimes.co.kr",
    "게재일": "2024-12-17",
-   "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3038626"
+   "link": "http://www.womentimes.co.kr/news/articleView.html?idxno=82600"
   },
   {
    "기사명": "LG전자, 스마트홈 플랫폼 씽큐 API 전면 개방…‘AI 홈’ 확대",
@@ -2144,6 +2138,12 @@
    "매체": "autodaily.co.kr",
    "게재일": "2024-12-17",
    "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=525833"
+  },
+  {
+   "기사명": "LG전자, 스마트홈 플랫폼 씽큐 API 전면 개방…\"손쉽게 스마트한 공간 구...",
+   "매체": "businessplus.kr",
+   "게재일": "2024-12-17",
+   "link": "https://www.businessplus.kr/news/articleView.html?idxno=77000"
   },
   {
    "기사명": "“스마트홈 앱 누구나 만든다”…LG전자, 스마트홈 플랫폼 API 전면 개방",
@@ -2392,16 +2392,16 @@
    "link": "https://biz.newdaily.co.kr/site/data/html/2024/11/15/2024111500067.html"
   },
   {
-   "기사명": "캐롯, 주택종합보험…스마트홈 기기 고객 월 보험료 10% 할인",
-   "매체": "g-enews.com",
-   "게재일": "2024-11-15",
-   "link": "http://www.g-enews.com/ko-kr/news/article/news_all/202411151006572817658ae4d6a0_1/article.html"
-  },
-  {
    "기사명": "아카라라이프, 캐롯손해보험의 주택종합보험 제휴 혜택 제공",
    "매체": "boannews.com",
    "게재일": "2024-11-15",
    "link": "http://www.boannews.com/media/view.asp?idx=134356&kind="
+  },
+  {
+   "기사명": "캐롯, 주택종합보험…스마트홈 기기 고객 월 보험료 10% 할인",
+   "매체": "g-enews.com",
+   "게재일": "2024-11-15",
+   "link": "http://www.g-enews.com/ko-kr/news/article/news_all/202411151006572817658ae4d6a0_1/article.html"
   },
   {
    "기사명": "캐롯, 화재·누수·도난 보장하는 주택종합보험 출시",
@@ -2416,16 +2416,16 @@
    "link": "https://mydaily.co.kr/page/view/2024111509584125742"
   },
   {
-   "기사명": "캐롯, 주택종합보험 출시...가전제품 수리비도 보장",
-   "매체": "biz.sbs.co.kr",
-   "게재일": "2024-11-15",
-   "link": "https://biz.sbs.co.kr/article_hub/20000201800?division=NAVER"
-  },
-  {
    "기사명": "캐롯손보, 가전제품 수리비용까지 보장하는 주택종합보험 출시",
    "매체": "이데일리",
    "게재일": "2024-11-15",
    "link": "http://www.edaily.co.kr/news/newspath.asp?newsid=02981526639086048"
+  },
+  {
+   "기사명": "캐롯, 주택종합보험 출시...가전제품 수리비도 보장",
+   "매체": "biz.sbs.co.kr",
+   "게재일": "2024-11-15",
+   "link": "https://biz.sbs.co.kr/article_hub/20000201800?division=NAVER"
   },
   {
    "기사명": "화재·누수·도난부터 가전제품 수리비용…캐롯손보, 주택종합보험 출시",
@@ -2464,16 +2464,16 @@
    "link": "https://biz.chosun.com/stock/finance/2024/11/15/DXSAA6TIRFAQFONMMDJ32BHYJQ/?utm_source=naver&utm_medium=original&utm_campaign=biz"
   },
   {
-   "기사명": "캐롯, 주택종합보험 출시…스마트홈 기기 연계 보험료 할인",
-   "매체": "pointdaily.co.kr",
-   "게재일": "2024-11-15",
-   "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=225317"
-  },
-  {
    "기사명": "캐롯, 주택 관련 사고 보장하는 주택종합보험 출시",
    "매체": "lcnews.co.kr",
    "게재일": "2024-11-15",
    "link": "https://www.lcnews.co.kr/news/articleView.html?idxno=88429"
+  },
+  {
+   "기사명": "캐롯, 주택종합보험 출시…스마트홈 기기 연계 보험료 할인",
+   "매체": "pointdaily.co.kr",
+   "게재일": "2024-11-15",
+   "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=225317"
   },
   {
    "기사명": "캐롯, 주택종합보험 출시…스마트홈 기기 연계 보험료 할인 혜택 제공",
@@ -2698,16 +2698,16 @@
    "link": "http://www.m-i.kr/news/articleView.html?idxno=1170946"
   },
   {
-   "기사명": "LG전자, 세계 최대규모 로봇 콘퍼런스서 ‘이동형 AI홈 허브 Q9’로 개방...",
-   "매체": "sportsw.kr",
-   "게재일": "2024-10-23",
-   "link": "https://www.sportsw.kr/news/newsview.php?ncode=1065582142951449"
-  },
-  {
    "기사명": "LG전자, 로스콘서 ‘이동형 AI홈 허브 Q9’ 공개",
    "매체": "kgnews.co.kr",
    "게재일": "2024-10-23",
    "link": "https://www.kgnews.co.kr/news/article.html?no=814300"
+  },
+  {
+   "기사명": "LG전자, 세계 최대규모 로봇 콘퍼런스서 ‘이동형 AI홈 허브 Q9’로 개방...",
+   "매체": "sportsw.kr",
+   "게재일": "2024-10-23",
+   "link": "https://www.sportsw.kr/news/newsview.php?ncode=1065582142951449"
   },
   {
    "기사명": "LG전자, '로스콘 2024'서 AI홈 허브 기술 공개",
@@ -2740,16 +2740,16 @@
    "link": "http://www.finomy.com/news/articleView.html?idxno=217356"
   },
   {
-   "기사명": "LG전자, 이동형 AI홈 허브 Q9 공개...\"초개인화 AI홈 솔루션 제공\"",
-   "매체": "consumernews.co.kr",
-   "게재일": "2024-10-23",
-   "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=717189"
-  },
-  {
    "기사명": "LG전자, ‘이동형 AI홈 허브 Q9’으로 개방형 생태계 조성",
    "매체": "dnews.co.kr",
    "게재일": "2024-10-23",
    "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202410230846470710438"
+  },
+  {
+   "기사명": "LG전자, 이동형 AI홈 허브 Q9 공개...\"초개인화 AI홈 솔루션 제공\"",
+   "매체": "consumernews.co.kr",
+   "게재일": "2024-10-23",
+   "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=717189"
   },
   {
    "기사명": "LG전자, 로봇 컨퍼런스 '로스콘 2024'서 이동형 AI홈 허브 Q9 SDK 공개",
@@ -2788,16 +2788,16 @@
    "link": "https://www.viva100.com/article/20241023500199"
   },
   {
-   "기사명": "AI홈 판 키우는 LG전자, 이동형 AI홈 허브 'Q9' 공개",
-   "매체": "segyebiz.com",
-   "게재일": "2024-10-23",
-   "link": "http://www.segyebiz.com/newsView/20241023506943?OutUrl=naver"
-  },
-  {
    "기사명": "LG전자, '이동형 허브 Q9' SDK 공개로 AI홈 플랫폼 개방화 가속",
    "매체": "아주경제",
    "게재일": "2024-10-23",
    "link": "https://www.ajunews.com/view/20241023092015555"
+  },
+  {
+   "기사명": "AI홈 판 키우는 LG전자, 이동형 AI홈 허브 'Q9' 공개",
+   "매체": "segyebiz.com",
+   "게재일": "2024-10-23",
+   "link": "http://www.segyebiz.com/newsView/20241023506943?OutUrl=naver"
   },
   {
    "기사명": "LG전자, '이동형 AI홈 허브 Q9'으로 개방형 생태계 조성 앞장",
@@ -2806,34 +2806,28 @@
    "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=214712"
   },
   {
-   "기사명": "LG전자, 로봇 콘퍼런스서 ‘이동형 AI홈 허브 Q9’ SDK 공개…\"AI홈 조성...",
-   "매체": "dailian.co.kr",
-   "게재일": "2024-10-23",
-   "link": "https://www.dailian.co.kr/news/view/1420091/?sc=Naver"
-  },
-  {
    "기사명": "LG전자, 가전과 IoT 연결하는 '이동형 AI홈 허브 Q9' SDK 공개",
    "매체": "지디넷코리아",
    "게재일": "2024-10-23",
    "link": "https://zdnet.co.kr/view/?no=20241023093835"
   },
   {
-   "기사명": "LG전자, 로스콘서 ‘이동형 AI홈 허브 Q9’으로 개방형 생태계 조성",
-   "매체": "dizzotv.com",
+   "기사명": "LG전자, 로봇 콘퍼런스서 ‘이동형 AI홈 허브 Q9’ SDK 공개…\"AI홈 조성...",
+   "매체": "dailian.co.kr",
    "게재일": "2024-10-23",
-   "link": "http://www.dizzotv.com/site/data/html_dir/2024/10/23/2024102380025.html"
+   "link": "https://www.dailian.co.kr/news/view/1420091/?sc=Naver"
+  },
+  {
+   "기사명": "LG전자, 로스콘 2024서 '이동형 AI홈 허브 Q9' 선봬…\"개방형 생태계 조...",
+   "매체": "businessplus.kr",
+   "게재일": "2024-10-23",
+   "link": "https://www.businessplus.kr/news/articleView.html?idxno=72387"
   },
   {
    "기사명": "LG전자, '이동형 AI홈 허브 Q9'로 개방형 생태계 조성",
-   "매체": "enewstoday.co.kr",
+   "매체": "pointdaily.co.kr",
    "게재일": "2024-10-23",
-   "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2190303"
-  },
-  {
-   "기사명": "\"AI 기반 개방형 생태계 조성\"...LG전자, 이동형 AI홈 허브 Q9 공개",
-   "매체": "4th.kr",
-   "게재일": "2024-10-23",
-   "link": "http://www.4th.kr/news/articleView.html?idxno=2071686"
+   "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=222590"
   },
   {
    "기사명": "LG전자, 세계 최대규모 로봇 콘퍼런스 참가...이동형 AI홈 허브 Q9 선봬",
@@ -2842,10 +2836,10 @@
    "link": "http://www.asiaa.co.kr/news/articleView.html?idxno=190895"
   },
   {
-   "기사명": "LG전자, 로스콘 2024서 '이동형 AI홈 허브 Q9' 선봬…\"개방형 생태계 조...",
-   "매체": "businessplus.kr",
+   "기사명": "\"AI 기반 개방형 생태계 조성\"...LG전자, 이동형 AI홈 허브 Q9 공개",
+   "매체": "4th.kr",
    "게재일": "2024-10-23",
-   "link": "https://www.businessplus.kr/news/articleView.html?idxno=72387"
+   "link": "http://www.4th.kr/news/articleView.html?idxno=2071686"
   },
   {
    "기사명": "LG전자, 세계 최대규모 로봇 콘퍼런스서 '개방형 생태계 조성'",
@@ -2968,16 +2962,16 @@
    "link": "http://www.rpm9.com/news/article.html?id=20241010090018"
   },
   {
-   "기사명": "[AT현장] 삼성물산 \"빌딩 플랫폼 '바인드'로 미래 사업 정조준\"",
-   "매체": "asiatime.co.kr",
-   "게재일": "2024-10-10",
-   "link": "https://www.asiatime.co.kr/article/20241010500385"
-  },
-  {
    "기사명": "삼성물산, 상업용 빌딩 플랫폼 '바인드' 공개",
    "매체": "한국경제",
    "게재일": "2024-10-10",
    "link": "https://www.hankyung.com/article/2024101067891"
+  },
+  {
+   "기사명": "[AT현장] 삼성물산 \"빌딩 플랫폼 '바인드'로 미래 사업 정조준\"",
+   "매체": "asiatime.co.kr",
+   "게재일": "2024-10-10",
+   "link": "https://www.asiatime.co.kr/article/20241010500385"
   },
   {
    "기사명": "삼성물산, 빌딩플랫폼 ‘Bynd’ 출시…다양한 서비스 통합 구현",
@@ -3196,16 +3190,16 @@
    "link": "http://www.metroseoul.co.kr/article/20241009500088"
   },
   {
-   "기사명": "삼성물산, 차세대 빌딩플랫폼 'Bynd' 출시…소프트 비즈니스 확장 속도",
-   "매체": "businessplus.kr",
-   "게재일": "2024-10-09",
-   "link": "https://www.businessplus.kr/news/articleView.html?idxno=71322"
-  },
-  {
    "기사명": "삼성물산, 100가지 서비스 담은 빌딩플랫폼 'Bynd' 선보여",
    "매체": "한국경제",
    "게재일": "2024-10-09",
    "link": "https://www.hankyung.com/article/202410093518i"
+  },
+  {
+   "기사명": "삼성물산, 차세대 빌딩플랫폼 'Bynd' 출시…소프트 비즈니스 확장 속도",
+   "매체": "businessplus.kr",
+   "게재일": "2024-10-09",
+   "link": "https://www.businessplus.kr/news/articleView.html?idxno=71322"
   },
   {
    "기사명": "삼성물산, 빌딩플랫폼 출시…소프트 비즈니스 사업 확장",
@@ -3718,52 +3712,22 @@
    "link": "https://biz.newdaily.co.kr/site/data/html/2024/09/07/2024090700039.html"
   },
   {
-   "기사명": "[IFA2024] \"'AI홈 시대' 열렸다\"...LG전자 \"가사 해방 삶의질 제고\"",
-   "매체": "4th.kr",
+   "기사명": "LG전자, 음성 중심 'AI 홈' 시대 연다...오픈AI 기술도 투입",
+   "매체": "디지털투데이",
    "게재일": "2024-09-08",
-   "link": "http://www.4th.kr/news/articleView.html?idxno=2069213"
-  },
-  {
-   "기사명": "LG전자, 'AI홈 시대 개막' 선언…LG AI 에이전트 '퓨론'·AI홈 허브 '씽큐...",
-   "매체": "businessplus.kr",
-   "게재일": "2024-09-08",
-   "link": "https://www.businessplus.kr/news/articleView.html?idxno=69268"
-  },
-  {
-   "기사명": "[IFA 2024] LG전자, 생성 AI 품은 홈 허브 '싱큐 온' 공개...\"UP가전 넘어...",
-   "매체": "아주경제",
-   "게재일": "2024-09-08",
-   "link": "https://www.ajunews.com/view/20240907215424278"
-  },
-  {
-   "기사명": "LG전자, AI홈 시대 개막 선언",
-   "매체": "조선일보",
-   "게재일": "2024-09-08",
-   "link": "https://it.chosun.com/news/articleView.html?idxno=2023092123007"
-  },
-  {
-   "기사명": "[IFA 2024] \"외출할래\" \"그럼 인덕션 끌까요?\"…LG전자 'AI홈' 본격 공략",
-   "매체": "dailian.co.kr",
-   "게재일": "2024-09-08",
-   "link": "https://www.dailian.co.kr/news/view/1404867/?sc=Naver"
-  },
-  {
-   "기사명": "LG전자 류재철 본부장, \"AI 홈시대, 소통만 하면 나머지는 AI가 알아서 한...",
-   "매체": "fetv.co.kr",
-   "게재일": "2024-09-08",
-   "link": "http://www.fetv.co.kr/news/article.html?no=174178"
-  },
-  {
-   "기사명": "류재철 LG전자 사장 \"'LG 씽큐 온'으로 가전 100% 연결하겠다\"",
-   "매체": "아시아경제",
-   "게재일": "2024-09-08",
-   "link": "https://view.asiae.co.kr/article/2024090722340094274"
+   "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=532822"
   },
   {
    "기사명": "[IFA 2024] \"생성형 AI가 생활 전반 케어\" LG전자, 'AI 홈 시대 개막' 선언",
    "매체": "financialpost.co.kr",
    "게재일": "2024-09-08",
    "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=212638"
+  },
+  {
+   "기사명": "류재철 LG전자 사장 \"'LG 씽큐 온'으로 가전 100% 연결하겠다\"",
+   "매체": "아시아경제",
+   "게재일": "2024-09-08",
+   "link": "https://view.asiae.co.kr/article/2024090722340094274"
   },
   {
    "기사명": "[IFA 2024] “가사 해방”…류재철 LG전자 사장 ‘AI홈 시대 개막’ 선언",
@@ -3778,10 +3742,40 @@
    "link": "http://www.asiaa.co.kr/news/articleView.html?idxno=185807"
   },
   {
-   "기사명": "LG전자, 음성 중심 'AI 홈' 시대 연다...오픈AI 기술도 투입",
-   "매체": "디지털투데이",
+   "기사명": "[IFA 2024] LG전자, 생성 AI 품은 홈 허브 '싱큐 온' 공개...\"UP가전 넘어...",
+   "매체": "아주경제",
    "게재일": "2024-09-08",
-   "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=532822"
+   "link": "https://www.ajunews.com/view/20240907215424278"
+  },
+  {
+   "기사명": "[IFA2024] \"'AI홈 시대' 열렸다\"...LG전자 \"가사 해방 삶의질 제고\"",
+   "매체": "4th.kr",
+   "게재일": "2024-09-08",
+   "link": "http://www.4th.kr/news/articleView.html?idxno=2069213"
+  },
+  {
+   "기사명": "LG전자, 'AI홈 시대 개막' 선언…LG AI 에이전트 '퓨론'·AI홈 허브 '씽큐...",
+   "매체": "businessplus.kr",
+   "게재일": "2024-09-08",
+   "link": "https://www.businessplus.kr/news/articleView.html?idxno=69268"
+  },
+  {
+   "기사명": "[IFA 2024] \"외출할래\" \"그럼 인덕션 끌까요?\"…LG전자 'AI홈' 본격 공략",
+   "매체": "dailian.co.kr",
+   "게재일": "2024-09-08",
+   "link": "https://www.dailian.co.kr/news/view/1404867/?sc=Naver"
+  },
+  {
+   "기사명": "LG전자 류재철 본부장, \"AI 홈시대, 소통만 하면 나머지는 AI가 알아서 한...",
+   "매체": "fetv.co.kr",
+   "게재일": "2024-09-08",
+   "link": "http://www.fetv.co.kr/news/article.html?no=174178"
+  },
+  {
+   "기사명": "LG전자, AI홈 시대 개막 선언",
+   "매체": "조선일보",
+   "게재일": "2024-09-08",
+   "link": "https://it.chosun.com/news/articleView.html?idxno=2023092123007"
   },
   {
    "기사명": "류재철 LG전자 본부장 “AI홈 시대 개막 선언…연내 씽크 온 출시”",
@@ -4120,10 +4114,10 @@
    "link": "https://www.socialvalue.kr/news/view/1065571419182402"
   },
   {
-   "기사명": "LG전자, IFA 2024서 AI홈 허브 '씽큐 온' 공개한다",
-   "매체": "ezyeconomy.com",
+   "기사명": "\"고객과 일상 언어로 대화\"…LG전자, IFA서 '씽큐 온' 공개",
+   "매체": "youthdaily.co.kr",
    "게재일": "2024-08-29",
-   "link": "https://www.ezyeconomy.com/news/articleView.html?idxno=202064"
+   "link": "http://www.youthdaily.co.kr/news/article.html?no=163662"
   },
   {
    "기사명": "LG전자, IFA서 생성형AI 탑재한 AI홈 허브 공개",
@@ -4132,10 +4126,10 @@
    "link": "https://daily.hankooki.com/news/articleView.html?idxno=1121766"
   },
   {
-   "기사명": "\"고객과 일상 언어로 대화\"…LG전자, IFA서 '씽큐 온' 공개",
-   "매체": "youthdaily.co.kr",
+   "기사명": "LG전자, IFA 2024서 AI홈 허브 '씽큐 온' 공개한다",
+   "매체": "ezyeconomy.com",
    "게재일": "2024-08-29",
-   "link": "http://www.youthdaily.co.kr/news/article.html?no=163662"
+   "link": "https://www.ezyeconomy.com/news/articleView.html?idxno=202064"
   },
   {
    "기사명": "LG전자 ‘AI 신무기’ 등장…알아서 세탁 척척, 택시까지 불러준다",
@@ -4156,18 +4150,6 @@
    "link": "https://www.sportsseoul.com/news/read/1457515?ref=naver"
   },
   {
-   "기사명": "獨 찾는 LG전자, AI홈 ’LG 씽큐 온’으로 유럽 공략 시동",
-   "매체": "이데일리",
-   "게재일": "2024-08-29",
-   "link": "http://www.edaily.co.kr/news/newspath.asp?newsid=01941766638992240"
-  },
-  {
-   "기사명": "일상 대화 가능한 LG AI홈 '씽큐 온'... IFA 2024서 공개",
-   "매체": "dailian.co.kr",
-   "게재일": "2024-08-29",
-   "link": "https://www.dailian.co.kr/news/view/1401038/?sc=Naver"
-  },
-  {
    "기사명": "LG전자, IFA 2024서 AI홈 ‘씽큐 온’ 선보인다… “업계 최초로 생성형...",
    "매체": "조선일보",
    "게재일": "2024-08-29",
@@ -4180,10 +4162,16 @@
    "link": "https://www.hankyung.com/article/202408293298g"
   },
   {
-   "기사명": "LG전자 유럽 시장 공략 박차… IFA 2024서 'LG 씽큐 온' 공개",
-   "매체": "lcnews.co.kr",
+   "기사명": "獨 찾는 LG전자, AI홈 ’LG 씽큐 온’으로 유럽 공략 시동",
+   "매체": "이데일리",
    "게재일": "2024-08-29",
-   "link": "https://www.lcnews.co.kr/news/articleView.html?idxno=83093"
+   "link": "http://www.edaily.co.kr/news/newspath.asp?newsid=01941766638992240"
+  },
+  {
+   "기사명": "일상 대화 가능한 LG AI홈 '씽큐 온'... IFA 2024서 공개",
+   "매체": "dailian.co.kr",
+   "게재일": "2024-08-29",
+   "link": "https://www.dailian.co.kr/news/view/1401038/?sc=Naver"
   },
   {
    "기사명": "가전·IoT 기기 24시간 연결...LG전자, AI 홈 허브 '씽큐 온' 공개",
@@ -4192,16 +4180,46 @@
    "link": "http://www.4th.kr/news/articleView.html?idxno=2068573"
   },
   {
+   "기사명": "LG전자 유럽 시장 공략 박차… IFA 2024서 'LG 씽큐 온' 공개",
+   "매체": "lcnews.co.kr",
+   "게재일": "2024-08-29",
+   "link": "https://www.lcnews.co.kr/news/articleView.html?idxno=83093"
+  },
+  {
+   "기사명": "LG전자, 생성형 AI 탑재 스마트홈 허브 'LG 씽큐 온' IFA서 공개",
+   "매체": "isplus.com",
+   "게재일": "2024-08-29",
+   "link": "https://isplus.com/article/view/isp202408290025"
+  },
+  {
+   "기사명": "LG전자, IFA서 AI비서 `씽큐온` 공개… 일상 언어로 대화하며 각종 기기...",
+   "매체": "디지털타임스",
+   "게재일": "2024-08-29",
+   "link": "https://www.dt.co.kr/contents.html?article_no=2024082902109932064003&ref=naver"
+  },
+  {
+   "기사명": "[IFA 2024]LG전자, 생성형 AI 탑재 'LG 씽큐 온' 공개…가전 업계 최초",
+   "매체": "newsway.co.kr",
+   "게재일": "2024-08-29",
+   "link": "https://www.newsway.co.kr/news/view?ud=2024082907520746667"
+  },
+  {
+   "기사명": "LG전자, IFA 2024서 허브 '씽큐 온' 공개",
+   "매체": "newsclaim.co.kr",
+   "게재일": "2024-08-29",
+   "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3034635"
+  },
+  {
+   "기사명": "LG전자, IFA 2024에서 업계 최초 AI 기능 탑재 'LG 싱큐 온' 공개",
+   "매체": "autodaily.co.kr",
+   "게재일": "2024-08-29",
+   "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=522595"
+  },
+  {
    "기사명": "[IFA '24] \"친구처럼 대화\"…LG전자, AI홈 허브 ‘씽큐 온’ 선봬",
    "매체": "ebn.co.kr",
    "게재일": "2024-08-29",
    "link": "https://www.ebn.co.kr/news/view/1635038/?sc=Naver"
-  },
-  {
-   "기사명": "[IFA 2024] \"업계 최초 생성형AI 탑재\"…AI홈허브 '씽큐 온' 공개한 LG",
-   "매체": "financialpost.co.kr",
-   "게재일": "2024-08-29",
-   "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=212001"
   },
   {
    "기사명": "\"하이 LG, 오늘 일정은?\"…LG전자, AI홈 허브 '씽큐 온' 공개",
@@ -4222,46 +4240,16 @@
    "link": "https://www.itbiznews.com/news/articleView.html?idxno=143660"
   },
   {
-   "기사명": "LG전자, IFA서 AI비서 `씽큐온` 공개… 일상 언어로 대화하며 각종 기기...",
-   "매체": "디지털타임스",
+   "기사명": "[IFA 2024] \"업계 최초 생성형AI 탑재\"…AI홈허브 '씽큐 온' 공개한 LG",
+   "매체": "financialpost.co.kr",
    "게재일": "2024-08-29",
-   "link": "https://www.dt.co.kr/contents.html?article_no=2024082902109932064003&ref=naver"
-  },
-  {
-   "기사명": "[IFA 2024]LG전자, 생성형 AI 탑재 'LG 씽큐 온' 공개…가전 업계 최초",
-   "매체": "newsway.co.kr",
-   "게재일": "2024-08-29",
-   "link": "https://www.newsway.co.kr/news/view?ud=2024082907520746667"
-  },
-  {
-   "기사명": "LG전자, 생성형 AI 탑재 스마트홈 허브 'LG 씽큐 온' IFA서 공개",
-   "매체": "isplus.com",
-   "게재일": "2024-08-29",
-   "link": "https://isplus.com/article/view/isp202408290025"
-  },
-  {
-   "기사명": "LG전자, IFA 2024서 허브 '씽큐 온' 공개",
-   "매체": "newsclaim.co.kr",
-   "게재일": "2024-08-29",
-   "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3034635"
-  },
-  {
-   "기사명": "LG전자, IFA 2024에서 업계 최초 AI 기능 탑재 'LG 싱큐 온' 공개",
-   "매체": "autodaily.co.kr",
-   "게재일": "2024-08-29",
-   "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=522595"
+   "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=212001"
   },
   {
    "기사명": "LG전자, IFA 2024서 AI홈허브 '씽큐온' 선봬",
    "매체": "smarttoday.co.kr",
    "게재일": "2024-08-29",
    "link": "https://www.smarttoday.co.kr/news/articleView.html?idxno=58541"
-  },
-  {
-   "기사명": "LG전자, 생성형 AI 탑재한 홈허브 '씽큐온' 내달 공개",
-   "매체": "지디넷코리아",
-   "게재일": "2024-08-29",
-   "link": "https://zdnet.co.kr/view/?no=20240829075303"
   },
   {
    "기사명": "[AT 현장] 건설사에서 '못'도 박아준다고!?…더 스마트해진 '홈닉2.0'",
@@ -4672,16 +4660,16 @@
    "link": "https://www.newscj.com/news/articleView.html?idxno=3157437"
   },
   {
-   "기사명": "삼성물산, ‘홈닉’ 앱 하나로 모든 홈IoT 서비스 제어 가능",
-   "매체": "globalepic.co.kr",
-   "게재일": "2024-07-09",
-   "link": "http://www.globalepic.co.kr/view.php?ud=2024070909151099263e9bb86c69_29"
-  },
-  {
    "기사명": "삼성물산, 월패드 그만 '홈닉' 앱 하나로 모든 홈IoT 서비스 제어",
    "매체": "catchnews.kr",
    "게재일": "2024-07-09",
    "link": "https://www.catchnews.kr/news/articleView.html?idxno=94705"
+  },
+  {
+   "기사명": "삼성물산, ‘홈닉’ 앱 하나로 모든 홈IoT 서비스 제어 가능",
+   "매체": "globalepic.co.kr",
+   "게재일": "2024-07-09",
+   "link": "http://www.globalepic.co.kr/view.php?ud=2024070909151099263e9bb86c69_29"
   },
   {
    "기사명": "삼성물산 \"홈플랫폼 '홈닉', 모든 홈 IoT 서비스 지원\"",
@@ -4714,16 +4702,16 @@
    "link": "http://www.whitepaper.co.kr/news/articleView.html?idxno=235829"
   },
   {
-   "기사명": "삼성물산, 홈닉 앱 하나로 모든 홈 IoT 서비스...인공지능으로 맞춤형 서...",
-   "매체": "aitimes.kr",
-   "게재일": "2024-07-09",
-   "link": "https://www.aitimes.kr/news/articleView.html?idxno=31611"
-  },
-  {
    "기사명": "삼성물산, 아파트 앱 ‘홈닉’ 하나로 모든 스마트홈 기기 제어",
    "매체": "todayeconomic.com",
    "게재일": "2024-07-09",
    "link": "https://www.todayeconomic.com/news/article.html?no=26017"
+  },
+  {
+   "기사명": "삼성물산, 홈닉 앱 하나로 모든 홈 IoT 서비스...인공지능으로 맞춤형 서...",
+   "매체": "aitimes.kr",
+   "게재일": "2024-07-09",
+   "link": "https://www.aitimes.kr/news/articleView.html?idxno=31611"
   },
   {
    "기사명": "삼성물산 건설부문, 스마트홈 기기 연동 활성화 업무협약 체결",
@@ -4780,16 +4768,16 @@
    "link": "https://view.asiae.co.kr/article/2024070910471083535"
   },
   {
-   "기사명": "삼성물산 \"홈닉앱 하나면 모든 홈 IoT 서비스 가능\"",
-   "매체": "epnc.co.kr",
-   "게재일": "2024-07-09",
-   "link": "https://www.epnc.co.kr/news/articleView.html?idxno=303943"
-  },
-  {
    "기사명": "[건설업계 소식] 삼성물산, '홈닉' 앱 하나로 모든 홈IoT 서비스 가능 外",
    "매체": "sisaweek.com",
    "게재일": "2024-07-09",
    "link": "https://www.sisaweek.com/news/articleView.html?idxno=216168"
+  },
+  {
+   "기사명": "삼성물산 \"홈닉앱 하나면 모든 홈 IoT 서비스 가능\"",
+   "매체": "epnc.co.kr",
+   "게재일": "2024-07-09",
+   "link": "https://www.epnc.co.kr/news/articleView.html?idxno=303943"
   },
   {
    "기사명": "삼성물산, 스마트홈 기기 연동 활성화 위한 업무협약 체결",
@@ -4816,16 +4804,16 @@
    "link": "http://www.bizwnews.com/news/articleView.html?idxno=85390"
   },
   {
-   "기사명": "삼성물산 \"'홈닉' 하나로 모든 스마트홈 서비스 제어\"",
-   "매체": "popcornnews.net",
-   "게재일": "2024-07-09",
-   "link": "http://www.popcornnews.net/news/articleView.html?idxno=62742"
-  },
-  {
    "기사명": "삼성물산 \"래미안은 앱 하나로 집안 모든 홈IoT 기기 제어\"",
    "매체": "한국경제",
    "게재일": "2024-07-09",
    "link": "https://www.hankyung.com/article/2024070912056"
+  },
+  {
+   "기사명": "삼성물산 \"'홈닉' 하나로 모든 스마트홈 서비스 제어\"",
+   "매체": "popcornnews.net",
+   "게재일": "2024-07-09",
+   "link": "http://www.popcornnews.net/news/articleView.html?idxno=62742"
   },
   {
    "기사명": "삼성물산, '홈닉' 앱 하나로 모든 홈IoT 사용하세요",
@@ -4882,6 +4870,12 @@
    "link": "https://www.youthdaily.co.kr/news/article.html?no=158769"
   },
   {
+   "기사명": "삼성물산, 홈플랫폼 '홈닉' 활용 넓힌다…아카라라이프와 MOU",
+   "매체": "서울경제",
+   "게재일": "2024-07-09",
+   "link": "https://www.sedaily.com/NewsView/2DBO9GN12M"
+  },
+  {
    "기사명": "삼성물산‘홈닉’으로 모든 홈IoT 서비스 제어",
    "매체": "dnews.co.kr",
    "게재일": "2024-07-09",
@@ -4894,22 +4888,16 @@
    "link": "https://www.ceoscoredaily.com/page/view/2024070909203148042"
   },
   {
-   "기사명": "삼성물산, 홈플랫폼 '홈닉' 활용 넓힌다…아카라라이프와 MOU",
-   "매체": "서울경제",
-   "게재일": "2024-07-09",
-   "link": "https://www.sedaily.com/NewsView/2DBO9GN12M"
-  },
-  {
    "기사명": "삼성물산, ‘홈닉’ 앱 하나로 모든 홈IoT 기기 제어하는 서비스 만든다",
    "매체": "news1.kr",
    "게재일": "2024-07-09",
    "link": "https://www.news1.kr/realestate/general/5473071"
   },
   {
-   "기사명": "삼성물산, 브랜드 상관없이 '홈닉' 앱 하나로 모든 가전· IoT 기기 제어",
-   "매체": "smarttoday.co.kr",
+   "기사명": "삼성물산 건설부문, 홈플랫폼 '홈닉'에 모든 IoT 서비스 연동",
+   "매체": "seoulfn.com",
    "게재일": "2024-07-09",
-   "link": "https://www.smarttoday.co.kr/news/articleView.html?idxno=54560"
+   "link": "http://www.seoulfn.com/news/articleView.html?idxno=525394"
   },
   {
    "기사명": "삼성물산, '홈닉' 앱 하나로 모든 홈 IoT 서비스 연동",
@@ -4918,10 +4906,10 @@
    "link": "https://www.bizwork.co.kr/news/articleView.html?idxno=248283"
   },
   {
-   "기사명": "삼성물산 건설부문, 홈플랫폼 '홈닉'에 모든 IoT 서비스 연동",
-   "매체": "seoulfn.com",
+   "기사명": "삼성물산, 브랜드 상관없이 '홈닉' 앱 하나로 모든 가전· IoT 기기 제어",
+   "매체": "smarttoday.co.kr",
    "게재일": "2024-07-09",
-   "link": "http://www.seoulfn.com/news/articleView.html?idxno=525394"
+   "link": "https://www.smarttoday.co.kr/news/articleView.html?idxno=54560"
   },
   {
    "기사명": "삼성물산, '매터' 기반 스마트홈 기기 연동 MOU…\"홈닉 하나로 해결\"",
@@ -5087,9 +5075,9 @@
   },
   {
    "기사명": "국산 온디바이스 AI 기술 중심의 지능형IoT 확산 추진",
-   "매체": "kbench.com",
+   "매체": "이데일리",
    "게재일": "2024-05-21",
-   "link": "https://kbench.com/?q=node/256144"
+   "link": "http://www.edaily.co.kr/news/newspath.asp?newsid=03296406638891216"
   },
   {
    "기사명": "[비하인드 스토리] 삼성전자, 최초로 CX-MDE센터 공개...모두 휴대폰 밖...",
@@ -5248,16 +5236,16 @@
    "link": "https://www.smarttoday.co.kr/news/articleView.html?idxno=49029"
   },
   {
-   "기사명": "\"문단속도 앱으로\"…삼성전자, '스마트싱스 도어록' 서비스",
-   "매체": "theviewers.co.kr",
-   "게재일": "2024-04-25",
-   "link": "http://theviewers.co.kr/View.aspx?No=3208442"
-  },
-  {
    "기사명": "삼성전자, 스마트싱스 도어록 서비스 출시",
    "매체": "insightkorea.co.kr",
    "게재일": "2024-04-25",
    "link": "http://www.insightkorea.co.kr/news/articleView.html?idxno=134393"
+  },
+  {
+   "기사명": "\"문단속도 앱으로\"…삼성전자, '스마트싱스 도어록' 서비스",
+   "매체": "theviewers.co.kr",
+   "게재일": "2024-04-25",
+   "link": "http://theviewers.co.kr/View.aspx?No=3208442"
   },
   {
    "기사명": "삼성전자, 스마트싱스 도어록 제어 서비스 시작",
@@ -5338,16 +5326,16 @@
    "link": "https://www.asiatoday.co.kr/view.php?key=20240425010014023"
   },
   {
-   "기사명": "삼성전자, 스마트싱스 도어록 서비스 선봬...출입 모니터링 가능",
-   "매체": "eroun.net",
-   "게재일": "2024-04-25",
-   "link": "https://www.eroun.net/news/articleView.html?idxno=42664"
-  },
-  {
    "기사명": "삼성전자 “스마트싱스로 도어록 연동해요”",
    "매체": "ebn.co.kr",
    "게재일": "2024-04-25",
    "link": "https://www.ebn.co.kr/news/view/1620751/?sc=Naver"
+  },
+  {
+   "기사명": "삼성전자, 스마트싱스 도어록 서비스 선봬...출입 모니터링 가능",
+   "매체": "eroun.net",
+   "게재일": "2024-04-25",
+   "link": "https://www.eroun.net/news/articleView.html?idxno=42664"
   },
   {
    "기사명": "삼성전자, 스마트싱스 도어록 서비스 시작…방문객 출입 간편 관리",
@@ -5362,6 +5350,12 @@
    "link": "https://www.nocutnews.co.kr/news/6135191?utm_source=naver&utm_medium=article&utm_campaign=20240425090218"
   },
   {
+   "기사명": "“배터리 방전 미리 확인”…삼성전자, 스마트싱스 도어록 선봬",
+   "매체": "sentv.co.kr",
+   "게재일": "2024-04-25",
+   "link": "http://www.sentv.co.kr/news/view/684690"
+  },
+  {
    "기사명": "삼성전자, 스마트싱스 도어록 제어 서비스 개시",
    "매체": "아주경제",
    "게재일": "2024-04-25",
@@ -5374,28 +5368,22 @@
    "link": "https://www.getnews.co.kr/news/articleView.html?idxno=671452"
   },
   {
-   "기사명": "“배터리 방전 미리 확인”…삼성전자, 스마트싱스 도어록 선봬",
-   "매체": "sentv.co.kr",
-   "게재일": "2024-04-25",
-   "link": "http://www.sentv.co.kr/news/view/684690"
-  },
-  {
    "기사명": "\"현관문, 스마트폰으로 연다\"... 도어록과 스마트싱스의 시너지",
    "매체": "파이낸셜뉴스",
    "게재일": "2024-04-25",
    "link": "http://www.fnnews.com/news/202404250848296471"
   },
   {
-   "기사명": "\"안전 강화한다\"…삼성전자, 스마트싱스 도어록 서비스 선봬",
-   "매체": "etoday.co.kr",
-   "게재일": "2024-04-25",
-   "link": "https://www.etoday.co.kr/news/view/2353963"
-  },
-  {
    "기사명": "삼성전자, 개인화 기능 탑재 '스마트싱스 도어록 서비스' 선봬",
    "매체": "조선일보",
    "게재일": "2024-04-25",
    "link": "https://it.chosun.com/news/articleView.html?idxno=2023092114364"
+  },
+  {
+   "기사명": "\"안전 강화한다\"…삼성전자, 스마트싱스 도어록 서비스 선봬",
+   "매체": "etoday.co.kr",
+   "게재일": "2024-04-25",
+   "link": "https://www.etoday.co.kr/news/view/2353963"
   },
   {
    "기사명": "삼성전자, '스마트싱스 도어록' 서비스 실시…앱으로 출입 확인한다",
@@ -6160,16 +6148,16 @@
    "link": "http://www.efnews.co.kr/news/articleView.html?idxno=103880"
   },
   {
-   "기사명": "삼성전자, 삼성닷컴에 '펫 케어 스토어' 오픈...\"펫팸족 시장 공략 강화...",
-   "매체": "goodkyung.com",
-   "게재일": "2023-05-26",
-   "link": "http://www.goodkyung.com/news/articleView.html?idxno=208478"
-  },
-  {
    "기사명": "삼성전자, 삼성닷컴에 펫팸족 위한 '펫 케어 스토어' 오픈",
    "매체": "fetv.co.kr",
    "게재일": "2023-05-26",
    "link": "https://www.fetv.co.kr/news/article.html?no=140133"
+  },
+  {
+   "기사명": "삼성전자, 삼성닷컴에 '펫 케어 스토어' 오픈...\"펫팸족 시장 공략 강화...",
+   "매체": "goodkyung.com",
+   "게재일": "2023-05-26",
+   "link": "http://www.goodkyung.com/news/articleView.html?idxno=208478"
   },
   {
    "기사명": "삼성전자, 삼성닷컴에 펫팸족 겨냥 '펫 케어 스토어' 오픈",
@@ -6430,16 +6418,16 @@
    "link": "http://www.segyebiz.com/newsView/20230320514365?OutUrl=naver"
   },
   {
-   "기사명": "LG전자, 스마트홈 플랫폼 ‘LG씽큐’ 비전으로 ‘진화·연결·개방’ 제...",
-   "매체": "businesspost.co.kr",
-   "게재일": "2023-03-20",
-   "link": "https://www.businesspost.co.kr/BP?command=article_view&num=309558"
-  },
-  {
    "기사명": "LG전자, 스마트홈 'LG 씽큐' 비전 '진화·연결·개방' 제시",
    "매체": "bigtanews.co.kr",
    "게재일": "2023-03-20",
    "link": "http://www.bigtanews.co.kr/news/articleView.html?idxno=13800"
+  },
+  {
+   "기사명": "LG전자, 스마트홈 플랫폼 ‘LG씽큐’ 비전으로 ‘진화·연결·개방’ 제...",
+   "매체": "businesspost.co.kr",
+   "게재일": "2023-03-20",
+   "link": "https://www.businesspost.co.kr/BP?command=article_view&num=309558"
   },
   {
    "기사명": "LG 스마트홈 핵심 가치는 진화·연결·개방…\"똑똑한 동반자\"",
@@ -6484,16 +6472,16 @@
    "link": "http://mbnmoney.mbn.co.kr/news/view?news_no=MM1004887451"
   },
   {
-   "기사명": "정기현 LG전자 부사장, \"스마트홈 플랫폼 'LG 씽큐' 핵심가치는 진화·연...",
-   "매체": "megaeconomy.co.kr",
-   "게재일": "2023-03-20",
-   "link": "http://www.megaeconomy.co.kr/news/newsview.php?ncode=1065589195032963"
-  },
-  {
    "기사명": "LG전자, 스마트홈 플랫폼 비전 '진화·연결·개방' 제시",
    "매체": "koit.co.kr",
    "게재일": "2023-03-20",
    "link": "http://www.koit.co.kr/news/articleView.html?idxno=110877"
+  },
+  {
+   "기사명": "정기현 LG전자 부사장, \"스마트홈 플랫폼 'LG 씽큐' 핵심가치는 진화·연...",
+   "매체": "megaeconomy.co.kr",
+   "게재일": "2023-03-20",
+   "link": "http://www.megaeconomy.co.kr/news/newsview.php?ncode=1065589195032963"
   },
   {
    "기사명": "LG전자, 스마트홈 플랫폼 'LG ThinQ' ...핵심 가치는 '진화·연결·개방'",
@@ -6502,16 +6490,16 @@
    "link": "http://www.newstnt.com/news/articleView.html?idxno=261160"
   },
   {
-   "기사명": "LG전자, 스마트홈 플랫폼 'LG 씽큐'로 '엠비언트 컴퓨팅' 시대 연다",
-   "매체": "techm.kr",
-   "게재일": "2023-03-20",
-   "link": "https://www.techm.kr/news/articleView.html?idxno=108124"
-  },
-  {
    "기사명": "LG전자 플랫폼사업센터장 정기현 부사장, \"스마트홈 플랫폼 LG 씽큐에 생...",
    "매체": "aitimes.kr",
    "게재일": "2023-03-20",
    "link": "https://www.aitimes.kr/news/articleView.html?idxno=27599"
+  },
+  {
+   "기사명": "LG전자, 스마트홈 플랫폼 'LG 씽큐'로 '엠비언트 컴퓨팅' 시대 연다",
+   "매체": "techm.kr",
+   "게재일": "2023-03-20",
+   "link": "https://www.techm.kr/news/articleView.html?idxno=108124"
   },
   {
    "기사명": "LG전자 \"핵심가치는 진화·연결·개방\"",
@@ -6598,16 +6586,16 @@
    "link": "http://news.heraldcorp.com/view.php?ud=20230320000401"
   },
   {
-   "기사명": "LG전자, 스마트홈 플랫폼 ‘LG 씽큐’ 비전 제시…“진화·연결·개방”",
-   "매체": "ceoscoredaily.com",
-   "게재일": "2023-03-20",
-   "link": "https://www.ceoscoredaily.com/page/view/2023032010440981151"
-  },
-  {
    "기사명": "LG씽큐 핵심가치 내세운 LG전자, B2B 영역까지 확장된다",
    "매체": "hellot.net",
    "게재일": "2023-03-20",
    "link": "https://www.hellot.net/news/article.html?no=76336"
+  },
+  {
+   "기사명": "LG전자, 스마트홈 플랫폼 ‘LG 씽큐’ 비전 제시…“진화·연결·개방”",
+   "매체": "ceoscoredaily.com",
+   "게재일": "2023-03-20",
+   "link": "https://www.ceoscoredaily.com/page/view/2023032010440981151"
   },
   {
    "기사명": "LG전자, 스마트홈 청사진 제시… \"핵심가치 진화·연결·개방\"",
@@ -6712,6 +6700,36 @@
    "link": "https://www.asiatoday.co.kr/view.php?key=20230320010010444"
   },
   {
+   "기사명": "LG전자, 스마트홈 플랫폼 ‘LG 씽큐’ 비전 제시",
+   "매체": "beyondpost.co.kr",
+   "게재일": "2023-03-20",
+   "link": "http://www.beyondpost.co.kr/view.php?ud=2023032007540531678cba63abf8_30"
+  },
+  {
+   "기사명": "LG전자가 밝힌 스마트홈 플랫폼 '씽큐'의 가치 세 가지는?",
+   "매체": "파이낸셜뉴스",
+   "게재일": "2023-03-20",
+   "link": "http://www.fnnews.com/news/202303200935182153"
+  },
+  {
+   "기사명": "‘LG 씽큐’가 알아서 에너지 절약…정기현 센터장 “최상의 스마트홈 ...",
+   "매체": "헤럴드경제",
+   "게재일": "2023-03-20",
+   "link": "http://news.heraldcorp.com/view.php?ud=20230320000183"
+  },
+  {
+   "기사명": "LG전자 'LG ThinQ' 비전, 핵심가치는 진화·연결·개방",
+   "매체": "비지니스코리아",
+   "게재일": "2023-03-20",
+   "link": "http://www.businesskorea.co.kr/news/articleView.html?idxno=111171"
+  },
+  {
+   "기사명": "LG전자, 스마트홈 비전 제시…\"핵심은 진화·연결·개방\"",
+   "매체": "daily.hankooki.com",
+   "게재일": "2023-03-20",
+   "link": "https://daily.hankooki.com/news/articleView.html?idxno=935760"
+  },
+  {
    "기사명": "LG전자, LG씽큐 핵심가치 '진화·연결·개방' 제시",
    "매체": "asiaa.co.kr",
    "게재일": "2023-03-20",
@@ -6742,18 +6760,6 @@
    "link": "http://www.newsworks.co.kr/news/articleView.html?idxno=708951"
   },
   {
-   "기사명": "LG전자 \"‘LG ThinQ’ 핵심가치는 진화·연결·개방\"",
-   "매체": "ekn.kr",
-   "게재일": "2023-03-20",
-   "link": "https://www.ekn.kr/web/view.php?key=20230320010004540"
-  },
-  {
-   "기사명": "LG전자, 스마트홈 LG씽큐 비전으로 '진화·연결·개방' 제시",
-   "매체": "g-enews.com",
-   "게재일": "2023-03-20",
-   "link": "http://www.g-enews.com/ko-kr/news/article/news_all/202303200946499029de014c1a1f_1/article.html"
-  },
-  {
    "기사명": "LG전자, 'ThinQ' 활용 스마트홈 비전 제시 \"핵심가치는 진화·연결·개방...",
    "매체": "pinpointnews.co.kr",
    "게재일": "2023-03-20",
@@ -6766,34 +6772,28 @@
    "link": "http://www.sentv.co.kr/news/view/649853"
   },
   {
-   "기사명": "LG전자가 밝힌 스마트홈 플랫폼 '씽큐'의 가치 세 가지는?",
-   "매체": "파이낸셜뉴스",
+   "기사명": "LG전자 \"‘LG ThinQ’ 핵심가치는 진화·연결·개방\"",
+   "매체": "ekn.kr",
    "게재일": "2023-03-20",
-   "link": "http://www.fnnews.com/news/202303200935182153"
+   "link": "https://www.ekn.kr/web/view.php?key=20230320010004540"
   },
   {
-   "기사명": "‘LG 씽큐’가 알아서 에너지 절약…정기현 센터장 “최상의 스마트홈 ...",
-   "매체": "헤럴드경제",
+   "기사명": "LG전자, 스마트홈 LG씽큐 비전으로 '진화·연결·개방' 제시",
+   "매체": "g-enews.com",
    "게재일": "2023-03-20",
-   "link": "http://news.heraldcorp.com/view.php?ud=20230320000183"
+   "link": "http://www.g-enews.com/ko-kr/news/article/news_all/202303200946499029de014c1a1f_1/article.html"
   },
   {
-   "기사명": "LG전자 'LG ThinQ' 비전, 핵심가치는 진화·연결·개방",
-   "매체": "businesskorea.co.kr",
+   "기사명": "\"핵심가치는 진화·연결·개방\" LG전자, 'LG 씽큐' 비전 제시",
+   "매체": "이데일리",
    "게재일": "2023-03-20",
-   "link": "http://www.businesskorea.co.kr/news/articleView.html?idxno=111171"
+   "link": "http://www.edaily.co.kr/news/newspath.asp?newsid=01833526635545288"
   },
   {
-   "기사명": "LG전자, 스마트홈 플랫폼 ‘LG 씽큐’ 비전 제시",
-   "매체": "beyondpost.co.kr",
+   "기사명": "LG전자, '진화·연결·개방' 기반 스마트홈 청사진 제시",
+   "매체": "전자신문",
    "게재일": "2023-03-20",
-   "link": "http://www.beyondpost.co.kr/view.php?ud=2023032007540531678cba63abf8_30"
-  },
-  {
-   "기사명": "LG전자, 스마트홈 비전 제시…\"핵심은 진화·연결·개방\"",
-   "매체": "daily.hankooki.com",
-   "게재일": "2023-03-20",
-   "link": "https://daily.hankooki.com/news/articleView.html?idxno=935760"
+   "link": "https://www.etnews.com/20230320000049"
   },
   {
    "기사명": "LG전자, 스마트홈 플랫폼 ‘LG 씽큐’ 비전 제시…“핵심가치는 진화·연...",
@@ -6814,30 +6814,6 @@
    "link": "http://www.inews24.com/view/1576884"
   },
   {
-   "기사명": "스마트홈 플랫폼 'LG 씽큐' 비전은 '진화·연결·개방'",
-   "매체": "지디넷코리아",
-   "게재일": "2023-03-20",
-   "link": "https://zdnet.co.kr/view/?no=20230320083259"
-  },
-  {
-   "기사명": "\"핵심가치는 진화·연결·개방\" LG전자, 'LG 씽큐' 비전 제시",
-   "매체": "이데일리",
-   "게재일": "2023-03-20",
-   "link": "http://www.edaily.co.kr/news/newspath.asp?newsid=01833526635545288"
-  },
-  {
-   "기사명": "LG전자, '진화·연결·개방' 기반 스마트홈 청사진 제시",
-   "매체": "전자신문",
-   "게재일": "2023-03-20",
-   "link": "https://www.etnews.com/20230320000049"
-  },
-  {
-   "기사명": "LG 씽큐 비전 제시..구글 캘린더·티맵·현대차·기아 등과 연동",
-   "매체": "kpenews.com",
-   "게재일": "2023-03-20",
-   "link": "http://kpenews.com/View.aspx?No=2760552"
-  },
-  {
    "기사명": "LG전자, 'LG 씽큐' 비전 제시…\"AI+매터 결합 진정한 스마트홈\"",
    "매체": "ebn.co.kr",
    "게재일": "2023-03-20",
@@ -6848,6 +6824,12 @@
    "매체": "dailian.co.kr",
    "게재일": "2023-03-20",
    "link": "https://www.dailian.co.kr/news/view/1213218/?sc=Naver"
+  },
+  {
+   "기사명": "LG 씽큐 비전 제시..구글 캘린더·티맵·현대차·기아 등과 연동",
+   "매체": "kpenews.com",
+   "게재일": "2023-03-20",
+   "link": "http://kpenews.com/View.aspx?No=2760552"
   },
   {
    "기사명": "[人사이트]김학용 IoT전략연구소장 \"글로벌 스마트홈 경쟁력, 생활 밀착...",
@@ -7108,16 +7090,16 @@
    "link": "https://www.fetv.co.kr/news/article.html?no=125229"
   },
   {
-   "기사명": "‘집안일부터 일정까지 똑똑한 집사가 생겼다’…LG전자, ‘LG 씽큐 앱’...",
-   "매체": "beyondpost.co.kr",
-   "게재일": "2022-09-27",
-   "link": "http://www.beyondpost.co.kr/view.php?ud=2022092708384798618cba63abf8_30"
-  },
-  {
    "기사명": "\"LG씽큐로 하루 일정 챙기세요\"…스마트TV 연동된 '모닝브리핑' 출시",
    "매체": "nocutnews.co.kr",
    "게재일": "2022-09-27",
    "link": "https://www.nocutnews.co.kr/news/5823414"
+  },
+  {
+   "기사명": "‘집안일부터 일정까지 똑똑한 집사가 생겼다’…LG전자, ‘LG 씽큐 앱’...",
+   "매체": "beyondpost.co.kr",
+   "게재일": "2022-09-27",
+   "link": "http://www.beyondpost.co.kr/view.php?ud=2022092708384798618cba63abf8_30"
   },
   {
    "기사명": "\"생활정보 한 눈에\" LG전자, 씽큐 앱에 '모닝브리핑' 서비스 추가",
@@ -7138,28 +7120,16 @@
    "link": "http://www.newstomato.com/ReadNews.aspx?no=1149535&inflow=N"
   },
   {
+   "기사명": "\"고객경험 확장\"···LG전자, 씽큐 앱 ‘모닝브리핑’ 서비스 추가",
+   "매체": "youthdaily.co.kr",
+   "게재일": "2022-09-27",
+   "link": "https://www.youthdaily.co.kr/news/article.html?no=111971"
+  },
+  {
    "기사명": "LG전자, 'LG 씽큐' 고객경험 확장 가속",
    "매체": "4th.kr",
    "게재일": "2022-09-27",
    "link": "http://www.4th.kr/news/articleView.html?idxno=2025470"
-  },
-  {
-   "기사명": "LG전자, LG씽큐 모닝브리핑 서비스 개시…고객경험 확장 가속",
-   "매체": "koit.co.kr",
-   "게재일": "2022-09-27",
-   "link": "http://www.koit.co.kr/news/articleView.html?idxno=103532"
-  },
-  {
-   "기사명": "'스마트 TV'로 날씨·교통 정보 한 눈에…'LG 씽큐'로 고객 경험 강화",
-   "매체": "아이뉴스24",
-   "게재일": "2022-09-27",
-   "link": "http://www.inews24.com/view/1522740"
-  },
-  {
-   "기사명": "LG전자, 씽큐 앱에 날씨·교통·일정 확인 서비스 추가",
-   "매체": "조선일보",
-   "게재일": "2022-09-27",
-   "link": "https://biz.chosun.com/it-science/ict/2022/09/27/3DZMUVKD2ZB47JJYKRII6PLEKM/?utm_source=naver&utm_medium=original&utm_campaign=biz"
   },
   {
    "기사명": "\"TV 켜니 오늘 날씨와 일정이\"...LG전자, 씽큐 앱으로 고객경험 확장 가...",
@@ -7168,16 +7138,22 @@
    "link": "http://www.fnnews.com/news/202209271040333250"
   },
   {
-   "기사명": "생활정보 궁금하면? 'LG 씽큐 모닝브리핑'으로 확인하세요",
-   "매체": "dailian.co.kr",
+   "기사명": "LG전자, 씽큐 앱에 날씨·교통·일정 확인 서비스 추가",
+   "매체": "조선일보",
    "게재일": "2022-09-27",
-   "link": "https://www.dailian.co.kr/news/view/1156568/?sc=Naver"
+   "link": "https://biz.chosun.com/it-science/ict/2022/09/27/3DZMUVKD2ZB47JJYKRII6PLEKM/?utm_source=naver&utm_medium=original&utm_campaign=biz"
   },
   {
-   "기사명": "LG전자 \"고객님 씽큐로 하루 일정 챙기세요\"",
-   "매체": "ebn.co.kr",
+   "기사명": "'스마트 TV'로 날씨·교통 정보 한 눈에…'LG 씽큐'로 고객 경험 강화",
+   "매체": "아이뉴스24",
    "게재일": "2022-09-27",
-   "link": "https://www.ebn.co.kr/news/view/1548079/?sc=Naver"
+   "link": "http://www.inews24.com/view/1522740"
+  },
+  {
+   "기사명": "\"'LG 씽큐' 앱 켜면 TV로 날씨·교통·일정 한 번에 본다\"",
+   "매체": "아시아경제",
+   "게재일": "2022-09-27",
+   "link": "https://view.asiae.co.kr/article/2022092709224505148"
   },
   {
    "기사명": "LG 씽큐, 모닝브리핑 서비스 개시...\"날씨·교통·일정 한 눈에\"",
@@ -7186,10 +7162,22 @@
    "link": "http://news.mt.co.kr/mtview.php?no=2022092708553918722"
   },
   {
-   "기사명": "\"'LG 씽큐' 앱 켜면 TV로 날씨·교통·일정 한 번에 본다\"",
-   "매체": "아시아경제",
+   "기사명": "LG전자 \"고객님 씽큐로 하루 일정 챙기세요\"",
+   "매체": "ebn.co.kr",
    "게재일": "2022-09-27",
-   "link": "https://view.asiae.co.kr/article/2022092709224505148"
+   "link": "https://www.ebn.co.kr/news/view/1548079/?sc=Naver"
+  },
+  {
+   "기사명": "생활정보 궁금하면? 'LG 씽큐 모닝브리핑'으로 확인하세요",
+   "매체": "dailian.co.kr",
+   "게재일": "2022-09-27",
+   "link": "https://www.dailian.co.kr/news/view/1156568/?sc=Naver"
+  },
+  {
+   "기사명": "LG전자, LG씽큐 모닝브리핑 서비스 개시…고객경험 확장 가속",
+   "매체": "koit.co.kr",
+   "게재일": "2022-09-27",
+   "link": "http://www.koit.co.kr/news/articleView.html?idxno=103532"
   },
   {
    "기사명": "[김재웅의 봄봄봄] 똑똑해진 우리집, 스마트싱스 써봄",
@@ -7288,16 +7276,16 @@
    "link": "http://www.nspna.com/news/?mode=view&newsid=589795"
   },
   {
-   "기사명": "LG전자 스마트홈 생태계 확장…헤이홈도 합류",
-   "매체": "dailyimpact.co.kr",
-   "게재일": "2022-08-28",
-   "link": "http://www.dailyimpact.co.kr/news/articleView.html?idxno=84575"
-  },
-  {
    "기사명": "LG 씽큐의 고객 경험 확장…헤이홈 IoT 제품도 제어",
    "매체": "segyebiz.com",
    "게재일": "2022-08-28",
    "link": "http://www.segyebiz.com/newsView/20220828510735?OutUrl=naver"
+  },
+  {
+   "기사명": "LG전자 스마트홈 생태계 확장…헤이홈도 합류",
+   "매체": "dailyimpact.co.kr",
+   "게재일": "2022-08-28",
+   "link": "http://www.dailyimpact.co.kr/news/articleView.html?idxno=84575"
   },
   {
    "기사명": "LG전자, '씽큐 앱' 기능 확장...헤이홈 IoT 제품 제어 지원",
@@ -7342,24 +7330,6 @@
    "link": "https://biz.newdaily.co.kr/site/data/html/2022/08/28/2022082800024.html"
   },
   {
-   "기사명": "LG 씽큐, 고객 경험 확장…헤이홈 IoT 제품도 제어",
-   "매체": "mediapen.com",
-   "게재일": "2022-08-28",
-   "link": "http://www.mediapen.com/news/view/749971"
-  },
-  {
-   "기사명": "LG전자 '씽큐' 앱에 '헤이홈' IoT 기기 연동…\"커튼 열고 온·습도 자동...",
-   "매체": "techm.kr",
-   "게재일": "2022-08-28",
-   "link": "https://www.techm.kr/news/articleView.html?idxno=100947"
-  },
-  {
-   "기사명": "\"스마트홈 생태계 확장\"···LG전자, LG 씽큐 앱 연동 서비스 제공",
-   "매체": "youthdaily.co.kr",
-   "게재일": "2022-08-28",
-   "link": "https://www.youthdaily.co.kr/news/article.html?no=109660"
-  },
-  {
    "기사명": "'LG 씽큐' 고객 경험 확장…헤이홈 IoT 제품도 연동",
    "매체": "전자신문",
    "게재일": "2022-08-28",
@@ -7370,6 +7340,24 @@
    "매체": "asiatoday.co.kr",
    "게재일": "2022-08-28",
    "link": "https://www.asiatoday.co.kr/view.php?key=20220828010016767"
+  },
+  {
+   "기사명": "\"스마트홈 생태계 확장\"···LG전자, LG 씽큐 앱 연동 서비스 제공",
+   "매체": "youthdaily.co.kr",
+   "게재일": "2022-08-28",
+   "link": "https://www.youthdaily.co.kr/news/article.html?no=109660"
+  },
+  {
+   "기사명": "LG 씽큐, 고객 경험 확장…헤이홈 IoT 제품도 제어",
+   "매체": "mediapen.com",
+   "게재일": "2022-08-28",
+   "link": "http://www.mediapen.com/news/view/749971"
+  },
+  {
+   "기사명": "LG전자 '씽큐' 앱에 '헤이홈' IoT 기기 연동…\"커튼 열고 온·습도 자동...",
+   "매체": "techm.kr",
+   "게재일": "2022-08-28",
+   "link": "https://www.techm.kr/news/articleView.html?idxno=100947"
   },
   {
    "기사명": "'LG 씽큐'로 헤이홈 IoT 제품도 제어한다…\"고객경험 확장\"",
@@ -7384,16 +7372,16 @@
    "link": "https://zdnet.co.kr/view/?no=20220828091131"
   },
   {
-   "기사명": "LG 씽큐에 헤이홈 IoT 연동된다…\"고객 경험 확장\"",
-   "매체": "아시아경제",
-   "게재일": "2022-08-28",
-   "link": "https://view.asiae.co.kr/article/2022082809415912853"
-  },
-  {
    "기사명": "헤이홈 IoT도 LG 씽큐앱에서…\"폰으로 전구 켜고 끄세요\"",
    "매체": "머니투데이",
    "게재일": "2022-08-28",
    "link": "http://news.mt.co.kr/mtview.php?no=2022082810202412764"
+  },
+  {
+   "기사명": "LG 씽큐에 헤이홈 IoT 연동된다…\"고객 경험 확장\"",
+   "매체": "아시아경제",
+   "게재일": "2022-08-28",
+   "link": "https://view.asiae.co.kr/article/2022082809415912853"
   },
   {
    "기사명": "[ICT 종합] 보라네트워크 및 네오위즈 소식 외",
