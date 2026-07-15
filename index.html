@@ -191,6 +191,7 @@
             <select id="fTopic" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 종류</option></select>
             <select id="fType" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 성격</option></select>
             <select id="fOrigin" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 배포</option><option>자사보도</option><option>오가닉</option></select>
+            <button onclick="deleteSelected()" class="text-sm border border-ared/40 text-ared hover:bg-ared/5 px-3 py-2 rounded-lg font-semibold" title="체크한 기사 삭제"><span id="delSelCount">선택 삭제</span></button>
             <button onclick="restoreDeleted()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg text-slate-500" title="숨긴(삭제한) 기사 모두 복원">삭제 복원</button>
           </div>
         </div>
@@ -198,6 +199,7 @@
         <div class="overflow-auto max-h-[600px] rounded-lg border border-slate-100">
           <table class="w-full text-sm">
             <thead class="bg-slate-50 text-slate-500 sticky top-0 z-10"><tr class="text-left">
+              <th class="px-2 py-3 w-8"><input type="checkbox" id="chkAll" onchange="toggleAllRows(this)" title="전체 선택" /></th>
               <th class="px-3 py-3 font-semibold whitespace-nowrap sortable" onclick="sortBy('게재일')">게재일 ⇅</th>
               <th class="px-3 py-3 font-semibold whitespace-nowrap sortable" onclick="sortBy('매체')">매체 ⇅</th>
               <th class="px-3 py-3 font-semibold whitespace-nowrap">종류</th>
@@ -1215,12 +1217,13 @@
       rows.sort((a,b)=>{let x=(a[sortKey]||'').toString(),y=(b[sortKey]||'').toString(); return x<y?-sortDir:x>y?sortDir:0;});
       document.getElementById('listCount').textContent='('+rows.length+'건)';
       const tb=document.getElementById('tableBody');
-      if(!rows.length){ tb.innerHTML='<tr><td colspan="7" class="text-center py-10 text-slate-400">결과가 없습니다.</td></tr>'; return; }
+      if(!rows.length){ tb.innerHTML='<tr><td colspan="8" class="text-center py-10 text-slate-400">결과가 없습니다.</td></tr>'; return; }
       TABLE_ROWS=rows.slice(0,700);
       tb.innerHTML=TABLE_ROWS.map((r,i)=>{
         if(r._key===editingKey){
           const topOpts=TOPIC_ORDER.map(t=>`<option ${r._topic===t?'selected':''}>${esc(t)}</option>`).join('');
           return `<tr class="bg-brand/5">
+            <td class="px-2 py-1.5"></td>
             <td class="px-2 py-1.5"><input id="ed-date" type="date" value="${esc((r['게재일']||'').toString().slice(0,10))}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-32"/></td>
             <td class="px-2 py-1.5"><input id="ed-media" value="${esc(r['매체']||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-24"/></td>
             <td class="px-2 py-1.5"><select id="ed-topic" class="border border-slate-300 rounded px-1 py-0.5 text-xs">${topOpts}</select></td>
@@ -1231,6 +1234,7 @@
         }
         const edited=rowEdits[r._key]?' <span class="text-[9px] text-brand-ink align-middle">•수정됨</span>':'';
         return `<tr class="hover:bg-slate-50 transition">
+        <td class="px-2 py-2.5"><input type="checkbox" class="rowchk" data-k="${esc(r._key)}" onchange="updateDelCount()"/></td>
         <td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(r['게재일'])}</td>
         <td class="px-3 py-2.5 whitespace-nowrap font-medium text-slate-700">${esc(r._media||r['매체'])}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._topic,'bg-ablue/25 text-[#365b7a]')}</td>
@@ -1239,8 +1243,14 @@
         <td class="px-3 py-2.5"><a href="${esc(linkOf(r))}" target="_blank" rel="noopener noreferrer" class="text-slate-800 hover:text-ink hover:underline">${esc(r['기사명'])} <span class="text-slate-300">↗</span></a>${chTag(r._chan)}${edited}</td>
         <td class="px-3 py-2.5 whitespace-nowrap text-right"><button onclick="startRowEdit(${i})" class="text-[13px] text-slate-300 hover:text-ink" title="편집">✏️</button></td></tr>`;
       }).join('')
-        +(rows.length>700?`<tr><td colspan="7" class="text-center py-3 text-xs text-slate-400">상위 700건 표시</td></tr>`:'');
+        +(rows.length>700?`<tr><td colspan="8" class="text-center py-3 text-xs text-slate-400">상위 700건 표시</td></tr>`:'');
+      const ca=document.getElementById('chkAll'); if(ca) ca.checked=false; updateDelCount();
     }
+    function toggleAllRows(cb){ document.querySelectorAll('#tableBody .rowchk').forEach(c=>{ c.checked=cb.checked; }); updateDelCount(); }
+    function updateDelCount(){ const n=document.querySelectorAll('#tableBody .rowchk:checked').length; const el=document.getElementById('delSelCount'); if(el) el.textContent=n?('선택 삭제 ('+n+')'):'선택 삭제'; }
+    function deleteSelected(){ const chk=[...document.querySelectorAll('#tableBody .rowchk:checked')]; if(!chk.length){ alert('삭제할 기사를 체크하세요.'); return; }
+      if(!confirm(chk.length+'건을 목록에서 삭제할까요? (이 브라우저에서만 숨김 · \'삭제 복원\'으로 되돌리기)')) return;
+      chk.forEach(c=>deletedRows.add(c.dataset.k)); saveDeleted(); ALL=ALL.filter(r=>!deletedRows.has(r._key)); applyAndRender(); }
 
     /* ================= 데일리 브리핑 (7/1~7/8) ================= */
     const _OLD_BRIEFINGS = {
