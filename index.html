@@ -922,6 +922,7 @@
            <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
            <button id="mktBtn-insta" onclick="mktSub('insta')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
            <button id="mktBtn-blog" onclick="mktSub('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
+           <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
            <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
          </div>
        </div>
@@ -938,6 +939,13 @@
          <div class="card p-5 mb-5"><h3 class="accent font-extrabold text-ink mb-1">블로그 글 자동 제안 <span class="text-xs font-normal text-slate-400">(관리 블로그 4개 컨셉별)</span></h3>
            <p class="text-[12px] text-slate-400 mb-3">블로그별 컨셉에 맞춘 <b>초안·SEO 키워드·이미지 방향</b> 제안입니다. 편집 가능(이 브라우저 저장).</p>
            <div id="mktBlogIdeas" class="space-y-4"></div>
+         </div>
+       </div>
+       <div id="mktSec-prpitch" class="hidden">
+         <div class="card p-5 mb-5"><h3 class="accent font-extrabold text-ink mb-1">PR 소재 제안 <span class="text-xs font-normal text-slate-400">(유통·스마트홈·인테리어 업계 이슈·통계 활용)</span></h3>
+           <p class="text-[12px] text-slate-400 mb-3">업계 이슈·핫키워드·통계에 아카라를 얹는 <b>보도자료/기획기사 앵글</b> 제안입니다. 최근 핫키워드는 데일리 브리핑에서 자동 반영. 편집 가능.</p>
+           <div id="mktPrHotKw" class="mb-4"></div>
+           <div id="mktPrIdeas" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
          </div>
        </div>
      </div>
@@ -2208,12 +2216,14 @@
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
-      ['kpi','medialist','calendar','insta','blog'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap '+(x===s?'bg-[#7C5CFF] text-white font-semibold':'text-[#5B44C7] hover:bg-[#EDE9FF] font-medium'); });
+      document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
+      ['kpi','medialist','calendar','insta','blog','prpitch'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap '+(x===s?'bg-[#7C5CFF] text-white font-semibold':'text-[#5B44C7] hover:bg-[#EDE9FF] font-medium'); });
       if(s==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
       if(s==='insta'){ renderMktInsta(); }
       if(s==='blog'){ renderMktBlog(); }
+      if(s==='prpitch'){ renderMktPr(); }
     }
     let mktEdits=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraMktEdits')||'{}');}catch(e){return {};} })();
     function mktSaveEdit(el){ mktEdits[el.dataset.mk]=el.innerText.trim(); try{ localStorage.setItem('aqaraMktEdits',JSON.stringify(mktEdits)); }catch(e){} }
@@ -2266,6 +2276,29 @@
             <div class="text-[12px] text-slate-500" contenteditable="true" data-mk="blog-i-${bi}" oninput="mktSaveEdit(this)">${esc(mktEdits['blog-i-'+bi]||b.img)}</div>
           </div>
         </div>`).join('');
+    }
+    const PR_PITCHES=[
+      {ind:'유통업계',ideas:[
+        {t:'"집이 매장이 된다" — 리테일 자동화와 스마트홈',angle:'유통사 무인·자동화 트렌드에 아카라 IoT 접목 사례로 연결',stat:'무인점포·리테일테크 시장 성장률·이커머스 침투율 인용'},
+        {t:'이사·혼수 시즌 스마트홈 번들 수요',angle:'이사철 가전 특수에 스마트홈 패키지 앵글',stat:'이사철 가전 구매·혼수 예산 조사, 신혼가구 스마트홈 관심도'}]},
+      {ind:'스마트홈업계',ideas:[
+        {t:'매터(Matter) 대중화 원년 — 표준 개방성 리더십',angle:'대기업 종속의 대안으로 아카라 멀티허브 중립성 강조',stat:'매터 인증 기기 수·글로벌 스마트홈 시장 규모(CAGR)'},
+        {t:'AI홈 시대, 프라이버시가 경쟁력',angle:'로컬 처리·보안을 신뢰 메시지로 전면화',stat:'스마트홈 보안·프라이버시 우려 소비자 설문'}]},
+      {ind:'인테리어업계',ideas:[
+        {t:'"선 없는 집" — 미니멀 인테리어 × 무타공 스마트홈',angle:'리모델링·전월세 DIY 트렌드에 무타공 제품 연결',stat:'리모델링 시장 규모·1인가구 인테리어 지출 통계'},
+        {t:'쇼룸·전시(더메종 등) 트렌드 리포트',angle:'전시 참여를 트렌드 발신 기획기사로 자산화',stat:'전시 방문객·"스마트홈 인테리어" 검색량 추이(데이터랩)'}]}
+    ];
+    function renderMktPr(){
+      const hk=mktHotKw();
+      document.getElementById('mktPrHotKw').innerHTML=`<div class="rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-3"><p class="text-[12px] font-bold text-[#4B32C3] mb-1">🔥 최근 업계 핫키워드 <span class="font-normal text-slate-400">(데일리 브리핑 기반)</span></p><div>${hk.map(k=>`<span class="inline-block text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7] mr-1 mb-1">${esc(k)}</span>`).join('')||'<span class="text-[11px] text-slate-400">수집 대기</span>'}</div></div>`;
+      document.getElementById('mktPrIdeas').innerHTML=PR_PITCHES.map((grp,gi)=>`<div class="rounded-lg border border-[#EDE9FF] p-3 bg-[#FBFAFF]">
+        <div class="font-bold text-[#4B32C3] mb-2">${esc(grp.ind)}</div>
+        ${grp.ideas.map((x,i)=>`<div class="mb-3 pb-2 border-b border-[#EDE9FF] last:border-0 last:mb-0 last:pb-0">
+          <div class="text-[13px] font-semibold text-ink mb-1" contenteditable="true" data-mk="pr-t-${gi}-${i}" oninput="mktSaveEdit(this)">${esc(mktEdits['pr-t-'+gi+'-'+i]||x.t)}</div>
+          <div class="text-[11px] text-slate-500 mb-0.5" contenteditable="true" data-mk="pr-a-${gi}-${i}" oninput="mktSaveEdit(this)"><b>앵글</b> · ${esc(mktEdits['pr-a-'+gi+'-'+i]||x.angle)}</div>
+          <div class="text-[11px] text-slate-400" contenteditable="true" data-mk="pr-s-${gi}-${i}" oninput="mktSaveEdit(this)"><b>근거통계</b> · ${esc(mktEdits['pr-s-'+gi+'-'+i]||x.stat)}</div>
+        </div>`).join('')}
+      </div>`).join('');
     }
     let ownedSection='overview';
     function ownedChannelLinks(s){
