@@ -191,6 +191,8 @@
             <select id="fTopic" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 종류</option></select>
             <select id="fType" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 성격</option></select>
             <select id="fOrigin" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 배포</option><option>자사보도</option><option>오가닉</option></select>
+            <select id="bulkTopic" onchange="applyBulk('종류',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 종류 일괄 지정"><option value="">종류 일괄…</option><option>대외협력</option><option>신제품</option><option>회사 이슈</option><option>[인테리어] 쇼룸</option><option>[인테리어] 시공사례</option><option>[인테리어] 서비스</option><option>[인테리어] 트렌드</option><option>기타</option></select>
+            <select id="bulkOrigin" onchange="applyBulk('배포',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 배포 일괄 지정"><option value="">배포 일괄…</option><option>자사보도</option><option>오가닉</option></select>
             <button onclick="deleteSelected()" class="text-sm border border-ared/40 text-ared hover:bg-ared/5 px-3 py-2 rounded-lg font-semibold" title="체크한 기사 삭제"><span id="delSelCount">선택 삭제</span></button>
             <button onclick="restoreDeleted()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg text-slate-500" title="숨긴(삭제한) 기사 모두 복원">삭제 복원</button>
           </div>
@@ -1198,7 +1200,7 @@
       try{ localStorage.setItem('aqaraOriginOthers',JSON.stringify(u)); }catch(x){}
       originOthers=[...new Set([...ORIGIN_OTHERS_DEFAULT,...u])];
       ALL.forEach(deriveRow); applyAndRender(); }
-    function deriveRow(r){ r._ym=(r['게재일']||'').toString().substring(0,7); r._type=fType(r); r._topic=fTopicVal(r); r._media=fMedia(r); r._chan=fChannel(r); r._origin=isOrganic(r['기사명'])?'오가닉':'자사보도'; }
+    function deriveRow(r){ r._ym=(r['게재일']||'').toString().substring(0,7); r._type=fType(r); r._topic=fTopicVal(r); r._media=fMedia(r); r._chan=fChannel(r); r._origin=isOrganic(r['기사명'])?'오가닉':'자사보도'; const e=rowEdits[r._key]; if(e&&e['배포']) r._origin=e['배포']; }
     function startRowEdit(i){ const r=TABLE_ROWS[i]; if(r){ editingKey=r._key; renderTable(); } }
     function cancelRowEdit(){ editingKey=null; renderTable(); }
     function saveRowEdit(){ if(!editingKey) return;
@@ -1251,6 +1253,12 @@
     function deleteSelected(){ const chk=[...document.querySelectorAll('#tableBody .rowchk:checked')]; if(!chk.length){ alert('삭제할 기사를 체크하세요.'); return; }
       if(!confirm(chk.length+'건을 목록에서 삭제할까요? (이 브라우저에서만 숨김 · \'삭제 복원\'으로 되돌리기)')) return;
       chk.forEach(c=>deletedRows.add(c.dataset.k)); saveDeleted(); ALL=ALL.filter(r=>!deletedRows.has(r._key)); applyAndRender(); }
+    function applyBulk(field, sel){ const v=sel.value; sel.value=''; if(!v) return;
+      const chk=[...document.querySelectorAll('#tableBody .rowchk:checked')]; if(!chk.length){ alert('먼저 분류할 기사를 체크하세요.'); return; }
+      if(!confirm(chk.length+'건을 '+field+' = "'+v+'"(으)로 일괄 분류할까요?')) return;
+      chk.forEach(c=>{ const k=c.dataset.k; rowEdits[k]=rowEdits[k]||{}; rowEdits[k][field]=v; });
+      try{ localStorage.setItem('aqaraRowEdits',JSON.stringify(rowEdits)); }catch(e){}
+      ALL.forEach(r=>{ if(rowEdits[r._key]){ applyRowEdit(r); deriveRow(r); } }); applyAndRender(); }
 
     /* ================= 데일리 브리핑 (7/1~7/8) ================= */
     const _OLD_BRIEFINGS = {
