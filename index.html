@@ -106,6 +106,13 @@
       <button id="ownBtn-newsletter" onclick="switchOwned('newsletter')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">뉴스레터</button>
     </div>
   </div>
+  <!-- 카페/커뮤니티 하위탭 -->
+  <div id="subnav-cafe" class="bg-[#FAFAF9] border-b border-[#E6E6E3] sticky top-[100px] z-10 hidden">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-2 py-2 overflow-x-auto">
+      <button id="cafeBtn-cafe" onclick="switchTab('cafe')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-ink text-white whitespace-nowrap transition">네이버 카페</button>
+      <button id="cafeBtn-dcinside" onclick="switchTab('dcinside')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">디시인사이드 갤러리</button>
+    </div>
+  </div>
   <!-- 종합 리포트 하위탭 -->
   <div id="subnav-report" class="bg-[#FAFAF9] border-b border-[#E6E6E3] sticky top-[100px] z-10 hidden">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-2 py-2 overflow-x-auto">
@@ -569,6 +576,28 @@
        <div id="cafeBody" class="divide-y divide-slate-100"></div>
      </div>
      <p class="text-center text-xs text-slate-400 pt-4">※ 키워드 기반 수집 스냅샷이라 카페 '전체 글'은 아닙니다. 전체 글·자동갱신은 네이버 카페 API 인증(관리자 로그인) 연동이 필요합니다.</p>
+   </div>
+
+   <!-- 디시인사이드 갤러리 -->
+   <div id="view-dcinside" class="hidden">
+     <div class="card p-5 mb-5">
+       <h2 class="text-xl font-extrabold text-ink">디시인사이드 갤러리 모니터링 <span class="text-sm font-semibold text-agray">(홈어시스턴트·스마트싱스)</span></h2>
+       <p class="text-sm text-slate-500 mt-1">스마트홈 유저 커뮤니티 내 <b>아카라 언급</b> 모니터링. <span id="dcStamp" class="text-slate-400"></span></p>
+     </div>
+     <section id="dcKpi" class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-5"></section>
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+       <div class="card p-5">
+         <div class="flex items-center justify-between mb-2"><h3 class="accent font-extrabold text-ink">홈어시스턴트 갤러리</h3><a href="https://gall.dcinside.com/mgallery/board/lists/?id=hass&s_type=search_subject_memo&s_keyword=%EC%95%84%EC%B9%B4%EB%9D%BC" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium">아카라 검색 ↗</a></div>
+         <div id="dcHass" class="divide-y divide-slate-100 max-h-[480px] overflow-auto"></div>
+       </div>
+       <div class="card p-5">
+         <div class="flex items-center justify-between mb-2"><h3 class="accent font-extrabold text-ink">스마트싱스 갤러리</h3><a href="https://gall.dcinside.com/mgallery/board/lists/?id=smartthings&s_type=search_subject_memo&s_keyword=%EC%95%84%EC%B9%B4%EB%9D%BC" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium">아카라 검색 ↗</a></div>
+         <div id="dcSt" class="divide-y divide-slate-100 max-h-[480px] overflow-auto"></div>
+       </div>
+     </div>
+     <div class="card p-4 mt-5 bg-[#FAFAF9] border-[#E6E6E3]">
+       <p class="text-[12px] text-slate-500 leading-relaxed">※ 디시인사이드는 공개 API가 없고 봇 차단이 있어 <b>자동 수집이 불안정</b>합니다. 수집되는 글은 <code class="bg-white px-1 rounded border">dcinside.json</code>으로 표시하며, 위 <b>'아카라 검색'</b> 링크로 각 갤러리에서 실시간 확인할 수 있습니다.</p>
+     </div>
    </div>
 
    <div id="view-competitor" class="hidden">
@@ -1866,6 +1895,22 @@
       if(/가입인사|가입했|정보\s*얻으러/.test(s)) return '가입인사';
       if(/\?|궁금|문의|질문|나요|가요|하나요|되나요|있을까요|모르겠|부탁/.test(s)) return '문의';
       return '일반'; }
+    // ===== 디시인사이드 갤러리 =====
+    let DCINSIDE={posts:[]};
+    const DC_HASS='https://gall.dcinside.com/mgallery/board/lists/?id=hass&s_type=search_subject_memo&s_keyword=%EC%95%84%EC%B9%B4%EB%9D%BC';
+    const DC_ST='https://gall.dcinside.com/mgallery/board/lists/?id=smartthings&s_type=search_subject_memo&s_keyword=%EC%95%84%EC%B9%B4%EB%9D%BC';
+    function loadDcinside(){ fetch('dcinside.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d){ DCINSIDE=d; renderDcinside(); } }).catch(()=>{ renderDcinside(); }); }
+    function dcRows(arr,search){ if(!arr||!arr.length) return `<p class="text-sm text-slate-400 py-6 text-center">자동 수집된 글이 없습니다. <a href="${search}" target="_blank" rel="noopener" class="lnk">갤러리에서 '아카라' 검색 ↗</a></p>`;
+      return arr.map(p=>`<div class="py-2.5"><a href="${esc(p.link)}" target="_blank" rel="noopener" class="lnk line-clamp-2 text-[13px]">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a><div class="text-[11px] text-slate-400 mt-0.5">${esc(p.date||'')} · 조회 ${(p.views||0).toLocaleString()} · 댓글 ${p.replies||0}</div></div>`).join(''); }
+    function renderDcinside(){
+      const posts=DCINSIDE.posts||[];
+      const stmp=document.getElementById('dcStamp'); if(stmp) stmp.textContent=DCINSIDE.generatedAt?('· 수집일 '+DCINSIDE.generatedAt+' · '+posts.length+'건'):'· 자동 수집 준비 중 (아래 링크로 확인)';
+      const hass=posts.filter(p=>p.gid==='hass'), st=posts.filter(p=>p.gid==='smartthings');
+      const kc=(l,v,s)=>`<div class="card card-hover p-5"><p class="text-sm text-slate-500">${l}</p><p class="num text-3xl font-extrabold text-ink mt-1">${v}</p><p class="text-xs text-slate-400 mt-1">${s}</p></div>`;
+      const kpi=document.getElementById('dcKpi'); if(kpi) kpi.innerHTML=kc('총 언급',posts.length+'건','아카라 언급 글')+kc('홈어시스턴트',hass.length+'건','hass 갤러리')+kc('스마트싱스',st.length+'건','smartthings 갤러리');
+      const eh=document.getElementById('dcHass'); if(eh) eh.innerHTML=dcRows(hass,DC_HASS);
+      const es=document.getElementById('dcSt'); if(es) es.innerHTML=dcRows(st,DC_ST);
+    }
     function loadCafe(silent){
       fetch('cafe.json?_='+Date.now()).then(r=>r.json()).then(p=>{
         if(p&&p.posts&&p.posts.length){ CAFE_POSTS=p.posts; if(p.generatedAt) window.__cafeStamp=p.generatedAt; renderCafe(); maybeRenderReport(); }
@@ -1961,14 +2006,14 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], report:['report','market','competitor'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', competitor:'report', market:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe','dcinside'], campaign:['campaign'], report:['report','market','competitor'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', dcinside:'cafe', campaign:'campaign', competitor:'report', market:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
-      ['analytics','briefing','campaign','owned','cafe','report','competitor','market','calendar','medialist','library','mkt','kpi'].forEach(v=>{
+      ['analytics','briefing','campaign','owned','cafe','dcinside','report','competitor','market','calendar','medialist','library','mkt','kpi'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
@@ -1976,6 +2021,8 @@
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
+      document.getElementById('subnav-cafe').classList.toggle('hidden', g!=='cafe');
+      ['cafe','dcinside'].forEach(v=>{ const b=document.getElementById('cafeBtn-'+v); if(b) b.className=subClass(v===t); });
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
       ['report','market','competitor'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
@@ -1985,6 +2032,7 @@
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
       if(t==='competitor'){ loadCompetitor(); }
       if(t==='market'){ loadCompetitor(); renderMarket(); }
+      if(t==='dcinside'){ loadDcinside(); }
       if(t==='library'){ loadLibrary(); }
       if(t==='mkt'){ mktEnter(); }
     }
@@ -2197,7 +2245,7 @@
     function libItemUrl(it){ return it.kind==='folder'?('https://drive.google.com/drive/folders/'+it.id):('https://drive.google.com/file/d/'+it.id+'/view'); }
     function libCard(it){
       const url=libItemUrl(it), isFolder=it.kind==='folder';
-      const thumb = it.kind==='image' ? `<img src="https://drive.google.com/thumbnail?id=${esc(it.id)}&sz=w400" loading="lazy" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='<span class=\\'text-4xl\\'>🖼️</span>'"/>` : `<span class="text-4xl">${libIcon(it.kind)}</span>`;
+      const thumb = it.kind==='image' ? `<img src="https://drive.google.com/thumbnail?id=${esc(it.id)}&sz=w400" loading="lazy" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='<span class=\\'text-2xl\\'>🖼️</span>'"/>` : `<span class="text-2xl">${libIcon(it.kind)}</span>`;
       return `<div class="card overflow-hidden flex flex-col"><div class="aspect-[4/3] bg-[#F4F1EA] flex items-center justify-center overflow-hidden">${thumb}</div><div class="p-3 flex flex-col flex-1"><div class="text-[13px] font-medium text-ink line-clamp-2 mb-0.5" title="${esc(it.title)}">${esc(it.title)}</div><div class="text-[11px] text-slate-400 mb-2">${isFolder?'폴더':(it.kind||'파일').toUpperCase()}${it.size?(' · '+esc(it.size)):''}</div><a href="${url}" target="_blank" rel="noopener" class="mt-auto block text-center text-[13px] bg-ink text-white rounded-lg py-1.5 font-semibold hover:brightness-125">${isFolder?'열기 ↗':'다운로드 ↗'}</a></div></div>`;
     }
     function renderLibrary(){
@@ -2214,7 +2262,7 @@
         const folderUrl='https://drive.google.com/drive/folders/'+esc(c.folderId);
         if(!items.length){
           // 폴더 전용 카테고리 → 반폭 컴팩트 블록(두 개씩 한 줄)
-          buf.push(`<a href="${folderUrl}" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 rounded-xl border ${c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3]'} p-4 hover:border-brand transition"><div><div class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)}</div><div class="text-[11px] text-slate-400 mt-0.5">${esc(c.desc||'')}</div><div class="text-[11px] text-ink mt-1 font-medium">드라이브에서 다운로드 ↗</div></div><span class="text-3xl shrink-0">📁</span></a>`);
+          buf.push(`<a href="${folderUrl}" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 rounded-xl border ${c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3]'} p-4 hover:border-brand transition"><div><div class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)}</div><div class="text-[11px] text-slate-400 mt-0.5">${esc(c.desc||'')}</div><div class="text-[11px] text-ink mt-1 font-medium">드라이브에서 다운로드 ↗</div></div><span class="text-xl shrink-0">📁</span></a>`);
           return;
         }
         flush();

@@ -1,0 +1,37 @@
+name: DCInside
+
+# 매일 한국 08:20경 + 수동 + 크롤러 변경 시 → dcinside.json (best-effort 스크래핑)
+on:
+  schedule:
+    - cron: '20 23 * * *'
+  workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/dcinside.yml'
+      - 'crawler/dcinside_fetch.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dcinside
+  cancel-in-progress: false
+
+jobs:
+  dcinside:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Fetch DCInside
+        run: python crawler/dcinside_fetch.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dcinside.json
+          git diff --staged --quiet || git commit -m "dcinside.json 자동 갱신"
+          git push
