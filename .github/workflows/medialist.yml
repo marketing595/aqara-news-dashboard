@@ -1,0 +1,40 @@
+name: Media List
+
+# 주 1회(월요일 한국 09시경) + 수동 + 크롤러 변경 시 → medialist.json
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/medialist.yml'
+      - 'crawler/medialist_fetch.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: medialist
+  cancel-in-progress: false
+
+jobs:
+  medialist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Fetch media list
+        env:
+          NAVER_ID: ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+        run: python crawler/medialist_fetch.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add medialist.json
+          git diff --staged --quiet || git commit -m "medialist.json 자동 갱신"
+          git push

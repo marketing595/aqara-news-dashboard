@@ -82,10 +82,9 @@
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-7 overflow-x-auto">
       <button id="grpBtn-pr" onclick="switchGroup('pr')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-brand text-ink whitespace-nowrap">PR</button>
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
+      <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페 모니터링</button>
       <button id="grpBtn-campaign" onclick="switchGroup('campaign')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">캠페인</button>
       <button id="grpBtn-report" onclick="switchGroup('report')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">종합 리포트</button>
-      <button id="grpBtn-calendar" onclick="switchGroup('calendar')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">이슈 캘린더</button>
-      <button id="grpBtn-medialist" onclick="switchGroup('medialist')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어리스트</button>
       <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
       <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
     </div>
@@ -724,23 +723,25 @@
    <div id="view-medialist" class="hidden">
      <div class="card p-5 mb-5">
        <h2 class="text-xl font-extrabold text-ink">미디어리스트 <span class="text-sm font-semibold text-agray">(매체·기자·연락처)</span></h2>
-       <p class="text-sm text-slate-500 mt-1">보도 노출 매체를 <b>부동산·인테리어·IT·AI</b> 담당으로 분류해 관리합니다. 매체는 자동 집계, <b>기자·이메일은 아래 기사 링크로 확인</b>해 입력하세요(이메일은 개인정보라 API 자동수집 불가 → 기사 하단 바이라인·매체 기자페이지에서 확인).</p>
+       <p class="text-sm text-slate-500 mt-1">부동산·인테리어·스마트홈·AI·경쟁사 등 <b>분야 키워드로 뉴스를 수집</b>하고, 기사 바이라인에서 <b>기자명·이메일을 자동 추출</b>합니다(공개된 경우). <span id="mlStamp" class="text-slate-400"></span></p>
      </div>
      <div id="mediaListAuto" class="card p-5 mb-5">
-       <h3 class="accent font-extrabold text-ink mb-1">수집 매체 현황 <span class="text-xs font-normal text-slate-400">(PR 데이터 기준 · 발행 건수순 · 매체 클릭 시 네이버 뉴스 검색)</span></h3>
-       <p class="text-[11px] text-slate-400 mb-3">매체명을 누르면 해당 매체의 아카라 기사 목록이 열립니다. 기사 하단에 <b>담당 기자명·이메일</b>이 대부분 표기돼 있어, 이를 확인해 아래에 입력하세요.</p>
-       <div id="mediaListAgg" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+       <h3 class="accent font-extrabold text-ink mb-1">수집 매체 현황 <span class="text-xs font-normal text-slate-400">(분야 키워드 수집 기준 · 발굴 기자 수순 · 매체 클릭 시 네이버 뉴스 검색)</span></h3>
+       <div id="mediaListAgg" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mt-2"></div>
      </div>
      <div class="card p-5 mb-5">
-       <h3 class="accent font-extrabold text-ink mb-1">기자 확인용 최근 보도 <span class="text-xs font-normal text-slate-400">(기사 열어 하단 기자·이메일 확인)</span></h3>
-       <p class="text-[11px] text-slate-400 mb-3">분야 필터로 좁혀서 기사를 열고, 담당 기자와 이메일을 확인해 아래 표에 추가하세요.</p>
+       <h3 class="accent font-extrabold text-ink mb-1">발굴된 기자 연락처 <span class="text-xs font-normal text-slate-400">(자동 수집 · 이메일 공개 기사 우선)</span></h3>
+       <p class="text-[11px] text-slate-400 mb-3">분야로 좁혀 확인하고, 필요한 연락처는 <b>담기 →</b>로 아래 '직접 관리' 표에 추가하세요. 이메일이 빈 경우 기사 열어 확인.</p>
        <div class="flex flex-wrap gap-2 mb-3">
-         <select id="mlArtBeat" onchange="renderMediaList()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 bg-white"><option value="">전체 분야</option><option>부동산</option><option>인테리어</option><option>IT</option><option>AI</option></select>
-         <input id="mlArtSearch" oninput="renderMediaList()" placeholder="매체·제목 검색" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 w-44" />
+         <select id="mlArtBeat" onchange="renderMediaList()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 bg-white"><option value="">전체 분야</option><option>부동산</option><option>인테리어</option><option>스마트홈</option><option>AI</option><option>IT</option><option>경쟁사</option></select>
+         <input id="mlArtSearch" oninput="renderMediaList()" placeholder="매체·기자·제목 검색" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 w-44" />
+         <label class="flex items-center gap-1 text-[12px] text-slate-500"><input type="checkbox" id="mlEmailOnly" onchange="renderMediaList()" /> 이메일 있는 것만</label>
        </div>
-       <div id="mediaListArticles" class="divide-y divide-slate-100 max-h-96 overflow-auto"></div>
+       <div class="overflow-auto rounded-lg border border-[#E6E6E3] max-h-[460px]">
+         <table class="w-full text-sm"><thead class="bg-[#F7F7F5] text-slate-500 sticky top-0"><tr class="text-left"><th class="px-3 py-2">분야</th><th class="px-3 py-2">매체</th><th class="px-3 py-2">기자</th><th class="px-3 py-2">이메일</th><th class="px-3 py-2">기사</th><th class="px-3 py-2"></th></tr></thead><tbody id="mediaListArticles" class="divide-y divide-slate-100"></tbody></table>
+       </div>
        <div class="mt-3 pt-3 border-t border-[#E6E6E3] text-[11px] text-slate-500 leading-relaxed">
-         <b class="text-ink">기자 이메일 찾는 법</b> · ① 위 기사 열기 → 본문 <b>맨 아래 기자 바이라인</b>(이름·이메일) 확인 ② 매체 홈페이지의 '기자 페이지/프로필' ③ 아래 검색 도구 활용:
+         <b class="text-ink">참고</b> · 이메일은 기사 바이라인에 공개된 경우만 자동 수집됩니다. 빈 경우 기사 열어 하단 확인 또는 아래 도구 활용:
          <span class="inline-flex flex-wrap gap-1.5 mt-1.5">
            <a href="https://www.bigkinds.or.kr/" target="_blank" rel="noopener" class="px-2 py-0.5 rounded bg-white border border-[#E6E6E3] hover:border-brand text-slate-600">빅카인즈(언론진흥재단)</a>
            <a href="https://www.journalist.or.kr/" target="_blank" rel="noopener" class="px-2 py-0.5 rounded bg-white border border-[#E6E6E3] hover:border-brand text-slate-600">한국기자협회</a>
@@ -801,13 +802,15 @@
      <div id="mktInner" class="hidden">
        <div class="bg-[#F4F1FF] border-b border-[#E1DBFF] -mt-5 mb-5">
          <div class="max-w-[1400px] mx-auto px-1 flex gap-2 py-2 overflow-x-auto">
-           <button id="mktBtn-cafe" onclick="mktSub('cafe')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-[#7C5CFF] text-white whitespace-nowrap">카페 모니터링</button>
+           <button id="mktBtn-medialist" onclick="mktSub('medialist')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-[#7C5CFF] text-white whitespace-nowrap">미디어리스트</button>
+           <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
            <button id="mktBtn-insta" onclick="mktSub('insta')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
            <button id="mktBtn-blog" onclick="mktSub('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
            <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
          </div>
        </div>
-       <div id="mktCafeSlot"></div>
+       <div id="mktMedialistSlot"></div>
+       <div id="mktCalendarSlot"></div>
        <div id="mktSec-insta" class="hidden">
          <div class="card p-5 mb-5"><h3 class="accent font-extrabold text-ink mb-1">인스타그램 콘텐츠 자동 제안 <span class="text-xs font-normal text-slate-400">(주제·카피·해시태그)</span></h3>
            <p class="text-[12px] text-slate-400 mb-3">최근 업계 핫키워드·자사 제품·시즌 이슈를 반영한 릴스/피드 아이디어입니다. 편집해 사용하세요(이 브라우저 저장).</p>
@@ -1736,8 +1739,8 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], campaign:['campaign'], report:['report','competitor'], calendar:['calendar'], medialist:['medialist'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', campaign:'campaign', competitor:'report', report:'report', calendar:'calendar', medialist:'medialist', library:'library', mkt:'mkt', cafe:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], report:['report','competitor'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', competitor:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
@@ -1747,7 +1750,7 @@
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','campaign','report','calendar','medialist','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
+      ['pr','owned','cafe','campaign','report','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
@@ -1759,8 +1762,6 @@
       if(t==='cafe'){ renderCafe(); loadCafe(); }
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
       if(t==='competitor'){ loadCompetitor(); }
-      if(t==='calendar'){ renderCalendar(); }
-      if(t==='medialist'){ renderMediaList(); }
       if(t==='library'){ loadLibrary(); }
       if(t==='mkt'){ mktEnter(); }
     }
@@ -1817,18 +1818,23 @@
       if(/\bai\b|인공지능|지능형|생성형|챗gpt|제미나이|온디바이스|매터|스레드/.test(s)) return 'AI';
       return 'IT'; }
     function nvSearch(q){ return 'https://search.naver.com/search.naver?where=news&query='+encodeURIComponent(q); }
+    let MEDIALIST={contacts:[]}, mlLoaded=false;
+    function loadMediaList(){ fetch('medialist.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d&&d.contacts){ MEDIALIST=d; renderMediaList(); } }).catch(()=>{}); }
+    function mlAddFrom(i){ const c=(MEDIALIST.contacts||[])[i]; if(!c) return; mlContacts.push({beat:c.beat||'',media:c.press||'',name:c.reporter||'',email:c.email||''}); mlSave(); renderMediaList(); }
     function renderMediaList(){
-      const agg={}; (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{ const md=(r['매체']||'').toString().replace(/\(.*?\)/g,'').trim(); if(md&&md!=='(미상)') agg[md]=(agg[md]||0)+1; });
+      if(!mlLoaded){ mlLoaded=true; loadMediaList(); }
+      const contacts=MEDIALIST.contacts||[];
+      document.getElementById('mlStamp').textContent=MEDIALIST.generatedAt?('· 수집일 '+MEDIALIST.generatedAt+' · 총 '+contacts.length+'명(이메일 '+contacts.filter(c=>c.email).length+')'):'· 수집 대기(자동 갱신 예정)';
+      // 매체별 발굴 기자 수
+      const agg={}; contacts.forEach(c=>{ const m=c.press||'(미상)'; agg[m]=(agg[m]||0)+1; });
       const arr=Object.entries(agg).sort((a,b)=>b[1]-a[1]);
       const box=document.getElementById('mediaListAgg');
-      if(box) box.innerHTML=arr.length?arr.map(([m,c])=>`<a href="${nvSearch(m+' 아카라')}" target="_blank" rel="noopener" class="flex items-center justify-between rounded-lg border border-[#E6E6E3] px-3 py-2 hover:border-brand hover:bg-brand/5 transition"><span class="text-sm text-ink truncate pr-2">${esc(m)} <span class="text-slate-300 text-xs">↗</span></span><span class="num text-sm font-bold text-slate-500 whitespace-nowrap">${c}건</span></a>`).join(''):'<p class="text-sm text-slate-400">PR 데이터 로딩 후 표시됩니다.</p>';
-      // 기자 확인용 최근 보도 리스트
-      const beatF=(document.getElementById('mlArtBeat')||{}).value||'', q=((document.getElementById('mlArtSearch')||{}).value||'').toLowerCase().trim();
-      const arts=(typeof ALL!=='undefined'?ALL:[]).slice().filter(r=>r['기사명']).map(r=>({t:r['기사명'],m:(r['매체']||'').replace(/\(.*?\)/g,'').trim(),d:r['게재일']||'',j:(r['기자']||'').trim(),link:(typeof linkOf==='function'?linkOf(r):''),beat:mlBeatOf(r['기사명']+' '+(r['종류']||''))}))
-        .filter(a=>(!beatF||a.beat===beatF)&&(!q||((a.m+' '+a.t).toLowerCase().indexOf(q)>-1)))
-        .sort((a,b)=>(b.d||'').localeCompare(a.d||'')).slice(0,120);
+      if(box) box.innerHTML=arr.length?arr.map(([m,c])=>`<a href="${nvSearch(m)}" target="_blank" rel="noopener" class="flex items-center justify-between rounded-lg border border-[#E6E6E3] px-3 py-2 hover:border-brand hover:bg-brand/5 transition"><span class="text-sm text-ink truncate pr-2">${esc(m)} <span class="text-slate-300 text-xs">↗</span></span><span class="num text-sm font-bold text-slate-500 whitespace-nowrap">${c}명</span></a>`).join(''):'<p class="text-sm text-slate-400">수집 대기 중… (자동 갱신되면 표시됩니다)</p>';
+      // 발굴 기자 연락처
+      const beatF=(document.getElementById('mlArtBeat')||{}).value||'', q=((document.getElementById('mlArtSearch')||{}).value||'').toLowerCase().trim(), eOnly=(document.getElementById('mlEmailOnly')||{}).checked;
+      const rows=contacts.map((c,i)=>({...c,_i:i})).filter(c=>(!beatF||(c.beats||[c.beat]).indexOf(beatF)>-1)&&(!eOnly||c.email)&&(!q||((c.press||'')+(c.reporter||'')+(c.title||'')).toLowerCase().indexOf(q)>-1)).slice(0,300);
       const al=document.getElementById('mediaListArticles');
-      if(al) al.innerHTML=arts.length?arts.map(a=>`<div class="py-2 flex items-baseline gap-2 text-sm"><span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 shrink-0">${esc(a.beat)}</span><span class="text-slate-400 text-xs w-20 shrink-0 truncate">${esc(a.m||'-')}</span><a href="${esc(a.link)}" target="_blank" rel="noopener" class="lnk flex-1 line-clamp-1">${esc(a.t)} <span class="text-slate-300 text-xs">↗</span></a>${a.j?`<span class="text-[11px] text-brand-ink shrink-0">${esc(a.j)}</span>`:''}<span class="text-[11px] text-slate-400 shrink-0">${esc((a.d||'').slice(5))}</span></div>`).join(''):'<p class="text-sm text-slate-400 py-4 text-center">해당 조건의 기사가 없습니다.</p>';
+      if(al) al.innerHTML=rows.length?rows.map(c=>`<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2"><span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc((c.beats||[c.beat]).join('·'))}</span></td><td class="px-3 py-2 text-ink whitespace-nowrap">${esc(c.press||'-')}</td><td class="px-3 py-2 text-slate-700 whitespace-nowrap">${esc(c.reporter||'-')}</td><td class="px-3 py-2 text-slate-500 whitespace-nowrap">${c.email?`<a href="mailto:${esc(c.email)}" class="lnk">${esc(c.email)}</a>`:'<span class="text-slate-300">-</span>'}</td><td class="px-3 py-2"><a href="${esc(c.link||'#')}" target="_blank" rel="noopener" class="lnk line-clamp-1 max-w-[220px]">${esc(c.title||'기사')} ↗</a></td><td class="px-3 py-2 whitespace-nowrap"><button onclick="mlAddFrom(${c._i})" class="text-[11px] text-brand-ink font-semibold hover:underline">담기 →</button></td></tr>`).join(''):'<tr><td colspan="6" class="px-3 py-6 text-center text-slate-400">수집된 연락처가 없습니다. (분야 키워드 자동 수집이 갱신되면 표시)</td></tr>';
       const tb=document.getElementById('mlBody');
       if(tb) tb.innerHTML=mlContacts.length?mlContacts.map((c,i)=>`<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2"><span class="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc(c.beat||'')}</span></td><td class="px-3 py-2 text-ink">${esc(c.media||'')}</td><td class="px-3 py-2 text-slate-600">${esc(c.name||'')}</td><td class="px-3 py-2 text-slate-500">${c.email?`<a href="mailto:${esc(c.email)}" class="lnk">${esc(c.email)}</a>`:'-'}</td><td class="px-3 py-2 text-right"><button onclick="mlDel(${i})" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join(''):'<tr><td colspan="5" class="px-3 py-6 text-center text-slate-400">아직 등록된 연락처가 없습니다. 위에서 추가하세요.</td></tr>';
     }
@@ -1867,22 +1873,27 @@
 
     // ===== ONLY MKT (팀 전용) =====
     const MKT_PW='aqara2026';   // 팀 공유 비밀번호(정적 사이트=화면 가림 수준). 변경 시 이 값 수정.
-    let mktSection='cafe';
-    let mktCafeMoved=false;
-    function mktMoveCafe(){ if(mktCafeMoved) return; const cafe=document.getElementById('view-cafe'), slot=document.getElementById('mktCafeSlot'); if(cafe&&slot){ slot.appendChild(cafe); mktCafeMoved=true; } }
+    let mktSection='medialist';
+    let mktMoved=false;
+    function mktMovePanels(){ if(mktMoved) return;
+      const ml=document.getElementById('view-medialist'), mls=document.getElementById('mktMedialistSlot');
+      const cal=document.getElementById('view-calendar'), cals=document.getElementById('mktCalendarSlot');
+      if(ml&&mls) mls.appendChild(ml); if(cal&&cals) cals.appendChild(cal); mktMoved=true; }
     function mktEnter(){ const ok=sessionStorage.getItem('mktUnlocked')==='1';
       document.getElementById('mktGate').classList.toggle('hidden', ok);
       document.getElementById('mktInner').classList.toggle('hidden', !ok);
-      if(ok){ mktMoveCafe(); mktSub(mktSection); } else { const pw=document.getElementById('mktPw'); if(pw){ pw.value=''; pw.focus(); } }
+      if(ok){ mktMovePanels(); mktSub(mktSection); } else { const pw=document.getElementById('mktPw'); if(pw){ pw.value=''; pw.focus(); } }
     }
     function mktUnlock(){ const v=document.getElementById('mktPw').value; if(v===MKT_PW){ sessionStorage.setItem('mktUnlocked','1'); document.getElementById('mktPwErr').classList.add('hidden'); mktEnter(); } else { document.getElementById('mktPwErr').classList.remove('hidden'); } }
     function mktLock(){ sessionStorage.removeItem('mktUnlocked'); mktEnter(); }
     function mktSub(s){ mktSection=s;
-      const cafe=document.getElementById('view-cafe'); if(cafe) cafe.classList.toggle('hidden', s!=='cafe');
+      const ml=document.getElementById('view-medialist'); if(ml) ml.classList.toggle('hidden', s!=='medialist');
+      const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
-      ['cafe','insta','blog'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap '+(x===s?'bg-[#7C5CFF] text-white font-semibold':'text-[#5B44C7] hover:bg-[#EDE9FF] font-medium'); });
-      if(s==='cafe'){ renderCafe(); loadCafe(); }
+      ['medialist','calendar','insta','blog'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap '+(x===s?'bg-[#7C5CFF] text-white font-semibold':'text-[#5B44C7] hover:bg-[#EDE9FF] font-medium'); });
+      if(s==='medialist'){ renderMediaList(); }
+      if(s==='calendar'){ renderCalendar(); }
       if(s==='insta'){ renderMktInsta(); }
       if(s==='blog'){ renderMktBlog(); }
     }
