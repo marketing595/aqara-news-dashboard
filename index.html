@@ -84,7 +84,6 @@
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
       <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페 모니터링</button>
       <button id="grpBtn-campaign" onclick="switchGroup('campaign')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">캠페인</button>
-      <button id="grpBtn-kpi" onclick="switchGroup('kpi')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">2026 KPI</button>
       <button id="grpBtn-report" onclick="switchGroup('report')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">종합 리포트</button>
       <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
       <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
@@ -839,13 +838,15 @@
      <div id="mktInner" class="hidden">
        <div class="bg-[#F4F1FF] border-b border-[#E1DBFF] -mt-5 mb-5">
          <div class="max-w-[1400px] mx-auto px-1 flex gap-2 py-2 overflow-x-auto">
-           <button id="mktBtn-medialist" onclick="mktSub('medialist')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-[#7C5CFF] text-white whitespace-nowrap">미디어리스트</button>
+           <button id="mktBtn-kpi" onclick="mktSub('kpi')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-[#7C5CFF] text-white whitespace-nowrap">2026 KPI</button>
+           <button id="mktBtn-medialist" onclick="mktSub('medialist')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">미디어리스트</button>
            <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
            <button id="mktBtn-insta" onclick="mktSub('insta')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
            <button id="mktBtn-blog" onclick="mktSub('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
            <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
          </div>
        </div>
+       <div id="mktKpiSlot"></div>
        <div id="mktMedialistSlot"></div>
        <div id="mktCalendarSlot"></div>
        <div id="mktSec-insta" class="hidden">
@@ -1308,10 +1309,10 @@
         pos:"<p>• <b>제품 검색 급등:</b> 'L100' 검색이 캠페인 중 <b class='text-ink'>약 2배(+89%)</b> 상승, 6월 초 피크(15.3). 캠페인이 L100 제품 인지에 직접 효과.</p><p>• <b>카테고리 동반 상승:</b> '아카라 도어락' +21%, '스마트도어락' +11% → 브랜드 도어락 전반으로 관심 확대.</p><p>• <b>구모델→신모델 전환:</b> 같은 기간 'K100'(구모델)은 −17% 하락 → 관심이 K100에서 L100으로 이동. 신제품 전환이라는 캠페인 목표에 부합.</p><p>• <b>콘텐츠 성과:</b> 인플루언서 유튜브 7편 누적 <b class='text-ink'>133만 조회</b> + 인스타 6건 52만 조회. 댓글 감성은 부정 8%로 양호.</p><p>• <b>콘텐츠 기여도 (도달 ≠ 제품 관심):</b> 최대 도달 영상(동네친구강나미 115만뷰)은 댓글이 창작자 사연(디스크·수술)에 집중돼 <b>제품 인지 기여는 낮음</b>. 실제 제품 반응·설치 의향은 <b>김한용의모카(테슬라 연동)·지니스펙트럼(아동 실종 방지)</b> 등 '제품 맥락이 분명한' 영상에서 발생.</p><p>• <b>메가 유튜버 재활용 전략:</b> 동네친구강나미 같은 초대형 채널은 즉각 전환보다 '브랜드 노출·화제성' 자산에 가까움. 향후 <b class='text-ink'>영상 2차 라이선스를 구매해 자사 채널·유료광고(퍼포먼스) 소재로 재확산</b>하면, 이미 검증된 고조회 콘텐츠로 도달을 재활용하며 전환까지 연결할 수 있음.</p><p>• <b>다음 캠페인 제언:</b> '초대형 1편' 의존을 낮추고, <b>제품 맥락이 뚜렷한 중형 크리에이터 다수 + 참여율 높은 마이크로 조합</b>으로 전환 효율을 높이는 편성 권장.</p>",
         videosAsOf:'2026-07-09',
         videos:[
-          {n:'동네친구강나미',t:'매크로',title:'결국 촬영 중단했습니다..🚨 수술실까지 들어가게 된 사연',views:1152875,likes:12101,comments:796,pos:105,neu:160,neg:35,id:'URJrux1lc-M'},
-          {n:'30대의삶',t:'매크로',title:'아내에게 스마트홈 설득하기 (아카라 스마트홈 후기)',views:99660,likes:1608,comments:376,pos:75,neu:116,neg:16,id:'xH8VY4g3YeI'},
-          {n:'김한용의모카',t:'매크로',title:'이젠 테슬라가 집과 연동되는 시대! 아카라 도어락의 신박한 기능!',views:42424,likes:725,comments:327,pos:132,neu:157,neg:11,id:'m3f8bUOgx7w'},
-          {n:'지니스펙트럼',t:'매크로',title:'자폐 아이 가출 경험담과 가출 방지 아이템',views:39358,likes:837,comments:146,pos:36,neu:31,neg:8,id:'F1Nmnm8f4UY'},
+          {n:'동네친구강나미',t:'메가',title:'결국 촬영 중단했습니다..🚨 수술실까지 들어가게 된 사연',views:1152875,likes:12101,comments:796,pos:105,neu:160,neg:35,id:'URJrux1lc-M'},
+          {n:'30대의삶',t:'메가',title:'아내에게 스마트홈 설득하기 (아카라 스마트홈 후기)',views:99660,likes:1608,comments:376,pos:75,neu:116,neg:16,id:'xH8VY4g3YeI'},
+          {n:'김한용의모카',t:'메가',title:'이젠 테슬라가 집과 연동되는 시대! 아카라 도어락의 신박한 기능!',views:42424,likes:725,comments:327,pos:132,neu:157,neg:11,id:'m3f8bUOgx7w'},
+          {n:'지니스펙트럼',t:'메가',title:'자폐 아이 가출 경험담과 가출 방지 아이템',views:39358,likes:837,comments:146,pos:36,neu:31,neg:8,id:'F1Nmnm8f4UY'},
           {n:'리뷰닉',t:'마이크로',title:'가격은 낮추고 더 세련되게! 무타공 설치! 아카라 L100',views:2008,likes:30,comments:8,pos:3,neu:3,neg:0,id:'F3BkofA6J_A'},
           {n:'판다리뷰',t:'마이크로',title:'할머니 집을 스마트홈으로 바꿔봤습니다.. (아카라 L100+M200+W100)',views:354,likes:23,comments:77,pos:24,neu:12,neg:2,id:'JhPSS1RTRYk'},
           {n:'앱준',t:'마이크로',title:'집안 가전 다 제어하는 스마트홈 끝판왕 도어락 아카라 L100',views:210,likes:4,comments:1,pos:1,neu:0,neg:0,id:'SBs2sUJncpo'}
@@ -1669,7 +1670,7 @@
         CAMP_PICK=CAMP_CONTENT.map(()=>true);
         renderCampChart();
         const sbar=(p,n,g)=>{ const t=p+n+g||1; return `<div class="flex h-2.5 w-24 rounded overflow-hidden" title="긍 ${p} · 중 ${n} · 부 ${g}"><div class="bg-agreen" style="width:${p/t*100}%"></div><div class="bg-slate-300" style="width:${n/t*100}%"></div><div class="bg-ared" style="width:${g/t*100}%"></div></div>`; };
-        document.getElementById('campVideoBody').innerHTML=yt.map(v=>{ const e=v.views?((v.likes+(v.comments||0))/v.views*100).toFixed(2):0; const tb=v.t==='매크로'?'bg-brand/20 text-ink':'bg-slate-100 text-slate-500'; const yurl='https://youtu.be/'+v.id;
+        document.getElementById('campVideoBody').innerHTML=yt.map(v=>{ const e=v.views?((v.likes+(v.comments||0))/v.views*100).toFixed(2):0; const tb=v.t==='메가'?'bg-brand/20 text-ink':'bg-slate-100 text-slate-500'; const yurl='https://youtu.be/'+v.id;
           return `<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] ${tb}">${esc(v.t)}</span></td><td class="px-3 py-2 whitespace-nowrap"><a href="${yurl}" target="_blank" rel="noopener" class="font-medium text-slate-700 hover:text-ink hover:underline">${esc(v.n)} <span class="text-slate-300 text-xs">↗</span></a></td><td class="px-3 py-2"><a href="${yurl}" target="_blank" rel="noopener" class="text-slate-700 hover:text-ink hover:underline">${esc(v.title)}</a></td><td class="px-3 py-2 text-right num">${v.views.toLocaleString()}</td><td class="px-3 py-2 text-right num">${v.likes.toLocaleString()}</td><td class="px-3 py-2 text-right num">${(v.comments||0).toLocaleString()}</td><td class="px-3 py-2 text-right num">${e}%</td><td class="px-3 py-2">${v.pos!=null?sbar(v.pos,v.neu,v.neg):'<span class="text-slate-300">-</span>'}</td></tr>`; }).join('');
         document.getElementById('campInsta').innerHTML='<p class="text-sm font-semibold text-slate-600 mb-2 mt-1">인스타그램 협업 '+ig.length+'건 <span class="text-xs font-normal text-agray">('+(c.instaAsOf||'수기입력')+')</span></p>'+
           '<div class="overflow-auto rounded-lg border border-slate-100"><table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2 font-semibold">채널</th><th class="px-3 py-2 font-semibold text-right">조회수</th><th class="px-3 py-2 font-semibold text-right">좋아요</th><th class="px-3 py-2 font-semibold text-right">댓글</th></tr></thead><tbody class="divide-y divide-slate-100">'+
@@ -1847,8 +1848,8 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], kpi:['kpi'], report:['report','competitor'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', kpi:'kpi', competitor:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], report:['report','competitor'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', competitor:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
@@ -1858,7 +1859,7 @@
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','campaign','kpi','report','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
+      ['pr','owned','cafe','campaign','report','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
@@ -1871,7 +1872,6 @@
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
       if(t==='competitor'){ loadCompetitor(); }
       if(t==='library'){ loadLibrary(); }
-      if(t==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(t==='mkt'){ mktEnter(); }
     }
     function todayStr(){ return (typeof reportToday==='function')?reportToday():new Date().toISOString().slice(0,10); }
@@ -2086,12 +2086,13 @@
 
     // ===== ONLY MKT (팀 전용) =====
     const MKT_PW='aqara2026';   // 팀 공유 비밀번호(정적 사이트=화면 가림 수준). 변경 시 이 값 수정.
-    let mktSection='medialist';
+    let mktSection='kpi';
     let mktMoved=false;
     function mktMovePanels(){ if(mktMoved) return;
       const ml=document.getElementById('view-medialist'), mls=document.getElementById('mktMedialistSlot');
       const cal=document.getElementById('view-calendar'), cals=document.getElementById('mktCalendarSlot');
-      if(ml&&mls) mls.appendChild(ml); if(cal&&cals) cals.appendChild(cal); mktMoved=true; }
+      const kp=document.getElementById('view-kpi'), kps=document.getElementById('mktKpiSlot');
+      if(kp&&kps) kps.appendChild(kp); if(ml&&mls) mls.appendChild(ml); if(cal&&cals) cals.appendChild(cal); mktMoved=true; }
     function mktEnter(){ const ok=sessionStorage.getItem('mktUnlocked')==='1';
       document.getElementById('mktGate').classList.toggle('hidden', ok);
       document.getElementById('mktInner').classList.toggle('hidden', !ok);
@@ -2100,11 +2101,13 @@
     function mktUnlock(){ const v=document.getElementById('mktPw').value; if(v===MKT_PW){ sessionStorage.setItem('mktUnlocked','1'); document.getElementById('mktPwErr').classList.add('hidden'); mktEnter(); } else { document.getElementById('mktPwErr').classList.remove('hidden'); } }
     function mktLock(){ sessionStorage.removeItem('mktUnlocked'); mktEnter(); }
     function mktSub(s){ mktSection=s;
+      const kp=document.getElementById('view-kpi'); if(kp) kp.classList.toggle('hidden', s!=='kpi');
       const ml=document.getElementById('view-medialist'); if(ml) ml.classList.toggle('hidden', s!=='medialist');
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
-      ['medialist','calendar','insta','blog'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap '+(x===s?'bg-[#7C5CFF] text-white font-semibold':'text-[#5B44C7] hover:bg-[#EDE9FF] font-medium'); });
+      ['kpi','medialist','calendar','insta','blog'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap '+(x===s?'bg-[#7C5CFF] text-white font-semibold':'text-[#5B44C7] hover:bg-[#EDE9FF] font-medium'); });
+      if(s==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
       if(s==='insta'){ renderMktInsta(); }
