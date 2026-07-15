@@ -1891,19 +1891,27 @@
       const cf=csel?csel.value:'', q=(document.getElementById('libSearch').value||'').toLowerCase().trim();
       const ordered=cats.filter(c=>!cf||c.name===cf).slice().sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0));
       const grid=document.getElementById('libGrid');
-      grid.innerHTML=ordered.length?ordered.map(c=>{
+      let out='', buf=[];
+      const flush=()=>{ if(buf.length){ out+=`<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">${buf.join('')}</div>`; buf=[]; } };
+      ordered.forEach(c=>{
         const items=(c.items||[]).filter(it=>!q||(it.title||'').toLowerCase().indexOf(q)>-1);
         const folderUrl='https://drive.google.com/drive/folders/'+esc(c.folderId);
-        const cards = items.length ? items.map(libCard).join('')
-          : `<a href="${folderUrl}" target="_blank" rel="noopener" class="card p-4 flex flex-col items-center justify-center text-center aspect-[4/3] hover:border-brand transition"><div class="text-4xl mb-2">📁</div><div class="text-sm font-medium text-ink">폴더 전체 열기</div><div class="text-[11px] text-slate-400">드라이브에서 다운로드 ↗</div></a>`;
-        return `<section class="mb-7 ${c.pinned?'rounded-xl border border-[#F0E7C0] bg-[#FEFCF3] p-4':''}">
+        if(!items.length){
+          // 폴더 전용 카테고리 → 반폭 컴팩트 블록(두 개씩 한 줄)
+          buf.push(`<a href="${folderUrl}" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 rounded-xl border ${c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3]'} p-4 hover:border-brand transition"><div><div class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)}</div><div class="text-[11px] text-slate-400 mt-0.5">${esc(c.desc||'')}</div><div class="text-[11px] text-ink mt-1 font-medium">드라이브에서 다운로드 ↗</div></div><span class="text-3xl shrink-0">📁</span></a>`);
+          return;
+        }
+        flush();
+        out+=`<section class="mb-7 ${c.pinned?'rounded-xl border border-[#F0E7C0] bg-[#FEFCF3] p-4':''}">
           <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
             <h3 class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)} <span class="text-xs font-normal text-slate-400 ml-1">${esc(c.desc||'')}</span></h3>
             <a href="${folderUrl}" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium whitespace-nowrap">드라이브 폴더 열기 ↗</a>
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${cards}</div>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${items.map(libCard).join('')}</div>
         </section>`;
-      }).join(''):'<div class="text-center py-16 text-slate-400"><div class="text-4xl mb-2">📁</div>등록된 카테고리가 없습니다.</div>';
+      });
+      flush();
+      grid.innerHTML=out||'<div class="text-center py-16 text-slate-400"><div class="text-4xl mb-2">📁</div>등록된 카테고리가 없습니다.</div>';
     }
 
     // ===== ONLY MKT (팀 전용) =====
