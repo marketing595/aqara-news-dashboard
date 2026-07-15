@@ -806,7 +806,7 @@
      <div class="card p-6 mb-5">
        <div class="flex items-end justify-between flex-wrap gap-3 mb-3">
          <div><p class="text-sm text-slate-500">2026 누적 발행</p><p class="num text-4xl font-extrabold text-ink mt-1"><span id="kpiTotal">0</span> <span class="text-lg font-bold text-slate-400">/ <span id="kpiTarget">600</span>건</span></p></div>
-         <div class="text-right"><p class="num text-4xl font-extrabold text-brand-ink" id="kpiPct">0%</p><p class="text-xs text-slate-400 mt-0.5" id="kpiRemain"></p></div>
+         <div class="text-right"><p class="text-[11px] text-slate-400">누적 발행률</p><p class="num text-4xl font-extrabold text-brand-ink leading-none" id="kpiPct">0%</p><p class="text-xs text-slate-500 mt-1"><span id="kpiPeriodPct" class="font-semibold text-ink"></span> · <span id="kpiRemain"></span></p></div>
        </div>
        <div class="h-5 rounded-full bg-slate-100 overflow-hidden relative"><div id="kpiBar" class="h-5 bg-brand transition-all" style="width:0%"></div><div id="kpiPaceMark" class="absolute top-0 h-5 w-0.5 bg-ink/50" style="left:0%" title="현재 페이스 기준 목표선"></div></div>
        <div id="kpiPaceNote" class="text-xs text-slate-500 mt-2"></div>
@@ -1887,7 +1887,8 @@
     function calSave(){ try{ localStorage.setItem('aqaraCalEvents',JSON.stringify(calEvents)); }catch(e){} }
     function calToday(){ const t=todayStr(); calYM={y:+t.slice(0,4),m:+t.slice(5,7)-1}; renderCalendar(); }
     function calShift(d){ if(!calYM){ calToday(); return; } let m=calYM.m+d,y=calYM.y; if(m<0){m=11;y--;} if(m>11){m=0;y++;} calYM={y,m}; renderCalendar(); }
-    function calPrCounts(){ const c={}; (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{ const d=r['게재일']; if(d) c[d]=(c[d]||0)+1; }); return c; }
+    // 자사보도(우리 배포) 기사만 날짜별로 — 헤드라인 포함. (오가닉 제외해야 캘린더가 의미 있음)
+    function calPrArticles(){ const c={}; (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{ if(r._origin!=='자사보도') return; const d=r['게재일']; if(d){ (c[d]=c[d]||[]).push({title:r['기사명']||'',link:(typeof linkOf==='function'?linkOf(r):'')}); } }); return c; }
     function calAddEvent(){ const s=document.getElementById('calEvDate').value, eRaw=document.getElementById('calEvEnd').value, ty=document.getElementById('calEvType').value, tx=(document.getElementById('calEvText').value||'').trim(); if(!s||!tx) return; const e=eRaw||s, en=(e<s?s:e); calEvents.push({start:s,end:en,type:ty,text:tx}); calSave(); document.getElementById('calEvText').value=''; document.getElementById('calEvEnd').value=''; renderCalendar(); }
     function calDelEvent(i){ calEvents.splice(i,1); calSave(); renderCalendar(); }
     function renderCalendar(){
@@ -1895,24 +1896,28 @@
       const y=calYM.y,m=calYM.m, pad=n=>(''+n).padStart(2,'0'), ymd=d=>y+'-'+pad(m+1)+'-'+pad(d);
       document.getElementById('calLabel').textContent=y+'년 '+(m+1)+'월';
       document.getElementById('calMonthTitle').textContent=(m+1)+'월 일정';
-      const startDow=new Date(y,m,1).getDay(), daysIn=new Date(y,m+1,0).getDate(), prc=calPrCounts(), today=todayStr();
+      const startDow=new Date(y,m,1).getDay(), daysIn=new Date(y,m+1,0).getDate(), pra=calPrArticles(), today=todayStr();
       let cells='';
       for(let i=0;i<startDow;i++) cells+='<div class="min-h-[74px] rounded-lg bg-[#FAFAF9]"></div>';
-      for(let d=1;d<=daysIn;d++){ const key=ymd(d), pr=prc[key]||0, isT=key===today, dow=(startDow+d-1)%7;
+      for(let d=1;d<=daysIn;d++){ const key=ymd(d), arts=pra[key]||[], pr=arts.length, isT=key===today, dow=(startDow+d-1)%7;
         const dayEvs=calEvents.filter(ev=>ev.start<=key&&ev.end>=key);
-        let chips=''; if(pr) chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR['보도자료']}">보도 ${pr}건</div>`;
+        let chips=''; if(pr){ const f=arts[0]; chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white" style="background:${CAL_COLOR['보도자료']}" title="${esc(arts.map(a=>a.title).join(' / '))}">${esc(f.title)}${pr>1?' +'+(pr-1):''}</div>`; }
         dayEvs.forEach(ev=>{ const isStart=key===ev.start, multi=ev.start!==ev.end;
           chips+=`<div class="text-[10px] px-1 py-0.5 rounded mb-0.5 truncate text-white ${isStart?'':'opacity-55'}" style="background:${CAL_COLOR[ev.type]||'#5E85A6'}" title="${esc(ev.text)} (${ev.start}~${ev.end})">${isStart?esc(ev.text):(multi?'···':esc(ev.text))}</div>`; });
         cells+=`<div class="min-h-[74px] rounded-lg border ${isT?'border-brand bg-brand/5':'border-[#EDEBE6]'} p-1 overflow-hidden"><div class="text-[11px] font-semibold ${dow===0?'text-ared':dow===6?'text-ablue':'text-slate-500'} mb-0.5">${d}</div>${chips}</div>`;
       }
       document.getElementById('calGrid').innerHTML=cells;
-      // 이 달 일정 리스트 (PR 자동 + 이 달과 겹치는 기간 이벤트)
+      // 이 달 일정 리스트: 자사보도 헤드라인 + (보도 N건) + 기간 이벤트
       const mp=y+'-'+pad(m+1);
       const items=[];
-      for(let d=1;d<=daysIn;d++){ const key=ymd(d); if(prc[key]) items.push({sort:key,label:key.slice(5),type:'보도자료',text:prc[key]+'건 발행',auto:true}); }
+      for(let d=1;d<=daysIn;d++){ const key=ymd(d), arts=pra[key]||[]; arts.forEach((a,ai)=>items.push({sort:key+'a'+ai,label:ai===0?key.slice(5):'',type:'보도자료',text:a.title,link:a.link,count:arts.length,first:ai===0,auto:true})); }
       calEvents.forEach((ev,i)=>{ if(ev.start.slice(0,7)<=mp&&ev.end.slice(0,7)>=mp){ const rng=ev.start===ev.end?ev.start.slice(5):(ev.start.slice(5)+'~'+ev.end.slice(5)); items.push({sort:ev.start,label:rng,type:ev.type,text:ev.text,idx:i}); } });
       items.sort((a,b)=>a.sort.localeCompare(b.sort));
-      document.getElementById('calEventList').innerHTML=items.length?items.map(it=>`<div class="flex items-center gap-2 text-sm border-b border-[#F2EFE9] pb-1.5"><span class="text-[11px] text-slate-400 w-20 shrink-0">${esc(it.label)}</span><span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:${CAL_COLOR[it.type]||'#5E85A6'}"></span><span class="flex-1 ${it.auto?'text-slate-500':'text-ink'}">${esc(it.text)} <span class="text-[10px] text-slate-400">${esc(it.type)}</span></span>${it.auto?'':`<button onclick="calDelEvent(${it.idx})" class="text-[11px] text-slate-300 hover:text-ared">✕</button>`}</div>`).join(''):'<p class="text-sm text-slate-400">이 달 일정이 없습니다.</p>';
+      document.getElementById('calEventList').innerHTML=items.length?items.map(it=>{
+        const cnt=(it.auto&&it.first)?` <span class="text-[11px] text-brand-ink font-semibold whitespace-nowrap">(보도 ${it.count}건)</span>`:'';
+        const body=it.link?`<a href="${esc(it.link)}" target="_blank" rel="noopener" class="hover:underline">${esc(it.text)} <span class="text-slate-300 text-xs">↗</span></a>`:`${esc(it.text)} <span class="text-[10px] text-slate-400">${esc(it.type)}</span>`;
+        return `<div class="flex items-baseline gap-2 text-sm border-b border-[#F2EFE9] pb-1.5"><span class="text-[11px] text-slate-400 w-14 shrink-0">${esc(it.label)}</span><span class="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5" style="background:${CAL_COLOR[it.type]||'#5E85A6'}"></span><span class="flex-1 ${it.auto?'text-slate-600':'text-ink'}">${body}${cnt}</span>${it.auto?'':`<button onclick="calDelEvent(${it.idx})" class="text-[11px] text-slate-300 hover:text-ared">✕</button>`}</div>`;
+      }).join(''):'<p class="text-sm text-slate-400">이 달 자사보도·일정이 없습니다.</p>';
     }
 
     // ===== 미디어리스트 =====
@@ -2004,8 +2009,10 @@
       const Y='2026';
       const monthsY=Array.from({length:12},(_,i)=>Y+'-'+String(i+1).padStart(2,'0'));
       const prM={}; (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{ if(r._origin==='자사보도'){ const m=r._ym||''; if(m.indexOf(Y)===0) prM[m]=(prM[m]||0)+1; } });
-      const blM={}; (typeof blogAll==='function'?blogAll():[]).forEach(p=>{ const m=(p.date||'').slice(0,7); if(m.indexOf(Y)===0) blM[m]=(blM[m]||0)+1; });
-      const inM={}; (typeof CONTENT_HIST!=='undefined'?CONTENT_HIST:[]).forEach(x=>{ if((x.month||'').indexOf(Y)===0) inM[x.month]=(inM[x.month]||0)+(x.instagram||0); });
+      // 블로그·인스타는 콘텐츠 히스토리(월별 실측)에서 동일 소스로 집계. 히스토리 없으면 blogAll 폴백.
+      const blM={}, inM={}, CH=(typeof CONTENT_HIST!=='undefined'?CONTENT_HIST:[]);
+      CH.forEach(x=>{ if((x.month||'').indexOf(Y)===0){ blM[x.month]=(x.blog||0); inM[x.month]=(x.instagram||0); } });
+      if(!Object.keys(blM).length){ (typeof blogAll==='function'?blogAll():[]).forEach(p=>{ const m=(p.date||'').slice(0,7); if(m.indexOf(Y)===0) blM[m]=(blM[m]||0)+1; }); }
       const pr=Object.values(prM).reduce((a,b)=>a+b,0), blog=Object.values(blM).reduce((a,b)=>a+b,0), ins=Object.values(inM).reduce((a,b)=>a+b,0);
       const hp=+kpiManual.homepage||0, wd=+kpiManual.webdoc||0, target=+kpiManual.target||600;
       const total=pr+blog+ins+hp+wd, pct=target?Math.round(total/target*100):0;
@@ -2019,9 +2026,11 @@
       document.getElementById('kpiRemain').textContent='잔여 '+Math.max(0,target-total).toLocaleString()+'건';
       const today=todayStr(); const y0=new Date(Y+'-01-01'); const clip=today>Y+'-12-31'?Y+'-12-31':(today<Y+'-01-01'?Y+'-01-01':today);
       const doy=Math.max(1,Math.floor((new Date(clip)-y0)/86400000)+1), yearDays=365;
+      const periodPct=Math.round(doy/yearDays*100);
       const expected=Math.round(target*doy/yearDays), projection=Math.round(total/doy*yearDays), ahead=total-expected;
-      document.getElementById('kpiPaceMark').style.left=Math.min(100,Math.round(doy/yearDays*100))+'%';
-      document.getElementById('kpiPaceNote').innerHTML=`경과 ${doy}일(${Math.round(doy/yearDays*100)}%) · 페이스 목표 ${expected.toLocaleString()}건 대비 <b class="${ahead>=0?'text-agreen':'text-ared'}">${ahead>=0?'+':''}${ahead.toLocaleString()}건</b> · 현재 속도면 연말 <b class="text-ink">${projection.toLocaleString()}건</b> 예상 (목표 ${projection>=target?'달성 ✓':'미달 ⚠'})`;
+      document.getElementById('kpiPeriodPct').textContent='기간 진행률 '+periodPct+'%';
+      document.getElementById('kpiPaceMark').style.left=Math.min(100,periodPct)+'%';
+      document.getElementById('kpiPaceNote').innerHTML=`기간 진행률 <b class="text-ink">${periodPct}%</b>(경과 ${doy}일) vs 누적 발행률 <b class="text-brand-ink">${pct}%</b> · 페이스 목표 ${expected.toLocaleString()}건 대비 <b class="${ahead>=0?'text-agreen':'text-ared'}">${ahead>=0?'+':''}${ahead.toLocaleString()}건</b> · 현재 속도면 연말 <b class="text-ink">${projection.toLocaleString()}건</b> 예상 (목표 ${projection>=target?'달성 ✓':'미달 ⚠'})`;
       const kc=(l,v,s,em)=>`<div class="card card-hover p-4"><p class="text-xs text-slate-500">${em} ${l}</p><p class="num text-2xl font-extrabold text-ink mt-1">${v.toLocaleString()}<span class="text-xs font-normal text-slate-400">건</span></p><p class="text-[11px] text-slate-400 mt-0.5">${s}</p></div>`;
       document.getElementById('kpiBreakdown').innerHTML=
         kc('PR (자사보도)',pr,'보도자료 발행','📰')+kc('블로그',blog,'관리 블로그','✍️')+kc('인스타그램',ins,'피드·릴스','📸')+kc('홈페이지',hp,'수기 입력','🖥️')+kc('웹문서',wd,'수기 입력','📄');
@@ -2386,10 +2395,11 @@
       </div>`).join(''):'<p class="text-sm text-slate-400 py-4 text-center">'+(all.length?'검색 결과가 없습니다':'블로그 글을 불러오는 중…')+'</p>';
     }
     let CONTENT_HIST=[];
+    function maybeRenderKpi(){ const v=document.getElementById('view-kpi'); if(v && !v.classList.contains('hidden') && typeof renderKpi==='function') renderKpi(); }
     function loadOwned(){
-      fetch('owned.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.youtube){ OWNED=Object.assign(OWNED,p); renderOwned(); maybeRenderReport(); } }).catch(()=>{});
+      fetch('owned.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.youtube){ OWNED=Object.assign(OWNED,p); renderOwned(); maybeRenderReport(); maybeRenderKpi(); } }).catch(()=>{});
       fetch('owned_history.json?_='+Date.now()).then(r=>r.json()).then(h=>{ if(Array.isArray(h)){ OWNED_HIST=h; renderOwned(); maybeRenderReport(); } }).catch(()=>{});
-      fetch('content_history.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d&&d.months){ CONTENT_HIST=d.months; renderOwned(); maybeRenderReport(); } }).catch(()=>{});
+      fetch('content_history.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d&&d.months){ CONTENT_HIST=d.months; renderOwned(); maybeRenderReport(); maybeRenderKpi(); } }).catch(()=>{});
     }
     function maybeRenderReport(){ const v=document.getElementById('view-report'); if(v && !v.classList.contains('hidden')) renderReport(); }
 
