@@ -796,8 +796,8 @@
    <div id="view-kpi" class="hidden">
      <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
        <div>
-         <h2 class="text-xl font-extrabold text-ink">2026 콘텐츠 발행 KPI</h2>
-         <p class="text-sm text-slate-500 mt-1">목표 <b id="kpiTargetLbl" class="text-ink">600</b>건 · <b>PR(자사보도) + 블로그 + 인스타그램 + 홈페이지 + 웹문서</b> 합산</p>
+         <h2 class="text-xl font-extrabold text-ink">2026 마케팅 성과 KPI <span class="text-sm font-semibold text-agray">(정여진 · 비재무성과 전략과제)</span></h2>
+         <p class="text-sm text-slate-500 mt-1">3대 전략과제(가중치 합 50%) · 자동 집계 가능한 지표는 실측, 나머지는 <b>실적 입력</b>. 아래 <b>전 채널 콘텐츠 600건</b>은 과제3 핵심지표입니다.</p>
        </div>
        <div class="flex gap-2">
          <button onclick="kpiEditManual()" class="text-sm border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg font-semibold">홈페이지·웹문서·목표 입력</button>
@@ -816,7 +816,11 @@
        <div class="card p-5 lg:col-span-2"><h3 class="accent font-extrabold text-ink mb-3">월별 발행 추이 <span class="text-xs font-normal text-slate-400">(2026 · 채널별 누적)</span></h3><div class="h-72"><canvas id="kpiMonthChart"></canvas></div></div>
        <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-3">채널 구성비 <span class="text-xs font-normal text-slate-400">(2026 누적)</span></h3><div class="h-72"><canvas id="kpiMixChart"></canvas></div></div>
      </div>
-     <p class="text-center text-xs text-slate-400 pt-4">PR·블로그·인스타는 자동 집계(자사보도 PR / 관리 블로그 / 콘텐츠 히스토리) · 홈페이지·웹문서는 수기 입력 · 이 브라우저에 저장</p>
+     <p class="text-center text-xs text-slate-400 py-4">PR·블로그·인스타는 자동 집계(자사보도 PR / 관리 블로그 / 콘텐츠 히스토리) · 홈페이지·웹문서는 수기 입력</p>
+
+     <h3 class="text-lg font-extrabold text-ink mt-2 mb-1">전략과제 스코어카드</h3>
+     <p class="text-xs text-slate-400 mb-3">각 과제의 KPI 달성 개수로 등급(S·A·B·C·D) 산정 · <b class="text-agreen">파란 자물쇠 없는 지표</b>는 자동 집계, 나머지는 '입력' 클릭해 실적 기재</p>
+     <div id="kpiTasks" class="space-y-5"></div>
    </div>
 
    <!-- ONLY MKT (팀 전용) -->
@@ -1954,6 +1958,47 @@
       try{ localStorage.setItem('aqaraKpi',JSON.stringify(kpiManual)); }catch(e){}
       renderKpi();
     }
+    // 비재무성과 3대 전략과제(정여진 KPI)
+    const KPI_TASKS=[
+      {no:1,w:18,title:'스마트홈 인테리어 파트너 및 매출 확대',
+       groups:[
+        {label:'현장 적용·파트너 성공사례 콘텐츠',targets:[{t:6,u:'건',key:'t1_case'}]},
+        {label:'스마트홈 인테리어 디지털 광고 통합 인게이지먼트',targets:[{t:500000,u:'',key:'t1_eng'}]},
+        {label:'인테리어 매거진 기사 발행',targets:[{t:2,u:'건',key:'t1_mag'}]}],
+       memo:'전시회 연2회+ · 스마트홈인테리어 소비자광고 · 쇼룸 전환퍼널 강화 · 시공 콘텐츠 강화'},
+      {no:2,w:18,title:'MX사업부 연간 100억 중 25억 직접 기여',
+       groups:[
+        {label:'퍼포먼스 캠페인 집행',targets:[{t:2,u:'회',key:'t2_camp'}]},
+        {label:'캠페인 연계 소비자 참여 콘텐츠',targets:[{t:100,u:'건',key:'t2_ugc'}]},
+        {label:'브랜드·캠페인 해시태그 콘텐츠 누적 조회수',targets:[{t:1000000,u:'',key:'t2_views'}]}],
+       memo:'연간 캠페인 2회+ 집행(광고/바이럴/KOL/프로모션 360°)'},
+      {no:3,w:14,title:'스마트홈 인테리어 전문회사 BI 강화',sub:'일관된 브랜드 메시지·커뮤니케이션 정체성 일원화',
+       groups:[
+        {label:'자사배포 기사 150+ / 기획기사 30+',targets:[{t:150,u:'건',auto:'selfPR',al:'자사배포 기사'},{t:30,u:'건',auto:'planPR',al:'기획기사'}]},
+        {label:'채널별 메시지 최적화 콘텐츠',targets:[{t:50,u:'건',key:'t3_msg',al:'채널 최적화 콘텐츠'}]},
+        {label:'뉴스레터 신규 구독자(격월 6회)',targets:[{t:1000,u:'명',key:'t3_news',al:'뉴스레터 구독자'}]},
+        {label:'SEO/AIO 디지털 점유율',targets:[{t:600,u:'건',auto:'content600',al:'전채널 콘텐츠'},{t:2,u:'건',key:'t3_seo',al:'네이버 1p 고정노출'},{t:8400,u:'건',key:'t3_blogview',al:'블로그5개 통합조회'}]}],
+       memo:'PR·블로그·SNS·퍼포먼스 공통 핵심키워드 3종 동기화 · 뉴스배포 150+ · 온드채널 멀티활용'}];
+    let KPI_AUTO={selfPR:0,planPR:0,content600:0};
+    function kpiVal(t){ if(t.auto) return KPI_AUTO[t.auto]||0; return +(kpiManual[t.key]||0); }
+    function kpiSet(key,label){ const v=prompt(label+' 현재 실적을 입력하세요.', kpiManual[key]!=null?kpiManual[key]:''); if(v===null) return; kpiManual[key]=Math.max(0,+v||0); try{ localStorage.setItem('aqaraKpi',JSON.stringify(kpiManual)); }catch(e){} renderKpi(); }
+    function renderKpiScorecard(){
+      const box=document.getElementById('kpiTasks'); if(!box) return;
+      box.innerHTML=KPI_TASKS.map(tk=>{
+        const n=tk.groups.length; let achieved=0, exceed=false;
+        const grpHtml=tk.groups.map(g=>{
+          const done=g.targets.every(t=>kpiVal(t)>=t.t); if(done) achieved++;
+          g.targets.forEach(t=>{ if(kpiVal(t)>t.t) exceed=true; });
+          const tHtml=g.targets.map(t=>{ const cur=kpiVal(t), p=Math.min(100,Math.round(cur/t.t*100)), ok=cur>=t.t;
+            const ctl=t.auto?'<span class="text-[10px] text-agreen font-semibold whitespace-nowrap">자동</span>':`<button onclick="kpiSet('${t.key}','${esc(t.al||g.label)}')" class="text-[10px] text-ink hover:underline whitespace-nowrap">입력</button>`;
+            return `<div class="flex items-center gap-2 text-[12px] py-0.5"><span class="w-36 shrink-0 text-slate-500 truncate">${esc(t.al||g.label)}</span><div class="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden"><div class="h-1.5 ${ok?'bg-agreen':'bg-brand'}" style="width:${p}%"></div></div><span class="num w-24 text-right ${ok?'text-agreen font-semibold':'text-slate-600'}">${cur.toLocaleString()}/${t.t.toLocaleString()}${esc(t.u)}</span>${ctl}</div>`;
+          }).join('');
+          return `<div class="py-1.5 border-b border-[#F2EFE9] last:border-0"><div class="text-[13px] font-semibold text-ink mb-0.5">${done?'✅':'⬜'} ${esc(g.label)}</div>${tHtml}</div>`;
+        }).join('');
+        const gr=(achieved===n&&exceed)?{g:'S',c:'bg-brand text-white'}:(achieved===n?{g:'A',c:'bg-agreen/15 text-agreen'}:(achieved===n-1?{g:'B',c:'bg-brand/20 text-brand-ink'}:(achieved===n-2?{g:'C',c:'bg-aorange/15 text-aorange'}:{g:'D',c:'bg-ared/10 text-ared'})));
+        return `<div class="card p-5"><div class="flex items-start justify-between flex-wrap gap-2 mb-3"><div><h4 class="font-extrabold text-ink">[과제 ${tk.no}] ${esc(tk.title)}</h4>${tk.sub?`<p class="text-[12px] text-slate-400 mt-0.5">${esc(tk.sub)}</p>`:''}</div><div class="flex items-center gap-2"><span class="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-500">가중치 ${tk.w}%</span><span class="text-sm font-extrabold px-2.5 py-1 rounded-lg ${gr.c}">${gr.g} (${achieved}/${n})</span></div></div>${grpHtml}<p class="text-[11px] text-slate-400 mt-2 pt-2 border-t border-[#F0F0EE]"><b>실행계획</b> · ${esc(tk.memo)}</p></div>`;
+      }).join('');
+    }
     function renderKpi(){
       if(!document.getElementById('kpiTotal')) return;
       const Y='2026';
@@ -1964,6 +2009,8 @@
       const pr=Object.values(prM).reduce((a,b)=>a+b,0), blog=Object.values(blM).reduce((a,b)=>a+b,0), ins=Object.values(inM).reduce((a,b)=>a+b,0);
       const hp=+kpiManual.homepage||0, wd=+kpiManual.webdoc||0, target=+kpiManual.target||600;
       const total=pr+blog+ins+hp+wd, pct=target?Math.round(total/target*100):0;
+      const planPR=(typeof ALL!=='undefined'?ALL:[]).filter(r=>r._origin==='자사보도'&&(r._ym||'').indexOf(Y)===0&&/기획|특집|인터뷰|기고/.test((r._type||'')+' '+(r['구분']||'')+' '+(r['종류']||''))).length;
+      KPI_AUTO={selfPR:pr,planPR:planPR,content600:total};
       document.getElementById('kpiTotal').textContent=total.toLocaleString();
       document.getElementById('kpiTarget').textContent=target.toLocaleString();
       document.getElementById('kpiTargetLbl').textContent=target.toLocaleString();
@@ -1985,6 +2032,7 @@
         {label:'인스타',data:use.map(m=>inM[m]||0),backgroundColor:'#C13584',stack:'k'}
       ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}}}});
       draw('kpiMixChart',{type:'doughnut',data:{labels:['PR','블로그','인스타','홈페이지','웹문서'],datasets:[{data:[pr,blog,ins,hp,wd],backgroundColor:['#FBC400','#5E7350','#C13584','#5E85A6','#BF5332'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}});
+      renderKpiScorecard();
     }
 
     // ===== 미디어 라이브러리 (구글드라이브 연동 · 카테고리별) =====
