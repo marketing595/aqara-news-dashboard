@@ -867,6 +867,22 @@
     function esc(s){ return (s||'').toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
     let jt=null;
+    // 네이버 추가 수집 기사(organic_news.json) 병합 — 시트에 없는 건 오가닉으로 추가
+    let ORG_ADDED=0;
+    function mergeOrganic(){
+      fetch('organic_news.json?_='+Date.now()).then(r=>r.json()).then(d=>{
+        if(!d||!d.items||!d.items.length) return;
+        const norm=s=>(s||'').toString().replace(/[^0-9A-Za-z가-힣]/g,'');
+        const seen=new Set(ALL.map(r=>norm(r['기사명'])));
+        let added=0;
+        d.items.forEach((it,i)=>{ const k=norm(it['기사명']); if(!k||seen.has(k)) return; seen.add(k);
+          const r={ '기사명':it['기사명'], '매체':it['매체']||'', '게재일':it['게재일']||'', '_href':it['link']||'', '_added':true, '_key':'org§'+k };
+          applyRowEdit(r); deriveRow(r); r._origin='오가닉'; ALL.push(r); added++; });
+        ORG_ADDED=added;
+        if(added){ const u=document.getElementById('updated'); if(u) u.textContent='업데이트: '+(d.generatedAt||'')+' · 시트 '+(ALL.length-added)+'건 + 네이버 오가닉 '+added+'건 = 총 '+ALL.length+'건';
+          try{ initRange(); populateFilters(); applyAndRender(); }catch(e){ console.error(e); } }
+      }).catch(()=>{});
+    }
     function loadData(silent){
       if(!silent) show('loading');
       window.__onAqaraData=function(p){ clearTimeout(jt);
@@ -875,6 +891,7 @@
         document.getElementById('updated').textContent='업데이트: '+(p.generatedAt||'')+' · 총 '+ALL.length+'건';
         try{ initRange(); populateFilters(); applyAndRender(); }catch(e){ console.error('render 오류:', e); }
         show('content');   // 렌더 중 일부 오류가 나도 화면은 표시
+        mergeOrganic();    // 네이버 추가 수집분(오가닉) 병합
       };
       const s=document.createElement('script'); s.src=API_URL+'?callback=__onAqaraData&_='+Date.now();
       s.onerror=function(){ if(!silent) showErr('네트워크 오류. 웹앱 배포/GET 접근을 확인하세요.'); };

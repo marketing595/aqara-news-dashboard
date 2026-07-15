@@ -1,0 +1,40 @@
+name: Organic News
+
+# 주 2회(월·목 한국 07시경) + 수동 + 크롤러 변경 시 → organic_news.json
+on:
+  schedule:
+    - cron: '0 22 * * 0,3'
+  workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/organic.yml'
+      - 'crawler/organic_fetch.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: organic-news
+  cancel-in-progress: false
+
+jobs:
+  organic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Fetch organic news
+        env:
+          NAVER_ID: ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+        run: python crawler/organic_fetch.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add organic_news.json
+          git diff --staged --quiet || git commit -m "organic_news.json 자동 갱신"
+          git push
