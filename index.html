@@ -188,8 +188,10 @@
             <input id="search" type="text" placeholder="제목·매체·전체 검색 (띄어쓰기 무시)" oninput="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 w-56 focus:outline-none focus:ring-2 focus:ring-brand" />
             <select id="fTopic" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 종류</option></select>
             <select id="fType" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 성격</option></select>
+            <select id="fOrigin" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 배포</option><option>자사보도</option><option>오가닉</option></select>
           </div>
         </div>
+        <p class="text-[11px] text-slate-400 mb-3">※ <b>배포 구분</b>: 기사 제목이 '아카라라이프'로 시작하면 <b class="text-brand-ink">자사보도</b>(우리가 배포), 그 외는 <b>오가닉</b>(제3자 작성)으로 자동 분류. 편집으로 제목 수정 시 자동 반영됩니다.</p>
         <div class="overflow-auto max-h-[600px] rounded-lg border border-slate-100">
           <table class="w-full text-sm">
             <thead class="bg-slate-50 text-slate-500 sticky top-0 z-10"><tr class="text-left">
@@ -197,7 +199,9 @@
               <th class="px-3 py-3 font-semibold whitespace-nowrap sortable" onclick="sortBy('매체')">매체 ⇅</th>
               <th class="px-3 py-3 font-semibold whitespace-nowrap">종류</th>
               <th class="px-3 py-3 font-semibold whitespace-nowrap">성격</th>
+              <th class="px-3 py-3 font-semibold whitespace-nowrap">배포</th>
               <th class="px-3 py-3 font-semibold">기사명</th>
+              <th class="px-3 py-3 font-semibold whitespace-nowrap text-right">편집</th>
             </tr></thead>
             <tbody id="tableBody" class="divide-y divide-slate-100"></tbody>
           </table>
@@ -260,22 +264,22 @@
          <button onclick="copyMail()" class="text-sm bg-ink hover:brightness-125 transition text-white px-4 py-2 rounded-lg font-semibold">메일 텍스트 복사</button>
        </div>
      </div>
-     <h2 class="text-lg font-extrabold text-slate-900 mb-2" id="brDate"></h2>
-     <div id="brHeadline" class="card p-4 mb-5 bg-brand/10 border-brand/30"></div>
-     <div id="briefingBody" class="space-y-5"></div>
-     <div class="card p-4 mt-5 bg-[#FAFAF9] border-[#E6E6E3]">
-       <p class="text-[12px] font-bold text-ink mb-2">수집·선별 기준</p>
-       <ul class="text-[12px] leading-relaxed text-slate-500 space-y-1">
-         <li>· <b class="text-slate-700">출처·범위</b>: 네이버 뉴스 검색 API · 최근 2일 발행 기사 · 관련도 필터 후 중복 제거</li>
-         <li>· <b class="text-slate-700">수집 키워드(카테고리별)</b></li>
+     <h2 class="text-lg font-extrabold text-slate-900 mb-1" id="brDate"></h2>
+     <details class="mb-4 text-[11px] text-slate-500">
+       <summary class="cursor-pointer text-slate-400 hover:text-ink font-semibold list-none">수집·선별 기준 보기 ▾</summary>
+       <ul class="leading-relaxed space-y-0.5 mt-1.5 pl-1">
+         <li>· <b class="text-slate-600">출처·범위</b>: 네이버 뉴스 검색 API · 최근 2일 발행 기사 · 관련도 필터 후 중복 제거</li>
+         <li>· <b class="text-slate-600">수집 키워드(카테고리별)</b></li>
          <li class="pl-3">└ <b>자사·기술</b>: 아카라라이프, 매터·스레드·지그비 스마트홈, AIoT</li>
          <li class="pl-3">└ <b>경쟁사</b>: 스마트싱스, LG 씽큐, 구글홈, 애플 홈킷, 샤오미</li>
          <li class="pl-3">└ <b>인테리어·시공</b>: 스마트홈 인테리어, 스마트 도어락, 신축 아파트 IoT, 스마트홈 시공</li>
          <li class="pl-3">└ <b>거시 트렌드</b>: AI 인테리어, 스마트홈 에너지, 홈 IoT 트렌드</li>
-         <li>· <b class="text-slate-700">선별·분류</b>: AI(Gemini)가 관련도 높은 8~12건을 선별해 [자사/경쟁사/시장/업계]로 분류하고 시사점 작성</li>
-         <li>· <b class="text-slate-700">갱신</b>: 매일 오전 8시 자동 (수동 수정 시 해당 내용 우선 유지)</li>
+         <li>· <b class="text-slate-600">선별·분류</b>: AI(Gemini)가 관련도 높은 8~12건을 선별해 [자사/경쟁사/시장/업계]로 분류하고 시사점 작성</li>
+         <li>· <b class="text-slate-600">갱신</b>: 매일 오전 8시 자동 (수동 수정 시 해당 내용 우선 유지)</li>
        </ul>
-     </div>
+     </details>
+     <div id="brHeadline" class="card p-4 mb-5 bg-brand/10 border-brand/30"></div>
+     <div id="briefingBody" class="space-y-5"></div>
      <p class="text-center text-xs text-slate-400 pt-4">요약·인사이트는 AI 분석 결과이며 참고용입니다 · 제목 클릭 시 원문으로 이동</p>
    </div>
 
@@ -867,8 +871,7 @@
       if(!silent) show('loading');
       window.__onAqaraData=function(p){ clearTimeout(jt);
         if(!p||!p.ok){ if(!silent) showErr('응답 오류: '+(p&&p.error||'?')); return; }
-        ALL=(p.rows||[]).filter(r=>r['기사명']).map(r=>{ r._ym=(r['게재일']||'').toString().substring(0,7);
-          r._type=fType(r); r._topic=fTopicVal(r); r._media=fMedia(r); r._chan=fChannel(r); return r; });
+        ALL=(p.rows||[]).filter(r=>r['기사명']).map((r,i)=>{ r._key=(r['기사명']||'')+'§'+(r['게재일']||'')+'§'+i; applyRowEdit(r); deriveRow(r); return r; });
         document.getElementById('updated').textContent='업데이트: '+(p.generatedAt||'')+' · 총 '+ALL.length+'건';
         try{ initRange(); populateFilters(); applyAndRender(); }catch(e){ console.error('render 오류:', e); }
         show('content');   // 렌더 중 일부 오류가 나도 화면은 표시
@@ -1035,22 +1038,54 @@
     function sortBy(k){ if(sortKey===k)sortDir*=-1; else{sortKey=k;sortDir=(k==='게재일')?-1:1;} renderTable(); }
     function chTag(c){ const col=c==='원문'?'bg-slate-100 text-slate-500':'bg-agreen/15 text-agreen'; return '<span class="px-1.5 py-0.5 rounded text-[10px] '+col+' ml-1">'+esc(c)+'</span>'; }
     function tag(txt,color){ return '<span class="px-2 py-0.5 rounded text-[11px] '+color+'">'+esc(txt)+'</span>'; }
+    // 기사 행 수정(시트는 읽기전용 → 브라우저에 오버라이드 저장)
+    let rowEdits=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraRowEdits')||'{}');}catch(e){return {};} })();
+    let editingKey=null, TABLE_ROWS=[];
+    function applyRowEdit(r){ const e=rowEdits[r._key]; if(e){ ['게재일','매체','종류','구분','기사명'].forEach(k=>{ if(e[k]!=null&&e[k]!=='') r[k]=e[k]; }); } }
+    function deriveRow(r){ r._ym=(r['게재일']||'').toString().substring(0,7); r._type=fType(r); r._topic=fTopicVal(r); r._media=fMedia(r); r._chan=fChannel(r); r._origin=/^\s*\[?\s*아카라라이프/.test((r['기사명']||'').toString())?'자사보도':'오가닉'; }
+    function startRowEdit(i){ const r=TABLE_ROWS[i]; if(r){ editingKey=r._key; renderTable(); } }
+    function cancelRowEdit(){ editingKey=null; renderTable(); }
+    function saveRowEdit(){ if(!editingKey) return;
+      const g=id=>{const el=document.getElementById(id);return el?el.value:'';};
+      rowEdits[editingKey]={ '게재일':g('ed-date'), '매체':g('ed-media').trim(), '종류':g('ed-topic'), '구분':g('ed-type').trim(), '기사명':g('ed-title').trim() };
+      try{ localStorage.setItem('aqaraRowEdits',JSON.stringify(rowEdits)); }catch(x){}
+      const row=ALL.find(r=>r._key===editingKey); if(row){ applyRowEdit(row); deriveRow(row); }
+      editingKey=null; applyAndRender();
+    }
+    function resetRowEdit(){ if(!editingKey) return; delete rowEdits[editingKey]; try{ localStorage.setItem('aqaraRowEdits',JSON.stringify(rowEdits)); }catch(x){} editingKey=null; loadData(true); }
     function renderTable(){ const q=(document.getElementById('search').value||'').toLowerCase().trim();
-      const ft=document.getElementById('fTopic').value, fy=document.getElementById('fType').value;
+      const ft=document.getElementById('fTopic').value, fy=document.getElementById('fType').value, fo=(document.getElementById('fOrigin')||{}).value||'';
       const nq=q.replace(/\s+/g,'');
-      let rows=FILTERED.filter(r=>{ if(ft&&r._topic!==ft)return false; if(fy&&r._type!==fy)return false;
+      let rows=FILTERED.filter(r=>{ if(ft&&r._topic!==ft)return false; if(fy&&r._type!==fy)return false; if(fo&&r._origin!==fo)return false;
         if(nq){ const h=Object.keys(r).filter(k=>k[0]!=='_'&&!/링크|url|href|채널/i.test(k)).map(k=>r[k]).join(' ').toLowerCase().replace(/\s+/g,''); if(h.indexOf(nq)<0)return false; } return true; });
       rows.sort((a,b)=>{let x=(a[sortKey]||'').toString(),y=(b[sortKey]||'').toString(); return x<y?-sortDir:x>y?sortDir:0;});
       document.getElementById('listCount').textContent='('+rows.length+'건)';
       const tb=document.getElementById('tableBody');
-      if(!rows.length){ tb.innerHTML='<tr><td colspan="5" class="text-center py-10 text-slate-400">결과가 없습니다.</td></tr>'; return; }
-      tb.innerHTML=rows.slice(0,700).map(r=>`<tr class="hover:bg-slate-50 transition">
+      if(!rows.length){ tb.innerHTML='<tr><td colspan="7" class="text-center py-10 text-slate-400">결과가 없습니다.</td></tr>'; return; }
+      TABLE_ROWS=rows.slice(0,700);
+      tb.innerHTML=TABLE_ROWS.map((r,i)=>{
+        if(r._key===editingKey){
+          const topOpts=TOPIC_ORDER.map(t=>`<option ${r._topic===t?'selected':''}>${esc(t)}</option>`).join('');
+          return `<tr class="bg-brand/5">
+            <td class="px-2 py-1.5"><input id="ed-date" type="date" value="${esc((r['게재일']||'').toString().slice(0,10))}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-32"/></td>
+            <td class="px-2 py-1.5"><input id="ed-media" value="${esc(r['매체']||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-24"/></td>
+            <td class="px-2 py-1.5"><select id="ed-topic" class="border border-slate-300 rounded px-1 py-0.5 text-xs">${topOpts}</select></td>
+            <td class="px-2 py-1.5"><input id="ed-type" value="${esc(r['구분']||r._type||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-20"/></td>
+            <td class="px-2 py-1.5 text-[10px] text-slate-400 whitespace-nowrap">${esc(r._origin||'')}<br>(제목따라 자동)</td>
+            <td class="px-2 py-1.5"><input id="ed-title" value="${esc(r['기사명']||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-full min-w-[220px]"/></td>
+            <td class="px-2 py-1.5 whitespace-nowrap text-right"><button onclick="saveRowEdit()" class="text-[11px] bg-ink text-white px-2 py-1 rounded font-semibold">저장</button> <button onclick="cancelRowEdit()" class="text-[11px] text-slate-400 hover:text-ink">취소</button>${rowEdits[r._key]?' <button onclick="resetRowEdit()" class="text-[11px] text-ared hover:underline">원복</button>':''}</td></tr>`;
+        }
+        const edited=rowEdits[r._key]?' <span class="text-[9px] text-brand-ink align-middle">•수정됨</span>':'';
+        return `<tr class="hover:bg-slate-50 transition">
         <td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(r['게재일'])}</td>
         <td class="px-3 py-2.5 whitespace-nowrap font-medium text-slate-700">${esc(r['매체'])}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._topic,'bg-ablue/25 text-[#365b7a]')}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._type,r._type==='단신'?'bg-slate-100 text-slate-600':'bg-aorange/15 text-aorange')}</td>
-        <td class="px-3 py-2.5"><a href="${esc(linkOf(r))}" target="_blank" rel="noopener noreferrer" class="text-slate-800 hover:text-ink hover:underline">${esc(r['기사명'])} <span class="text-slate-300">↗</span></a>${chTag(r._chan)}</td></tr>`).join('')
-        +(rows.length>700?`<tr><td colspan="5" class="text-center py-3 text-xs text-slate-400">상위 700건 표시</td></tr>`:'');
+        <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._origin,r._origin==='자사보도'?'bg-brand/20 text-brand-ink':'bg-slate-100 text-slate-500')}</td>
+        <td class="px-3 py-2.5"><a href="${esc(linkOf(r))}" target="_blank" rel="noopener noreferrer" class="text-slate-800 hover:text-ink hover:underline">${esc(r['기사명'])} <span class="text-slate-300">↗</span></a>${chTag(r._chan)}${edited}</td>
+        <td class="px-3 py-2.5 whitespace-nowrap text-right"><button onclick="startRowEdit(${i})" class="text-[13px] text-slate-300 hover:text-ink" title="편집">✏️</button></td></tr>`;
+      }).join('')
+        +(rows.length>700?`<tr><td colspan="7" class="text-center py-3 text-xs text-slate-400">상위 700건 표시</td></tr>`:'');
     }
 
     /* ================= 데일리 브리핑 (7/1~7/8) ================= */
