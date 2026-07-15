@@ -1,4 +1,71 @@
 {
- "note": "미디어 라이브러리 자산 목록. web/media/ 에 파일을 넣고 아래 items 에 항목을 추가하면 대시보드에 표시됩니다. 필드: title, category, url(다운로드 경로), thumb(선택·미리보기), size(선택).",
- "items": []
+ "note": "미디어 라이브러리. 자산은 구글드라이브에 두고 카테고리별로 연결합니다(대용량·최신성·내부파일 제외에 유리). 카테고리 추가/파일 추가는 아래 categories 편집. pinned:true 는 상단 고정.",
+ "categories": [
+  {
+   "name": "아카라라이프 CI",
+   "pinned": true,
+   "desc": "로고·모티프·서체·컬러 가이드·이메일 서명·PPT 양식",
+   "folderId": "1aslP5jrclus5HucZwNj3BX2rxIRIfre1",
+   "items": [
+    {"title": "01 로고 & 모티프", "kind": "folder", "id": "10A2_UOTmAqpaSE1JpmC066Zo6tXfT0kk"},
+    {"title": "02 가이드", "kind": "folder", "id": "1PsQ7w8Da4BiwNm9_p_FXy3eGcMFOKcMR"},
+    {"title": "03 서체", "kind": "folder", "id": "1MKZT-YhpjOkes1i9XKvXkodR0hOGmOyP"},
+    {"title": "04 이메일 서명", "kind": "folder", "id": "1QS1HZD-JKChJukIcQsGxrrsi5GilgD6t"},
+    {"title": "05 PPT 양식", "kind": "folder", "id": "1p_ygV3a465oNlLbHXKvBrFckNCa9eMqn"}
+   ]
+  },
+  {
+   "name": "전사 제작물",
+   "pinned": true,
+   "desc": "브로셔·전제품 리플렛·스펙시트·소개 영상",
+   "folderId": "1E2TtwSfeYSOfsXe2JhroakJj10k3GarL",
+   "items": [
+    {"title": "아카라라이프 인테리어 브로셔", "kind": "pdf", "id": "1I7-RnKD8Xkf5Wh4zOER9d2l2a--pnoQL", "size": "57.7MB"},
+    {"title": "전제품 리플렛 (260605)", "kind": "pdf", "id": "1Os2goW4Mv6WZhH52VK_9niZSziZj3fQ9", "size": "11.2MB"},
+    {"title": "스펙시트·디지털 가이드 (260213)", "kind": "pdf", "id": "1x-odtMiwuAip2fRa0cRDnZlJ7pVY9Wk_", "size": "33.7MB"},
+    {"title": "아카라라이프 Full Brochure (241017)", "kind": "pdf", "id": "1uv8ZwBcpPk2M-b1B2NiHnYAdBTOW-_5E", "size": "16.3MB"},
+    {"title": "대표 제품 리플렛 (240809)", "kind": "pdf", "id": "1bzFB4iwOgeiHeXj4PMBjAGt3lEOpfk3u", "size": "9.6MB"},
+    {"title": "시나리오 리플렛 (240809)", "kind": "pdf", "id": "1dRK0IojK7_l8lQPMsG86BVVuEu8MlWO3", "size": "8.2MB"},
+    {"title": "아카라라이프 소개 영상 (MWS)", "kind": "video", "id": "17nhGV2b81J5tIBJ_esVfFnHWueTSvdos", "size": "229MB"},
+    {"title": "외부 리플렛", "kind": "folder", "id": "1bmhbSimVd2ZbGBf4A-lTmPVyXZRb0tu6"}
+   ]
+  },
+  {
+   "name": "홈페이지 연결 소개자료",
+   "desc": "aqaralife.kr 연결 소개 자료",
+   "folderId": "1CshLuVi7IeXD_qhI1Ra-zZT44hGzEuE4",
+   "items": []
+  },
+  {
+   "name": "회사소개서 및 제안서",
+   "desc": "회사소개서·제안서(대외 배포용)",
+   "folderId": "1oZUfG6X2GfvvmhzBr3hgBjpAabcHPA42",
+   "items": []
+  },
+  {
+   "name": "제품 이미지",
+   "desc": "제품 누끼·상세 이미지",
+   "folderId": "1MkL7sRiNf4rt_BrskqNpK0rlQFaL42ze",
+   "items": []
+  },
+  {
+   "name": "제품 사진·영상",
+   "desc": "제품 촬영 사진·영상",
+   "folderId": "1fBueFJrvyAqgIMHYyIYEQl7L_c2Fqbp_",
+   "items": []
+  },
+  {
+   "name": "제품별 MKT 자료",
+   "desc": "제품별 이미지·영상·리플렛 (L100·K100·N100·A100·D200·배스히터 T1 등 / 내부 트래킹·원본 제외)",
+   "folderId": "16pHNBwKb_lfO6WhX8OdFXWfWxX-4ewxE",
+   "items": [
+    {"title": "스마트 도어락 L100", "kind": "folder", "id": "14V2Nv0n-tPCv0-UEvkp1xyQA_HVvlqrG"},
+    {"title": "스마트 도어락 K100", "kind": "folder", "id": "1PArCqf9O9HDFbuEoK1EFotW2SQVqI6Rt"},
+    {"title": "N100", "kind": "folder", "id": "1ipVaEgX3PwMAu7wobWt7PD6RunCk3bKT"},
+    {"title": "A100", "kind": "folder", "id": "1XwYasIlB8MZ6I8z_3lGGX_1IlQdRvp_L"},
+    {"title": "D200", "kind": "folder", "id": "1W1Hp_nocJdZgg4p8BJALahN87fTjV07N"},
+    {"title": "배스 히터 T1", "kind": "folder", "id": "1ycOHuxyw7QGvhZejJ4VbbXPFRT7r9ChY"}
+   ]
+  }
+ ]
 }

@@ -785,10 +785,10 @@
          <input id="libSearch" oninput="renderLibrary()" placeholder="검색" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 w-36" />
        </div>
      </div>
-     <div id="libGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+     <div id="libGrid"></div>
      <div class="card p-4 mt-5 bg-[#FAFAF9] border-[#E6E6E3]">
-       <p class="text-[12px] font-bold text-ink mb-1">자산 업로드(수동) 방법</p>
-       <p class="text-[12px] text-slate-500 leading-relaxed">정적 사이트라 화면에서 직접 업로드는 안 됩니다. 파일을 <code class="bg-white px-1 rounded border">web/media/</code> 폴더에 넣고 <code class="bg-white px-1 rounded border">media.json</code>에 항목을 추가하면 여기에 자동 노출됩니다. (담당자가 파일 전달 주시면 제가 등록해 드립니다.)</p>
+       <p class="text-[12px] font-bold text-ink mb-1">이용 안내</p>
+       <p class="text-[12px] text-slate-500 leading-relaxed">자산은 구글드라이브에 보관되며 카테고리별로 연결됩니다(대용량 영상·최신본 관리에 유리). 카드를 누르면 드라이브에서 열려 <b>다운로드</b>할 수 있습니다. <b class="text-ink">외부 배포용으로 열려면</b> 해당 드라이브 폴더가 '링크가 있는 모든 사용자'로 공유돼 있어야 합니다. 카테고리·폴더 추가는 담당자가 링크 주시면 등록해 드립니다.</p>
      </div>
    </div>
 
@@ -1829,16 +1829,36 @@
       if(tb) tb.innerHTML=mlContacts.length?mlContacts.map((c,i)=>`<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2"><span class="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc(c.beat||'')}</span></td><td class="px-3 py-2 text-ink">${esc(c.media||'')}</td><td class="px-3 py-2 text-slate-600">${esc(c.name||'')}</td><td class="px-3 py-2 text-slate-500">${c.email?`<a href="mailto:${esc(c.email)}" class="lnk">${esc(c.email)}</a>`:'-'}</td><td class="px-3 py-2 text-right"><button onclick="mlDel(${i})" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join(''):'<tr><td colspan="5" class="px-3 py-6 text-center text-slate-400">아직 등록된 연락처가 없습니다. 위에서 추가하세요.</td></tr>';
     }
 
-    // ===== 미디어 라이브러리 =====
-    let LIBRARY={items:[]};
-    function loadLibrary(){ fetch('media.json?_='+Date.now()).then(r=>r.json()).then(d=>{ LIBRARY=d&&d.items?d:{items:[]}; renderLibrary(); }).catch(()=>{ LIBRARY={items:[]}; renderLibrary(); }); }
+    // ===== 미디어 라이브러리 (구글드라이브 연동 · 카테고리별) =====
+    let LIBRARY={categories:[]};
+    function loadLibrary(){ fetch('media.json?_='+Date.now()).then(r=>r.json()).then(d=>{ LIBRARY=d&&d.categories?d:{categories:[]}; renderLibrary(); }).catch(()=>{ LIBRARY={categories:[]}; renderLibrary(); }); }
+    function libIcon(k){ return k==='pdf'?'📄':k==='video'?'🎬':k==='image'?'🖼️':k==='ppt'?'📊':k==='folder'?'📁':'📎'; }
+    function libItemUrl(it){ return it.kind==='folder'?('https://drive.google.com/drive/folders/'+it.id):('https://drive.google.com/file/d/'+it.id+'/view'); }
+    function libCard(it){
+      const url=libItemUrl(it), isFolder=it.kind==='folder';
+      const thumb = it.kind==='image' ? `<img src="https://drive.google.com/thumbnail?id=${esc(it.id)}&sz=w400" loading="lazy" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='<span class=\\'text-4xl\\'>🖼️</span>'"/>` : `<span class="text-4xl">${libIcon(it.kind)}</span>`;
+      return `<div class="card overflow-hidden flex flex-col"><div class="aspect-[4/3] bg-[#F4F1EA] flex items-center justify-center overflow-hidden">${thumb}</div><div class="p-3 flex flex-col flex-1"><div class="text-[13px] font-medium text-ink line-clamp-2 mb-0.5" title="${esc(it.title)}">${esc(it.title)}</div><div class="text-[11px] text-slate-400 mb-2">${isFolder?'폴더':(it.kind||'파일').toUpperCase()}${it.size?(' · '+esc(it.size)):''}</div><a href="${url}" target="_blank" rel="noopener" class="mt-auto block text-center text-[13px] bg-ink text-white rounded-lg py-1.5 font-semibold hover:brightness-125">${isFolder?'열기 ↗':'다운로드 ↗'}</a></div></div>`;
+    }
     function renderLibrary(){
-      const items=LIBRARY.items||[]; const cats=[...new Set(items.map(x=>x.category).filter(Boolean))];
-      const csel=document.getElementById('libCat'); if(csel&&csel.options.length!==cats.length+1){ const cur=csel.value; csel.innerHTML='<option value="">전체 카테고리</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join(''); if(cats.indexOf(cur)>-1)csel.value=cur; }
+      const cats=(LIBRARY.categories||[]);
+      const csel=document.getElementById('libCat');
+      if(csel && csel.options.length!==cats.length+1){ const cur=csel.value; csel.innerHTML='<option value="">전체 카테고리</option>'+cats.map(c=>`<option>${esc(c.name)}</option>`).join(''); if(cats.some(c=>c.name===cur)) csel.value=cur; }
       const cf=csel?csel.value:'', q=(document.getElementById('libSearch').value||'').toLowerCase().trim();
-      const rows=items.filter(x=>(!cf||x.category===cf)&&(!q||((x.title||'')+(x.category||'')).toLowerCase().indexOf(q)>-1));
+      const ordered=cats.filter(c=>!cf||c.name===cf).slice().sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0));
       const grid=document.getElementById('libGrid');
-      grid.innerHTML=rows.length?rows.map(x=>`<div class="card overflow-hidden group"><div class="aspect-square bg-[#F4F1EA] overflow-hidden flex items-center justify-center">${x.thumb||x.url?`<img src="${esc(x.thumb||x.url)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.parentNode.innerHTML='<span class=\\'text-4xl\\'>🖼️</span>'"/>`:'<span class="text-4xl">🖼️</span>'}</div><div class="p-3"><div class="text-sm font-medium text-ink truncate">${esc(x.title||'무제')}</div><div class="text-[11px] text-slate-400 mb-2">${esc(x.category||'')}${x.size?(' · '+esc(x.size)):''}</div><a href="${esc(x.url||'#')}" download class="block text-center text-[13px] bg-ink text-white rounded-lg py-1.5 font-semibold hover:brightness-125">다운로드 ↓</a></div></div>`).join(''):'<div class="col-span-full text-center py-16 text-slate-400"><div class="text-4xl mb-2">📁</div>등록된 자산이 없습니다. <code class="bg-slate-100 px-1 rounded">media.json</code>에 항목을 추가하면 여기에 표시됩니다.</div>';
+      grid.innerHTML=ordered.length?ordered.map(c=>{
+        const items=(c.items||[]).filter(it=>!q||(it.title||'').toLowerCase().indexOf(q)>-1);
+        const folderUrl='https://drive.google.com/drive/folders/'+esc(c.folderId);
+        const cards = items.length ? items.map(libCard).join('')
+          : `<a href="${folderUrl}" target="_blank" rel="noopener" class="card p-4 flex flex-col items-center justify-center text-center aspect-[4/3] hover:border-brand transition"><div class="text-4xl mb-2">📁</div><div class="text-sm font-medium text-ink">폴더 전체 열기</div><div class="text-[11px] text-slate-400">드라이브에서 다운로드 ↗</div></a>`;
+        return `<section class="mb-7 ${c.pinned?'rounded-xl border border-[#F0E7C0] bg-[#FEFCF3] p-4':''}">
+          <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+            <h3 class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)} <span class="text-xs font-normal text-slate-400 ml-1">${esc(c.desc||'')}</span></h3>
+            <a href="${folderUrl}" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium whitespace-nowrap">드라이브 폴더 열기 ↗</a>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${cards}</div>
+        </section>`;
+      }).join(''):'<div class="text-center py-16 text-slate-400"><div class="text-4xl mb-2">📁</div>등록된 카테고리가 없습니다.</div>';
     }
 
     // ===== ONLY MKT (팀 전용) =====
