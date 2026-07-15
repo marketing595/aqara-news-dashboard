@@ -84,6 +84,7 @@
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
       <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페 모니터링</button>
       <button id="grpBtn-campaign" onclick="switchGroup('campaign')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">캠페인</button>
+      <button id="grpBtn-kpi" onclick="switchGroup('kpi')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">2026 KPI</button>
       <button id="grpBtn-report" onclick="switchGroup('report')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">종합 리포트</button>
       <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
       <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
@@ -189,6 +190,7 @@
             <select id="fTopic" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 종류</option></select>
             <select id="fType" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 성격</option></select>
             <select id="fOrigin" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 배포</option><option>자사보도</option><option>오가닉</option></select>
+            <button onclick="restoreDeleted()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg text-slate-500" title="숨긴(삭제한) 기사 모두 복원">삭제 복원</button>
           </div>
         </div>
         <p class="text-[11px] text-slate-400 mb-3">※ <b>배포 구분</b>: 기본은 <b class="text-brand-ink">자사보도</b>(우리가 배포), 제목이 <b>타사 발신사</b> 이름으로 시작하면 <b>오가닉</b>(제3자 발행)으로 분류. <button onclick="addOriginOther()" class="text-ink font-semibold hover:underline">오가닉 발신사 추가 +</button></p>
@@ -519,7 +521,7 @@
        <ul class="text-[12px] leading-relaxed text-slate-500 space-y-1">
          <li>· <b class="text-agreen">긍정</b>: 해결완료·해결됨·만족·추천·좋아요·편하다·굿·최고·감사·잘 됨·덕분 등 <b>긍정 표현이 있고 부정 표현이 없을 때</b></li>
          <li>· <b class="text-ared">부정</b>: 오류·에러·안됨·안돼·실패·딜레이·먹통·불편·불만·최악·문제·하지마·ㅠㅠ 등 <b>부정 표현이 있고 긍정 표현이 없을 때</b></li>
-         <li>· <b class="text-agray">중립</b>: 위 둘에 해당하지 않거나(단순 문의·정보), 긍정·부정이 함께 있는 경우</li>
+         <li>· <b class="text-agray">중립</b>: 위 둘에 해당하지 않거나(단순 문의·정보), 긍정·부정이 함께 있는 경우, <b>가입/신규 인사글(안녕하세요·가입인사 등)</b></li>
          <li>· ※ 규칙 기반 자동 분류라 문맥상 오분류가 있을 수 있어 <b>추세 참고용</b>입니다. 정밀 분석이 필요하면 개별 글을 확인하세요.</li>
        </ul>
      </div>
@@ -790,6 +792,33 @@
      </div>
    </div>
 
+   <!-- 2026 KPI -->
+   <div id="view-kpi" class="hidden">
+     <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
+       <div>
+         <h2 class="text-xl font-extrabold text-ink">2026 콘텐츠 발행 KPI</h2>
+         <p class="text-sm text-slate-500 mt-1">목표 <b id="kpiTargetLbl" class="text-ink">600</b>건 · <b>PR(자사보도) + 블로그 + 인스타그램 + 홈페이지 + 웹문서</b> 합산</p>
+       </div>
+       <div class="flex gap-2">
+         <button onclick="kpiEditManual()" class="text-sm border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg font-semibold">홈페이지·웹문서·목표 입력</button>
+       </div>
+     </div>
+     <div class="card p-6 mb-5">
+       <div class="flex items-end justify-between flex-wrap gap-3 mb-3">
+         <div><p class="text-sm text-slate-500">2026 누적 발행</p><p class="num text-4xl font-extrabold text-ink mt-1"><span id="kpiTotal">0</span> <span class="text-lg font-bold text-slate-400">/ <span id="kpiTarget">600</span>건</span></p></div>
+         <div class="text-right"><p class="num text-4xl font-extrabold text-brand-ink" id="kpiPct">0%</p><p class="text-xs text-slate-400 mt-0.5" id="kpiRemain"></p></div>
+       </div>
+       <div class="h-5 rounded-full bg-slate-100 overflow-hidden relative"><div id="kpiBar" class="h-5 bg-brand transition-all" style="width:0%"></div><div id="kpiPaceMark" class="absolute top-0 h-5 w-0.5 bg-ink/50" style="left:0%" title="현재 페이스 기준 목표선"></div></div>
+       <div id="kpiPaceNote" class="text-xs text-slate-500 mt-2"></div>
+     </div>
+     <section id="kpiBreakdown" class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-5"></section>
+     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+       <div class="card p-5 lg:col-span-2"><h3 class="accent font-extrabold text-ink mb-3">월별 발행 추이 <span class="text-xs font-normal text-slate-400">(2026 · 채널별 누적)</span></h3><div class="h-72"><canvas id="kpiMonthChart"></canvas></div></div>
+       <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-3">채널 구성비 <span class="text-xs font-normal text-slate-400">(2026 누적)</span></h3><div class="h-72"><canvas id="kpiMixChart"></canvas></div></div>
+     </div>
+     <p class="text-center text-xs text-slate-400 pt-4">PR·블로그·인스타는 자동 집계(자사보도 PR / 관리 블로그 / 콘텐츠 히스토리) · 홈페이지·웹문서는 수기 입력 · 이 브라우저에 저장</p>
+   </div>
+
    <!-- ONLY MKT (팀 전용) -->
    <div id="view-mkt" class="hidden">
      <div id="mktGate" class="max-w-md mx-auto card p-8 mt-8 text-center">
@@ -850,7 +879,9 @@
       if(/신제품|제품|출시|론칭|공개|선봬|선보/.test(s)) return '신제품';
       return '기타'; }
     function fTopicVal(r){ let t=(r['종류']||'').toString().trim(); if(!t) t=topicByTitle(r['기사명']); return canonTopic(t); }
-    function fMedia(r){ return (r['매체']||'').toString().replace(/\(.*?\)/g,'').trim() || '(미상)'; }
+    // 매체명 표기 통일(별칭). 필요 시 여기에 추가.
+    const MEDIA_ALIAS=[[/businesskorea|비즈니스코리아|비지니스코리아/i,'비지니스코리아']];
+    function fMedia(r){ let m=(r['매체']||'').toString().replace(/\(.*?\)/g,'').trim(); if(!m) return '(미상)'; for(const a of MEDIA_ALIAS){ if(a[0].test(m)) return a[1]; } return m; }
     function urlOf(r){ const h=(r['_href']||'').toString().trim(); if(/^https?:\/\//.test(h)) return h;
       for(const k of ['링크','채널','url','URL']){ const v=(r[k]||'').toString().trim(); if(/^https?:\/\//.test(v)) return v; } return ''; }
     function fChannel(r){ const u=urlOf(r);
@@ -887,7 +918,7 @@
       if(!silent) show('loading');
       window.__onAqaraData=function(p){ clearTimeout(jt);
         if(!p||!p.ok){ if(!silent) showErr('응답 오류: '+(p&&p.error||'?')); return; }
-        ALL=(p.rows||[]).filter(r=>r['기사명']).map((r,i)=>{ r._key=(r['기사명']||'')+'§'+(r['게재일']||'')+'§'+i; applyRowEdit(r); deriveRow(r); return r; });
+        ALL=(p.rows||[]).filter(r=>r['기사명']).map((r,i)=>{ r._key=(r['기사명']||'')+'§'+(r['게재일']||'')+'§'+i; applyRowEdit(r); deriveRow(r); return r; }).filter(r=>!deletedRows.has(r._key));
         document.getElementById('updated').textContent='업데이트: '+(p.generatedAt||'')+' · 총 '+ALL.length+'건';
         try{ initRange(); populateFilters(); applyAndRender(); }catch(e){ console.error('render 오류:', e); }
         show('content');   // 렌더 중 일부 오류가 나도 화면은 표시
@@ -1057,7 +1088,12 @@
     function tag(txt,color){ return '<span class="px-2 py-0.5 rounded text-[11px] '+color+'">'+esc(txt)+'</span>'; }
     // 기사 행 수정(시트는 읽기전용 → 브라우저에 오버라이드 저장)
     let rowEdits=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraRowEdits')||'{}');}catch(e){return {};} })();
+    let deletedRows=(()=>{ try{return new Set(JSON.parse(localStorage.getItem('aqaraDeletedRows')||'[]'));}catch(e){return new Set();} })();
+    function saveDeleted(){ try{ localStorage.setItem('aqaraDeletedRows',JSON.stringify([...deletedRows])); }catch(e){} }
     let editingKey=null, TABLE_ROWS=[];
+    function deleteRow(){ if(!editingKey) return; if(!confirm('이 기사를 목록에서 삭제할까요? (이 브라우저에서만 숨김, 되돌리려면 아래 \'삭제 복원\')')) return;
+      deletedRows.add(editingKey); saveDeleted(); ALL=ALL.filter(r=>r._key!==editingKey); editingKey=null; applyAndRender(); }
+    function restoreDeleted(){ if(!deletedRows.size){ alert('삭제한 기사가 없습니다.'); return; } if(!confirm(deletedRows.size+'건의 삭제를 모두 복원할까요?')) return; deletedRows=new Set(); saveDeleted(); loadData(true); }
     function applyRowEdit(r){ const e=rowEdits[r._key]; if(e){ ['게재일','매체','종류','구분','기사명'].forEach(k=>{ if(e[k]!=null&&e[k]!=='') r[k]=e[k]; }); } }
     // 오가닉 판별: 기사 제목이 '타사 발신사' 이름으로 시작하면 오가닉(제3자 발행), 그 외는 자사보도(우리가 배포)
     const ORIGIN_OTHERS_DEFAULT=['에스알테크','마이워크스페이스','홈즈컴퍼니','버킷스튜디오'];
@@ -1099,12 +1135,12 @@
             <td class="px-2 py-1.5"><input id="ed-type" value="${esc(r['구분']||r._type||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-20"/></td>
             <td class="px-2 py-1.5 text-[10px] text-slate-400 whitespace-nowrap">${esc(r._origin||'')}<br>(제목따라 자동)</td>
             <td class="px-2 py-1.5"><input id="ed-title" value="${esc(r['기사명']||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-full min-w-[220px]"/></td>
-            <td class="px-2 py-1.5 whitespace-nowrap text-right"><button onclick="saveRowEdit()" class="text-[11px] bg-ink text-white px-2 py-1 rounded font-semibold">저장</button> <button onclick="cancelRowEdit()" class="text-[11px] text-slate-400 hover:text-ink">취소</button>${rowEdits[r._key]?' <button onclick="resetRowEdit()" class="text-[11px] text-ared hover:underline">원복</button>':''}</td></tr>`;
+            <td class="px-2 py-1.5 whitespace-nowrap text-right"><button onclick="saveRowEdit()" class="text-[11px] bg-ink text-white px-2 py-1 rounded font-semibold">저장</button> <button onclick="cancelRowEdit()" class="text-[11px] text-slate-400 hover:text-ink">취소</button> <button onclick="deleteRow()" class="text-[11px] text-ared hover:underline">삭제</button>${rowEdits[r._key]?' <button onclick="resetRowEdit()" class="text-[11px] text-slate-400 hover:underline">원복</button>':''}</td></tr>`;
         }
         const edited=rowEdits[r._key]?' <span class="text-[9px] text-brand-ink align-middle">•수정됨</span>':'';
         return `<tr class="hover:bg-slate-50 transition">
         <td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(r['게재일'])}</td>
-        <td class="px-3 py-2.5 whitespace-nowrap font-medium text-slate-700">${esc(r['매체'])}</td>
+        <td class="px-3 py-2.5 whitespace-nowrap font-medium text-slate-700">${esc(r._media||r['매체'])}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._topic,'bg-ablue/25 text-[#365b7a]')}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._type,r._type==='단신'?'bg-slate-100 text-slate-600':'bg-aorange/15 text-aorange')}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._origin,r._origin==='자사보도'?'bg-brand/20 text-brand-ink':'bg-slate-100 text-slate-500')}</td>
@@ -1697,6 +1733,9 @@
     // ===== 카페 모니터링 (실시간: 웹앱 ?type=cafe 로드, 실패 시 스냅샷 폴백) =====
     let CAFE_POSTS=[{"no":13155,"title":"아카라허브 , 스마트싱스 허브 중 어느게 필요할까요?","desc":"스마트싱스 허브만 있으면 K100과 G4가 스마트싱스에서 연동되서 기능을 다 쓸수 있나요?","link":"http://cafe.naver.com/aqara/13155"},{"no":13153,"title":"아카라 도어락 원격제어 할려면 무조건 아카라 허브 있어야 되나요?","desc":"애플티비나 삼성스마트싱스 이걸로도 제어 가능한가요?","link":"http://cafe.naver.com/aqara/13153"},{"no":13149,"title":"도어락 k100 vs L100","desc":"이사가면서 도어락 설치를 하려고 합니다. 도어락 초보라 어떤게 더 좋을지 모르겠더라구요.","link":"http://cafe.naver.com/aqara/13149"},{"no":13148,"title":"L100 도어락 스마트싱스 기기추가 오류발생.","desc":"스마트싱스에 직접 연결하려는데 오류코드 34-302 뜨면서 기기추가가 안돼요","link":"http://cafe.naver.com/aqara/13148"},{"no":13147,"title":"매터 방식이면 아카라 제품 아니라도 M3허브에 다 등록가능한가요?","desc":"매터 방식이면 아카라 제품 아니라도 M3허브에 다 등록가능한가요?","link":"http://cafe.naver.com/aqara/13147"},{"no":13146,"title":"아카라 서울 인근에 오프라인 매장이나 팝업스토어가 있을까요?","desc":"스마트플러그 2개를 급하게 구해야하는데 주말 오프라인 매장 정보를 부탁드립니다","link":"http://cafe.naver.com/aqara/13146"},{"no":13145,"title":"아카라 B1모터 떨어짐","desc":"이사하면서 이사업체에서 해체 조립을 하였는데 모터를 레일에 체결하고 작동시키니","link":"http://cafe.naver.com/aqara/13145"},{"no":13144,"title":"삼성에어컨 연동문제","desc":"해결 되셨나요? m200으로 교체 받았는데 이것도 마찬가지네요.","link":"http://cafe.naver.com/aqara/13144"},{"no":13136,"title":"g2h pro 홈킷에 등록하려면 아카라앱에서 삭제후 악세사리추가해야하나요?","desc":"카메라 총4대인데 테스트로 2대는 오류없이 등록했습니다","link":"http://cafe.naver.com/aqara/13136"},{"no":13133,"title":"안녕하세요 연동 문의드립니다","desc":"알리에서 직구한 M2+전동커튼 중국서버 사용중, 새로 도어락 E1+k100 한국서버로 사용중인데 한곳에","link":"http://cafe.naver.com/aqara/13133"},{"no":13131,"title":"애플tv 홈킷 g2h pro 연결질문입니다.","desc":"아카라앱에서 g2h pro 딜레이가 심해서 애플홈킷 이용하려고 애플tv를 구매했습니다","link":"http://cafe.naver.com/aqara/13131"},{"no":13129,"title":"도어락 설치중에 매우 불쾌한 경험을 했습니다.","desc":"네이버 판매자 홈앤락을 통해 도어락을 구매했는데 이번 경험으로 인해","link":"http://cafe.naver.com/aqara/13129"},{"no":13128,"title":"k100 펌웨어 업데이트 실패…","desc":"펌웨어 업데이트가 떠서 진행했는데 자꾸 에러가 발생하네요","link":"http://cafe.naver.com/aqara/13128"},{"no":13126,"title":"안녕하세요 가입인사 드립니다","desc":"스마트홈 구축하면서 H2 스위치, L100 도어락, G4 초인종, G100 카메라 사용","link":"http://cafe.naver.com/aqara/13126"},{"no":13124,"title":"gh2pro 아카라앱에서 연동하려니 딜레이가 너무심합니다.","desc":"집안 전체를 아카라제품으로 사용중, 아카라앱으로 gh2pro 실행시키면 너무 늦거나 연결이","link":"http://cafe.naver.com/aqara/13124"},{"no":13118,"title":"아카라 구축 궁금증","desc":"도어락k100, m3허브, 전동커튼, w100 하려는데 가전은 삼성ai제품 구매예정입니다","link":"http://cafe.naver.com/aqara/13118"},{"no":13115,"title":"K100 스마트싱스 직결시 구글홈 연동 되나요?","desc":"본가에는 아카라 허브가 없어서 스마트싱스 스테이션에 직결했는데","link":"http://cafe.naver.com/aqara/13115"},{"no":13111,"title":"모션센서 T1, 열림감지센서 T1 연결 안됨","desc":"이사하고 공유기 바꾸면서 다시 연결하려는데 모션센서가 연결이 안돼요","link":"http://cafe.naver.com/aqara/13111"},{"no":13106,"title":"RF447 월패드 4핀이 너무 뚱뚱합니다 ㅠㅠ","desc":"아카라 고객센터, 채팅상담 다 해봤는데 둘 다 모르겠다고 설치기사 부르라고만 하네요","link":"http://cafe.naver.com/aqara/13106"},{"no":13096,"title":"W100 온도 습도계 질문이요","desc":"W100 냉방 자동화 하려는데 에어컨이 자동으로 작동되나요? 다른 설정 방법 있나요?","link":"http://cafe.naver.com/aqara/13096"},{"no":13092,"title":"공식몰ㅣ(~30% OFF) 도어락 프로모션 + 슈퍼적립 (05.27~06.30)","desc":"아카라라이프입니다. 공식몰에서 도어락 프로모션을 진행합니다","link":"http://cafe.naver.com/aqara/13092"},{"no":13087,"title":"G3 보안문제","desc":"잘 쓰다가 최근에 여러번 아래 같은 메세지가 뜨더라구요 현재 아카라","link":"http://cafe.naver.com/aqara/13087"},{"no":13077,"title":"FP300 펌웨어 업데이트","desc":"펌웨어 업데이트 후 화장실 자동화 시 오류가 현저히 줄었습니다","link":"http://cafe.naver.com/aqara/13077"},{"no":13076,"title":"아카라 커튼 구성 문의 (실제 사용 경험 공유 요청)","desc":"거실 내 아카라 모터를 포함하여 구매하고자 합니다","link":"http://cafe.naver.com/aqara/13076"},{"no":13071,"title":"아카라 전동커튼 전원선","desc":"플러그가 없고 전선만 있던데 기본구성품에 플러그도 같이 있나요?","link":"http://cafe.naver.com/aqara/13071"},{"no":13064,"title":"공식몰ㅣ아카라 스마트 허브 M200 출시기념 할인 및 특별 혜택 (05.14~05.22)","desc":"추가 10% 할인: 재실센서 FP300, 조명스위치, 온습도센서, 카메라E1","link":"http://cafe.naver.com/aqara/13064"},{"no":13031,"title":"아카라를 통한 층간소음 해결 방법 아시는분?","desc":"센서를 건드리면 알람이 울려요 뛰는 진동을 감지 못하네요","link":"http://cafe.naver.com/aqara/13031"},{"no":13025,"title":"FP300 나온지 얼마 안됐는데...","desc":"FP310 버전이 나왔네요? 무슨 차이가 있나","link":"http://cafe.naver.com/aqara/13025"},{"no":12991,"title":"(해결완료) 아카라 이런 식으로 운영하지마세요.","desc":"고객 대응 관련 불만 글 (해결완료)","link":"http://cafe.naver.com/aqara/12991"},{"no":12969,"title":"FP300로 욕실센서 고민 종결","desc":"FP300으로 욕실센서 세팅하니 만족스럽습니다","link":"http://cafe.naver.com/aqara/12969"}];
     function cafeSentiment(t,d){ const s=(t+' '+d).toLowerCase();
+      // 가입/신규 인사글은 긍정 아님 → 중립 처리
+      const greet=/가입인사|가입\s*했|신규\s*가입|처음\s*(인사|가입|왔|글)|잘\s*부탁|반갑습니다|안녕하세요|눈팅|정보\s*얻으러|눈팅만/;
+      if(greet.test(s)) return {k:'중립',c:'bg-agray/15 text-agray'};
       const neg=/불쾌|하지마|운영하지|불편|떨어짐|보안문제|실패|딜레이|너무\s*심|먹통|안와|현저히|뚱뚱|오류|에러|안됨|안돼|안되|연결\s*안|추가가\s*안|모르겠|ㅠ|ㅜ|불만|화나|짜증|최악|문제/;
       const pos=/해결완료|해결됐|종결|장점|줄었|좋아|좋네|좋습|만족|추천|편하|편해|굿|훌륭|최고|감사|잘\s*되|덕분/;
       if(pos.test(s)&&!neg.test(s)) return {k:'긍정',c:'bg-agreen/15 text-agreen'};
@@ -1723,6 +1762,8 @@
         words.forEach(w=>{ w=w.trim(); if(w.length<2) return; if(CAFE_STOP.has(w.toLowerCase())) return; if(/^\d+$/.test(w)) return; freq[w]=(freq[w]||0)+1; }); });
       return Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,topN||8);
     }
+    const CAFE_URL={'아카라 스마트홈':'https://cafe.naver.com/aqara','모두의 스마트홈':'https://cafe.naver.com/stsmarthome','셀프인테리어 마이홈':'https://cafe.naver.com/overseer','셀프인테리어My홈':'https://cafe.naver.com/overseer','아사모(애플)':'https://cafe.naver.com/appleiphone','아사모':'https://cafe.naver.com/appleiphone','박목수':'https://cafe.naver.com/pcarpenter','박목수의 열린견적서':'https://cafe.naver.com/pcarpenter','클리앙':'https://www.clien.net/service/search?q=%EC%95%84%EC%B9%B4%EB%9D%BC'};
+    function cafeUrlOf(name){ if(CAFE_URL[name]) return CAFE_URL[name]; for(const k in CAFE_URL){ if(name&&name.indexOf(k)>-1) return CAFE_URL[k]; } return ''; }
     function renderCafeByCafe(posts){
       const box=document.getElementById('cafeByCafe'); if(!box) return;
       const cafes=[...new Set(posts.map(p=>p.cafe))]; const total=posts.length||1;
@@ -1733,8 +1774,10 @@
         const ms=Object.keys(mc).sort().slice(-6); const spark=ms.length>=2?kwSpark(ms.map(m=>mc[m])):'';
         const pct=Math.round(n/total*100);
         const seg=(v,col)=>v?`<div class="${col}" style="width:${v/n*100}%"></div>`:'';
+        const cu=cafeUrlOf(c);
+        const nameHtml=cu?`<a href="${esc(cu)}" target="_blank" rel="noopener" class="font-semibold text-ink text-sm truncate pr-2 hover:underline">${esc(c)} <span class="text-slate-300 text-xs">↗</span></a>`:`<span class="font-semibold text-ink text-sm truncate pr-2">${esc(c)}</span>`;
         return `<div class="rounded-lg border border-[#E6E6E3] p-3">
-          <div class="flex items-center justify-between mb-0.5"><span class="font-semibold text-ink text-sm truncate pr-2">${esc(c)}</span><span class="num text-lg font-extrabold text-ink whitespace-nowrap">${n}<span class="text-xs font-normal text-slate-400">건</span></span></div>
+          <div class="flex items-center justify-between mb-0.5">${nameHtml}<span class="num text-lg font-extrabold text-ink whitespace-nowrap">${n}<span class="text-xs font-normal text-slate-400">건</span></span></div>
           <div class="text-[11px] text-slate-400 mb-2">전체의 ${pct}%</div>
           <div class="flex rounded-full overflow-hidden h-1.5 mb-1 bg-slate-100">${seg(s.긍정,'bg-agreen')}${seg(s.중립,'bg-slate-300')}${seg(s.부정,'bg-ared')}</div>
           <div class="flex justify-between text-[10px] mb-2"><span class="text-agreen">긍정 ${s.긍정}</span><span class="text-slate-400">중립 ${s.중립}</span><span class="text-ared">부정 ${s.부정}</span></div>
@@ -1800,18 +1843,18 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], report:['report','competitor'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', competitor:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], campaign:['campaign'], kpi:['kpi'], report:['report','competitor'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'campaign', kpi:'kpi', competitor:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
-      ['analytics','briefing','campaign','owned','cafe','report','competitor','calendar','medialist','library','mkt'].forEach(v=>{
+      ['analytics','briefing','campaign','owned','cafe','report','competitor','calendar','medialist','library','mkt','kpi'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','campaign','report','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
+      ['pr','owned','cafe','campaign','kpi','report','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
@@ -1824,6 +1867,7 @@
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
       if(t==='competitor'){ loadCompetitor(); }
       if(t==='library'){ loadLibrary(); }
+      if(t==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(t==='mkt'){ mktEnter(); }
     }
     function todayStr(){ return (typeof reportToday==='function')?reportToday():new Date().toISOString().slice(0,10); }
@@ -1898,6 +1942,49 @@
       if(al) al.innerHTML=rows.length?rows.map(c=>`<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2"><span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc((c.beats||[c.beat]).join('·'))}</span></td><td class="px-3 py-2 text-ink whitespace-nowrap">${esc(c.press||'-')}</td><td class="px-3 py-2 text-slate-700 whitespace-nowrap">${esc(c.reporter||'-')}</td><td class="px-3 py-2 text-slate-500 whitespace-nowrap">${c.email?`<a href="mailto:${esc(c.email)}" class="lnk">${esc(c.email)}</a>`:'<span class="text-slate-300">-</span>'}</td><td class="px-3 py-2"><a href="${esc(c.link||'#')}" target="_blank" rel="noopener" class="lnk line-clamp-1 max-w-[220px]">${esc(c.title||'기사')} ↗</a></td><td class="px-3 py-2 whitespace-nowrap"><button onclick="mlAddFrom(${c._i})" class="text-[11px] text-brand-ink font-semibold hover:underline">담기 →</button></td></tr>`).join(''):'<tr><td colspan="6" class="px-3 py-6 text-center text-slate-400">수집된 연락처가 없습니다. (분야 키워드 자동 수집이 갱신되면 표시)</td></tr>';
       const tb=document.getElementById('mlBody');
       if(tb) tb.innerHTML=mlContacts.length?mlContacts.map((c,i)=>`<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2"><span class="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc(c.beat||'')}</span></td><td class="px-3 py-2 text-ink">${esc(c.media||'')}</td><td class="px-3 py-2 text-slate-600">${esc(c.name||'')}</td><td class="px-3 py-2 text-slate-500">${c.email?`<a href="mailto:${esc(c.email)}" class="lnk">${esc(c.email)}</a>`:'-'}</td><td class="px-3 py-2 text-right"><button onclick="mlDel(${i})" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join(''):'<tr><td colspan="5" class="px-3 py-6 text-center text-slate-400">아직 등록된 연락처가 없습니다. 위에서 추가하세요.</td></tr>';
+    }
+
+    // ===== 2026 콘텐츠 발행 KPI =====
+    let kpiManual=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraKpi')||'{}');}catch(e){return {};} })();
+    function kpiEditManual(){
+      const hp=prompt('2026 홈페이지 발행 콘텐츠 수', kpiManual.homepage!=null?kpiManual.homepage:''); if(hp===null) return;
+      const wd=prompt('2026 웹문서 발행 수', kpiManual.webdoc!=null?kpiManual.webdoc:''); if(wd===null) return;
+      const tg=prompt('연간 목표 건수 (기본 600)', kpiManual.target!=null?kpiManual.target:600); if(tg===null) return;
+      kpiManual.homepage=Math.max(0,+hp||0); kpiManual.webdoc=Math.max(0,+wd||0); kpiManual.target=Math.max(1,+tg||600);
+      try{ localStorage.setItem('aqaraKpi',JSON.stringify(kpiManual)); }catch(e){}
+      renderKpi();
+    }
+    function renderKpi(){
+      if(!document.getElementById('kpiTotal')) return;
+      const Y='2026';
+      const monthsY=Array.from({length:12},(_,i)=>Y+'-'+String(i+1).padStart(2,'0'));
+      const prM={}; (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{ if(r._origin==='자사보도'){ const m=r._ym||''; if(m.indexOf(Y)===0) prM[m]=(prM[m]||0)+1; } });
+      const blM={}; (typeof blogAll==='function'?blogAll():[]).forEach(p=>{ const m=(p.date||'').slice(0,7); if(m.indexOf(Y)===0) blM[m]=(blM[m]||0)+1; });
+      const inM={}; (typeof CONTENT_HIST!=='undefined'?CONTENT_HIST:[]).forEach(x=>{ if((x.month||'').indexOf(Y)===0) inM[x.month]=(inM[x.month]||0)+(x.instagram||0); });
+      const pr=Object.values(prM).reduce((a,b)=>a+b,0), blog=Object.values(blM).reduce((a,b)=>a+b,0), ins=Object.values(inM).reduce((a,b)=>a+b,0);
+      const hp=+kpiManual.homepage||0, wd=+kpiManual.webdoc||0, target=+kpiManual.target||600;
+      const total=pr+blog+ins+hp+wd, pct=target?Math.round(total/target*100):0;
+      document.getElementById('kpiTotal').textContent=total.toLocaleString();
+      document.getElementById('kpiTarget').textContent=target.toLocaleString();
+      document.getElementById('kpiTargetLbl').textContent=target.toLocaleString();
+      document.getElementById('kpiPct').textContent=pct+'%';
+      document.getElementById('kpiBar').style.width=Math.min(100,pct)+'%';
+      document.getElementById('kpiRemain').textContent='잔여 '+Math.max(0,target-total).toLocaleString()+'건';
+      const today=todayStr(); const y0=new Date(Y+'-01-01'); const clip=today>Y+'-12-31'?Y+'-12-31':(today<Y+'-01-01'?Y+'-01-01':today);
+      const doy=Math.max(1,Math.floor((new Date(clip)-y0)/86400000)+1), yearDays=365;
+      const expected=Math.round(target*doy/yearDays), projection=Math.round(total/doy*yearDays), ahead=total-expected;
+      document.getElementById('kpiPaceMark').style.left=Math.min(100,Math.round(doy/yearDays*100))+'%';
+      document.getElementById('kpiPaceNote').innerHTML=`경과 ${doy}일(${Math.round(doy/yearDays*100)}%) · 페이스 목표 ${expected.toLocaleString()}건 대비 <b class="${ahead>=0?'text-agreen':'text-ared'}">${ahead>=0?'+':''}${ahead.toLocaleString()}건</b> · 현재 속도면 연말 <b class="text-ink">${projection.toLocaleString()}건</b> 예상 (목표 ${projection>=target?'달성 ✓':'미달 ⚠'})`;
+      const kc=(l,v,s,em)=>`<div class="card card-hover p-4"><p class="text-xs text-slate-500">${em} ${l}</p><p class="num text-2xl font-extrabold text-ink mt-1">${v.toLocaleString()}<span class="text-xs font-normal text-slate-400">건</span></p><p class="text-[11px] text-slate-400 mt-0.5">${s}</p></div>`;
+      document.getElementById('kpiBreakdown').innerHTML=
+        kc('PR (자사보도)',pr,'보도자료 발행','📰')+kc('블로그',blog,'관리 블로그','✍️')+kc('인스타그램',ins,'피드·릴스','📸')+kc('홈페이지',hp,'수기 입력','🖥️')+kc('웹문서',wd,'수기 입력','📄');
+      const mm=monthsY.filter(m=>m<=today.slice(0,7)); const use=mm.length?mm:monthsY.slice(0,7);
+      draw('kpiMonthChart',{type:'bar',data:{labels:use.map(m=>(+m.slice(5))+'월'),datasets:[
+        {label:'PR',data:use.map(m=>prM[m]||0),backgroundColor:'#FBC400',stack:'k'},
+        {label:'블로그',data:use.map(m=>blM[m]||0),backgroundColor:'#5E7350',stack:'k'},
+        {label:'인스타',data:use.map(m=>inM[m]||0),backgroundColor:'#C13584',stack:'k'}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}}}});
+      draw('kpiMixChart',{type:'doughnut',data:{labels:['PR','블로그','인스타','홈페이지','웹문서'],datasets:[{data:[pr,blog,ins,hp,wd],backgroundColor:['#FBC400','#5E7350','#C13584','#5E85A6','#BF5332'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}});
     }
 
     // ===== 미디어 라이브러리 (구글드라이브 연동 · 카테고리별) =====

@@ -20,7 +20,8 @@ DOMAIN = {"mt.co.kr": "머니투데이", "heraldcorp.com": "헤럴드경제", "s
           "kmib.co.kr": "국민일보", "segye.com": "세계일보", "munhwa.com": "문화일보", "hankookilbo.com": "한국일보",
           "biz.chosun.com": "조선비즈", "newspim.com": "뉴스핌", "ajunews.com": "아주경제", "ceoscoredaily.com": "CEO스코어데일리",
           "housing-herald.co.kr": "하우징헤럴드", "rensunion.com": "리모델링신문", "kukinews.com": "쿠키뉴스",
-          "digitaltoday.co.kr": "디지털투데이", "itdaily.kr": "아이티데일리", "aitimes.com": "AI타임스", "dealsite.co.kr": "딜사이트"}
+          "digitaltoday.co.kr": "디지털투데이", "itdaily.kr": "아이티데일리", "aitimes.com": "AI타임스", "dealsite.co.kr": "딜사이트",
+          "businesskorea.co.kr": "비지니스코리아"}
 
 # 분야 키워드 → beat 분류
 KEYWORDS = [
