@@ -871,7 +871,7 @@
          </div>
        </div>
        <div class="overflow-auto rounded-lg border border-[#E6E6E3]">
-         <table class="w-full text-sm"><thead class="bg-[#F7F7F5] text-slate-500"><tr class="text-left"><th class="px-3 py-2">분야</th><th class="px-3 py-2">매체</th><th class="px-3 py-2">기자</th><th class="px-3 py-2">이메일</th><th class="px-3 py-2"></th></tr></thead><tbody id="mlBody" class="divide-y divide-slate-100"></tbody></table>
+         <table class="w-full text-sm"><thead class="bg-[#F7F7F5] text-slate-500"><tr class="text-left"><th class="px-3 py-2">분야</th><th class="px-3 py-2">매체</th><th class="px-3 py-2">기자</th><th class="px-3 py-2">이메일</th><th class="px-3 py-2">최근 기사</th><th class="px-3 py-2"></th></tr></thead><tbody id="mlBody" class="divide-y divide-slate-100"></tbody></table>
        </div>
        <p class="text-xs text-slate-400 mt-2">※ 입력 내용은 이 브라우저에 저장됩니다. 팀 공유가 필요하면 CSV로 내보내 관리하세요. <button onclick="mlExport()" class="text-ink font-semibold hover:underline">CSV 내보내기</button></p>
      </div>
@@ -2111,7 +2111,7 @@
     function mlSave(){ try{ localStorage.setItem('aqaraMediaList',JSON.stringify(mlContacts)); }catch(e){} }
     function mlAdd(){ const beat=document.getElementById('mlBeat').value, media=(document.getElementById('mlMedia').value||'').trim(), name=(document.getElementById('mlName').value||'').trim(), email=(document.getElementById('mlEmail').value||'').trim(); if(!media&&!name) return; mlContacts.push({beat,media,name,email}); mlSave(); ['mlMedia','mlName','mlEmail'].forEach(id=>document.getElementById(id).value=''); renderMediaList(); }
     function mlDel(i){ mlContacts.splice(i,1); mlSave(); renderMediaList(); }
-    function mlExport(){ const head=['분야','매체','기자','이메일']; const lines=[head].concat(mlContacts.map(c=>[c.beat,c.media,c.name,c.email])); const csv=lines.map(r=>r.map(x=>'"'+String(x||'').replace(/"/g,'""')+'"').join(',')).join('\r\n'); dlBlob(csv,'아카라_미디어리스트.csv','text/csv'); }
+    function mlExport(){ const head=['분야','매체','기자','이메일','최근기사','기사링크']; const lines=[head].concat(mlContacts.map(c=>[c.beat,c.media,c.name,c.email,c.title||'',c.link||''])); const csv=lines.map(r=>r.map(x=>'"'+String(x||'').replace(/"/g,'""')+'"').join(',')).join('\r\n'); dlBlob(csv,'아카라_미디어리스트.csv','text/csv'); }
     function mlBeatOf(t){ const s=(t||'').toLowerCase();
       if(/아파트|분양|임대|청약|건설|주택|재건축|부동산|입주|단지|빌트인|시행|시공사|건자재/.test(s)) return '부동산';
       if(/인테리어|리모델링|공간|홈스타일|가구|집꾸미|시공|데코|리빙/.test(s)) return '인테리어';
@@ -2120,7 +2120,7 @@
     function nvSearch(q){ return 'https://search.naver.com/search.naver?where=news&query='+encodeURIComponent(q); }
     let MEDIALIST={contacts:[]}, mlLoaded=false;
     function loadMediaList(){ fetch('medialist.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d&&d.contacts){ MEDIALIST=d; renderMediaList(); } }).catch(()=>{}); }
-    function mlAddFrom(i){ const c=(MEDIALIST.contacts||[])[i]; if(!c) return; mlContacts.push({beat:c.beat||'',media:c.press||'',name:c.reporter||'',email:c.email||''}); mlSave(); renderMediaList(); }
+    function mlAddFrom(i){ const c=(MEDIALIST.contacts||[])[i]; if(!c) return; mlContacts.push({beat:(c.beats||[c.beat]).join('·'),media:c.press||'',name:c.reporter||'',email:c.email||'',title:c.title||'',link:c.link||''}); mlSave(); renderMediaList(); }
     function renderMediaList(){
       if(!mlLoaded){ mlLoaded=true; loadMediaList(); }
       const contacts=MEDIALIST.contacts||[];
@@ -2136,7 +2136,7 @@
       const al=document.getElementById('mediaListArticles');
       if(al) al.innerHTML=rows.length?rows.map(c=>`<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2"><span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc((c.beats||[c.beat]).join('·'))}</span></td><td class="px-3 py-2 text-ink whitespace-nowrap">${esc(c.press||'-')}</td><td class="px-3 py-2 text-slate-700 whitespace-nowrap">${esc(c.reporter||'-')}</td><td class="px-3 py-2 text-slate-500 whitespace-nowrap">${c.email?`<a href="mailto:${esc(c.email)}" class="lnk">${esc(c.email)}</a>`:'<span class="text-slate-300">-</span>'}</td><td class="px-3 py-2"><a href="${esc(c.link||'#')}" target="_blank" rel="noopener" class="lnk line-clamp-1 max-w-[220px]">${esc(c.title||'기사')} ↗</a></td><td class="px-3 py-2 whitespace-nowrap"><button onclick="mlAddFrom(${c._i})" class="text-[11px] text-brand-ink font-semibold hover:underline">담기 →</button></td></tr>`).join(''):'<tr><td colspan="6" class="px-3 py-6 text-center text-slate-400">수집된 연락처가 없습니다. (분야 키워드 자동 수집이 갱신되면 표시)</td></tr>';
       const tb=document.getElementById('mlBody');
-      if(tb) tb.innerHTML=mlContacts.length?mlContacts.map((c,i)=>`<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2"><span class="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc(c.beat||'')}</span></td><td class="px-3 py-2 text-ink">${esc(c.media||'')}</td><td class="px-3 py-2 text-slate-600">${esc(c.name||'')}</td><td class="px-3 py-2 text-slate-500">${c.email?`<a href="mailto:${esc(c.email)}" class="lnk">${esc(c.email)}</a>`:'-'}</td><td class="px-3 py-2 text-right"><button onclick="mlDel(${i})" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join(''):'<tr><td colspan="5" class="px-3 py-6 text-center text-slate-400">아직 등록된 연락처가 없습니다. 위에서 추가하세요.</td></tr>';
+      if(tb) tb.innerHTML=mlContacts.length?mlContacts.map((c,i)=>`<tr class="hover:bg-[#F7F7F5]"><td class="px-3 py-2 whitespace-nowrap"><span class="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${esc(c.beat||'')}</span></td><td class="px-3 py-2 text-ink whitespace-nowrap">${esc(c.media||'')}</td><td class="px-3 py-2 text-slate-600 whitespace-nowrap">${esc(c.name||'')}</td><td class="px-3 py-2 text-slate-500 whitespace-nowrap">${c.email?`<a href="mailto:${esc(c.email)}" class="lnk">${esc(c.email)}</a>`:'-'}</td><td class="px-3 py-2">${c.link?`<a href="${esc(c.link)}" target="_blank" rel="noopener" class="lnk line-clamp-1 max-w-[240px]">${esc(c.title||'기사')} ↗</a>`:'<span class="text-slate-300">-</span>'}</td><td class="px-3 py-2 text-right"><button onclick="mlDel(${i})" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join(''):'<tr><td colspan="6" class="px-3 py-6 text-center text-slate-400">아직 등록된 연락처가 없습니다. 위에서 추가하세요.</td></tr>';
     }
 
     // ===== 2026 콘텐츠 발행 KPI =====
