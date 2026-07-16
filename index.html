@@ -2491,13 +2491,18 @@
     function wkProjListFrom(m){ m=m||{}; return Object.keys(m).map(id=>({id:id,name:(m[id]&&m[id].name)||'',color:(m[id]&&m[id].color)||'#6E6E73',order:(m[id]&&typeof m[id].order==='number'?m[id].order:0)})).sort((a,b)=> (a.order-b.order) || (a.id<b.id?-1:1)); }
     function wkProjList(){ return wkProjListFrom(wkProjects); }
     // 기본 프로젝트 시딩 (없는 이름만 추가, 동시 접속에도 안전한 트랜잭션)
+    // 기본 프로젝트는 '완전히 비었을 때'만 1회 시딩 (지운 프로젝트가 되살아나지 않도록)
     function wkSeedProjects(){
+      const build=function(){ const o={}; WK_DEFAULT_PROJECTS.forEach(function(nm,i){ o[wkNewId()]={name:nm,color:WK_PALETTE[i%WK_PALETTE.length],order:i}; }); return o; };
       if(wkUseFB()){
-        WK_DB.ref('projects').transaction(function(cur){ cur=cur||{}; const names=Object.keys(cur).map(k=>cur[k]&&cur[k].name); let ord=Object.keys(cur).reduce((m,k)=>Math.max(m,(cur[k]&&cur[k].order)||0),-1); let ch=false; WK_DEFAULT_PROJECTS.forEach(nm=>{ if(names.indexOf(nm)<0){ ord++; cur[wkNewId()]={name:nm,color:WK_PALETTE[ord%WK_PALETTE.length],order:ord}; ch=true; } }); return ch?cur:undefined; });
+        WK_DB.ref('projects').transaction(function(cur){ if(cur && Object.keys(cur).length) return; return build(); });
       } else {
-        const cur=wkProjects||{}; const names=Object.keys(cur).map(k=>cur[k]&&cur[k].name); let ord=Object.keys(cur).reduce((m,k)=>Math.max(m,(cur[k]&&cur[k].order)||0),-1); let ch=false; WK_DEFAULT_PROJECTS.forEach(nm=>{ if(names.indexOf(nm)<0){ ord++; cur[wkNewId()]={name:nm,color:WK_PALETTE[ord%WK_PALETTE.length],order:ord}; ch=true; } }); if(ch){ wkProjects=cur; wkPersistLocal(); renderMktWeekly(); }
+        if(!wkProjects || !Object.keys(wkProjects).length){ wkProjects=build(); wkPersistLocal(); renderMktWeekly(); }
       }
     }
+    // 프로젝트 이름 수정 / 삭제
+    function wkRenameProject(pid){ const p=wkProjList().filter(x=>x.id===pid)[0]; if(!p) return; const v=prompt('프로젝트 이름 수정', p.name); if(v==null) return; const nm=v.trim(); if(!nm) return; const u={}; u['projects/'+pid+'/name']=nm; wkApply(u); }
+    function wkDelProject(pid){ const p=wkProjList().filter(x=>x.id===pid)[0]; if(!p) return; if(!confirm('프로젝트 "'+p.name+'"을(를) 삭제할까요?\n이 프로젝트의 항목들은 \'미분류\'로 이동합니다.')) return; const u={}; u['projects/'+pid]=null; ['done','plan','issue','check'].forEach(function(bk){ wkItems(bk).forEach(function(it){ if(it.project===pid) u['weekly/'+wkCur+'/'+bk+'/'+it.id+'/project']=''; }); }); if(wkFilter===pid) wkFilter=null; wkApply(u); }
     // 접속 중 기기 표시 (Firebase presence · 창 닫으면 자동 제거)
     let wkPresRef=null, wkPresListen=false, wkPresConn=null;
     function wkGuessDevice(){ const ua=navigator.userAgent||''; let os='기기'; if(/Windows/.test(ua))os='Windows'; else if(/Macintosh|Mac OS/.test(ua))os='Mac'; else if(/Android/.test(ua))os='Android'; else if(/iPhone|iPad/.test(ua))os='iOS'; else if(/Linux/.test(ua))os='Linux'; let br=''; if(/Edg/.test(ua))br='Edge'; else if(/Chrome/.test(ua))br='Chrome'; else if(/Firefox/.test(ua))br='Firefox'; else if(/Safari/.test(ua))br='Safari'; return br?(os+'·'+br):os; }
@@ -2590,7 +2595,14 @@
         </div>`; }
     function wkAddCheck(){ const id=wkNewId(); const u={}; u['weekly/'+wkCur+'/check/'+id]={t:'',w:'',c:false,order:wkNextOrder('check')}; wkApply(u); setTimeout(function(){ const el=document.querySelector('[data-path="weekly/'+wkCur+'/check/'+id+'/t"]'); if(el) el.focus(); },40); }
     function wkRefresh(){ if(wkUseFB()&&wkCur){ wkDetach(); wkAttach(); } wkEnsure(); renderMktWeekly(); wkRenderSave(); }
-    function wkChipBar(){ const projs=wkProjList(); const chip=(v,label,color,active)=>'<button onclick="wkSetFilter('+(v===null?'null':"'"+v+"'")+')" class="px-2.5 py-1 rounded-full text-[12px] font-semibold border" style="'+(active?('background:'+(color||'#1D1D1F')+';border-color:'+(color||'#1D1D1F')+';color:#fff'):('color:'+(color||'#6E6E73')+';border-color:#E6E6E3'))+'">'+esc(label)+'</button>'; let h=chip(null,'전체',null,wkFilter===null); projs.forEach(p=>{ h+=chip(p.id,p.name,p.color,wkFilter===p.id); }); h+=chip('__none__','미분류','#6E6E73',wkFilter==='__none__'); return h; }
+    function wkChipBar(){ const projs=wkProjList(); const chip=(v,label,color,active)=>'<button onclick="wkSetFilter('+(v===null?'null':"'"+v+"'")+')" class="px-2.5 py-1 rounded-full text-[12px] font-semibold border" style="'+(active?('background:'+(color||'#1D1D1F')+';border-color:'+(color||'#1D1D1F')+';color:#fff'):('color:'+(color||'#6E6E73')+';border-color:#E6E6E3'))+'">'+esc(label)+'</button>';
+      let h=chip(null,'전체',null,wkFilter===null);
+      projs.forEach(p=>{ const active=wkFilter===p.id; const fg=active?'#fff':p.color; h+='<span class="inline-flex items-center rounded-full border" style="'+(active?('background:'+p.color+';border-color:'+p.color):('border-color:#E6E6E3'))+'">'+
+        '<button onclick="wkSetFilter(\''+p.id+'\')" class="pl-2.5 pr-1 py-1 text-[12px] font-semibold" style="color:'+fg+'" title="클릭: 이 프로젝트만 보기">'+esc(p.name)+'</button>'+
+        '<button onclick="wkRenameProject(\''+p.id+'\')" class="px-0.5 py-1 text-[11px]" style="color:'+(active?'rgba(255,255,255,.85)':'#B8B8B4')+'" title="이름 수정">✎</button>'+
+        '<button onclick="wkDelProject(\''+p.id+'\')" class="pr-2 pl-0.5 py-1 text-[11px]" style="color:'+(active?'rgba(255,255,255,.85)':'#C7C7C4')+'" title="프로젝트 삭제">✕</button>'+
+        '</span>'; });
+      h+=chip('__none__','미분류','#6E6E73',wkFilter==='__none__'); return h; }
     function renderMktWeekly(){ wkEnsure(); const lab=document.getElementById('wkLabel'); if(lab) lab.textContent=wkRange(); const body=wkBody(); if(!body) return;
       const projs=wkProjList();
       const blocks=WK_FIELDS.map(f=>{ let items=wkItems(f.k); if(wkFilter){ items=items.filter(it=> wkFilter==='__none__'? (!it.project||!projs.some(p=>p.id===it.project)) : it.project===wkFilter); }
