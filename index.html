@@ -2414,6 +2414,15 @@
     function wkAddComment(bk,i){ wkEnsure(); const it=(weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{}); if(!Array.isArray(it.cm)) it.cm=[]; it.cm.push(''); wkPersist(); renderMktWeekly(); }
     function wkEditComment(bk,i,ci,el){ wkEnsure(); const it=(weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{}); if(!Array.isArray(it.cm)) it.cm=[]; it.cm[ci]=el.innerText.trim(); wkPersist(); }
     function wkDelComment(bk,i,ci){ wkEnsure(); const it=weeklyData[wkCur][bk][i]; if(it&&Array.isArray(it.cm)){ it.cm.splice(ci,1); wkPersist(); renderMktWeekly(); } }
+    // --- 드래그로 순서 이동 (손잡이 ⠿를 누를 때만 활성화, 텍스트 편집과 충돌 방지) ---
+    let wkDragSrc=null;
+    function wkGripDown(el){ const it=el.closest('.wk-item'); if(it) it.setAttribute('draggable','true'); }
+    function wkGripUp(el){ const it=el.closest('.wk-item'); if(it) setTimeout(()=>it.setAttribute('draggable','false'),0); }
+    function wkDragStart(e){ const it=e.target.closest('.wk-item'); if(!it){ return; } wkDragSrc={bk:it.dataset.bk,idx:+it.dataset.idx}; e.dataTransfer.effectAllowed='move'; try{ e.dataTransfer.setData('text/plain',it.dataset.idx); }catch(_){} it.classList.add('opacity-40'); }
+    function wkDragOver(e){ if(!wkDragSrc) return; const it=e.target.closest('.wk-item'); if(it&&it.dataset.bk!==wkDragSrc.bk) return; e.preventDefault(); e.dataTransfer.dropEffect='move'; }
+    function wkDrop(e){ if(!wkDragSrc) return; const it=e.target.closest('.wk-item'); if(!it||it.dataset.bk!==wkDragSrc.bk){ return; } e.preventDefault(); const bk=it.dataset.bk, to=+it.dataset.idx, from=wkDragSrc.idx; wkDragSrc=null; wkReorder(bk,from,to); }
+    function wkDragEnd(e){ const it=e.target.closest('.wk-item'); if(it){ it.setAttribute('draggable','false'); it.classList.remove('opacity-40'); } wkDragSrc=null; }
+    function wkReorder(bk,from,to){ wkEnsure(); const a=weeklyData[wkCur][bk]; if(from===to||from<0||from>=a.length||to<0||to>=a.length) return; const moved=a.splice(from,1)[0]; a.splice(to,0,moved); wkPersist(); renderMktWeekly(); }
     function renderMktWeekly(){ wkEnsure();
       const lab=document.getElementById('wkLabel'); if(lab) lab.textContent=wkRange();
       const blocks=WK_FIELDS.map(f=>{
@@ -2425,9 +2434,9 @@
             <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" contenteditable="true" oninput="wkEditComment('${f.k}',${i},${ci},this)">${esc(c||'')}</div>
             <button onclick="wkDelComment('${f.k}',${i},${ci})" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="댓글 삭제">✕</button>
           </div>`).join('');
-          return `<div class="wk-item border-b border-[#F2EFE9] py-0.5">
+          return `<div class="wk-item border-b border-[#F2EFE9] py-0.5" draggable="false" data-bk="${f.k}" data-idx="${i}" ondragstart="wkDragStart(event)" ondragend="wkDragEnd(event)" ondragover="wkDragOver(event)" ondrop="wkDrop(event)">
           <div class="wk-row flex items-center gap-2 py-1">
-          <span class="flex flex-col shrink-0 leading-none text-slate-300"><button onclick="wkMoveRow('${f.k}',${i},-1)" ${i===0?'disabled':''} class="text-[10px] hover:text-ink disabled:opacity-20" title="위로">▲</button><button onclick="wkMoveRow('${f.k}',${i},1)" ${i===items.length-1?'disabled':''} class="text-[10px] hover:text-ink disabled:opacity-20" title="아래로">▼</button></span>
+          <span class="wk-grip shrink-0 cursor-grab text-slate-300 hover:text-slate-500 select-none text-[13px] leading-none px-0.5" title="드래그해서 순서 이동" onmousedown="wkGripDown(this)" onmouseup="wkGripUp(this)">⠿</span>
           <input type="checkbox" ${it.c?'checked':''} onchange="wkToggle('${f.k}',${i},this)" class="shrink-0 w-4 h-4"/>
           <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none ${it.c?'line-through text-slate-400':'text-slate-700'}" contenteditable="true" oninput="wkEditRow('${f.k}',${i},'t',this)">${esc(it.t||'')}</div>
           <input value="${esc(it.w||'')}" oninput="wkEditRow('${f.k}',${i},'w',this)" placeholder="담당자" class="w-16 text-[12px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0"/>
