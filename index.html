@@ -2574,7 +2574,7 @@
     const WK_CIRCLED=['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩','⑪','⑫'];
     function wkBuildSummary(){ const projs=wkProjList(); let n=0; const sections=[];
       const collect=pid=>{ let arr=[]; WK_FIELDS.forEach(f=>{ wkItems(f.k).forEach(it=>{ if((it.project||'')===pid && (it.t||it.w)) arr.push(it); }); }); return arr; };
-      const build=function(title,items){ let s=(WK_CIRCLED[n]||('('+(n+1)+')'))+' '+title; items.forEach(it=>{ s+='\n- '+(it.t||'')+(it.w?(' ('+it.w+')'):''); wkComments(it.cm).forEach(c=>{ if(c.t&&c.t.trim()) s+='\n  ^'+c.t; }); }); n++; return s; };
+      const build=function(title,items){ let s=(WK_CIRCLED[n]||('('+(n+1)+')'))+' '+title; items.forEach(it=>{ s+='\n'+(it.t||'')+(it.w?(' ('+it.w+')'):''); wkComments(it.cm).forEach(c=>{ if(c.t&&c.t.trim()) s+='\n  ^'+c.t; }); }); n++; return s; };
       projs.forEach(p=>{ const items=collect(p.id); if(items.length) sections.push(build(p.name,items)); });
       let none=[]; WK_FIELDS.forEach(f=>{ wkItems(f.k).forEach(it=>{ if((!it.project||!projs.some(p=>p.id===it.project)) && (it.t||it.w)) none.push(it); }); });
       if(none.length) sections.push(build('기타',none));
