@@ -1003,7 +1003,7 @@
                <button onclick="wkShift(-1)" class="px-3 py-1.5 rounded-lg border border-[#E6E6E3] hover:bg-slate-50 text-sm">◀</button>
                <span id="wkLabel" class="font-bold text-ink text-sm w-40 text-center"></span>
                <button onclick="wkShift(1)" class="px-3 py-1.5 rounded-lg border border-[#E6E6E3] hover:bg-slate-50 text-sm">▶</button>
-               <button onclick="wkThis()" class="px-3 py-1.5 rounded-lg border border-[#E6E6E3] hover:bg-slate-50 text-sm">이번 주</button>
+               <button onclick="wkThisReport()" class="px-3 py-1.5 rounded-lg border border-[#7C5CFF] text-[#5B44C7] hover:bg-[#EDE9FF] text-sm font-semibold">금주 보고</button>
                <button onclick="wkRefresh()" class="px-3 py-1.5 rounded-lg border border-[#E6E6E3] hover:bg-slate-50 text-sm" title="상대가 지금 작성 중인 최신 내용을 즉시 불러오기">↻ 새로고침</button>
                <span id="wkSaveState" class="text-[12px] mr-1"></span>
                <button id="wkSaveBtn" onclick="wkSaveNow()" class="text-sm text-white px-3 py-1.5 rounded-lg font-semibold" style="background:#16A34A" title="지금 저장 — 이 보고서는 자동저장되지만 눌러서 즉시 저장할 수 있어요">저장</button>
@@ -2440,11 +2440,12 @@
       return (mon.getMonth()+1)+'/'+mon.getDate()+'('+WK_DOW[mon.getDay()]+') ~ '+(fri.getMonth()+1)+'/'+fri.getDate()+'('+WK_DOW[fri.getDay()]+')'; }
     function wkUseFB(){ return !!(typeof WK_FB_READY!=='undefined' && WK_FB_READY && WK_AUTH_OK && WK_DB); }
     // 진입 · 주차 이동
-    function wkOpen(){ if(!wkCur) wkCur=wkMondayOf(todayStr()); wkWireFocus(); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); wkRenderSave(); }
-    function wkThis(){ wkCur=wkMondayOf(todayStr()); wkAttach(); renderMktWeekly(); }
-    function wkShift(n){ if(!wkCur) wkCur=wkMondayOf(todayStr()); const d=new Date(wkCur); d.setDate(d.getDate()+n*7); wkCur=d.toISOString().slice(0,10); wkAttach(); renderMktWeekly(); }
+    function wkOpen(){ if(!wkCur) wkCur=wkReportMonday(); wkWireFocus(); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); wkRenderSave(); }
+    function wkReportMonday(){ const d=new Date(wkMondayOf(todayStr())); d.setDate(d.getDate()+7); return d.toISOString().slice(0,10); }
+    function wkThisReport(){ wkCur=wkReportMonday(); wkAttach(); renderMktWeekly(); wkRenderSave(); }
+    function wkShift(n){ if(!wkCur) wkCur=wkReportMonday(); const d=new Date(wkCur); d.setDate(d.getDate()+n*7); wkCur=d.toISOString().slice(0,10); wkAttach(); renderMktWeekly(); }
     function wkVisible(){ const s=document.getElementById('mktSec-weekly'); return !!(s && !s.classList.contains('hidden')); }
-    function wkOnAuth(){ if(wkVisible()){ if(!wkCur) wkCur=wkMondayOf(todayStr()); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); } }
+    function wkOnAuth(){ if(wkVisible()){ if(!wkCur) wkCur=wkReportMonday(); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); } }
     // Firebase 실시간 리스너
     function wkAttach(){ if(!wkUseFB()||!wkCur) return; wkDetach();
       wkWeekRef=WK_DB.ref('weekly/'+wkCur);
@@ -2478,7 +2479,7 @@
     function wkNextOrder(bk){ const a=wkItems(bk); return a.length?(a[a.length-1].order+1):0; }
     // 정규화 · 접근자
     function wkArrToMap(arr){ const m={}; (arr||[]).forEach((it,i)=>{ const id=wkNewId(); let cm={}; if(Array.isArray(it.cm)){ it.cm.forEach((c,j)=>{ if(c&&(''+c).trim()) cm[wkNewId()]={t:''+c,order:j}; }); } m[id]={t:it.t||'',w:it.w||'',c:!!it.c,project:it.project||'',order:i,cm:cm}; }); return m; }
-    function wkEnsure(){ if(!wkCur) wkCur=wkMondayOf(todayStr()); if(!wkProjects||typeof wkProjects!=='object') wkProjects={}; weeklyData[wkCur]=weeklyData[wkCur]||{}; const w=weeklyData[wkCur]; WK_FIELDS.forEach(f=>{ if(Array.isArray(w[f.k])) w[f.k]=wkArrToMap(w[f.k]); else if(w[f.k]==null||typeof w[f.k]!=='object') w[f.k]={}; }); if(Array.isArray(w.check)) w.check=wkArrToMap(w.check); else if(w.check==null||typeof w.check!=='object') w.check={}; if(typeof w.insight!=='string') w.insight=(w.insight==null?'':String(w.insight)); }
+    function wkEnsure(){ if(!wkCur) wkCur=wkReportMonday(); if(!wkProjects||typeof wkProjects!=='object') wkProjects={}; weeklyData[wkCur]=weeklyData[wkCur]||{}; const w=weeklyData[wkCur]; WK_FIELDS.forEach(f=>{ if(Array.isArray(w[f.k])) w[f.k]=wkArrToMap(w[f.k]); else if(w[f.k]==null||typeof w[f.k]!=='object') w[f.k]={}; }); if(Array.isArray(w.check)) w.check=wkArrToMap(w.check); else if(w.check==null||typeof w.check!=='object') w.check={}; if(typeof w.insight!=='string') w.insight=(w.insight==null?'':String(w.insight)); }
     function wkItemsFrom(m){ m=m||{}; return Object.keys(m).map(id=>{ const it=m[id]||{}; return {id:id,t:it.t||'',w:it.w||'',c:!!it.c,project:it.project||'',order:(typeof it.order==='number'?it.order:0),cm:it.cm||{}}; }).sort((a,b)=> (a.order-b.order) || (a.id<b.id?-1:1)); }
     function wkItems(bk){ wkEnsure(); return wkItemsFrom((weeklyData[wkCur]||{})[bk]); }
     function wkItemById(bk,id){ const it=((weeklyData[wkCur]||{})[bk]||{})[id]||{}; return {id:id,t:it.t||'',w:it.w||'',c:!!it.c,project:it.project||'',order:it.order||0,cm:it.cm||{}}; }
