@@ -2537,6 +2537,13 @@
     function wkSetProject(bk,id,el){ const v=el.value; if(v==='__new__'){ wkNewProject(bk,id); return; } const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/project']=v; wkApply(u); }
     function wkNewProject(bk,id){ const name=prompt('새 프로젝트 이름을 입력하세요'); if(name==null){ renderMktWeekly(); return; } const nm=name.trim(); if(!nm){ renderMktWeekly(); return; } const list=wkProjList(); const pid=wkNewId(); const u={}; u['projects/'+pid]={name:nm,color:WK_PALETTE[list.length%WK_PALETTE.length],order:(list.length?list[list.length-1].order+1:0)}; if(bk&&id) u['weekly/'+wkCur+'/'+bk+'/'+id+'/project']=pid; wkApply(u); }
     function wkSetFilter(v){ wkFilter=(wkFilter===v?null:v); renderMktWeekly(); }
+    // 프로젝트 칩 순서 드래그
+    let wkProjDrag=null;
+    function wkProjDragStart(e,pid){ wkProjDrag=pid; try{ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',pid); }catch(_){}; const s=e.target.closest&&e.target.closest('.wk-projchip'); if(s) s.style.opacity='0.4'; }
+    function wkProjDragOver(e){ if(wkProjDrag){ e.preventDefault(); try{ e.dataTransfer.dropEffect='move'; }catch(_){} } }
+    function wkProjDrop(e,pid){ if(!wkProjDrag) return; e.preventDefault(); const from=wkProjDrag; wkProjDrag=null; if(from!==pid) wkReorderProject(from,pid); else renderMktWeekly(); }
+    function wkProjDragEnd(e){ const s=e.target.closest&&e.target.closest('.wk-projchip'); if(s) s.style.opacity=''; wkProjDrag=null; }
+    function wkReorderProject(fromPid,toPid){ const ids=wkProjList().map(p=>p.id); const fi=ids.indexOf(fromPid); if(fi<0) return; ids.splice(fi,1); let ti=ids.indexOf(toPid); if(ti<0) ti=ids.length; ids.splice(ti,0,fromPid); const u={}; ids.forEach((id,k)=>{ u['projects/'+id+'/order']=k; }); wkApply(u); }
     // 댓글
     function wkAddComment(bk,id){ const cid=wkNewId(); const cur=wkComments(wkItemById(bk,id).cm); const order=cur.length?cur[cur.length-1].order+1:0; const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/cm/'+cid]={t:'',order:order}; wkApply(u); setTimeout(function(){ const el=document.querySelector('[data-path="weekly/'+wkCur+'/'+bk+'/'+id+'/cm/'+cid+'/t"]'); if(el) el.focus(); },40); }
     function wkDelComment(bk,id,cid){ const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/cm/'+cid]=null; wkApply(u); }
@@ -2603,8 +2610,9 @@
     function wkRefresh(){ if(wkUseFB()&&wkCur){ wkDetach(); wkAttach(); } wkEnsure(); renderMktWeekly(); wkRenderSave(); }
     function wkChipBar(){ const projs=wkProjList(); const chip=(v,label,color,active)=>'<button onclick="wkSetFilter('+(v===null?'null':"'"+v+"'")+')" class="px-2.5 py-1 rounded-full text-[12px] font-semibold border" style="'+(active?('background:'+(color||'#1D1D1F')+';border-color:'+(color||'#1D1D1F')+';color:#fff'):('color:'+(color||'#6E6E73')+';border-color:#E6E6E3'))+'">'+esc(label)+'</button>';
       let h=chip(null,'전체',null,wkFilter===null);
-      projs.forEach(p=>{ const active=wkFilter===p.id; const fg=active?'#fff':p.color; h+='<span class="inline-flex items-center rounded-full border" style="'+(active?('background:'+p.color+';border-color:'+p.color):('border-color:#E6E6E3'))+'">'+
-        '<button onclick="wkSetFilter(\''+p.id+'\')" class="pl-2.5 pr-1 py-1 text-[12px] font-semibold" style="color:'+fg+'" title="클릭: 이 프로젝트만 보기">'+esc(p.name)+'</button>'+
+      projs.forEach(p=>{ const active=wkFilter===p.id; const fg=active?'#fff':p.color; h+='<span draggable="true" ondragstart="wkProjDragStart(event,\''+p.id+'\')" ondragover="wkProjDragOver(event)" ondrop="wkProjDrop(event,\''+p.id+'\')" ondragend="wkProjDragEnd(event)" class="wk-projchip inline-flex items-center rounded-full border" style="cursor:grab;'+(active?('background:'+p.color+';border-color:'+p.color):('border-color:#E6E6E3'))+'" title="드래그해서 순서 이동">'+
+        '<span class="pl-2 pr-0 text-[11px] select-none" style="color:'+(active?'rgba(255,255,255,.7)':'#C7C7C4')+'">⠿</span>'+
+        '<button onclick="wkSetFilter(\''+p.id+'\')" class="pl-1 pr-1 py-1 text-[12px] font-semibold" style="color:'+fg+'" title="클릭: 이 프로젝트만 보기">'+esc(p.name)+'</button>'+
         '<button onclick="wkRenameProject(\''+p.id+'\')" class="px-0.5 py-1 text-[11px]" style="color:'+(active?'rgba(255,255,255,.85)':'#B8B8B4')+'" title="이름 수정">✎</button>'+
         '<button onclick="wkDelProject(\''+p.id+'\')" class="pr-2 pl-0.5 py-1 text-[11px]" style="color:'+(active?'rgba(255,255,255,.85)':'#C7C7C4')+'" title="프로젝트 삭제">✕</button>'+
         '</span>'; });
