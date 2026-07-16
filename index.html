@@ -2456,7 +2456,7 @@
     function wkStampUpdated(){ const el=document.getElementById('wkUpdated'); if(!el) return; const d=new Date(); el.textContent='마지막 갱신 '+d.getHours()+'시 '+d.getMinutes()+'분 '+d.getSeconds()+'초'; }
     function wkAfterSnap(){ wkStampUpdated(); if(!wkFocused()){ renderMktWeekly(); return; } wkPreserveActive(); wkPatchLive(); wkPendingSnap=true; }
     // 편집 중: 내가 커서를 둔 칸은 건드리지 않고, 나머지 칸의 텍스트만 실시간 갱신(커서·한글조합 안전)
-    function wkPatchLive(){ const body=wkBody(); if(!body) return; const act=document.activeElement; body.querySelectorAll('[data-path]').forEach(function(el){ if(el===act) return; const v=wkGetPath(el.dataset.path); const val=(v==null?'':String(v)); if(el.tagName==='INPUT'){ if(el.value!==val) el.value=val; } else { if(el.innerText!==val) el.innerText=val; } }); }
+    function wkPatchLive(){ const body=wkBody(); if(!body) return; const act=document.activeElement; body.querySelectorAll('[data-path]').forEach(function(el){ if(el===act) return; const v=wkGetPath(el.dataset.path); const val=(v==null?'':String(v)); if(el.tagName==='INPUT'){ if(el.value!==val) el.value=val; } else if(/\/summary$/.test(el.dataset.path)){ const html=wkSummaryHtml(val); if(el.innerHTML!==html) el.innerHTML=html; } else { if(el.innerText!==val) el.innerText=val; } }); }
     // 편집 중 커서 보호
     function wkBody(){ return document.getElementById('mktWeeklyBody'); }
     function wkFocused(){ const a=document.activeElement, b=wkBody(); return !!(a && b && b.contains(a) && (a.isContentEditable || a.tagName==='INPUT' || a.tagName==='TEXTAREA' || a.tagName==='SELECT')); }
@@ -2567,12 +2567,15 @@
         </div>`; }
     // AI 요약 — 프로젝트 구조를 [마케팅팀] ①②③ 형식으로 정리(리더 복붙용)
     const WK_CIRCLED=['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩','⑪','⑫'];
-    function wkBuildSummary(){ const projs=wkProjList(); let out='[마케팅팀]\n'; let n=0;
+    function wkBuildSummary(){ const projs=wkProjList(); let n=0; const sections=[];
       const collect=pid=>{ let arr=[]; WK_FIELDS.forEach(f=>{ wkItems(f.k).forEach(it=>{ if((it.project||'')===pid && (it.t||it.w)) arr.push(it); }); }); return arr; };
-      projs.forEach(p=>{ const items=collect(p.id); if(!items.length) return; out+=(WK_CIRCLED[n]||('('+(n+1)+')'))+' '+p.name+'\n'; items.forEach(it=>{ out+='- '+(it.t||'')+(it.w?(' ('+it.w+')'):'')+'\n'; wkComments(it.cm).forEach(c=>{ if(c.t&&c.t.trim()) out+='  ^'+c.t+'\n'; }); }); n++; });
+      const build=function(title,items){ let s=(WK_CIRCLED[n]||('('+(n+1)+')'))+' '+title; items.forEach(it=>{ s+='\n- '+(it.t||'')+(it.w?(' ('+it.w+')'):''); wkComments(it.cm).forEach(c=>{ if(c.t&&c.t.trim()) s+='\n  ^'+c.t; }); }); n++; return s; };
+      projs.forEach(p=>{ const items=collect(p.id); if(items.length) sections.push(build(p.name,items)); });
       let none=[]; WK_FIELDS.forEach(f=>{ wkItems(f.k).forEach(it=>{ if((!it.project||!projs.some(p=>p.id===it.project)) && (it.t||it.w)) none.push(it); }); });
-      if(none.length){ out+=(WK_CIRCLED[n]||('('+(n+1)+')'))+' 기타\n'; none.forEach(it=>{ out+='- '+(it.t||'')+(it.w?(' ('+it.w+')'):'')+'\n'; }); }
-      return out.replace(/\n+$/,''); }
+      if(none.length) sections.push(build('기타',none));
+      return '[마케팅팀]\n\n'+sections.join('\n\n'); }
+    // AI 요약 표시용: [마케팅팀]·카테고리(①②③…) 줄을 볼드 처리 (저장은 순수 텍스트 유지)
+    function wkSummaryHtml(t){ t=(t==null?'':String(t)); return t.split('\n').map(function(line){ const e=esc(line); const tr=line.trim(); if(tr==='[마케팅팀]' || /^(①|②|③|④|⑤|⑥|⑦|⑧|⑨|⑩|⑪|⑫|\(\d+\))\s/.test(tr)){ return '<b>'+e+'</b>'; } return e; }).join('\n'); }
     function wkGenSummary(){ const cur=(weeklyData[wkCur]||{}).summary; if(cur && cur.trim() && !confirm('기존 AI 요약을 새로 생성한 내용으로 덮어쓸까요?')) return; const u={}; u['weekly/'+wkCur+'/summary']=wkBuildSummary(); wkApply(u); }
     // 확인 필요 사항 (확인자 지정 · 체크 · 댓글) — 프로젝트 없이 항목 리스트
     function wkCheckRowHtml(it){ const wp='weekly/'+wkCur+'/check/'+it.id; const cms=wkComments(it.cm);
@@ -2613,7 +2616,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
         <div class="space-y-4">${blocks}</div>
         <div class="space-y-4">
-          <div class="card p-4"><div class="flex items-center justify-between mb-2 gap-2"><h4 class="font-bold text-ink">🤖 AI 요약 <span class="text-[11px] font-normal text-slate-400">([마케팅팀] 형식)</span></h4><button onclick="wkGenSummary()" class="text-[12px] bg-[#7C5CFF] text-white px-2.5 py-1 rounded-lg font-semibold hover:brightness-110 shrink-0">요약하기</button></div><div class="text-[13px] text-slate-700 leading-relaxed min-h-[240px] focus:outline-none border border-[#E6E6E3] rounded-lg px-3 py-2" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-path="weekly/${wkCur}/summary" oninput="wkText(this)">${esc((weeklyData[wkCur]||{}).summary||'')}</div></div>
+          <div class="card p-4"><div class="flex items-center justify-between mb-2 gap-2"><h4 class="font-bold text-ink">🤖 AI 요약 <span class="text-[11px] font-normal text-slate-400">([마케팅팀] 형식)</span></h4><button onclick="wkGenSummary()" class="text-[12px] bg-[#7C5CFF] text-white px-2.5 py-1 rounded-lg font-semibold hover:brightness-110 shrink-0">요약하기</button></div><div class="text-[13px] text-slate-700 leading-relaxed min-h-[240px] focus:outline-none border border-[#E6E6E3] rounded-lg px-3 py-2" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-path="weekly/${wkCur}/summary" oninput="wkText(this)">${wkSummaryHtml((weeklyData[wkCur]||{}).summary||'')}</div></div>
           <div class="card p-4"><div class="flex items-center justify-between mb-1"><h4 class="font-bold text-ink">💡 확인 필요 사항 <span class="text-[11px] font-normal text-slate-400">(확인자·체크·댓글)</span></h4><button onclick="wkAddCheck()" class="text-[12px] text-[#7C5CFF] font-semibold hover:underline">＋ 항목 추가</button></div><div>${wkItems('check').map(wkCheckRowHtml).join('')||'<p class="text-[12px] text-slate-400 py-2">＋ 항목 추가로 확인 필요 사항을 적고 확인자를 지정하세요.</p>'}</div>${((weeklyData[wkCur]||{}).insight&&weeklyData[wkCur].insight.trim())?('<p class="text-[11px] text-slate-400 mt-2 border-t border-[#F2EFE9] pt-2" style="white-space:pre-wrap">이전 자유기재 메모:'+esc(weeklyData[wkCur].insight)+'</p>'):''}</div>
         </div>
         </div>`;
@@ -2629,7 +2632,7 @@
           WK_FIELDS.map(f=>{ const items=wkItemsFrom((p.data&&p.data[f.k])||{}); const groups=wkGroupItems(items,projs);
             const inner=groups.map(g=>{ const gh=projs.length?('<div class="text-[12px] font-bold mt-2 mb-1" style="color:'+(g.p?g.p.color:'#94A3B8')+'">● '+esc(g.p?g.p.name:'미분류')+'</div>'):''; return gh+g.items.map(it=>'<div class="text-[13px] text-slate-700">· '+esc(it.t)+(it.w?' <span class="text-slate-400">('+esc(it.w)+')</span>':'')+'</div>'+wkCommentsFrom(it.cm).filter(c=>c.t&&c.t.trim()).map(c=>'<div class="text-[12px] text-[#2563EB] pl-5">💬 '+esc(c.t)+'</div>').join('')).join(''); }).join('');
             return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">'+esc(f.label)+'</div><div class="p-3 space-y-1">'+(items.length?inner:'<p class="text-[12px] text-slate-400">-</p>')+'</div></div>'; }).join('')+
-          ((p.data&&p.data.summary)?('<div class="rounded-lg border border-[#7C5CFF]/40 mb-3"><div class="px-4 py-2 bg-[#F3F0FF] font-bold text-[#5B44C7]">🤖 AI 요약</div><div class="p-3 text-[13px] text-slate-700" style="white-space:pre-wrap">'+esc(p.data.summary)+'</div></div>'):'')+
+          ((p.data&&p.data.summary)?('<div class="rounded-lg border border-[#7C5CFF]/40 mb-3"><div class="px-4 py-2 bg-[#F3F0FF] font-bold text-[#5B44C7]">🤖 AI 요약</div><div class="p-3 text-[13px] text-slate-700" style="white-space:pre-wrap">'+wkSummaryHtml(p.data.summary)+'</div></div>'):'')+
           (function(){ const chk=wkItemsFrom((p.data&&p.data.check)||{}); const ins=(p.data&&p.data.insight&&p.data.insight.trim())?p.data.insight:''; if(!chk.length && !ins) return ''; let inner=chk.map(it=>'<div class="text-[13px] text-slate-700">· '+esc(it.t)+(it.w?' <span class="text-slate-400">(확인: '+esc(it.w)+')</span>':'')+'</div>'+wkCommentsFrom(it.cm).filter(c=>c.t&&c.t.trim()).map(c=>'<div class="text-[12px] text-[#2563EB] pl-5">💬 '+esc(c.t)+'</div>').join('')).join(''); if(ins) inner+='<div class="text-[12px] text-slate-500 mt-1" style="white-space:pre-wrap">'+esc(ins)+'</div>'; return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">💡 확인 필요 사항</div><div class="p-3 space-y-1">'+inner+'</div></div>'; })()+
           '<p class="text-center text-xs text-slate-400 pt-4">읽기전용 공유 보고 · 링크를 가진 사람만 열람</p></div>';
         return true;
