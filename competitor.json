@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-15 19:16",
+ "generatedAt": "2026-07-16 19:22",
  "brands": [
   {
    "name": "아카라",
@@ -127,8 +127,8 @@
     "아카라 스위치",
     "아카라 홈캠",
     "아카라 l100",
+    "명조 아카라이브",
     "아카라카",
-    "이환 아카라이브",
     "니케 아카라이브"
    ],
    "recent": [
@@ -346,8 +346,8 @@
     "헤이홈 홈캠",
     "헤이홈",
     "헤이홈 sd카드",
-    "헤이홈 연결",
     "헤이홈 거치대",
+    "헤이홈 연결",
     "헤이홈 공유",
     "헤이홈 중국",
     "헤이홈 오프라인",
@@ -451,10 +451,10 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 66978,
+   "total": 66981,
    "sentiment": {
-    "pos": 19,
-    "neu": 40,
+    "pos": 21,
+    "neu": 38,
     "neg": 1
    },
    "keywords": [
@@ -464,7 +464,7 @@
     ],
     [
      "모듈러",
-     22
+     23
     ],
     [
      "플랫폼",
@@ -472,73 +472,77 @@
     ],
     [
      "삼성전자는",
-     16
-    ],
-    [
-     "갤럭시",
-     16
-    ],
-    [
-     "개방형",
-     15
-    ],
-    [
-     "SmartThings",
-     12
+     20
     ],
     [
      "주택",
-     12
+     13
     ],
     [
-     "기기",
-     12
+     "개방형",
+     13
+    ],
+    [
+     "갤럭시",
+     13
+    ],
+    [
+     "SmartThings",
+     11
     ],
     [
      "가전과",
      11
     ],
     [
+     "기기",
+     11
+    ],
+    [
+     "에너지",
+     10
+    ],
+    [
+     "가전",
+     10
+    ],
+    [
+     "AI홈",
+     10
+    ],
+    [
      "기반",
      10
     ],
     [
+     "기반으로",
+     9
+    ],
+    [
+     "지난달",
+     9
+    ],
+    [
      "개방",
-     10
-    ],
-    [
-     "노태문",
-     10
-    ],
-    [
-     "에너지",
      9
     ],
     [
-     "가전",
-     9
-    ],
-    [
-     "22일",
-     9
-    ],
-    [
-     "원칙으로",
-     9
-    ],
-    [
-     "기기와",
-     9
+     "TV",
+     8
     ]
    ],
    "posWords": [
     [
      "확대",
-     8
+     10
     ],
     [
      "혁신",
-     6
+     5
+    ],
+    [
+     "강화",
+     3
     ],
     [
      "돌파",
@@ -549,19 +553,15 @@
      2
     ],
     [
-     "강화",
-     2
-    ],
-    [
      "프리미엄",
      2
     ],
     [
-     "인기",
+     "성장",
      1
     ],
     [
-     "1위",
+     "인기",
      1
     ]
    ],
@@ -571,13 +571,31 @@
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스",
     "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 선풍기",
     "삼성 스마트싱스 세탁기",
+    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 아이폰",
-    "삼성 스마트싱스 에어컨 연동"
+    "삼성 스마트싱스 선풍기",
+    "삼성 스마트싱스 전력량"
    ],
    "recent": [
+    {
+     "title": "[그레이 파워⑥] 빈곤율 40% 對 168조…'돌봄과 소비' 시니어의 두 시각",
+     "source": "shinailbo.co.kr",
+     "date": "2026-07-16",
+     "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5041608"
+    },
+    {
+     "title": "집 전체를 똑똑하게… 삼성·LG, 'AI 홈' 빅픽처 그린다",
+     "source": "sisaon.co.kr",
+     "date": "2026-07-16",
+     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=202745"
+    },
+    {
+     "title": "\"가전 넘어 주거 플랫폼으로\"⋯삼성·LG, AI홈 B2B 사업 확대",
+     "source": "아이뉴스24",
+     "date": "2026-07-16",
+     "link": "https://n.news.naver.com/mnews/article/031/0001042575?sid=101"
+    },
     {
      "title": "\"AI 홈 시장을 잡아라\" 국내외 기업 경쟁 치열",
      "source": "ekoreanews.co.kr",
@@ -649,24 +667,6 @@
      "source": "donga.com",
      "date": "2026-07-14",
      "link": "https://n.news.naver.com/mnews/article/020/0003733616?sid=101"
-    },
-    {
-     "title": "LG전자, GS건설과 ‘AI 아파트’ 짓는다",
-     "source": "khan.co.kr",
-     "date": "2026-07-13",
-     "link": "https://n.news.naver.com/mnews/article/032/0003457868?sid=105"
-    },
-    {
-     "title": "이제는 'AI홈' 전쟁이다… 삼성·LG, 미래 주거 플랫폼 격돌",
-     "source": "파이낸셜뉴스",
-     "date": "2026-07-13",
-     "link": "https://n.news.naver.com/mnews/article/014/0005547546?sid=101"
-    },
-    {
-     "title": "스마트폰·자동차 넘어 ‘집’으로 간 AI…LG·삼성·빅테크 ‘AI 홈’ 총...",
-     "source": "donga.com",
-     "date": "2026-07-13",
-     "link": "https://n.news.naver.com/mnews/article/020/0003733541?sid=101"
     }
    ]
   },
@@ -674,101 +674,101 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76750,
+   "total": 76831,
    "sentiment": {
-    "pos": 13,
-    "neu": 45,
-    "neg": 2
+    "pos": 17,
+    "neu": 42,
+    "neg": 1
    },
    "keywords": [
     [
-     "AI홈",
-     68
+     "가전을",
+     52
     ],
     [
      "AI",
-     54
-    ],
-    [
-     "단지",
-     51
-    ],
-    [
-     "자이",
-     47
-    ],
-    [
-     "GS건설",
-     41
+     52
     ],
     [
      "LG전자",
-     37
+     42
     ],
     [
-     "LG전자의",
-     32
+     "에어컨",
+     39
+    ],
+    [
+     "앱에",
+     34
     ],
     [
      "ThinQ",
-     32
-    ],
-    [
-     "세대",
      31
     ],
     [
-     "주거",
-     29
+     "음성",
+     30
     ],
     [
-     "서비스를",
+     "세탁기",
+     30
+    ],
+    [
+     "AI홈",
+     28
+    ],
+    [
+     "퓨리케어",
+     28
+    ],
+    [
+     "등록된",
      27
     ],
     [
-     "허브",
+     "얼음",
+     27
+    ],
+    [
+     "정보도",
+     26
+    ],
+    [
+     "음성으로",
+     26
+    ],
+    [
+     "제어하고",
      24
     ],
     [
-     "기기",
+     "LLM",
      24
     ],
     [
-     "차세대",
+     "제공한다",
+     24
+    ],
+    [
+     "거대언어모델",
      23
-    ],
-    [
-     "난방",
-     22
-    ],
-    [
-     "양사는",
-     20
-    ],
-    [
-     "LG전자는",
-     20
-    ],
-    [
-     "환기",
-     19
     ]
    ],
    "posWords": [
     [
      "확대",
-     7
+     6
     ],
     [
-     "성장",
-     2
+     "강화",
+     6
     ],
     [
-     "글로벌",
-     2
+     "1위",
+     6
     ],
     [
-     "돌파",
+     "계약",
      1
     ],
     [
@@ -776,112 +776,112 @@
      1
     ],
     [
-     "공략",
+     "프리미엄",
      1
     ]
    ],
    "related": [
     "lg 씽큐 오류",
     "lg 씽큐 어플 오류",
-    "lg 씽큐",
+    "LG 씽큐",
+    "LG 씽큐앱 오류",
     "lg 씽큐 e1031 오류",
-    "lg 씽큐온",
     "lg 씽큐앱",
-    "lg 씽큐 앱 오류",
+    "lg 씽큐온",
     "lg 씽큐 어플",
     "lg 씽큐 연결",
-    "lg 씽큐 앱 에러"
+    "lg 씽큐 어플 안됨"
    ],
    "recent": [
     {
-     "title": "입주민 미래 주거 AI 플랫폼 각축전…현대·삼성 주도 속 포스코·GS 가세",
-     "source": "sateconomy.co.kr",
-     "date": "2026-07-15",
-     "link": "http://sateconomy.co.kr/news/view/1065598952212238"
+     "title": "[TOP's Pick] [전자·IT] 삼성, 포용금융 확대 위해 2000억 출연 外",
+     "source": "topdaily.kr",
+     "date": "2026-07-16",
+     "link": "https://www.topdaily.kr/articles/111035"
     },
     {
-     "title": "\"AI 홈 시장을 잡아라\" 국내외 기업 경쟁 치열",
-     "source": "ekoreanews.co.kr",
-     "date": "2026-07-15",
-     "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=87052"
+     "title": "\"하이 엘지, 얼음 한 컵 줘\"···말귀 알아듣는 정수기 나왔다",
+     "source": "pointdaily.co.kr",
+     "date": "2026-07-16",
+     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=312237"
     },
     {
-     "title": "가전 넘어 공간·인프라·로봇으로…LG전자, B2B 전환 가속",
-     "source": "ddaily.co.kr",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/138/0002234314?sid=105"
+     "title": "[건설플러스] HJ중공업과 삼성물산 ‘홈닉’ 스마트 서비스 확대 外",
+     "source": "news.dealsitetv.com",
+     "date": "2026-07-16",
+     "link": "https://news.dealsitetv.com/articles/173430"
     },
     {
-     "title": "'가전만으론 한계'…삼성·LG, AI홈으로 돌파구 찾는다",
-     "source": "sidae.com",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/417/0001151795?sid=101"
+     "title": "“얼음 한 컵 줘” LG전자, 말로 물·얼음 받는 ‘퓨리케어 AI 냉동얼음...",
+     "source": "cnet.co.kr",
+     "date": "2026-07-16",
+     "link": "https://www.cnet.co.kr/view/?no=20260716161828"
     },
     {
-     "title": "오픈AI, 화면 없는 AI 스피커로 애플에 도전장",
-     "source": "ddaily.co.kr",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/138/0002234291?sid=105"
+     "title": "LG전자, AI 냉동얼음정수기 출시… 음성으로 물·얼음 출수",
+     "source": "mediapen.com",
+     "date": "2026-07-16",
+     "link": "https://www.mediapen.com/news/view/1110603"
     },
     {
-     "title": "“앱도 가전 품질인데”…폭염에 접속 몰리자 스마트홈 ‘먹통’",
-     "source": "biz.chosun.com",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/366/0001179410?sid=102"
+     "title": "“하이 엘지, 얼음 한 컵 줘”…30도 폭염 날릴 LG AI 얼음정수기",
+     "source": "dnews.co.kr",
+     "date": "2026-07-16",
+     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607161534448110464"
     },
     {
-     "title": "“무더위에 사용자 폭증”…스마트가전 앱 심야 접속 장애",
-     "source": "ekn.kr",
-     "date": "2026-07-15",
-     "link": "https://www.ekn.kr/web/view.php?key=20260715027302700"
+     "title": "AI 스마트홈 경쟁 뛰어든 건설사…'집'이 생활비서로 진화한다",
+     "source": "m-economynews.com",
+     "date": "2026-07-16",
+     "link": "https://www.m-economynews.com/news/article.html?no=68825"
     },
     {
-     "title": "“영국 주택난, 한국 AI 스마트주택이 해법”…킹스톤 시의원, 한영 협...",
-     "source": "ekn.kr",
-     "date": "2026-07-15",
-     "link": "https://www.ekn.kr/web/view.php?key=20260715026042506"
+     "title": "\"말 한마디로 얼음·물 출수\"… LG전자, '퓨리케어 AI 냉동얼음정수기' ...",
+     "source": "m-i.kr",
+     "date": "2026-07-16",
+     "link": "https://www.m-i.kr/news/articleView.html?idxno=1392407"
     },
     {
-     "title": "\"가전 마진 한계 극복\" 삼성·LG전자, 집·스크린 묶는 플랫폼 전쟁",
-     "source": "asiaa.co.kr",
-     "date": "2026-07-15",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=255272"
+     "title": "LG 휘센, NCSI 에어컨 부문 21년 연속 1위…LG전자 베스트샵 프로모션 진...",
+     "source": "한국경제",
+     "date": "2026-07-16",
+     "link": "https://n.news.naver.com/mnews/article/015/0005310790?sid=101"
     },
     {
-     "title": "'빌트인 락인' LG전자냐, '생태계 확장' 삼성전자인가…갈라진 AI 홈 방...",
-     "source": "newsquest.co.kr",
-     "date": "2026-07-14",
-     "link": "https://www.newsquest.co.kr/news/articleView.html?idxno=269751"
+     "title": "\"21년 연속 1위 휘센\"…LG전자, 무더위 겨냥 최대 700만원 여름 프로모션",
+     "source": "newsroad.co.kr",
+     "date": "2026-07-16",
+     "link": "http://www.newsroad.co.kr/news/articleView.html?idxno=61665"
     },
     {
-     "title": "[카드뉴스] AI는 집을 움직이고 웹OS는 수익을 만든다.. 달라진 LG전자의...",
-     "source": "techm.kr",
-     "date": "2026-07-14",
-     "link": "https://www.techm.kr/news/articleView.html?idxno=153380"
+     "title": "AI로 더욱 똑똑해진 LG 퓨리케어 정수기",
+     "source": "economist.co.kr",
+     "date": "2026-07-16",
+     "link": "https://n.news.naver.com/mnews/article/243/0000100508?sid=101"
     },
     {
-     "title": "李 대통령이 웃으며 언급한 ‘그 집’ 난리 났다…삼성·LG 모듈러 주택...",
-     "source": "매일경제",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/009/0005707374?sid=101"
+     "title": "LG 휘센, NCSI 에어컨 부문 21년 연속 1위···LG전자 베스트샵 프로모션...",
+     "source": "enetnews.co.kr",
+     "date": "2026-07-16",
+     "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=52499"
     },
     {
-     "title": "이 대통령 4번째 거론 힘 실리는 ‘히트펌프’ 시장서 삼성·LG 격돌",
-     "source": "vop.co.kr",
-     "date": "2026-07-14",
-     "link": "https://vop.co.kr/A00001695817.html"
+     "title": "집 전체를 똑똑하게… 삼성·LG, 'AI 홈' 빅픽처 그린다",
+     "source": "sisaon.co.kr",
+     "date": "2026-07-16",
+     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=202745"
     },
     {
-     "title": "[이슈플러스]아이로봇 인수한 피세아…글로벌 '로청' 공장으로",
-     "source": "전자신문",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/030/0003447729?sid=105"
+     "title": "삼성·LG전자, 포용금융 확대·AI 냉동얼음정수기 출시",
+     "source": "wsobi.com",
+     "date": "2026-07-16",
+     "link": "http://www.wsobi.com/news/articleView.html?idxno=315364"
     },
     {
-     "title": "자이와 씽큐가 함께 지으면 얼마나 편할까··· GS건설·LG전자 'AI 아파...",
-     "source": "greenpostkorea.co.kr",
-     "date": "2026-07-14",
-     "link": "https://www.greenpostkorea.co.kr/news/articleView.html?idxno=307099"
+     "title": "LG 휘센 NCSI 에어컨 부문 21년 연속 1위, LG전자 베스트샵 고객 혜택 확...",
+     "source": "megaeconomy.co.kr",
+     "date": "2026-07-16",
+     "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065588858465922"
     }
    ]
   },
@@ -889,105 +889,105 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75113,
+   "total": 75144,
    "sentiment": {
-    "pos": 15,
-    "neu": 30,
-    "neg": 15
+    "pos": 24,
+    "neu": 25,
+    "neg": 11
    },
    "keywords": [
     [
      "AI",
-     52
+     42
     ],
     [
-     "하드웨어",
+     "고객을",
      18
+    ],
+    [
+     "투자지원금",
+     17
     ],
     [
      "아마존",
-     18
+     16
     ],
     [
      "오픈AI",
      15
     ],
     [
-     "제미나이",
+     "하드웨어",
      15
-    ],
-    [
-     "화면",
-     14
     ],
     [
      "스피커",
      14
     ],
     [
-     "미국",
-     14
-    ],
-    [
-     "결제",
+     "제공한다",
      13
     ],
     [
-     "애플은",
+     "대신증권",
+     12
+    ],
+    [
+     "미국",
+     12
+    ],
+    [
+     "사용할",
+     11
+    ],
+    [
+     "이용권과",
+     11
+    ],
+    [
+     "도미노피자",
+     11
+    ],
+    [
+     "할인",
+     11
+    ],
+    [
+     "다음",
      10
     ],
     [
-     "오픈AI의",
-     9
+     "프로",
+     10
     ],
     [
-     "오픈AI와",
-     9
+     "개인",
+     10
     ],
     [
-     "기기",
-     8
-    ],
-    [
-     "생성형",
-     8
-    ],
-    [
-     "오픈AI로",
-     8
-    ],
-    [
-     "챗GPT",
-     8
-    ],
-    [
-     "이동식",
-     7
-    ],
-    [
-     "시장을",
-     7
+     "문화",
+     10
     ]
    ],
    "posWords": [
     [
-     "협업",
-     3
-    ],
-    [
-     "확대",
-     2
-    ],
-    [
-     "기대",
-     2
-    ],
-    [
-     "선도",
-     2
+     "투자",
+     21
     ],
     [
      "성장",
+     6
+    ],
+    [
+     "글로벌",
+     6
+    ],
+    [
+     "돌파",
+     3
+    ],
+    [
+     "1위",
      1
     ],
     [
@@ -995,116 +995,116 @@
      1
     ],
     [
-     "투자",
+     "확대",
      1
     ],
     [
-     "글로벌",
+     "기대",
      1
     ]
    ],
    "related": [
     "구글 홈 스피커",
     "구글 홈",
-    "구글 홈페이지",
     "구글 홈 미니",
+    "구글 홈페이지",
     "구글 홈 허브",
-    "구글 홈 미니 1세대",
     "구글 홈 어시스턴트",
+    "구글 홈 미니 1세대",
     "구글 홈 스피커 연결",
-    "구글 홈 미니 초기화",
-    "구글 홈 미니 연결"
+    "구글 홈 미니 연결",
+    "구글 홈 미니 초기화"
    ],
    "recent": [
     {
-     "title": "화면 없는 이동식 AI 스피커…오픈AI, 첫 하드웨어 승부수",
-     "source": "뉴시스",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/003/0014069505?sid=104"
+     "title": "홈플러스 살릴 메리츠 2000억…김병주 보증에도 '납품·영업 정상화' 숙...",
+     "source": "joongangenews.com",
+     "date": "2026-07-16",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=533547"
     },
     {
-     "title": "개인용 공유기 출하 4년 연속 감소…메시·게이밍은 성장",
-     "source": "이데일리",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/018/0006331084?sid=105"
-    },
-    {
-     "title": "\"AI 홈 시장을 잡아라\" 국내외 기업 경쟁 치열",
-     "source": "ekoreanews.co.kr",
-     "date": "2026-07-15",
-     "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=87052"
-    },
-    {
-     "title": "\"스마트폰 다음은 글라스\"… 삼성, '항상 연결된 AI' 구축",
-     "source": "mediapen.com",
-     "date": "2026-07-15",
-     "link": "https://www.mediapen.com/news/view/1110338"
-    },
-    {
-     "title": "오픈AI 첫 하드웨어 제품은 '화면없는 이동식 스마트 스피커'...블룸버그...",
-     "source": "beyondpost.co.kr",
-     "date": "2026-07-15",
-     "link": "http://www.beyondpost.co.kr/view.php?ud=2026071514491768552aaae0046f_30"
-    },
-    {
-     "title": "“앱도 가전 품질인데”…폭염에 접속 몰리자 스마트홈 ‘먹통’",
-     "source": "biz.chosun.com",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/366/0001179410?sid=102"
-    },
-    {
-     "title": "“무더위에 사용자 폭증”…스마트가전 앱 심야 접속 장애",
-     "source": "ekn.kr",
-     "date": "2026-07-15",
-     "link": "https://www.ekn.kr/web/view.php?key=20260715027302700"
-    },
-    {
-     "title": "오픈AI, 첫 AI 하드웨어 승부수…화면 없는 스피커 내년 출시",
-     "source": "etoday.co.kr",
-     "date": "2026-07-15",
-     "link": "https://www.etoday.co.kr/news/view/2604065"
-    },
-    {
-     "title": "뷰소닉, 넓은 장소에 특화...200만원대 고휘도 레이저 빔프로젝터 'LSD50...",
-     "source": "betanews.net",
-     "date": "2026-07-15",
-     "link": "https://www.betanews.net/article/view/beta202607130022"
-    },
-    {
-     "title": "오픈AI 첫 하드웨어 기기는 ‘이동식 AI 스피커’…내년 출시 목표",
-     "source": "biz.chosun.com",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/366/0001179386?sid=105"
-    },
-    {
-     "title": "\"AI가 월가에 돈을 뿌리고 있다\"…사상 최대 실적 찍은 투자은행들 [외...",
-     "source": "한국경제",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/015/0005310258?sid=104"
-    },
-    {
-     "title": "“오픈AI 첫 하드웨어는 '무화면 이동식 스마트 스피커'”",
-     "source": "전자신문",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/030/0003448053?sid=105"
-    },
-    {
-     "title": "한병도 민주당 원내대표 \"전대 관리 및 검찰개혁·홈플러스 등 현안 총...",
+     "title": "평택시, 여름방학 맞이 초등학생 치과주치의사업 참여 권장",
      "source": "breaknews.com",
-     "date": "2026-07-15",
-     "link": "http://www.breaknews.com/1221853"
+     "date": "2026-07-16",
+     "link": "http://www.breaknews.com/1222314"
     },
     {
-     "title": "오픈AI, 차세대 스마트 스피커로 AI 기기 시장 진입",
-     "source": "tokenpost.kr",
-     "date": "2026-07-15",
-     "link": "https://www.tokenpost.kr/news/ai/377969"
+     "title": "아임웹, '브랜드 콘퍼런스' 사전신청자 4천명 돌파",
+     "source": "이데일리",
+     "date": "2026-07-16",
+     "link": "https://n.news.naver.com/mnews/article/018/0006331832?sid=101"
     },
     {
-     "title": "오픈AI 첫 하드웨어는 AI 스피커…이번엔 성공할까",
-     "source": "byline.network",
-     "date": "2026-07-15",
-     "link": "https://byline.network/?p=9004111222612139"
+     "title": "세계 1위 보조 배터리 업체 앤커, 롯데백화점 등으로 오프라인 행보 확...",
+     "source": "hankookilbo.com",
+     "date": "2026-07-16",
+     "link": "https://n.news.naver.com/mnews/article/469/0000942661?sid=105"
+    },
+    {
+     "title": "대신증권, 크레온 신규 고객 이벤트 진행",
+     "source": "newsinside.kr",
+     "date": "2026-07-16",
+     "link": "https://www.newsinside.kr/news/articleView.html?idxno=4842564"
+    },
+    {
+     "title": "반도체 성과급·외국인 소비 '쌍끌이'…백화점·대형마트 8년 만에 부활...",
+     "source": "joongangenews.com",
+     "date": "2026-07-16",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=533455"
+    },
+    {
+     "title": "[증권 NOW] 한화투자증권·신한투자증권·대신증권",
+     "source": "wikileaks-kr.org",
+     "date": "2026-07-16",
+     "link": "http://www.wikileaks-kr.org/news/articleView.html?idxno=189849"
+    },
+    {
+     "title": "아임웹 '브랜드콘26' 접수에 4000명 몰려",
+     "source": "아이뉴스24",
+     "date": "2026-07-16",
+     "link": "https://n.news.naver.com/mnews/article/031/0001042756?sid=105"
+    },
+    {
+     "title": "김병주·MBK, 홈플러스 회생 2000억원 추가 연대보증 결정",
+     "source": "breaknews.com",
+     "date": "2026-07-16",
+     "link": "http://www.breaknews.com/1222246"
+    },
+    {
+     "title": "아임웹 '브랜드콘 26' 4천명 신청…4대 1 경쟁률",
+     "source": "hansbiz.co.kr",
+     "date": "2026-07-16",
+     "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=850740"
+    },
+    {
+     "title": "대신증권, 크레온 신규 고객 대상 투자지원금 이벤트",
+     "source": "issuenbiz.com",
+     "date": "2026-07-16",
+     "link": "http://www.issuenbiz.com/news/articleView.html?idxno=77929"
+    },
+    {
+     "title": "대신증권 \"MTS로 계좌 만들고 투자지원금 받아 가세요\"",
+     "source": "머니투데이",
+     "date": "2026-07-16",
+     "link": "https://n.news.naver.com/mnews/article/008/0005387032?sid=101"
+    },
+    {
+     "title": "[경제소식] 'TIGER 미국배당다우존스' 순자산 4조원 돌파",
+     "source": "4th.kr",
+     "date": "2026-07-16",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2114847"
+    },
+    {
+     "title": "대신증권, 크레온 신규 고객 대상 투자지원금·주식 매수 이벤트...최대...",
+     "source": "ftoday.co.kr",
+     "date": "2026-07-16",
+     "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=362175"
+    },
+    {
+     "title": "사람과 유사한 AI 스피커? 윤곽 드러나는 올트먼의 포스트 스마트폰",
+     "source": "fortunekorea.co.kr",
+     "date": "2026-07-16",
+     "link": "https://www.fortunekorea.co.kr/news/articleView.html?idxno=53230"
     }
    ]
   }
