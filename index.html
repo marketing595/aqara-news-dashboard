@@ -1007,7 +1007,11 @@
                <button onclick="wkShareLink()" class="text-sm bg-[#7C5CFF] text-white px-3 py-1.5 rounded-lg font-semibold">보고 링크 복사</button>
              </div>
            </div>
-           <p class="text-[12px] text-slate-400 mb-3">각 칸을 클릭해 작성하세요. 주차별로 이 브라우저에 저장됩니다(팀 공유는 '보고 텍스트 복사'로).</p>
+           <p class="text-[12px] text-slate-400 mb-2">각 칸을 클릭해 작성하세요. <b class="text-agreen">여러 명이 동시에 편집하면 실시간으로 서로 반영</b>됩니다.</p>
+           <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+             <div id="wkPresence" class="flex flex-wrap items-center gap-1.5"></div>
+             <span id="wkUpdated" class="text-[11px] text-slate-400"></span>
+           </div>
            <div id="mktWeeklyBody" class="space-y-4"></div>
          </div>
        </div>
@@ -2046,7 +2050,7 @@
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
-    function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
+    function switchGroup(g){ if(g!=='mkt' && typeof wkPresenceStop==='function') wkPresenceStop(); switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
       ['analytics','briefing','campaign','owned','cafe','report','competitor','market','calendar','medialist','library','mkt','kpi'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
@@ -2335,7 +2339,7 @@
       document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
       document.getElementById('mktSec-weekly').classList.toggle('hidden', s!=='weekly');
       ['kpi','weekly','medialist','calendar','insta','blog','prpitch'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
-      if(s==='weekly'){ wkOpen(); }
+      if(s==='weekly'){ wkOpen(); } else { if(typeof wkPresenceStop==='function') wkPresenceStop(); }
       if(s==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -2421,6 +2425,7 @@
     // ===== 주간보고 (Firebase 실시간 공유 · 프로젝트·댓글·드래그) =====
     const WK_FIELDS=[{k:'done',label:'금주 진행 · 성과'},{k:'plan',label:'차주 계획'},{k:'issue',label:'이슈 · 공유'}];
     const WK_PALETTE=['#7C5CFF','#2563EB','#059669','#D97706','#DC2626','#DB2777','#0891B2','#65A30D','#9333EA','#E11D48'];
+    const WK_DEFAULT_PROJECTS=['L100캠페인','스마트홈 인테리어','온라인팀 협업','PR'];
     let weeklyData=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraWeekly')||'{}');}catch(e){return {};} })();
     let wkProjects=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraProjects')||'{}');}catch(e){return {};} })();
     let wkCur=null, wkFilter=null, wkPendingSnap=false, wkFocusWired=false, wkWeekRef=null, wkProjRef=null;
@@ -2431,18 +2436,19 @@
       return (mon.getMonth()+1)+'/'+mon.getDate()+'('+WK_DOW[mon.getDay()]+') ~ '+(fri.getMonth()+1)+'/'+fri.getDate()+'('+WK_DOW[fri.getDay()]+')'; }
     function wkUseFB(){ return !!(typeof WK_FB_READY!=='undefined' && WK_FB_READY && WK_AUTH_OK && WK_DB); }
     // 진입 · 주차 이동
-    function wkOpen(){ if(!wkCur) wkCur=wkMondayOf(todayStr()); wkWireFocus(); wkAttach(); renderMktWeekly(); }
+    function wkOpen(){ if(!wkCur) wkCur=wkMondayOf(todayStr()); wkWireFocus(); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); }
     function wkThis(){ wkCur=wkMondayOf(todayStr()); wkAttach(); renderMktWeekly(); }
     function wkShift(n){ if(!wkCur) wkCur=wkMondayOf(todayStr()); const d=new Date(wkCur); d.setDate(d.getDate()+n*7); wkCur=d.toISOString().slice(0,10); wkAttach(); renderMktWeekly(); }
     function wkVisible(){ const s=document.getElementById('mktSec-weekly'); return !!(s && !s.classList.contains('hidden')); }
-    function wkOnAuth(){ if(wkVisible()){ if(!wkCur) wkCur=wkMondayOf(todayStr()); wkAttach(); renderMktWeekly(); } }
+    function wkOnAuth(){ if(wkVisible()){ if(!wkCur) wkCur=wkMondayOf(todayStr()); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); } }
     // Firebase 실시간 리스너
     function wkAttach(){ if(!wkUseFB()||!wkCur) return; wkDetach();
       wkWeekRef=WK_DB.ref('weekly/'+wkCur);
       wkWeekRef.on('value', function(snap){ weeklyData[wkCur]=snap.val()||{}; wkAfterSnap(); });
       if(!wkProjRef){ wkProjRef=WK_DB.ref('projects'); wkProjRef.on('value', function(snap){ wkProjects=snap.val()||{}; wkAfterSnap(); }); } }
     function wkDetach(){ if(wkWeekRef){ try{wkWeekRef.off();}catch(e){} wkWeekRef=null; } }
-    function wkAfterSnap(){ if(wkFocused()){ wkPendingSnap=true; wkPreserveActive(); return; } renderMktWeekly(); }
+    function wkStampUpdated(){ const el=document.getElementById('wkUpdated'); if(!el) return; const d=new Date(); el.textContent='마지막 갱신 '+d.getHours()+'시 '+d.getMinutes()+'분 '+d.getSeconds()+'초'; }
+    function wkAfterSnap(){ wkStampUpdated(); if(wkFocused()){ wkPendingSnap=true; wkPreserveActive(); return; } renderMktWeekly(); }
     // 편집 중 커서 보호
     function wkBody(){ return document.getElementById('mktWeeklyBody'); }
     function wkFocused(){ const a=document.activeElement, b=wkBody(); return !!(a && b && b.contains(a) && (a.isContentEditable || a.tagName==='INPUT' || a.tagName==='TEXTAREA' || a.tagName==='SELECT')); }
@@ -2455,7 +2461,7 @@
     function wkLocalSet(path,val){ const parts=path.split('/'); if(parts[0]==='projects'){ setNested(wkProjects,parts.slice(1),val); } else if(parts[0]==='weekly'){ const wk=parts[1]; weeklyData[wk]=weeklyData[wk]||{}; setNested(weeklyData[wk],parts.slice(2),val); } }
     function wkGetPath(path){ const parts=path.split('/'); let o=parts[0]==='projects'?wkProjects:(parts[0]==='weekly'?(weeklyData[parts[1]]||{}):null); const start=parts[0]==='projects'?1:2; for(let i=start;i<parts.length;i++){ o=o&&o[parts[i]]; } return (o==null?null:o); }
     function wkApply(updates,noRender){ for(const p in updates){ wkLocalSet(p,updates[p]); } if(wkUseFB()){ WK_DB.ref().update(updates).catch(e=>console.warn('저장 실패:',e&&e.message)); } else { wkPersistLocal(); } if(!noRender && !wkFocused()) renderMktWeekly(); }
-    function wkSetText(path,val){ wkLocalSet(path,val); clearTimeout(wkDeb[path]); wkDeb[path]=setTimeout(function(){ wkFlushPath(path); },400); }
+    function wkSetText(path,val){ wkLocalSet(path,val); clearTimeout(wkDeb[path]); wkDeb[path]=setTimeout(function(){ wkFlushPath(path); },250); }
     function wkFlushPath(path){ clearTimeout(wkDeb[path]); delete wkDeb[path]; const v=wkGetPath(path); if(wkUseFB()){ const u={}; u[path]=(v==null?'':v); WK_DB.ref().update(u).catch(e=>console.warn('저장 실패:',e&&e.message)); } else { wkPersistLocal(); } }
     function wkText(el){ if(el&&el.dataset&&el.dataset.path) wkSetText(el.dataset.path, (el.tagName==='INPUT'?el.value:el.innerText)); }
     // ID · 순서
@@ -2471,6 +2477,24 @@
     function wkComments(m){ return wkCommentsFrom(m); }
     function wkProjListFrom(m){ m=m||{}; return Object.keys(m).map(id=>({id:id,name:(m[id]&&m[id].name)||'',color:(m[id]&&m[id].color)||'#6E6E73',order:(m[id]&&typeof m[id].order==='number'?m[id].order:0)})).sort((a,b)=> (a.order-b.order) || (a.id<b.id?-1:1)); }
     function wkProjList(){ return wkProjListFrom(wkProjects); }
+    // 기본 프로젝트 시딩 (없는 이름만 추가, 동시 접속에도 안전한 트랜잭션)
+    function wkSeedProjects(){
+      if(wkUseFB()){
+        WK_DB.ref('projects').transaction(function(cur){ cur=cur||{}; const names=Object.keys(cur).map(k=>cur[k]&&cur[k].name); let ord=Object.keys(cur).reduce((m,k)=>Math.max(m,(cur[k]&&cur[k].order)||0),-1); let ch=false; WK_DEFAULT_PROJECTS.forEach(nm=>{ if(names.indexOf(nm)<0){ ord++; cur[wkNewId()]={name:nm,color:WK_PALETTE[ord%WK_PALETTE.length],order:ord}; ch=true; } }); return ch?cur:undefined; });
+      } else {
+        const cur=wkProjects||{}; const names=Object.keys(cur).map(k=>cur[k]&&cur[k].name); let ord=Object.keys(cur).reduce((m,k)=>Math.max(m,(cur[k]&&cur[k].order)||0),-1); let ch=false; WK_DEFAULT_PROJECTS.forEach(nm=>{ if(names.indexOf(nm)<0){ ord++; cur[wkNewId()]={name:nm,color:WK_PALETTE[ord%WK_PALETTE.length],order:ord}; ch=true; } }); if(ch){ wkProjects=cur; wkPersistLocal(); renderMktWeekly(); }
+      }
+    }
+    // 접속 중 기기 표시 (Firebase presence · 창 닫으면 자동 제거)
+    let wkPresRef=null, wkPresListen=false, wkPresConn=null;
+    function wkGuessDevice(){ const ua=navigator.userAgent||''; let os='기기'; if(/Windows/.test(ua))os='Windows'; else if(/Macintosh|Mac OS/.test(ua))os='Mac'; else if(/Android/.test(ua))os='Android'; else if(/iPhone|iPad/.test(ua))os='iOS'; else if(/Linux/.test(ua))os='Linux'; let br=''; if(/Edg/.test(ua))br='Edge'; else if(/Chrome/.test(ua))br='Chrome'; else if(/Firefox/.test(ua))br='Firefox'; else if(/Safari/.test(ua))br='Safari'; return br?(os+'·'+br):os; }
+    function wkDeviceName(){ let n=null; try{ n=localStorage.getItem('wkDeviceName'); }catch(e){} if(!n){ n=wkGuessDevice(); try{ localStorage.setItem('wkDeviceName',n); }catch(e){} } return n; }
+    function wkRenamePresence(){ const v=prompt('이 컴퓨터의 표시 이름을 입력하세요', wkDeviceName()); if(v==null) return; const nm=(v.trim()||wkGuessDevice()); try{ localStorage.setItem('wkDeviceName',nm); }catch(e){} if(wkPresRef) wkPresRef.update({name:nm}); }
+    function wkPresenceStart(){ if(!wkUseFB()||wkPresRef) return; const name=wkDeviceName(); wkPresRef=WK_DB.ref('presence').push(); wkPresConn=WK_DB.ref('.info/connected'); wkPresConn.on('value', function(s){ if(s.val()===true && wkPresRef){ wkPresRef.onDisconnect().remove(); wkPresRef.set({name:name, ts:Date.now()}); } }); if(!wkPresListen){ wkPresListen=true; WK_DB.ref('presence').on('value', function(snap){ wkRenderPresence(snap.val()||{}); }); } }
+    function wkPresenceStop(){ if(wkPresConn){ try{ wkPresConn.off(); }catch(e){} wkPresConn=null; } if(wkPresRef){ try{ wkPresRef.onDisconnect().cancel(); wkPresRef.remove(); }catch(e){} wkPresRef=null; } const el=document.getElementById('wkPresence'); if(el) el.innerHTML=''; }
+    function wkRenderPresence(map){ const el=document.getElementById('wkPresence'); if(!el) return; const mykey=wkPresRef&&wkPresRef.key; const keys=Object.keys(map||{}).filter(k=>map[k]&&map[k].name); if(!keys.length){ el.innerHTML=''; return; }
+      const chips=keys.map(k=>{ const n=map[k].name, me=(k===mykey); return '<span class="inline-flex items-center gap-1 text-[12px] px-2 py-0.5 rounded-full '+(me?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'bg-slate-100 text-slate-600')+'"><span style="width:6px;height:6px;border-radius:9999px;background:#22C55E;display:inline-block"></span>'+esc(n)+(me?' (나)':'')+'</span>'; }).join(' ');
+      el.innerHTML='<span class="text-[12px] font-semibold text-slate-500 mr-1">🟢 접속 중 '+keys.length+'명</span> '+chips+' <button onclick="wkRenamePresence()" class="text-[11px] text-slate-400 hover:text-ink underline ml-1">내 이름 변경</button>'; }
     function wkGroupItems(items,projs){ const groups=[]; if(projs&&projs.length){ projs.forEach(p=>{ const gi=items.filter(it=>it.project===p.id); if(gi.length) groups.push({p:p,items:gi}); }); const none=items.filter(it=>!it.project||!projs.some(p=>p.id===it.project)); if(none.length) groups.push({p:null,items:none}); } else if(items.length){ groups.push({p:null,items:items}); } return groups; }
     // 항목 조작
     function wkToggle(bk,id,checked){ const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/c']=!!checked; wkApply(u); }
