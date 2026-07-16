@@ -31,7 +31,7 @@
         firebase.initializeApp(FIREBASE_CONFIG);
         WK_DB=firebase.database(); WK_FB_READY=true;
         firebase.auth().signInAnonymously().catch(e=>console.warn('Firebase 익명 로그인 실패:', e&&e.message));
-        firebase.auth().onAuthStateChanged(u=>{ WK_AUTH_OK=!!u; if(u && typeof wkOnAuth==='function') wkOnAuth(); });
+        firebase.auth().onAuthStateChanged(u=>{ WK_AUTH_OK=!!u; if(u){ if(typeof wkPresenceStart==='function') wkPresenceStart(); if(typeof wkOnAuth==='function') wkOnAuth(); } });
       }catch(e){ console.warn('Firebase init 오류:', e&&e.message); WK_FB_READY=false; }
     })();
   </script>
@@ -96,6 +96,7 @@
         <span class="text-[11px] text-white/35 tracking-wide hidden sm:inline">AqaraLife</span>
       </div>
       <div class="flex items-center gap-3">
+        <div id="globalPresence" onclick="if(typeof wkRenamePresence==='function')wkRenamePresence()" title="지금 대시보드에 접속한 사람 · 클릭하면 내 표시 이름 변경" class="flex items-center cursor-pointer"></div>
         <span id="updated" class="text-[11px] text-white/35 hidden md:inline"></span>
         <button onclick="loadData()" class="text-[13px] bg-white/10 hover:bg-white/20 text-white transition px-3.5 py-2 rounded-lg font-medium border border-white/15">새로고침</button>
       </div>
@@ -2052,7 +2053,7 @@
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
-    function switchGroup(g){ if(g!=='mkt' && typeof wkPresenceStop==='function') wkPresenceStop(); switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
+    function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
       ['analytics','briefing','campaign','owned','cafe','report','competitor','market','calendar','medialist','library','mkt','kpi'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
@@ -2341,7 +2342,7 @@
       document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
       document.getElementById('mktSec-weekly').classList.toggle('hidden', s!=='weekly');
       ['kpi','weekly','medialist','calendar','insta','blog','prpitch'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
-      if(s==='weekly'){ wkOpen(); } else { if(typeof wkPresenceStop==='function') wkPresenceStop(); }
+      if(s==='weekly'){ wkOpen(); }
       if(s==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -2499,9 +2500,20 @@
     function wkRenamePresence(){ const v=prompt('이 컴퓨터의 표시 이름을 입력하세요', wkDeviceName()); if(v==null) return; const nm=(v.trim()||wkGuessDevice()); try{ localStorage.setItem('wkDeviceName',nm); }catch(e){} if(wkPresRef) wkPresRef.update({name:nm}); }
     function wkPresenceStart(){ if(!wkUseFB()||wkPresRef) return; const name=wkDeviceName(); wkPresRef=WK_DB.ref('presence').push(); wkPresConn=WK_DB.ref('.info/connected'); wkPresConn.on('value', function(s){ if(s.val()===true && wkPresRef){ wkPresRef.onDisconnect().remove(); wkPresRef.set({name:name, ts:Date.now()}); } }); if(!wkPresListen){ wkPresListen=true; WK_DB.ref('presence').on('value', function(snap){ wkRenderPresence(snap.val()||{}); }); } }
     function wkPresenceStop(){ if(wkPresConn){ try{ wkPresConn.off(); }catch(e){} wkPresConn=null; } if(wkPresRef){ try{ wkPresRef.onDisconnect().cancel(); wkPresRef.remove(); }catch(e){} wkPresRef=null; } const el=document.getElementById('wkPresence'); if(el) el.innerHTML=''; }
-    function wkRenderPresence(map){ const el=document.getElementById('wkPresence'); if(!el) return; const mykey=wkPresRef&&wkPresRef.key; const keys=Object.keys(map||{}).filter(k=>map[k]&&map[k].name); if(!keys.length){ el.innerHTML=''; return; }
-      const chips=keys.map(k=>{ const n=map[k].name, me=(k===mykey); return '<span class="inline-flex items-center gap-1 text-[12px] px-2 py-0.5 rounded-full '+(me?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'bg-slate-100 text-slate-600')+'"><span style="width:6px;height:6px;border-radius:9999px;background:#22C55E;display:inline-block"></span>'+esc(n)+(me?' (나)':'')+'</span>'; }).join(' ');
-      el.innerHTML='<span class="text-[12px] font-semibold text-slate-500 mr-1">🟢 접속 중 '+keys.length+'명</span> '+chips+' <button onclick="wkRenamePresence()" class="text-[11px] text-slate-400 hover:text-ink underline ml-1">내 이름 변경</button>'; }
+    function wkAvatarColor(name){ let h=0; const s=name||'?'; for(let i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))>>>0; } return WK_PALETTE[h%WK_PALETTE.length]; }
+    function wkInitials(name){ const n=(name||'?').trim(); const parts=n.split(/[\s·]+/).filter(Boolean); if(parts.length>=2) return (parts[0][0]+parts[1][0]).toUpperCase(); return n.slice(0,2).toUpperCase(); }
+    function wkRenderPresence(map){ const mykey=wkPresRef&&wkPresRef.key; const keys=Object.keys(map||{}).filter(k=>map[k]&&map[k].name);
+      // 우상단 아바타 스택 (구글 스프레드시트 스타일)
+      const g=document.getElementById('globalPresence');
+      if(g){ if(!keys.length){ g.innerHTML=''; } else { const ordered=keys.slice().sort((a,b)=> a===mykey?-1:(b===mykey?1:0)); const show=ordered.slice(0,5);
+        const dot=function(bg,ml,label,title){ return '<div'+(title?' title="'+title+'"':'')+' style="width:26px;height:26px;border-radius:9999px;background:'+bg+';border:2px solid #1D1D1F;box-sizing:content-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;letter-spacing:-0.02em;margin-left:'+ml+'">'+label+'</div>'; };
+        let av=show.map(function(k,idx){ const n=map[k].name, me=(k===mykey); return dot(wkAvatarColor(n), idx?'-8px':'0', esc(wkInitials(n)), esc(n)+(me?' (나)':'')); }).join('');
+        if(keys.length>show.length){ av+=dot('#6E6E73','-8px','+'+(keys.length-show.length),''); }
+        g.innerHTML='<span class="text-[11px] text-white/50 mr-2 hidden sm:inline">접속 '+keys.length+'</span>'+av; } }
+      // 주간보고 내부 상세 칩(있을 때만)
+      const el=document.getElementById('wkPresence'); if(el){ if(!keys.length){ el.innerHTML=''; } else {
+        const chips=keys.map(k=>{ const n=map[k].name, me=(k===mykey); return '<span class="inline-flex items-center gap-1 text-[12px] px-2 py-0.5 rounded-full '+(me?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'bg-slate-100 text-slate-600')+'"><span style="width:6px;height:6px;border-radius:9999px;background:#22C55E;display:inline-block"></span>'+esc(n)+(me?' (나)':'')+'</span>'; }).join(' ');
+        el.innerHTML='<span class="text-[12px] font-semibold text-slate-500 mr-1">🟢 접속 중 '+keys.length+'명</span> '+chips+' <button onclick="wkRenamePresence()" class="text-[11px] text-slate-400 hover:text-ink underline ml-1">내 이름 변경</button>'; } } }
     function wkGroupItems(items,projs){ const groups=[]; if(projs&&projs.length){ projs.forEach(p=>{ const gi=items.filter(it=>it.project===p.id); if(gi.length) groups.push({p:p,items:gi}); }); const none=items.filter(it=>!it.project||!projs.some(p=>p.id===it.project)); if(none.length) groups.push({p:null,items:none}); } else if(items.length){ groups.push({p:null,items:items}); } return groups; }
     // 항목 조작
     function wkToggle(bk,id,checked){ const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/c']=!!checked; wkApply(u); }
