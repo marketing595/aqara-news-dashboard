@@ -10,6 +10,31 @@
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Firebase (주간보고 실시간 공유) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script>
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyAs_yQ1fgGKfRDKbkUb0lviIoJ2e00KRGA",
+      authDomain: "aqara-weekly-1227c.firebaseapp.com",
+      databaseURL: "https://aqara-weekly-1227c-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "aqara-weekly-1227c",
+      storageBucket: "aqara-weekly-1227c.firebasestorage.app",
+      messagingSenderId: "869711080033",
+      appId: "1:869711080033:web:9fc6fb53b272b942085820"
+    };
+    let WK_DB=null, WK_FB_READY=false, WK_AUTH_OK=false;
+    (function initFirebase(){
+      try{
+        if(typeof firebase==='undefined' || !FIREBASE_CONFIG.databaseURL){ console.warn('Firebase SDK 미로딩 → 주간보고 로컬 저장 모드'); return; }
+        firebase.initializeApp(FIREBASE_CONFIG);
+        WK_DB=firebase.database(); WK_FB_READY=true;
+        firebase.auth().signInAnonymously().catch(e=>console.warn('Firebase 익명 로그인 실패:', e&&e.message));
+        firebase.auth().onAuthStateChanged(u=>{ WK_AUTH_OK=!!u; if(u && typeof wkOnAuth==='function') wkOnAuth(); });
+      }catch(e){ console.warn('Firebase init 오류:', e&&e.message); WK_FB_READY=false; }
+    })();
+  </script>
   <script>
     // 아카라라이프 Brand Guideline ver.1.0 — 공식 컬러 시스템
     tailwind.config = { theme: { extend: {
@@ -2309,8 +2334,8 @@
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
       document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
       document.getElementById('mktSec-weekly').classList.toggle('hidden', s!=='weekly');
-      ['kpi','weekly','medialist','calendar','insta','blog','prpitch'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b) b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap '+(x===s?'bg-[#7C5CFF] text-white font-semibold':'text-[#5B44C7] hover:bg-[#EDE9FF] font-medium'); });
-      if(s==='weekly'){ renderMktWeekly(); }
+      ['kpi','weekly','medialist','calendar','insta','blog','prpitch'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
+      if(s==='weekly'){ wkOpen(); }
       if(s==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -2393,85 +2418,134 @@
         </div>`).join('')}
       </div>`).join('');
     }
-    // ===== 주간보고 (블록별 · 체크박스+담당자) =====
+    // ===== 주간보고 (Firebase 실시간 공유 · 프로젝트·댓글·드래그) =====
     const WK_FIELDS=[{k:'done',label:'금주 진행 · 성과'},{k:'plan',label:'차주 계획'},{k:'issue',label:'이슈 · 공유'}];
+    const WK_PALETTE=['#7C5CFF','#2563EB','#059669','#D97706','#DC2626','#DB2777','#0891B2','#65A30D','#9333EA','#E11D48'];
     let weeklyData=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraWeekly')||'{}');}catch(e){return {};} })();
-    let wkCur=null;
+    let wkProjects=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraProjects')||'{}');}catch(e){return {};} })();
+    let wkCur=null, wkFilter=null, wkPendingSnap=false, wkFocusWired=false, wkWeekRef=null, wkProjRef=null;
+    const wkDeb={};
     const WK_DOW=['일','월','화','수','목','금','토'];
     function wkMondayOf(dstr){ const d=new Date(dstr); const day=(d.getDay()+6)%7; d.setDate(d.getDate()-day); return d.toISOString().slice(0,10); }
     function wkRange(){ const mon=new Date(wkCur), fri=new Date(wkCur); fri.setDate(fri.getDate()+4);
       return (mon.getMonth()+1)+'/'+mon.getDate()+'('+WK_DOW[mon.getDay()]+') ~ '+(fri.getMonth()+1)+'/'+fri.getDate()+'('+WK_DOW[fri.getDay()]+')'; }
-    function wkThis(){ wkCur=wkMondayOf(todayStr()); renderMktWeekly(); }
-    function wkShift(n){ if(!wkCur) wkCur=wkMondayOf(todayStr()); const d=new Date(wkCur); d.setDate(d.getDate()+n*7); wkCur=d.toISOString().slice(0,10); renderMktWeekly(); }
-    function wkEnsure(){ if(!wkCur) wkCur=wkMondayOf(todayStr()); weeklyData[wkCur]=weeklyData[wkCur]||{}; WK_FIELDS.forEach(f=>{ if(!Array.isArray(weeklyData[wkCur][f.k])) weeklyData[wkCur][f.k]=[]; }); if(typeof weeklyData[wkCur].insight!=='string') weeklyData[wkCur].insight=''; }
-    function wkSaveInsight(el){ wkEnsure(); weeklyData[wkCur].insight=el.innerText; wkPersist(); }
-    function wkPersist(){ try{ localStorage.setItem('aqaraWeekly',JSON.stringify(weeklyData)); }catch(e){} }
-    function wkAddRow(bk){ wkEnsure(); weeklyData[wkCur][bk].push({t:'',w:'',c:false}); wkPersist(); renderMktWeekly(); }
-    function wkDelRow(bk,i){ wkEnsure(); weeklyData[wkCur][bk].splice(i,1); wkPersist(); renderMktWeekly(); }
-    function wkMoveRow(bk,i,dir){ wkEnsure(); const a=weeklyData[wkCur][bk], j=i+dir; if(j<0||j>=a.length) return; const tmp=a[i]; a[i]=a[j]; a[j]=tmp; wkPersist(); renderMktWeekly(); }
-    function wkToggle(bk,i,cb){ wkEnsure(); (weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{}).c=cb.checked; wkPersist(); const row=cb.closest('.wk-row'); if(row){ const td=row.querySelector('.wk-txt'); if(td){ td.classList.toggle('line-through',cb.checked); td.classList.toggle('text-slate-400',cb.checked); td.classList.toggle('text-slate-700',!cb.checked); } } }
-    function wkEditRow(bk,i,field,el){ wkEnsure(); (weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{})[field]=(el.tagName==='INPUT'?el.value:el.innerText).trim(); wkPersist(); }
-    function wkAddComment(bk,i){ wkEnsure(); const it=(weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{}); if(!Array.isArray(it.cm)) it.cm=[]; it.cm.push(''); wkPersist(); renderMktWeekly(); }
-    function wkEditComment(bk,i,ci,el){ wkEnsure(); const it=(weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{}); if(!Array.isArray(it.cm)) it.cm=[]; it.cm[ci]=el.innerText.trim(); wkPersist(); }
-    function wkDelComment(bk,i,ci){ wkEnsure(); const it=weeklyData[wkCur][bk][i]; if(it&&Array.isArray(it.cm)){ it.cm.splice(ci,1); wkPersist(); renderMktWeekly(); } }
-    // --- 드래그로 순서 이동 (손잡이 ⠿를 누를 때만 활성화, 텍스트 편집과 충돌 방지) ---
+    function wkUseFB(){ return !!(typeof WK_FB_READY!=='undefined' && WK_FB_READY && WK_AUTH_OK && WK_DB); }
+    // 진입 · 주차 이동
+    function wkOpen(){ if(!wkCur) wkCur=wkMondayOf(todayStr()); wkWireFocus(); wkAttach(); renderMktWeekly(); }
+    function wkThis(){ wkCur=wkMondayOf(todayStr()); wkAttach(); renderMktWeekly(); }
+    function wkShift(n){ if(!wkCur) wkCur=wkMondayOf(todayStr()); const d=new Date(wkCur); d.setDate(d.getDate()+n*7); wkCur=d.toISOString().slice(0,10); wkAttach(); renderMktWeekly(); }
+    function wkVisible(){ const s=document.getElementById('mktSec-weekly'); return !!(s && !s.classList.contains('hidden')); }
+    function wkOnAuth(){ if(wkVisible()){ if(!wkCur) wkCur=wkMondayOf(todayStr()); wkAttach(); renderMktWeekly(); } }
+    // Firebase 실시간 리스너
+    function wkAttach(){ if(!wkUseFB()||!wkCur) return; wkDetach();
+      wkWeekRef=WK_DB.ref('weekly/'+wkCur);
+      wkWeekRef.on('value', function(snap){ weeklyData[wkCur]=snap.val()||{}; wkAfterSnap(); });
+      if(!wkProjRef){ wkProjRef=WK_DB.ref('projects'); wkProjRef.on('value', function(snap){ wkProjects=snap.val()||{}; wkAfterSnap(); }); } }
+    function wkDetach(){ if(wkWeekRef){ try{wkWeekRef.off();}catch(e){} wkWeekRef=null; } }
+    function wkAfterSnap(){ if(wkFocused()){ wkPendingSnap=true; wkPreserveActive(); return; } renderMktWeekly(); }
+    // 편집 중 커서 보호
+    function wkBody(){ return document.getElementById('mktWeeklyBody'); }
+    function wkFocused(){ const a=document.activeElement, b=wkBody(); return !!(a && b && b.contains(a) && (a.isContentEditable || a.tagName==='INPUT' || a.tagName==='TEXTAREA' || a.tagName==='SELECT')); }
+    function wkPreserveActive(){ const a=document.activeElement; if(a && a.dataset && a.dataset.path){ wkLocalSet(a.dataset.path, (a.tagName==='INPUT'?a.value:a.innerText)); } }
+    function wkWireFocus(){ if(wkFocusWired) return; const b=wkBody(); if(!b) return; wkFocusWired=true;
+      b.addEventListener('focusout', function(){ Object.keys(wkDeb).forEach(wkFlushPath); setTimeout(function(){ if(!wkFocused() && wkPendingSnap){ wkPendingSnap=false; renderMktWeekly(); } }, 80); }); }
+    // 저장 (로컬 미러 + Firebase)
+    function wkPersistLocal(){ try{ localStorage.setItem('aqaraWeekly',JSON.stringify(weeklyData)); localStorage.setItem('aqaraProjects',JSON.stringify(wkProjects)); }catch(e){} }
+    function setNested(obj,keys,val){ let o=obj; for(let i=0;i<keys.length-1;i++){ const k=keys[i]; if(typeof o[k]!=='object'||o[k]===null) o[k]={}; o=o[k]; } const last=keys[keys.length-1]; if(val===null) delete o[last]; else o[last]=val; }
+    function wkLocalSet(path,val){ const parts=path.split('/'); if(parts[0]==='projects'){ setNested(wkProjects,parts.slice(1),val); } else if(parts[0]==='weekly'){ const wk=parts[1]; weeklyData[wk]=weeklyData[wk]||{}; setNested(weeklyData[wk],parts.slice(2),val); } }
+    function wkGetPath(path){ const parts=path.split('/'); let o=parts[0]==='projects'?wkProjects:(parts[0]==='weekly'?(weeklyData[parts[1]]||{}):null); const start=parts[0]==='projects'?1:2; for(let i=start;i<parts.length;i++){ o=o&&o[parts[i]]; } return (o==null?null:o); }
+    function wkApply(updates,noRender){ for(const p in updates){ wkLocalSet(p,updates[p]); } if(wkUseFB()){ WK_DB.ref().update(updates).catch(e=>console.warn('저장 실패:',e&&e.message)); } else { wkPersistLocal(); } if(!noRender && !wkFocused()) renderMktWeekly(); }
+    function wkSetText(path,val){ wkLocalSet(path,val); clearTimeout(wkDeb[path]); wkDeb[path]=setTimeout(function(){ wkFlushPath(path); },400); }
+    function wkFlushPath(path){ clearTimeout(wkDeb[path]); delete wkDeb[path]; const v=wkGetPath(path); if(wkUseFB()){ const u={}; u[path]=(v==null?'':v); WK_DB.ref().update(u).catch(e=>console.warn('저장 실패:',e&&e.message)); } else { wkPersistLocal(); } }
+    function wkText(el){ if(el&&el.dataset&&el.dataset.path) wkSetText(el.dataset.path, (el.tagName==='INPUT'?el.value:el.innerText)); }
+    // ID · 순서
+    function wkNewId(){ if(wkUseFB()){ try{ return WK_DB.ref().push().key; }catch(e){} } return 'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+    function wkNextOrder(bk){ const a=wkItems(bk); return a.length?(a[a.length-1].order+1):0; }
+    // 정규화 · 접근자
+    function wkArrToMap(arr){ const m={}; (arr||[]).forEach((it,i)=>{ const id=wkNewId(); let cm={}; if(Array.isArray(it.cm)){ it.cm.forEach((c,j)=>{ if(c&&(''+c).trim()) cm[wkNewId()]={t:''+c,order:j}; }); } m[id]={t:it.t||'',w:it.w||'',c:!!it.c,project:it.project||'',order:i,cm:cm}; }); return m; }
+    function wkEnsure(){ if(!wkCur) wkCur=wkMondayOf(todayStr()); if(!wkProjects||typeof wkProjects!=='object') wkProjects={}; weeklyData[wkCur]=weeklyData[wkCur]||{}; const w=weeklyData[wkCur]; WK_FIELDS.forEach(f=>{ if(Array.isArray(w[f.k])) w[f.k]=wkArrToMap(w[f.k]); else if(w[f.k]==null||typeof w[f.k]!=='object') w[f.k]={}; }); if(typeof w.insight!=='string') w.insight=(w.insight==null?'':String(w.insight)); }
+    function wkItemsFrom(m){ m=m||{}; return Object.keys(m).map(id=>{ const it=m[id]||{}; return {id:id,t:it.t||'',w:it.w||'',c:!!it.c,project:it.project||'',order:(typeof it.order==='number'?it.order:0),cm:it.cm||{}}; }).sort((a,b)=> (a.order-b.order) || (a.id<b.id?-1:1)); }
+    function wkItems(bk){ wkEnsure(); return wkItemsFrom((weeklyData[wkCur]||{})[bk]); }
+    function wkItemById(bk,id){ const it=((weeklyData[wkCur]||{})[bk]||{})[id]||{}; return {id:id,t:it.t||'',w:it.w||'',c:!!it.c,project:it.project||'',order:it.order||0,cm:it.cm||{}}; }
+    function wkCommentsFrom(m){ m=m||{}; return Object.keys(m).map(id=>{ const c=m[id]; return {id:id,t:(typeof c==='string'?c:(c&&c.t)||''),order:(c&&typeof c.order==='number'?c.order:0)}; }).sort((a,b)=> (a.order-b.order) || (a.id<b.id?-1:1)); }
+    function wkComments(m){ return wkCommentsFrom(m); }
+    function wkProjListFrom(m){ m=m||{}; return Object.keys(m).map(id=>({id:id,name:(m[id]&&m[id].name)||'',color:(m[id]&&m[id].color)||'#6E6E73',order:(m[id]&&typeof m[id].order==='number'?m[id].order:0)})).sort((a,b)=> (a.order-b.order) || (a.id<b.id?-1:1)); }
+    function wkProjList(){ return wkProjListFrom(wkProjects); }
+    function wkGroupItems(items,projs){ const groups=[]; if(projs&&projs.length){ projs.forEach(p=>{ const gi=items.filter(it=>it.project===p.id); if(gi.length) groups.push({p:p,items:gi}); }); const none=items.filter(it=>!it.project||!projs.some(p=>p.id===it.project)); if(none.length) groups.push({p:null,items:none}); } else if(items.length){ groups.push({p:null,items:items}); } return groups; }
+    // 항목 조작
+    function wkToggle(bk,id,checked){ const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/c']=!!checked; wkApply(u); }
+    function wkAddRow(bk){ const id=wkNewId(); const pid=(wkFilter&&wkFilter!=='__none__')?wkFilter:''; const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id]={t:'',w:'',c:false,project:pid,order:wkNextOrder(bk)}; wkApply(u); setTimeout(function(){ const el=document.querySelector('[data-path="weekly/'+wkCur+'/'+bk+'/'+id+'/t"]'); if(el) el.focus(); },40); }
+    function wkDelRow(bk,id){ const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id]=null; wkApply(u); }
+    function wkSetProject(bk,id,el){ const v=el.value; if(v==='__new__'){ wkNewProject(bk,id); return; } const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/project']=v; wkApply(u); }
+    function wkNewProject(bk,id){ const name=prompt('새 프로젝트 이름을 입력하세요'); if(name==null){ renderMktWeekly(); return; } const nm=name.trim(); if(!nm){ renderMktWeekly(); return; } const list=wkProjList(); const pid=wkNewId(); const u={}; u['projects/'+pid]={name:nm,color:WK_PALETTE[list.length%WK_PALETTE.length],order:(list.length?list[list.length-1].order+1:0)}; if(bk&&id) u['weekly/'+wkCur+'/'+bk+'/'+id+'/project']=pid; wkApply(u); }
+    function wkSetFilter(v){ wkFilter=(wkFilter===v?null:v); renderMktWeekly(); }
+    // 댓글
+    function wkAddComment(bk,id){ const cid=wkNewId(); const cur=wkComments(wkItemById(bk,id).cm); const order=cur.length?cur[cur.length-1].order+1:0; const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/cm/'+cid]={t:'',order:order}; wkApply(u); setTimeout(function(){ const el=document.querySelector('[data-path="weekly/'+wkCur+'/'+bk+'/'+id+'/cm/'+cid+'/t"]'); if(el) el.focus(); },40); }
+    function wkDelComment(bk,id,cid){ const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/cm/'+cid]=null; wkApply(u); }
+    // 드래그로 순서 이동 (손잡이 ⠿ 누를 때만 활성화 → 텍스트 편집과 충돌 방지)
     let wkDragSrc=null;
     function wkGripDown(el){ const it=el.closest('.wk-item'); if(it) it.setAttribute('draggable','true'); }
     function wkGripUp(el){ const it=el.closest('.wk-item'); if(it) setTimeout(()=>it.setAttribute('draggable','false'),0); }
-    function wkDragStart(e){ const it=e.target.closest('.wk-item'); if(!it){ return; } wkDragSrc={bk:it.dataset.bk,idx:+it.dataset.idx}; e.dataTransfer.effectAllowed='move'; try{ e.dataTransfer.setData('text/plain',it.dataset.idx); }catch(_){} it.classList.add('opacity-40'); }
+    function wkDragStart(e){ const it=e.target.closest('.wk-item'); if(!it) return; wkDragSrc={bk:it.dataset.bk,id:it.dataset.id}; e.dataTransfer.effectAllowed='move'; try{ e.dataTransfer.setData('text/plain',it.dataset.id); }catch(_){} it.classList.add('opacity-40'); }
     function wkDragOver(e){ if(!wkDragSrc) return; const it=e.target.closest('.wk-item'); if(it&&it.dataset.bk!==wkDragSrc.bk) return; e.preventDefault(); e.dataTransfer.dropEffect='move'; }
-    function wkDrop(e){ if(!wkDragSrc) return; const it=e.target.closest('.wk-item'); if(!it||it.dataset.bk!==wkDragSrc.bk){ return; } e.preventDefault(); const bk=it.dataset.bk, to=+it.dataset.idx, from=wkDragSrc.idx; wkDragSrc=null; wkReorder(bk,from,to); }
+    function wkDrop(e){ if(!wkDragSrc) return; const it=e.target.closest('.wk-item'); if(!it||it.dataset.bk!==wkDragSrc.bk) return; e.preventDefault(); const bk=it.dataset.bk, toId=it.dataset.id, fromId=wkDragSrc.id; wkDragSrc=null; if(toId!==fromId) wkReorder(bk,fromId,toId); }
     function wkDragEnd(e){ const it=e.target.closest('.wk-item'); if(it){ it.setAttribute('draggable','false'); it.classList.remove('opacity-40'); } wkDragSrc=null; }
-    function wkReorder(bk,from,to){ wkEnsure(); const a=weeklyData[wkCur][bk]; if(from===to||from<0||from>=a.length||to<0||to>=a.length) return; const moved=a.splice(from,1)[0]; a.splice(to,0,moved); wkPersist(); renderMktWeekly(); }
-    function renderMktWeekly(){ wkEnsure();
-      const lab=document.getElementById('wkLabel'); if(lab) lab.textContent=wkRange();
-      const blocks=WK_FIELDS.map(f=>{
-        const items=weeklyData[wkCur][f.k]||[];
-        const rows=items.map((it,i)=>{
-          const cms=Array.isArray(it.cm)?it.cm:[];
-          const cmHtml=cms.map((c,ci)=>`<div class="flex items-start gap-1.5 pl-[52px] py-0.5">
+    function wkVisualSeq(bk){ const items=wkItems(bk); const projs=wkProjList(); if(!projs.length) return items.map(it=>it.id); let seq=[]; projs.forEach(p=>{ items.forEach(it=>{ if(it.project===p.id) seq.push(it.id); }); }); items.forEach(it=>{ if(!it.project||!projs.some(p=>p.id===it.project)) seq.push(it.id); }); return seq; }
+    function wkReorder(bk,fromId,toId){ const seq=wkVisualSeq(bk); const fi=seq.indexOf(fromId); if(fi<0) return; seq.splice(fi,1); let ti=toId?seq.indexOf(toId):seq.length; if(ti<0) ti=seq.length; seq.splice(ti,0,fromId); const targetProj=toId?(wkItemById(bk,toId).project||''):(wkItemById(bk,fromId).project||''); const u={}; seq.forEach((id,k)=>{ u['weekly/'+wkCur+'/'+bk+'/'+id+'/order']=k; }); u['weekly/'+wkCur+'/'+bk+'/'+fromId+'/project']=targetProj; wkApply(u); }
+    // 렌더
+    function wkProjOptions(sel){ const projs=wkProjList(); let o='<option value=""'+(!sel?' selected':'')+'>미분류</option>'; o+=projs.map(p=>'<option value="'+p.id+'"'+(sel===p.id?' selected':'')+'>'+esc(p.name)+'</option>').join(''); o+='<option value="__new__">＋ 새 프로젝트…</option>'; return o; }
+    function wkRowHtml(bk,it){ const projs=wkProjList(); const cur=projs.filter(p=>p.id===it.project)[0]; const dot=cur?('<span class="shrink-0" style="width:8px;height:8px;border-radius:9999px;background:'+cur.color+';display:inline-block"></span>'):''; const wp='weekly/'+wkCur+'/'+bk+'/'+it.id; const cms=wkComments(it.cm);
+      const cmHtml=cms.map(c=>`<div class="flex items-start gap-1.5 pl-[52px] py-0.5">
             <span class="text-[#2563EB] text-[12px] leading-5 shrink-0">💬</span>
-            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" contenteditable="true" oninput="wkEditComment('${f.k}',${i},${ci},this)">${esc(c||'')}</div>
-            <button onclick="wkDelComment('${f.k}',${i},${ci})" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="댓글 삭제">✕</button>
+            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" contenteditable="true" data-path="${wp}/cm/${c.id}/t" oninput="wkText(this)">${esc(c.t)}</div>
+            <button onclick="wkDelComment('${bk}','${it.id}','${c.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="댓글 삭제">✕</button>
           </div>`).join('');
-          return `<div class="wk-item border-b border-[#F2EFE9] py-0.5" draggable="false" data-bk="${f.k}" data-idx="${i}" ondragstart="wkDragStart(event)" ondragend="wkDragEnd(event)" ondragover="wkDragOver(event)" ondrop="wkDrop(event)">
+      return `<div class="wk-item border-b border-[#F2EFE9] py-0.5" draggable="false" data-bk="${bk}" data-id="${it.id}" ondragstart="wkDragStart(event)" ondragend="wkDragEnd(event)" ondragover="wkDragOver(event)" ondrop="wkDrop(event)">
           <div class="wk-row flex items-center gap-2 py-1">
           <span class="wk-grip shrink-0 cursor-grab text-slate-300 hover:text-slate-500 select-none text-[13px] leading-none px-0.5" title="드래그해서 순서 이동" onmousedown="wkGripDown(this)" onmouseup="wkGripUp(this)">⠿</span>
-          <input type="checkbox" ${it.c?'checked':''} onchange="wkToggle('${f.k}',${i},this)" class="shrink-0 w-4 h-4"/>
-          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none ${it.c?'line-through text-slate-400':'text-slate-700'}" contenteditable="true" oninput="wkEditRow('${f.k}',${i},'t',this)">${esc(it.t||'')}</div>
-          <input value="${esc(it.w||'')}" oninput="wkEditRow('${f.k}',${i},'w',this)" placeholder="담당자" class="w-16 text-[12px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0"/>
-          <button onclick="wkDelRow('${f.k}',${i})" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="삭제">✕</button>
+          <input type="checkbox" ${it.c?'checked':''} onchange="wkToggle('${bk}','${it.id}',this.checked)" class="shrink-0 w-4 h-4"/>
+          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none ${it.c?'line-through text-slate-400':'text-slate-700'}" contenteditable="true" data-path="${wp}/t" oninput="wkText(this)">${esc(it.t)}</div>
+          ${dot}
+          <select onchange="wkSetProject('${bk}','${it.id}',this)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5 shrink-0 max-w-[92px]" title="프로젝트">${wkProjOptions(it.project)}</select>
+          <input value="${esc(it.w)}" data-path="${wp}/w" oninput="wkText(this)" placeholder="담당자" class="w-14 text-[12px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0"/>
+          <button onclick="wkDelRow('${bk}','${it.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="삭제">✕</button>
           </div>
           ${cmHtml}
-          <div class="pl-[52px] ${cms.length?'pt-0.5':''}"><button onclick="wkAddComment('${f.k}',${i})" class="text-[11px] text-[#2563EB] hover:underline font-medium">💬 댓글 달기</button></div>
-        </div>`;
-        }).join('');
-        return `<div class="card p-4">
-          <div class="flex items-center justify-between mb-1"><h4 class="font-bold text-ink">${esc(f.label)}</h4><button onclick="wkAddRow('${f.k}')" class="text-[12px] text-[#7C5CFF] font-semibold hover:underline">＋ 항목 추가</button></div>
-          <div>${rows||'<p class="text-[12px] text-slate-400 py-2">＋ 항목 추가로 작성하세요.</p>'}</div>
-        </div>`;
-      }).join('');
-      document.getElementById('mktWeeklyBody').innerHTML=`<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+          <div class="pl-[52px] ${cms.length?'pt-0.5':''}"><button onclick="wkAddComment('${bk}','${it.id}')" class="text-[11px] text-[#2563EB] hover:underline font-medium">💬 댓글 달기</button></div>
+        </div>`; }
+    function wkChipBar(){ const projs=wkProjList(); const chip=(v,label,color,active)=>'<button onclick="wkSetFilter('+(v===null?'null':"'"+v+"'")+')" class="px-2.5 py-1 rounded-full text-[12px] font-semibold border" style="'+(active?('background:'+(color||'#1D1D1F')+';border-color:'+(color||'#1D1D1F')+';color:#fff'):('color:'+(color||'#6E6E73')+';border-color:#E6E6E3'))+'">'+esc(label)+'</button>'; let h=chip(null,'전체',null,wkFilter===null); projs.forEach(p=>{ h+=chip(p.id,p.name,p.color,wkFilter===p.id); }); h+=chip('__none__','미분류','#6E6E73',wkFilter==='__none__'); return h; }
+    function renderMktWeekly(){ wkEnsure(); const lab=document.getElementById('wkLabel'); if(lab) lab.textContent=wkRange(); const body=wkBody(); if(!body) return;
+      const projs=wkProjList();
+      const blocks=WK_FIELDS.map(f=>{ let items=wkItems(f.k); if(wkFilter){ items=items.filter(it=> wkFilter==='__none__'? (!it.project||!projs.some(p=>p.id===it.project)) : it.project===wkFilter); }
+        const groups=wkGroupItems(items,projs);
+        const gh=groups.map(g=>{ const head = projs.length? ('<div class="flex items-center gap-1.5 mt-2 mb-0.5"><span style="width:8px;height:8px;border-radius:9999px;display:inline-block;background:'+(g.p?g.p.color:'#C7C7C4')+'"></span><span class="text-[11px] font-bold" style="color:'+(g.p?g.p.color:'#94A3B8')+'">'+esc(g.p?g.p.name:'미분류')+'</span></div>') : '';
+          return head + g.items.map(it=>wkRowHtml(f.k,it)).join(''); }).join('');
+        return `<div class="card p-4"><div class="flex items-center justify-between mb-1"><h4 class="font-bold text-ink">${esc(f.label)}</h4><button onclick="wkAddRow('${f.k}')" class="text-[12px] text-[#7C5CFF] font-semibold hover:underline">＋ 항목 추가</button></div><div>${gh||'<p class="text-[12px] text-slate-400 py-2">＋ 항목 추가로 작성하세요.</p>'}</div></div>`; }).join('');
+      const sync=wkUseFB()? '<span class="text-[11px] font-semibold text-agreen">● 실시간 공유 중</span>' : '<span class="text-[11px] text-slate-400">○ 이 브라우저에만 저장(오프라인)</span>';
+      body.innerHTML=`<div class="flex items-center justify-between flex-wrap gap-2 mb-2"><div class="flex flex-wrap gap-1.5">${wkChipBar()}</div>${sync}</div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
         <div class="space-y-4">${blocks}</div>
-        <div class="card p-4"><h4 class="font-bold text-ink mb-2">💡 요약 / 확인 필요 사항 <span class="text-[11px] font-normal text-slate-400">(자유 기재)</span></h4><div class="text-[13px] text-slate-700 leading-relaxed min-h-[360px] focus:outline-none whitespace-pre-wrap border border-[#E6E6E3] rounded-lg px-3 py-2" contenteditable="true" oninput="wkSaveInsight(this)">${esc(weeklyData[wkCur].insight||'')}</div></div>
-      </div>`;
-    }
-    function wkShareLink(){ wkEnsure(); const payload={week:wkCur,range:wkRange(),data:weeklyData[wkCur]||{}};
+        <div class="card p-4"><h4 class="font-bold text-ink mb-2">💡 요약 / 확인 필요 사항 <span class="text-[11px] font-normal text-slate-400">(자유 기재)</span></h4><div class="text-[13px] text-slate-700 leading-relaxed min-h-[360px] focus:outline-none whitespace-pre-wrap border border-[#E6E6E3] rounded-lg px-3 py-2" contenteditable="true" data-path="weekly/${wkCur}/insight" oninput="wkText(this)">${esc((weeklyData[wkCur]||{}).insight||'')}</div></div>
+        </div>`;
+      wkWireFocus(); }
+    function wkShareLink(){ wkEnsure(); const payload={week:wkCur,range:wkRange(),data:weeklyData[wkCur]||{},projects:wkProjects||{}};
       const enc=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
       const url=location.origin+location.pathname+'#wkreport='+enc;
       if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(()=>alert('공유 링크를 복사했습니다.\n링크를 받은 사람은 로그인 없이 이번 주 보고를 읽기전용으로 볼 수 있습니다.'),()=>prompt('아래 링크를 복사하세요',url)); } else prompt('아래 링크를 복사하세요',url); }
     function wkShowShared(){ if(location.hash.indexOf('#wkreport=')!==0) return false;
-      try{ const p=JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(10)))));
+      try{ const p=JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(10))))); const projs=wkProjListFrom(p.projects||{});
         const ov=document.getElementById('wkShareView'); if(!ov) return false; ov.classList.remove('hidden');
         ov.innerHTML='<div class="max-w-3xl mx-auto"><div class="flex items-center justify-between mb-4"><h1 class="text-xl font-extrabold text-ink">마케팅팀 주간보고 <span class="text-sm font-normal text-slate-400">'+esc(p.range||'')+'</span></h1><a href="'+location.pathname+'" class="text-sm text-ink hover:underline">대시보드로 →</a></div>'+
-          WK_FIELDS.map(f=>{ const items=(p.data&&p.data[f.k])||[]; return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">'+esc(f.label)+'</div><div class="p-3 space-y-1">'+(items.length?items.map(it=>'<div class="text-[13px] text-slate-700">'+(it.c?'✅':'⬜')+' '+esc(it.t||'')+(it.w?' <span class="text-slate-400">('+esc(it.w)+')</span>':'')+'</div>'+((Array.isArray(it.cm)?it.cm:[]).filter(c=>c&&c.trim()).map(c=>'<div class="text-[12px] text-[#2563EB] pl-5">💬 '+esc(c)+'</div>').join(''))).join(''):'<p class="text-[12px] text-slate-400">-</p>')+'</div></div>'; }).join('')+
+          WK_FIELDS.map(f=>{ const items=wkItemsFrom((p.data&&p.data[f.k])||{}); const groups=wkGroupItems(items,projs);
+            const inner=groups.map(g=>{ const gh=projs.length?('<div class="text-[12px] font-bold mt-2 mb-1" style="color:'+(g.p?g.p.color:'#94A3B8')+'">● '+esc(g.p?g.p.name:'미분류')+'</div>'):''; return gh+g.items.map(it=>'<div class="text-[13px] text-slate-700">'+(it.c?'✅':'⬜')+' '+esc(it.t)+(it.w?' <span class="text-slate-400">('+esc(it.w)+')</span>':'')+'</div>'+wkCommentsFrom(it.cm).filter(c=>c.t&&c.t.trim()).map(c=>'<div class="text-[12px] text-[#2563EB] pl-5">💬 '+esc(c.t)+'</div>').join('')).join(''); }).join('');
+            return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">'+esc(f.label)+'</div><div class="p-3 space-y-1">'+(items.length?inner:'<p class="text-[12px] text-slate-400">-</p>')+'</div></div>'; }).join('')+
           ((p.data&&p.data.insight)?('<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">💡 요약 / 확인 필요 사항</div><div class="p-3 text-[13px] text-slate-700 whitespace-pre-wrap">'+esc(p.data.insight)+'</div></div>'):'')+
           '<p class="text-center text-xs text-slate-400 pt-4">읽기전용 공유 보고 · 링크를 가진 사람만 열람</p></div>';
         return true;
       }catch(e){ return false; } }
-    function wkCopy(){ wkEnsure(); let t='[마케팅팀 주간보고] '+wkRange()+'\n\n';
-      WK_FIELDS.forEach(f=>{ t+='■ '+f.label+'\n'; (weeklyData[wkCur][f.k]||[]).forEach(it=>{ t+='  '+(it.c?'[완료] ':'[  ] ')+(it.t||'')+(it.w?(' ('+it.w+')'):'')+'\n'; (Array.isArray(it.cm)?it.cm:[]).forEach(c=>{ if(c&&c.trim()) t+='    💬 '+c+'\n'; }); }); t+='\n'; });
-      if(weeklyData[wkCur].insight) t+='■ 요약 / 확인 필요 사항\n'+weeklyData[wkCur].insight+'\n\n';
+    function wkCopy(){ wkEnsure(); let t='[마케팅팀 주간보고] '+wkRange()+'\n\n'; const projs=wkProjList();
+      WK_FIELDS.forEach(f=>{ t+='■ '+f.label+'\n'; const groups=wkGroupItems(wkItems(f.k),projs); if(!groups.length) t+='  -\n'; groups.forEach(g=>{ if(projs.length) t+=' ['+(g.p?g.p.name:'미분류')+']\n'; g.items.forEach(it=>{ t+='  '+(it.c?'[완료] ':'[  ] ')+(it.t||'')+(it.w?(' ('+it.w+')'):'')+'\n'; wkComments(it.cm).forEach(c=>{ if(c.t&&c.t.trim()) t+='    💬 '+c.t+'\n'; }); }); }); t+='\n'; });
+      const ins=(weeklyData[wkCur]||{}).insight; if(ins) t+='■ 요약 / 확인 필요 사항\n'+ins+'\n\n';
       if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(()=>alert('주간보고 텍스트를 복사했습니다.'),()=>alert(t)); } else alert(t); }
     let ownedSection='overview';
     function ownedChannelLinks(s){
