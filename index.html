@@ -1003,6 +1003,8 @@
                <span id="wkLabel" class="font-bold text-ink text-sm w-40 text-center"></span>
                <button onclick="wkShift(1)" class="px-3 py-1.5 rounded-lg border border-[#E6E6E3] hover:bg-slate-50 text-sm">▶</button>
                <button onclick="wkThis()" class="px-3 py-1.5 rounded-lg border border-[#E6E6E3] hover:bg-slate-50 text-sm">이번 주</button>
+               <span id="wkSaveState" class="text-[12px] mr-1"></span>
+               <button id="wkSaveBtn" onclick="wkSaveNow()" class="text-sm text-white px-3 py-1.5 rounded-lg font-semibold" style="background:#16A34A" title="지금 저장 — 이 보고서는 자동저장되지만 눌러서 즉시 저장할 수 있어요">저장</button>
                <button onclick="wkCopy()" class="text-sm border border-[#E6E6E3] hover:bg-slate-50 px-3 py-1.5 rounded-lg font-semibold">텍스트 복사</button>
                <button onclick="wkShareLink()" class="text-sm bg-[#7C5CFF] text-white px-3 py-1.5 rounded-lg font-semibold">보고 링크 복사</button>
              </div>
@@ -2428,7 +2430,7 @@
     const WK_DEFAULT_PROJECTS=['L100캠페인','스마트홈 인테리어','온라인팀 협업','PR'];
     let weeklyData=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraWeekly')||'{}');}catch(e){return {};} })();
     let wkProjects=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraProjects')||'{}');}catch(e){return {};} })();
-    let wkCur=null, wkFilter=null, wkPendingSnap=false, wkFocusWired=false, wkWeekRef=null, wkProjRef=null;
+    let wkCur=null, wkFilter=null, wkPendingSnap=false, wkFocusWired=false, wkWeekRef=null, wkProjRef=null, wkInflight=0;
     const wkDeb={};
     const WK_DOW=['일','월','화','수','목','금','토'];
     function wkMondayOf(dstr){ const d=new Date(dstr); const day=(d.getDay()+6)%7; d.setDate(d.getDate()-day); return d.toISOString().slice(0,10); }
@@ -2436,7 +2438,7 @@
       return (mon.getMonth()+1)+'/'+mon.getDate()+'('+WK_DOW[mon.getDay()]+') ~ '+(fri.getMonth()+1)+'/'+fri.getDate()+'('+WK_DOW[fri.getDay()]+')'; }
     function wkUseFB(){ return !!(typeof WK_FB_READY!=='undefined' && WK_FB_READY && WK_AUTH_OK && WK_DB); }
     // 진입 · 주차 이동
-    function wkOpen(){ if(!wkCur) wkCur=wkMondayOf(todayStr()); wkWireFocus(); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); }
+    function wkOpen(){ if(!wkCur) wkCur=wkMondayOf(todayStr()); wkWireFocus(); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); wkRenderSave(); }
     function wkThis(){ wkCur=wkMondayOf(todayStr()); wkAttach(); renderMktWeekly(); }
     function wkShift(n){ if(!wkCur) wkCur=wkMondayOf(todayStr()); const d=new Date(wkCur); d.setDate(d.getDate()+n*7); wkCur=d.toISOString().slice(0,10); wkAttach(); renderMktWeekly(); }
     function wkVisible(){ const s=document.getElementById('mktSec-weekly'); return !!(s && !s.classList.contains('hidden')); }
@@ -2460,9 +2462,14 @@
     function setNested(obj,keys,val){ let o=obj; for(let i=0;i<keys.length-1;i++){ const k=keys[i]; if(typeof o[k]!=='object'||o[k]===null) o[k]={}; o=o[k]; } const last=keys[keys.length-1]; if(val===null) delete o[last]; else o[last]=val; }
     function wkLocalSet(path,val){ const parts=path.split('/'); if(parts[0]==='projects'){ setNested(wkProjects,parts.slice(1),val); } else if(parts[0]==='weekly'){ const wk=parts[1]; weeklyData[wk]=weeklyData[wk]||{}; setNested(weeklyData[wk],parts.slice(2),val); } }
     function wkGetPath(path){ const parts=path.split('/'); let o=parts[0]==='projects'?wkProjects:(parts[0]==='weekly'?(weeklyData[parts[1]]||{}):null); const start=parts[0]==='projects'?1:2; for(let i=start;i<parts.length;i++){ o=o&&o[parts[i]]; } return (o==null?null:o); }
-    function wkApply(updates,noRender){ for(const p in updates){ wkLocalSet(p,updates[p]); } if(wkUseFB()){ WK_DB.ref().update(updates).catch(e=>console.warn('저장 실패:',e&&e.message)); } else { wkPersistLocal(); } if(!noRender && !wkFocused()) renderMktWeekly(); }
-    function wkSetText(path,val){ wkLocalSet(path,val); clearTimeout(wkDeb[path]); wkDeb[path]=setTimeout(function(){ wkFlushPath(path); },250); }
-    function wkFlushPath(path){ clearTimeout(wkDeb[path]); delete wkDeb[path]; const v=wkGetPath(path); if(wkUseFB()){ const u={}; u[path]=(v==null?'':v); WK_DB.ref().update(u).catch(e=>console.warn('저장 실패:',e&&e.message)); } else { wkPersistLocal(); } }
+    function wkApply(updates,noRender){ for(const p in updates){ wkLocalSet(p,updates[p]); } if(wkUseFB()){ wkTrack(WK_DB.ref().update(updates)); } else { wkPersistLocal(); } wkRenderSave(); if(!noRender && !wkFocused()) renderMktWeekly(); }
+    function wkSetText(path,val){ wkLocalSet(path,val); clearTimeout(wkDeb[path]); wkDeb[path]=setTimeout(function(){ wkFlushPath(path); },250); wkRenderSave(); }
+    function wkFlushPath(path){ clearTimeout(wkDeb[path]); delete wkDeb[path]; const v=wkGetPath(path); if(wkUseFB()){ const u={}; u[path]=(v==null?'':v); wkTrack(WK_DB.ref().update(u)); } else { wkPersistLocal(); } wkRenderSave(); }
+    // 저장 상태 표시 (자동저장이 진행 중인지/완료됐는지)
+    function wkTrack(p){ wkInflight++; wkRenderSave(); const done=function(){ wkInflight=Math.max(0,wkInflight-1); wkRenderSave(); }; if(p&&p.then){ p.then(done, function(e){ console.warn('저장 실패:',e&&e.message); done(); }); } else { done(); } }
+    function wkDirtyState(){ return Object.keys(wkDeb).length>0 || wkInflight>0; }
+    function wkRenderSave(){ const el=document.getElementById('wkSaveState'); if(!el) return; if(wkDirtyState()){ el.innerHTML='<span class="font-semibold" style="color:#D97706">● 저장 중…</span>'; } else { const d=new Date(); el.innerHTML='<span class="font-semibold" style="color:#16A34A">✓ 저장됨</span> <span class="text-slate-400">'+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+'</span>'; } }
+    function wkSaveNow(){ Object.keys(wkDeb).forEach(wkFlushPath); if(!wkUseFB()) wkPersistLocal(); wkRenderSave(); const b=document.getElementById('wkSaveBtn'); if(b){ const t=b.getAttribute('data-lbl')||b.textContent; b.setAttribute('data-lbl',t); b.textContent='저장됨 ✓'; setTimeout(function(){ b.textContent=t; },1500); } }
     function wkText(el){ if(el&&el.dataset&&el.dataset.path) wkSetText(el.dataset.path, (el.tagName==='INPUT'?el.value:el.innerText)); }
     // ID · 순서
     function wkNewId(){ if(wkUseFB()){ try{ return WK_DB.ref().push().key; }catch(e){} } return 'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
