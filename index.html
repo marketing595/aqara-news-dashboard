@@ -901,7 +901,7 @@
      <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
        <div>
          <h2 class="text-xl font-extrabold text-ink">2026 마케팅 성과 KPI <span class="text-sm font-semibold text-agray">(정여진 · 비재무성과 전략과제)</span></h2>
-         <p class="text-sm text-slate-500 mt-1">3대 전략과제(가중치 합 50%) · 자동 집계 가능한 지표는 실측, 나머지는 <b>실적 입력</b>. 아래 <b>전 채널 콘텐츠 600건</b>은 과제3 핵심지표입니다.</p>
+         <p class="text-sm text-slate-500 mt-1">3대 전략과제(가중치 합 50%) · 자동 집계 가능한 지표는 실측, 나머지는 <b>실적 입력</b>. 아래 <b>전 채널 콘텐츠 <span id="kpiTargetLbl">600</span>건</b>은 과제3 핵심지표입니다.</p>
        </div>
        <div class="flex gap-2">
          <button onclick="kpiEditManual()" class="text-sm border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg font-semibold">홈페이지·웹문서·목표 입력</button>
@@ -909,7 +909,7 @@
      </div>
      <div class="card p-6 mb-5">
        <div class="flex items-end justify-between flex-wrap gap-3 mb-3">
-         <div><p class="text-sm text-slate-500">2026 누적 발행</p><p class="num text-4xl font-extrabold text-ink mt-1"><span id="kpiTotal">0</span> <span class="text-lg font-bold text-slate-400">/ <span id="kpiTarget">600</span>건</span></p></div>
+         <div><p class="text-sm text-slate-500">2026 누적 발행</p><p class="num text-4xl font-extrabold text-ink mt-1"><span id="kpiTot">0</span> <span class="text-lg font-bold text-slate-400">/ <span id="kpiTarget">600</span>건</span></p></div>
          <div class="text-right"><p class="text-[11px] text-slate-400">누적 발행률</p><p class="num text-4xl font-extrabold text-brand-ink leading-none" id="kpiPct">0%</p><p class="text-xs text-slate-500 mt-1"><span id="kpiPeriodPct" class="font-semibold text-ink"></span> · <span id="kpiRemain"></span></p></div>
        </div>
        <div class="h-5 rounded-full bg-slate-100 overflow-hidden relative"><div id="kpiBar" class="h-5 bg-brand transition-all" style="width:0%"></div><div id="kpiPaceMark" class="absolute top-0 h-5 w-0.5 bg-ink/50" style="left:0%" title="현재 페이스 기준 목표선"></div></div>
@@ -2204,7 +2204,7 @@
       const total=pr+blog+ins+hp+wd, pct=target?Math.round(total/target*100):0;
       const planPR=(typeof ALL!=='undefined'?ALL:[]).filter(r=>r._origin==='자사보도'&&(r._ym||'').indexOf(Y)===0&&/기획|매거진|특집|인터뷰|기고/.test((r._type||'')+' '+(r['구분']||'')+' '+(r['종류']||''))).length;
       KPI_AUTO={selfPR:pr,planPR:planPR,content600:total};
-      document.getElementById('kpiTotal').textContent=total.toLocaleString();
+      document.getElementById('kpiTot').textContent=total.toLocaleString();
       document.getElementById('kpiTarget').textContent=target.toLocaleString();
       document.getElementById('kpiTargetLbl').textContent=target.toLocaleString();
       document.getElementById('kpiPct').textContent=pct+'%';
@@ -2411,17 +2411,32 @@
     function wkMoveRow(bk,i,dir){ wkEnsure(); const a=weeklyData[wkCur][bk], j=i+dir; if(j<0||j>=a.length) return; const tmp=a[i]; a[i]=a[j]; a[j]=tmp; wkPersist(); renderMktWeekly(); }
     function wkToggle(bk,i,cb){ wkEnsure(); (weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{}).c=cb.checked; wkPersist(); const row=cb.closest('.wk-row'); if(row){ const td=row.querySelector('.wk-txt'); if(td){ td.classList.toggle('line-through',cb.checked); td.classList.toggle('text-slate-400',cb.checked); td.classList.toggle('text-slate-700',!cb.checked); } } }
     function wkEditRow(bk,i,field,el){ wkEnsure(); (weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{})[field]=(el.tagName==='INPUT'?el.value:el.innerText).trim(); wkPersist(); }
+    function wkAddComment(bk,i){ wkEnsure(); const it=(weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{}); if(!Array.isArray(it.cm)) it.cm=[]; it.cm.push(''); wkPersist(); renderMktWeekly(); }
+    function wkEditComment(bk,i,ci,el){ wkEnsure(); const it=(weeklyData[wkCur][bk][i]=weeklyData[wkCur][bk][i]||{}); if(!Array.isArray(it.cm)) it.cm=[]; it.cm[ci]=el.innerText.trim(); wkPersist(); }
+    function wkDelComment(bk,i,ci){ wkEnsure(); const it=weeklyData[wkCur][bk][i]; if(it&&Array.isArray(it.cm)){ it.cm.splice(ci,1); wkPersist(); renderMktWeekly(); } }
     function renderMktWeekly(){ wkEnsure();
       const lab=document.getElementById('wkLabel'); if(lab) lab.textContent=wkRange();
       const blocks=WK_FIELDS.map(f=>{
         const items=weeklyData[wkCur][f.k]||[];
-        const rows=items.map((it,i)=>`<div class="wk-row flex items-center gap-2 py-1.5 border-b border-[#F2EFE9]">
+        const rows=items.map((it,i)=>{
+          const cms=Array.isArray(it.cm)?it.cm:[];
+          const cmHtml=cms.map((c,ci)=>`<div class="flex items-start gap-1.5 pl-[52px] py-0.5">
+            <span class="text-[#2563EB] text-[12px] leading-5 shrink-0">💬</span>
+            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" contenteditable="true" oninput="wkEditComment('${f.k}',${i},${ci},this)">${esc(c||'')}</div>
+            <button onclick="wkDelComment('${f.k}',${i},${ci})" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="댓글 삭제">✕</button>
+          </div>`).join('');
+          return `<div class="wk-item border-b border-[#F2EFE9] py-0.5">
+          <div class="wk-row flex items-center gap-2 py-1">
           <span class="flex flex-col shrink-0 leading-none text-slate-300"><button onclick="wkMoveRow('${f.k}',${i},-1)" ${i===0?'disabled':''} class="text-[10px] hover:text-ink disabled:opacity-20" title="위로">▲</button><button onclick="wkMoveRow('${f.k}',${i},1)" ${i===items.length-1?'disabled':''} class="text-[10px] hover:text-ink disabled:opacity-20" title="아래로">▼</button></span>
           <input type="checkbox" ${it.c?'checked':''} onchange="wkToggle('${f.k}',${i},this)" class="shrink-0 w-4 h-4"/>
           <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none ${it.c?'line-through text-slate-400':'text-slate-700'}" contenteditable="true" oninput="wkEditRow('${f.k}',${i},'t',this)">${esc(it.t||'')}</div>
           <input value="${esc(it.w||'')}" oninput="wkEditRow('${f.k}',${i},'w',this)" placeholder="담당자" class="w-16 text-[12px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0"/>
           <button onclick="wkDelRow('${f.k}',${i})" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="삭제">✕</button>
-        </div>`).join('');
+          </div>
+          ${cmHtml}
+          <div class="pl-[52px] ${cms.length?'pt-0.5':''}"><button onclick="wkAddComment('${f.k}',${i})" class="text-[11px] text-[#2563EB] hover:underline font-medium">💬 댓글 달기</button></div>
+        </div>`;
+        }).join('');
         return `<div class="card p-4">
           <div class="flex items-center justify-between mb-1"><h4 class="font-bold text-ink">${esc(f.label)}</h4><button onclick="wkAddRow('${f.k}')" class="text-[12px] text-[#7C5CFF] font-semibold hover:underline">＋ 항목 추가</button></div>
           <div>${rows||'<p class="text-[12px] text-slate-400 py-2">＋ 항목 추가로 작성하세요.</p>'}</div>
@@ -2440,13 +2455,13 @@
       try{ const p=JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(10)))));
         const ov=document.getElementById('wkShareView'); if(!ov) return false; ov.classList.remove('hidden');
         ov.innerHTML='<div class="max-w-3xl mx-auto"><div class="flex items-center justify-between mb-4"><h1 class="text-xl font-extrabold text-ink">마케팅팀 주간보고 <span class="text-sm font-normal text-slate-400">'+esc(p.range||'')+'</span></h1><a href="'+location.pathname+'" class="text-sm text-ink hover:underline">대시보드로 →</a></div>'+
-          WK_FIELDS.map(f=>{ const items=(p.data&&p.data[f.k])||[]; return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">'+esc(f.label)+'</div><div class="p-3 space-y-1">'+(items.length?items.map(it=>'<div class="text-[13px] text-slate-700">'+(it.c?'✅':'⬜')+' '+esc(it.t||'')+(it.w?' <span class="text-slate-400">('+esc(it.w)+')</span>':'')+'</div>').join(''):'<p class="text-[12px] text-slate-400">-</p>')+'</div></div>'; }).join('')+
+          WK_FIELDS.map(f=>{ const items=(p.data&&p.data[f.k])||[]; return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">'+esc(f.label)+'</div><div class="p-3 space-y-1">'+(items.length?items.map(it=>'<div class="text-[13px] text-slate-700">'+(it.c?'✅':'⬜')+' '+esc(it.t||'')+(it.w?' <span class="text-slate-400">('+esc(it.w)+')</span>':'')+'</div>'+((Array.isArray(it.cm)?it.cm:[]).filter(c=>c&&c.trim()).map(c=>'<div class="text-[12px] text-[#2563EB] pl-5">💬 '+esc(c)+'</div>').join(''))).join(''):'<p class="text-[12px] text-slate-400">-</p>')+'</div></div>'; }).join('')+
           ((p.data&&p.data.insight)?('<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">💡 요약 / 확인 필요 사항</div><div class="p-3 text-[13px] text-slate-700 whitespace-pre-wrap">'+esc(p.data.insight)+'</div></div>'):'')+
           '<p class="text-center text-xs text-slate-400 pt-4">읽기전용 공유 보고 · 링크를 가진 사람만 열람</p></div>';
         return true;
       }catch(e){ return false; } }
     function wkCopy(){ wkEnsure(); let t='[마케팅팀 주간보고] '+wkRange()+'\n\n';
-      WK_FIELDS.forEach(f=>{ t+='■ '+f.label+'\n'; (weeklyData[wkCur][f.k]||[]).forEach(it=>{ t+='  '+(it.c?'[완료] ':'[  ] ')+(it.t||'')+(it.w?(' ('+it.w+')'):'')+'\n'; }); t+='\n'; });
+      WK_FIELDS.forEach(f=>{ t+='■ '+f.label+'\n'; (weeklyData[wkCur][f.k]||[]).forEach(it=>{ t+='  '+(it.c?'[완료] ':'[  ] ')+(it.t||'')+(it.w?(' ('+it.w+')'):'')+'\n'; (Array.isArray(it.cm)?it.cm:[]).forEach(c=>{ if(c&&c.trim()) t+='    💬 '+c+'\n'; }); }); t+='\n'; });
       if(weeklyData[wkCur].insight) t+='■ 요약 / 확인 필요 사항\n'+weeklyData[wkCur].insight+'\n\n';
       if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(()=>alert('주간보고 텍스트를 복사했습니다.'),()=>alert(t)); } else alert(t); }
     let ownedSection='overview';
