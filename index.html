@@ -2432,7 +2432,7 @@
     const WK_DEFAULT_PROJECTS=['L100캠페인','스마트홈 인테리어','온라인팀 협업','PR'];
     let weeklyData=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraWeekly')||'{}');}catch(e){return {};} })();
     let wkProjects=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraProjects')||'{}');}catch(e){return {};} })();
-    let wkCur=null, wkFilter=null, wkPendingSnap=false, wkFocusWired=false, wkWeekRef=null, wkProjRef=null, wkInflight=0;
+    let wkCur=null, wkFilter=null, wkPendingSnap=false, wkFocusWired=false, wkWeekRef=null, wkProjRef=null, wkInflight=0, wkFbErr=false;
     const wkDeb={};
     const WK_DOW=['일','월','화','수','목','금','토'];
     function wkMondayOf(dstr){ const d=new Date(dstr); const day=(d.getDay()+6)%7; d.setDate(d.getDate()-day); return d.toISOString().slice(0,10); }
@@ -2447,13 +2447,16 @@
     function wkVisible(){ const s=document.getElementById('mktSec-weekly'); return !!(s && !s.classList.contains('hidden')); }
     function wkOnAuth(){ if(wkVisible()){ if(!wkCur) wkCur=wkReportMonday(); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); } }
     // Firebase 실시간 리스너
+    function wkHasContent(w){ if(!w||typeof w!=='object') return false; if((typeof w.insight==='string'&&w.insight.trim())||(typeof w.summary==='string'&&w.summary.trim())) return true; return ['done','plan','issue','check'].some(function(k){ return w[k]&&typeof w[k]==='object'&&Object.keys(w[k]).length; }); }
     function wkAttach(){ if(!wkUseFB()||!wkCur) return; wkDetach();
       wkWeekRef=WK_DB.ref('weekly/'+wkCur);
-      wkWeekRef.on('value', function(snap){ weeklyData[wkCur]=snap.val()||{}; wkAfterSnap(); });
-      if(!wkProjRef){ wkProjRef=WK_DB.ref('projects'); wkProjRef.on('value', function(snap){ wkProjects=snap.val()||{}; wkAfterSnap(); }); } }
+      wkWeekRef.on('value', function(snap){ wkFbErr=false; const remote=snap.val(); const local=weeklyData[wkCur]; if((remote==null||(typeof remote==='object'&&!Object.keys(remote).length)) && wkHasContent(local)){ try{ WK_DB.ref('weekly/'+wkCur).set(local); }catch(e){} } else { weeklyData[wkCur]=remote||{}; } wkAfterSnap(); }, function(err){ wkFbErr=true; console.warn('DB 읽기 권한 오류:',err&&err.message); wkStampUpdated(); renderMktWeekly(); });
+      if(!wkProjRef){ wkProjRef=WK_DB.ref('projects'); wkProjRef.on('value', function(snap){ wkProjects=snap.val()||{}; wkAfterSnap(); }, function(err){ wkFbErr=true; console.warn('DB 읽기 권한 오류:',err&&err.message); }); } }
     function wkDetach(){ if(wkWeekRef){ try{wkWeekRef.off();}catch(e){} wkWeekRef=null; } }
     function wkStampUpdated(){ const el=document.getElementById('wkUpdated'); if(!el) return; const d=new Date(); el.textContent='마지막 갱신 '+d.getHours()+'시 '+d.getMinutes()+'분 '+d.getSeconds()+'초'; }
-    function wkAfterSnap(){ wkStampUpdated(); if(wkFocused()){ wkPendingSnap=true; wkPreserveActive(); return; } renderMktWeekly(); }
+    function wkAfterSnap(){ wkStampUpdated(); if(!wkFocused()){ renderMktWeekly(); return; } wkPreserveActive(); wkPatchLive(); wkPendingSnap=true; }
+    // 편집 중: 내가 커서를 둔 칸은 건드리지 않고, 나머지 칸의 텍스트만 실시간 갱신(커서·한글조합 안전)
+    function wkPatchLive(){ const body=wkBody(); if(!body) return; const act=document.activeElement; body.querySelectorAll('[data-path]').forEach(function(el){ if(el===act) return; const v=wkGetPath(el.dataset.path); const val=(v==null?'':String(v)); if(el.tagName==='INPUT'){ if(el.value!==val) el.value=val; } else { if(el.innerText!==val) el.innerText=val; } }); }
     // 편집 중 커서 보호
     function wkBody(){ return document.getElementById('mktWeeklyBody'); }
     function wkFocused(){ const a=document.activeElement, b=wkBody(); return !!(a && b && b.contains(a) && (a.isContentEditable || a.tagName==='INPUT' || a.tagName==='TEXTAREA' || a.tagName==='SELECT')); }
@@ -2465,13 +2468,13 @@
     function setNested(obj,keys,val){ let o=obj; for(let i=0;i<keys.length-1;i++){ const k=keys[i]; if(typeof o[k]!=='object'||o[k]===null) o[k]={}; o=o[k]; } const last=keys[keys.length-1]; if(val===null) delete o[last]; else o[last]=val; }
     function wkLocalSet(path,val){ const parts=path.split('/'); if(parts[0]==='projects'){ setNested(wkProjects,parts.slice(1),val); } else if(parts[0]==='weekly'){ const wk=parts[1]; weeklyData[wk]=weeklyData[wk]||{}; setNested(weeklyData[wk],parts.slice(2),val); } }
     function wkGetPath(path){ const parts=path.split('/'); let o=parts[0]==='projects'?wkProjects:(parts[0]==='weekly'?(weeklyData[parts[1]]||{}):null); const start=parts[0]==='projects'?1:2; for(let i=start;i<parts.length;i++){ o=o&&o[parts[i]]; } return (o==null?null:o); }
-    function wkApply(updates,noRender){ for(const p in updates){ wkLocalSet(p,updates[p]); } if(wkUseFB()){ wkTrack(WK_DB.ref().update(updates)); } else { wkPersistLocal(); } wkRenderSave(); if(!noRender && !wkFocused()) renderMktWeekly(); }
+    function wkApply(updates,noRender){ for(const p in updates){ wkLocalSet(p,updates[p]); } if(wkUseFB()){ wkTrack(WK_DB.ref().update(updates)); } wkPersistLocal(); wkRenderSave(); if(!noRender) renderMktWeekly(); }
     function wkSetText(path,val){ wkLocalSet(path,val); clearTimeout(wkDeb[path]); wkDeb[path]=setTimeout(function(){ wkFlushPath(path); },250); wkRenderSave(); }
-    function wkFlushPath(path){ clearTimeout(wkDeb[path]); delete wkDeb[path]; const v=wkGetPath(path); if(wkUseFB()){ const u={}; u[path]=(v==null?'':v); wkTrack(WK_DB.ref().update(u)); } else { wkPersistLocal(); } wkRenderSave(); }
+    function wkFlushPath(path){ clearTimeout(wkDeb[path]); delete wkDeb[path]; const v=wkGetPath(path); if(wkUseFB()){ const u={}; u[path]=(v==null?'':v); wkTrack(WK_DB.ref().update(u)); } wkPersistLocal(); wkRenderSave(); }
     // 저장 상태 표시 (자동저장이 진행 중인지/완료됐는지)
-    function wkTrack(p){ wkInflight++; wkRenderSave(); const done=function(){ wkInflight=Math.max(0,wkInflight-1); wkRenderSave(); }; if(p&&p.then){ p.then(done, function(e){ console.warn('저장 실패:',e&&e.message); done(); }); } else { done(); } }
+    function wkTrack(p){ wkInflight++; wkRenderSave(); const done=function(){ wkInflight=Math.max(0,wkInflight-1); wkRenderSave(); }; if(p&&p.then){ p.then(function(){ wkFbErr=false; done(); }, function(e){ wkFbErr=true; console.warn('저장 실패(권한?):',e&&e.message); done(); }); } else { done(); } }
     function wkDirtyState(){ return Object.keys(wkDeb).length>0 || wkInflight>0; }
-    function wkRenderSave(){ const el=document.getElementById('wkSaveState'); if(!el) return; if(wkDirtyState()){ el.innerHTML='<span class="font-semibold" style="color:#D97706">● 저장 중…</span>'; } else { const d=new Date(); el.innerHTML='<span class="font-semibold" style="color:#16A34A">✓ 저장됨</span> <span class="text-slate-400">'+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+'</span>'; } }
+    function wkRenderSave(){ const el=document.getElementById('wkSaveState'); if(!el) return; if(wkFbErr){ el.innerHTML='<span class="font-semibold" style="color:#B91C1C">⚠ 저장 실패(DB 규칙 확인)</span>'; return; } if(wkDirtyState()){ el.innerHTML='<span class="font-semibold" style="color:#D97706">● 저장 중…</span>'; } else { const d=new Date(); el.innerHTML='<span class="font-semibold" style="color:#16A34A">✓ 저장됨</span> <span class="text-slate-400">'+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+'</span>'; } }
     function wkSaveNow(){ Object.keys(wkDeb).forEach(wkFlushPath); if(!wkUseFB()) wkPersistLocal(); wkRenderSave(); const b=document.getElementById('wkSaveBtn'); if(b){ const t=b.getAttribute('data-lbl')||b.textContent; b.setAttribute('data-lbl',t); b.textContent='저장됨 ✓'; setTimeout(function(){ b.textContent=t; },1500); } }
     function wkText(el){ if(el&&el.dataset&&el.dataset.path) wkSetText(el.dataset.path, (el.tagName==='INPUT'?el.value:el.innerText)); }
     // ID · 순서
@@ -2500,7 +2503,7 @@
     function wkGuessDevice(){ const ua=navigator.userAgent||''; let os='기기'; if(/Windows/.test(ua))os='Windows'; else if(/Macintosh|Mac OS/.test(ua))os='Mac'; else if(/Android/.test(ua))os='Android'; else if(/iPhone|iPad/.test(ua))os='iOS'; else if(/Linux/.test(ua))os='Linux'; let br=''; if(/Edg/.test(ua))br='Edge'; else if(/Chrome/.test(ua))br='Chrome'; else if(/Firefox/.test(ua))br='Firefox'; else if(/Safari/.test(ua))br='Safari'; return br?(os+'·'+br):os; }
     function wkDeviceName(){ let n=null; try{ n=localStorage.getItem('wkDeviceName'); }catch(e){} if(!n){ n=wkGuessDevice(); try{ localStorage.setItem('wkDeviceName',n); }catch(e){} } return n; }
     function wkRenamePresence(){ const v=prompt('이 컴퓨터의 표시 이름을 입력하세요', wkDeviceName()); if(v==null) return; const nm=(v.trim()||wkGuessDevice()); try{ localStorage.setItem('wkDeviceName',nm); }catch(e){} if(wkPresRef) wkPresRef.update({name:nm}); }
-    function wkPresenceStart(){ if(!wkUseFB()||wkPresRef) return; const name=wkDeviceName(); wkPresRef=WK_DB.ref('presence').push(); wkPresConn=WK_DB.ref('.info/connected'); wkPresConn.on('value', function(s){ if(s.val()===true && wkPresRef){ wkPresRef.onDisconnect().remove(); wkPresRef.set({name:name, ts:Date.now()}); } }); if(!wkPresListen){ wkPresListen=true; WK_DB.ref('presence').on('value', function(snap){ wkRenderPresence(snap.val()||{}); }); } }
+    function wkPresenceStart(){ if(!wkUseFB()||wkPresRef) return; const name=wkDeviceName(); wkPresRef=WK_DB.ref('presence').push(); wkPresConn=WK_DB.ref('.info/connected'); wkPresConn.on('value', function(s){ if(s.val()===true && wkPresRef){ wkPresRef.onDisconnect().remove(); wkPresRef.set({name:name, ts:Date.now()}).catch(function(e){ wkFbErr=true; console.warn('presence 쓰기 오류(권한?):',e&&e.message); wkRenderSave(); }); } }); if(!wkPresListen){ wkPresListen=true; WK_DB.ref('presence').on('value', function(snap){ wkRenderPresence(snap.val()||{}); }, function(err){ wkFbErr=true; console.warn('presence 읽기 오류(권한?):',err&&err.message); }); } }
     function wkPresenceStop(){ if(wkPresConn){ try{ wkPresConn.off(); }catch(e){} wkPresConn=null; } if(wkPresRef){ try{ wkPresRef.onDisconnect().cancel(); wkPresRef.remove(); }catch(e){} wkPresRef=null; } const el=document.getElementById('wkPresence'); if(el) el.innerHTML=''; }
     function wkAvatarColor(name){ let h=0; const s=name||'?'; for(let i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))>>>0; } return WK_PALETTE[h%WK_PALETTE.length]; }
     function wkInitials(name){ const n=(name||'?').trim(); const parts=n.split(/[\s·]+/).filter(Boolean); if(parts.length>=2) return (parts[0][0]+parts[1][0]).toUpperCase(); return n.slice(0,2).toUpperCase(); }
@@ -2595,7 +2598,7 @@
         const gh=groups.map(g=>{ const head = projs.length? ('<div class="flex items-center gap-1.5 mt-2 mb-0.5"><span style="width:8px;height:8px;border-radius:9999px;display:inline-block;background:'+(g.p?g.p.color:'#C7C7C4')+'"></span><span class="text-[11px] font-bold" style="color:'+(g.p?g.p.color:'#94A3B8')+'">'+esc(g.p?g.p.name:'미분류')+'</span></div>') : '';
           return head + g.items.map(it=>wkRowHtml(f.k,it)).join(''); }).join('');
         return `<div class="card p-4"><div class="flex items-center justify-between mb-1"><h4 class="font-bold text-ink">${esc(f.label)}</h4><button onclick="wkAddRow('${f.k}')" class="text-[12px] text-[#7C5CFF] font-semibold hover:underline">＋ 항목 추가</button></div><div>${gh||'<p class="text-[12px] text-slate-400 py-2">＋ 항목 추가로 작성하세요.</p>'}</div></div>`; }).join('');
-      const sync=wkUseFB()? '<span class="inline-flex items-center gap-1.5 text-[13px] font-bold px-3 py-1 rounded-full" style="color:#15803D;background:#DCFCE7"><span style="width:8px;height:8px;border-radius:9999px;background:#22C55E;display:inline-block;box-shadow:0 0 0 3px rgba(34,197,94,.25)"></span>실시간 공유 중</span>' : '<span class="inline-flex items-center gap-1.5 text-[13px] font-semibold px-3 py-1 rounded-full text-slate-500 bg-slate-100">○ 이 브라우저에만 저장(오프라인)</span>';
+      const sync = wkFbErr ? '<span class="inline-flex items-center gap-1.5 text-[13px] font-bold px-3 py-1 rounded-full" style="color:#B91C1C;background:#FEE2E2">⚠ 공유 안 됨 — Firebase DB 규칙을 확인하세요</span>' : (wkUseFB()? '<span class="inline-flex items-center gap-1.5 text-[13px] font-bold px-3 py-1 rounded-full" style="color:#15803D;background:#DCFCE7"><span style="width:8px;height:8px;border-radius:9999px;background:#22C55E;display:inline-block;box-shadow:0 0 0 3px rgba(34,197,94,.25)"></span>실시간 공유 중</span>' : '<span class="inline-flex items-center gap-1.5 text-[13px] font-semibold px-3 py-1 rounded-full text-slate-500 bg-slate-100">○ 이 브라우저에만 저장(오프라인)</span>');
       body.innerHTML=`<div class="flex items-center justify-between flex-wrap gap-2 mb-2"><div class="flex flex-wrap gap-1.5">${wkChipBar()}</div>${sync}</div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
         <div class="space-y-4">${blocks}</div>
