@@ -2441,7 +2441,7 @@
     function wkUseFB(){ return !!(typeof WK_FB_READY!=='undefined' && WK_FB_READY && WK_AUTH_OK && WK_DB); }
     // 진입 · 주차 이동
     function wkOpen(){ if(!wkCur) wkCur=wkReportMonday(); wkWireFocus(); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); wkRenderSave(); }
-    function wkReportMonday(){ const d=new Date(wkMondayOf(todayStr())); d.setDate(d.getDate()+7); return d.toISOString().slice(0,10); }
+    function wkReportMonday(){ return wkMondayOf(todayStr()); }
     function wkThisReport(){ wkCur=wkReportMonday(); wkAttach(); renderMktWeekly(); wkRenderSave(); }
     function wkShift(n){ if(!wkCur) wkCur=wkReportMonday(); const d=new Date(wkCur); d.setDate(d.getDate()+n*7); wkCur=d.toISOString().slice(0,10); wkAttach(); renderMktWeekly(); }
     function wkVisible(){ const s=document.getElementById('mktSec-weekly'); return !!(s && !s.classList.contains('hidden')); }
