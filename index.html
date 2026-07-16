@@ -2550,13 +2550,13 @@
     function wkRowHtml(bk,it){ const projs=wkProjList(); const cur=projs.filter(p=>p.id===it.project)[0]; const dot=cur?('<span class="shrink-0" style="width:8px;height:8px;border-radius:9999px;background:'+cur.color+';display:inline-block"></span>'):''; const wp='weekly/'+wkCur+'/'+bk+'/'+it.id; const cms=wkComments(it.cm);
       const cmHtml=cms.map(c=>`<div class="flex items-start gap-1.5 pl-[52px] py-0.5">
             <span class="text-[#2563EB] text-[12px] leading-5 shrink-0">💬</span>
-            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" contenteditable="true" data-path="${wp}/cm/${c.id}/t" oninput="wkText(this)">${esc(c.t)}</div>
+            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB] whitespace-pre-wrap break-words" contenteditable="true" data-path="${wp}/cm/${c.id}/t" oninput="wkText(this)">${esc(c.t)}</div>
             <button onclick="wkDelComment('${bk}','${it.id}','${c.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="댓글 삭제">✕</button>
           </div>`).join('');
       return `<div class="wk-item border-b border-[#F2EFE9] py-0.5" draggable="false" data-bk="${bk}" data-id="${it.id}" ondragstart="wkDragStart(event)" ondragend="wkDragEnd(event)" ondragover="wkDragOver(event)" ondrop="wkDrop(event)">
           <div class="wk-row flex items-center gap-2 py-1">
           <span class="wk-grip shrink-0 cursor-grab text-slate-300 hover:text-slate-500 select-none text-[13px] leading-none px-0.5" title="드래그해서 순서 이동" onmousedown="wkGripDown(this)" onmouseup="wkGripUp(this)">⠿</span>
-          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none text-slate-700" contenteditable="true" data-path="${wp}/t" oninput="wkText(this)">${esc(it.t)}</div>
+          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none text-slate-700 whitespace-pre-wrap break-words" contenteditable="true" data-path="${wp}/t" oninput="wkText(this)">${esc(it.t)}</div>
           ${dot}
           <select onchange="wkSetProject('${bk}','${it.id}',this)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5 shrink-0 max-w-[92px]" title="프로젝트">${wkProjOptions(it.project)}</select>
           <input value="${esc(it.w)}" data-path="${wp}/w" oninput="wkText(this)" placeholder="담당자" class="w-14 text-[12px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0"/>
@@ -2578,13 +2578,13 @@
     function wkCheckRowHtml(it){ const wp='weekly/'+wkCur+'/check/'+it.id; const cms=wkComments(it.cm);
       const cmHtml=cms.map(c=>`<div class="flex items-start gap-1.5 pl-[46px] py-0.5">
             <span class="text-[#2563EB] text-[12px] leading-5 shrink-0">💬</span>
-            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" contenteditable="true" data-path="${wp}/cm/${c.id}/t" oninput="wkText(this)">${esc(c.t)}</div>
+            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB] whitespace-pre-wrap break-words" contenteditable="true" data-path="${wp}/cm/${c.id}/t" oninput="wkText(this)">${esc(c.t)}</div>
             <button onclick="wkDelComment('check','${it.id}','${c.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="댓글 삭제">✕</button>
           </div>`).join('');
       return `<div class="wk-item border-b border-[#F2EFE9] py-0.5" draggable="false" data-bk="check" data-id="${it.id}" ondragstart="wkDragStart(event)" ondragend="wkDragEnd(event)" ondragover="wkDragOver(event)" ondrop="wkDrop(event)">
           <div class="wk-row flex items-center gap-2 py-1">
           <span class="wk-grip shrink-0 cursor-grab text-slate-300 hover:text-slate-500 select-none text-[13px] leading-none px-0.5" title="드래그해서 순서 이동" onmousedown="wkGripDown(this)" onmouseup="wkGripUp(this)">⠿</span>
-          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none text-slate-700" contenteditable="true" data-path="${wp}/t" oninput="wkText(this)">${esc(it.t)}</div>
+          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none text-slate-700 whitespace-pre-wrap break-words" contenteditable="true" data-path="${wp}/t" oninput="wkText(this)">${esc(it.t)}</div>
           <input value="${esc(it.w)}" data-path="${wp}/w" oninput="wkText(this)" placeholder="확인자" class="w-16 text-[12px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0" title="확인해줄 사람"/>
           <button onclick="wkDelRow('check','${it.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="삭제">✕</button>
           </div>
