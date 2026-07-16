@@ -2462,7 +2462,12 @@
     function wkFocused(){ const a=document.activeElement, b=wkBody(); return !!(a && b && b.contains(a) && (a.isContentEditable || a.tagName==='INPUT' || a.tagName==='TEXTAREA' || a.tagName==='SELECT')); }
     function wkPreserveActive(){ const a=document.activeElement; if(a && a.dataset && a.dataset.path){ wkLocalSet(a.dataset.path, (a.tagName==='INPUT'?a.value:a.innerText)); } }
     function wkWireFocus(){ if(wkFocusWired) return; const b=wkBody(); if(!b) return; wkFocusWired=true;
-      b.addEventListener('focusout', function(){ Object.keys(wkDeb).forEach(wkFlushPath); setTimeout(function(){ if(!wkFocused() && wkPendingSnap){ wkPendingSnap=false; renderMktWeekly(); } }, 80); }); }
+      b.addEventListener('focusout', function(){ Object.keys(wkDeb).forEach(wkFlushPath); setTimeout(function(){ if(!wkFocused() && wkPendingSnap){ wkPendingSnap=false; renderMktWeekly(); } }, 80); });
+      // 붙여넣기: 서식·폰트 제거하고 순수 텍스트로 삽입 → 필드 폰트(Pretendard)로 통일
+      b.addEventListener('paste', function(e){ const t=e.target; if(!t||!t.isContentEditable) return; e.preventDefault(); let text=''; try{ text=((e.clipboardData||window.clipboardData).getData('text/plain'))||''; }catch(_){}
+        let ok=false; try{ ok=document.execCommand('insertText', false, text); }catch(_){}
+        if(!ok){ const sel=window.getSelection(); if(sel&&sel.rangeCount){ const r=sel.getRangeAt(0); r.deleteContents(); r.insertNode(document.createTextNode(text)); r.collapse(false); sel.removeAllRanges(); sel.addRange(r); } }
+        wkText(t); }); }
     // 저장 (로컬 미러 + Firebase)
     function wkPersistLocal(){ try{ localStorage.setItem('aqaraWeekly',JSON.stringify(weeklyData)); localStorage.setItem('aqaraProjects',JSON.stringify(wkProjects)); }catch(e){} }
     function setNested(obj,keys,val){ let o=obj; for(let i=0;i<keys.length-1;i++){ const k=keys[i]; if(typeof o[k]!=='object'||o[k]===null) o[k]={}; o=o[k]; } const last=keys[keys.length-1]; if(val===null) delete o[last]; else o[last]=val; }
