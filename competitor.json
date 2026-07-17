@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-16 19:22",
+ "generatedAt": "2026-07-17 19:13",
  "brands": [
   {
    "name": "아카라",
@@ -124,12 +124,12 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
-    "아카라 스위치",
     "아카라 홈캠",
+    "아카라 스위치",
     "아카라 l100",
-    "명조 아카라이브",
     "아카라카",
-    "니케 아카라이브"
+    "명조 아카라이브",
+    "아카라이브 핫딜"
    ],
    "recent": [
     {
@@ -346,13 +346,13 @@
     "헤이홈 홈캠",
     "헤이홈",
     "헤이홈 sd카드",
-    "헤이홈 거치대",
     "헤이홈 연결",
+    "헤이홈 거치대",
     "헤이홈 공유",
     "헤이홈 중국",
     "헤이홈 오프라인",
-    "헤이홈 g2",
-    "헤이홈 프로"
+    "헤이홈 프로",
+    "헤이홈 g2"
    ],
    "recent": [
     {
@@ -451,10 +451,10 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 66981,
+   "total": 66983,
    "sentiment": {
-    "pos": 21,
-    "neu": 38,
+    "pos": 23,
+    "neu": 36,
     "neg": 1
    },
    "keywords": [
@@ -463,32 +463,32 @@
      76
     ],
     [
+     "플랫폼",
+     23
+    ],
+    [
      "모듈러",
      23
     ],
     [
-     "플랫폼",
+     "삼성전자는",
      21
     ],
     [
-     "삼성전자는",
-     20
+     "갤럭시",
+     15
     ],
     [
      "주택",
      13
     ],
     [
-     "개방형",
-     13
-    ],
-    [
-     "갤럭시",
-     13
-    ],
-    [
      "SmartThings",
-     11
+     12
+    ],
+    [
+     "개방형",
+     12
     ],
     [
      "가전과",
@@ -499,11 +499,15 @@
      11
     ],
     [
-     "에너지",
+     "TV",
      10
     ],
     [
-     "가전",
+     "기반으로",
+     10
+    ],
+    [
+     "에너지",
      10
     ],
     [
@@ -515,20 +519,16 @@
      10
     ],
     [
-     "기반으로",
+     "관리",
+     9
+    ],
+    [
+     "가전",
      9
     ],
     [
      "지난달",
      9
-    ],
-    [
-     "개방",
-     9
-    ],
-    [
-     "TV",
-     8
     ]
    ],
    "posWords": [
@@ -542,7 +542,7 @@
     ],
     [
      "강화",
-     3
+     4
     ],
     [
      "돌파",
@@ -557,27 +557,39 @@
      2
     ],
     [
-     "성장",
+     "첨단",
      1
     ],
     [
-     "인기",
+     "성장",
      1
     ]
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스",
-    "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 아이폰",
     "삼성 스마트싱스 선풍기",
     "삼성 스마트싱스 전력량"
    ],
    "recent": [
+    {
+     "title": "'TV 이후'가 더 중요하다···삼성·LG, 플랫폼 패권 전쟁",
+     "source": "seoulfn.com",
+     "date": "2026-07-17",
+     "link": "https://www.seoulfn.com/news/articleView.html?idxno=633337"
+    },
+    {
+     "title": "반도체 원리로 작업복 냉각, AI로 체감온도 관리... 폭염 대처도 첨단 기...",
+     "source": "hankookilbo.com",
+     "date": "2026-07-17",
+     "link": "https://n.news.naver.com/mnews/article/469/0000942816?sid=105"
+    },
     {
      "title": "[그레이 파워⑥] 빈곤율 40% 對 168조…'돌봄과 소비' 시니어의 두 시각",
      "source": "shinailbo.co.kr",
@@ -655,18 +667,6 @@
      "source": "전자신문",
      "date": "2026-07-14",
      "link": "https://n.news.naver.com/mnews/article/030/0003447732?sid=105"
-    },
-    {
-     "title": "폭염보다 뜨거운 '발열'…삼성은 공조, LG는 데이터센터 주력",
-     "source": "itdaily.kr",
-     "date": "2026-07-14",
-     "link": "https://www.itdaily.kr/news/articleView.html?idxno=240372"
-    },
-    {
-     "title": "AI, 家치를 키운다",
-     "source": "donga.com",
-     "date": "2026-07-14",
-     "link": "https://n.news.naver.com/mnews/article/020/0003733616?sid=101"
     }
    ]
   },
@@ -674,20 +674,20 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76831,
+   "total": 76834,
    "sentiment": {
-    "pos": 17,
+    "pos": 18,
     "neu": 42,
-    "neg": 1
+    "neg": 0
    },
    "keywords": [
     [
-     "가전을",
-     52
+     "AI",
+     50
     ],
     [
-     "AI",
-     52
+     "가전을",
+     50
     ],
     [
      "LG전자",
@@ -695,26 +695,26 @@
     ],
     [
      "에어컨",
-     39
+     36
     ],
     [
      "앱에",
-     34
-    ],
-    [
-     "ThinQ",
-     31
-    ],
-    [
-     "음성",
-     30
-    ],
-    [
-     "세탁기",
-     30
+     33
     ],
     [
      "AI홈",
+     30
+    ],
+    [
+     "ThinQ",
+     30
+    ],
+    [
+     "음성",
+     29
+    ],
+    [
+     "세탁기",
      28
     ],
     [
@@ -730,12 +730,16 @@
      27
     ],
     [
-     "정보도",
+     "음성으로",
      26
     ],
     [
-     "음성으로",
-     26
+     "정보도",
+     25
+    ],
+    [
+     "플랫폼",
+     24
     ],
     [
      "제어하고",
@@ -743,15 +747,11 @@
     ],
     [
      "LLM",
-     24
+     22
     ],
     [
      "제공한다",
-     24
-    ],
-    [
-     "거대언어모델",
-     23
+     22
     ]
    ],
    "posWords": [
@@ -760,12 +760,16 @@
      6
     ],
     [
-     "강화",
+     "1위",
      6
     ],
     [
-     "1위",
-     6
+     "강화",
+     5
+    ],
+    [
+     "협업",
+     1
     ],
     [
      "계약",
@@ -783,16 +787,34 @@
    "related": [
     "lg 씽큐 오류",
     "lg 씽큐 어플 오류",
-    "LG 씽큐",
-    "LG 씽큐앱 오류",
-    "lg 씽큐 e1031 오류",
-    "lg 씽큐앱",
+    "lg 씽큐",
+    "lg 씽큐앱 오류",
     "lg 씽큐온",
+    "lg 씽큐 e1031 오류",
+    "lg 씽큐 앱",
     "lg 씽큐 어플",
     "lg 씽큐 연결",
-    "lg 씽큐 어플 안됨"
+    "lg 씽큐 오프라인"
    ],
    "recent": [
+    {
+     "title": "LG전자, 목재 소재로 모듈러 주택 만든다",
+     "source": "한국경제",
+     "date": "2026-07-17",
+     "link": "https://n.news.naver.com/mnews/article/015/0005311109?sid=101"
+    },
+    {
+     "title": "“라면 물 받아줘”… AI로 똑똑해진 정수기",
+     "source": "seoul.co.kr",
+     "date": "2026-07-17",
+     "link": "https://n.news.naver.com/mnews/article/081/0003662040?sid=101"
+    },
+    {
+     "title": "[경제 단신] DH 인수한 우버, 배민 새 주인 예고 외",
+     "source": "segye.com",
+     "date": "2026-07-17",
+     "link": "https://n.news.naver.com/mnews/article/022/0004143745?sid=101"
+    },
     {
      "title": "[TOP's Pick] [전자·IT] 삼성, 포용금융 확대 위해 2000억 출연 外",
      "source": "topdaily.kr",
@@ -864,24 +886,6 @@
      "source": "enetnews.co.kr",
      "date": "2026-07-16",
      "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=52499"
-    },
-    {
-     "title": "집 전체를 똑똑하게… 삼성·LG, 'AI 홈' 빅픽처 그린다",
-     "source": "sisaon.co.kr",
-     "date": "2026-07-16",
-     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=202745"
-    },
-    {
-     "title": "삼성·LG전자, 포용금융 확대·AI 냉동얼음정수기 출시",
-     "source": "wsobi.com",
-     "date": "2026-07-16",
-     "link": "http://www.wsobi.com/news/articleView.html?idxno=315364"
-    },
-    {
-     "title": "LG 휘센 NCSI 에어컨 부문 21년 연속 1위, LG전자 베스트샵 고객 혜택 확...",
-     "source": "megaeconomy.co.kr",
-     "date": "2026-07-16",
-     "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065588858465922"
     }
    ]
   },
@@ -889,16 +893,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75144,
+   "total": 75150,
    "sentiment": {
-    "pos": 24,
-    "neu": 25,
-    "neg": 11
+    "pos": 26,
+    "neu": 22,
+    "neg": 12
    },
    "keywords": [
     [
      "AI",
-     42
+     38
     ],
     [
      "고객을",
@@ -918,10 +922,6 @@
     ],
     [
      "하드웨어",
-     15
-    ],
-    [
-     "스피커",
      14
     ],
     [
@@ -929,12 +929,16 @@
      13
     ],
     [
+     "스피커",
+     13
+    ],
+    [
      "대신증권",
      12
     ],
     [
-     "미국",
-     12
+     "다음",
+     11
     ],
     [
      "사용할",
@@ -953,7 +957,11 @@
      11
     ],
     [
-     "다음",
+     "미국",
+     10
+    ],
+    [
+     "고객",
      10
     ],
     [
@@ -963,10 +971,6 @@
     [
      "개인",
      10
-    ],
-    [
-     "문화",
-     10
     ]
    ],
    "posWords": [
@@ -975,12 +979,12 @@
      21
     ],
     [
-     "성장",
-     6
+     "글로벌",
+     8
     ],
     [
-     "글로벌",
-     6
+     "성장",
+     8
     ],
     [
      "돌파",
@@ -1006,16 +1010,58 @@
    "related": [
     "구글 홈 스피커",
     "구글 홈",
-    "구글 홈 미니",
     "구글 홈페이지",
+    "구글 홈 미니",
     "구글 홈 허브",
     "구글 홈 어시스턴트",
-    "구글 홈 미니 1세대",
-    "구글 홈 스피커 연결",
     "구글 홈 미니 연결",
-    "구글 홈 미니 초기화"
+    "구글 홈 스피커 연결",
+    "구글 홈 미니 초기화",
+    "구글 홈 초기화 방법"
    ],
    "recent": [
+    {
+     "title": "EU, 구글에 안드로이드 AI 개방 명령… \"제미나이 독점권 풀어라\"",
+     "source": "it.chosun.com",
+     "date": "2026-07-17",
+     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092166029"
+    },
+    {
+     "title": "\"액정 밖으로 나온 AI\"…삼성, 런던서 '스마트 안경' 깜짝 공개?[언팩 미...",
+     "source": "뉴시스",
+     "date": "2026-07-17",
+     "link": "https://n.news.naver.com/mnews/article/003/0014072845?sid=105"
+    },
+    {
+     "title": "'TV 이후'가 더 중요하다···삼성·LG, 플랫폼 패권 전쟁",
+     "source": "seoulfn.com",
+     "date": "2026-07-17",
+     "link": "https://www.seoulfn.com/news/articleView.html?idxno=633337"
+    },
+    {
+     "title": "국민의힘, 장동혁·정점식 “이재명 정권 독선적 국정운영-입법독주 저...",
+     "source": "breaknews.com",
+     "date": "2026-07-17",
+     "link": "http://www.breaknews.com/1222462"
+    },
+    {
+     "title": "갤럭시Z플립8 스펙 유출…또 엑시노스, 스냅드래곤 아니다",
+     "source": "wikitree.co.kr",
+     "date": "2026-07-16",
+     "link": "https://www.wikitree.co.kr/articles/1146934"
+    },
+    {
+     "title": "브랜드 성장 해법 찾는다… 아임웹 브랜드콘에 4천 명 몰려",
+     "source": "venturesquare.net",
+     "date": "2026-07-16",
+     "link": "https://www.venturesquare.net/1099369/"
+    },
+    {
+     "title": "AI 시대, 사용 요금 계산법",
+     "source": "ifs.or.kr",
+     "date": "2026-07-16",
+     "link": "http://www.ifs.or.kr/bbs/board.php?bo_table=News&wr_id=55920"
+    },
     {
      "title": "홈플러스 살릴 메리츠 2000억…김병주 보증에도 '납품·영업 정상화' 숙...",
      "source": "joongangenews.com",
@@ -1063,48 +1109,6 @@
      "source": "아이뉴스24",
      "date": "2026-07-16",
      "link": "https://n.news.naver.com/mnews/article/031/0001042756?sid=105"
-    },
-    {
-     "title": "김병주·MBK, 홈플러스 회생 2000억원 추가 연대보증 결정",
-     "source": "breaknews.com",
-     "date": "2026-07-16",
-     "link": "http://www.breaknews.com/1222246"
-    },
-    {
-     "title": "아임웹 '브랜드콘 26' 4천명 신청…4대 1 경쟁률",
-     "source": "hansbiz.co.kr",
-     "date": "2026-07-16",
-     "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=850740"
-    },
-    {
-     "title": "대신증권, 크레온 신규 고객 대상 투자지원금 이벤트",
-     "source": "issuenbiz.com",
-     "date": "2026-07-16",
-     "link": "http://www.issuenbiz.com/news/articleView.html?idxno=77929"
-    },
-    {
-     "title": "대신증권 \"MTS로 계좌 만들고 투자지원금 받아 가세요\"",
-     "source": "머니투데이",
-     "date": "2026-07-16",
-     "link": "https://n.news.naver.com/mnews/article/008/0005387032?sid=101"
-    },
-    {
-     "title": "[경제소식] 'TIGER 미국배당다우존스' 순자산 4조원 돌파",
-     "source": "4th.kr",
-     "date": "2026-07-16",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2114847"
-    },
-    {
-     "title": "대신증권, 크레온 신규 고객 대상 투자지원금·주식 매수 이벤트...최대...",
-     "source": "ftoday.co.kr",
-     "date": "2026-07-16",
-     "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=362175"
-    },
-    {
-     "title": "사람과 유사한 AI 스피커? 윤곽 드러나는 올트먼의 포스트 스마트폰",
-     "source": "fortunekorea.co.kr",
-     "date": "2026-07-16",
-     "link": "https://www.fortunekorea.co.kr/news/articleView.html?idxno=53230"
     }
    ]
   }
