@@ -138,6 +138,7 @@
       <button id="rptBtn-campaign" onclick="switchTab('campaign')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">캠페인</button>
       <button id="rptBtn-market" onclick="switchTab('market')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">시장 분석</button>
       <button id="rptBtn-competitor" onclick="switchTab('competitor')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">경쟁사 분석</button>
+      <button id="rptBtn-cdj" onclick="switchTab('cdj')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">자사 분석</button>
     </div>
   </div>
 
@@ -763,6 +764,16 @@
      <div class="card p-4 mb-5"><p class="text-[11px] font-semibold text-slate-400 mb-1">여정 인사이트</p><div id="rpt-cdj" data-rk="cdj" class="text-sm text-slate-700 leading-relaxed rpt-edit"></div></div>
      <p id="reportEditNote" class="text-center text-xs text-slate-400 pt-1 hidden">편집 모드: 요약·인사이트 텍스트를 클릭해 수정 후 '저장' 버튼을 누르세요. 내용은 이 브라우저에 저장됩니다.</p>
      <p class="text-center text-xs text-slate-400 pt-4">수치는 자동 수집 기준 · 인사이트는 수정 가능(대체자료로 활용)</p>
+   </div>
+
+   <!-- 자사 분석 · CDJ 맵 -->
+   <div id="view-cdj" class="hidden">
+      <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
+        <h2 class="text-xl font-extrabold text-ink">자사 분석 · CDJ 맵 <span class="text-sm font-normal text-slate-400">(소비자 구매여정 × 검색 인텐트 맵)</span></h2>
+        <span class="text-xs text-slate-400">네이버 실측 키워드 관심도 반영 · 노란 버블 = 실측(크기=관심도)</span>
+      </div>
+      <div class="card p-4 overflow-x-auto"><div id="cdjMap" class="min-w-[1060px]"></div></div>
+      <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">※ 6단계 CDJ(초기 탐색→정보 탐색→경험 탐색→구매 확정→구매 후 관리→리텐션)별 <b>검색 인텐트 토픽 · Paid 미디어 · Owned/SEO 콘텐츠</b> 맵입니다. 노란 버블은 네이버 실측 키워드(관심도로 크기·증감 반영), 회색 버블·미디어·콘텐츠 항목은 전략 초안이라 편집·보완하면 됩니다.</p>
    </div>
 
    <!-- 시장 분석 -->
@@ -2054,14 +2065,14 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], report:['report','campaign','market','competitor'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'report', competitor:'report', market:'report', report:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], report:['report','campaign','market','competitor','cdj'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
-      ['analytics','briefing','campaign','owned','cafe','report','competitor','market','calendar','medialist','library','mkt','kpi'].forEach(v=>{
+      ['analytics','briefing','campaign','owned','cafe','report','competitor','market','cdj','calendar','medialist','library','mkt','kpi'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
@@ -2070,7 +2081,7 @@
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
-      ['report','campaign','market','competitor'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
+      ['report','campaign','market','competitor','cdj'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       if(t==='campaign'){ renderCampaign(); loadYoutube(); }
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
@@ -2078,8 +2089,42 @@
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
       if(t==='competitor'){ loadCompetitor(); }
       if(t==='market'){ loadCompetitor(); renderMarket(); }
+      if(t==='cdj'){ renderCDJ(); }
       if(t==='library'){ loadLibrary(); }
       if(t==='mkt'){ mktEnter(); }
+    }
+    // ===== 자사 분석 · CDJ 맵 =====
+    const CDJ_STAGES=[
+      {c:'#5E85A6', en:'Initial Exploration', kr:'초기 탐색', desc:'브랜드·제품 인지 전, 니즈 기반 탐색', paid:'TV·신문·잡지·PR·PPL·디지털광고·이벤트', paidNote:'브랜드·제품 인지도 확대', topics:['스마트홈','스마트홈 인테리어','IoT 인테리어','홈 오토메이션'], owned:['보도자료','뉴스기사']},
+      {c:'#5EA6A0', en:'Browsing', kr:'정보 탐색', desc:'여러 브랜드·기능·용도 비교 탐색', paid:'PR·디지털 광고', paidNote:'제품·기능 정보 확산', topics:['스마트 조명','스마트 커튼','매터','아카라 호환성'], owned:['블로그','카탈로그/스펙']},
+      {c:'#7BA65E', en:'Experience', kr:'경험 탐색', desc:'리뷰·전문가 평가·체험 정보 탐색', paid:'PR·인플루언서 마케팅·체험 이벤트', paidNote:'긍정적 체험정보 확산', topics:['아카라','아카라라이프','스마트 도어락','아카라 리뷰'], owned:['미디어 리뷰','유튜브 리뷰 영상','카테고리 페이지']},
+      {c:'#4E6E96', en:'Confirmation', kr:'구매 확정', desc:'가격·조건·할인 등 베스트딜 탐색', paid:'디지털 광고·PR·리타겟팅', paidNote:'프로모션·기획전 공지', topics:['아카라 가격','아카라 할인','스마트홈 구축비용'], owned:['고객 리뷰','구매 가이드','커뮤니티 리뷰'], pop:true},
+      {c:'#8A6EC0', en:'Own · 구매 후', kr:'구매 후 관리', desc:'구매 후 활용·부가서비스·A/S 탐색', paid:'CRM·DM·디지털 광고 캠페인', paidNote:'구매고객 경험가치·로열티', topics:['아카라 앱 설정','스마트싱스 연동','아카라 A/S'], owned:['기획전/이벤트 페이지','제품 상세/바이 페이지']},
+      {c:'#5E85A6', en:'Retention', kr:'리텐션', desc:'만족·재구매·커뮤니티 참여', paid:'인쇄매체 광고·PR·재구매 이벤트', paidNote:'팬덤 육성·크로스셀', topics:['아카라 추천','스마트홈 확장','아카라 신제품'], owned:['제품 상세','커뮤니티']}
+    ];
+    let CDJ_KW=null;
+    function renderCDJ(){ const el=document.getElementById('cdjMap'); if(!el) return;
+      if(CDJ_KW){ drawCDJ(el); return; }
+      fetch('keywords_trend.json?_='+Date.now()).then(r=>r.json()).then(d=>{ CDJ_KW={}; (d.keywords||[]).forEach(k=>{ CDJ_KW[k.name]={latest:k.latest,mom:k.mom,yoy:k.yoy}; }); drawCDJ(el); }).catch(()=>{ CDJ_KW={}; drawCDJ(el); }); }
+    function drawCDJ(el){
+      const kw=CDJ_KW||{};
+      const sizeOf=n=>{ const k=kw[n]; if(!k||k.latest==null) return 58; return Math.round(Math.max(48,Math.min(108,44+k.latest*0.62))); };
+      const rowLabel=t=>`<div class="text-[11px] font-bold text-slate-500 mb-1 mt-3">${t}</div>`;
+      const head=CDJ_STAGES.map(s=>`<div class="rounded-t-lg px-2 py-2 text-white" style="background:${s.c}"><div class="text-[9px] opacity-80 leading-tight">${s.en}</div><div class="text-[13px] font-extrabold leading-tight">${s.kr}</div><div class="text-[9px] opacity-90 mt-1 leading-snug">${s.desc}</div></div>`).join('');
+      const paid=CDJ_STAGES.map(s=>`<div class="px-2 py-2 border-x border-b border-[#E6E6E3] bg-[#EEF1F6]"><div class="text-[11px] font-semibold text-[#365b7a] leading-snug">${s.paid}</div>${s.paidNote?`<div class="text-[9px] text-slate-500 mt-1">${s.paidNote}</div>`:''}</div>`).join('');
+      const funnel=CDJ_STAGES.map(s=>{
+        const bubbles=s.topics.map(n=>{ const sz=sizeOf(n), tracked=!!kw[n], k=kw[n]||{};
+          const delta=(tracked&&k.mom!=null)?`<div class="leading-none mt-0.5" style="font-size:8px;color:${k.mom>=0?'#5E7350':'#BF5332'}">${k.mom>=0?'▲':'▼'}${Math.abs(k.mom)}%</div>`:'';
+          return `<div class="rounded-full flex flex-col items-center justify-center text-center shrink-0 shadow-sm" title="${esc(n)}${tracked?' · 관심도 '+k.latest:''}" style="width:${sz}px;height:${sz}px;background:${tracked?'#FBC400':'#DCE4EF'};color:${tracked?'#5a4a00':'#3a4a5a'};padding:4px"><div class="font-semibold leading-tight" style="font-size:${sz>78?11:9}px">${esc(n)}</div>${delta}</div>`; }).join('');
+        const pop=s.pop?`<div class="rounded-full flex items-center justify-center text-white font-extrabold text-center shrink-0 shadow" style="width:92px;height:92px;background:#1D1D1F;font-size:11px;line-height:1.15">Point of<br>Purchase</div>`:'';
+        return `<div class="px-2 py-3 border-x border-b border-[#E6E6E3] bg-[#FBFAF3] flex flex-wrap gap-2 items-center justify-center content-center" style="min-height:230px">${pop}${bubbles}</div>`; }).join('');
+      const chip=x=>`<span class="inline-block text-[10px] bg-white border border-[#CFE0F0] text-[#365b7a] rounded px-1.5 py-0.5 mb-1 mr-1">${esc(x)}</span>`;
+      const owned=CDJ_STAGES.map(s=>`<div class="px-2 py-2 border-x border-b border-[#E6E6E3] bg-[#EAF4FB] rounded-b-lg">${(s.owned||[]).map(chip).join('')}</div>`).join('');
+      el.innerHTML=
+        rowLabel('CDJ 단계 (구매여정)')+`<div class="grid grid-cols-6 gap-0">${head}</div>`+
+        rowLabel('Paid Media Campaign (단계별 매체)')+`<div class="grid grid-cols-6 gap-0">${paid}</div>`+
+        rowLabel('마케팅 퍼널 · 검색 인텐트 맵 (Intent Map)')+`<div class="grid grid-cols-6 gap-0">${funnel}</div>`+
+        rowLabel('SEO/SMO · Owned Media (콘텐츠)')+`<div class="grid grid-cols-6 gap-0">${owned}</div>`;
     }
     function todayStr(){ return (typeof reportToday==='function')?reportToday():new Date().toISOString().slice(0,10); }
 
