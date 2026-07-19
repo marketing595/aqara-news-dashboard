@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-18 18:48",
+ "generatedAt": "2026-07-19 19:01",
  "brands": [
   {
    "name": "아카라",
@@ -348,8 +348,8 @@
     "헤이홈 sd카드",
     "헤이홈 거치대",
     "헤이홈 연결",
-    "헤이홈 중국",
     "헤이홈 공유",
+    "헤이홈 중국",
     "헤이홈 오프라인",
     "헤이홈 프로",
     "헤이홈 g2"
@@ -451,10 +451,10 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 66986,
+   "total": 66988,
    "sentiment": {
-    "pos": 23,
-    "neu": 36,
+    "pos": 22,
+    "neu": 37,
     "neg": 1
    },
    "keywords": [
@@ -464,7 +464,7 @@
     ],
     [
      "모듈러",
-     25
+     27
     ],
     [
      "플랫폼",
@@ -472,15 +472,23 @@
     ],
     [
      "삼성전자는",
-     21
+     23
     ],
     [
      "주택",
-     14
+     15
     ],
     [
-     "갤럭시",
+     "가전과",
      13
+    ],
+    [
+     "히트펌프",
+     12
+    ],
+    [
+     "기반",
+     12
     ],
     [
      "TV",
@@ -491,19 +499,19 @@
      12
     ],
     [
-     "가전과",
-     12
-    ],
-    [
-     "기반",
-     12
-    ],
-    [
      "SmartThings",
-     12
+     11
     ],
     [
-     "히트펌프",
+     "지난달",
+     10
+    ],
+    [
+     "관리",
+     10
+    ],
+    [
+     "프로",
      10
     ],
     [
@@ -511,23 +519,15 @@
      10
     ],
     [
+     "갤럭시",
+     10
+    ],
+    [
      "AI홈",
      10
     ],
     [
-     "LG전자",
-     9
-    ],
-    [
-     "프로",
-     9
-    ],
-    [
-     "관리",
-     9
-    ],
-    [
-     "가전",
+     "공간제작소와",
      9
     ]
    ],
@@ -538,7 +538,7 @@
     ],
     [
      "강화",
-     4
+     3
     ],
     [
      "혁신",
@@ -557,27 +557,39 @@
      2
     ],
     [
-     "프리미엄",
-     2
+     "공략",
+     1
     ],
     [
-     "공략",
+     "계약",
      1
     ]
    ],
    "related": [
     "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 에어컨",
+    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 선풍기",
+    "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 아이폰",
     "삼성 스마트싱스 전력량"
    ],
    "recent": [
+    {
+     "title": "\"집도 난방도 우리가\"…삼성·LG, 400조 주거 시장 정조준",
+     "source": "metroseoul.co.kr",
+     "date": "2026-07-19",
+     "link": "http://www.metroseoul.co.kr/article/20260719500159"
+    },
+    {
+     "title": "삼성전자, 사우디 모스크 100곳에 맞춤형 HVAC 솔루션 공급",
+     "source": "socialvalue.kr",
+     "date": "2026-07-19",
+     "link": "https://www.socialvalue.kr/news/view/1065579744831568"
+    },
     {
      "title": "李대통령 잇단 언급에 '모듈러주택·히트펌프' 주목…삼성·LG전자 사업...",
      "source": "뉴시스",
@@ -655,18 +667,6 @@
      "source": "ekn.kr",
      "date": "2026-07-15",
      "link": "https://www.ekn.kr/web/view.php?key=20260715026042506"
-    },
-    {
-     "title": "\"가전 마진 한계 극복\" 삼성·LG전자, 집·스크린 묶는 플랫폼 전쟁",
-     "source": "asiaa.co.kr",
-     "date": "2026-07-15",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=255272"
-    },
-    {
-     "title": "개발도사, AI 기반 ‘바이브 코딩’으로 소프트웨어 개발·교육 사업 확...",
-     "source": "isplus.com",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/241/0003520132?sid=101"
     }
    ]
   },
@@ -674,222 +674,214 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76839,
+   "total": 76902,
    "sentiment": {
-    "pos": 18,
-    "neu": 42,
+    "pos": 21,
+    "neu": 39,
     "neg": 0
    },
    "keywords": [
     [
-     "AI",
-     49
-    ],
-    [
-     "가전을",
-     44
+     "구독",
+     65
     ],
     [
      "LG전자",
+     64
+    ],
+    [
+     "가전",
+     58
+    ],
+    [
+     "압구정",
+     56
+    ],
+    [
+     "단지",
+     50
+    ],
+    [
+     "아파트",
+     50
+    ],
+    [
+     "세대",
+     40
+    ],
+    [
+     "재건축",
      39
     ],
     [
-     "에어컨",
-     34
+     "앱을",
+     39
     ],
     [
-     "앱에",
-     32
+     "우리",
+     36
     ],
     [
-     "ThinQ",
-     30
+     "연결",
+     36
     ],
     [
      "AI홈",
+     36
+    ],
+    [
+     "특화",
+     33
+    ],
+    [
+     "상반기",
+     33
+    ],
+    [
+     "기능인",
      29
     ],
     [
-     "음성",
-     28
-    ],
-    [
-     "세탁기",
-     28
-    ],
-    [
-     "퓨리케어",
+     "30만",
      27
     ],
     [
-     "등록된",
-     26
+     "LG전자는",
+     27
     ],
     [
-     "정보도",
-     24
-    ],
-    [
-     "음성으로",
-     24
-    ],
-    [
-     "제어하고",
-     23
-    ],
-    [
-     "얼음",
-     23
-    ],
-    [
-     "플랫폼",
-     22
-    ],
-    [
-     "생활",
-     20
-    ],
-    [
-     "제공한다",
-     20
+     "B2B",
+     27
     ]
    ],
    "posWords": [
     [
      "확대",
-     6
+     8
     ],
     [
-     "1위",
-     6
+     "공략",
+     7
     ],
     [
-     "강화",
-     4
-    ],
-    [
-     "주목",
-     1
-    ],
-    [
-     "협업",
-     1
-    ],
-    [
-     "계약",
-     1
-    ],
-    [
-     "혁신",
-     1
+     "성장",
+     5
     ],
     [
      "프리미엄",
+     5
+    ],
+    [
+     "돌파",
+     2
+    ],
+    [
+     "강화",
      1
     ]
    ],
    "related": [
     "lg 씽큐 오류",
-    "lg 씽큐 어플 오류",
     "lg 씽큐",
+    "lg 씽큐 어플 오류",
     "lg 씽큐앱",
     "lg 씽큐온",
     "lg 씽큐 e1031 오류",
     "lg 씽큐 앱 오류",
     "lg 씽큐 어플",
     "lg 씽큐 오프라인",
-    "lg 씽큐 연결"
+    "lg 씽큐 에어컨 연결"
    ],
    "recent": [
     {
-     "title": "李대통령 잇단 언급에 '모듈러주택·히트펌프' 주목…삼성·LG전자 사업...",
-     "source": "뉴시스",
-     "date": "2026-07-18",
-     "link": "https://n.news.naver.com/mnews/article/003/0014073616?sid=101"
+     "title": "LG전자, 압구정 재건축 7000여 세대에 가전 구독 공급",
+     "source": "sateconomy.co.kr",
+     "date": "2026-07-19",
+     "link": "http://sateconomy.co.kr/news/view/1065606450277444"
     },
     {
-     "title": "LG전자, AI 음성 제어 및 가전 허브 기능 탑재한 'LG 퓨리케어 AI 냉동얼...",
-     "source": "thepublic.kr",
-     "date": "2026-07-18",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=311611"
+     "title": "LG전자 '구독형 가전' 압구정 재건축단지 공급",
+     "source": "파이낸셜뉴스",
+     "date": "2026-07-19",
+     "link": "https://n.news.naver.com/mnews/article/014/0005549760?sid=101"
     },
     {
-     "title": "가전과 로봇의 경계 허무는 AI…정서적 교감부터 가전 제어까지 스마트...",
-     "source": "dailypop.kr",
-     "date": "2026-07-18",
-     "link": "http://www.dailypop.kr/news/articleView.html?idxno=100663"
+     "title": "LG전자, 압구정 7000가구에 '가전 구독' 심는다… 하이엔드 주거시장 공...",
+     "source": "biztribune.co.kr",
+     "date": "2026-07-19",
+     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=356110"
     },
     {
-     "title": "30평짜리 신축이 '1억5000만원'…삼성·LG '파격 승부수' [홍민성의 테토...",
-     "source": "한국경제",
-     "date": "2026-07-18",
-     "link": "https://n.news.naver.com/mnews/article/015/0005311204?sid=101"
+     "title": "씽큐 온 앞세운 LG전자, 압구정 재건축 단지에 'AI홈 생태계' 심는다",
+     "source": "pointe.co.kr",
+     "date": "2026-07-19",
+     "link": "https://www.pointe.co.kr/news/articleView.html?idxno=81939"
     },
     {
-     "title": "‘생존형 필수가전’된 괴물 공기청정기 써보니…노벨상 신소재 필터로...",
-     "source": "biz.heraldcorp.com",
-     "date": "2026-07-18",
-     "link": "https://n.news.naver.com/mnews/article/016/0002671646?sid=101"
+     "title": "이젠 가전도 구독…LG전자, 압구정 재건축단지에 구독 상품 공급",
+     "source": "news.tvchosun.com",
+     "date": "2026-07-19",
+     "link": "https://n.news.naver.com/mnews/article/448/0000627812?sid=101"
     },
     {
-     "title": "LG전자, 목재 소재로 모듈러 주택 만든다",
-     "source": "한국경제",
-     "date": "2026-07-17",
-     "link": "https://n.news.naver.com/mnews/article/015/0005311109?sid=101"
+     "title": "LG전자, 압구정 재건축 단지에 가전 구독 서비스 도입 추진",
+     "source": "mdtoday.co.kr",
+     "date": "2026-07-19",
+     "link": "https://www.mdtoday.co.kr/news/articleView.html?idxno=605268"
     },
     {
-     "title": "“라면 물 받아줘”… AI로 똑똑해진 정수기",
-     "source": "seoul.co.kr",
-     "date": "2026-07-17",
-     "link": "https://n.news.naver.com/mnews/article/081/0003662040?sid=101"
+     "title": "LG전자, 압구정 재건축 7천여 세대 프리미엄 빌트인 가전 구독 공급",
+     "source": "autodaily.co.kr",
+     "date": "2026-07-19",
+     "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=545853"
     },
     {
-     "title": "[경제 단신] DH 인수한 우버, 배민 새 주인 예고 외",
-     "source": "segye.com",
-     "date": "2026-07-17",
-     "link": "https://n.news.naver.com/mnews/article/022/0004143745?sid=101"
+     "title": "LG전자, 현대건설 압구정 재건축 단지 구독 서비스…B2B 주거 시장 공략...",
+     "source": "lcnews.co.kr",
+     "date": "2026-07-19",
+     "link": "https://www.lcnews.co.kr/news/articleView.html?idxno=205120"
     },
     {
-     "title": "[TOP's Pick] [전자·IT] 삼성, 포용금융 확대 위해 2000억 출연 外",
-     "source": "topdaily.kr",
-     "date": "2026-07-16",
-     "link": "https://www.topdaily.kr/articles/111035"
+     "title": "LG전자, 가전 구독 B2B 강화 '성장동력 확보'…압구정 재건축 단지에 서...",
+     "source": "sportschosun.com",
+     "date": "2026-07-19",
+     "link": "https://n.news.naver.com/mnews/article/076/0004426893?sid=101"
     },
     {
-     "title": "\"하이 엘지, 얼음 한 컵 줘\"···말귀 알아듣는 정수기 나왔다",
-     "source": "pointdaily.co.kr",
-     "date": "2026-07-16",
-     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=312237"
+     "title": "'압구정 재건축 7000세대' LG 가전구독 공급",
+     "source": "shinailbo.co.kr",
+     "date": "2026-07-19",
+     "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5042083"
     },
     {
-     "title": "[건설플러스] HJ중공업과 삼성물산 ‘홈닉’ 스마트 서비스 확대 外",
-     "source": "news.dealsitetv.com",
-     "date": "2026-07-16",
-     "link": "https://news.dealsitetv.com/articles/173430"
+     "title": "LG전자, 압구정 재건축단지에 가전구독 공급…7000세대 대상",
+     "source": "newsworks.co.kr",
+     "date": "2026-07-19",
+     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=847537"
     },
     {
-     "title": "“얼음 한 컵 줘” LG전자, 말로 물·얼음 받는 ‘퓨리케어 AI 냉동얼음...",
-     "source": "cnet.co.kr",
-     "date": "2026-07-16",
-     "link": "https://www.cnet.co.kr/view/?no=20260716161828"
+     "title": "\"압구정 재건축 품는다\"…LG전자, 가전 구독으로 B2B 공략",
+     "source": "megaeconomy.co.kr",
+     "date": "2026-07-19",
+     "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065590522052719"
     },
     {
-     "title": "LG전자, AI 냉동얼음정수기 출시… 음성으로 물·얼음 출수",
-     "source": "mediapen.com",
-     "date": "2026-07-16",
-     "link": "https://www.mediapen.com/news/view/1110603"
+     "title": "LG전자, 압구정 재건축 단지에 가전 구독 서비스 공급한다",
+     "source": "tournews21.com",
+     "date": "2026-07-19",
+     "link": "https://www.tournews21.com/news/articleView.html?idxno=138835"
     },
     {
-     "title": "“하이 엘지, 얼음 한 컵 줘”…30도 폭염 날릴 LG AI 얼음정수기",
-     "source": "dnews.co.kr",
-     "date": "2026-07-16",
-     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607161534448110464"
+     "title": "LG전자, 압구정 재건축 7천세대에 가전 구독서비스",
+     "source": "nocutnews.co.kr",
+     "date": "2026-07-19",
+     "link": "https://n.news.naver.com/mnews/article/079/0004169651?sid=101"
     },
     {
-     "title": "AI 스마트홈 경쟁 뛰어든 건설사…'집'이 생활비서로 진화한다",
-     "source": "m-economynews.com",
-     "date": "2026-07-16",
-     "link": "https://www.m-economynews.com/news/article.html?no=68825"
+     "title": "LG전자, 압구정 재건축에 가전 구독 도입...'AI홈 B2B 사업 확대'",
+     "source": "metroseoul.co.kr",
+     "date": "2026-07-19",
+     "link": "http://www.metroseoul.co.kr/article/20260719500157"
     }
    ]
   },
@@ -897,16 +889,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75153,
+   "total": 75156,
    "sentiment": {
     "pos": 27,
-    "neu": 21,
-    "neg": 12
+    "neu": 23,
+    "neg": 10
    },
    "keywords": [
     [
      "AI",
-     38
+     37
     ],
     [
      "투자지원금",
@@ -921,10 +913,6 @@
      14
     ],
     [
-     "아마존",
-     14
-    ],
-    [
      "할인",
      13
     ],
@@ -933,8 +921,8 @@
      13
     ],
     [
-     "오픈AI",
-     13
+     "제미나이",
+     12
     ],
     [
      "다음",
@@ -949,11 +937,11 @@
      12
     ],
     [
-     "하드웨어",
-     12
+     "프로",
+     11
     ],
     [
-     "프로",
+     "아마존",
      11
     ],
     [
@@ -961,7 +949,7 @@
      11
     ],
     [
-     "스피커",
+     "오픈AI",
      11
     ],
     [
@@ -975,6 +963,10 @@
     [
      "포함한",
      10
+    ],
+    [
+     "대상으로",
+     10
     ]
    ],
    "posWords": [
@@ -983,31 +975,31 @@
      22
     ],
     [
-     "글로벌",
+     "성장",
      8
     ],
     [
-     "성장",
-     8
+     "글로벌",
+     7
     ],
     [
      "돌파",
      3
     ],
     [
+     "강화",
+     2
+    ],
+    [
+     "프리미엄",
+     1
+    ],
+    [
      "1위",
      1
     ],
     [
-     "강화",
-     1
-    ],
-    [
      "확대",
-     1
-    ],
-    [
-     "기대",
      1
     ]
    ],
@@ -1021,9 +1013,27 @@
     "구글 홈 미니 연결",
     "구글 홈 스피커 연결",
     "구글 홈 미니 초기화",
-    "구글 홈 팟"
+    "구글 홈 초기화 방법"
    ],
    "recent": [
+    {
+     "title": "홈플러스는 왜 무너졌나?…MBK 10년, 2.3조 부동산 매각의 대가",
+     "source": "joongangenews.com",
+     "date": "2026-07-19",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=533699"
+    },
+    {
+     "title": "[주간 유통 나침반] 김병주 보증에도 갈 길 먼 홈플러스…환율발 물가인...",
+     "source": "joongangenews.com",
+     "date": "2026-07-19",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=533647"
+    },
+    {
+     "title": "'대륙의 실수' 옛말?…샤오미, 프리미엄 로봇청소기 시장 진출",
+     "source": "news1.kr",
+     "date": "2026-07-19",
+     "link": "https://n.news.naver.com/mnews/article/421/0009066266?sid=105"
+    },
     {
      "title": "대신증권, 크레온 신규고객 최대 6만원 지원",
      "source": "bizwnews.com",
@@ -1095,24 +1105,6 @@
      "source": "breaknews.com",
      "date": "2026-07-16",
      "link": "http://www.breaknews.com/1222314"
-    },
-    {
-     "title": "아임웹, '브랜드 콘퍼런스' 사전신청자 4천명 돌파",
-     "source": "이데일리",
-     "date": "2026-07-16",
-     "link": "https://n.news.naver.com/mnews/article/018/0006331832?sid=101"
-    },
-    {
-     "title": "세계 1위 보조 배터리 업체 앤커, 롯데백화점 등으로 오프라인 행보 확...",
-     "source": "hankookilbo.com",
-     "date": "2026-07-16",
-     "link": "https://n.news.naver.com/mnews/article/469/0000942661?sid=105"
-    },
-    {
-     "title": "대신증권, 크레온 신규 고객 이벤트 진행",
-     "source": "newsinside.kr",
-     "date": "2026-07-16",
-     "link": "https://www.newsinside.kr/news/articleView.html?idxno=4842564"
     }
    ]
   }
