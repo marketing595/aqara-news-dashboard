@@ -492,6 +492,14 @@
      <div id="ownedSec-instagram" class="hidden">
      <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">Instagram 채널 <span class="text-xs font-normal text-slate-400">Graph API 실측</span></h2>
      <section id="ownedIgKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
+     <section class="card p-5 mb-5">
+       <div class="flex items-baseline justify-between flex-wrap gap-2 mb-1">
+         <h3 class="accent font-extrabold text-ink">팔로워 성장 · 전월/전년 대비 <span class="text-xs font-normal text-slate-400">(매일 자동 기록 · 축적될수록 정밀)</span></h3>
+         <span id="igGrowthDelta" class="text-xs text-slate-500"></span>
+       </div>
+       <div class="h-56"><canvas id="igGrowthChart"></canvas></div>
+       <p class="text-[11px] text-slate-400 mt-2">※ 팔로워 전월/전년 대비는 <b class="text-ink">일별 팔로워 히스토리</b>로 계산합니다. 인스타 자동수집(<b class="text-ink">INSTA_TOKEN</b>) 연결 후 매일 기록되어 채워지며, 현재는 데이터 축적 초기 단계입니다.</p>
+     </section>
      <section id="ownedIgPostsWrap" class="card p-5 hidden">
        <h3 class="accent font-extrabold text-ink mb-3">최근 게시물 <span id="ownedIgCount" class="text-sm font-normal text-slate-400"></span></h3>
        <div class="overflow-auto max-h-[520px] rounded-lg border border-[#E6E6E3]">
@@ -2843,6 +2851,7 @@
           <td class="px-3 py-2.5 text-right num">${(p.likes||0).toLocaleString()}</td>
           <td class="px-3 py-2.5 text-right num">${(p.comments||0).toLocaleString()}</td></tr>`).join('');
       }
+      renderIgGrowth();
       // 블로그 (관리 블로그 여러 개)
       const bl=OWNED.blog||{}, all=blogAll();
       const totalPosts=bl.total!=null?bl.total:all.length;
@@ -3005,6 +3014,13 @@
       return [lo,hi]; }
     function cafeSentCounts(posts){ const c={긍정:0,중립:0,부정:0}; posts.forEach(p=>{ const s=(p._sen?p._sen.k:cafeSentiment(p.title,p.desc).k); c[s]++; }); return c; }
     function rline(id,labels,datasets){ draw(id,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,labels:{boxWidth:10,font:{size:10}}}},scales:{y:{beginAtZero:false,ticks:{font:{size:10}}},x:{ticks:{maxTicksLimit:8,font:{size:9}}}}}}); }
+    // 인스타 팔로워 성장(전월/전년) — 일별 히스토리 기반, 목표 시점 근처 데이터가 있을 때만 계산
+    function igStrictDelta(field,days,tol){ const h=OWNED_HIST; if(!h||h.length<2) return null; const latest=h[h.length-1], cur=latest[field]; if(cur==null) return null; const target=new Date(latest.date)-days*864e5; let best=null,bd=1e9; for(let i=0;i<h.length-1;i++){ if(h[i][field]==null) continue; const diff=Math.abs(new Date(h[i].date)-target)/864e5; if(diff<=(tol||10)&&diff<bd){ bd=diff; best=h[i]; } } if(!best) return null; return {d:cur-best[field], base:best[field], from:best.date}; }
+    function renderIgGrowth(){ const el=document.getElementById('igGrowthChart'); if(!el) return;
+      const rows=(OWNED_HIST||[]).filter(x=>x.igFollowers!=null);
+      rline('igGrowthChart', rows.map(x=>x.date), [{label:'팔로워',data:rows.map(x=>x.igFollowers),borderColor:'#C13584',backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:rows.length<=1?4:2}]);
+      const badge=(dl,lbl)=>{ if(!dl) return lbl+' <span class="text-slate-300">데이터 축적 중</span>'; const up=dl.d>=0; return lbl+' <span class="'+(up?'text-agreen':'text-ared')+' font-semibold">'+(up?'▲':'▼')+Math.abs(dl.d).toLocaleString()+'명</span> <span class="text-slate-400">('+dl.from+'~)</span>'; };
+      const el2=document.getElementById('igGrowthDelta'); if(el2) el2.innerHTML=badge(igStrictDelta('igFollowers',30,10),'전월 대비')+' · '+badge(igStrictDelta('igFollowers',365,20),'전년 대비'); }
     function renderReport(){
       const [lo,hi]=reportRange(); const cut=lo;
       document.getElementById('reportStamp').textContent='생성일 '+(new Date().toISOString().slice(0,10))+' · 기간 '+lo+'~'+hi+(OWNED.generatedAt?(' · 데이터 '+OWNED.generatedAt):'');
