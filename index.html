@@ -424,6 +424,11 @@
          <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">조회수 추이 <span class="text-xs font-normal text-slate-400">(YouTube 누적)</span></h4><div class="h-52"><canvas id="ovViewsChart"></canvas></div></div>
          <div class="card p-5"><h4 class="font-bold text-slate-700 mb-2 text-sm">콘텐츠 발행 추이 <span class="text-xs font-normal text-slate-400">(월별 · 2021~ 소급)</span></h4><div class="h-52"><canvas id="ovContentChart"></canvas></div></div>
        </section>
+       <div class="flex items-baseline justify-between flex-wrap gap-2 mt-6 mb-3">
+         <h3 class="accent font-extrabold text-ink">콘텐츠 발행 전월·전년 대비 <span class="text-xs font-normal text-slate-400">(월별 발행 건수 · 금월은 진행 중)</span></h3>
+         <span id="ovCompareDelta" class="text-xs text-slate-500"></span>
+       </div>
+       <section class="card p-5"><div class="h-64"><canvas id="ovCompareChart"></canvas></div></section>
      </div>
 
      <!-- YouTube 자사 채널 -->
@@ -2868,8 +2873,21 @@
         card('YouTube','자동 실측', row('구독자',(ch.subs||0).toLocaleString()+'명')+row('업로드 영상',(ch.videos||0).toLocaleString()+'개')+row('영상 평균 조회',KO_UNIT(avg)),'youtube','text-red-600')+
         card('Instagram','Graph API 실측', row('팔로워',ig.followers!=null?ig.followers.toLocaleString()+'명':'-')+row('게시물',ig.posts!=null?ig.posts.toLocaleString()+'개':'-')+row('기준일',ig.asOf||'-'),'instagram','text-[#C13584]')+
         card('네이버 블로그','관리 '+nBlogs+'개', row('전체 글',blTotal.toLocaleString()+'건')+row('최근 30일 발행',(bl.recent30||0)+'건')+row('최신 발행일',(_all[0]?_all[0].date:'-')),'blog','text-[#03C75A]');
-      renderOwnedTrends();
+      renderOwnedTrends(); renderOwnedCompare();
     }
+    function renderOwnedCompare(){ const el=document.getElementById('ovCompareChart'); if(!el||!CONTENT_HIST.length) return;
+      const byM={}; CONTENT_HIST.forEach(m=>byM[m.month]=m);
+      const cNow=CONTENT_HIST[CONTENT_HIST.length-1].month;
+      const shift=(ym,n)=>{ let y=+ym.slice(0,4),m=+ym.slice(5,7)-n; while(m<1){m+=12;y--;} while(m>12){m-=12;y++;} return y+'-'+String(m).padStart(2,'0'); };
+      const prevM=shift(cNow,1), yoyM=shift(cNow,12);
+      const g=ym=>byM[ym]||{blog:0,youtube:0,instagram:0,total:0};
+      const per=[g(yoyM),g(prevM),g(cNow)];
+      const ds=[{label:'블로그',data:per.map(m=>m.blog||0),backgroundColor:'#5E7350'},{label:'영상',data:per.map(m=>m.youtube||0),backgroundColor:'#BF5332'},{label:'인스타',data:per.map(m=>m.instagram||0),backgroundColor:'#C13584'}];
+      draw('ovCompareChart',{type:'bar',data:{labels:[['전년 동월',yoyM],['전월',prevM],['금월',cNow]],datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}}},scales:{x:{ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{font:{size:9}}}}}});
+      const tot=m=>m.total!=null?m.total:((m.blog||0)+(m.youtube||0)+(m.instagram||0));
+      const cur=tot(g(cNow)), pv=tot(g(prevM)), yy=tot(g(yoyM));
+      const badge=(a,b,has)=>{ if(!has) return '<span class="text-slate-300">데이터 없음</span>'; const up=(a-b)>=0, pct=b>0?Math.round((a-b)/b*100):(a>0?100:0); return '<span class="font-semibold '+(up?'text-agreen':'text-ared')+'">'+(up?'▲':'▼')+Math.abs(pct)+'%</span>'; };
+      const el2=document.getElementById('ovCompareDelta'); if(el2) el2.innerHTML='금월 <b class="text-ink num">'+cur+'건</b> · 전월 대비 '+badge(cur,pv,!!byM[prevM])+' · 전년 대비 '+badge(cur,yy,!!byM[yoyM]); }
     function renderOwnedTrends(){
       if(!document.getElementById('ovSubsChart')) return;
       const p=document.getElementById('ownedTrendPeriod')?.value||'all';
