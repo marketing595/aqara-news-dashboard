@@ -773,7 +773,7 @@
         <span class="text-xs text-slate-400">네이버 실측 키워드 관심도 반영 · 노란 버블 = 실측(크기=관심도)</span>
       </div>
       <div class="card p-4 overflow-x-auto"><div id="cdjMap" class="min-w-[1060px]"></div></div>
-      <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">※ 6단계 CDJ(초기 탐색→정보 탐색→경험 탐색→구매 확정→구매 후 관리→리텐션)별 <b>검색 인텐트 토픽 · Paid 미디어 · Owned/SEO 콘텐츠</b> 맵입니다. 노란 버블은 네이버 실측 키워드(관심도로 크기·증감 반영), 회색 버블·미디어·콘텐츠 항목은 전략 초안이라 편집·보완하면 됩니다.</p>
+      <div id="cdjSource" class="card p-4 mt-3 bg-[#FAFAF9] border-[#E6E6E3] text-[12px] text-slate-600 leading-relaxed"></div>
    </div>
 
    <!-- 시장 분석 -->
@@ -2102,10 +2102,10 @@
       {c:'#8A6EC0', en:'Own · 구매 후', kr:'구매 후 관리', desc:'구매 후 활용·부가서비스·A/S 탐색', paid:'CRM·DM·디지털 광고 캠페인', paidNote:'구매고객 경험가치·로열티', topics:['아카라 앱 설정','스마트싱스 연동','아카라 A/S'], owned:['기획전/이벤트 페이지','제품 상세/바이 페이지']},
       {c:'#5E85A6', en:'Retention', kr:'리텐션', desc:'만족·재구매·커뮤니티 참여', paid:'인쇄매체 광고·PR·재구매 이벤트', paidNote:'팬덤 육성·크로스셀', topics:['아카라 추천','스마트홈 확장','아카라 신제품'], owned:['제품 상세','커뮤니티']}
     ];
-    let CDJ_KW=null;
+    let CDJ_KW=null, CDJ_META={};
     function renderCDJ(){ const el=document.getElementById('cdjMap'); if(!el) return;
       if(CDJ_KW){ drawCDJ(el); return; }
-      fetch('keywords_trend.json?_='+Date.now()).then(r=>r.json()).then(d=>{ CDJ_KW={}; (d.keywords||[]).forEach(k=>{ CDJ_KW[k.name]={latest:k.latest,mom:k.mom,yoy:k.yoy}; }); drawCDJ(el); }).catch(()=>{ CDJ_KW={}; drawCDJ(el); }); }
+      fetch('keywords_trend.json?_='+Date.now()).then(r=>r.json()).then(d=>{ CDJ_KW={}; (d.keywords||[]).forEach(k=>{ CDJ_KW[k.name]={latest:k.latest,mom:k.mom,yoy:k.yoy}; }); CDJ_META={gen:d.generatedAt||'',end:d.endDate||'',n:(d.keywords||[]).length}; drawCDJ(el); }).catch(()=>{ CDJ_KW={}; drawCDJ(el); }); }
     function drawCDJ(el){
       const kw=CDJ_KW||{};
       const sizeOf=n=>{ const k=kw[n]; if(!k||k.latest==null) return 58; return Math.round(Math.max(48,Math.min(108,44+k.latest*0.62))); };
@@ -2125,6 +2125,14 @@
         rowLabel('Paid Media Campaign (단계별 매체)')+`<div class="grid grid-cols-6 gap-0">${paid}</div>`+
         rowLabel('마케팅 퍼널 · 검색 인텐트 맵 (Intent Map)')+`<div class="grid grid-cols-6 gap-0">${funnel}</div>`+
         rowLabel('SEO/SMO · Owned Media (콘텐츠)')+`<div class="grid grid-cols-6 gap-0">${owned}</div>`;
+      const src=document.getElementById('cdjSource'); if(src){ const m=CDJ_META||{};
+        src.innerHTML=`<div class="font-bold text-ink mb-2">📌 출처 · 산출 방법 · 갱신 주기</div>
+        <ul class="list-disc pl-4 space-y-1.5">
+          <li><b>분석 틀(6단계 CDJ)</b> — 소비자 구매여정(Consumer Decision Journey) 표준 프레임워크를 적용한 <b>분석 구조</b>이며 측정 데이터가 아닙니다. 레이아웃은 참고용 CDJ 맵(냉장고 예시) 구성을 차용했습니다.</li>
+          <li><b>노란 버블(실측 데이터)</b> — 네이버 <b>데이터랩 검색어트렌드</b> 기반 <b>상대 관심도</b>. 파일 <code class="bg-white px-1 rounded border">keywords_trend.json</code>${m.n?' · 대상 키워드 '+m.n+'개(아카라·아카라라이프·스마트홈 등)':''}${m.end?' · 기준일 ~'+m.end:''}${m.gen?' · 파일 생성 '+m.gen:''}. 버블 <b>크기 = 최근 관심도</b>, ▲▼ = <b>전월 대비(MoM)</b>. ※ 각 키워드의 <b>자체 최고점=100 기준 상대값</b>이며 절대 검색량이 아닙니다.</li>
+          <li><b>갱신 주기 — 월별 데이터(실시간 아님)</b>. 네이버 데이터랩이 <b>월 단위</b> 관심도를 제공하므로, 새 수치는 <b>매월 마감 후</b> 반영됩니다. 수집 크롤러(GitHub Actions)는 <b>매주 1회(월요일) 자동 갱신</b>하지만 데이터 시점은 직전 완료 월(${m.end||'최근 월'})까지입니다.</li>
+          <li><b>회색 버블 · Paid 미디어 · Owned 콘텐츠 · 단계 배치</b> — 아카라 제품·시장 맥락으로 작성한 <b>전략 초안(편집 가능)</b>입니다. 검색·측정 데이터가 아니므로 담당자 검증·보완이 필요합니다.</li>
+        </ul>`; }
     }
     function todayStr(){ return (typeof reportToday==='function')?reportToday():new Date().toISOString().slice(0,10); }
 
