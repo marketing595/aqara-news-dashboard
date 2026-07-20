@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-19 19:01",
+ "generatedAt": "2026-07-20 20:15",
  "brands": [
   {
    "name": "아카라",
@@ -128,8 +128,8 @@
     "아카라 홈캠",
     "아카라 l100",
     "아카라카",
-    "니케 아카라이브",
-    "이환 아카라이브"
+    "이환 아카라이브",
+    "니케 아카라이브"
    ],
    "recent": [
     {
@@ -228,10 +228,10 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 958,
+   "total": 959,
    "sentiment": {
-    "pos": 30,
-    "neu": 29,
+    "pos": 29,
+    "neu": 30,
     "neg": 1
    },
    "keywords": [
@@ -300,12 +300,12 @@
      18
     ],
     [
-     "AI",
-     18
-    ],
-    [
      "모니터링이",
      17
+    ],
+    [
+     "추적한다",
+     16
     ]
    ],
    "posWords": [
@@ -322,15 +322,15 @@
      4
     ],
     [
+     "확대",
+     3
+    ],
+    [
      "1위",
      3
     ],
     [
      "투자",
-     2
-    ],
-    [
-     "확대",
      2
     ],
     [
@@ -346,15 +346,21 @@
     "헤이홈 홈캠",
     "헤이홈",
     "헤이홈 sd카드",
-    "헤이홈 거치대",
     "헤이홈 연결",
-    "헤이홈 공유",
+    "헤이홈 거치대",
     "헤이홈 중국",
+    "헤이홈 공유",
     "헤이홈 오프라인",
     "헤이홈 프로",
     "헤이홈 g2"
    ],
    "recent": [
+    {
+     "title": "도둑보다 택배 도난이 무섭다… '홈 보안' 키우는 보안업계",
+     "source": "the-biz.co.kr",
+     "date": "2026-07-20",
+     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=724628"
+    },
     {
      "title": "한정판 ‘KT 홈캠 아기상어 에디션’ 10일 출시",
      "source": "서울경제",
@@ -438,12 +444,6 @@
      "source": "hbnpress.com",
      "date": "2026-07-08",
      "link": "https://hbnpress.com/news/view/1065590168485577"
-    },
-    {
-     "title": "“우리집 홈캠은 아기상어“…KT, 더핑크퐁컴퍼니와 협업",
-     "source": "ddaily.co.kr",
-     "date": "2026-07-08",
-     "link": "https://n.news.naver.com/mnews/article/138/0002233542?sid=105"
     }
    ]
   },
@@ -451,35 +451,43 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 66988,
+   "total": 66995,
    "sentiment": {
-    "pos": 22,
-    "neu": 37,
+    "pos": 24,
+    "neu": 35,
     "neg": 1
    },
    "keywords": [
     [
      "AI",
-     75
+     72
     ],
     [
      "모듈러",
-     27
+     25
     ],
     [
      "플랫폼",
-     24
+     22
     ],
     [
      "삼성전자는",
-     23
+     21
     ],
     [
      "주택",
      15
     ],
     [
-     "가전과",
+     "기반",
+     14
+    ],
+    [
+     "에너지",
+     13
+    ],
+    [
+     "TV",
      13
     ],
     [
@@ -487,39 +495,19 @@
      12
     ],
     [
-     "기반",
+     "가전과",
      12
-    ],
-    [
-     "TV",
-     12
-    ],
-    [
-     "에너지",
-     12
-    ],
-    [
-     "SmartThings",
-     11
-    ],
-    [
-     "지난달",
-     10
-    ],
-    [
-     "관리",
-     10
     ],
     [
      "프로",
-     10
+     11
     ],
     [
      "기반으로",
-     10
+     11
     ],
     [
-     "갤럭시",
+     "관리",
      10
     ],
     [
@@ -527,57 +515,111 @@
      10
     ],
     [
-     "공간제작소와",
+     "넘어",
+     9
+    ],
+    [
+     "SmartThings",
+     9
+    ],
+    [
+     "지난달",
+     9
+    ],
+    [
+     "LG전자",
      9
     ]
    ],
    "posWords": [
     [
      "확대",
-     10
+     9
+    ],
+    [
+     "글로벌",
+     4
     ],
     [
      "강화",
-     3
+     4
     ],
     [
      "혁신",
      3
     ],
     [
-     "주목",
+     "1위",
      2
     ],
     [
-     "돌파",
+     "계약",
      2
     ],
     [
-     "글로벌",
+     "프리미엄",
      2
     ],
     [
      "공략",
-     1
-    ],
-    [
-     "계약",
-     1
+     2
     ]
    ],
    "related": [
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스",
     "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 선풍기",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 아이폰",
+    "삼성 스마트싱스 선풍기",
     "삼성 스마트싱스 전력량"
    ],
    "recent": [
+    {
+     "title": "삼성전자, HVAC 미래 새 먹거리 낙점…“중동 넘어 글로벌 사우스까지 ...",
+     "source": "ceoscoredaily.com",
+     "date": "2026-07-20",
+     "link": "https://www.ceoscoredaily.com/page/view/2026072016565165436"
+    },
+    {
+     "title": "\"일상 동반자로 거듭날 것\"…삼성 계정, 기기 연결 넘어 가족까지 잇는...",
+     "source": "financialpost.co.kr",
+     "date": "2026-07-20",
+     "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=267147"
+    },
+    {
+     "title": "“사물인터넷(IoT) 활용 갈수록 늘어나는 데”…보안인증 의무화 논의 ...",
+     "source": "전자신문",
+     "date": "2026-07-20",
+     "link": "https://n.news.naver.com/mnews/article/030/0003449194?sid=105"
+    },
+    {
+     "title": "‘일상부터 보안·가족 케어까지’…삼성전자, ‘계정’ 하나로 편리한...",
+     "source": "swtvnews.com",
+     "date": "2026-07-20",
+     "link": "https://swtvnews.com/news/newsview.php?ncode=1065575310380687"
+    },
+    {
+     "title": "[미르의 글로벌 레이더]삼성, 카타르 1위 통신사 ‘우레두’와 동맹…중...",
+     "source": "mediapen.com",
+     "date": "2026-07-20",
+     "link": "https://www.mediapen.com/news/view/1110915"
+    },
+    {
+     "title": "\"아파트 공사비의 절반\"…삼성이 3년간 1만 호 노리는 집 [르포]",
+     "source": "realty.chosun.com",
+     "date": "2026-07-20",
+     "link": "https://realty.chosun.com/site/data/html_dir/2026/07/20/2026072000534.html"
+    },
+    {
+     "title": "“주차·순찰로봇 들이시죠”…강남 재건축단지 영업뛰는 기업들",
+     "source": "매일경제",
+     "date": "2026-07-20",
+     "link": "https://n.news.naver.com/mnews/article/009/0005709307?sid=103"
+    },
     {
      "title": "\"집도 난방도 우리가\"…삼성·LG, 400조 주거 시장 정조준",
      "source": "metroseoul.co.kr",
@@ -625,48 +667,6 @@
      "source": "shinailbo.co.kr",
      "date": "2026-07-16",
      "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5041608"
-    },
-    {
-     "title": "집 전체를 똑똑하게… 삼성·LG, 'AI 홈' 빅픽처 그린다",
-     "source": "sisaon.co.kr",
-     "date": "2026-07-16",
-     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=202745"
-    },
-    {
-     "title": "\"가전 넘어 주거 플랫폼으로\"⋯삼성·LG, AI홈 B2B 사업 확대",
-     "source": "아이뉴스24",
-     "date": "2026-07-16",
-     "link": "https://n.news.naver.com/mnews/article/031/0001042575?sid=101"
-    },
-    {
-     "title": "\"AI 홈 시장을 잡아라\" 국내외 기업 경쟁 치열",
-     "source": "ekoreanews.co.kr",
-     "date": "2026-07-15",
-     "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=87052"
-    },
-    {
-     "title": "'가전만으론 한계'…삼성·LG, AI홈으로 돌파구 찾는다",
-     "source": "sidae.com",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/417/0001151795?sid=101"
-    },
-    {
-     "title": "삼성, 암스테르담에 '유럽 최대 규모' 냉난방 설비 전문 교육 센터 설립",
-     "source": "theguru.co.kr",
-     "date": "2026-07-15",
-     "link": "https://www.theguru.co.kr/news/article.html?no=104479"
-    },
-    {
-     "title": "오픈AI, 화면 없는 AI 스피커로 애플에 도전장",
-     "source": "ddaily.co.kr",
-     "date": "2026-07-15",
-     "link": "https://n.news.naver.com/mnews/article/138/0002234291?sid=105"
-    },
-    {
-     "title": "“영국 주택난, 한국 AI 스마트주택이 해법”…킹스톤 시의원, 한영 협...",
-     "source": "ekn.kr",
-     "date": "2026-07-15",
-     "link": "https://www.ekn.kr/web/view.php?key=20260715026042506"
     }
    ]
   },
@@ -674,98 +674,90 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76902,
+   "total": 76927,
    "sentiment": {
-    "pos": 21,
-    "neu": 39,
+    "pos": 28,
+    "neu": 32,
     "neg": 0
    },
    "keywords": [
     [
-     "구독",
-     65
-    ],
-    [
      "LG전자",
-     64
+     59
     ],
     [
      "가전",
      58
     ],
     [
-     "압구정",
+     "단지",
      56
     ],
     [
-     "단지",
-     50
+     "구독",
+     54
+    ],
+    [
+     "압구정",
+     48
     ],
     [
      "아파트",
-     50
-    ],
-    [
-     "세대",
-     40
-    ],
-    [
-     "재건축",
-     39
-    ],
-    [
-     "앱을",
-     39
-    ],
-    [
-     "우리",
-     36
-    ],
-    [
-     "연결",
-     36
+     47
     ],
     [
      "AI홈",
-     36
+     44
+    ],
+    [
+     "우리",
+     34
+    ],
+    [
+     "연결",
+     33
     ],
     [
      "특화",
-     33
+     30
     ],
     [
      "상반기",
-     33
+     30
     ],
     [
-     "기능인",
-     29
+     "세대",
+     30
     ],
     [
-     "30만",
-     27
+     "재건축",
+     30
     ],
     [
      "LG전자는",
-     27
+     29
+    ],
+    [
+     "허브",
+     26
     ],
     [
      "B2B",
-     27
+     26
+    ],
+    [
+     "앱을",
+     26
+    ],
+    [
+     "30만",
+     25
     ]
    ],
    "posWords": [
     [
      "확대",
-     8
-    ],
-    [
-     "공략",
-     7
-    ],
-    [
-     "성장",
-     5
+     14
     ],
     [
      "프리미엄",
@@ -773,7 +765,19 @@
     ],
     [
      "돌파",
-     2
+     5
+    ],
+    [
+     "공략",
+     5
+    ],
+    [
+     "성장",
+     5
+    ],
+    [
+     "혁신",
+     1
     ],
     [
      "강화",
@@ -794,94 +798,94 @@
    ],
    "recent": [
     {
-     "title": "LG전자, 압구정 재건축 7000여 세대에 가전 구독 공급",
-     "source": "sateconomy.co.kr",
-     "date": "2026-07-19",
-     "link": "http://sateconomy.co.kr/news/view/1065606450277444"
+     "title": "KCC글라스·LG전자·고려아연, 기술 혁신부터 주거·조선·안전까지 미래...",
+     "source": "dailypop.kr",
+     "date": "2026-07-20",
+     "link": "http://www.dailypop.kr/news/articleView.html?idxno=100720"
     },
     {
-     "title": "LG전자 '구독형 가전' 압구정 재건축단지 공급",
-     "source": "파이낸셜뉴스",
-     "date": "2026-07-19",
-     "link": "https://n.news.naver.com/mnews/article/014/0005549760?sid=101"
+     "title": "LG전자의 건설 B2B 확대…'AI홈 동맹' GS건설 '반사이익'도 커진다",
+     "source": "asiatoday.co.kr",
+     "date": "2026-07-20",
+     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20260720010006947"
     },
     {
-     "title": "LG전자, 압구정 7000가구에 '가전 구독' 심는다… 하이엔드 주거시장 공...",
-     "source": "biztribune.co.kr",
-     "date": "2026-07-19",
-     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=356110"
+     "title": "챗GPT로 가전도 조작…LG 씽큐, AI홈 창구 넓힌다",
+     "source": "전자신문",
+     "date": "2026-07-20",
+     "link": "https://n.news.naver.com/mnews/article/030/0003449191?sid=105"
     },
     {
-     "title": "씽큐 온 앞세운 LG전자, 압구정 재건축 단지에 'AI홈 생태계' 심는다",
-     "source": "pointe.co.kr",
-     "date": "2026-07-19",
-     "link": "https://www.pointe.co.kr/news/articleView.html?idxno=81939"
+     "title": "LG전자, 건설사 동맹으로 '구독' 확장…AI홈 몸집 불린다",
+     "source": "asiatime.co.kr",
+     "date": "2026-07-20",
+     "link": "https://www.asiatime.co.kr/article/20260720500231"
     },
     {
-     "title": "이젠 가전도 구독…LG전자, 압구정 재건축단지에 구독 상품 공급",
-     "source": "news.tvchosun.com",
-     "date": "2026-07-19",
-     "link": "https://n.news.naver.com/mnews/article/448/0000627812?sid=101"
+     "title": "[기업경쟁력]LG전자, 가전 구독 솔루션 통해 B2B 시장 확대…압구정 재...",
+     "source": "nspna.com",
+     "date": "2026-07-20",
+     "link": "https://www.nspna.com/news/?mode=view&newsid=821056"
     },
     {
-     "title": "LG전자, 압구정 재건축 단지에 가전 구독 서비스 도입 추진",
-     "source": "mdtoday.co.kr",
-     "date": "2026-07-19",
-     "link": "https://www.mdtoday.co.kr/news/articleView.html?idxno=605268"
+     "title": "현대건설 손잡은 LG전자…압구정 재건축에 프리미엄 가전 구독 도입",
+     "source": "thepublic.kr",
+     "date": "2026-07-20",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=311732"
     },
     {
-     "title": "LG전자, 압구정 재건축 7천여 세대 프리미엄 빌트인 가전 구독 공급",
-     "source": "autodaily.co.kr",
-     "date": "2026-07-19",
-     "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=545853"
+     "title": "LG전자, 압구정 재건축에 가전 구독 도입…B2B 시장 확대",
+     "source": "nongaek.com",
+     "date": "2026-07-20",
+     "link": "http://www.nongaek.com/news/articleView.html?idxno=96140"
     },
     {
-     "title": "LG전자, 현대건설 압구정 재건축 단지 구독 서비스…B2B 주거 시장 공략...",
-     "source": "lcnews.co.kr",
-     "date": "2026-07-19",
-     "link": "https://www.lcnews.co.kr/news/articleView.html?idxno=205120"
+     "title": "LG전자, 압구정 재건축에 '가전 구독·AI홈' 적용",
+     "source": "todayenergy.kr",
+     "date": "2026-07-20",
+     "link": "https://www.todayenergy.kr/news/articleView.html?idxno=300558"
     },
     {
-     "title": "LG전자, 가전 구독 B2B 강화 '성장동력 확보'…압구정 재건축 단지에 서...",
-     "source": "sportschosun.com",
-     "date": "2026-07-19",
-     "link": "https://n.news.naver.com/mnews/article/076/0004426893?sid=101"
+     "title": "LG전자, 현대건설과 손잡았다…압구정 재건축에 '가전 구독' 도입",
+     "source": "cstimes.com",
+     "date": "2026-07-20",
+     "link": "https://www.cstimes.com/news/articleView.html?idxno=713904"
     },
     {
-     "title": "'압구정 재건축 7000세대' LG 가전구독 공급",
-     "source": "shinailbo.co.kr",
-     "date": "2026-07-19",
-     "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5042083"
+     "title": "LG전자 류재철, 구독으로 B2B 주거 시장 정조준",
+     "source": "smartbizn.com",
+     "date": "2026-07-20",
+     "link": "https://www.smartbizn.com/news/articleView.html?idxno=148836"
     },
     {
-     "title": "LG전자, 압구정 재건축단지에 가전구독 공급…7000세대 대상",
-     "source": "newsworks.co.kr",
-     "date": "2026-07-19",
-     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=847537"
+     "title": "[르포]\"가전도 5성급 호텔처럼 구독한다\"…압구정 재건축에 불어온 LG '...",
+     "source": "view.asiae.co.kr",
+     "date": "2026-07-20",
+     "link": "https://n.news.naver.com/mnews/article/277/0005791752?sid=101"
     },
     {
-     "title": "\"압구정 재건축 품는다\"…LG전자, 가전 구독으로 B2B 공략",
-     "source": "megaeconomy.co.kr",
-     "date": "2026-07-19",
-     "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065590522052719"
+     "title": "LG전자, 압구정 재건축 7000가구에 가전 구독 도입",
+     "source": "webeconomy.co.kr",
+     "date": "2026-07-20",
+     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2237058"
     },
     {
-     "title": "LG전자, 압구정 재건축 단지에 가전 구독 서비스 공급한다",
-     "source": "tournews21.com",
-     "date": "2026-07-19",
-     "link": "https://www.tournews21.com/news/articleView.html?idxno=138835"
+     "title": "LG전자·현대건설, 압구정 재건축 단지 7,000세대에 가전 구독 서비스 도...",
+     "source": "nextdaily.co.kr",
+     "date": "2026-07-20",
+     "link": "https://www.nextdaily.co.kr/news/articleView.html?idxno=251414"
     },
     {
-     "title": "LG전자, 압구정 재건축 7천세대에 가전 구독서비스",
-     "source": "nocutnews.co.kr",
-     "date": "2026-07-19",
-     "link": "https://n.news.naver.com/mnews/article/079/0004169651?sid=101"
+     "title": "가전 한 번 팔고 끝 아냐...LG전자, 압구정서 구독으로 '5년 고객' 만든...",
+     "source": "insight.co.kr",
+     "date": "2026-07-20",
+     "link": "https://www.insight.co.kr/news/563653"
     },
     {
-     "title": "LG전자, 압구정 재건축에 가전 구독 도입...'AI홈 B2B 사업 확대'",
-     "source": "metroseoul.co.kr",
-     "date": "2026-07-19",
-     "link": "http://www.metroseoul.co.kr/article/20260719500157"
+     "title": "삼성전자-LG전자, 사우디아라비아에 고효율 HVAC 솔루션 공급...신축단지...",
+     "source": "wsobi.com",
+     "date": "2026-07-20",
+     "link": "http://www.wsobi.com/news/articleView.html?idxno=315386"
     }
    ]
   },
@@ -889,117 +893,117 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75156,
+   "total": 75166,
    "sentiment": {
-    "pos": 27,
-    "neu": 23,
-    "neg": 10
+    "pos": 28,
+    "neu": 25,
+    "neg": 7
    },
    "keywords": [
     [
      "AI",
-     37
-    ],
-    [
-     "투자지원금",
-     18
+     35
     ],
     [
      "고객을",
-     18
+     20
+    ],
+    [
+     "투자지원금",
+     19
+    ],
+    [
+     "제미나이",
+     14
+    ],
+    [
+     "할인",
+     14
+    ],
+    [
+     "제공한다",
+     14
     ],
     [
      "대신증권",
      14
     ],
     [
-     "할인",
-     13
-    ],
-    [
-     "제공한다",
-     13
-    ],
-    [
-     "제미나이",
-     12
-    ],
-    [
      "다음",
-     12
+     13
     ],
     [
      "이용권과",
-     12
+     13
     ],
     [
      "도미노피자",
+     13
+    ],
+    [
+     "사용할",
      12
     ],
     [
      "프로",
-     11
+     12
     ],
     [
-     "아마존",
-     11
-    ],
-    [
-     "사용할",
-     11
-    ],
-    [
-     "오픈AI",
+     "Gemini",
      11
     ],
     [
      "수요일",
-     10
+     11
     ],
     [
      "LG유플러스에서",
-     10
+     11
     ],
     [
      "포함한",
-     10
+     11
+    ],
+    [
+     "개인",
+     11
     ],
     [
      "대상으로",
-     10
+     11
     ]
    ],
    "posWords": [
     [
      "투자",
-     22
-    ],
-    [
-     "성장",
-     8
+     24
     ],
     [
      "글로벌",
-     7
+     9
+    ],
+    [
+     "성장",
+     9
     ],
     [
      "돌파",
      3
     ],
     [
+     "1위",
+     2
+    ],
+    [
+     "확대",
+     2
+    ],
+    [
      "강화",
      2
     ],
     [
-     "프리미엄",
-     1
-    ],
-    [
-     "1위",
-     1
-    ],
-    [
-     "확대",
+     "최초",
      1
     ]
    ],
@@ -1007,8 +1011,8 @@
     "구글 홈 스피커",
     "구글 홈",
     "구글 홈 미니",
-    "구글 홈페이지",
     "구글 홈 허브",
+    "구글 홈페이지",
     "구글 홈 어시스턴트",
     "구글 홈 미니 연결",
     "구글 홈 스피커 연결",
@@ -1016,6 +1020,66 @@
     "구글 홈 초기화 방법"
    ],
    "recent": [
+    {
+     "title": "NAS 입문 해볼까? 부담 낮은 20만원대 NAS, 아이피타임 'NAS2plus'",
+     "source": "betanews.net",
+     "date": "2026-07-20",
+     "link": "https://www.betanews.net/article/view/beta202607200126"
+    },
+    {
+     "title": "[게임뉴스] 스마일게이트 및 웹젠 소식 외",
+     "source": "gamevu.co.kr",
+     "date": "2026-07-20",
+     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=59430"
+    },
+    {
+     "title": "BTS 월드컵 첫 하프타임쇼·정호연 트로피 운반·하지원 MLB 시구…오늘...",
+     "source": "sports.khan.co.kr",
+     "date": "2026-07-20",
+     "link": "https://m.entertain.naver.com/article/144/0001127133"
+    },
+    {
+     "title": "거실을 영화관처럼, 뷰소닉 포터블 빔프로젝터 'X11-4K' 등 3종 4K 시네마...",
+     "source": "betanews.net",
+     "date": "2026-07-20",
+     "link": "https://www.betanews.net/article/view/beta202607200122"
+    },
+    {
+     "title": "챗GPT로 가전도 조작…LG 씽큐, AI홈 창구 넓힌다",
+     "source": "전자신문",
+     "date": "2026-07-20",
+     "link": "https://n.news.naver.com/mnews/article/030/0003449191?sid=105"
+    },
+    {
+     "title": "화장품 회사 넘어 글로벌 플랫폼…에이피알이 다시 쓴 K뷰티 성장공식",
+     "source": "joongangenews.com",
+     "date": "2026-07-20",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=533912"
+    },
+    {
+     "title": "에이트코 홀딩스, 보유자산 4억600만 달러…오픈AI·월드코인 편입",
+     "source": "tokenpost.kr",
+     "date": "2026-07-20",
+     "link": "https://www.tokenpost.kr/news/blockchain/379353"
+    },
+    {
+     "title": "이도현, 이모개 감독 ‘남벌’로 스크린 복귀..이병헌·고윤정과 호흡",
+     "source": "breaknews.com",
+     "date": "2026-07-20",
+     "link": "http://www.breaknews.com/1222646"
+    },
+    {
+     "title": "[출근길 포인트] 세제·재정지원 뒷받침되면…대기업 4곳 중 1곳 \"3년내...",
+     "source": "pointdaily.co.kr",
+     "date": "2026-07-20",
+     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=312311"
+    },
+    {
+     "title": "한화투자증권, Digital Asset Holdings LLC에 300억 원 규모 투자 완료 外",
+     "source": "rcast.co.kr",
+     "date": "2026-07-19",
+     "link": "https://www.rcast.co.kr/news/articleView.html?idxno=31288"
+    },
     {
      "title": "홈플러스는 왜 무너졌나?…MBK 10년, 2.3조 부동산 매각의 대가",
      "source": "joongangenews.com",
@@ -1045,66 +1109,6 @@
      "source": "shinailbo.co.kr",
      "date": "2026-07-18",
      "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5041665"
-    },
-    {
-     "title": "뉴욕증시 다우지수 '또 하락'...코카콜라 · 알파벳A · 엔비디아 '뚝'",
-     "source": "choicenews.co.kr",
-     "date": "2026-07-18",
-     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=168356"
-    },
-    {
-     "title": "EU, 구글에 안드로이드 AI 개방 명령… \"제미나이 독점권 풀어라\"",
-     "source": "it.chosun.com",
-     "date": "2026-07-17",
-     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092166029"
-    },
-    {
-     "title": "\"액정 밖으로 나온 AI\"…삼성, 런던서 '스마트 안경' 깜짝 공개?[언팩 미...",
-     "source": "뉴시스",
-     "date": "2026-07-17",
-     "link": "https://n.news.naver.com/mnews/article/003/0014072845?sid=105"
-    },
-    {
-     "title": "'TV 이후'가 더 중요하다···삼성·LG, 플랫폼 패권 전쟁",
-     "source": "seoulfn.com",
-     "date": "2026-07-17",
-     "link": "https://www.seoulfn.com/news/articleView.html?idxno=633337"
-    },
-    {
-     "title": "국민의힘, 장동혁·정점식 “이재명 정권 독선적 국정운영-입법독주 저...",
-     "source": "breaknews.com",
-     "date": "2026-07-17",
-     "link": "http://www.breaknews.com/1222462"
-    },
-    {
-     "title": "갤럭시Z플립8 스펙 유출…또 엑시노스, 스냅드래곤 아니다",
-     "source": "wikitree.co.kr",
-     "date": "2026-07-16",
-     "link": "https://www.wikitree.co.kr/articles/1146934"
-    },
-    {
-     "title": "브랜드 성장 해법 찾는다… 아임웹 브랜드콘에 4천 명 몰려",
-     "source": "venturesquare.net",
-     "date": "2026-07-16",
-     "link": "https://www.venturesquare.net/1099369/"
-    },
-    {
-     "title": "AI 시대, 사용 요금 계산법",
-     "source": "ifs.or.kr",
-     "date": "2026-07-16",
-     "link": "http://www.ifs.or.kr/bbs/board.php?bo_table=News&wr_id=55920"
-    },
-    {
-     "title": "홈플러스 살릴 메리츠 2000억…김병주 보증에도 '납품·영업 정상화' 숙...",
-     "source": "joongangenews.com",
-     "date": "2026-07-16",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=533547"
-    },
-    {
-     "title": "평택시, 여름방학 맞이 초등학생 치과주치의사업 참여 권장",
-     "source": "breaknews.com",
-     "date": "2026-07-16",
-     "link": "http://www.breaknews.com/1222314"
     }
    ]
   }
