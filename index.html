@@ -1137,8 +1137,13 @@
            <div id="mktPrHotKw" class="mb-4"></div>
            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
              <div>
-               <p class="text-[13px] font-bold text-[#4B32C3] mb-2">📝 앵글 기획 <span class="text-[11px] font-normal text-slate-400">(드래그해서 캘린더에 배치)</span></p>
-               <div class="flex gap-2 mb-3"><input id="prAngleInput" type="text" placeholder="새 앵글 입력 후 Enter" onkeydown="if(event.key==='Enter')prAngleAdd()" class="flex-1 text-sm border border-[#EDE9FF] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#5B44C7]/40"/><button onclick="prAngleAdd()" class="text-sm bg-[#5B44C7] text-white px-3 py-2 rounded-lg font-semibold whitespace-nowrap">추가</button></div>
+               <style>#prAngleList [data-ph]:empty:before{ content:attr(data-ph); color:#cbd5e1; }</style>
+               <p class="text-[13px] font-bold text-[#4B32C3] mb-2">📝 앵글 기획 <span class="text-[11px] font-normal text-slate-400">(유형 선택·내용 작성 · 드래그해서 캘린더에 배치)</span></p>
+               <div class="flex gap-2 mb-3">
+                 <select id="prAngleType" class="text-sm border border-[#EDE9FF] rounded-lg px-2 py-2 bg-white shrink-0"><option>기획</option><option>단신</option><option>매거진</option></select>
+                 <input id="prAngleInput" type="text" placeholder="앵글 제목 입력 후 Enter" onkeydown="if(event.key==='Enter')prAngleAdd()" class="flex-1 min-w-0 text-sm border border-[#EDE9FF] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#5B44C7]/40"/>
+                 <button onclick="prAngleAdd()" class="text-sm bg-[#5B44C7] text-white px-3 py-2 rounded-lg font-semibold whitespace-nowrap">추가</button>
+               </div>
                <div id="prAngleList" class="space-y-2 max-h-[460px] overflow-auto pr-1"></div>
              </div>
              <div>
@@ -2676,25 +2681,37 @@
     }
     // ===== PR 앵글 기획 · 캘린더 (Firebase 실시간 공유) =====
     let PR_ANGLES={}, PR_SCHED={}, prCalYM=null, prSynced=false;
+    const PR_TYPES={'단신':'bg-slate-100 text-slate-600','기획':'bg-[#FFF3D6] text-[#8a6d00]','매거진':'bg-[#EAF3FF] text-[#2c5b8a]'};
+    // 2026 공휴일(음력·대체 포함) + 매년 고정 공휴일(MM-DD)
+    const HOLIDAYS={'2026-02-16':'설날','2026-02-17':'설날','2026-02-18':'설날','2026-03-02':'대체','2026-05-24':'부처님오신날','2026-05-25':'대체','2026-08-17':'대체','2026-09-24':'추석','2026-09-25':'추석','2026-09-26':'추석','2026-10-05':'대체'};
+    const HOLIDAYS_FIXED={'01-01':'신정','03-01':'삼일절','05-05':'어린이날','06-06':'현충일','08-15':'광복절','10-03':'개천절','10-09':'한글날','12-25':'성탄절'};
+    function prHoliday(date){ return HOLIDAYS[date]||HOLIDAYS_FIXED[date.slice(5)]||null; }
     function prRef(p){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('prPlan/'+p):null; }
     function prSyncStart(){ if(prSynced) return; const a=prRef('angles'); if(!a) return; prSynced=true;
       a.on('value',s=>{ PR_ANGLES=s.val()||{}; renderPrAngles(); });
       prRef('sched').on('value',s=>{ PR_SCHED=s.val()||{}; renderPrCalendar(); });
-      // 최초 1회: 비어 있으면 예시 앵글 시드
-      a.transaction(cur=>{ if(cur) return; const o={}; let n=0; PR_PITCHES.forEach(g=>g.ideas.forEach(x=>{ o['s'+(n)]={t:g.ind+' · '+x.t, ord:n}; n++; })); return o; }); }
-    function prAngleAdd(){ const el=document.getElementById('prAngleInput'); const t=(el.value||'').trim(); if(!t) return; el.value='';
-      const ref=prRef('angles'); const item={t:t, ord:Object.keys(PR_ANGLES).length}; if(ref) ref.push(item); else { PR_ANGLES['loc'+Object.keys(PR_ANGLES).length]=item; renderPrAngles(); } }
+      a.transaction(cur=>{ if(cur) return; const o={}; let n=0; PR_PITCHES.forEach(g=>g.ideas.forEach(x=>{ o['s'+n]={t:g.ind+' · '+x.t, type:'기획', desc:'앵글: '+x.angle+' / 근거: '+x.stat, ord:n}; n++; })); return o; }); }
+    function prAngleAdd(){ const el=document.getElementById('prAngleInput'); const t=(el.value||'').trim(); if(!t) return; const type=(document.getElementById('prAngleType')||{}).value||'기획'; el.value='';
+      const item={t:t, type:type, desc:'', ord:Object.keys(PR_ANGLES).length}; const ref=prRef('angles'); if(ref) ref.push(item); else { PR_ANGLES['loc'+Object.keys(PR_ANGLES).length]=item; renderPrAngles(); } }
     function prAngleDel(id){ const ref=prRef('angles'); if(ref) ref.child(id).remove(); else { delete PR_ANGLES[id]; renderPrAngles(); } }
     function prAngleEdit(id,el){ const t=(el.textContent||'').trim(); if(!t) return; const ref=prRef('angles'); if(ref) ref.child(id).update({t:t}); else if(PR_ANGLES[id]) PR_ANGLES[id].t=t; }
+    function prAngleEditDesc(id,el){ const d=(el.textContent||'').trim(); const ref=prRef('angles'); if(ref) ref.child(id).update({desc:d}); else if(PR_ANGLES[id]) PR_ANGLES[id].desc=d; }
+    function prAngleType(id,ty){ const ref=prRef('angles'); if(ref) ref.child(id).update({type:ty}); else if(PR_ANGLES[id]) PR_ANGLES[id].type=ty; if(!ref) renderPrAngles(); }
     function renderPrAngles(){ const el=document.getElementById('prAngleList'); if(!el) return;
       const items=Object.entries(PR_ANGLES).sort((a,b)=>(a[1].ord||0)-(b[1].ord||0));
-      el.innerHTML=items.map(([id,v])=>`<div draggable="true" ondragstart="prDragStart(event,'${id}')" class="group flex items-start gap-2 rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-2.5 cursor-grab hover:border-[#5B44C7]/50">
-        <span class="text-[#8a7ad0] mt-0.5 select-none">⋮⋮</span>
-        <span class="flex-1 text-[13px] text-ink leading-snug" contenteditable="true" onblur="prAngleEdit('${id}',this)">${esc(v.t||'')}</span>
-        <button onclick="prAngleDel('${id}')" class="text-slate-300 hover:text-ared opacity-0 group-hover:opacity-100 text-xs">✕</button>
-      </div>`).join('')||'<p class="text-[12px] text-slate-400 py-6 text-center">위 입력창에서 앵글을 추가하세요.</p>';
+      const opt=(cur)=>['기획','단신','매거진'].map(t=>`<option ${cur===t?'selected':''}>${t}</option>`).join('');
+      el.innerHTML=items.map(([id,v])=>{ const ty=v.type||'기획';
+        return `<div draggable="true" ondragstart="prDragStart(event,'${id}')" class="group rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-2.5 cursor-grab hover:border-[#5B44C7]/50">
+        <div class="flex items-start gap-2">
+          <span class="text-[#8a7ad0] mt-1 select-none">⋮⋮</span>
+          <select onchange="prAngleType('${id}',this.value)" onmousedown="event.stopPropagation()" class="text-[10px] border border-[#EDE9FF] rounded px-1 py-0.5 bg-white shrink-0 ${PR_TYPES[ty]||''}">${opt(ty)}</select>
+          <span class="flex-1 text-[13px] font-semibold text-ink leading-snug" contenteditable="true" onblur="prAngleEdit('${id}',this)">${esc(v.t||'')}</span>
+          <button onclick="prAngleDel('${id}')" class="text-slate-300 hover:text-ared opacity-0 group-hover:opacity-100 text-xs">✕</button>
+        </div>
+        <div class="text-[12px] text-slate-500 mt-1 pl-6 leading-snug" contenteditable="true" data-ph="내용·근거 입력…" onblur="prAngleEditDesc('${id}',this)">${esc(v.desc||'')}</div>
+      </div>`; }).join('')||'<p class="text-[12px] text-slate-400 py-6 text-center">위 입력창에서 앵글을 추가하세요.</p>';
     }
-    function prDragStart(e,id){ e.dataTransfer.setData('text/plain',(PR_ANGLES[id]&&PR_ANGLES[id].t)||''); e.dataTransfer.effectAllowed='copy'; }
+    function prDragStart(e,id){ const v=PR_ANGLES[id]||{}; e.dataTransfer.setData('text/plain',v.t||''); try{ e.dataTransfer.setData('application/json',JSON.stringify({t:v.t||'',type:v.type||'기획'})); }catch(_){} e.dataTransfer.effectAllowed='copy'; }
     function prCalMove(d){ if(!prCalYM) renderPrCalendar(); let[y,m]=prCalYM.split('-').map(Number); let mm=m-1+d,yy=y; while(mm<0){mm+=12;yy--;} while(mm>11){mm-=12;yy++;} prCalYM=yy+'-'+String(mm+1).padStart(2,'0'); renderPrCalendar(); }
     function renderPrCalendar(){ const grid=document.getElementById('prCalGrid'); if(!grid) return;
       if(!prCalYM){ const n=new Date(); prCalYM=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0'); }
@@ -2703,16 +2720,17 @@
       const first=new Date(y,m-1,1).getDay(), dim=new Date(y,m,0).getDate(), dows=['일','월','화','수','목','금','토'];
       let html=dows.map((d,i)=>`<div class="text-[10px] py-1 text-center ${i===0?'text-ared':(i===6?'text-ablue':'text-slate-400')}">${d}</div>`).join('');
       for(let i=0;i<first;i++) html+='<div></div>';
-      for(let d=1;d<=dim;d++){ const date=prCalYM+'-'+String(d).padStart(2,'0');
+      for(let d=1;d<=dim;d++){ const date=prCalYM+'-'+String(d).padStart(2,'0'), dow=new Date(y,m-1,d).getDay(), hol=prHoliday(date);
         const items=Object.entries(PR_SCHED).filter(e=>e[1].date===date);
-        html+=`<div ondragover="event.preventDefault()" ondrop="prCalDrop(event,'${date}')" class="min-h-[62px] rounded border border-[#EEEBF7] p-1 hover:border-[#5B44C7] transition">
-          <div class="text-[10px] text-slate-400 mb-0.5">${d}</div>
-          ${items.map(e=>`<div class="text-[10px] bg-[#EDE9FF] text-[#4B32C3] rounded px-1 py-0.5 mb-0.5 flex items-start gap-1"><span class="flex-1 leading-tight">${esc(e[1].t||'')}</span><button onclick="prSchedDel('${e[0]}')" class="text-[#8a7ad0] hover:text-ared leading-none">✕</button></div>`).join('')}
+        const dcol=hol?'text-ared font-bold':(dow===0?'text-ared':(dow===6?'text-ablue':'text-slate-400'));
+        html+=`<div ondragover="event.preventDefault()" ondrop="prCalDrop(event,'${date}')" class="min-h-[62px] rounded border ${hol?'border-ared/30 bg-ared/5':'border-[#EEEBF7]'} p-1 hover:border-[#5B44C7] transition">
+          <div class="flex items-center justify-between gap-1"><span class="text-[10px] ${dcol}">${d}</span>${hol?`<span class="text-[8px] text-ared truncate">${hol}</span>`:''}</div>
+          ${items.map(e=>{ const ty=e[1].type||'기획'; return `<div class="text-[10px] rounded px-1 py-0.5 mb-0.5 flex items-start gap-1 bg-[#EDE9FF]"><span class="text-[8px] px-1 rounded shrink-0 ${PR_TYPES[ty]||''}">${ty}</span><span class="flex-1 leading-tight text-[#4B32C3]">${esc(e[1].t||'')}</span><button onclick="prSchedDel('${e[0]}')" class="text-[#8a7ad0] hover:text-ared leading-none">✕</button></div>`; }).join('')}
         </div>`; }
       grid.innerHTML=html;
     }
-    function prCalDrop(e,date){ e.preventDefault(); const t=(e.dataTransfer.getData('text/plain')||'').trim(); if(!t) return;
-      const ref=prRef('sched'); const item={t:t,date:date}; if(ref) ref.push(item); else { PR_SCHED['loc'+Date.now()]=item; renderPrCalendar(); } }
+    function prCalDrop(e,date){ e.preventDefault(); let t='',type='기획'; const j=e.dataTransfer.getData('application/json'); if(j){ try{ const o=JSON.parse(j); t=o.t||''; type=o.type||'기획'; }catch(_){} } if(!t) t=(e.dataTransfer.getData('text/plain')||'').trim(); if(!t) return;
+      const ref=prRef('sched'); const item={t:t,type:type,date:date}; if(ref) ref.push(item); else { PR_SCHED['loc'+Date.now()]=item; renderPrCalendar(); } }
     function prSchedDel(id){ const ref=prRef('sched'); if(ref) ref.child(id).remove(); else { delete PR_SCHED[id]; renderPrCalendar(); } }
     // ===== 주간보고 (Firebase 실시간 공유 · 프로젝트·댓글·드래그) =====
     const WK_FIELDS=[{k:'done',label:'금주 진행 · 성과'},{k:'plan',label:'차주 계획'},{k:'issue',label:'이슈 · 공유'}];
