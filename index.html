@@ -31,7 +31,7 @@
         firebase.initializeApp(FIREBASE_CONFIG);
         WK_DB=firebase.database(); WK_FB_READY=true;
         firebase.auth().signInAnonymously().catch(e=>console.warn('Firebase 익명 로그인 실패:', e&&e.message));
-        firebase.auth().onAuthStateChanged(u=>{ WK_AUTH_OK=!!u; if(u){ if(typeof wkPresenceStart==='function') wkPresenceStart(); if(typeof wkOnAuth==='function') wkOnAuth(); } });
+        firebase.auth().onAuthStateChanged(u=>{ WK_AUTH_OK=!!u; if(u){ if(typeof wkPresenceStart==='function') wkPresenceStart(); if(typeof wkOnAuth==='function') wkOnAuth(); if(typeof prDelSyncStart==='function') prDelSyncStart(); } });
       }catch(e){ console.warn('Firebase init 오류:', e&&e.message); WK_FB_READY=false; }
     })();
   </script>
@@ -1190,6 +1190,7 @@
         let added=0;
         d.items.forEach((it,i)=>{ const k=norm(it['기사명']); if(!k||seen.has(k)) return; seen.add(k);
           const r={ '기사명':it['기사명'], '매체':it['매체']||'', '게재일':it['게재일']||'', '_href':it['link']||'', '_added':true, '_key':'org§'+k };
+          if(deletedRows.has(r._key)) return;   // 공유 삭제 반영(오가닉 자동수집분도 숨김 유지)
           applyRowEdit(r); deriveRow(r); r._origin='오가닉'; ALL.push(r); added++; });
         ORG_ADDED=added;
         if(added){ const u=document.getElementById('updated'); if(u) u.textContent='업데이트: '+(d.generatedAt||'')+' · 시트 '+(ALL.length-added)+'건 + 네이버 오가닉 '+added+'건 = 총 '+ALL.length+'건';
@@ -1200,7 +1201,7 @@
       if(!silent) show('loading');
       window.__onAqaraData=function(p){ clearTimeout(jt);
         if(!p||!p.ok){ if(!silent) showErr('응답 오류: '+(p&&p.error||'?')); return; }
-        ALL=(p.rows||[]).filter(r=>r['기사명']).map((r,i)=>{ r._key=(r['기사명']||'')+'§'+(r['게재일']||'')+'§'+i; applyRowEdit(r); deriveRow(r); return r; }).filter(r=>!deletedRows.has(r._key));
+        ALL=(p.rows||[]).filter(r=>r['기사명']).map((r,i)=>{ r._key=(r['기사명']||'')+'§'+(r['게재일']||'')+'§'+(r['매체']||''); applyRowEdit(r); deriveRow(r); return r; }).filter(r=>!deletedRows.has(r._key));
         document.getElementById('updated').textContent='업데이트: '+(p.generatedAt||'')+' · 총 '+ALL.length+'건';
         try{ initRange(); populateFilters(); applyAndRender(); }catch(e){ console.error('render 오류:', e); }
         show('content');   // 렌더 중 일부 오류가 나도 화면은 표시
@@ -1423,10 +1424,17 @@
     let rowEdits=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraRowEdits')||'{}');}catch(e){return {};} })();
     let deletedRows=(()=>{ try{return new Set(JSON.parse(localStorage.getItem('aqaraDeletedRows')||'[]'));}catch(e){return new Set();} })();
     function saveDeleted(){ try{ localStorage.setItem('aqaraDeletedRows',JSON.stringify([...deletedRows])); }catch(e){} }
+    // ===== PR 기사 삭제 공유(Firebase) — 모든 컴퓨터에 반영 =====
+    function prHash(s){ let h=0; s=s||''; for(let i=0;i<s.length;i++){ h=(Math.imul(h,31)+s.charCodeAt(i))|0; } return 'k'+(h>>>0); }
+    function prDelRef(){ return (typeof wkUseFB==='function' && wkUseFB()) ? WK_DB.ref('prNews/deleted') : null; }
+    function prDelPush(keys){ const ref=prDelRef(); if(!ref) return; const upd={}; (keys||[]).forEach(k=>{ if(k) upd[prHash(k)]=k; }); ref.update(upd).catch(()=>{}); }
+    let prDelSynced=false;
+    function prDelSyncStart(){ const ref=prDelRef(); if(!ref||prDelSynced) return; prDelSynced=true;
+      ref.on('value', s=>{ const v=s.val()||{}; deletedRows=new Set(Object.values(v)); saveDeleted(); if(typeof ALL!=='undefined') loadData(true); }); }
     let editingKey=null, TABLE_ROWS=[];
-    function deleteRow(){ if(!editingKey) return; if(!confirm('이 기사를 목록에서 삭제할까요? (이 브라우저에서만 숨김, 되돌리려면 아래 \'삭제 복원\')')) return;
-      deletedRows.add(editingKey); saveDeleted(); ALL=ALL.filter(r=>r._key!==editingKey); editingKey=null; applyAndRender(); }
-    function restoreDeleted(){ if(!deletedRows.size){ alert('삭제한 기사가 없습니다.'); return; } if(!confirm(deletedRows.size+'건의 삭제를 모두 복원할까요?')) return; deletedRows=new Set(); saveDeleted(); loadData(true); }
+    function deleteRow(){ if(!editingKey) return; if(!confirm('이 기사를 목록에서 삭제할까요? (모든 사용자에게 반영 · 되돌리려면 \'삭제 복원\')')) return;
+      deletedRows.add(editingKey); saveDeleted(); prDelPush([editingKey]); ALL=ALL.filter(r=>r._key!==editingKey); editingKey=null; applyAndRender(); }
+    function restoreDeleted(){ if(!deletedRows.size){ alert('삭제한 기사가 없습니다.'); return; } if(!confirm(deletedRows.size+'건의 삭제를 모두 복원할까요? (모든 사용자에게 반영)')) return; const ref=prDelRef(); if(ref) ref.remove().catch(()=>{}); deletedRows=new Set(); saveDeleted(); loadData(true); }
     function applyRowEdit(r){ const e=rowEdits[r._key]; if(e){ ['게재일','매체','종류','구분','기사명'].forEach(k=>{ if(e[k]!=null&&e[k]!=='') r[k]=e[k]; }); } }
     // 오가닉 판별: 기사 제목이 '타사 발신사' 이름으로 시작하면 오가닉(제3자 발행), 그 외는 자사보도(우리가 배포)
     const ORIGIN_OTHERS_DEFAULT=['에스알테크','마이워크스페이스','홈즈컴퍼니','버킷스튜디오'];
@@ -1503,8 +1511,8 @@
     function toggleAllRows(cb){ document.querySelectorAll('#tableBody .rowchk').forEach(c=>{ c.checked=cb.checked; if(cb.checked) checkedKeys.add(c.dataset.k); else checkedKeys.delete(c.dataset.k); }); updateDelCount(); }
     function updateDelCount(){ const n=document.querySelectorAll('#tableBody .rowchk:checked').length; const el=document.getElementById('delSelCount'); if(el) el.textContent=n?('선택 삭제 ('+n+')'):'선택 삭제'; }
     function deleteSelected(){ const chk=[...document.querySelectorAll('#tableBody .rowchk:checked')]; if(!chk.length){ alert('삭제할 기사를 체크하세요.'); return; }
-      if(!confirm(chk.length+'건을 목록에서 삭제할까요? (이 브라우저에서만 숨김 · \'삭제 복원\'으로 되돌리기)')) return;
-      chk.forEach(c=>deletedRows.add(c.dataset.k)); saveDeleted(); checkedKeys.clear(); ALL=ALL.filter(r=>!deletedRows.has(r._key)); applyAndRender(); }
+      if(!confirm(chk.length+'건을 목록에서 삭제할까요? (모든 사용자에게 반영 · \'삭제 복원\'으로 되돌리기)')) return;
+      const dkeys=chk.map(c=>c.dataset.k); dkeys.forEach(k=>deletedRows.add(k)); saveDeleted(); prDelPush(dkeys); checkedKeys.clear(); ALL=ALL.filter(r=>!deletedRows.has(r._key)); applyAndRender(); }
     function applyBulk(field, sel){ const v=sel.value; sel.value=''; if(!v) return;
       const disp=field==='구분'?'성격':field;
       const chk=[...document.querySelectorAll('#tableBody .rowchk:checked')]; if(!chk.length){ alert('먼저 분류할 기사를 체크하세요.'); return; }
