@@ -157,13 +157,16 @@ def main():
             print(name, "토큰 미설정 — 건너뜀")
             continue
         sc, auth = _get("/auth-check", token)
+        sc_em, em_body = _get("/emails", token, {"limit": 5})
         items, total = fetch_all_emails(token)
         sent_items = [e for e in items if e.get("sentTime")]
         sent_items.sort(key=lambda e: (e.get("sentTime") or ""), reverse=True)
         stat_ep = find_stat_endpoint(sent_items[0].get("id"), token) if sent_items else None
         rows = [parse(e, token, stat_ep, force) for e in sent_items]
         all_rows.extend(rows)
-        raw[name] = {"auth": sc, "total": total, "fetched": len(items),
+        raw[name] = {"auth": sc, "emailsStatus": sc_em,
+                     "emailsSnippet": json.dumps(em_body, ensure_ascii=False)[:400],
+                     "total": total, "fetched": len(items),
                      "sent": len(sent_items), "statEndpoint": stat_ep}
         print("%s: auth %s · total %s · sent %d · stat %s" % (name, sc, total, len(sent_items), stat_ep))
 
