@@ -156,6 +156,7 @@
         <div class="flex gap-1.5">
           <button onclick="preset('all')" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">전체</button>
           <button onclick="preset('12m')" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">최근 12개월</button>
+          <button onclick="preset('month')" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">이번 달</button>
           <button onclick="preset('ytd')" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">올해</button>
           <button onclick="preset('90d')" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">최근 90일</button>
         </div>
@@ -1136,7 +1137,7 @@
     function iso(d){ return d.toISOString().substring(0,10); }
     function preset(k){ const ds=sortedDates(); if(!ds.length)return; const last=ds[ds.length-1],f=document.getElementById('fromDate'),t=document.getElementById('toDate'); t.value=last;
       if(k==='all')f.value=ds[0]; else if(k==='90d'){const d=new Date(last);d.setDate(d.getDate()-90);f.value=iso(d);}
-      else if(k==='12m'){const d=new Date(last);d.setMonth(d.getMonth()-12);f.value=iso(d);} else if(k==='ytd')f.value=last.substring(0,4)+'-01-01'; applyAndRender(); }
+      else if(k==='12m'){const d=new Date(last);d.setMonth(d.getMonth()-12);f.value=iso(d);} else if(k==='ytd')f.value=last.substring(0,4)+'-01-01'; else if(k==='month')f.value=last.substring(0,7)+'-01'; applyAndRender(); }
     function applyAndRender(){ const f=document.getElementById('fromDate').value,t=document.getElementById('toDate').value;
       FILTERED=ALL.filter(r=>{const d=r['게재일']; if(!d)return false; if(f&&d<f)return false; if(t&&d>t)return false; return true;});
       document.getElementById('rangeInfo').textContent=f+' ~ '+t+' · '+FILTERED.length+'건';
