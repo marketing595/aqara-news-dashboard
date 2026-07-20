@@ -1133,7 +1133,7 @@
        </div>
        <div id="mktSec-prpitch" class="hidden">
          <div class="card p-5 mb-5"><h3 class="accent font-extrabold text-ink mb-1">PR 소재 제안 · 앵글 기획 <span class="text-xs font-normal text-slate-400">(핫키워드 모니터링 + 앵글 캘린더)</span></h3>
-           <p class="text-[12px] text-slate-400 mb-3">상단 업계 핫키워드를 참고해 <b>왼쪽에 앵글을 기획</b>하고, <b>오른쪽 캘린더로 드래그</b>해 발행일을 잡으세요. 실시간 공유·저장됩니다.</p>
+           <p class="text-[12px] text-slate-400 mb-3">상단 <b>기회 키워드</b>(검색 관심↑·발행↓)를 참고해 <b>왼쪽에 앵글을 기획</b>하고, <b>오른쪽 캘린더로 드래그</b>해 발행일을 잡으세요. 실시간 공유·저장됩니다.</p>
            <div id="mktPrHotKw" class="mb-4"></div>
            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
              <div>
@@ -2674,11 +2674,27 @@
         {t:'"선 없는 집" — 미니멀 인테리어 × 무타공 스마트홈',angle:'리모델링·전월세 DIY 트렌드에 무타공 제품 연결',stat:'리모델링 시장 규모·1인가구 인테리어 지출 통계'},
         {t:'쇼룸·전시(더메종 등) 트렌드 리포트',angle:'전시 참여를 트렌드 발신 기획기사로 자산화',stat:'전시 방문객·"스마트홈 인테리어" 검색량 추이(데이터랩)'}]}
     ];
-    function renderMktPr(){
-      const hk=mktHotKw();
-      document.getElementById('mktPrHotKw').innerHTML=`<div class="rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-3"><p class="text-[12px] font-bold text-[#4B32C3] mb-1">🔥 최근 업계 핫키워드 <span class="font-normal text-slate-400">(데일리 브리핑 기반)</span></p><div>${hk.map(k=>`<span class="inline-block text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7] mr-1 mb-1">${esc(k)}</span>`).join('')||'<span class="text-[11px] text-slate-400">수집 대기</span>'}</div></div>`;
-      prSyncStart(); renderPrAngles(); renderPrCalendar();
-    }
+    let KWTREND=[];
+    function prLoadKw(cb){ if(KWTREND.length){ cb&&cb(); return; } fetch('keywords_trend.json?_='+Date.now()).then(r=>r.json()).then(d=>{ KWTREND=(d&&d.keywords)||[]; cb&&cb(); }).catch(()=>{ cb&&cb(); }); }
+    function renderPrOpp(){ const el=document.getElementById('mktPrHotKw'); if(!el) return;
+      const norm=s=>(s||'').toLowerCase().replace(/\s+/g,'');
+      const titles=(ALL||[]).map(r=>norm(r['기사명']));
+      const rows=(KWTREND||[]).map(k=>{ const nk=norm(k.name); const cov=nk?titles.filter(t=>t.indexOf(nk)>-1).length:0; return {name:k.name, latest:k.latest, mom:(k.mom==null?0:k.mom), cov}; })
+        .sort((a,b)=>(b.mom-a.mom)||(a.cov-b.cov));
+      if(!rows.length){ el.innerHTML='<div class="rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-3 text-[12px] text-slate-400">키워드 트렌드 수집 대기</div>'; return; }
+      const chip=r=>{ const opp=r.mom>=5&&r.cov<=2; const mm=(r.mom>=0?'▲':'▼')+Math.abs(r.mom)+'%';
+        return `<div class="flex items-center gap-2 rounded-lg border ${opp?'border-[#FBC400] bg-[#FFFBEA]':'border-[#EEE] bg-white'} px-2.5 py-1.5">
+          <span class="text-[13px] font-semibold text-ink flex-1 truncate">${esc(r.name)}</span>
+          <span class="text-[11px] ${r.mom>=0?'text-agreen':'text-ared'} font-semibold whitespace-nowrap">${mm}</span>
+          <span class="text-[10px] text-slate-400 whitespace-nowrap">발행 ${r.cov}</span>
+          ${opp?'<span class="text-[9px] px-1.5 py-0.5 rounded-full bg-[#FBC400] text-[#5a4a00] font-bold whitespace-nowrap">기회</span>':''}
+        </div>`; };
+      el.innerHTML=`<div class="rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-3">
+        <p class="text-[12px] font-bold text-[#4B32C3] mb-2">🎯 기회 키워드 <span class="font-normal text-slate-400">(검색 관심 ↑ · 우리 발행 ↓ = 선점 기회 · 네이버 데이터랩 전월대비)</span></p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">${rows.map(chip).join('')}</div>
+        <p class="text-[10px] text-slate-400 mt-2">※ <b class="text-[#8a6d00]">기회</b> = 전월대비 관심 +5%↑ & 우리 최근 발행 2건 이하. 발행 수는 뉴스 목록 제목 매칭 기준. (관심도: 네이버 데이터랩 실측)</p>
+      </div>`; }
+    function renderMktPr(){ prLoadKw(renderPrOpp); prSyncStart(); renderPrAngles(); renderPrCalendar(); }
     // ===== PR 앵글 기획 · 캘린더 (Firebase 실시간 공유) =====
     let PR_ANGLES={}, PR_SCHED={}, prCalYM=null, prSynced=false;
     const PR_TYPES={'단신':'bg-slate-100 text-slate-600','기획':'bg-[#FFF3D6] text-[#8a6d00]','매거진':'bg-[#EAF3FF] text-[#2c5b8a]'};
