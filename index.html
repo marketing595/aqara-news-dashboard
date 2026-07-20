@@ -184,7 +184,7 @@
       <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">기간 내 기사</p><p id="kpiTotal" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p id="kpiDelta" class="text-xs mt-1"></p></div>
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">활동 매체 수</p><p id="kpiMedia" class="num text-3xl font-extrabold text-ink mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도된 고유 매체</p></div>
-        <div class="card card-hover p-5"><p class="text-sm text-slate-500">단신 : 기획 : 언급</p><p id="kpiRatio" class="num text-2xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도자료 : 기획·특집 : 단순 언급 (%)</p></div>
+        <div class="card card-hover p-5 relative"><button onclick="prRatioEdit()" class="absolute top-2.5 right-2.5 text-slate-300 hover:text-ink text-[13px]" title="비율 직접 수정 (비밀번호)">✏️</button><p class="text-sm text-slate-500">단신 : 기획 : 언급 <span id="kpiRatioTag"></span></p><p id="kpiRatio" class="num text-2xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도자료 : 기획·특집 : 단순 언급 (%)</p></div>
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">월 평균 발행</p><p id="kpiAvg" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">기간 내 월평균 건수</p></div>
       </section>
       <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -1364,7 +1364,9 @@
       document.getElementById('kpiDelta').innerHTML=dh;
       document.getElementById('kpiMedia').textContent=new Set(FILTERED.map(r=>r._media)).size.toLocaleString();
       const dan=FILTERED.filter(r=>r._type==='단신').length, eon=FILTERED.filter(r=>r._type==='언급').length, gi=n-dan-eon;
-      document.getElementById('kpiRatio').textContent=n?(Math.round(dan/n*100)+' : '+Math.round(gi/n*100)+' : '+Math.round(eon/n*100)):'–';
+      const autoRatio=n?(Math.round(dan/n*100)+' : '+Math.round(gi/n*100)+' : '+Math.round(eon/n*100)):'–';
+      document.getElementById('kpiRatio').textContent=prRatioOverride||autoRatio;
+      const rtag=document.getElementById('kpiRatioTag'); if(rtag) rtag.innerHTML=prRatioOverride?' <span class="text-[10px] text-brand-ink font-semibold">· 수기</span>':'';
       const mset=new Set(FILTERED.map(r=>r._ym).filter(Boolean)); document.getElementById('kpiAvg').textContent=mset.size?(n/mset.size).toFixed(1):'–'; }
     // 원형(도넛·파이) 조각 위에 퍼센트를 상시 표기(마우스 오버 없이 즉시 보이게)
     const PCT_LABELS={ id:'pctLabels', afterDatasetsDraw(chart){
@@ -1430,7 +1432,21 @@
     function prDelPush(keys){ const ref=prDelRef(); if(!ref) return; const upd={}; (keys||[]).forEach(k=>{ if(k) upd[prHash(k)]=k; }); ref.update(upd).catch(()=>{}); }
     let prDelSynced=false;
     function prDelSyncStart(){ const ref=prDelRef(); if(!ref||prDelSynced) return; prDelSynced=true;
-      ref.on('value', s=>{ const v=s.val()||{}; deletedRows=new Set(Object.values(v)); saveDeleted(); if(typeof ALL!=='undefined') loadData(true); }); }
+      ref.on('value', s=>{ const v=s.val()||{}; const nw=new Set(Object.values(v)); const shrank=nw.size<deletedRows.size; deletedRows=nw; saveDeleted();
+        // 시트 재요청 없이 메모리에서 필터(추가 삭제) · 복원(집합 축소) 때만 재로드
+        if(typeof ALL!=='undefined'){ if(shrank){ loadData(true); } else { try{ ALL=ALL.filter(r=>!deletedRows.has(r._key)); applyAndRender(); }catch(e){} } } });
+      // 단신:기획:언급 비율 수기 override 동기화(전 사용자 공유)
+      WK_DB.ref('prNews/ratioOverride').on('value', s=>{ const v=s.val(); prRatioOverride=v||null;
+        try{ if(v) localStorage.setItem('aqaraRatioOverride',v); else localStorage.removeItem('aqaraRatioOverride'); }catch(e){}
+        try{ if(typeof FILTERED!=='undefined') applyAndRender(); }catch(e){} }); }
+    let prRatioOverride=(()=>{ try{return localStorage.getItem('aqaraRatioOverride')||null;}catch(e){return null;} })();
+    function prRatioEdit(){ if(typeof ensureNewsEditAuth==='function' && !ensureNewsEditAuth()) return;
+      const v=prompt('단신 : 기획 : 언급 비율을 직접 입력하세요 (예: 48 : 40 : 12).\n비우고 확인하면 자동 계산값으로 복원됩니다.', prRatioOverride||'');
+      if(v===null) return; const val=v.trim(); prRatioOverride=val||null;
+      try{ if(val) localStorage.setItem('aqaraRatioOverride',val); else localStorage.removeItem('aqaraRatioOverride'); }catch(e){}
+      const ref=(typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('prNews/ratioOverride'):null;
+      if(ref){ if(val) ref.set(val).catch(()=>{}); else ref.remove().catch(()=>{}); }
+      try{ applyAndRender(); }catch(e){} }
     let editingKey=null, TABLE_ROWS=[];
     function deleteRow(){ if(!editingKey) return; if(!confirm('이 기사를 목록에서 삭제할까요? (모든 사용자에게 반영 · 되돌리려면 \'삭제 복원\')')) return;
       deletedRows.add(editingKey); saveDeleted(); prDelPush([editingKey]); ALL=ALL.filter(r=>r._key!==editingKey); editingKey=null; applyAndRender(); }
