@@ -64,16 +64,33 @@ def fetch_all_emails():
     return items, total
 
 
-def fetch_stats(eid):
-    """이메일별 통계 조회. 후보 엔드포인트를 순서대로 시도, 200이면 반환."""
-    for ep in ("/emails/%s/statistics", "/emails/%s/stat", "/emails/%s/report",
-               "/emails/%s/statistics/overview", "/emails/%s"):
-        sc, j = _get(ep % eid)
-        if sc == 200 and isinstance(j, dict):
-            body = j.get("value") if isinstance(j.get("value"), dict) else j
-            if stat(body, "sent", "sentCount", "delivered", "success", "openRate", "opened", "open", "uniqueOpen") is not None:
-                return ep, body
-    return None, None
+STAT_CANDIDATES = [
+    "/emails/{id}/statistics", "/emails/{id}/statistics/summary", "/emails/{id}/statistics/detail",
+    "/emails/{id}/reports", "/emails/{id}/report", "/emails/{id}/analytics", "/emails/{id}/result",
+    "/emails/{id}/results", "/emails/{id}/opens", "/emails/{id}/clicks", "/emails/{id}/stat",
+    "/emails/{id}/stats", "/statistics/emails/{id}", "/reports/emails/{id}", "/emails/{id}/summary",
+]
+STAT_KEYS = ("sent", "sentCount", "delivered", "deliverySuccess", "success", "totalSent",
+             "openRate", "opened", "open", "opens", "openCount", "uniqueOpen",
+             "clicked", "click", "clicks", "clickCount", "uniqueClick")
+
+
+def _body(j):
+    return j.get("value") if isinstance(j, dict) and isinstance(j.get("value"), dict) else j
+
+
+def find_stat_endpoint(eid):
+    """통계 후보 엔드포인트를 모두 시도해 실제 통계가 담긴 경로를 찾음. (probe 결과도 반환)"""
+    found, results = None, {}
+    for tmpl in STAT_CANDIDATES:
+        sc, j = _get(tmpl.replace("{id}", str(eid)))
+        b = _body(j)
+        has = stat(b, *STAT_KEYS) is not None if isinstance(b, dict) else False
+        results[tmpl] = {"status": sc, "hasStats": has,
+                         "keys": list(b.keys())[:25] if isinstance(b, dict) else None}
+        if has and found is None:
+            found = tmpl
+    return found, results
 
 
 def main():
@@ -96,15 +113,14 @@ def main():
     items, total = fetch_all_emails()
     print("emails:", len(items), "/ total", total)
 
-    # 통계 엔드포인트 확정용 probe (첫 발송 이메일 기준)
-    probe = {}
     sent_items = [e for e in items if e.get("sentTime")]
+    sent_items.sort(key=lambda e: (e.get("sentTime") or ""), reverse=True)
+
+    # 통계 엔드포인트 자동 탐색 (첫 발송 이메일로 후보 15종 테스트)
+    stat_ep, probe = (None, {})
     if sent_items:
-        eid = sent_items[0].get("id")
-        for ep in ("/emails/%s/statistics", "/emails/%s/stat", "/emails/%s/report",
-                   "/emails/%s", "/emails/%s/statistics/overview", "/emails/%s/summary"):
-            sc, j = _get(ep % eid)
-            probe[ep % "{id}"] = {"status": sc, "body": j if sc == 200 else (pick(j, "code") or str(j)[:120])}
+        stat_ep, probe = find_stat_endpoint(sent_items[0].get("id"))
+    print("stat endpoint:", stat_ep)
 
     # listId 분포(B2B/B2C 분류 확인용)
     lists = {}
@@ -126,42 +142,44 @@ def main():
         title = pick(e, "subject", "title", "name") or "(제목 없음)"
         date = (pick(e, "sentTime", "sentAt", "createdTime", "createdAt") or "")[:10]
         link = pick(e, "permanentLink", "url", "permalink") or ("https://stibee.com/email/%s/" % eid)
-        row = {"id": eid, "title": title, "date": date, "link": link, "listId": e.get("listId"),
+        row = {"id": eid, "title": title, "date": date, "link": link,
+               "listId": e.get("listId"), "sender": pick(e, "senderName"),
                "sent": None, "openRate": None, "clickRate": None}
-        # 통계 병합
-        ep, sdata = fetch_stats(eid)
-        if sdata:
-            sent = stat(sdata, "sent", "sentCount", "delivered", "deliverySuccess", "success", "totalSent")
-            opened = stat(sdata, "opened", "openCount", "uniqueOpen", "open", "opens")
-            clicked = stat(sdata, "clicked", "clickCount", "uniqueClick", "click", "clicks")
-            orate = stat(sdata, "openRate", "openrate", "open_rate")
-            crate = stat(sdata, "clickRate", "clickrate", "click_rate")
+        # 통계 병합(엔드포인트가 탐색된 경우에만)
+        if stat_ep:
+            sc, j = _get(stat_ep.replace("{id}", str(eid)))
+            sdata = _body(j) if sc == 200 else None
+            if isinstance(sdata, dict):
+                sent = stat(sdata, "sent", "sentCount", "delivered", "deliverySuccess", "success", "totalSent")
+                opened = stat(sdata, "opened", "openCount", "uniqueOpen", "open", "opens")
+                clicked = stat(sdata, "clicked", "clickCount", "uniqueClick", "click", "clicks")
+                orate = stat(sdata, "openRate", "openrate", "open_rate")
+                crate = stat(sdata, "clickRate", "clickrate", "click_rate")
 
-            def rate(n):
-                try:
-                    return round(n / sent * 100, 1) if (sent and n is not None) else None
-                except Exception:
-                    return None
+                def rate(n):
+                    try:
+                        return round(n / sent * 100, 1) if (sent and n is not None) else None
+                    except Exception:
+                        return None
 
-            def pct(v):
-                try:
-                    v = float(v)
-                    return round(v * 100, 1) if v <= 1 else round(v, 1)
-                except Exception:
-                    return None
-            row["sent"] = sent
-            row["openRate"] = pct(orate) if orate is not None else rate(opened)
-            row["clickRate"] = pct(crate) if crate is not None else rate(clicked)
+                def pct(v):
+                    try:
+                        v = float(v)
+                        return round(v * 100, 1) if v <= 1 else round(v, 1)
+                    except Exception:
+                        return None
+                row["sent"] = sent
+                row["openRate"] = pct(orate) if orate is not None else rate(opened)
+                row["clickRate"] = pct(crate) if crate is not None else rate(clicked)
         return row
 
-    # 발송된 이메일만, 최신순
-    sent_items.sort(key=lambda e: (e.get("sentTime") or ""), reverse=True)
     rows = [parse(e) for e in sent_items]
 
     def is_b2c(x):
         if x["listId"] in B2C_LIST_IDS:
             return True
-        return any(h.lower() in (x["title"] or "").lower() for h in B2C_HINT)
+        blob = ((x.get("sender") or "") + " " + (x["title"] or "")).lower()
+        return any(h.lower() in blob for h in B2C_HINT)
 
     b2b = [x for x in rows if not is_b2c(x)]
     b2c = [x for x in rows if is_b2c(x)]
