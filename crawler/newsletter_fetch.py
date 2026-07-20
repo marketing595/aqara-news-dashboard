@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """스티비(Stibee) 뉴스레터 발송 통계 자동 수집 → web/newsletter.json
    Stibee API v2 (이메일 API · 프로 요금제 이상). 키: STIBEE_TOKEN.
-   GET /auth-check(인증확인) → GET /emails(발송 이메일 목록·통계) 수집.
-   실제 응답 필드가 확정되기 전이라 방어적으로 파싱하고, 원본은 newsletter_raw.json에 저장(첫 확인용).
+   GET /auth-check → GET /emails(페이지네이션) → 이메일별 통계 엔드포인트 호출.
+   통계 엔드포인트명이 확정되기 전까지 후보를 probe해서 newsletter_raw.json에 원본 저장.
    GitHub Actions 매일 실행."""
 import os, json, datetime
 import requests
@@ -11,8 +11,9 @@ TOKEN = os.environ.get("STIBEE_TOKEN", "")
 BASE = "https://api.stibee.com/v2"
 H = {"AccessToken": TOKEN, "Content-Type": "application/json"}
 
-# B2C(시절레터)로 분류할 힌트 — 나머지는 B2B(아카라레터)로
-B2C_HINT = ["시절레터", "시절", "sijeol", "b2c"]
+# B2C(시절레터) 분류 listId — 확인 후 채움. 그 외 listId는 B2B(아카라레터).
+B2C_LIST_IDS = []
+B2C_HINT = ["시절레터", "시절", "sijeol", "sijeul"]
 
 
 def _get(path, params=None):
@@ -33,12 +34,14 @@ def pick(d, *keys):
     return None
 
 
-def stat(e, *keys):
-    """통계가 flat/중첩(statistics·stat·report·result) 어디에 있어도 탐색."""
-    containers = [e]
-    for c in ("statistics", "stat", "report", "result", "summary"):
-        if isinstance(e.get(c), dict):
-            containers.append(e[c])
+def stat(obj, *keys):
+    """통계가 flat/중첩 어디에 있어도 탐색."""
+    if not isinstance(obj, dict):
+        return None
+    containers = [obj]
+    for c in ("statistics", "stat", "report", "result", "value", "data", "summary", "overview"):
+        if isinstance(obj.get(c), dict):
+            containers.append(obj[c])
     for c in containers:
         v = pick(c, *keys)
         if v is not None:
@@ -46,15 +49,31 @@ def stat(e, *keys):
     return None
 
 
-def to_date(dt):
-    if isinstance(dt, (int, float)):
-        try:
-            return datetime.datetime.utcfromtimestamp(dt / 1000 if dt > 1e12 else dt).strftime("%Y-%m-%d")
-        except Exception:
-            return ""
-    if isinstance(dt, str):
-        return dt[:10]
-    return ""
+def fetch_all_emails():
+    items, offset, total = [], 0, None
+    while True:
+        sc, page = _get("/emails", {"offset": offset, "limit": 100})
+        if sc != 200 or not isinstance(page, dict):
+            break
+        batch = page.get("items") or page.get("value") or []
+        items.extend(batch)
+        total = page.get("total", total)
+        offset += len(batch) if batch else 1
+        if not batch or (total is not None and offset >= total) or len(items) >= 1000:
+            break
+    return items, total
+
+
+def fetch_stats(eid):
+    """이메일별 통계 조회. 후보 엔드포인트를 순서대로 시도, 200이면 반환."""
+    for ep in ("/emails/%s/statistics", "/emails/%s/stat", "/emails/%s/report",
+               "/emails/%s/statistics/overview", "/emails/%s"):
+        sc, j = _get(ep % eid)
+        if sc == 200 and isinstance(j, dict):
+            body = j.get("value") if isinstance(j.get("value"), dict) else j
+            if stat(body, "sent", "sentCount", "delivered", "success", "openRate", "opened", "open", "uniqueOpen") is not None:
+                return ep, body
+    return None, None
 
 
 def main():
@@ -68,88 +87,90 @@ def main():
             prev = {}
 
     if not TOKEN:
-        print("STIBEE_TOKEN 미설정 — 자동 수집 건너뜀(기존 newsletter.json 유지)")
+        print("STIBEE_TOKEN 미설정 — 건너뜀(기존 newsletter.json 유지)")
         return
 
-    # 1) 인증 확인
     sc, auth = _get("/auth-check")
-    print("auth-check:", sc, json.dumps(auth, ensure_ascii=False)[:200])
+    print("auth-check:", sc, json.dumps(auth, ensure_ascii=False)[:150])
 
-    # 2) 발송 이메일 목록·통계
-    sc, emails = _get("/emails")
-    print("emails status:", sc)
+    items, total = fetch_all_emails()
+    print("emails:", len(items), "/ total", total)
 
-    # 원본 저장(첫 확인용 — 실제 필드 확인 후 파싱 정교화)
+    # 통계 엔드포인트 확정용 probe (첫 발송 이메일 기준)
+    probe = {}
+    sent_items = [e for e in items if e.get("sentTime")]
+    if sent_items:
+        eid = sent_items[0].get("id")
+        for ep in ("/emails/%s/statistics", "/emails/%s/stat", "/emails/%s/report",
+                   "/emails/%s", "/emails/%s/statistics/overview", "/emails/%s/summary"):
+            sc, j = _get(ep % eid)
+            probe[ep % "{id}"] = {"status": sc, "body": j if sc == 200 else (pick(j, "code") or str(j)[:120])}
+
+    # listId 분포(B2B/B2C 분류 확인용)
+    lists = {}
+    for e in items:
+        lid = e.get("listId")
+        d = lists.setdefault(str(lid), {"count": 0, "senders": [], "sample": e.get("subject")})
+        d["count"] += 1
+        sn = e.get("senderName")
+        if sn and sn not in d["senders"]:
+            d["senders"].append(sn)
+
     raw_path = os.path.join(os.path.dirname(__file__), "..", "newsletter_raw.json")
-    json.dump({"generatedAt": kst.strftime("%Y-%m-%d %H:%M"), "emailsStatus": sc, "emails": emails},
+    json.dump({"generatedAt": kst.strftime("%Y-%m-%d %H:%M"), "total": total,
+               "listIdDistribution": lists, "statProbe": probe, "sampleItem": items[0] if items else None},
               open(raw_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
-    if sc != 200:
-        print("emails 조회 실패(%s) — 기존 newsletter.json 유지" % sc)
-        return
-
-    # 목록 추출 ({value|data|emails|items:[...]} 또는 [...] 대응)
-    lst = None
-    if isinstance(emails, dict):
-        lst = emails.get("value") or emails.get("data") or emails.get("emails") or emails.get("items")
-    elif isinstance(emails, list):
-        lst = emails
-    lst = lst or []
-
     def parse(e):
+        eid = e.get("id")
         title = pick(e, "subject", "title", "name") or "(제목 없음)"
-        date = to_date(pick(e, "sentAt", "sendAt", "sentDate", "publishedAt", "sentTime", "createdAt", "created"))
-        sent = stat(e, "sent", "sentCount", "deliverySuccess", "success", "totalSent", "delivered")
-        opened = stat(e, "opened", "openCount", "uniqueOpen", "open", "opens")
-        clicked = stat(e, "clicked", "clickCount", "uniqueClick", "click", "clicks")
-        orate = stat(e, "openRate", "openrate", "open_rate")
-        crate = stat(e, "clickRate", "clickrate", "click_rate")
+        date = (pick(e, "sentTime", "sentAt", "createdTime", "createdAt") or "")[:10]
+        link = pick(e, "permanentLink", "url", "permalink") or ("https://stibee.com/email/%s/" % eid)
+        row = {"id": eid, "title": title, "date": date, "link": link, "listId": e.get("listId"),
+               "sent": None, "openRate": None, "clickRate": None}
+        # 통계 병합
+        ep, sdata = fetch_stats(eid)
+        if sdata:
+            sent = stat(sdata, "sent", "sentCount", "delivered", "deliverySuccess", "success", "totalSent")
+            opened = stat(sdata, "opened", "openCount", "uniqueOpen", "open", "opens")
+            clicked = stat(sdata, "clicked", "clickCount", "uniqueClick", "click", "clicks")
+            orate = stat(sdata, "openRate", "openrate", "open_rate")
+            crate = stat(sdata, "clickRate", "clickrate", "click_rate")
 
-        def rate(n):
-            try:
-                return round(n / sent * 100, 1) if (sent and n is not None) else None
-            except Exception:
-                return None
-        # 비율이 0~1 소수로 오면 %로 환산
-        def pct(v):
-            if v is None:
-                return None
-            try:
-                v = float(v)
-                return round(v * 100, 1) if v <= 1 else round(v, 1)
-            except Exception:
-                return None
-        orate = pct(orate) if orate is not None else rate(opened)
-        crate = pct(crate) if crate is not None else rate(clicked)
-        eid = pick(e, "id", "emailId")
-        link = pick(e, "url", "permalink", "shareUrl", "webUrl")
-        if not link and eid:
-            link = "https://stibee.com/email/%s/" % eid
-        status = pick(e, "status", "state")
-        return {"id": eid, "title": title, "date": date, "sent": sent,
-                "openRate": orate, "clickRate": crate, "link": link, "status": status}
+            def rate(n):
+                try:
+                    return round(n / sent * 100, 1) if (sent and n is not None) else None
+                except Exception:
+                    return None
 
-    items = [parse(e) for e in lst if isinstance(e, dict)]
-    # 발송된 이메일 위주(발송일 있는 것) · 최신순
-    items.sort(key=lambda x: x["date"] or "", reverse=True)
+            def pct(v):
+                try:
+                    v = float(v)
+                    return round(v * 100, 1) if v <= 1 else round(v, 1)
+                except Exception:
+                    return None
+            row["sent"] = sent
+            row["openRate"] = pct(orate) if orate is not None else rate(opened)
+            row["clickRate"] = pct(crate) if crate is not None else rate(clicked)
+        return row
+
+    # 발송된 이메일만, 최신순
+    sent_items.sort(key=lambda e: (e.get("sentTime") or ""), reverse=True)
+    rows = [parse(e) for e in sent_items]
 
     def is_b2c(x):
-        s = ((x["title"] or "") + " " + (x["link"] or "")).lower()
-        return any(h.lower() in s for h in B2C_HINT)
+        if x["listId"] in B2C_LIST_IDS:
+            return True
+        return any(h.lower() in (x["title"] or "").lower() for h in B2C_HINT)
 
-    b2b = [x for x in items if not is_b2c(x)]
-    b2c = [x for x in items if is_b2c(x)]
+    b2b = [x for x in rows if not is_b2c(x)]
+    b2c = [x for x in rows if is_b2c(x)]
 
-    out = {
-        "generatedAt": kst.strftime("%Y-%m-%d %H:%M"),
-        "source": "Stibee API v2 (자동)",
-        "subscribers": prev.get("subscribers"),
-        "b2b": b2b,
-        "b2c": b2c,
-        "note": "Stibee API v2 자동 수집 · GET /emails 기준. B2C=시절레터 힌트 분류, 그 외 B2B.",
-    }
+    out = {"generatedAt": kst.strftime("%Y-%m-%d %H:%M"), "source": "Stibee API v2 (자동)",
+           "subscribers": prev.get("subscribers"), "b2b": b2b, "b2c": b2c,
+           "note": "Stibee API v2 자동 수집 · GET /emails + 이메일별 통계."}
     json.dump(out, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    print("newsletter.json OK — b2b:%d b2c:%d (total %d)" % (len(b2b), len(b2c), len(items)))
+    print("newsletter.json OK — b2b:%d b2c:%d" % (len(b2b), len(b2c)))
 
 
 if __name__ == "__main__":
