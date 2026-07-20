@@ -1310,7 +1310,7 @@
     function renderKPIs(f,t){ const n=FILTERED.length; document.getElementById('kpiTotal').textContent=n.toLocaleString(); let dh='';
       if(f&&t){ const days=(new Date(t)-new Date(f))/864e5+1; const pe=iso(new Date(new Date(f)-864e5)),ps=iso(new Date(new Date(f)-days*864e5));
         const prev=ALL.filter(r=>{const d=r['게재일'];return d&&d>=ps&&d<=pe;}).length;
-        if(prev>0){const pct=Math.round((n-prev)/prev*100),up=pct>=0; dh='<span class="'+(up?'text-agreen':'text-ared')+'">'+(up?'▲':'▼')+' '+Math.abs(pct)+'% <span class="text-slate-400">이전 동기간('+prev+') 대비</span></span>';} else dh='<span class="text-slate-400">이전 동기간 0건</span>'; }
+        if(prev>0){const pct=Math.round((n-prev)/prev*100),up=pct>=0; dh='<span class="'+(up?'text-agreen':'text-ared')+'">'+(up?'▲':'▼')+' '+Math.abs(pct)+'% <span class="text-slate-400">이전 동기간 '+ps+'~'+pe+' ('+prev+'건) 대비</span></span>';} else dh='<span class="text-slate-400">이전 동기간 '+ps+'~'+pe+' 0건</span>'; }
       document.getElementById('kpiDelta').innerHTML=dh;
       document.getElementById('kpiMedia').textContent=new Set(FILTERED.map(r=>r._media)).size.toLocaleString();
       const dan=FILTERED.filter(r=>r._type==='단신').length, gi=n-dan;
