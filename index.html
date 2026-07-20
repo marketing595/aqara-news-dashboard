@@ -226,7 +226,7 @@
       </section>
       <section class="card p-5">
         <h2 class="accent font-extrabold text-ink mb-1">월별 헤드라인 요약 <span class="text-xs font-normal text-slate-400">(선택 기간 · 월별 주요 기사)</span></h2>
-        <p class="text-[11px] text-slate-400 mb-3">※ 각 월의 <b>기획·특집·매거진</b> 기사를 우선 노출(최대 6건). 해당 유형이 없으면 최신 단신을 표시합니다. 제목 클릭 시 원문 이동.</p>
+        <p class="text-[11px] text-slate-400 mb-3">※ 중복 기사 제거 후 <b>배포일·헤드라인</b>만 요약(기획·특집 우선, 최신순). 제목 클릭 시 원문 이동.</p>
         <div id="mhBody" class="max-h-[560px] overflow-auto pr-1 divide-y divide-[#EFEDE7]"></div>
       </section>
       <style>
@@ -1235,18 +1235,17 @@
       const byM={}; FILTERED.forEach(r=>{ const m=r._ym; if(m) (byM[m]=byM[m]||[]).push(r); });
       const months=Object.keys(byM).sort().reverse();
       if(!months.length){ el.innerHTML='<p class="text-sm text-slate-400 py-6 text-center">해당 기간 데이터가 없습니다.</p>'; return; }
-      el.innerHTML=months.map(m=>{ const rs=byM[m], dan=rs.filter(r=>r._type==='단신').length, gi=rs.length-dan;
-        const sorted=rs.slice().sort((a,b)=>{ const ra=(a._type==='단신'?1:0)-(b._type==='단신'?1:0); if(ra) return ra; return (b['게재일']||'').localeCompare(a['게재일']||''); });
-        const items=sorted.slice(0,6).map(r=>`<li class="flex items-baseline gap-2 py-0.5">
-          <span class="text-[10px] text-slate-400 num shrink-0 w-12">${esc((r['게재일']||'').toString().slice(5,10))}</span>
-          <a href="${esc(linkOf(r))}" target="_blank" rel="noopener" class="text-[13px] text-slate-700 hover:text-ink hover:underline line-clamp-1 flex-1 min-w-0">${esc(r['기사명'])}</a>
-          <span class="text-[10px] shrink-0 ${r._type==='단신'?'text-slate-400':'text-aorange font-semibold'}">${esc(r._type||'')}</span></li>`).join('');
+      el.innerHTML=months.map(m=>{ const rs=byM[m];
+        // 제목 기준 중복 제거(기획·특집 우선 → 최신순)
+        const seen=new Set(), uniq=[];
+        rs.slice().sort((a,b)=>{ const ra=(a._type==='단신'?1:0)-(b._type==='단신'?1:0); if(ra) return ra; return (b['게재일']||'').localeCompare(a['게재일']||''); })
+          .forEach(r=>{ const k=(r['기사명']||'').toLowerCase().replace(/\s+/g,''); if(!k||seen.has(k))return; seen.add(k); uniq.push(r); });
+        const items=uniq.map(r=>`<li class="flex items-baseline gap-2 py-0.5">
+          <span class="text-[11px] text-slate-400 num shrink-0 w-14">${esc((r['게재일']||'').toString().slice(0,10))}</span>
+          <a href="${esc(linkOf(r))}" target="_blank" rel="noopener" class="text-[13px] text-slate-700 hover:text-ink hover:underline line-clamp-1 flex-1 min-w-0">${esc(r['기사명'])}</a></li>`).join('');
         return `<div class="py-3">
-          <div class="flex items-baseline justify-between mb-1.5">
-            <p class="font-extrabold text-ink text-sm">${m} <span class="text-xs font-normal text-slate-400">· 총 ${rs.length}건</span></p>
-            <span class="text-[11px] text-slate-400">단신 ${dan} · 기획·특집 ${gi}</span>
-          </div>
-          <ul class="space-y-0.5">${items}</ul>${rs.length>6?`<p class="text-[10px] text-slate-300 mt-1 pl-14">외 ${rs.length-6}건</p>`:''}
+          <p class="font-extrabold text-ink text-sm mb-1.5">${m} <span class="text-xs font-normal text-slate-400">· ${uniq.length}건</span></p>
+          <ul class="space-y-0.5">${items}</ul>
         </div>`; }).join(''); }
     // ===== 전월/전년 대비 비교표 =====
     function ymShift(ym,delta){ let y=+ym.slice(0,4),m=+ym.slice(5,7)+delta; while(m<1){m+=12;y--;} while(m>12){m-=12;y++;} return y+'-'+String(m).padStart(2,'0'); }
@@ -1327,7 +1326,9 @@
         <p class="num text-2xl font-extrabold text-ink mt-1">${s.n.toLocaleString()}건</p>
         <p class="text-xs mt-1 font-medium ${s.character.includes('기획')?'text-aorange':(s.character.includes('단신')?'text-slate-500':'text-slate-500')}">${s.character} <span class="text-slate-400 font-normal">(단신 ${s.dan}·기획 ${s.gi})</span></p>
         <p class="text-[11px] text-slate-400 mt-1.5 truncate">주요이슈 · ${s.top.length?esc(s.top.join(' · ')):'-'}</p></div>`;
-      el.innerHTML=`<div class="flex items-stretch gap-2">${card(by,bh,base,false)}<div class="flex flex-col items-center justify-center px-1 shrink-0"><span class="text-xl text-slate-300">→</span>${dtxt?`<span class="text-[11px] mt-1 whitespace-nowrap">${dtxt}</span>`:''}</div>${card(cy,ch,cur,true)}</div>`;
+      const br=halfRange(by,bh), cr=halfRange(cy,ch);
+      el.innerHTML=`<div class="flex items-stretch gap-2">${card(by,bh,base,false)}<div class="flex flex-col items-center justify-center px-1 shrink-0"><span class="text-xl text-slate-300">→</span>${dtxt?`<span class="text-[11px] mt-1 whitespace-nowrap">${dtxt}</span>`:''}</div>${card(cy,ch,cur,true)}</div>
+        <p class="text-[11px] text-slate-500 mt-2.5 text-center">비교 기간 · <b class="text-slate-600">${halfLabel(by,bh)}</b> ${br[0]}~${br[1]} <span class="text-slate-300">vs</span> <b class="text-ink">${halfLabel(cy,ch)}</b> ${cr[0]}~${cr[1]}</p>`;
       const on='text-xs px-2.5 py-1 rounded-lg bg-ink text-white font-semibold', off='text-xs px-2.5 py-1 rounded-lg border border-slate-300 text-slate-500 hover:bg-slate-50';
       const by1=document.getElementById('hcBtnYoy'), bp=document.getElementById('hcBtnPrev');
       if(by1) by1.className=halfCmpMode==='yoy'?on:off; if(bp) bp.className=halfCmpMode==='prev'?on:off;
@@ -1772,7 +1773,7 @@
       document.getElementById('brHeadline').innerHTML='<p class="text-sm font-bold text-slate-800 mb-2">종합 요약 (Headlines)'+(brEditMode?' <span class="text-[11px] font-normal text-ink">· 편집 모드: 글자를 클릭해 수정 후 저장</span>':'')+'</p>'+
         ['자사','업계','경쟁사'].map(k=>{ const v=(edH[k]!=null?edH[k]:(h[k]||'')); if(!v&&!brEditMode)return''; return `<p class="text-sm text-slate-700 mb-1.5 flex gap-2"><span class="px-1.5 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[k]||'bg-slate-100 text-slate-500'} h-fit whitespace-nowrap">${k}</span><span data-eh="${k}" ${brEditMode?'contenteditable="true"':''} class="flex-1${ec}">${esc(v)}</span></p>`; }).join('');
       const rows=b.rows||[];
-      document.getElementById('briefingBody').innerHTML='<p class="text-sm font-bold text-slate-800 mb-2">상세 내역</p><div class="card overflow-auto"><table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2.5 font-semibold whitespace-nowrap">구분</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">매체명</th><th class="px-3 py-2.5 font-semibold">기사 제목</th><th class="px-3 py-2.5 font-semibold">주요 내용 요약</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">링크</th></tr></thead><tbody class="divide-y divide-slate-100">'+
+      document.getElementById('briefingBody').innerHTML='<p class="text-sm font-bold text-slate-800 mb-2">상세 내역</p><div class="card overflow-auto"><table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2.5 font-semibold whitespace-nowrap">구분</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">매체명</th><th class="px-3 py-2.5 font-semibold">기사 제목</th><th class="px-3 py-2.5 font-semibold">주요 내용</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">링크</th></tr></thead><tbody class="divide-y divide-slate-100">'+
         rows.map((r,i)=>{ const iv=(edI[i]!=null?edI[i]:r.ins); return `<tr class="hover:bg-slate-50 align-top"><td class="px-3 py-3 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[r.cat]||'bg-slate-100 text-slate-500'}">${esc(r.cat)}</span></td><td class="px-3 py-3 whitespace-nowrap font-medium text-slate-600">${esc(r.s)}</td><td class="px-3 py-3 font-semibold text-slate-800 min-w-[180px]">${esc(r.t)}</td><td class="px-3 py-3 text-slate-600 min-w-[280px]" data-ei="${i}" ${brEditMode?'contenteditable="true"':''}><span class="${brEditMode?'':''}">${esc(iv)}</span></td><td class="px-3 py-3 whitespace-nowrap">${r.link?`<a href="${esc(r.link)}" target="_blank" rel="noopener noreferrer" class="text-ink hover:underline font-medium">[이동]</a>`:'-'}</td></tr>`; }).join('')+
         (rows.length?'':'<tr><td colspan="5" class="text-center py-8 text-slate-400">해당 일자 기사가 없습니다.</td></tr>')+
         '</tbody></table></div>'+(brEditMode?'<p class="text-xs text-ink mt-2">편집 내용은 이 브라우저에 저장됩니다(수동 수정 우선). 원문 자동갱신 시에도 유지됩니다.</p>':'');

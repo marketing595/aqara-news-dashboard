@@ -87,16 +87,21 @@ def gemini(cand):
         "아래 뉴스 후보 중 아카라라이프에 의미있는 기사만 8~12건 선별해 '일일 언론 모니터링 보고'를 작성하라.\n"
         "무관/중복 기사는 제외. 각 기사는 [자사/경쟁사/시장/업계] 중 하나로 분류한다.\n"
         "(자사=아카라 직접 관련, 경쟁사=삼성·LG·샤오미·구글·애플 등, 시장=인테리어·시공·B2B 등, 업계=정책·표준·거시 트렌드)\n"
-        "'insight'는 기사의 주요 내용을 사실 위주로 요약(개조식 1~2문장). 시사점·해석·아카라 관점의 코멘트는 넣지 말 것.\n"
-        "headlines는 자사/업계/경쟁사 각 한 줄 종합 요약.\n"
+        "★가장 중요한 규칙★ 'insight'는 해당 기사에 실제로 적힌 사실만 3인칭으로 건조하게 요약한다(개조식 1~2문장).\n"
+        "아카라 관점의 전략·제언·시사점·평가·추천·전망·해석은 절대 넣지 마라.\n"
+        "특히 '~해야 한다/필요하다/공략/틈새시장/강점으로 내세워/전략적으로/기회로/주목된다/전망된다' 같은 제언·해석성 표현을 쓰지 마라.\n"
+        "  나쁜 예(절대 금지): '아카라는 Matter 기반 연동 호환성을 강점으로 내세워 틈새 시장을 공략해야 합니다.'\n"
+        "  좋은 예(이렇게): '삼성전자가 신형 스마트싱스 허브를 공개하고 Matter 지원 기기를 확대했다고 밝혔다.'\n"
+        "즉 기자가 쓴 사실 보도 문장처럼, 무엇을/누가/어떻게 했는지 사실만 옮겨라.\n"
+        "headlines도 마찬가지로 자사/업계/경쟁사 각 한 줄 '사실' 종합(제언·평가 금지).\n"
         "반드시 아래 JSON 스키마로만 출력(선택 기사는 후보의 대괄호 id로 지정):\n"
         '{"headlines":{"자사":"...","업계":"...","경쟁사":"..."},'
-        '"rows":[{"id":"tech-0","cat":"자사","insight":"기사 주요 내용 요약(사실 위주, 시사점 없이)"}]}\n\n'
+        '"rows":[{"id":"tech-0","cat":"자사","insight":"기사에 적힌 사실만 요약(제언·시사점·해석 없이)"}]}\n\n'
         "뉴스 후보:\n" + newsblock)
     if not GKEY:
         raise SystemExit("ERROR: GEMINI_API_KEY 미설정")
     body = {"contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"response_mime_type": "application/json", "temperature": 0.4}}
+            "generationConfig": {"response_mime_type": "application/json", "temperature": 0.15}}
     last = ""
     for model in ("gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-flash-latest"):
         url = "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s" % (model, GKEY)
@@ -116,6 +121,22 @@ def gemini(cand):
     raise SystemExit("ERROR: 모든 Gemini 모델 실패 - " + last)
 
 
+BAN = ("해야 한다", "해야 합니다", "해야할", "해야 할", "필요하다", "필요합니다", "필요가 있다", "필요가있다",
+       "공략해야", "공략할", "노려야", "대비해야", "주력해야", "확대해야", "강화해야", "삼아야",
+       "강점으로 내세", "틈새 시장", "틈새시장", "기회로 삼", "전략적으로", "선점해야", "차별화해야",
+       "것으로 보인다", "것으로 전망", "것으로 분석", "주목된다", "기대된다", "전망된다", "풀이된다")
+
+
+def strip_opinion(t):
+    """제언·시사점·해석성 문장을 사실 요약에서 제거(문장 단위). 다 지워지면 원문 유지."""
+    if not t:
+        return t
+    sents = re.split(r'(?<=[.!?。])\s+', str(t).strip())
+    keep = [s for s in sents if not any(b in s for b in BAN)]
+    out = ' '.join(keep).strip()
+    return out or str(t).strip()
+
+
 def main():
     cand = collect()
     idx = {}
@@ -129,10 +150,12 @@ def main():
         if not it:
             continue
         rows.append({"cat": p.get("cat", "시장"), "s": it["source"], "t": it["title"],
-                     "d": it["date"], "ins": p.get("insight", ""), "link": it["link"]})
+                     "d": it["date"], "ins": strip_opinion(p.get("insight", "")), "link": it["link"]})
     kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
     day = kst.strftime("%Y-%m-%d")
-    today = {"headlines": res.get("headlines", {}), "rows": rows}
+    hl = res.get("headlines", {}) or {}
+    hl = {k: strip_opinion(v) for k, v in hl.items()}
+    today = {"headlines": hl, "rows": rows}
 
     path = os.path.join(os.path.dirname(__file__), "..", "briefing.json")
     store = {"generatedAt": kst.strftime("%Y-%m-%d %H:%M"), "briefings": {}}

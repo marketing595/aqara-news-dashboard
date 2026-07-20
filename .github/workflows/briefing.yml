@@ -1,9 +1,11 @@
 name: Daily Briefing
 
-# 매일 23:00(UTC)=한국 오전 08:00 뉴스 수집 + Gemini 브리핑 생성 → briefing.json
+# 매일 한국 오전 8시대 뉴스 수집 + Gemini 브리핑 생성 → briefing.json
+# GitHub 스케줄은 정시에 몰려 누락되기 쉬워, 08:05 KST 실행 + 09:05 KST 백업(같은 날 재생성=멱등)으로 안정화
 on:
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '5 23 * * *'   # 08:05 KST
+    - cron: '5 0 * * *'    # 09:05 KST (백업 · 08시 실행 누락 대비)
   workflow_dispatch: {}
   push:
     paths:
