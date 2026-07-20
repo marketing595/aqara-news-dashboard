@@ -134,8 +134,64 @@ ITOKEN = os.environ.get("INSTA_TOKEN", "")
 GRAPH = "https://graph.facebook.com/v21.0"
 
 
+def _ig_reach_series(since, until):
+    """계정 일별 도달(reach) 시계열 → [{date,value}], 최근 30일. 실패 시 []."""
+    try:
+        r = requests.get("%s/%s/insights" % (GRAPH, IG_ID),
+                         params={"metric": "reach", "period": "day",
+                                 "since": since, "until": until, "access_token": ITOKEN}, timeout=20).json()
+        if "error" in r:
+            print("IG insights reach 오류:", r["error"].get("message"))
+            return []
+        data = r.get("data", [])
+        if not data:
+            return []
+        return [{"date": (v.get("end_time") or "")[:10], "value": int(v.get("value", 0) or 0)}
+                for v in data[0].get("values", [])]
+    except Exception as e:
+        print("IG reach 실패:", e)
+        return []
+
+
+def _ig_total_value(metric, since, until):
+    """계정 total_value 지표(프로필조회·참여·클릭 등) 최근 30일 합계. 실패/미지원 시 None."""
+    try:
+        r = requests.get("%s/%s/insights" % (GRAPH, IG_ID),
+                         params={"metric": metric, "period": "day", "metric_type": "total_value",
+                                 "since": since, "until": until, "access_token": ITOKEN}, timeout=20).json()
+        if "error" in r:
+            print("IG insights %s 오류:" % metric, r["error"].get("message"))
+            return None
+        data = r.get("data", [])
+        if not data:
+            return None
+        return data[0].get("total_value", {}).get("value")
+    except Exception as e:
+        print("IG %s 실패:" % metric, e)
+        return None
+
+
+def _ig_media_insights(mid):
+    """게시물별 성과(도달·저장·공유·총상호작용). 실패/미지원 지표는 제외."""
+    try:
+        r = requests.get("%s/%s/insights" % (GRAPH, mid),
+                         params={"metric": "reach,saved,shares,total_interactions",
+                                 "access_token": ITOKEN}, timeout=20).json()
+        if "error" in r:
+            return {}
+        out = {}
+        for d in r.get("data", []):
+            vals = d.get("values", [])
+            if vals and vals[0].get("value") is not None:
+                out[d["name"]] = int(vals[0]["value"] or 0)
+        return out
+    except Exception:
+        return {}
+
+
 def fetch_instagram():
-    """Instagram Graph API로 팔로워·게시물·최근 미디어 반응 수집. 토큰(INSTA_TOKEN) 없으면 None."""
+    """Instagram Graph API로 팔로워·게시물·최근 미디어 반응 + 인사이트(도달·노출·클릭·게시물별 성과) 수집.
+       토큰(INSTA_TOKEN) 없으면 None."""
     if not ITOKEN:
         return None
     try:
@@ -153,14 +209,33 @@ def fetch_instagram():
             cap = re.sub(r"\s+", " ", (m.get("caption") or "")).strip()[:70]
             # 이미지: 동영상/릴스는 thumbnail_url, 사진은 media_url
             img = m.get("thumbnail_url") or (m.get("media_url") if m.get("media_type") != "VIDEO" else "")
+            mi = _ig_media_insights(m.get("id"))
             recent.append({"date": (m.get("timestamp") or "")[:10], "type": m.get("media_type", ""),
                            "caption": cap, "likes": int(m.get("like_count", 0) or 0),
                            "comments": int(m.get("comments_count", 0) or 0),
-                           "image": img or "", "permalink": m.get("permalink", "")})
+                           "image": img or "", "permalink": m.get("permalink", ""),
+                           "reach": mi.get("reach"), "saved": mi.get("saved"),
+                           "shares": mi.get("shares"), "interactions": mi.get("total_interactions")})
+
+        # 계정 인사이트(최근 30일): 도달 시계열 + total_value 합계
+        now = datetime.datetime.now(datetime.timezone.utc)
+        until = int(now.timestamp())
+        since = int((now - datetime.timedelta(days=29)).timestamp())
+        reach_series = _ig_reach_series(since, until)
+        insights = {
+            "range": "최근 30일",
+            "reachSeries": reach_series,
+            "reach30": sum(x["value"] for x in reach_series) if reach_series else None,
+            "profileViews30": _ig_total_value("profile_views", since, until),
+            "accountsEngaged30": _ig_total_value("accounts_engaged", since, until),
+            "totalInteractions30": _ig_total_value("total_interactions", since, until),
+            "websiteClicks30": _ig_total_value("website_clicks", since, until),
+        }
+
         kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
         return {"asOf": kst.strftime("%Y-%m-%d") + " (자동)", "username": acc.get("username"),
                 "followers": acc.get("followers_count"), "following": acc.get("follows_count"),
-                "posts": acc.get("media_count"), "recent": recent}
+                "posts": acc.get("media_count"), "recent": recent, "insights": insights}
     except Exception as e:
         print("IG 수집 실패:", e)
         return None
