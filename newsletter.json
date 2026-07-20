@@ -1,6 +1,209 @@
 {
- "note": "Stibee API v2 연동 대기. STIBEE_TOKEN 등록 후 자동 수집(발송 목록·오픈율·클릭률). subscribers는 스티비 주소록 총 구독자.",
+ "generatedAt": "2026-07-20 12:45",
+ "source": "Stibee API v2 (자동)",
  "subscribers": 7262,
- "b2b": [],
- "b2c": []
+ "b2b": [
+  {
+   "id": 2453049,
+   "title": "(광고)아카라라이프 AIoT 국제전시회 부스에 초대합니다.",
+   "date": "2024-10-22",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2453049/",
+   "status": 3
+  },
+  {
+   "id": 2367825,
+   "title": "(광고) 아카라라이프 10월 뉴스레터",
+   "date": "2024-10-16",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2367825/",
+   "status": 3
+  },
+  {
+   "id": 2257083,
+   "title": "(광고) 아카라라이프 8월 뉴스레터",
+   "date": "2024-08-14",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2257083/",
+   "status": 3
+  },
+  {
+   "id": 2340250,
+   "title": "AqaraLife Newsletter - August 2024",
+   "date": "2024-08-14",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2340250/",
+   "status": 3
+  },
+  {
+   "id": 2251971,
+   "title": "아카라 매직패드 S1 Plus 설명회에 참석해주셔서 감사합니다.",
+   "date": "2024-06-27",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2251971/",
+   "status": 3
+  },
+  {
+   "id": 2249976,
+   "title": "매직패드 S1 Plus 온라인 설명회 참가 링크 전달드립니다.",
+   "date": "2024-06-26",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2249976/",
+   "status": 3
+  },
+  {
+   "id": 2221867,
+   "title": "(광고) 아카라라이프 6월 뉴스레터",
+   "date": "2024-06-19",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2221867/",
+   "status": 3
+  },
+  {
+   "id": 2238964,
+   "title": "AqaraLife NewsLetter",
+   "date": "2024-06-19",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2238964/",
+   "status": 3
+  },
+  {
+   "id": 2116904,
+   "title": "(광고) 아카라라이프 4월 뉴스레터",
+   "date": "2024-04-17",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2116904/",
+   "status": 3
+  },
+  {
+   "id": 2127271,
+   "title": "AqaraLife NewsLetter",
+   "date": "2024-04-17",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2127271/",
+   "status": 3
+  },
+  {
+   "id": 2024896,
+   "title": "(광고) 아카라라이프 2월 뉴스레터",
+   "date": "2024-02-28",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2024896/",
+   "status": 3
+  },
+  {
+   "id": 2029795,
+   "title": "Aqaralife Newsletter",
+   "date": "2024-02-28",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/2029795/",
+   "status": 3
+  },
+  {
+   "id": 1898000,
+   "title": "(광고) 아카라 라이프 12월 뉴스레터",
+   "date": "2023-12-26",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/1898000/",
+   "status": 3
+  },
+  {
+   "id": 1844475,
+   "title": "(광고) 아카라 라이프 11월 뉴스레터",
+   "date": "2023-11-21",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/1844475/",
+   "status": 3
+  },
+  {
+   "id": 1808492,
+   "title": "아카라 라이프 파트너스 데이 참석에 감사드립니다.",
+   "date": "2023-10-26",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/1808492/",
+   "status": 3
+  },
+  {
+   "id": 1762909,
+   "title": "(광고) 아카라 라이프 10월 뉴스레터",
+   "date": "2023-10-18",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/1762909/",
+   "status": 3
+  },
+  {
+   "id": 1698733,
+   "title": "(광고) 아카라라이프 9월 뉴스레터",
+   "date": "2023-09-12",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/1698733/",
+   "status": 3
+  },
+  {
+   "id": 1743555,
+   "title": "아카라코리아 사명 변경 안내드립니다.",
+   "date": "2023-09-04",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/1743555/",
+   "status": 3
+  },
+  {
+   "id": 1694255,
+   "title": "아카라코리아 부스를 방문해주셔서 감사합니다.",
+   "date": "2023-08-08",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/1694255/",
+   "status": 3
+  },
+  {
+   "id": 1669296,
+   "title": "(광고) 아카라코리아 뉴스레터를 만나보세요, 다양한 소식이 기다립니다!",
+   "date": "2023-08-01",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null,
+   "link": "https://stibee.com/email/1669296/",
+   "status": 3
+  }
+ ],
+ "b2c": [],
+ "note": "Stibee API v2 자동 수집 · GET /emails 기준. B2C=시절레터 힌트 분류, 그 외 B2B."
 }
