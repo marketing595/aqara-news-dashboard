@@ -184,7 +184,7 @@
       <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">기간 내 기사</p><p id="kpiTotal" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p id="kpiDelta" class="text-xs mt-1"></p></div>
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">활동 매체 수</p><p id="kpiMedia" class="num text-3xl font-extrabold text-ink mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도된 고유 매체</p></div>
-        <div class="card card-hover p-5"><p class="text-sm text-slate-500">단신 : 기획</p><p id="kpiRatio" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도자료 대 기획·특집</p></div>
+        <div class="card card-hover p-5"><p class="text-sm text-slate-500">단신 : 기획 : 언급</p><p id="kpiRatio" class="num text-2xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도자료 : 기획·특집 : 단순 언급 (%)</p></div>
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">월 평균 발행</p><p id="kpiAvg" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">기간 내 월평균 건수</p></div>
       </section>
       <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -1363,8 +1363,8 @@
         if(prev>0){const pct=Math.round((n-prev)/prev*100),up=pct>=0; dh='<span class="'+(up?'text-agreen':'text-ared')+'">'+(up?'▲':'▼')+' '+Math.abs(pct)+'% <span class="text-slate-400">이전 동기간 '+ps+'~'+pe+' ('+prev+'건) 대비</span></span>';} else dh='<span class="text-slate-400">이전 동기간 '+ps+'~'+pe+' 0건</span>'; }
       document.getElementById('kpiDelta').innerHTML=dh;
       document.getElementById('kpiMedia').textContent=new Set(FILTERED.map(r=>r._media)).size.toLocaleString();
-      const dan=FILTERED.filter(r=>r._type==='단신').length, gi=n-dan;
-      document.getElementById('kpiRatio').textContent=n?(Math.round(dan/n*100)+' : '+Math.round(gi/n*100)):'–';
+      const dan=FILTERED.filter(r=>r._type==='단신').length, eon=FILTERED.filter(r=>r._type==='언급').length, gi=n-dan-eon;
+      document.getElementById('kpiRatio').textContent=n?(Math.round(dan/n*100)+' : '+Math.round(gi/n*100)+' : '+Math.round(eon/n*100)):'–';
       const mset=new Set(FILTERED.map(r=>r._ym).filter(Boolean)); document.getElementById('kpiAvg').textContent=mset.size?(n/mset.size).toFixed(1):'–'; }
     // 원형(도넛·파이) 조각 위에 퍼센트를 상시 표기(마우스 오버 없이 즉시 보이게)
     const PCT_LABELS={ id:'pctLabels', afterDatasetsDraw(chart){
