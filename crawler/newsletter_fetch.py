@@ -144,7 +144,11 @@ def main():
     def parse(e):
         eid = e.get("id")
         title = pick(e, "subject", "title", "name") or "(제목 없음)"
-        date = (pick(e, "sentTime", "sentAt", "createdTime", "createdAt") or "")[:10]
+        # 발송시각이 플레이스홀더(1990/0001 등 웹 발행)면 생성일로 대체
+        st = pick(e, "sentTime", "sentAt")
+        if st and str(st)[:4] in ("1990", "0001", "1970"):
+            st = None
+        date = (st or pick(e, "createdTime", "createdAt") or "")[:10]
         link = pick(e, "permanentLink", "url", "permalink") or ("https://stibee.com/email/%s/" % eid)
         row = {"id": eid, "title": title, "date": date, "link": link,
                "listId": e.get("listId"), "sender": pick(e, "senderName"),
