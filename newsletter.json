@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-20 13:22",
+ "generatedAt": "2026-07-20 13:25",
  "source": "Stibee API v2 (자동)",
  "subscribers": 7262,
  "b2b": [
@@ -97,6 +97,17 @@
    "date": "2026-03-24",
    "link": "https://stib.ee/CsrL",
    "listId": 480572,
+   "sender": "아카라라이프",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null
+  },
+  {
+   "id": 3299490,
+   "title": "(광고) 2026년 4월 아카라라이프 뉴스레터",
+   "date": "2026-03-24",
+   "link": "https://stib.ee/FpsL",
+   "listId": 272115,
    "sender": "아카라라이프",
    "sent": null,
    "openRate": null,
@@ -224,87 +235,10 @@
    "clickRate": null
   },
   {
-   "id": 2940971,
-   "title": "[아카라라이프] 스마트홈 쇼룸 방문에 감사드립니다.",
-   "date": "2025-08-11",
-   "link": "https://stib.ee/iDsI",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2931066,
-   "title": "[아카라라이프] 스마트홈 쇼룸 방문에 감사드립니다.",
-   "date": "2025-08-04",
-   "link": "https://stib.ee/d2mI",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2896188,
-   "title": "[아카라라이프] 스마트홈 쇼룸 방문에 감사드립니다.",
-   "date": "2025-07-14",
-   "link": "https://stib.ee/srUI",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2885172,
-   "title": "[아카라라이프] 스마트홈 쇼룸 방문에 감사드립니다.",
-   "date": "2025-07-07",
-   "link": "https://stib.ee/v6PI",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2873674,
-   "title": "[아카라라이프] 스마트홈 쇼룸 방문에 감사드립니다.",
-   "date": "2025-06-30",
-   "link": "https://stib.ee/Y6JI",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
    "id": 2846646,
    "title": "(광고) 아카라라이프 6월 뉴스레터",
    "date": "2025-06-18",
    "link": "https://stib.ee/J35I",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2848937,
-   "title": "[아카라라이프] 스마트홈 쇼룸 방문에 감사드립니다.",
-   "date": "2025-06-16",
-   "link": "https://stib.ee/nE6I",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2828909,
-   "title": "[아카라라이프] 스마트홈 쇼룸 방문에 감사드립니다.",
-   "date": "2025-06-02",
-   "link": "https://stib.ee/SrvH",
    "listId": 272115,
    "sender": "아카라라이프",
    "sent": null,
@@ -327,17 +261,6 @@
    "title": "아카라라이프 스마트홈 세미나에 참석해주셔서 감사합니다.",
    "date": "2025-05-28",
    "link": "https://stib.ee/L9rH",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2815085,
-   "title": "[아카라라이프] 스마트홈 쇼룸 방문에 감사드립니다.",
-   "date": "2025-05-26",
-   "link": "https://stib.ee/SfoH",
    "listId": 272115,
    "sender": "아카라라이프",
    "sent": null,
@@ -373,17 +296,6 @@
    "link": "https://stib.ee/HPkF",
    "listId": 317615,
    "sender": "Aqara Life",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2551181,
-   "title": "(광고) 아카라라이프 12월 뉴스레터",
-   "date": "2024-12-18",
-   "link": "https://stib.ee/AhaF",
-   "listId": 272115,
-   "sender": "아카라라이프",
    "sent": null,
    "openRate": null,
    "clickRate": null
@@ -444,34 +356,12 @@
    "clickRate": null
   },
   {
-   "id": 2367825,
-   "title": "(광고) 아카라라이프 10월 뉴스레터",
-   "date": "2024-10-16",
-   "link": "https://stib.ee/Bq2E",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
    "id": 2340250,
    "title": "AqaraLife Newsletter - August 2024",
    "date": "2024-08-14",
    "link": "https://stib.ee/WQoD",
    "listId": 317615,
    "sender": "Aqara Life",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2257083,
-   "title": "(광고) 아카라라이프 8월 뉴스레터",
-   "date": "2024-08-14",
-   "link": "https://stib.ee/Vw6D",
-   "listId": 272115,
-   "sender": "아카라라이프",
    "sent": null,
    "openRate": null,
    "clickRate": null
@@ -499,78 +389,12 @@
    "clickRate": null
   },
   {
-   "id": 2221867,
-   "title": "(광고) 아카라라이프 6월 뉴스레터",
-   "date": "2024-06-19",
-   "link": "https://stib.ee/RYoC",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
    "id": 2238964,
    "title": "AqaraLife NewsLetter",
    "date": "2024-06-19",
    "link": "https://stib.ee/aTxC",
    "listId": 317615,
    "sender": "AqaraLife",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2127271,
-   "title": "AqaraLife NewsLetter",
-   "date": "2024-04-17",
-   "link": "https://stib.ee/fA1C",
-   "listId": 317615,
-   "sender": "AqaraLife",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2116904,
-   "title": "(광고) 아카라라이프 4월 뉴스레터",
-   "date": "2024-04-17",
-   "link": "https://stib.ee/4qvB",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2024896,
-   "title": "(광고) 아카라라이프 2월 뉴스레터",
-   "date": "2024-02-28",
-   "link": "https://stib.ee/vp9B",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 2029795,
-   "title": "Aqaralife Newsletter",
-   "date": "2024-02-28",
-   "link": "https://stib.ee/ZOCB",
-   "listId": 317615,
-   "sender": "Aqaralife",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 1898000,
-   "title": "(광고) 아카라 라이프 12월 뉴스레터",
-   "date": "2023-12-26",
-   "link": "https://stib.ee/DP5A",
-   "listId": 272115,
-   "sender": "아카라라이프",
    "sent": null,
    "openRate": null,
    "clickRate": null
@@ -593,17 +417,6 @@
    "link": "https://stib.ee/5ZK9",
    "listId": 272115,
    "sender": "아카라 라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 1762909,
-   "title": "(광고) 아카라 라이프 10월 뉴스레터",
-   "date": "2023-10-18",
-   "link": "https://stib.ee/hhw8",
-   "listId": 272115,
-   "sender": "아카라라이프",
    "sent": null,
    "openRate": null,
    "clickRate": null
@@ -651,17 +464,6 @@
    "sent": null,
    "openRate": null,
    "clickRate": null
-  },
-  {
-   "id": 3299490,
-   "title": "(광고) 2026년 4월 아카라라이프 뉴스레터",
-   "date": "2026-03-24",
-   "link": "https://stib.ee/FpsL",
-   "listId": 272115,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
   }
  ],
  "b2c": [
@@ -677,5 +479,5 @@
    "clickRate": null
   }
  ],
- "note": "Stibee API v2 자동 수집 · GET /emails + 이메일별 통계."
+ "note": "Stibee API v2 자동 수집(아카라+시절레터 워크스페이스) · 제목 기준 중복 제거."
 }
