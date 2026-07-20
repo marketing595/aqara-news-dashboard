@@ -494,6 +494,20 @@
      <div id="ownedSec-instagram" class="hidden">
      <h2 class="accent font-extrabold text-ink mb-3 flex items-center gap-2">Instagram 채널 <span class="text-xs font-normal text-slate-400">Graph API 실측</span></h2>
      <section id="ownedIgKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
+     <section id="ownedIgInsights" class="mb-5 hidden">
+       <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
+         <h3 class="accent font-extrabold text-ink">계정 인사이트 <span class="text-xs font-normal text-slate-400">(최근 30일 · Graph API 실측)</span></h3>
+         <span class="text-xs text-slate-400">메타 비즈니스 스위트와 동일 지표</span>
+       </div>
+       <div id="ownedIgInsightKpi" class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-5"></div>
+       <div class="card p-5">
+         <div class="flex items-baseline justify-between flex-wrap gap-2 mb-2">
+           <h3 class="accent font-extrabold text-ink">일별 도달(Reach) 추이 <span class="text-xs font-normal text-slate-400">(최근 30일 · 순 도달 계정 수)</span></h3>
+           <span id="igReachSum" class="text-xs text-slate-500"></span>
+         </div>
+         <div class="h-56"><canvas id="igReachChart"></canvas></div>
+       </div>
+     </section>
      <section class="card p-5 mb-5">
        <div class="flex items-baseline justify-between flex-wrap gap-2 mb-1">
          <h3 class="accent font-extrabold text-ink">팔로워 성장 · 전월/전년 대비 <span class="text-xs font-normal text-slate-400">(매일 자동 기록 · 축적될수록 정밀)</span></h3>
@@ -510,8 +524,11 @@
              <th class="px-3 py-3 whitespace-nowrap">게시일</th>
              <th class="px-3 py-3 whitespace-nowrap">유형</th>
              <th class="px-3 py-3">내용</th>
+             <th class="px-3 py-3 text-right whitespace-nowrap">도달</th>
              <th class="px-3 py-3 text-right whitespace-nowrap">좋아요</th>
              <th class="px-3 py-3 text-right whitespace-nowrap">댓글</th>
+             <th class="px-3 py-3 text-right whitespace-nowrap">저장</th>
+             <th class="px-3 py-3 text-right whitespace-nowrap">공유</th>
            </tr></thead>
            <tbody id="ownedIgBody" class="divide-y divide-slate-100"></tbody>
          </table>
@@ -704,6 +721,8 @@
        <div class="flex flex-wrap items-center gap-2">
          <select id="reportPeriod" onchange="reportPreset()" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-2 bg-white font-semibold">
            <option value="all">전체 기간</option>
+           <option value="thismonth">이번 달</option>
+           <option value="lastmonth">지난 달</option>
            <option value="quarter">최근 분기(3개월)</option>
            <option value="half">최근 반년(6개월)</option>
            <option value="ytd">올해(YTD)</option>
@@ -2849,10 +2868,14 @@
           <td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(p.date||'-')}</td>
           <td class="px-3 py-2.5 whitespace-nowrap"><span class="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${esc(p.type||'')}</span></td>
           <td class="px-3 py-2.5 min-w-[260px]"><div class="flex items-center gap-2.5">${p.image?`<a href="${esc(p.permalink||'#')}" target="_blank" rel="noopener" class="flex-shrink-0"><img src="${esc(p.image)}" loading="lazy" class="w-14 h-14 object-cover rounded-md border border-[#E6E6E3] bg-slate-100" onerror="this.parentNode.style.display='none'"/></a>`:''}${p.permalink?`<a href="${esc(p.permalink)}" target="_blank" rel="noopener" class="lnk">${esc(p.caption||'(내용 없음)')} <span class="text-slate-300 text-xs">↗</span></a>`:`<span>${esc(p.caption||'')}</span>`}</div></td>
+          <td class="px-3 py-2.5 text-right num font-semibold text-ink">${p.reach!=null?p.reach.toLocaleString():'<span class="text-slate-300">-</span>'}</td>
           <td class="px-3 py-2.5 text-right num">${(p.likes||0).toLocaleString()}</td>
-          <td class="px-3 py-2.5 text-right num">${(p.comments||0).toLocaleString()}</td></tr>`).join('');
+          <td class="px-3 py-2.5 text-right num">${(p.comments||0).toLocaleString()}</td>
+          <td class="px-3 py-2.5 text-right num text-slate-500">${p.saved!=null?p.saved.toLocaleString():'-'}</td>
+          <td class="px-3 py-2.5 text-right num text-slate-500">${p.shares!=null?p.shares.toLocaleString():'-'}</td></tr>`).join('');
       }
       renderIgGrowth();
+      renderIgInsights();
       // 블로그 (관리 블로그 여러 개)
       const bl=OWNED.blog||{}, all=blogAll();
       const totalPosts=bl.total!=null?bl.total:all.length;
@@ -3005,6 +3028,8 @@
       toEl.value=now;
       if(p==='all'){ const dts=ALL.map(r=>r['게재일']).filter(Boolean).sort(); fromEl.value=dts[0]||'2021-01-01'; }
       else if(p==='ytd'){ fromEl.value=now.slice(0,4)+'-01-01'; }
+      else if(p==='thismonth'){ fromEl.value=now.slice(0,7)+'-01'; }
+      else if(p==='lastmonth'){ let y=+now.slice(0,4), mo=+now.slice(5,7)-1; if(mo<1){mo=12;y--;} const dim=new Date(y,mo,0).getDate(); const mm=String(mo).padStart(2,'0'); fromEl.value=y+'-'+mm+'-01'; toEl.value=y+'-'+mm+'-'+String(dim).padStart(2,'0'); }
       else { const d=new Date(now); d.setMonth(d.getMonth()-(p==='quarter'?3:6)); fromEl.value=d.toISOString().slice(0,10); }
       renderReport();
     }
@@ -3017,6 +3042,24 @@
     function rline(id,labels,datasets){ draw(id,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,labels:{boxWidth:10,font:{size:10}}}},scales:{y:{beginAtZero:false,ticks:{font:{size:10}}},x:{ticks:{maxTicksLimit:8,font:{size:9}}}}}}); }
     // 인스타 팔로워 성장(전월/전년) — 일별 히스토리 기반, 목표 시점 근처 데이터가 있을 때만 계산
     function igStrictDelta(field,days,tol){ const h=OWNED_HIST; if(!h||h.length<2) return null; const latest=h[h.length-1], cur=latest[field]; if(cur==null) return null; const target=new Date(latest.date)-days*864e5; let best=null,bd=1e9; for(let i=0;i<h.length-1;i++){ if(h[i][field]==null) continue; const diff=Math.abs(new Date(h[i].date)-target)/864e5; if(diff<=(tol||10)&&diff<bd){ bd=diff; best=h[i]; } } if(!best) return null; return {d:cur-best[field], base:best[field], from:best.date}; }
+    function renderIgInsights(){
+      const ins=(OWNED.instagram||{}).insights, wrap=document.getElementById('ownedIgInsights');
+      if(!wrap) return;
+      if(!ins){ wrap.classList.add('hidden'); return; }
+      wrap.classList.remove('hidden');
+      const fmt=v=>v==null?'<span class="text-slate-300">-</span>':(v>=10000?KO_UNIT(v):v.toLocaleString());
+      const c=(label,val,sub)=>`<div class="card p-5"><p class="text-sm text-slate-500">${label}</p><p class="num text-2xl font-extrabold text-ink mt-1">${val}</p><p class="text-xs text-slate-400 mt-1">${sub}</p></div>`;
+      document.getElementById('ownedIgInsightKpi').innerHTML=
+        c('도달(Reach)', fmt(ins.reach30), '순 도달 계정 수')+
+        c('프로필 방문', fmt(ins.profileViews30), '프로필 조회 횟수')+
+        c('참여 계정', fmt(ins.accountsEngaged30), '콘텐츠에 반응한 계정')+
+        c('총 상호작용', fmt(ins.totalInteractions30), '좋아요·저장·댓글·공유')+
+        c('웹사이트 클릭', fmt(ins.websiteClicks30), '프로필 링크 클릭');
+      const s=(ins.reachSeries||[]).filter(x=>x&&x.date);
+      const sumEl=document.getElementById('igReachSum');
+      if(sumEl) sumEl.innerHTML=s.length?('합계 <span class="font-semibold text-ink">'+s.reduce((a,x)=>a+(x.value||0),0).toLocaleString()+'</span> · 일평균 '+Math.round(s.reduce((a,x)=>a+(x.value||0),0)/s.length).toLocaleString()):'';
+      if(s.length) rline('igReachChart', s.map(x=>x.date.slice(5)), [{label:'일별 도달',data:s.map(x=>x.value),borderColor:'#C13584',backgroundColor:'rgba(193,53,132,.08)',borderWidth:2,fill:true,tension:.3,pointRadius:s.length<=1?4:0}]);
+    }
     function renderIgGrowth(){ const el=document.getElementById('igGrowthChart'); if(!el) return;
       const rows=(OWNED_HIST||[]).filter(x=>x.igFollowers!=null);
       rline('igGrowthChart', rows.map(x=>x.date), [{label:'팔로워',data:rows.map(x=>x.igFollowers),borderColor:'#C13584',backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:rows.length<=1?4:2}]);
