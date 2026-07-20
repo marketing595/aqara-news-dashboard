@@ -1,6 +1,13 @@
 {
- "generatedAt": "2026-07-20 13:25",
+ "generatedAt": "2026-07-20 13:27",
  "workspaces": {
+  "시절레터": {
+   "auth": 200,
+   "total": null,
+   "fetched": 0,
+   "sent": 0,
+   "statEndpoint": null
+  },
   "아카라": {
    "auth": 200,
    "total": 61,
