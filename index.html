@@ -1392,7 +1392,11 @@
       originOthers=[...new Set([...ORIGIN_OTHERS_DEFAULT,...u])];
       ALL.forEach(deriveRow); applyAndRender(); }
     function deriveRow(r){ r._ym=(r['게재일']||'').toString().substring(0,7); r._type=fType(r); r._topic=fTopicVal(r); r._media=fMedia(r); r._chan=fChannel(r); r._origin=isOrganic(r['기사명'])?'오가닉':'자사보도'; const e=rowEdits[r._key]; if(e&&e['배포']) r._origin=e['배포']; }
-    function startRowEdit(i){ const r=TABLE_ROWS[i]; if(r){ editingKey=r._key; renderTable(); } }
+    function ensureNewsEditAuth(){ if(sessionStorage.getItem('newsEditAuth')==='1') return true;
+      const p=prompt('뉴스 목록 편집 비밀번호를 입력하세요'); if(p===null) return false;
+      if(p==='aqara2026'){ sessionStorage.setItem('newsEditAuth','1'); return true; }
+      alert('비밀번호가 올바르지 않습니다.'); return false; }
+    function startRowEdit(i){ if(!ensureNewsEditAuth()) return; const r=TABLE_ROWS[i]; if(r){ editingKey=r._key; renderTable(); } }
     function cancelRowEdit(){ editingKey=null; renderTable(); }
     function saveRowEdit(){ if(!editingKey) return;
       const g=id=>{const el=document.getElementById(id);return el?el.value:'';};
