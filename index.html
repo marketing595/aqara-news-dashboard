@@ -821,12 +821,19 @@
    <style>
      .exp-slide{ margin-bottom:20px; }
      @media print{
+       @page{ size:A4 landscape; margin:10mm; }
+       html, body{ background:#fff !important; }
        body.printing-export *{ visibility:hidden !important; }
-       body.printing-export #view-export, body.printing-export #view-export *{ visibility:visible !important; }
+       body.printing-export #view-export, body.printing-export #view-export *{ visibility:visible !important; -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
        body.printing-export #view-export{ position:absolute; left:0; top:0; width:100%; padding:0; margin:0; }
+       body.printing-export #expSlides{ max-width:none !important; width:100% !important; margin:0 !important; }
        body.printing-export .rpt-noprint{ display:none !important; }
-       .exp-slide{ break-inside:avoid; page-break-inside:avoid; box-shadow:none !important; }
+       .exp-slide{ break-inside:avoid; page-break-inside:avoid; box-shadow:none !important;
+                   width:100% !important; max-width:100% !important; margin:0 !important;
+                   border:1px solid #e5e5e5 !important; border-radius:0 !important; overflow:hidden; }
        .exp-slide + .exp-slide{ page-break-before:always; }
+       .exp-slide table, .exp-slide img{ max-width:100% !important; }
+       .exp-slide .overflow-x-auto{ overflow:visible !important; }
      }
    </style>
    <div id="view-export" class="hidden">
