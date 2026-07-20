@@ -2681,10 +2681,10 @@
       const titles=(ALL||[]).map(r=>norm(r['기사명']));
       let rows=(KWTREND||[]).map(k=>{ const nk=norm(k.name); const cov=nk?titles.filter(t=>t.indexOf(nk)>-1).length:0; const vol=(k.vol!=null?k.vol:k.latest)||0; return {name:k.name, cat:k.cat||'', vol:vol, mom:(k.mom==null?0:k.mom), cov:cov}; });
       if(!rows.length){ el.innerHTML='<div class="rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-3 text-[12px] text-slate-400">키워드 트렌드 수집 대기 (배포 후 워크플로우 1회 실행 필요)</div>'; return; }
-      const maxVol=Math.max(1,...rows.map(r=>r.vol)), thr=Math.max(8, maxVol*0.15);
+      const vols=rows.map(r=>r.vol).slice().sort((a,b)=>a-b), maxVol=Math.max(1,vols[vols.length-1]||1), median=vols[Math.floor(vols.length/2)]||0, thr=Math.max(8, median);
       rows.forEach(r=>{ r.opp = r.mom>=5 && r.vol>=thr && r.cov<=2; });
       rows.sort((a,b)=>(b.opp-a.opp)||(b.mom-a.mom)||(b.vol-a.vol));
-      const chip=r=>{ const mm=(r.mom>=0?'▲':'▼')+Math.abs(r.mom)+'%', w=Math.max(6,Math.round(r.vol/maxVol*100));
+      const chip=r=>{ const mm=(r.mom>=0?'▲':'▼')+Math.abs(r.mom)+'%', w=Math.max(4,Math.round(Math.sqrt(r.vol/maxVol)*100));
         return `<div class="rounded-lg border ${r.opp?'border-[#FBC400] bg-[#FFFBEA]':'border-[#EEE] bg-white'} px-2.5 py-1.5">
           <div class="flex items-center gap-2">
             <span class="text-[13px] font-semibold text-ink flex-1 truncate" title="${esc(r.cat)}">${esc(r.name)}</span>
