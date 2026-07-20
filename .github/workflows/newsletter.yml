@@ -29,6 +29,7 @@ jobs:
       - name: Fetch Stibee newsletter
         env:
           STIBEE_TOKEN: ${{ secrets.STIBEE_TOKEN }}
+          STIBEE_TOKEN_SIJEOL: ${{ secrets.STIBEE_TOKEN_SIJEOL }}
         run: python crawler/newsletter_fetch.py
       - name: Commit if changed
         run: |
