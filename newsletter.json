@@ -1,6 +1,6 @@
 {
- "note": "뉴스레터 발행 이슈. Stibee 아카이브는 JS 렌더라 자동수집이 불안정 → 이슈를 여기에 수기 등록. 필드: title, date, link. subscribers는 총 구독자(선택).",
- "subscribers": null,
+ "note": "Stibee API v2 연동 대기. STIBEE_TOKEN 등록 후 자동 수집(발송 목록·오픈율·클릭률). subscribers는 스티비 주소록 총 구독자.",
+ "subscribers": 7262,
  "b2b": [],
  "b2c": []
 }

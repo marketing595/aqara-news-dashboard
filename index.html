@@ -2799,15 +2799,26 @@
     let NEWSLETTER={b2b:[],b2c:[]};
     function loadNewsletter(){ fetch('newsletter.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d){ NEWSLETTER=d; renderNewsletter(); } }).catch(()=>{ renderNewsletter(); }); }
     function nlRows(arr,arch){ if(!arr||!arr.length) return `<p class="text-sm text-slate-400 py-6 text-center">등록된 이슈가 없습니다. <a href="${arch}" target="_blank" rel="noopener" class="lnk">아카이브에서 확인 ↗</a></p>`;
-      return arr.map(it=>`<div class="py-2.5 flex items-baseline gap-3"><span class="text-[11px] text-slate-400 w-20 shrink-0">${esc(it.date||'')}</span><a href="${esc(it.link||arch)}" target="_blank" rel="noopener" class="lnk flex-1 line-clamp-2">${esc(it.title||'(제목 없음)')} <span class="text-slate-300 text-xs">↗</span></a></div>`).join(''); }
+      return arr.map(it=>{
+        const st=[];
+        if(it.sent!=null) st.push('발송 '+Number(it.sent).toLocaleString());
+        if(it.openRate!=null) st.push('오픈 <b class="text-ink">'+it.openRate+'%</b>');
+        if(it.clickRate!=null) st.push('클릭 <b class="text-ink">'+it.clickRate+'%</b>');
+        const sub=st.length?`<div class="pl-20 text-[11px] text-slate-400 mt-0.5">${st.join(' <span class="text-slate-200">·</span> ')}</div>`:'';
+        return `<div class="py-2.5"><div class="flex items-baseline gap-3"><span class="text-[11px] text-slate-400 w-20 shrink-0">${esc(it.date||'')}</span><a href="${esc(it.link||arch)}" target="_blank" rel="noopener" class="lnk flex-1 line-clamp-2">${esc(it.title||'(제목 없음)')} <span class="text-slate-300 text-xs">↗</span></a></div>${sub}</div>`;
+      }).join(''); }
     function renderNewsletter(){
       const b2b=NEWSLETTER.b2b||[], b2c=NEWSLETTER.b2c||[];
       const el2b=document.getElementById('nlB2B'); if(el2b) el2b.innerHTML=nlRows(b2b,'https://aqaralife.stibee.com/');
       const el2c=document.getElementById('nlB2C'); if(el2c) el2c.innerHTML=nlRows(b2c,'https://sijeol.stibee.com/');
+      const all=b2b.concat(b2c), wo=all.filter(x=>x.openRate!=null);
+      const avgOpen=wo.length?(wo.reduce((a,x)=>a+(+x.openRate||0),0)/wo.length).toFixed(1):null;
       const kc=(l,v,s)=>`<div class="card card-hover p-5"><p class="text-sm text-slate-500">${l}</p><p class="num text-3xl font-extrabold text-ink mt-1">${v}</p><p class="text-xs text-slate-400 mt-1">${s}</p></div>`;
       const kpi=document.getElementById('nlKpi'); if(kpi) kpi.innerHTML=
-        kc('B2B 발행',b2b.length+'회','아카라레터')+kc('B2C 발행',b2c.length+'회','시절레터')+
-        kc('총 발행',(b2b.length+b2c.length)+'회','뉴스레터 합산')+kc('채널',NEWSLETTER.subscribers!=null?NEWSLETTER.subscribers.toLocaleString()+'명':'-','구독자(수기)');
+        kc('총 발행',(b2b.length+b2c.length)+'회',`B2B ${b2b.length} · B2C ${b2c.length}`)+
+        kc('구독자',NEWSLETTER.subscribers!=null?NEWSLETTER.subscribers.toLocaleString()+'명':'-','스티비 주소록')+
+        kc('평균 오픈율',avgOpen!=null?avgOpen+'%':'-','발송 이메일 평균')+
+        kc('데이터',NEWSLETTER.generatedAt?'자동':'수기',NEWSLETTER.generatedAt?('Stibee · '+NEWSLETTER.generatedAt):'newsletter.json');
     }
     function loadYoutube(){
       fetch('youtube.json?_='+Date.now()).then(r=>r.json()).then(p=>{
