@@ -169,6 +169,16 @@
           <span id="perfHeroSub" class="text-xs text-slate-400"></span>
         </div>
         <div id="perfHeroCards" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
+        <div class="mt-5 pt-5 border-t border-[#ECE9E1]">
+          <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+            <h3 class="font-bold text-ink text-sm">반기 성과 비교 <span class="text-xs font-normal text-slate-400">(직전 완료 반기 결산 · 건수·성격·주요이슈)</span></h3>
+            <div class="flex gap-1.5 text-xs">
+              <button id="hcBtnYoy" onclick="halfCmpMode='yoy';renderHalfCompare()">전년 동반기</button>
+              <button id="hcBtnPrev" onclick="halfCmpMode='prev';renderHalfCompare()">직전 반기</button>
+            </div>
+          </div>
+          <div id="perfHalfCmp"></div>
+        </div>
       </section>
       <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">기간 내 기사</p><p id="kpiTotal" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p id="kpiDelta" class="text-xs mt-1"></p></div>
@@ -1244,6 +1254,35 @@
         metric('단신(보도자료)', a=>a.filter(r=>r._type==='단신').length)+
         metric('기획·특집', a=>a.filter(r=>r._type!=='단신').length)+
         metric('활동 매체 수', a=>new Set(a.map(r=>r._media)).size);
+      renderHalfCompare();
+    }
+    // ===== 반기(상·하반기) 성과 비교 =====
+    let halfCmpMode='yoy';
+    function halfRange(y,h){ return h===1?[y+'-01-01',y+'-06-30']:[y+'-07-01',y+'-12-31']; }
+    function halfLabel(y,h){ return String(y%100).padStart(2,'0')+'년 '+(h===1?'상':'하')+'반기'; }
+    function halfStats(y,h){ const [a,b]=halfRange(y,h);
+      const rs=ALL.filter(r=>{const d=r['게재일'];return d&&d>=a&&d<=b;});
+      const dan=rs.filter(r=>r._type==='단신').length, gi=rs.length-dan;
+      const character=rs.length?(gi>dan?'기획 중심':(dan>gi?'단신 중심':'단신·기획 균형')):'-';
+      const cnt={}; rs.forEach(r=>{ if(r._topic) cnt[r._topic]=(cnt[r._topic]||0)+1; });
+      const top=Object.entries(cnt).sort((x,y)=>y[1]-x[1]).slice(0,2).map(e=>e[0]);
+      return {n:rs.length,dan,gi,character,top}; }
+    function renderHalfCompare(){ const el=document.getElementById('perfHalfCmp'); if(!el) return;
+      const now=new Date(), Y=now.getFullYear(), M=now.getMonth()+1;
+      let cy,ch; if(M<=6){cy=Y-1;ch=2;}else{cy=Y;ch=1;}   // 직전 '완료' 반기
+      let by,bh; if(halfCmpMode==='prev'){ if(ch===1){by=cy-1;bh=2;}else{by=cy;bh=1;} } else { by=cy-1; bh=ch; }
+      const cur=halfStats(cy,ch), base=halfStats(by,bh);
+      const delta=base.n?Math.round((cur.n-base.n)/base.n*100):null;
+      const dtxt=delta==null?'':(delta>=0?`<span class="text-agreen font-bold">▲${delta}%</span>`:`<span class="text-ared font-bold">▼${Math.abs(delta)}%</span>`);
+      const card=(y,h,s,isCur)=>`<div class="flex-1 rounded-xl border ${isCur?'border-brand/50 bg-brand/5':'border-[#ECE9E1] bg-[#FAFAF9]'} p-4 min-w-0">
+        <p class="text-xs font-semibold ${isCur?'text-ink':'text-slate-500'}">${halfLabel(y,h)}</p>
+        <p class="num text-2xl font-extrabold text-ink mt-1">${s.n.toLocaleString()}건</p>
+        <p class="text-xs mt-1 font-medium ${s.character.includes('기획')?'text-aorange':(s.character.includes('단신')?'text-slate-500':'text-slate-500')}">${s.character} <span class="text-slate-400 font-normal">(단신 ${s.dan}·기획 ${s.gi})</span></p>
+        <p class="text-[11px] text-slate-400 mt-1.5 truncate">주요이슈 · ${s.top.length?esc(s.top.join(' · ')):'-'}</p></div>`;
+      el.innerHTML=`<div class="flex items-stretch gap-2">${card(by,bh,base,false)}<div class="flex flex-col items-center justify-center px-1 shrink-0"><span class="text-xl text-slate-300">→</span>${dtxt?`<span class="text-[11px] mt-1 whitespace-nowrap">${dtxt}</span>`:''}</div>${card(cy,ch,cur,true)}</div>`;
+      const on='text-xs px-2.5 py-1 rounded-lg bg-ink text-white font-semibold', off='text-xs px-2.5 py-1 rounded-lg border border-slate-300 text-slate-500 hover:bg-slate-50';
+      const by1=document.getElementById('hcBtnYoy'), bp=document.getElementById('hcBtnPrev');
+      if(by1) by1.className=halfCmpMode==='yoy'?on:off; if(bp) bp.className=halfCmpMode==='prev'?on:off;
     }
     // ===== 경쟁사 언론 노출량(compete.json) =====
     const COMPETE_FALLBACK={ items:[
