@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-20 12:49",
+ "generatedAt": "2026-07-20 12:57",
  "total": 61,
  "listIdDistribution": {
   "272115": {
@@ -109,40 +109,108 @@
  "statProbe": {
   "/emails/{id}/statistics": {
    "status": 404,
-   "body": "{'message': 'Not Found'}"
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
   },
-  "/emails/{id}/stat": {
+  "/emails/{id}/statistics/summary": {
    "status": 404,
-   "body": "{'message': 'Not Found'}"
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
+  },
+  "/emails/{id}/statistics/detail": {
+   "status": 404,
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
+  },
+  "/emails/{id}/reports": {
+   "status": 404,
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
   },
   "/emails/{id}/report": {
    "status": 404,
-   "body": "{'message': 'Not Found'}"
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
   },
-  "/emails/{id}": {
-   "status": 200,
-   "body": {
-    "id": 1669296,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고) 아카라코리아 뉴스레터를 만나보세요, 다양한 소식이 기다립니다!",
-    "senderEmail": "inquiry@aqarakorea.com",
-    "senderName": "아카라코리아",
-    "permanentLink": "https://stib.ee/nqA8",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2023-08-01T10:00:00+09:00",
-    "createdTime": "2023-07-24T10:08:09+09:00"
-   }
-  },
-  "/emails/{id}/statistics/overview": {
+  "/emails/{id}/analytics": {
    "status": 404,
-   "body": "{'message': 'Not Found'}"
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
+  },
+  "/emails/{id}/result": {
+   "status": 404,
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
+  },
+  "/emails/{id}/results": {
+   "status": 404,
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
+  },
+  "/emails/{id}/opens": {
+   "status": 404,
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
+  },
+  "/emails/{id}/clicks": {
+   "status": 404,
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
+  },
+  "/emails/{id}/stat": {
+   "status": 404,
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
+  },
+  "/emails/{id}/stats": {
+   "status": 404,
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
+  },
+  "/statistics/emails/{id}": {
+   "status": 404,
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
+  },
+  "/reports/emails/{id}": {
+   "status": 404,
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
   },
   "/emails/{id}/summary": {
    "status": 404,
-   "body": "{'message': 'Not Found'}"
+   "hasStats": false,
+   "keys": [
+    "message"
+   ]
   }
  },
  "sampleItem": {
