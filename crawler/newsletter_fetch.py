@@ -133,8 +133,12 @@ def main():
             d["senders"].append(sn)
 
     raw_path = os.path.join(os.path.dirname(__file__), "..", "newsletter_raw.json")
+    all_compact = [{"id": e.get("id"), "subject": e.get("subject"), "sender": e.get("senderName"),
+                    "listId": e.get("listId"), "status": e.get("status"),
+                    "sentTime": e.get("sentTime"), "createdTime": e.get("createdTime")} for e in items]
     json.dump({"generatedAt": kst.strftime("%Y-%m-%d %H:%M"), "total": total,
-               "listIdDistribution": lists, "statProbe": probe, "sampleItem": items[0] if items else None},
+               "statEndpoint": stat_ep, "listIdDistribution": lists, "statProbe": probe,
+               "allItems": all_compact},
               open(raw_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
     def parse(e):
