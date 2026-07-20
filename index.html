@@ -593,7 +593,7 @@
        </div>
      </div>
      <div class="card p-4 mt-5 bg-[#FAFAF9] border-[#E6E6E3]">
-       <p class="text-[12px] text-slate-500 leading-relaxed">※ Stibee 아카이브는 자바스크립트로 렌더돼 자동 수집이 불안정합니다. 발행 이슈는 <code class="bg-white px-1 rounded border">newsletter.json</code>으로 관리합니다. 담당자가 이슈(제목·날짜·링크)를 알려주시면 등록해 드리며, 위 '아카이브 열기'로 전체 확인이 가능합니다.</p>
+       <p class="text-[12px] text-slate-500 leading-relaxed">※ <b class="text-ink">Stibee API v2로 발송 이력을 매일 자동 동기화</b>합니다(제목·발송일·링크·B2B/B2C 분류). 오픈율·클릭률 등 <b class="text-ink">상세 성과 지표는 스티비 API가 제공하지 않아</b> 각 이슈의 '↗' 링크 또는 <a href="https://stibee.com" target="_blank" rel="noopener" class="lnk">스티비 대시보드</a>에서 확인하세요.</p>
      </div>
      </div>
    </div>
@@ -2814,11 +2814,12 @@
       const all=b2b.concat(b2c), wo=all.filter(x=>x.openRate!=null);
       const avgOpen=wo.length?(wo.reduce((a,x)=>a+(+x.openRate||0),0)/wo.length).toFixed(1):null;
       const kc=(l,v,s)=>`<div class="card card-hover p-5"><p class="text-sm text-slate-500">${l}</p><p class="num text-3xl font-extrabold text-ink mt-1">${v}</p><p class="text-xs text-slate-400 mt-1">${s}</p></div>`;
+      const latest=all.map(x=>x.date).filter(Boolean).sort().slice(-1)[0]||'-';
       const kpi=document.getElementById('nlKpi'); if(kpi) kpi.innerHTML=
         kc('총 발행',(b2b.length+b2c.length)+'회',`B2B ${b2b.length} · B2C ${b2c.length}`)+
         kc('구독자',NEWSLETTER.subscribers!=null?NEWSLETTER.subscribers.toLocaleString()+'명':'-','스티비 주소록')+
-        kc('평균 오픈율',avgOpen!=null?avgOpen+'%':'-','발송 이메일 평균')+
-        kc('데이터',NEWSLETTER.generatedAt?'자동':'수기',NEWSLETTER.generatedAt?('Stibee · '+NEWSLETTER.generatedAt):'newsletter.json');
+        (avgOpen!=null?kc('평균 오픈율',avgOpen+'%','발송 이메일 평균'):kc('최신 발행일',latest,'가장 최근 발송'))+
+        kc('데이터',NEWSLETTER.generatedAt?'자동':'수기',NEWSLETTER.generatedAt?('Stibee API · '+NEWSLETTER.generatedAt):'newsletter.json');
     }
     function loadYoutube(){
       fetch('youtube.json?_='+Date.now()).then(r=>r.json()).then(p=>{
