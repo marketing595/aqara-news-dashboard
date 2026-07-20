@@ -189,9 +189,36 @@ def _ig_media_insights(mid):
         return {}
 
 
+def _ig_hashtags():
+    """전체 게시물 캡션을 페이지네이션 수집 → 우리 계정이 사용한 해시태그 빈도 집계."""
+    counts, disp, posts, pages = {}, {}, 0, 0
+    url = "%s/%s/media" % (GRAPH, IG_ID)
+    params = {"fields": "caption", "limit": 100, "access_token": ITOKEN}
+    try:
+        while url and pages < 20:
+            r = requests.get(url, params=params, timeout=20).json()
+            if "error" in r:
+                break
+            for m in r.get("data", []):
+                posts += 1
+                for tag in re.findall(r"#([0-9A-Za-z가-힣ㄱ-ㅎㅏ-ㅣ_]+)", m.get("caption") or ""):
+                    k = tag.lower()
+                    counts[k] = counts.get(k, 0) + 1
+                    if k not in disp:
+                        disp[k] = tag
+            url = (r.get("paging") or {}).get("next")
+            params = None
+            pages += 1
+    except Exception as e:
+        print("IG 해시태그 실패:", e)
+    ranked = sorted(counts.items(), key=lambda x: (-x[1], x[0]))
+    return {"posts": posts, "unique": len(counts),
+            "top": [{"tag": disp[k], "count": c} for k, c in ranked[:40]]}
+
+
 def fetch_instagram():
-    """Instagram Graph API로 팔로워·게시물·최근 미디어 반응 + 인사이트(도달·노출·클릭·게시물별 성과) 수집.
-       토큰(INSTA_TOKEN) 없으면 None."""
+    """Instagram Graph API로 팔로워·게시물·최근 미디어 반응 + 인사이트(도달·노출·클릭·게시물별 성과)
+       + 우리 계정 해시태그 사용 집계 수집. 토큰(INSTA_TOKEN) 없으면 None."""
     if not ITOKEN:
         return None
     try:
@@ -235,7 +262,8 @@ def fetch_instagram():
         kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
         return {"asOf": kst.strftime("%Y-%m-%d") + " (자동)", "username": acc.get("username"),
                 "followers": acc.get("followers_count"), "following": acc.get("follows_count"),
-                "posts": acc.get("media_count"), "recent": recent, "insights": insights}
+                "posts": acc.get("media_count"), "recent": recent, "insights": insights,
+                "hashtags": _ig_hashtags()}
     except Exception as e:
         print("IG 수집 실패:", e)
         return None

@@ -541,6 +541,14 @@
        <div class="h-56"><canvas id="igGrowthChart"></canvas></div>
        <p class="text-[11px] text-slate-400 mt-2">※ 팔로워 전월/전년 대비는 <b class="text-ink">일별 팔로워 히스토리</b>로 계산합니다. 인스타 자동수집(<b class="text-ink">INSTA_TOKEN</b>) 연결 후 매일 기록되어 채워지며, 현재는 데이터 축적 초기 단계입니다.</p>
      </section>
+     <section id="ownedIgHashWrap" class="card p-5 mb-5 hidden">
+       <div class="flex items-baseline justify-between flex-wrap gap-2 mb-1">
+         <h3 class="accent font-extrabold text-ink">우리 게시물 해시태그 <span class="text-xs font-normal text-slate-400">(사용 빈도 · 전체 게시물 기준)</span></h3>
+         <span id="ownedIgHashMeta" class="text-xs text-slate-400"></span>
+       </div>
+       <p class="text-[11px] text-slate-400 mb-3">※ aqaralife 계정이 게시물 캡션에 실제 사용한 해시태그 집계(Graph API 실측) · 매일 자동 갱신. (인스타 전체 해시태그 총량은 API 미제공)</p>
+       <div id="ownedIgHashBody"></div>
+     </section>
      <section id="ownedIgPostsWrap" class="card p-5 hidden">
        <h3 class="accent font-extrabold text-ink mb-3">최근 게시물 <span id="ownedIgCount" class="text-sm font-normal text-slate-400"></span></h3>
        <div class="overflow-auto max-h-[520px] rounded-lg border border-[#E6E6E3]">
@@ -3009,6 +3017,7 @@
       }
       renderIgGrowth();
       renderIgInsights();
+      renderIgHashtags();
       // 블로그 (관리 블로그 여러 개)
       const bl=OWNED.blog||{}, all=blogAll();
       const totalPosts=bl.total!=null?bl.total:all.length;
@@ -3175,6 +3184,18 @@
     function rline(id,labels,datasets){ draw(id,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,labels:{boxWidth:10,font:{size:10}}}},scales:{y:{beginAtZero:false,ticks:{font:{size:10}}},x:{ticks:{maxTicksLimit:8,font:{size:9}}}}}}); }
     // 인스타 팔로워 성장(전월/전년) — 일별 히스토리 기반, 목표 시점 근처 데이터가 있을 때만 계산
     function igStrictDelta(field,days,tol){ const h=OWNED_HIST; if(!h||h.length<2) return null; const latest=h[h.length-1], cur=latest[field]; if(cur==null) return null; const target=new Date(latest.date)-days*864e5; let best=null,bd=1e9; for(let i=0;i<h.length-1;i++){ if(h[i][field]==null) continue; const diff=Math.abs(new Date(h[i].date)-target)/864e5; if(diff<=(tol||10)&&diff<bd){ bd=diff; best=h[i]; } } if(!best) return null; return {d:cur-best[field], base:best[field], from:best.date}; }
+    function renderIgHashtags(){ const h=(OWNED.instagram||{}).hashtags, wrap=document.getElementById('ownedIgHashWrap'); if(!wrap) return;
+      if(!h||!h.top||!h.top.length){ wrap.classList.add('hidden'); return; }
+      wrap.classList.remove('hidden');
+      const meta=document.getElementById('ownedIgHashMeta'); if(meta) meta.textContent='게시물 '+(h.posts||0)+'개 · 고유 해시태그 '+(h.unique||0)+'종';
+      const max=Math.max(1,...h.top.map(x=>x.count)), hi=['스마트홈','인테리어','스마트홈인테리어','아카라','아카라라이프'];
+      document.getElementById('ownedIgHashBody').innerHTML=h.top.slice(0,25).map((x,i)=>{
+        const w=Math.max(4,Math.round(x.count/max*100)), key=hi.some(k=>(x.tag||'').replace(/\s/g,'').includes(k));
+        return `<div class="flex items-center gap-3 py-1">
+          <span class="text-[11px] text-slate-400 num w-5 text-right shrink-0">${i+1}</span>
+          <span class="text-[13px] ${key?'font-bold text-ink':'text-slate-600'} w-44 shrink-0 truncate">#${esc(x.tag)}</span>
+          <div class="flex-1 bg-slate-100 rounded-full h-3 overflow-hidden"><div class="h-3 ${key?'bg-brand':'bg-slate-300'}" style="width:${w}%"></div></div>
+          <span class="text-[12px] text-slate-500 num w-10 text-right shrink-0">${x.count}회</span></div>`; }).join(''); }
     function renderIgInsights(){
       const ins=(OWNED.instagram||{}).insights, wrap=document.getElementById('ownedIgInsights');
       if(!wrap) return;
