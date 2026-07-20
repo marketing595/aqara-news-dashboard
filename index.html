@@ -224,7 +224,12 @@
         <div class="card p-5 lg:col-span-3"><h2 class="accent font-extrabold text-ink mb-3">② 주제(종류) 월별 추이 <span class="text-xs font-normal text-slate-400">(선택 기간 · 상위 8개 주제)</span></h2><div class="h-72"><canvas id="topicChart"></canvas></div></div>
         <div class="card p-5 lg:col-span-2"><h2 class="accent font-extrabold text-ink mb-3">② 연도별 발행 건수 <span class="text-xs font-normal text-slate-400">(선택 기간 내 · 연도별 합계)</span></h2><div class="h-72"><canvas id="yearlyChart"></canvas></div></div>
       </section>
-      <section class="card p-5">
+      <style>
+        #newsListSection .col-chk, #newsListSection .col-edit, #newsListSection #bulkEditBar{ display:none; }
+        #newsListSection.editon .col-chk, #newsListSection.editon .col-edit{ display:table-cell; }
+        #newsListSection.editon #bulkEditBar{ display:contents; }
+      </style>
+      <section id="newsListSection" class="card p-5">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <h2 class="accent font-extrabold text-ink">뉴스 목록 <span id="listCount" class="text-sm font-normal text-slate-400"></span></h2>
           <div class="flex flex-wrap gap-2">
@@ -234,11 +239,14 @@
             <select id="fTopic" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 종류</option></select>
             <select id="fType" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 성격</option></select>
             <select id="fOrigin" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 배포</option><option>자사보도</option><option>오가닉</option></select>
+            <button id="newsEditBtn" onclick="toggleNewsEdit()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg font-semibold" title="편집 모드 (비밀번호 필요)">🔒 편집</button>
+            <span id="bulkEditBar" class="contents">
             <select id="bulkTopic" onchange="applyBulk('종류',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 종류 일괄 지정"><option value="">종류 일괄…</option><option>대외협력</option><option>신제품</option><option>회사 이슈</option><option>[인테리어] 쇼룸</option><option>[인테리어] 시공사례</option><option>[인테리어] 서비스</option><option>[인테리어] 트렌드</option><option>기타</option></select>
             <select id="bulkType" onchange="applyBulk('구분',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 성격 일괄 지정"><option value="">성격 일괄…</option><option>단신</option><option>기획</option><option>매거진</option><option>언급</option></select>
             <select id="bulkOrigin" onchange="applyBulk('배포',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 배포 일괄 지정"><option value="">배포 일괄…</option><option>자사보도</option><option>오가닉</option></select>
             <button onclick="deleteSelected()" class="text-sm border border-ared/40 text-ared hover:bg-ared/5 px-3 py-2 rounded-lg font-semibold" title="체크한 기사 삭제"><span id="delSelCount">선택 삭제</span></button>
             <button onclick="restoreDeleted()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg text-slate-500" title="숨긴(삭제한) 기사 모두 복원">삭제 복원</button>
+            </span>
           </div>
         </div>
         <p class="text-[11px] text-slate-400 mb-1">※ <b>배포 구분</b>: 기본은 <b class="text-brand-ink">자사보도</b>(우리가 배포), 제목이 <b>타사 발신사</b> 이름으로 시작하면 <b>오가닉</b>(제3자 발행)으로 분류. <button onclick="addOriginOther()" class="text-ink font-semibold hover:underline">오가닉 발신사 추가 +</button></p>
@@ -246,14 +254,14 @@
         <div class="overflow-auto max-h-[600px] rounded-lg border border-slate-100">
           <table class="w-full text-sm">
             <thead class="bg-slate-50 text-slate-500 sticky top-0 z-10"><tr class="text-left">
-              <th class="px-2 py-3 w-8"><input type="checkbox" id="chkAll" onchange="toggleAllRows(this)" title="전체 선택" /></th>
+              <th class="px-2 py-3 w-8 col-chk"><input type="checkbox" id="chkAll" onchange="toggleAllRows(this)" title="전체 선택" /></th>
               <th class="px-3 py-3 font-semibold whitespace-nowrap sortable" onclick="sortBy('게재일')">게재일 ⇅</th>
               <th class="px-3 py-3 font-semibold whitespace-nowrap sortable" onclick="sortBy('매체')">매체 ⇅</th>
               <th class="px-3 py-3 font-semibold whitespace-nowrap">종류</th>
               <th class="px-3 py-3 font-semibold whitespace-nowrap">성격</th>
               <th class="px-3 py-3 font-semibold whitespace-nowrap">배포</th>
               <th class="px-3 py-3 font-semibold">기사명</th>
-              <th class="px-3 py-3 font-semibold whitespace-nowrap text-right">편집</th>
+              <th class="px-3 py-3 font-semibold whitespace-nowrap text-right col-edit">편집</th>
             </tr></thead>
             <tbody id="tableBody" class="divide-y divide-slate-100"></tbody>
           </table>
@@ -1403,6 +1411,15 @@
       const p=prompt('뉴스 목록 편집 비밀번호를 입력하세요'); if(p===null) return false;
       if(p==='aqara2026'){ sessionStorage.setItem('newsEditAuth','1'); return true; }
       alert('비밀번호가 올바르지 않습니다.'); return false; }
+    let newsEditMode=false;
+    function toggleNewsEdit(){
+      if(!newsEditMode){ if(!ensureNewsEditAuth()) return; newsEditMode=true; }
+      else { newsEditMode=false; editingKey=null; checkedKeys.clear(); }
+      const sec=document.getElementById('newsListSection'); if(sec) sec.classList.toggle('editon', newsEditMode);
+      const b=document.getElementById('newsEditBtn');
+      if(b){ b.textContent=newsEditMode?'✏️ 편집 중 · 잠그기':'🔒 편집';
+        b.className='text-sm px-3 py-2 rounded-lg font-semibold '+(newsEditMode?'bg-ink text-white':'border border-slate-300 hover:bg-slate-50'); }
+      renderTable(); }
     function startRowEdit(i){ if(!ensureNewsEditAuth()) return; const r=TABLE_ROWS[i]; if(r){ editingKey=r._key; renderTable(); } }
     function cancelRowEdit(){ editingKey=null; renderTable(); }
     function saveRowEdit(){ if(!editingKey) return;
@@ -1427,25 +1444,25 @@
         if(r._key===editingKey){
           const topOpts=TOPIC_ORDER.map(t=>`<option ${r._topic===t?'selected':''}>${esc(t)}</option>`).join('');
           return `<tr class="bg-brand/5">
-            <td class="px-2 py-1.5"></td>
+            <td class="px-2 py-1.5 col-chk"></td>
             <td class="px-2 py-1.5"><input id="ed-date" type="date" value="${esc((r['게재일']||'').toString().slice(0,10))}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-32"/></td>
             <td class="px-2 py-1.5"><input id="ed-media" value="${esc(r['매체']||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-24"/></td>
             <td class="px-2 py-1.5"><select id="ed-topic" class="border border-slate-300 rounded px-1 py-0.5 text-xs">${topOpts}</select></td>
             <td class="px-2 py-1.5"><select id="ed-type" class="border border-slate-300 rounded px-1 py-0.5 text-xs">${['단신','기획','매거진','언급'].map(o=>`<option ${((r['구분']||r._type)===o)?'selected':''}>${o}</option>`).join('')}${['단신','기획','매거진','언급'].indexOf(r['구분']||r._type)<0&&(r['구분']||r._type)?`<option selected>${esc(r['구분']||r._type)}</option>`:''}</select></td>
             <td class="px-2 py-1.5 text-[10px] text-slate-400 whitespace-nowrap">${esc(r._origin||'')}<br>(제목따라 자동)</td>
             <td class="px-2 py-1.5"><input id="ed-title" value="${esc(r['기사명']||'')}" class="border border-slate-300 rounded px-1 py-0.5 text-xs w-full min-w-[220px]"/></td>
-            <td class="px-2 py-1.5 whitespace-nowrap text-right"><button onclick="saveRowEdit()" class="text-[11px] bg-ink text-white px-2 py-1 rounded font-semibold">저장</button> <button onclick="cancelRowEdit()" class="text-[11px] text-slate-400 hover:text-ink">취소</button> <button onclick="deleteRow()" class="text-[11px] text-ared hover:underline">삭제</button>${rowEdits[r._key]?' <button onclick="resetRowEdit()" class="text-[11px] text-slate-400 hover:underline">원복</button>':''}</td></tr>`;
+            <td class="px-2 py-1.5 whitespace-nowrap text-right col-edit"><button onclick="saveRowEdit()" class="text-[11px] bg-ink text-white px-2 py-1 rounded font-semibold">저장</button> <button onclick="cancelRowEdit()" class="text-[11px] text-slate-400 hover:text-ink">취소</button> <button onclick="deleteRow()" class="text-[11px] text-ared hover:underline">삭제</button>${rowEdits[r._key]?' <button onclick="resetRowEdit()" class="text-[11px] text-slate-400 hover:underline">원복</button>':''}</td></tr>`;
         }
         const edited=rowEdits[r._key]?' <span class="text-[9px] text-brand-ink align-middle">•수정됨</span>':'';
         return `<tr class="hover:bg-slate-50 transition">
-        <td class="px-2 py-2.5"><input type="checkbox" class="rowchk" data-k="${esc(r._key)}" ${checkedKeys.has(r._key)?'checked':''} onchange="onRowCheck(this)"/></td>
+        <td class="px-2 py-2.5 col-chk"><input type="checkbox" class="rowchk" data-k="${esc(r._key)}" ${checkedKeys.has(r._key)?'checked':''} onchange="onRowCheck(this)"/></td>
         <td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${esc(r['게재일'])}</td>
         <td class="px-3 py-2.5 whitespace-nowrap font-medium text-slate-700">${esc(r._media||r['매체'])}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._topic,'bg-ablue/25 text-[#365b7a]')}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._type,r._type==='단신'?'bg-slate-100 text-slate-600':'bg-aorange/15 text-aorange')}</td>
         <td class="px-3 py-2.5 whitespace-nowrap">${tag(r._origin,r._origin==='자사보도'?'bg-brand/20 text-brand-ink':'bg-slate-100 text-slate-500')}</td>
         <td class="px-3 py-2.5"><a href="${esc(linkOf(r))}" target="_blank" rel="noopener noreferrer" class="text-slate-800 hover:text-ink hover:underline">${esc(r['기사명'])} <span class="text-slate-300">↗</span></a>${chTag(r._chan)}${edited}</td>
-        <td class="px-3 py-2.5 whitespace-nowrap text-right"><button onclick="startRowEdit(${i})" class="text-[13px] text-slate-300 hover:text-ink" title="편집">✏️</button></td></tr>`;
+        <td class="px-3 py-2.5 whitespace-nowrap text-right col-edit"><button onclick="startRowEdit(${i})" class="text-[13px] text-slate-300 hover:text-ink" title="편집">✏️</button></td></tr>`;
       }).join('')
         +(rows.length>700?`<tr><td colspan="8" class="text-center py-3 text-xs text-slate-400">상위 700건 표시</td></tr>`:'');
       const ca=document.getElementById('chkAll'); if(ca) ca.checked=false; updateDelCount();
