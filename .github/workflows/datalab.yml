@@ -9,6 +9,7 @@ on:
     paths:
       - '.github/workflows/datalab.yml'
       - 'crawler/datalab_fetch.py'
+      - 'crawler/keyword_trend_fetch.py'
 
 permissions:
   contents: write
@@ -31,10 +32,15 @@ jobs:
           NAVER_ID: ${{ secrets.NAVER_ID }}
           NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
         run: python crawler/datalab_fetch.py
+      - name: Fetch keyword trends (기회 키워드용)
+        env:
+          NAVER_ID: ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+        run: python crawler/keyword_trend_fetch.py
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add datalab.json
-          git diff --staged --quiet || git commit -m "datalab.json 자동 갱신"
+          git add datalab.json keywords_trend.json
+          git diff --staged --quiet || git commit -m "datalab.json·keywords_trend.json 자동 갱신"
           git push
