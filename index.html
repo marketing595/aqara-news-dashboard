@@ -148,13 +148,6 @@
     <div id="loading" class="text-center py-24 text-slate-400">데이터를 불러오는 중…</div>
     <div id="error" class="hidden text-center py-24 text-red-500"></div>
     <div id="content" class="hidden space-y-5">
-      <section class="card p-5 sm:p-6">
-        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
-          <h2 class="text-lg font-extrabold text-ink">발행 실적 요약 <span id="perfHeroMonth" class="text-sm font-medium text-muted"></span></h2>
-          <span id="perfHeroSub" class="text-xs text-slate-400"></span>
-        </div>
-        <div id="perfHeroCards" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
-      </section>
       <section class="card p-4 flex flex-wrap items-end gap-3">
         <div><label class="block text-[11px] text-slate-500 mb-1">시작일</label>
           <input id="fromDate" type="date" onchange="applyAndRender()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm" /></div>
@@ -167,6 +160,13 @@
           <button onclick="preset('90d')" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">최근 90일</button>
         </div>
         <div class="ml-auto text-xs text-slate-400 self-center" id="rangeInfo"></div>
+      </section>
+      <section class="card p-5 sm:p-6">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+          <h2 class="text-lg font-extrabold text-ink">발행 실적 요약 <span id="perfHeroMonth" class="text-sm font-medium text-muted"></span></h2>
+          <span id="perfHeroSub" class="text-xs text-slate-400"></span>
+        </div>
+        <div id="perfHeroCards" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
       </section>
       <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">기간 내 기사</p><p id="kpiTotal" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p id="kpiDelta" class="text-xs mt-1"></p></div>
@@ -1163,10 +1163,9 @@
         <p class="text-[13px] text-slate-600 mt-3">${curLbl} <b class="text-ink num">${cur.toLocaleString()}건</b> · ${baseLbl} <b class="text-ink num">${has?base.toLocaleString()+'건':'-'}</b></p>
         ${note?`<p class="text-[11px] text-slate-400 mt-1">${note}</p>`:''}</div>`;
     }
-    function shiftPeriod(lo,hi,m,y){ const a=new Date(lo),b=new Date(hi);
-      a.setFullYear(a.getFullYear()-y); a.setMonth(a.getMonth()-m);
-      b.setFullYear(b.getFullYear()-y); b.setMonth(b.getMonth()-m);
-      return [a.toISOString().slice(0,10),b.toISOString().slice(0,10)]; }
+    function shiftPeriod(lo,hi,m,y){
+      const shift=s=>{ const p=(s||'').split('-'); let yy=+p[0]-y, mm=(+p[1])-1-m, dd=+p[2]; while(mm<0){mm+=12;yy--;} const dim=new Date(yy,mm+1,0).getDate(); dd=Math.min(dd,dim); return yy+'-'+String(mm+1).padStart(2,'0')+'-'+String(dd).padStart(2,'0'); };
+      return [shift(lo),shift(hi)]; }
     function renderCompare(){
       const dts=ALL.map(r=>r['게재일']).filter(Boolean).sort();
       if(!dts.length){ document.getElementById('cmpBody').innerHTML=''; document.getElementById('perfHeroCards').innerHTML=''; return; }
