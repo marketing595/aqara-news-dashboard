@@ -1,8 +1,10 @@
 {
- "generatedAt": "2026-07-20 13:27",
+ "generatedAt": "2026-07-20 13:29",
  "workspaces": {
   "시절레터": {
    "auth": 200,
+   "emailsStatus": 400,
+   "emailsSnippet": "{\"code\": \"Errors.Service.UnsupportedAPI\", \"httpStatusCode\": 400, \"message\": \"지원하지 않는 API 입니다.\", \"values\": {\"message\": \"프로 요금제가 필요합니다. \"}}",
    "total": null,
    "fetched": 0,
    "sent": 0,
@@ -10,6 +12,8 @@
   },
   "아카라": {
    "auth": 200,
+   "emailsStatus": 200,
+   "emailsSnippet": "{\"total\": 61, \"offset\": 0, \"limit\": 5, \"items\": [{\"id\": 1669296, \"owner\": \"23017e8a-9d9e-42f0-9bf9-bf5ba54546f1\", \"status\": 3, \"listId\": 272115, \"subject\": \"(광고) 아카라코리아 뉴스레터를 만나보세요, 다양한 소식이 기다립니다!\", \"senderEmail\": \"inquiry@aqarakorea.com\", \"senderName\": \"아카라코리아\", \"permanentLink\": \"https://stib.ee/nqA8\", \"segmentIds\": null, \"groupIds\": null, \"sentTime\": \"2023-08-01T10:00:00+09:00\", \"createdTime\": \"",
    "total": 61,
    "fetched": 61,
    "sent": 61,
