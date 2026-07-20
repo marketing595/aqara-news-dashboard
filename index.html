@@ -31,7 +31,7 @@
         firebase.initializeApp(FIREBASE_CONFIG);
         WK_DB=firebase.database(); WK_FB_READY=true;
         firebase.auth().signInAnonymously().catch(e=>console.warn('Firebase 익명 로그인 실패:', e&&e.message));
-        firebase.auth().onAuthStateChanged(u=>{ WK_AUTH_OK=!!u; if(u){ if(typeof wkPresenceStart==='function') wkPresenceStart(); if(typeof wkOnAuth==='function') wkOnAuth(); if(typeof prDelSyncStart==='function') prDelSyncStart(); } });
+        firebase.auth().onAuthStateChanged(u=>{ WK_AUTH_OK=!!u; if(u){ if(typeof wkPresenceStart==='function') wkPresenceStart(); if(typeof wkOnAuth==='function') wkOnAuth(); if(typeof prDelSyncStart==='function') prDelSyncStart(); if(typeof prSyncStart==='function') prSyncStart(); } });
       }catch(e){ console.warn('Firebase init 오류:', e&&e.message); WK_FB_READY=false; }
     })();
   </script>
@@ -1132,10 +1132,25 @@
          </div>
        </div>
        <div id="mktSec-prpitch" class="hidden">
-         <div class="card p-5 mb-5"><h3 class="accent font-extrabold text-ink mb-1">PR 소재 제안 <span class="text-xs font-normal text-slate-400">(유통·스마트홈·인테리어 업계 이슈·통계 활용)</span></h3>
-           <p class="text-[12px] text-slate-400 mb-3">업계 이슈·핫키워드·통계에 아카라를 얹는 <b>보도자료/기획기사 앵글</b> 제안입니다. 최근 핫키워드는 데일리 브리핑에서 자동 반영. 편집 가능.</p>
+         <div class="card p-5 mb-5"><h3 class="accent font-extrabold text-ink mb-1">PR 소재 제안 · 앵글 기획 <span class="text-xs font-normal text-slate-400">(핫키워드 모니터링 + 앵글 캘린더)</span></h3>
+           <p class="text-[12px] text-slate-400 mb-3">상단 업계 핫키워드를 참고해 <b>왼쪽에 앵글을 기획</b>하고, <b>오른쪽 캘린더로 드래그</b>해 발행일을 잡으세요. 실시간 공유·저장됩니다.</p>
            <div id="mktPrHotKw" class="mb-4"></div>
-           <div id="mktPrIdeas" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+             <div>
+               <p class="text-[13px] font-bold text-[#4B32C3] mb-2">📝 앵글 기획 <span class="text-[11px] font-normal text-slate-400">(드래그해서 캘린더에 배치)</span></p>
+               <div class="flex gap-2 mb-3"><input id="prAngleInput" type="text" placeholder="새 앵글 입력 후 Enter" onkeydown="if(event.key==='Enter')prAngleAdd()" class="flex-1 text-sm border border-[#EDE9FF] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#5B44C7]/40"/><button onclick="prAngleAdd()" class="text-sm bg-[#5B44C7] text-white px-3 py-2 rounded-lg font-semibold whitespace-nowrap">추가</button></div>
+               <div id="prAngleList" class="space-y-2 max-h-[460px] overflow-auto pr-1"></div>
+             </div>
+             <div>
+               <div class="flex items-center justify-between mb-2">
+                 <button onclick="prCalMove(-1)" class="text-slate-400 hover:text-ink px-2 text-lg">‹</button>
+                 <p id="prCalLabel" class="text-[13px] font-bold text-ink"></p>
+                 <button onclick="prCalMove(1)" class="text-slate-400 hover:text-ink px-2 text-lg">›</button>
+               </div>
+               <div id="prCalGrid" class="grid grid-cols-7 gap-1"></div>
+               <p class="text-[11px] text-slate-400 mt-2">※ 왼쪽 앵글을 날짜 칸으로 끌어다 놓으면 발행 일정으로 등록됩니다.</p>
+             </div>
+           </div>
          </div>
        </div>
      </div>
@@ -2657,15 +2672,48 @@
     function renderMktPr(){
       const hk=mktHotKw();
       document.getElementById('mktPrHotKw').innerHTML=`<div class="rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-3"><p class="text-[12px] font-bold text-[#4B32C3] mb-1">🔥 최근 업계 핫키워드 <span class="font-normal text-slate-400">(데일리 브리핑 기반)</span></p><div>${hk.map(k=>`<span class="inline-block text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7] mr-1 mb-1">${esc(k)}</span>`).join('')||'<span class="text-[11px] text-slate-400">수집 대기</span>'}</div></div>`;
-      document.getElementById('mktPrIdeas').innerHTML=PR_PITCHES.map((grp,gi)=>`<div class="rounded-lg border border-[#EDE9FF] p-3 bg-[#FBFAFF]">
-        <div class="font-bold text-[#4B32C3] mb-2">${esc(grp.ind)}</div>
-        ${grp.ideas.map((x,i)=>`<div class="mb-3 pb-2 border-b border-[#EDE9FF] last:border-0 last:mb-0 last:pb-0">
-          <div class="text-[13px] font-semibold text-ink mb-1" contenteditable="true" data-mk="pr-t-${gi}-${i}" oninput="mktSaveEdit(this)">${esc(mktEdits['pr-t-'+gi+'-'+i]||x.t)}</div>
-          <div class="text-[11px] text-slate-500 mb-0.5" contenteditable="true" data-mk="pr-a-${gi}-${i}" oninput="mktSaveEdit(this)"><b>앵글</b> · ${esc(mktEdits['pr-a-'+gi+'-'+i]||x.angle)}</div>
-          <div class="text-[11px] text-slate-400" contenteditable="true" data-mk="pr-s-${gi}-${i}" oninput="mktSaveEdit(this)"><b>근거통계</b> · ${esc(mktEdits['pr-s-'+gi+'-'+i]||x.stat)}</div>
-        </div>`).join('')}
-      </div>`).join('');
+      prSyncStart(); renderPrAngles(); renderPrCalendar();
     }
+    // ===== PR 앵글 기획 · 캘린더 (Firebase 실시간 공유) =====
+    let PR_ANGLES={}, PR_SCHED={}, prCalYM=null, prSynced=false;
+    function prRef(p){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('prPlan/'+p):null; }
+    function prSyncStart(){ if(prSynced) return; const a=prRef('angles'); if(!a) return; prSynced=true;
+      a.on('value',s=>{ PR_ANGLES=s.val()||{}; renderPrAngles(); });
+      prRef('sched').on('value',s=>{ PR_SCHED=s.val()||{}; renderPrCalendar(); });
+      // 최초 1회: 비어 있으면 예시 앵글 시드
+      a.transaction(cur=>{ if(cur) return; const o={}; let n=0; PR_PITCHES.forEach(g=>g.ideas.forEach(x=>{ o['s'+(n)]={t:g.ind+' · '+x.t, ord:n}; n++; })); return o; }); }
+    function prAngleAdd(){ const el=document.getElementById('prAngleInput'); const t=(el.value||'').trim(); if(!t) return; el.value='';
+      const ref=prRef('angles'); const item={t:t, ord:Object.keys(PR_ANGLES).length}; if(ref) ref.push(item); else { PR_ANGLES['loc'+Object.keys(PR_ANGLES).length]=item; renderPrAngles(); } }
+    function prAngleDel(id){ const ref=prRef('angles'); if(ref) ref.child(id).remove(); else { delete PR_ANGLES[id]; renderPrAngles(); } }
+    function prAngleEdit(id,el){ const t=(el.textContent||'').trim(); if(!t) return; const ref=prRef('angles'); if(ref) ref.child(id).update({t:t}); else if(PR_ANGLES[id]) PR_ANGLES[id].t=t; }
+    function renderPrAngles(){ const el=document.getElementById('prAngleList'); if(!el) return;
+      const items=Object.entries(PR_ANGLES).sort((a,b)=>(a[1].ord||0)-(b[1].ord||0));
+      el.innerHTML=items.map(([id,v])=>`<div draggable="true" ondragstart="prDragStart(event,'${id}')" class="group flex items-start gap-2 rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-2.5 cursor-grab hover:border-[#5B44C7]/50">
+        <span class="text-[#8a7ad0] mt-0.5 select-none">⋮⋮</span>
+        <span class="flex-1 text-[13px] text-ink leading-snug" contenteditable="true" onblur="prAngleEdit('${id}',this)">${esc(v.t||'')}</span>
+        <button onclick="prAngleDel('${id}')" class="text-slate-300 hover:text-ared opacity-0 group-hover:opacity-100 text-xs">✕</button>
+      </div>`).join('')||'<p class="text-[12px] text-slate-400 py-6 text-center">위 입력창에서 앵글을 추가하세요.</p>';
+    }
+    function prDragStart(e,id){ e.dataTransfer.setData('text/plain',(PR_ANGLES[id]&&PR_ANGLES[id].t)||''); e.dataTransfer.effectAllowed='copy'; }
+    function prCalMove(d){ if(!prCalYM) renderPrCalendar(); let[y,m]=prCalYM.split('-').map(Number); let mm=m-1+d,yy=y; while(mm<0){mm+=12;yy--;} while(mm>11){mm-=12;yy++;} prCalYM=yy+'-'+String(mm+1).padStart(2,'0'); renderPrCalendar(); }
+    function renderPrCalendar(){ const grid=document.getElementById('prCalGrid'); if(!grid) return;
+      if(!prCalYM){ const n=new Date(); prCalYM=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0'); }
+      const [y,m]=prCalYM.split('-').map(Number);
+      const lb=document.getElementById('prCalLabel'); if(lb) lb.textContent=y+'년 '+m+'월';
+      const first=new Date(y,m-1,1).getDay(), dim=new Date(y,m,0).getDate(), dows=['일','월','화','수','목','금','토'];
+      let html=dows.map((d,i)=>`<div class="text-[10px] py-1 text-center ${i===0?'text-ared':(i===6?'text-ablue':'text-slate-400')}">${d}</div>`).join('');
+      for(let i=0;i<first;i++) html+='<div></div>';
+      for(let d=1;d<=dim;d++){ const date=prCalYM+'-'+String(d).padStart(2,'0');
+        const items=Object.entries(PR_SCHED).filter(e=>e[1].date===date);
+        html+=`<div ondragover="event.preventDefault()" ondrop="prCalDrop(event,'${date}')" class="min-h-[62px] rounded border border-[#EEEBF7] p-1 hover:border-[#5B44C7] transition">
+          <div class="text-[10px] text-slate-400 mb-0.5">${d}</div>
+          ${items.map(e=>`<div class="text-[10px] bg-[#EDE9FF] text-[#4B32C3] rounded px-1 py-0.5 mb-0.5 flex items-start gap-1"><span class="flex-1 leading-tight">${esc(e[1].t||'')}</span><button onclick="prSchedDel('${e[0]}')" class="text-[#8a7ad0] hover:text-ared leading-none">✕</button></div>`).join('')}
+        </div>`; }
+      grid.innerHTML=html;
+    }
+    function prCalDrop(e,date){ e.preventDefault(); const t=(e.dataTransfer.getData('text/plain')||'').trim(); if(!t) return;
+      const ref=prRef('sched'); const item={t:t,date:date}; if(ref) ref.push(item); else { PR_SCHED['loc'+Date.now()]=item; renderPrCalendar(); } }
+    function prSchedDel(id){ const ref=prRef('sched'); if(ref) ref.child(id).remove(); else { delete PR_SCHED[id]; renderPrCalendar(); } }
     // ===== 주간보고 (Firebase 실시간 공유 · 프로젝트·댓글·드래그) =====
     const WK_FIELDS=[{k:'done',label:'금주 진행 · 성과'},{k:'plan',label:'차주 계획'},{k:'issue',label:'이슈 · 공유'}];
     const WK_PALETTE=['#7C5CFF','#2563EB','#059669','#D97706','#DC2626','#DB2777','#0891B2','#65A30D','#9333EA','#E11D48'];
