@@ -139,6 +139,7 @@
       <button id="rptBtn-market" onclick="switchTab('market')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">시장 분석</button>
       <button id="rptBtn-competitor" onclick="switchTab('competitor')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">경쟁사 분석</button>
       <button id="rptBtn-cdj" onclick="switchTab('cdj')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">자사 분석</button>
+      <button id="rptBtn-export" onclick="switchTab('export')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">📑 보고서 추출하기</button>
     </div>
   </div>
 
@@ -803,6 +804,33 @@
       </div>
       <div class="card p-4 overflow-x-auto"><div id="cdjMap" class="min-w-[1060px]"></div></div>
       <div id="cdjSource" class="card p-4 mt-3 bg-[#FAFAF9] border-[#E6E6E3] text-[12px] text-slate-600 leading-relaxed"></div>
+   </div>
+
+   <!-- 보고서 추출하기 · 월간 PPT 리포트 -->
+   <style>
+     .exp-slide{ margin-bottom:20px; }
+     @media print{
+       body.printing-export *{ visibility:hidden !important; }
+       body.printing-export #view-export, body.printing-export #view-export *{ visibility:visible !important; }
+       body.printing-export #view-export{ position:absolute; left:0; top:0; width:100%; padding:0; margin:0; }
+       body.printing-export .rpt-noprint{ display:none !important; }
+       .exp-slide{ break-inside:avoid; page-break-inside:avoid; box-shadow:none !important; }
+       .exp-slide + .exp-slide{ page-break-before:always; }
+     }
+   </style>
+   <div id="view-export" class="hidden">
+     <div class="flex items-center justify-between flex-wrap gap-3 mb-5 rpt-noprint">
+       <div class="flex items-baseline gap-2">
+         <h2 class="text-xl font-extrabold text-ink">📑 보고서 추출하기</h2>
+         <span class="text-xs text-slate-400">월간 마케팅 성과 리포트 · 인쇄 시 PPT/PDF로 저장</span>
+       </div>
+       <div class="flex items-center gap-2">
+         <div id="expMonthTabs" class="flex flex-wrap gap-1.5"></div>
+         <button onclick="expPrint()" class="text-sm bg-ink hover:brightness-125 transition text-white px-4 py-2 rounded-lg font-semibold whitespace-nowrap">인쇄 / PDF 저장</button>
+       </div>
+     </div>
+     <div id="expSlides" class="max-w-[960px] mx-auto"></div>
+     <p class="text-center text-[11px] text-slate-400 mt-4 rpt-noprint">※ 표준 템플릿 기반 · 새 월 추가 시 동일 형식으로 자동 생성됩니다. 수치는 제공 자료·자동 수집(인스타 인사이트) 기준.</p>
    </div>
 
    <!-- 시장 분석 -->
@@ -2093,14 +2121,14 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], report:['report','campaign','market','competitor','cdj'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], report:['report','campaign','market','competitor','cdj','export'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
-      ['analytics','briefing','campaign','owned','cafe','report','competitor','market','cdj','calendar','medialist','library','mkt','kpi'].forEach(v=>{
+      ['analytics','briefing','campaign','owned','cafe','report','competitor','market','cdj','export','calendar','medialist','library','mkt','kpi'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
@@ -2109,7 +2137,7 @@
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
-      ['report','campaign','market','competitor','cdj'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
+      ['report','campaign','market','competitor','cdj','export'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
       if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
       if(t==='campaign'){ renderCampaign(); loadYoutube(); }
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
@@ -2118,6 +2146,7 @@
       if(t==='competitor'){ loadCompetitor(); }
       if(t==='market'){ loadCompetitor(); renderMarket(); }
       if(t==='cdj'){ renderCDJ(); }
+      if(t==='export'){ loadOwned(); renderExport(); }
       if(t==='library'){ loadLibrary(); }
       if(t==='mkt'){ mktEnter(); }
     }
@@ -3012,7 +3041,7 @@
     let CONTENT_HIST=[];
     function maybeRenderKpi(){ const v=document.getElementById('view-kpi'); if(v && !v.classList.contains('hidden') && typeof renderKpi==='function') renderKpi(); }
     function loadOwned(){
-      fetch('owned.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.youtube){ OWNED=Object.assign(OWNED,p); renderOwned(); maybeRenderReport(); maybeRenderKpi(); } }).catch(()=>{});
+      fetch('owned.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.youtube){ OWNED=Object.assign(OWNED,p); renderOwned(); maybeRenderReport(); maybeRenderKpi(); maybeRenderExport(); } }).catch(()=>{});
       fetch('owned_history.json?_='+Date.now()).then(r=>r.json()).then(h=>{ if(Array.isArray(h)){ OWNED_HIST=h; renderOwned(); maybeRenderReport(); } }).catch(()=>{});
       fetch('content_history.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d&&d.months){ CONTENT_HIST=d.months; renderOwned(); maybeRenderReport(); maybeRenderKpi(); } }).catch(()=>{});
     }
@@ -3065,6 +3094,102 @@
       rline('igGrowthChart', rows.map(x=>x.date), [{label:'팔로워',data:rows.map(x=>x.igFollowers),borderColor:'#C13584',backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:rows.length<=1?4:2}]);
       const badge=(dl,lbl)=>{ if(!dl) return lbl+' <span class="text-slate-300">데이터 축적 중</span>'; const up=dl.d>=0; return lbl+' <span class="'+(up?'text-agreen':'text-ared')+' font-semibold">'+(up?'▲':'▼')+Math.abs(dl.d).toLocaleString()+'명</span> <span class="text-slate-400">('+dl.from+'~)</span>'; };
       const el2=document.getElementById('igGrowthDelta'); if(el2) el2.innerHTML=badge(igStrictDelta('igFollowers',30,10),'전월 대비')+' · '+badge(igStrictDelta('igFollowers',365,20),'전년 대비'); }
+    // ===== 보고서 추출하기 · 월간 PPT 리포트 =====
+    function expTbl(head, rows, foot){
+      const al=i=>i===0?'left':'right';
+      const th=head.map((h,i)=>'<th class="px-3 py-2 text-'+al(i)+' font-semibold text-slate-500 whitespace-nowrap">'+h+'</th>').join('');
+      const body=rows.map(r=>'<tr class="border-t border-[#EFEDE7]">'+r.map((c,i)=>'<td class="px-3 py-1.5 text-'+al(i)+' '+(i===0?'font-medium text-ink':'num text-slate-700')+' whitespace-nowrap">'+c+'</td>').join('')+'</tr>').join('');
+      const tf=foot?'<tr class="border-t-2 border-[#E6E6E3] bg-[#FBF7E8] font-bold">'+foot.map((c,i)=>'<td class="px-3 py-2 text-'+al(i)+' '+(i===0?'text-ink':'num text-ink')+' whitespace-nowrap">'+c+'</td>').join('')+'</tr>':'';
+      return '<div class="overflow-x-auto rounded-lg border border-[#EFEDE7]"><table class="w-full text-[12.5px]"><thead><tr class="bg-[#FAF9F6]">'+th+'</tr></thead><tbody>'+body+tf+'</tbody></table></div>';
+    }
+    function expTblL(head, rows){
+      const th=head.map((h,i)=>'<th class="px-3 py-2 text-left font-semibold '+(i===0?'text-slate-400':'text-ink')+' whitespace-nowrap">'+h+'</th>').join('');
+      const body=rows.map(r=>'<tr class="border-t border-[#EFEDE7] align-top">'+r.map((c,i)=>'<td class="px-3 py-2 text-left '+(i===0?'font-semibold text-slate-500 whitespace-nowrap':'text-slate-700')+'">'+c+'</td>').join('')+'</tr>').join('');
+      return '<div class="overflow-x-auto rounded-lg border border-[#EFEDE7]"><table class="w-full text-[12.5px]"><thead><tr class="bg-[#FAF9F6]">'+th+'</tr></thead><tbody>'+body+'</tbody></table></div>';
+    }
+    function expMcards(arr){ return '<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">'+arr.map(m=>'<div class="rounded-xl border border-[#EFEDE7] bg-gradient-to-b from-[#FFFDF5] to-white p-4 text-center"><p class="text-[22px] font-extrabold text-ink num leading-tight">'+m[0]+'</p><p class="text-[12px] text-slate-700 mt-1 font-semibold">'+m[1]+'</p><p class="text-[10px] text-slate-400 mt-0.5">'+(m[2]||'')+'</p></div>').join('')+'</div>'; }
+    function expBul(items){ return '<ul class="space-y-1.5">'+items.map(t=>'<li class="flex gap-2"><span class="text-brand font-bold">•</span><span>'+t+'</span></li>').join('')+'</ul>'; }
+    function expKwCard(title,arr){ return '<div class="rounded-lg border border-[#EFEDE7] p-3"><p class="text-[12px] font-bold text-brand mb-2">'+title+'</p><ol class="space-y-1 text-[13px]">'+arr.map((k,i)=>'<li class="flex gap-2"><span class="num text-slate-400 w-4">'+(i+1)+'</span><span class="text-ink">'+k+'</span></li>').join('')+'</ol></div>'; }
+    function expLL(title,insight,fixes){ return '<div class="rounded-lg border border-[#EFEDE7] p-4"><p class="font-bold text-ink mb-1">'+title+'</p><p class="text-[13px] text-slate-600 mb-2"><span class="text-brand font-semibold">인사이트</span> · '+insight+'</p>'+expBul(fixes)+'</div>'; }
+    function expIgIns(){ return (window.OWNED&&OWNED.instagram&&OWNED.instagram.insights)||{}; }
+    function expJulyKpi(){ const ins=expIgIns(); const ko=v=>v==null?'-':(v>=10000?(Math.round(v/1000)/10+'만'):v.toLocaleString());
+      return expMcards([[ko(ins.reach30),'인스타 도달 (30일)','Graph API 실측'],[ins.profileViews30!=null?ins.profileViews30.toLocaleString():'-','프로필 방문','최근 30일'],['248만+','방배동 랜선집들이','7/8 게재 · 조회수'],[ins.websiteClicks30!=null?ins.websiteClicks30.toLocaleString():'-','웹사이트 클릭','프로필 링크']]); }
+    function expJulyOverview(){ return expJulyKpi()+'<div class="mt-5">'+expBul(['하반기 캠페인 지속 운영 · 상반기 성과 기반 최적화 전개','<b>랜선집들이 ‘방배동 원페렐라’ 게재</b>(7/8) — 조회수 248만+ 기록','<b>Instagram 인사이트 자동 연동 시작</b> — 도달·프로필방문·클릭 매일 실측 수집','<span class="text-slate-400">※ 7월 광고·PR 상세 수치는 월말 확정 후 갱신</span>'])+'</div>'; }
+    function expJulyDigital(){ const ins=expIgIns(); const f=v=>v==null?'<span class="text-slate-300">-</span>':v.toLocaleString();
+      return expTbl(['지표','최근 30일'],[['도달(Reach)',f(ins.reach30)],['프로필 방문',f(ins.profileViews30)],['참여 계정',f(ins.accountsEngaged30)],['총 상호작용',f(ins.totalInteractions30)],['웹사이트 클릭',f(ins.websiteClicks30)]])+'<p class="text-[11px] text-slate-400 mt-3">※ Instagram Graph API 실측 · 매일 자동 수집(18:50) · @aqaralife.official. 데이터가 쌓일수록 월간 추세 비교가 가능해집니다.</p>'; }
+    const EXP_REPORTS={
+      '2026-06':{ label:'2026 상반기', date:'2026 H1 · 1~6월', title:'상반기 스마트홈 인테리어\n마케팅 결산 리포트', cover:{sub:'스마트홈 인테리어 시장 선점 · 소비자·사업자 리드 전환 극대화'},
+        toc:['마케팅 Overview & 주요 성과','주요 활동 및 기간','퍼포먼스 — 온라인 광고 성과','퍼포먼스 — 검색 광고 키워드','퍼포먼스 — 인스타(사업자)','퍼포먼스 — 인스타(소비자)','콘텐츠 — 랜선집들이','PR — 보도 성과 & 전후 분석','오프라인 — 코엑스 더메종','Lessons & Learn'],
+        slides:[
+          { kicker:'01 · OVERVIEW', title:'마케팅 Overview & 주요 성과', html:
+            expMcards([['83건','스마트홈 인테리어 보도','상반기 누적'],['536만+','디지털 광고·콘텐츠 총노출','도달'],['178건','인테리어+교육 문의 인입','리드'],['+281%','홈페이지 방문자 (YoY)','증가율']])
+            +'<div class="grid md:grid-cols-2 gap-6 mt-6">'
+            +'<div><p class="font-bold text-ink mb-2">개요 · 목적</p>'+expBul(['2026년 상반기 스마트홈 인테리어 마케팅 활동','<b>스마트홈 인테리어 시장 선점</b> 및 브랜드 인지도 제고','소비자·사업자 <b>동시 공략</b>을 통한 리드 전환 극대화'])+'</div>'
+            +'<div><p class="font-bold text-ink mb-2">주요 성과 · 비용</p>'+expBul(['공식 홈페이지 방문자 <b>10.9만명</b> (YoY +276% · +8만명)','디지털 콘텐츠 총 도달 <b>536만+</b>','인테리어+교육 문의 <b>총 178건</b> <span class="text-slate-400">(일반문의·개별 영업메일 제외)</span>','총 집행 비용 <b>9,320만원</b> <span class="text-slate-400">(광고비+오프라인 전시+제작비)</span>'])+'</div>'
+            +'</div>' },
+          { kicker:'01 · ACTIVITY', title:'주요 활동 및 기간', html:
+            '<div class="rounded-lg bg-[#FBF7E8] border border-[#F0E6BF] p-4 mb-4"><p class="font-bold text-ink">[광고] Meta 타깃팅 광고 운영 <span class="text-slate-500 font-normal text-[12px]">· 2026.4.13 ~ 6.30 (총 79일)</span></p><div class="grid sm:grid-cols-2 gap-3 mt-3">'
+            +'<div class="rounded-lg bg-white border border-[#EFEDE7] p-3"><p class="text-[12px] font-bold text-brand">B2C 전략</p><p class="text-[13px] mt-1">인테리어·스마트홈 관심사 타깃 대상, <b>‘랜선집들이’</b> 콘텐츠로 참여 및 웹사이트 유입 유도</p></div>'
+            +'<div class="rounded-lg bg-white border border-[#EFEDE7] p-3"><p class="text-[12px] font-bold text-brand">B2B 전략</p><p class="text-[13px] mt-1">인테리어 디자이너·업계 종사자 대상, <b>전문가 교육 프로그램</b> 및 맞춤형 서비스 소재 활용</p></div>'
+            +'</div></div>'+expBul(['<b>[콘텐츠]</b> 실제 레퍼런스 기반 ‘랜선집들이’ 콘텐츠 제작','<b>[PR·오프라인]</b> 미디어 노출 및 전시회(코엑스 더메종) 참여']) },
+          { kicker:'02 · PERFORMANCE', title:'온라인 광고 성과 요약', html:
+            '<div class="rounded-lg bg-[#FBF7E8] border border-[#F0E6BF] p-3 mb-4 text-[13px]"><b>핵심 인사이트</b> — 캠페인 후반 소재 최적화·모니터링으로 <b>CTR 0.80% → 1.82%</b> 대폭 상승, 유입 효율 개선. (사업자=네이버 검색 전환 우세 / 소비자=‘소파 한 대 값’ 소재 반응)</div>'
+            +expTbl(['영역','노출','클릭','CTR','조회','VTR'],[['검색(파워링크)','36,434','450','1.24%','–','–'],['인스타_사업자(이미지)','361,033','5,652','1.57%','–','–'],['<i class="text-slate-400">사업자 Sub Total</i>','397,467','6,102','1.54%','–','–'],['인스타_소비자(영상)','2,401,537','30,125','1.25%','915,800','38.13%'],['<i class="text-slate-400">소비자 Sub Total</i>','2,401,537','30,125','1.25%','915,800','38.13%']],['합계','2,799,004','36,227','1.29%','915,800','32.72%']) },
+          { kicker:'02 · SEARCH AD', title:'검색 광고 키워드 TOP 5', html:
+            '<div class="grid sm:grid-cols-3 gap-3">'+expKwCard('노출 TOP 5',['스마트홈','인테리어배우기','인테리어종류','인테리어자격증','집수리교육'])+expKwCard('클릭 TOP 5',['스마트홈','스마트홈구축','인테리어배우기','인테리어종류','홈IOT'])+expKwCard('전환 TOP 5',['스마트홈구축','스마트홈','홈IOT','IOT인테리어','스마트홈리모델링'])+'</div>'
+            +'<p class="text-[12px] text-slate-500 mt-3">※ 전환은 노출/클릭 상위엔 없으나 <b>스마트홈 리모델링·인테리어 관련 소규모·롱테일 키워드</b> 중심 발생(홈IOT·IOT교육·아카라설치·스마트홈설치·스마트홈교육 등).</p>' },
+          { kicker:'02 · INSTAGRAM (B2B)', title:'인스타그램 광고 · 사업자 타깃', html:
+            expBul(['<b>서비스 홍보 소재(B3)</b> 유입 최적화 — 직관적 표현, 사업자 소재 중 최고 클릭률','<b>교육 소재(A1)</b> 고순도 리드 — “3시간 교육으로 끝” 구체 카피로 CTR·전환(CVR 0.65%) 동시 확보','소재 1개당 하나의 명확한 메시지 → 단순하지만 임팩트 있게'])
+            +'<p class="font-bold text-ink mt-4 mb-2 text-[12px]">사업자 소재 효율순 (CTR)</p>'+expTbl(['소재','노출','클릭','CTR'],[['B3_서비스','130,036','2,639','2.00%'],['A1_교육','26,603','461','1.70%'],['B1_서비스+교육','182,873','2,318','1.33%'],['B2_서비스+교육','10,388','114','1.11%'],['B4_서비스+교육','11,133','120','1.11%']]) },
+          { kicker:'02 · INSTAGRAM (B2C)', title:'인스타그램 광고 · 소비자 타깃', html:
+            expBul(['<b>‘소파 하나 값도 안 해요’</b> 카피 — 최고 조회율(VTR 39.54%)·전환율(CVR 0.96%) (초반 3초 Hook·액션 유도)','<b>불편함(1)·영화관(4)</b> — 두 소재 모두 100만+ 노출·높은 VTR로 유입 확대 주도','뾰족한 메시지에 반응 · 단순 ‘스마트홈이 좋다’로는 고객을 잡을 수 없음'])
+            +'<p class="font-bold text-ink mt-4 mb-2 text-[12px]">소비자 소재 효율순 (VTR)</p>'+expTbl(['소재','노출','클릭','조회','VTR'],[['2_가격','31,036','627','12,273','39.54%'],['1_불편함','1,320,733','8,313','511,011','38.69%'],['4_영화관','1,037,764','21,018','389,345','37.52%'],['3_일반','12,004','167','3,171','26.42%']]) },
+          { kicker:'03 · CONTENT', title:'랜선집들이 콘텐츠 성과', html:
+            expTblL(['구분','용인 신봉동','방배동 원페렐라','여의도 리체시아','서울 암사동'],[['컨셉','로망·비주얼 중심','타깃 최적화·리드 전환형','큰 집일수록 스마트홈','스마트홈 시공 비하인드'],['게시일','3/13(금)','7/8(수)','7월 중 예정','7월 중 예정'],['성과','노출 3.2만 · CTR 6.9% · 조회 2.9천+','노출 8.7천 · CTR 2.1% · 조회 248만+','편집 중','편집 중'],['키워드','50평대·풀시공·자동화','가성비·소파 한 대 값·래미안','–','–']]) },
+          { kicker:'04 · PR', title:'PR 보도 성과 & 캠페인 전후 분석', html:
+            '<div class="mb-3"><span class="rounded-lg border border-[#EFEDE7] px-4 py-2 inline-block"><span class="text-[12px] text-slate-500">보도 실적</span> <b class="text-ink num">83건</b> <span class="text-[12px] text-slate-400">/ 상반기 전체 141건 (59%)</span></span></div>'
+            +'<p class="text-[12px] font-bold text-slate-500 mb-1">보도자료 분류</p><div class="flex flex-wrap gap-2 mb-4">'+[['트렌드','50%'],['MOU·행사','27%'],['신제품','14%'],['컨설팅·서비스','9%'],['시공사례','1%']].map(x=>'<span class="px-2.5 py-1 rounded-full bg-[#FAF9F6] border border-[#EFEDE7] text-[12px]"><b class="text-ink">'+x[0]+'</b> '+x[1]+'</span>').join('')+'</div>'
+            +'<p class="text-[12px] font-bold text-slate-500 mb-2">캠페인 전후 변화</p>'+expBul(['<b>제품→라이프스타일 홍보 전환</b> — ‘노동 효율화’·‘도어인 트렌드’ 등 결합. 기획 보도 비중 44.3%(35건) → <b>54.5%(24건)</b>','<b>학회·전시 연계로 브랜드 권위 상승</b> — 기관 협업·오프라인 보도가 과반(54.5%), 더메종 르포로 신뢰도 극대화','<b>인플루언서 2차 확산</b> — 잇섭·마켓피디아·동네친구강나미 등으로 2030 대중 타깃 확장']) },
+          { kicker:'05 · OFFLINE', title:'코엑스 더메종(THE MAISON) 전시 성과', html:
+            '<div class="grid sm:grid-cols-2 gap-3 mb-4"><div class="rounded-lg border border-[#EFEDE7] p-3"><p class="text-[12px] text-slate-500">일시 · 장소</p><p class="font-semibold text-ink text-[13px] mt-0.5">2026.6.25(목)~6.28(일) · 코엑스 C홀 (부스 D112)</p></div><div class="rounded-lg border border-[#EFEDE7] p-3"><p class="text-[12px] text-slate-500">KPI 목표</p><p class="font-semibold text-ink text-[13px] mt-0.5">상담·리드 확보 1,500건 이상</p></div></div>'
+            +expMcards([['3,000명+','총 관람객',''],['1,788개','확보 DB','목표 대비 +119%'],['1,323건','B2C (74%)','개인·인플루언서·학생'],['465건','B2B (26%)','기업·비즈니스']]) },
+          { kicker:'06 · LESSONS & LEARN', title:'인사이트 & 하반기 Next Steps', html:
+            '<div class="space-y-3">'+expLL('📣 퍼포먼스 광고','구체적 니즈 키워드(‘설치’·‘구축’·‘리모델링’) 효율↑, 단 시장 미성숙으로 다양한 파워·연관 키워드 운영 필요',['무중단 머신러닝 위한 광고 지속 운영','구축·설치·시공·리모델링 조합 고관여 롱테일 키워드 전면 재배치','성과 저하 키워드 CPC 하향 · 성과 키워드 지속 추가'])+expLL('🎬 랜선집들이 콘텐츠','PD 개별 컨택으로 스케줄 불안정·리드타임 지연(2개월 소요)',['하반기 외주 프로덕션 고정 계약 → 촬영~게재 3주 이내 안정화'])+expLL('📰 PR & 커뮤니티','기존 매체 외 고관여 타깃 집단으로 활동 영역 확대 필요',['신혼부부 커뮤니티(‘다이렉트 웨딩’·‘오늘의집’) 내 스마트홈 홍보','사내 인플루언서 전략 실행'])+'</div>' },
+        ] },
+      '2026-07':{ label:'2026년 7월', date:'2026.07', title:'7월 마케팅 리포트', cover:{sub:'하반기 스마트홈 인테리어 마케팅 · 진행 현황 & 실행 계획'},
+        toc:['7월 Overview','콘텐츠 — 랜선집들이','디지털 — 인스타그램 인사이트','하반기 실행 계획'],
+        slides:[
+          { kicker:'01 · OVERVIEW', title:'7월 마케팅 리포트 · Overview', html:expJulyOverview },
+          { kicker:'02 · CONTENT', title:'콘텐츠 · 랜선집들이', html:
+            expTblL(['구분','방배동 원페렐라','여의도 리체시아','서울 암사동'],[['컨셉','타깃 최적화·리드 전환형','큰 집일수록 스마트홈이 필요한 이유','스마트홈 시공 비하인드'],['상태','게재 완료 (7/8)','편집 중 · 7월 업로드 예정','편집 중 · 7월 업로드 예정'],['성과','노출 8.7천 · CTR 2.1% · 조회 248만+','–','–'],['키워드','가성비·소파 한 대 값·래미안 원베일리 48평','–','–']]) },
+          { kicker:'03 · DIGITAL', title:'디지털 · 인스타그램 인사이트 (자동 연동)', html:expJulyDigital },
+          { kicker:'04 · NEXT STEPS', title:'하반기 실행 계획', html:
+            '<div class="space-y-3">'+expLL('📣 퍼포먼스 광고','고관여 니즈 키워드 효율↑',['구축·설치·시공·리모델링 롱테일 키워드 재배치','성과 저하 키워드 CPC 하향, 성과 키워드 추가','무중단 머신러닝 위한 지속 운영'])+expLL('🎬 콘텐츠','랜선집들이 리드타임 단축 필요',['외주 프로덕션 고정 계약 → 촬영~게재 3주 이내'])+expLL('📰 PR & 커뮤니티','고관여 타깃 확장',['다이렉트 웨딩·오늘의집 커뮤니티 스마트홈 홍보','사내 인플루언서 전략 실행'])+'</div>' },
+        ] },
+    };
+    let expMonth='2026-06';
+    function expFrame(kicker,title,body,rep){
+      return '<section class="exp-slide card overflow-hidden"><div class="px-8 pt-6 pb-3 border-b border-[#F0EDE6] flex items-baseline justify-between gap-3"><div><p class="text-[11px] font-extrabold tracking-widest text-brand uppercase">'+kicker+'</p><h3 class="text-xl font-extrabold text-ink mt-1">'+title+'</h3></div><span class="text-[11px] text-slate-300 whitespace-nowrap">'+rep.label+'</span></div><div class="px-8 py-6 text-[13.5px] text-slate-700 leading-relaxed">'+body+'</div></section>';
+    }
+    function expCover(rep){
+      return '<section class="exp-slide rounded-2xl overflow-hidden text-white" style="background:linear-gradient(135deg,#1b1b1b 0%,#2a2418 55%,#3a3413 100%)"><div class="px-10 py-14 min-h-[420px] flex flex-col justify-between gap-8"><div><span class="inline-block px-3 py-1 rounded-full bg-[#FBC400] text-[#3a2f00] text-[12px] font-extrabold tracking-wide">AQARA · MKT REPORT</span></div><div><h2 class="text-3xl sm:text-4xl font-extrabold leading-tight whitespace-pre-line">'+rep.title+'</h2><p class="text-[#FBC400] font-bold mt-3 text-lg">'+rep.date+'</p>'+(rep.cover&&rep.cover.sub?'<p class="text-slate-300 mt-1 text-sm">'+rep.cover.sub+'</p>':'')+'</div><div class="flex items-center justify-between text-slate-400 text-[12px]"><span>아카라라이프 마케팅팀</span><span>스마트홈 인테리어</span></div></div></section>';
+    }
+    function expToc(rep){
+      const items=(rep.toc||[]).map((t,i)=>'<div class="flex items-center gap-3 py-2.5 border-b border-[#F0EDE6]"><span class="w-7 h-7 rounded-full bg-ink text-white text-[12px] font-bold flex items-center justify-center shrink-0 num">'+(i+1)+'</span><span class="font-semibold text-ink text-[14px]">'+t+'</span></div>').join('');
+      return expFrame('CONTENTS','목차','<div class="max-w-2xl">'+items+'</div>',rep);
+    }
+    function renderExport(){
+      const months=Object.keys(EXP_REPORTS); if(!EXP_REPORTS[expMonth]) expMonth=months[0];
+      const tabs=document.getElementById('expMonthTabs');
+      if(tabs) tabs.innerHTML=months.map(m=>'<button onclick="expMonth=\''+m+'\';renderExport()" class="px-3 py-1.5 rounded-full text-[13px] '+(expMonth===m?'bg-ink text-white font-semibold':'bg-white border border-[#E6E6E3] text-muted hover:text-ink font-medium')+'">'+EXP_REPORTS[m].label+'</button>').join('');
+      const rep=EXP_REPORTS[expMonth], wrap=document.getElementById('expSlides'); if(!wrap||!rep) return;
+      let out=expCover(rep)+expToc(rep);
+      out+=(rep.slides||[]).map(s=>{ const body=(typeof s.html==='function')?s.html():s.html; return expFrame(s.kicker||rep.label, s.title, body, rep); }).join('');
+      wrap.innerHTML=out;
+    }
+    function expPrint(){ document.body.classList.add('printing-export'); window.print(); }
+    window.addEventListener('afterprint',()=>document.body.classList.remove('printing-export'));
+    function maybeRenderExport(){ const v=document.getElementById('view-export'); if(v && !v.classList.contains('hidden')) renderExport(); }
     function renderReport(){
       const [lo,hi]=reportRange(); const cut=lo;
       document.getElementById('reportStamp').textContent='생성일 '+(new Date().toISOString().slice(0,10))+' · 기간 '+lo+'~'+hi+(OWNED.generatedAt?(' · 데이터 '+OWNED.generatedAt):'');
