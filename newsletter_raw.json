@@ -1,12 +1,127 @@
 {
- "generatedAt": "2026-07-20 12:45",
- "emailsStatus": 200,
- "emails": {
-  "total": 61,
-  "offset": 0,
-  "limit": 20,
-  "items": [
-   {
+ "generatedAt": "2026-07-20 12:49",
+ "total": 61,
+ "listIdDistribution": {
+  "272115": {
+   "count": 40,
+   "senders": [
+    "아카라코리아",
+    "아카라라이프",
+    "아카라 라이프",
+    "시절레터"
+   ],
+   "sample": "(광고) 아카라코리아 뉴스레터를 만나보세요, 다양한 소식이 기다립니다!"
+  },
+  "317615": {
+   "count": 6,
+   "senders": [
+    "Aqaralife",
+    "AqaraLife",
+    "Aqara Life"
+   ],
+   "sample": "Aqaralife Newsletter"
+  },
+  "347123": {
+   "count": 2,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "매직패드 S1 Plus 온라인 설명회 참가 링크 전달드립니다."
+  },
+  "386710": {
+   "count": 1,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "[중요] 아카라라이프 발주몰 신규 오픈 안내"
+  },
+  "462091": {
+   "count": 1,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "(광고)아카라라이프 홈테이블데코페어 부스에 방문해주셔서 감사합니다."
+  },
+  "476848": {
+   "count": 2,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "[웨비나] 아카라라이프 파트너를 위한 비즈니스 인사이트 "
+  },
+  "477337": {
+   "count": 1,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "고객의 스마트홈 요청, 이제 자신있게 ‘YES’라고 하셔도 됩니다!"
+  },
+  "480572": {
+   "count": 1,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "★온라인 세미나 입장 링크 발송★ 아카라라이프 파트너를 위한 비즈니스 인사이트"
+  },
+  "481344": {
+   "count": 1,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "[아카라라이프] 어제 진행된 웨비나 자료 공유 및 행사 안내"
+  },
+  "484209": {
+   "count": 2,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "(세미나 초대) 대전·충청 스마트홈 비즈니스 전략 세미나에 초대합니다"
+  },
+  "489087": {
+   "count": 1,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "스마트홈 인테리어 세미나에 참석해주셔서 감사합니다"
+  },
+  "489876": {
+   "count": 1,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "📂대전 세미나 자료 공유: 세미나 때 못봬서 아쉬웠어요. "
+  },
+  "498881": {
+   "count": 1,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "(광고) 나다운 공간의 완성, 스마트홈 | 6월 더메종 전시회에 초대합니다."
+  },
+  "501353": {
+   "count": 1,
+   "senders": [
+    "아카라라이프"
+   ],
+   "sample": "(광고) 더메종 스마트홈🏠 인테리어 자료 보내드려요. "
+  }
+ },
+ "statProbe": {
+  "/emails/{id}/statistics": {
+   "status": 404,
+   "body": "{'message': 'Not Found'}"
+  },
+  "/emails/{id}/stat": {
+   "status": 404,
+   "body": "{'message': 'Not Found'}"
+  },
+  "/emails/{id}/report": {
+   "status": 404,
+   "body": "{'message': 'Not Found'}"
+  },
+  "/emails/{id}": {
+   "status": 200,
+   "body": {
     "id": 1669296,
     "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
     "status": 3,
@@ -19,282 +134,29 @@
     "groupIds": null,
     "sentTime": "2023-08-01T10:00:00+09:00",
     "createdTime": "2023-07-24T10:08:09+09:00"
-   },
-   {
-    "id": 1694255,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "아카라코리아 부스를 방문해주셔서 감사합니다.",
-    "senderEmail": "inquiry@aqarakorea.com",
-    "senderName": "아카라코리아",
-    "permanentLink": "https://stib.ee/1pM8",
-    "segmentIds": null,
-    "groupIds": [
-     272127
-    ],
-    "sentTime": "2023-08-08T14:11:57+09:00",
-    "createdTime": "2023-08-07T13:41:33+09:00"
-   },
-   {
-    "id": 1698733,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고) 아카라라이프 9월 뉴스레터",
-    "senderEmail": "inquiry@aqarakorea.com",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/q4P8",
-    "segmentIds": null,
-    "groupIds": [
-     280711
-    ],
-    "sentTime": "2023-09-12T16:08:59+09:00",
-    "createdTime": "2023-08-08T09:56:18+09:00"
-   },
-   {
-    "id": 1743555,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "아카라코리아 사명 변경 안내드립니다.",
-    "senderEmail": "inquiry@aqarakorea.com",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/AZn8",
-    "segmentIds": null,
-    "groupIds": [
-     272127,
-     270802
-    ],
-    "sentTime": "2023-09-04T15:01:33+09:00",
-    "createdTime": "2023-09-04T14:46:54+09:00"
-   },
-   {
-    "id": 1762909,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고) 아카라 라이프 10월 뉴스레터",
-    "senderEmail": "inquiry@aqarakorea.com",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/hhw8",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2023-10-18T15:04:02+09:00",
-    "createdTime": "2023-09-14T16:11:48+09:00"
-   },
-   {
-    "id": 1808492,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "아카라 라이프 파트너스 데이 참석에 감사드립니다.",
-    "senderEmail": "inquiry@aqarakorea.com",
-    "senderName": "아카라 라이프",
-    "permanentLink": "https://stib.ee/5ZK9",
-    "segmentIds": null,
-    "groupIds": [
-     291074
-    ],
-    "sentTime": "2023-10-26T13:04:42+09:00",
-    "createdTime": "2023-10-16T10:06:48+09:00"
-   },
-   {
-    "id": 1844475,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고) 아카라 라이프 11월 뉴스레터",
-    "senderEmail": "inquiry@aqarakorea.com",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/4Od9",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2023-11-21T10:00:00+09:00",
-    "createdTime": "2023-11-03T15:24:33+09:00"
-   },
-   {
-    "id": 1898000,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고) 아카라 라이프 12월 뉴스레터",
-    "senderEmail": "inquiry@aqarakorea.com",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/DP5A",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2023-12-26T15:31:10+09:00",
-    "createdTime": "2023-12-04T14:52:59+09:00"
-   },
-   {
-    "id": 2024896,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고) 아카라라이프 2월 뉴스레터",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/vp9B",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-02-28T14:00:01+09:00",
-    "createdTime": "2024-02-21T09:43:46+09:00"
-   },
-   {
-    "id": 2029795,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 317615,
-    "subject": "Aqaralife Newsletter",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "Aqaralife",
-    "permanentLink": "https://stib.ee/ZOCB",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-02-28T14:00:01+09:00",
-    "createdTime": "2024-02-23T13:18:26+09:00"
-   },
-   {
-    "id": 2116904,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고) 아카라라이프 4월 뉴스레터",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/4qvB",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-04-17T14:01:25+09:00",
-    "createdTime": "2024-04-11T15:41:01+09:00"
-   },
-   {
-    "id": 2127271,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 317615,
-    "subject": "AqaraLife NewsLetter",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "AqaraLife",
-    "permanentLink": "https://stib.ee/fA1C",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-04-17T16:44:05+09:00",
-    "createdTime": "2024-04-17T13:39:16+09:00"
-   },
-   {
-    "id": 2221867,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고) 아카라라이프 6월 뉴스레터",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/RYoC",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-06-19T14:00:01+09:00",
-    "createdTime": "2024-06-10T13:24:03+09:00"
-   },
-   {
-    "id": 2238964,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 317615,
-    "subject": "AqaraLife NewsLetter",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "AqaraLife",
-    "permanentLink": "https://stib.ee/aTxC",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-06-19T14:00:01+09:00",
-    "createdTime": "2024-06-19T08:45:34+09:00"
-   },
-   {
-    "id": 2249976,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 347123,
-    "subject": "매직패드 S1 Plus 온라인 설명회 참가 링크 전달드립니다.",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/ME3D",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-06-26T10:11:35+09:00",
-    "createdTime": "2024-06-25T11:04:47+09:00"
-   },
-   {
-    "id": 2251971,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 347123,
-    "subject": "아카라 매직패드 S1 Plus 설명회에 참석해주셔서 감사합니다.",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/vG4D",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-06-27T11:00:00+09:00",
-    "createdTime": "2024-06-26T08:40:32+09:00"
-   },
-   {
-    "id": 2257083,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고) 아카라라이프 8월 뉴스레터",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/Vw6D",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-08-14T14:00:00+09:00",
-    "createdTime": "2024-06-28T08:53:19+09:00"
-   },
-   {
-    "id": 2340250,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 317615,
-    "subject": "AqaraLife Newsletter - August 2024",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "Aqara Life",
-    "permanentLink": "https://stib.ee/WQoD",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-08-14T14:00:01+09:00",
-    "createdTime": "2024-08-14T08:25:39+09:00"
-   },
-   {
-    "id": 2367825,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고) 아카라라이프 10월 뉴스레터",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/Bq2E",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-10-16T14:00:00+09:00",
-    "createdTime": "2024-08-29T10:39:59+09:00"
-   },
-   {
-    "id": 2453049,
-    "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
-    "status": 3,
-    "listId": 272115,
-    "subject": "(광고)아카라라이프 AIoT 국제전시회 부스에 초대합니다.",
-    "senderEmail": "sales@aqara.kr",
-    "senderName": "아카라라이프",
-    "permanentLink": "https://stib.ee/hJlE",
-    "segmentIds": null,
-    "groupIds": null,
-    "sentTime": "2024-10-22T13:00:01+09:00",
-    "createdTime": "2024-10-16T17:41:45+09:00"
    }
-  ]
+  },
+  "/emails/{id}/statistics/overview": {
+   "status": 404,
+   "body": "{'message': 'Not Found'}"
+  },
+  "/emails/{id}/summary": {
+   "status": 404,
+   "body": "{'message': 'Not Found'}"
+  }
+ },
+ "sampleItem": {
+  "id": 1669296,
+  "owner": "23017e8a-9d9e-42f0-9bf9-bf5ba54546f1",
+  "status": 3,
+  "listId": 272115,
+  "subject": "(광고) 아카라코리아 뉴스레터를 만나보세요, 다양한 소식이 기다립니다!",
+  "senderEmail": "inquiry@aqarakorea.com",
+  "senderName": "아카라코리아",
+  "permanentLink": "https://stib.ee/nqA8",
+  "segmentIds": null,
+  "groupIds": null,
+  "sentTime": "2023-08-01T10:00:00+09:00",
+  "createdTime": "2023-07-24T10:08:09+09:00"
  }
 }
