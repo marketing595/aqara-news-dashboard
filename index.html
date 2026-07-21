@@ -2712,8 +2712,8 @@
           <p class="text-[12px] font-bold text-[#4B32C3]">🎯 기회 키워드 <span class="font-normal text-slate-400">(검색 관심↑ · 발행↓ = 선점 기회)</span> <span class="text-[#8a6d00] font-semibold">${oppN}개</span></p>
           <div class="flex items-center gap-1 flex-wrap">${volTog}${sortTog}<a href="${esc(KWMETA.source||'https://datalab.naver.com/keyword/trendSearch.naver')}" target="_blank" rel="noopener" class="text-[10px] text-slate-400 hover:text-ink font-medium ml-1">데이터랩 ↗</a></div>
         </div>
+        <p class="text-[10px] text-slate-500 mb-2.5 leading-relaxed bg-white/60 rounded-md border border-[#EDE9FF] px-2.5 py-2">※ <b class="text-[#8a6d00]">기회</b> = 전월대비 관심 +5%↑ · 검색량 상위(중앙값 이상) · 우리 발행 2건 이하 · <b>경쟁사·자사 키워드 제외</b>.<br>· <b>%(▲▼)</b> = <b>전월대비 관심도 변화율</b> = (이번달−전달)÷전달×100 (관심도 = 데이터랩 월간 상대지수 0~100)<br>· <b>검색량(월 N회)</b> = ${volLbl}<br>· <b>출처</b> 네이버 데이터랩·검색광고 · 월간 · 기간 <b>${per||'수집 중'}</b> · <b>${KWTREND.length}개</b> 추적 · <b>매달 1일 갱신</b>${KWMETA.generatedAt?' · '+esc(KWMETA.generatedAt)+' 기준':''}</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">${rows.map(chip).join('')}</div>
-        <p class="text-[10px] text-slate-400 mt-2 leading-relaxed">※ <b class="text-[#8a6d00]">기회</b> = 전월대비 관심 +5%↑ · 검색량 상위(중앙값 이상) · 우리 발행 2건 이하 · <b>경쟁사·자사 키워드 제외</b>.<br>· <b>%(▲▼)</b> = <b>전월대비 관심도 변화율</b> = (이번달−전달)÷전달×100 (관심도 = 데이터랩 월간 상대지수 0~100)<br>· <b>검색량(월 N회)</b> = ${volLbl}<br>· <b>출처</b> 네이버 데이터랩·검색광고 · 월간 · 기간 <b>${per||'수집 중'}</b> · <b>${KWTREND.length}개</b> 추적 · <b>매달 1일 갱신</b>${KWMETA.generatedAt?' · '+esc(KWMETA.generatedAt)+' 기준':''}</p>
       </div>`; }
     function renderMktPr(){ prLoadKw(renderPrOpp); prSyncStart(); renderPrAngles(); renderPrCalendar(); }
     // ===== PR 앵글 기획 · 캘린더 (Firebase 실시간 공유) =====
