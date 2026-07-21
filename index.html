@@ -108,7 +108,6 @@
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-7 overflow-x-auto">
       <button id="grpBtn-pr" onclick="switchGroup('pr')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-brand text-ink whitespace-nowrap">PR</button>
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
-      <button id="grpBtn-ad" onclick="switchGroup('ad')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">퍼포먼스AD</button>
       <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
       <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
     </div>
@@ -1138,12 +1137,14 @@
            <button id="mktBtn-blog" onclick="mktSub('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
            <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
            <span class="w-px self-stretch my-1 bg-[#D9D0FF]"></span>
+           <button id="mktBtn-ad" onclick="mktSub('ad')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">퍼포먼스AD</button>
            <button id="mktBtn-cafe" onclick="mktSub('cafe')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">카페·커뮤니티</button>
            <button id="mktBtn-report" onclick="mktSub('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">종합 리포트</button>
            <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
          </div>
        </div>
        <div id="mktKpiSlot"></div>
+       <div id="mktAdSlot"></div>
        <div id="mktCafeSlot"></div>
        <div id="mktReportSlot"></div>
        <div id="mktMedialistSlot"></div>
@@ -2496,16 +2497,15 @@
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
       // 상위 뷰만 토글(카페·리포트 클러스터는 view-mkt 내부로 편입 → mktSub/mktReportSub가 관리)
-      ['analytics','briefing','owned','ad','library','mkt'].forEach(v=>{
+      ['analytics','briefing','owned','library','mkt'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','ad','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
+      ['pr','owned','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
-      if(t==='ad'){ loadAd(); }
       if(t==='library'){ loadLibrary(); }
       if(t==='mkt'){ mktEnter(); }
     }
@@ -2799,7 +2799,7 @@
     function mktMovePanels(){ if(mktMoved) return;
       const mv=(id,slot)=>{ const e=document.getElementById(id), s=document.getElementById(slot); if(e&&s) s.appendChild(e); };
       mv('view-kpi','mktKpiSlot'); mv('view-medialist','mktMedialistSlot'); mv('view-calendar','mktCalendarSlot');
-      mv('view-cafe','mktCafeSlot');
+      mv('view-ad','mktAdSlot'); mv('view-cafe','mktCafeSlot');
       // 종합 리포트 클러스터(서브내브 + 6개 뷰)를 리포트 슬롯으로 편입
       mv('subnav-report','mktReportSlot');
       ['view-report','view-campaign','view-market','view-cdj','view-competitor','view-export'].forEach(id=>mv(id,'mktReportSlot'));
@@ -2818,6 +2818,7 @@
       const ml=document.getElementById('view-medialist'); if(ml) ml.classList.toggle('hidden', s!=='medialist');
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       const cf=document.getElementById('view-cafe'); if(cf) cf.classList.toggle('hidden', s!=='cafe');
+      const adv=document.getElementById('view-ad'); if(adv) adv.classList.toggle('hidden', s!=='ad');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
       document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
@@ -2825,7 +2826,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['kpi','weekly','medialist','calendar','insta','blog','prpitch','cafe','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
+      ['kpi','weekly','medialist','calendar','insta','blog','prpitch','ad','cafe','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(s==='medialist'){ renderMediaList(); }
@@ -2833,6 +2834,7 @@
       if(s==='insta'){ renderMktInsta(); }
       if(s==='blog'){ renderMktBlog(); }
       if(s==='prpitch'){ renderMktPr(); }
+      if(s==='ad'){ loadAd(); }
       if(s==='cafe'){ renderCafe(); loadCafe(); loadDcinside(); }
       if(s==='report'){ mktReportSub(mktRptView); }
     }
