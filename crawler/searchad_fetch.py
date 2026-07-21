@@ -82,25 +82,22 @@ def main():
                              "cost": num(row.get("salesAmt")), "conv": num(row.get("ccnt")),
                              "convRate": num(row.get("crto")), "convAmt": num(row.get("convAmt"))})
 
+    # 일별(timeIncrement) 은 /stats 미지원(code 11001) → StatReports 필요. 우선 시도만 하고 안 되면 생략.
     daily = []
-    byd = {}
     if ids:
-        # 일별은 캠페인별 단일 id 조회 후 날짜 합산(배치+timeIncrement 조합이 400 나는 경우 대비)
-        for cid in ids:
-            sc, j = stats([cid], ["impCnt", "clkCnt", "salesAmt"], s, u, "1")
-            if "dailyStatus" not in raw:
-                raw["dailyStatus"] = sc
-                if sc != 200:
-                    raw["dailyError"] = j
-            for row in (j.get("data", []) if isinstance(j, dict) else []):
-                d = row.get("dateStart") or row.get("statDt") or row.get("date") or row.get("dateEnd")
+        sc, j = stats(ids, ["impCnt", "clkCnt", "salesAmt"], s, u, "1")
+        raw["dailyStatus"] = sc
+        if sc == 200 and isinstance(j, dict):
+            byd = {}
+            for row in j.get("data", []):
+                d = row.get("dateStart") or row.get("statDt") or row.get("date")
                 if not d:
                     continue
                 e = byd.setdefault(str(d)[:10], {"imp": 0, "clk": 0, "cost": 0})
-                e["imp"] += num(row.get("impCnt"))
-                e["clk"] += num(row.get("clkCnt"))
-                e["cost"] += num(row.get("salesAmt"))
-        daily = [{"date": d, "imp": byd[d]["imp"], "clk": byd[d]["clk"], "cost": byd[d]["cost"]} for d in sorted(byd)]
+                e["imp"] += num(row.get("impCnt")); e["clk"] += num(row.get("clkCnt")); e["cost"] += num(row.get("salesAmt"))
+            daily = [{"date": d, "imp": byd[d]["imp"], "clk": byd[d]["clk"], "cost": byd[d]["cost"]} for d in sorted(byd)]
+        else:
+            raw["dailyError"] = j
 
     bytype = {}
     for c in per_camp:

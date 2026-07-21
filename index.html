@@ -1031,10 +1031,9 @@
        <span id="adStamp" class="text-xs text-slate-400"></span>
      </div>
      <section id="adTypeCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5"></section>
-     <section class="card p-5 mb-5">
-       <h3 class="accent font-extrabold text-ink mb-3">일별 성과 추이 <span class="text-xs font-normal text-slate-400">(노출·클릭·광고비)</span></h3>
+     <section id="adDailySection" class="card p-5 mb-5 hidden">
+       <h3 class="accent font-extrabold text-ink mb-3">일별 성과 추이 <span class="text-xs font-normal text-slate-400">(노출·클릭)</span></h3>
        <div class="h-64"><canvas id="adDailyChart"></canvas></div>
-       <p id="adDailyNote" class="text-[11px] text-slate-400 mt-2"></p>
      </section>
      <section class="card p-5">
        <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
@@ -1512,13 +1511,14 @@
         <td class="px-3 py-2.5 text-right num">${won(c.cpc)}</td>
         <td class="px-3 py-2.5 text-right num font-semibold">${won(c.cost)}</td>
         <td class="px-3 py-2.5 text-right num">${(+c.conv||0).toLocaleString()}</td></tr>`).join(''):'<tr><td colspan="8" class="text-center py-8 text-slate-400">데이터 없음</td></tr>';
-      const daily=AD.daily||[], note=document.getElementById('adDailyNote');
-      if(daily.length){ if(note) note.textContent='';
+      const daily=AD.daily||[], sec=document.getElementById('adDailySection');
+      if(sec) sec.classList.toggle('hidden', !daily.length);
+      if(daily.length){
         draw('adDailyChart',{type:'line',data:{labels:daily.map(d=>d.date.slice(5)),datasets:[
           {label:'노출',data:daily.map(d=>d.imp),borderColor:'#8FB9D8',borderWidth:2,tension:.3,pointRadius:0,yAxisID:'y'},
           {label:'클릭',data:daily.map(d=>d.clk),borderColor:'#BF5332',borderWidth:2,tension:.3,pointRadius:0,yAxisID:'y1'}]},
           options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{position:'left',beginAtZero:true},y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false}}}}});
-      } else { if(note) note.textContent='※ 일별 추이는 보완 예정(검색광고 일별 API). 현재는 최근 30일 합계·캠페인별 성과를 제공합니다.'; if(charts['adDailyChart']){ charts['adDailyChart'].destroy(); delete charts['adDailyChart']; } }
+      } else if(charts['adDailyChart']){ charts['adDailyChart'].destroy(); delete charts['adDailyChart']; }
     }
     function renderKPIs(f,t){ const n=FILTERED.length; document.getElementById('kpiTotal').textContent=n.toLocaleString(); let dh='';
       if(f&&t){ const days=(new Date(t)-new Date(f))/864e5+1; const pe=iso(new Date(new Date(f)-864e5)),ps=iso(new Date(new Date(f)-days*864e5));
