@@ -1,0 +1,41 @@
+name: SearchAd Performance
+
+# 매일 09:20(UTC)=한국 18:20 검색광고 성과 수집 → searchad.json
+on:
+  schedule:
+    - cron: '20 9 * * *'
+  workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/searchad.yml'
+      - 'crawler/searchad_fetch.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: searchad
+  cancel-in-progress: false
+
+jobs:
+  searchad:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Fetch SearchAd performance
+        env:
+          SEARCHAD_API_KEY: ${{ secrets.SEARCHAD_API_KEY }}
+          SEARCHAD_SECRET: ${{ secrets.SEARCHAD_SECRET }}
+          SEARCHAD_CUSTOMER_ID: ${{ secrets.SEARCHAD_CUSTOMER_ID }}
+        run: python crawler/searchad_fetch.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add searchad.json searchad_raw.json
+          git diff --staged --quiet || git commit -m "searchad.json 자동 갱신"
+          git push
