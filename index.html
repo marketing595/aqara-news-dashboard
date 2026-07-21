@@ -1532,6 +1532,7 @@
       const crc=document.getElementById('adCreativeCount'); if(crc) crc.textContent='· '+crf.length+'개';
       const cb=document.getElementById('adCreativeBody'); if(cb) cb.innerHTML=crf.length?crf.map(c=>`<div class="rounded-lg border border-[#EFEDE7] p-3 bg-white">
         <div class="flex items-center gap-2 mb-1"><span class="text-[10px] px-1.5 py-0.5 rounded ${c.type==='브랜드검색'?'bg-[#EAF3FF] text-[#2c5b8a]':'bg-[#FFF3D6] text-[#8a6d00]'}">${esc(c.type||'')}</span><span class="text-[11px] text-slate-400 truncate">${esc(c.campaign||'')}</span></div>
+        ${c.image?`<a href="${esc(c.url||c.image)}" target="_blank" rel="noopener"><img src="${esc(c.image)}" loading="lazy" class="w-full rounded border border-[#EFEDE7] mb-1 bg-slate-50" onerror="this.style.display='none'"/></a>`:''}
         ${c.headline?`<p class="text-[13px] font-bold text-[#1a5cff] leading-snug">${esc(c.headline)}</p>`:''}
         ${c.desc?`<p class="text-[12px] text-slate-600 mt-0.5 leading-snug">${esc(c.desc)}</p>`:''}
         ${c.url?`<a href="${esc(c.url)}" target="_blank" rel="noopener" class="text-[11px] text-agreen block mt-1 truncate">${esc((c.url||'').replace(/^https?:\/\//,'').split('?')[0])} ↗</a>`:''}

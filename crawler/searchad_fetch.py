@@ -128,13 +128,24 @@ def get_creatives(ids, info, raw):
                     else:
                         heads.append(t)
                 url = _txt(pc.get("final")) or _txt(mo.get("final")) or _txt(ad.get("displayUrl")) or _txt(ad.get("pcFinalUrl")) or _txt(pc.get("display"))
+                # 이미지(브랜드검색 등 템플릿 소재 미리보기 썸네일)
+                img = _txt(ad.get("thumbnail")) or _txt(ad.get("image"))
+                # 브랜드검색: 연결 URL은 adAttr.naAccountList, 문구 없으면 소재명 사용
+                if not url:
+                    accs = (a.get("adAttr", {}) or {}).get("naAccountList") or []
+                    if accs:
+                        url = _txt(accs[0].get("url"))
                 dh = list(dict.fromkeys(heads))
                 dd = list(dict.fromkeys(descs))
-                if dh or dd:
+                if not dh and not dd:
+                    nm = _txt(a.get("name"))
+                    if nm:
+                        dh = [nm]
+                if dh or dd or img:
                     out.append({"campaign": info.get(cid, {}).get("name"), "type": typ,
                                 "headline": (" · ".join(dh))[:140] if dh else None,
                                 "desc": (" · ".join(dd))[:240] if dd else None,
-                                "url": url})
+                                "url": url, "image": img})
             if len(out) >= 140:
                 raw["sampleByType"] = sample_by_type
                 return out
