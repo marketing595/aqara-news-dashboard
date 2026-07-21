@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-21 11:02",
+ "generatedAt": "2026-07-21 11:07",
  "campaignsStatus": 200,
  "campaignCount": 20,
  "campaignStats": {
@@ -29,5 +29,10 @@
    }
   ]
  },
- "dailyStatus": 400
+ "dailyStatus": 400,
+ "dailyError": {
+  "code": 11001,
+  "message": "지원하지 않는 기능입니다.",
+  "status": "BAD_REQUEST"
+ }
 }
