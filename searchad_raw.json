@@ -1,0 +1,33 @@
+{
+ "generatedAt": "2026-07-21 11:02",
+ "campaignsStatus": 200,
+ "campaignCount": 20,
+ "campaignStats": {
+  "status": 200,
+  "sample": [
+   {
+    "ctr": 0.63,
+    "convAmt": 1,
+    "clkCnt": 19,
+    "crto": 5.26,
+    "cpc": 5301,
+    "ccnt": 1,
+    "id": "cmp-a001-01-000000010498342",
+    "impCnt": 3007,
+    "salesAmt": 100723
+   },
+   {
+    "ctr": 1.1,
+    "convAmt": 1,
+    "clkCnt": 71,
+    "crto": 1.41,
+    "cpc": 2717,
+    "ccnt": 1,
+    "id": "cmp-a001-01-000000010498370",
+    "impCnt": 6430,
+    "salesAmt": 192907
+   }
+  ]
+ },
+ "dailyStatus": 400
+}
