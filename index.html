@@ -199,7 +199,12 @@
         <div id="cmpCompeteBody" class="space-y-2.5"></div>
         <p class="text-xs text-slate-400 mt-3">※ 네이버 뉴스 '브랜드 검색' 노출량(스마트홈 맥락) · <b class="text-ink">올해 누적</b> 기준. 삼성·LG는 종합 대기업 특성상 절대량이 커 <b class="text-ink">점유율보다 추세</b>에 활용하세요.</p>
       </section>
-      <section class="card p-5"><h2 class="accent font-extrabold text-ink mb-3">① 월별 발행 추이 <span class="text-xs font-normal text-slate-400">(선택 기간 · 성격별 누적)</span></h2><div class="h-72"><canvas id="trendChart"></canvas></div></section>
+      <section class="card p-5"><h2 class="accent font-extrabold text-ink mb-3">① 월별 발행 추이 <span class="text-xs font-normal text-slate-400">(선택 기간 · 성격별 누적)</span></h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+          <div class="h-72"><canvas id="trendChart"></canvas></div>
+          <div id="trendTable" class="overflow-auto rounded-lg border border-[#EFEDE7] max-h-72"></div>
+        </div>
+      </section>
       <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="card p-5"><h2 class="accent font-extrabold text-ink mb-3">③ 기사 성격(구분) <span class="text-xs font-normal text-slate-400">(선택 기간)</span></h2><div class="h-60"><canvas id="typeChart"></canvas></div></div>
         <div class="card p-5"><h2 class="accent font-extrabold text-ink mb-3">④ 매체별 점유율 <span class="text-xs font-normal text-slate-400">(선택 기간 · 상위 8)</span></h2><div class="h-60"><canvas id="mediaChart"></canvas></div></div>
@@ -1496,7 +1501,20 @@
     function renderTrend(){ const ms=months(); const ORD=['단신','기획','매거진','언급'];
       const cats=[...new Set(ALL.map(r=>r._type))].sort((a,b)=>{const ia=ORD.indexOf(a),ib=ORD.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib);});
       const ds=cats.map(c=>({label:c,data:ms.map(m=>FILTERED.filter(r=>r._ym===m&&r._type===c).length),backgroundColor:typeColor(c),borderRadius:3}));
-      draw('trendChart',{type:'bar',data:{labels:ms,datasets:ds},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}},plugins:{legend:{position:'top'}}}}); }
+      draw('trendChart',{type:'bar',data:{labels:ms,datasets:ds},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}},plugins:{legend:{position:'top'}}}});
+      // 성격 × 월 교차표
+      const tbl=document.getElementById('trendTable'); if(tbl){
+        const types=['단신','기획','언급','매거진'].filter(t=>cats.includes(t)).concat(cats.filter(c=>['단신','기획','언급','매거진'].indexOf(c)<0));
+        const cnt=(m,t)=>FILTERED.filter(r=>r._ym===m&&(t?r._type===t:true)).length;
+        const c=(v,cls)=>`<td class="px-2 py-1 text-right num ${cls||''}">${v||0}</td>`;
+        const head='<th class="px-2 py-1 text-left sticky left-0 bg-slate-50 z-10 whitespace-nowrap">성격</th>'+ms.map(m=>`<th class="px-2 py-1 text-right whitespace-nowrap font-semibold">${m.slice(2,4)+'.'+(+m.slice(5))}</th>`).join('')+'<th class="px-2 py-1 text-right bg-slate-50 whitespace-nowrap">합계</th>';
+        const body=types.map(t=>{ const per=ms.map(m=>cnt(m,t)), tot=per.reduce((a,b)=>a+b,0);
+          const dot='<span class="inline-block w-2 h-2 rounded-full mr-1 align-middle" style="background:'+typeColor(t)+'"></span>';
+          return `<tr class="border-t border-[#EFEDE7]"><td class="px-2 py-1 font-medium text-ink whitespace-nowrap sticky left-0 bg-white">${dot}${esc(t)}</td>${per.map(v=>c(v)).join('')}${c(tot,'font-bold text-ink bg-[#FAFAF9]')}</tr>`; }).join('');
+        const mt=ms.map(m=>cnt(m,null)), gt=mt.reduce((a,b)=>a+b,0);
+        const totalRow=`<tr class="border-t-2 border-[#E6E6E3] bg-[#FBF7E8] font-bold"><td class="px-2 py-1 text-ink sticky left-0 bg-[#FBF7E8] whitespace-nowrap">TOTAL</td>${mt.map(v=>c(v,'text-ink')).join('')}${c(gt,'text-ink')}</tr>`;
+        tbl.innerHTML=ms.length?('<table class="text-[11px] w-full"><thead><tr class="bg-slate-50 text-slate-500">'+head+'</tr></thead><tbody>'+body+totalRow+'</tbody></table>'):'<p class="text-xs text-slate-400 p-4 text-center">데이터 없음</p>';
+      } }
     function donutFrom(counts,id,colorFn){ let a=Object.entries(counts).sort((x,y)=>y[1]-x[1]); const top=a.slice(0,8),etc=a.slice(8).reduce((s,x)=>s+x[1],0);
       const labels=top.map(x=>x[0]).concat(etc?['기타']:[]),data=top.map(x=>x[1]).concat(etc?[etc]:[]);
       const bg=colorFn?labels.map(colorFn):PALETTE;
