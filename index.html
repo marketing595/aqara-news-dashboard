@@ -1026,32 +1026,37 @@
 
    <!-- 퍼포먼스AD · 검색광고 성과 -->
    <div id="view-ad" class="hidden">
-     <div class="flex items-baseline justify-between flex-wrap gap-2 mb-4">
-       <h2 class="text-xl font-extrabold text-ink">퍼포먼스 AD <span class="text-sm font-normal text-slate-400">(네이버 검색광고 성과 · 실측)</span></h2>
-       <span id="adStamp" class="text-xs text-slate-400"></span>
+     <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
+       <h2 class="text-xl font-extrabold text-ink">퍼포먼스 AD <span class="text-sm font-normal text-slate-400">(네이버 검색광고 실측)</span></h2>
+       <div class="flex items-center gap-1.5 flex-wrap"><div id="adPeriodBtns" class="flex gap-1"></div><span id="adStamp" class="text-xs text-slate-400 ml-1"></span></div>
      </div>
      <section id="adTypeCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5"></section>
-     <section id="adDailySection" class="card p-5 mb-5 hidden">
-       <h3 class="accent font-extrabold text-ink mb-3">일별 성과 추이 <span class="text-xs font-normal text-slate-400">(노출·클릭)</span></h3>
-       <div class="h-64"><canvas id="adDailyChart"></canvas></div>
-     </section>
-     <section class="card p-5">
+     <section class="card p-5 mb-5">
        <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
          <h3 class="accent font-extrabold text-ink">캠페인별 성과 <span id="adCampCount" class="text-sm font-normal text-slate-400"></span></h3>
          <select id="adCampType" onchange="renderAd()" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-white"><option value="">전체 유형</option></select>
        </div>
-       <div class="overflow-auto rounded-lg border border-[#ECE9E1] max-h-[520px]">
+       <div class="overflow-auto rounded-lg border border-[#ECE9E1] max-h-[480px]">
          <table class="w-full text-sm">
            <thead class="bg-slate-50 text-slate-500 sticky top-0"><tr class="text-left">
              <th class="px-3 py-2.5">캠페인</th><th class="px-3 py-2.5 whitespace-nowrap">유형</th>
              <th class="px-3 py-2.5 text-right whitespace-nowrap">노출</th><th class="px-3 py-2.5 text-right whitespace-nowrap">클릭</th>
              <th class="px-3 py-2.5 text-right whitespace-nowrap">CTR</th><th class="px-3 py-2.5 text-right whitespace-nowrap">CPC</th>
              <th class="px-3 py-2.5 text-right whitespace-nowrap">광고비</th><th class="px-3 py-2.5 text-right whitespace-nowrap">전환</th>
+             <th class="px-3 py-2.5 text-right whitespace-nowrap">전환매출</th><th class="px-3 py-2.5 text-right whitespace-nowrap">ROAS</th>
            </tr></thead>
            <tbody id="adCampBody" class="divide-y divide-slate-100"></tbody>
          </table>
        </div>
-       <p class="text-[11px] text-slate-400 mt-3">※ 네이버 검색광고 API 실측(최근 30일) · 광고비=지출액(salesAmt). 브랜드검색은 정액상품 특성상 광고비가 0으로 표기될 수 있습니다.</p>
+       <p class="text-[11px] text-slate-400 mt-3">※ 네이버 검색광고 API 실측 · 광고비=지출액 · ROAS=전환매출÷광고비. 전환·ROAS는 <b class="text-ink">전환추적 설치</b> 시 집계됩니다. 브랜드검색은 정액상품이라 광고비 0으로 표기될 수 있음.</p>
+     </section>
+     <section class="card p-5">
+       <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+         <h3 class="accent font-extrabold text-ink">광고 소재 미리보기 <span id="adCreativeCount" class="text-sm font-normal text-slate-400"></span></h3>
+         <select id="adCreativeType" onchange="renderAd()" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-white"><option value="">전체 유형</option></select>
+       </div>
+       <div id="adCreativeBody" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 max-h-[560px] overflow-auto pr-1"></div>
+       <p class="text-[11px] text-slate-400 mt-3">※ 현재 게재 중인 광고 소재(제목·설명·연결 URL). 네이버 파워링크 미리보기 형태입니다.</p>
      </section>
    </div>
 
@@ -1484,38 +1489,47 @@
       fetch('compete.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.items&&p.items.length) renderCompete(p); }).catch(()=>{});
     }
     loadCompete();
-    // ===== 퍼포먼스 AD (검색광고 성과) =====
-    let AD={campaigns:[],byType:{},daily:[]};
-    function loadAd(){ fetch('searchad.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d){ AD=d; renderAd(); } }).catch(()=>{ renderAd(); }); }
+    // ===== 퍼포먼스 AD (검색광고 성과·소재) =====
+    let AD={periods:{},creatives:[]}, adPeriod='30d';
+    function loadAd(){ fetch('searchad.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d){ AD=d; if(!(AD.periods||{})[adPeriod]) adPeriod=AD.defaultPeriod||Object.keys(AD.periods||{})[0]||'30d'; renderAd(); } }).catch(()=>{ renderAd(); }); }
+    function adSetPeriod(p){ adPeriod=p; renderAd(); }
     function renderAd(){
       const won=v=>'₩'+(+v||0).toLocaleString();
-      const st=document.getElementById('adStamp'); if(st) st.textContent=(AD.since?AD.since+' ~ '+AD.until+' (최근 30일)':'')+(AD.generatedAt?(' · '+AD.generatedAt+' 기준'):'');
+      const PL={'7d':'최근 7일','30d':'최근 30일','90d':'최근 90일','month':'이번 달'};
+      const pb=document.getElementById('adPeriodBtns'); if(pb) pb.innerHTML=['7d','30d','90d','month'].filter(k=>(AD.periods||{})[k]).map(k=>`<button onclick="adSetPeriod('${k}')" class="text-xs px-2.5 py-1 rounded-lg ${adPeriod===k?'bg-ink text-white font-semibold':'border border-slate-300 text-slate-500 hover:bg-slate-50'}">${PL[k]}</button>`).join('');
+      const P=(AD.periods||{})[adPeriod]||{}, byType=P.byType||{}, camps=P.campaigns||[];
+      const st=document.getElementById('adStamp'); if(st) st.textContent=(P.since?P.since+' ~ '+P.until:'')+(AD.generatedAt?(' · '+AD.generatedAt):'');
       const tc=document.getElementById('adTypeCards');
-      if(tc){ const types=Object.keys(AD.byType||{}); tc.innerHTML=types.length?types.map(t=>{ const e=AD.byType[t];
+      if(tc){ const types=Object.keys(byType); tc.innerHTML=types.length?types.map(t=>{ const e=byType[t];
         const m=(l,v)=>`<div><p class="text-xs text-slate-400">${l}</p><p class="num font-bold text-ink">${v}</p></div>`;
-        return `<div class="card p-5"><p class="text-sm font-extrabold text-ink mb-2">${esc(t)}</p><div class="grid grid-cols-3 gap-y-2">${m('노출',(+e.imp||0).toLocaleString())}${m('클릭',(+e.clk||0).toLocaleString())}${m('CTR',(+e.ctr||0)+'%')}${m('CPC',won(e.cpc))}${m('광고비',won(e.cost))}${m('전환',(+e.conv||0).toLocaleString())}</div></div>`; }).join(''):'<p class="text-sm text-slate-400 p-4">수집 대기 — 워크플로우 실행 후 표시됩니다.</p>'; }
-      const sel=document.getElementById('adCampType'), camps=AD.campaigns||[];
+        return `<div class="card p-5"><p class="text-sm font-extrabold text-ink mb-2">${esc(t)}</p><div class="grid grid-cols-3 gap-y-2">${m('노출',(+e.imp||0).toLocaleString())}${m('클릭',(+e.clk||0).toLocaleString())}${m('CTR',(+e.ctr||0)+'%')}${m('광고비',won(e.cost))}${m('전환',(+e.conv||0).toLocaleString())}${m('ROAS',(+e.roas||0)+'%')}</div></div>`; }).join(''):'<p class="text-sm text-slate-400 p-4">수집 대기 — 워크플로우 실행 후 표시됩니다.</p>'; }
+      const sel=document.getElementById('adCampType');
       if(sel && sel.options.length<=1){ const types=[...new Set(camps.map(c=>c.type).filter(Boolean))]; sel.innerHTML='<option value="">전체 유형</option>'+types.map(t=>`<option>${esc(t)}</option>`).join(''); }
       const ft=sel?sel.value:'';
-      const rows=camps.filter(c=>!ft||c.type===ft).slice().sort((a,b)=>(b.imp||0)-(a.imp||0));
+      const rows=camps.filter(c=>!ft||c.type===ft).slice().sort((a,b)=>(b.cost||0)-(a.cost||0)||(b.imp||0)-(a.imp||0));
       const cc=document.getElementById('adCampCount'); if(cc) cc.textContent='· '+rows.length+'개';
       const tb=document.getElementById('adCampBody'); if(tb) tb.innerHTML=rows.length?rows.map(c=>`<tr class="hover:bg-slate-50">
-        <td class="px-3 py-2.5 min-w-[180px] font-medium text-ink">${esc(c.name||'-')}</td>
+        <td class="px-3 py-2.5 min-w-[160px] font-medium text-ink">${esc(c.name||'-')}</td>
         <td class="px-3 py-2.5 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] ${c.type==='브랜드검색'?'bg-[#EAF3FF] text-[#2c5b8a]':'bg-[#FFF3D6] text-[#8a6d00]'}">${esc(c.type||'')}</span></td>
         <td class="px-3 py-2.5 text-right num">${(+c.imp||0).toLocaleString()}</td>
         <td class="px-3 py-2.5 text-right num">${(+c.clk||0).toLocaleString()}</td>
         <td class="px-3 py-2.5 text-right num">${(+c.ctr||0)}%</td>
         <td class="px-3 py-2.5 text-right num">${won(c.cpc)}</td>
         <td class="px-3 py-2.5 text-right num font-semibold">${won(c.cost)}</td>
-        <td class="px-3 py-2.5 text-right num">${(+c.conv||0).toLocaleString()}</td></tr>`).join(''):'<tr><td colspan="8" class="text-center py-8 text-slate-400">데이터 없음</td></tr>';
-      const daily=AD.daily||[], sec=document.getElementById('adDailySection');
-      if(sec) sec.classList.toggle('hidden', !daily.length);
-      if(daily.length){
-        draw('adDailyChart',{type:'line',data:{labels:daily.map(d=>d.date.slice(5)),datasets:[
-          {label:'노출',data:daily.map(d=>d.imp),borderColor:'#8FB9D8',borderWidth:2,tension:.3,pointRadius:0,yAxisID:'y'},
-          {label:'클릭',data:daily.map(d=>d.clk),borderColor:'#BF5332',borderWidth:2,tension:.3,pointRadius:0,yAxisID:'y1'}]},
-          options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{position:'left',beginAtZero:true},y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false}}}}});
-      } else if(charts['adDailyChart']){ charts['adDailyChart'].destroy(); delete charts['adDailyChart']; }
+        <td class="px-3 py-2.5 text-right num">${(+c.conv||0).toLocaleString()}</td>
+        <td class="px-3 py-2.5 text-right num">${won(c.convAmt)}</td>
+        <td class="px-3 py-2.5 text-right num font-bold ${(+c.roas>=100)?'text-agreen':'text-ink'}">${(+c.roas||0)}%</td></tr>`).join(''):'<tr><td colspan="10" class="text-center py-8 text-slate-400">데이터 없음</td></tr>';
+      const cr=AD.creatives||[];
+      const csel=document.getElementById('adCreativeType');
+      if(csel && csel.options.length<=1){ const types=[...new Set(cr.map(c=>c.type).filter(Boolean))]; csel.innerHTML='<option value="">전체 유형</option>'+types.map(t=>`<option>${esc(t)}</option>`).join(''); }
+      const cft=csel?csel.value:'', crf=cr.filter(c=>!cft||c.type===cft);
+      const crc=document.getElementById('adCreativeCount'); if(crc) crc.textContent='· '+crf.length+'개';
+      const cb=document.getElementById('adCreativeBody'); if(cb) cb.innerHTML=crf.length?crf.map(c=>`<div class="rounded-lg border border-[#EFEDE7] p-3 bg-white">
+        <div class="flex items-center gap-2 mb-1"><span class="text-[10px] px-1.5 py-0.5 rounded ${c.type==='브랜드검색'?'bg-[#EAF3FF] text-[#2c5b8a]':'bg-[#FFF3D6] text-[#8a6d00]'}">${esc(c.type||'')}</span><span class="text-[11px] text-slate-400 truncate">${esc(c.campaign||'')}</span></div>
+        ${c.headline?`<p class="text-[13px] font-bold text-[#1a5cff] leading-snug">${esc(c.headline)}</p>`:''}
+        ${c.desc?`<p class="text-[12px] text-slate-600 mt-0.5 leading-snug">${esc(c.desc)}</p>`:''}
+        ${c.url?`<a href="${esc(c.url)}" target="_blank" rel="noopener" class="text-[11px] text-agreen block mt-1 truncate">${esc((c.url||'').replace(/^https?:\/\//,'').split('?')[0])} ↗</a>`:''}
+      </div>`).join(''):'<p class="text-sm text-slate-400 p-4 col-span-full text-center">소재 수집 대기</p>';
     }
     function renderKPIs(f,t){ const n=FILTERED.length; document.getElementById('kpiTotal').textContent=n.toLocaleString(); let dh='';
       if(f&&t){ const days=(new Date(t)-new Date(f))/864e5+1; const pe=iso(new Date(new Date(f)-864e5)),ps=iso(new Date(new Date(f)-days*864e5));
