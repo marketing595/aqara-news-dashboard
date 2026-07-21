@@ -1375,17 +1375,21 @@
       {name:'아카라',total:1499,me:true},{name:'삼성 스마트싱스',total:66952},{name:'LG 씽큐',total:76513},
       {name:'샤오미 스마트홈',total:5173},{name:'애플 홈킷',total:2678}], generatedAt:'' };
     function renderCompete(data){
-      const items=(data.items||[]).slice().sort((a,b)=>b.total-a.total);
-      const max=Math.max(1,...items.map(i=>i.total));
+      const valOf=i=>(i.ytd!=null?i.ytd:i.total)||0;
+      const items=(data.items||[]).slice().sort((a,b)=>valOf(b)-valOf(a));
+      const max=Math.max(1,...items.map(valOf));
+      const yr=data.year||'';
+      const yl=document.getElementById('cmpCompeteYearLbl'); if(yl) yl.textContent='('+(yr?yr+'년':'올해')+' 발행 기준)';
       document.getElementById('cmpCompeteStamp').textContent=data.generatedAt?(data.generatedAt+' 기준'):'';
       document.getElementById('cmpCompeteBody').innerHTML=items.map(i=>{
-        const w=Math.max(3,Math.round(i.total/max*100));
+        const v=valOf(i), w=Math.max(3,Math.round(v/max*100));
         const bar=i.me?'bg-brand':'bg-slate-300';
         const nm=i.me?'text-ink font-bold':'text-slate-600 font-medium';
+        const lbl=v.toLocaleString()+(i.capped?'+':'')+'건';
         return `<div class="flex items-center gap-3">
           <span class="text-xs ${nm} w-28 shrink-0 truncate">${esc(i.name)}</span>
           <div class="flex-1 bg-slate-100 rounded-full h-3.5 overflow-hidden"><div class="h-3.5 ${bar}" style="width:${w}%"></div></div>
-          <span class="text-xs text-slate-500 num w-16 text-right">${i.total.toLocaleString()}</span>
+          <span class="text-xs text-slate-500 num w-20 text-right">${lbl}</span>
         </div>`; }).join('');
     }
     function loadCompete(){
