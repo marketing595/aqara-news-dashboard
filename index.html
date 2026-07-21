@@ -241,7 +241,7 @@
         #mhBody .mhcaret{ display:inline-block; transition:transform .15s; } #mhBody details[open] .mhcaret{ transform:rotate(90deg); }
         #newsListSection .col-chk, #newsListSection .col-edit, #newsListSection #bulkEditBar{ display:none; }
         #newsListSection.editon .col-chk, #newsListSection.editon .col-edit{ display:table-cell; }
-        #newsListSection.editon #bulkEditBar{ display:contents; }
+        #newsListSection.editon #bulkEditBar{ display:flex; }
       </style>
       <section id="newsListSection" class="card p-5">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -254,14 +254,17 @@
             <select id="fType" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 성격</option></select>
             <select id="fOrigin" onchange="renderTable()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 배포</option><option>자사보도</option><option>오가닉</option></select>
             <button id="newsEditBtn" onclick="toggleNewsEdit()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg font-semibold" title="편집 모드 (비밀번호 필요)">🔒 편집</button>
-            <span id="bulkEditBar" class="contents">
-            <select id="bulkTopic" onchange="applyBulk('종류',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 종류 일괄 지정"><option value="">종류 일괄…</option><option>대외협력</option><option>신제품</option><option>회사 이슈</option><option>[인테리어] 쇼룸</option><option>[인테리어] 시공사례</option><option>[인테리어] 서비스</option><option>[인테리어] 트렌드</option><option>기타</option></select>
-            <select id="bulkType" onchange="applyBulk('구분',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 성격 일괄 지정"><option value="">성격 일괄…</option><option>단신</option><option>기획</option><option>매거진</option><option>언급</option></select>
-            <select id="bulkOrigin" onchange="applyBulk('배포',this)" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold" title="체크한 기사 배포 일괄 지정"><option value="">배포 일괄…</option><option>자사보도</option><option>오가닉</option></select>
-            <button onclick="deleteSelected()" class="text-sm border border-ared/40 text-ared hover:bg-ared/5 px-3 py-2 rounded-lg font-semibold" title="체크한 기사 삭제"><span id="delSelCount">선택 삭제</span></button>
-            <button onclick="restoreDeleted()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg text-slate-500" title="숨긴(삭제한) 기사 모두 복원">삭제 복원</button>
-            </span>
           </div>
+        </div>
+        <div id="bulkEditBar" class="flex-wrap items-center gap-2 mb-3 p-2.5 rounded-lg bg-[#FBFAFF] border border-[#EDE9FF]">
+          <span class="text-[12px] font-bold text-[#5B44C7] mr-1">체크한 기사 일괄 지정 →</span>
+          <select id="bulkTopic" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold"><option value="">종류…</option><option>대외협력</option><option>신제품</option><option>회사 이슈</option><option>[인테리어] 쇼룸</option><option>[인테리어] 시공사례</option><option>[인테리어] 서비스</option><option>[인테리어] 트렌드</option><option>기타</option></select>
+          <select id="bulkType" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold"><option value="">성격…</option><option>단신</option><option>기획</option><option>매거진</option><option>언급</option></select>
+          <select id="bulkOrigin" class="text-sm border border-brand/40 rounded-lg px-2.5 py-2 bg-white text-brand-ink font-semibold"><option value="">배포…</option><option>자사보도</option><option>오가닉</option></select>
+          <button onclick="applyBulkAll()" class="text-sm bg-[#5B44C7] text-white hover:brightness-110 px-4 py-2 rounded-lg font-bold">반영하기</button>
+          <span class="flex-1 min-w-[8px]"></span>
+          <button onclick="deleteSelected()" class="text-sm border border-ared/40 text-ared hover:bg-ared/5 px-3 py-2 rounded-lg font-semibold" title="체크한 기사 삭제"><span id="delSelCount">선택 삭제</span></button>
+          <button onclick="restoreDeleted()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg text-slate-500" title="숨긴(삭제한) 기사 모두 복원">삭제 복원</button>
         </div>
         <p class="text-[11px] text-slate-400 mb-1">※ <b>배포 구분</b>: 기본은 <b class="text-brand-ink">자사보도</b>(우리가 배포), 제목이 <b>타사 발신사</b> 이름으로 시작하면 <b>오가닉</b>(제3자 발행)으로 분류. <button onclick="addOriginOther()" class="text-ink font-semibold hover:underline">오가닉 발신사 추가 +</button></p>
         <p class="text-[11px] text-slate-400 mb-3">※ <b>수집 기준·출처</b>: <b class="text-brand-ink">오가닉(자동수집)</b>은 네이버 <b>뉴스 검색 오픈API</b>(통합검색 화면 아님)로 <b>「아카라라이프 · 아카라 스마트홈 · 아카라 도어락 · 아카라코리아 · 아카라 매터」 5개 쿼리</b>를 최신순 수집 → <b>제목·본문에 '아카라/aqara' 포함</b>분만 남기고 제목 중복 제거(2021~). <b>자사보도</b>는 구글 시트 수기 집계분이며, 대시보드가 둘을 재중복제거 후 병합합니다.</p>
@@ -1744,6 +1747,16 @@
       if(!confirm(chk.length+'건을 '+disp+' = "'+v+'"(으)로 일괄 지정할까요?')) return;
       chk.forEach(c=>{ const k=c.dataset.k; rowEdits[k]=rowEdits[k]||{}; rowEdits[k][field]=v; });
       try{ localStorage.setItem('aqaraRowEdits',JSON.stringify(rowEdits)); }catch(e){}
+      ALL.forEach(r=>{ if(rowEdits[r._key]){ applyRowEdit(r); deriveRow(r); } }); checkedKeys.clear(); applyAndRender(); }
+    // 종류·성격·배포를 골라두고 한 번에 반영
+    function applyBulkAll(){
+      const chk=[...document.querySelectorAll('#tableBody .rowchk:checked')]; if(!chk.length){ alert('반영할 기사를 체크하세요.'); return; }
+      const pairs=[['종류',document.getElementById('bulkTopic').value,'종류'],['구분',document.getElementById('bulkType').value,'성격'],['배포',document.getElementById('bulkOrigin').value,'배포']].filter(p=>p[1]);
+      if(!pairs.length){ alert('종류·성격·배포 중 하나 이상 선택하세요.'); return; }
+      if(!confirm(chk.length+'건에 '+pairs.map(p=>p[2]+'="'+p[1]+'"').join(', ')+' 반영할까요?')) return;
+      chk.forEach(c=>{ const k=c.dataset.k; rowEdits[k]=rowEdits[k]||{}; pairs.forEach(p=>{ rowEdits[k][p[0]]=p[1]; }); });
+      try{ localStorage.setItem('aqaraRowEdits',JSON.stringify(rowEdits)); }catch(e){}
+      document.getElementById('bulkTopic').value=''; document.getElementById('bulkType').value=''; document.getElementById('bulkOrigin').value='';
       ALL.forEach(r=>{ if(rowEdits[r._key]){ applyRowEdit(r); deriveRow(r); } }); checkedKeys.clear(); applyAndRender(); }
 
     /* ================= 데일리 브리핑 (7/1~7/8) ================= */
