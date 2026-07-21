@@ -194,11 +194,11 @@
       <!-- 경쟁사 노출량 -->
       <section class="card p-5">
         <div class="flex items-baseline justify-between mb-3">
-          <h2 class="accent font-extrabold text-ink">경쟁사 대비 언론 노출량 <span id="cmpCompeteYearLbl" class="text-xs font-normal text-slate-400">(올해 기준)</span></h2>
+          <h2 class="accent font-extrabold text-ink">경쟁사 언론플레이 키워드 <span id="cmpCompeteYearLbl" class="text-xs font-normal text-slate-400">(올해 · 주요 키워드)</span></h2>
           <span id="cmpCompeteStamp" class="text-xs text-slate-400"></span>
         </div>
         <div id="cmpCompeteBody" class="space-y-2.5"></div>
-        <p class="text-xs text-slate-400 mt-3">※ 네이버 뉴스 '브랜드 검색' 노출량(스마트홈 맥락) · <b class="text-ink">올해 누적</b> 기준. 삼성·LG는 종합 대기업 특성상 절대량이 커 <b class="text-ink">점유율보다 추세</b>에 활용하세요.</p>
+        <p class="text-xs text-slate-400 mt-3">※ 경쟁사별 <b class="text-ink">네이버 뉴스 제목·본문에서 자주 등장하는 키워드</b>를 집계(브랜드명·불용어 제외). 글자 크기 = 언급 빈도. "어떤 메시지·주제로 언론플레이 하는가"를 파악하는 용도입니다.</p>
       </section>
       <section class="card p-5"><h2 class="accent font-extrabold text-ink mb-3">① 월별 발행 추이 <span class="text-xs font-normal text-slate-400">(선택 기간 · 성격별 누적)</span></h2>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
@@ -1462,25 +1462,19 @@
       if(by1) by1.className=halfCmpMode==='yoy'?on:off; if(bp) bp.className=halfCmpMode==='prev'?on:off;
     }
     // ===== 경쟁사 언론 노출량(compete.json) =====
-    const COMPETE_FALLBACK={ items:[
-      {name:'아카라',total:1499,me:true},{name:'삼성 스마트싱스',total:66952},{name:'LG 씽큐',total:76513},
-      {name:'샤오미 스마트홈',total:5173},{name:'애플 홈킷',total:2678}], generatedAt:'' };
+    const COMPETE_FALLBACK={ items:[], generatedAt:'' };
     function renderCompete(data){
-      const valOf=i=>(i.ytd!=null?i.ytd:i.total)||0;
-      const items=(data.items||[]).slice().sort((a,b)=>valOf(b)-valOf(a));
-      const max=Math.max(1,...items.map(valOf));
-      const yr=data.year||'';
-      const yl=document.getElementById('cmpCompeteYearLbl'); if(yl) yl.textContent='('+(yr?yr+'년':'올해')+' 발행 기준)';
-      document.getElementById('cmpCompeteStamp').textContent=data.generatedAt?(data.generatedAt+' 기준'):'';
-      document.getElementById('cmpCompeteBody').innerHTML=items.map(i=>{
-        const v=valOf(i), w=Math.max(3,Math.round(v/max*100));
-        const bar=i.me?'bg-brand':'bg-slate-300';
-        const nm=i.me?'text-ink font-bold':'text-slate-600 font-medium';
-        const lbl=v.toLocaleString()+(i.capped?'+':'')+'건';
-        return `<div class="flex items-center gap-3">
-          <span class="text-xs ${nm} w-28 shrink-0 truncate">${esc(i.name)}</span>
-          <div class="flex-1 bg-slate-100 rounded-full h-3.5 overflow-hidden"><div class="h-3.5 ${bar}" style="width:${w}%"></div></div>
-          <span class="text-xs text-slate-500 num w-20 text-right">${lbl}</span>
+      const items=(data.items||[]), yr=data.year||'';
+      const yl=document.getElementById('cmpCompeteYearLbl'); if(yl) yl.textContent='('+(yr?yr+'년':'올해')+' · 언론플레이 주요 키워드)';
+      const stEl=document.getElementById('cmpCompeteStamp'); if(stEl) stEl.textContent=data.generatedAt?(data.generatedAt+' 기준'):'';
+      const body=document.getElementById('cmpCompeteBody');
+      if(!items.length||!items.some(i=>(i.topKw||[]).length)){ body.className='space-y-2.5'; body.innerHTML='<p class="text-sm text-slate-400 py-4 text-center">키워드 분석 수집 대기 (경쟁사 워크플로우 실행 필요)</p>'; return; }
+      body.className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4';
+      body.innerHTML=items.map(i=>{ const kws=i.topKw||[], max=Math.max(1,...kws.map(k=>k.n));
+        const chips=kws.map(k=>{ const sz=11+Math.round(k.n/max*7); return `<span class="inline-block rounded-full px-2 py-0.5 mr-1 mb-1 leading-tight ${i.me?'bg-brand/20 text-brand-ink':'bg-slate-100 text-slate-600'}" style="font-size:${sz}px" title="${k.n}회 언급">${esc(k.kw)}</span>`; }).join('');
+        return `<div class="rounded-xl border ${i.me?'border-brand/40 bg-brand/5':'border-[#ECE9E1]'} p-4">
+          <div class="flex items-baseline justify-between mb-2"><p class="font-bold ${i.me?'text-ink':'text-slate-700'}">${esc(i.name)}</p><span class="text-[11px] text-slate-400">${i.analyzed||0}건${i.capped?'+':''} 분석</span></div>
+          <div>${chips||'<span class="text-xs text-slate-400">키워드 없음</span>'}</div>
         </div>`; }).join('');
     }
     function loadCompete(){
