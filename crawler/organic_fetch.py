@@ -17,7 +17,8 @@ DOMAIN = {"mt.co.kr": "머니투데이", "heraldcorp.com": "헤럴드경제", "s
           "segye.com": "세계일보", "munhwa.com": "문화일보", "hankookilbo.com": "한국일보", "newspim.com": "뉴스핌",
           "ajunews.com": "아주경제", "biz.chosun.com": "조선비즈", "kukinews.com": "쿠키뉴스",
           "digitaltoday.co.kr": "디지털투데이", "itdaily.kr": "아이티데일리", "aitimes.com": "AI타임스",
-          "businesskorea.co.kr": "비지니스코리아"}
+          "businesskorea.co.kr": "비지니스코리아", "beyondpost.co.kr": "비욘드포스트",
+          "insightkorea.co.kr": "인사이트코리아"}
 QUERIES = ["아카라라이프", "아카라 스마트홈", "아카라 도어락", "아카라코리아", "아카라 매터"]
 
 

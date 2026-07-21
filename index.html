@@ -1225,7 +1225,7 @@
       return '기타'; }
     function fTopicVal(r){ let t=(r['종류']||'').toString().trim(); if(!t) t=topicByTitle(r['기사명']); return canonTopic(t); }
     // 매체명 표기 통일(별칭). 필요 시 여기에 추가.
-    const MEDIA_ALIAS=[[/businesskorea|비즈니스코리아|비지니스코리아/i,'비지니스코리아']];
+    const MEDIA_ALIAS=[[/businesskorea|비즈니스코리아|비지니스코리아/i,'비지니스코리아'],[/beyondpost/i,'비욘드포스트'],[/insightkorea|인사이트코리아/i,'인사이트코리아']];
     function fMedia(r){ let m=(r['매체']||'').toString().replace(/\(.*?\)/g,'').trim(); if(!m) return '(미상)'; for(const a of MEDIA_ALIAS){ if(a[0].test(m)) return a[1]; } return m; }
     function urlOf(r){ const h=(r['_href']||'').toString().trim(); if(/^https?:\/\//.test(h)) return h;
       for(const k of ['링크','채널','url','URL']){ const v=(r[k]||'').toString().trim(); if(/^https?:\/\//.test(v)) return v; } return ''; }
