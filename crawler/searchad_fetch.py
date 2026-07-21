@@ -83,18 +83,23 @@ def main():
                              "convRate": num(row.get("crto")), "convAmt": num(row.get("convAmt"))})
 
     daily = []
+    byd = {}
     if ids:
-        sc, j = stats(ids, ["impCnt", "clkCnt", "salesAmt"], s, u, "1")
-        raw["dailyStatus"] = sc
-        byd = {}
-        for row in (j.get("data", []) if isinstance(j, dict) else []):
-            d = row.get("dateStart") or row.get("statDt") or row.get("date")
-            if not d:
-                continue
-            e = byd.setdefault(d[:10], {"imp": 0, "clk": 0, "cost": 0})
-            e["imp"] += num(row.get("impCnt"))
-            e["clk"] += num(row.get("clkCnt"))
-            e["cost"] += num(row.get("salesAmt"))
+        # 일별은 캠페인별 단일 id 조회 후 날짜 합산(배치+timeIncrement 조합이 400 나는 경우 대비)
+        for cid in ids:
+            sc, j = stats([cid], ["impCnt", "clkCnt", "salesAmt"], s, u, "1")
+            if "dailyStatus" not in raw:
+                raw["dailyStatus"] = sc
+                if sc != 200:
+                    raw["dailyError"] = j
+            for row in (j.get("data", []) if isinstance(j, dict) else []):
+                d = row.get("dateStart") or row.get("statDt") or row.get("date") or row.get("dateEnd")
+                if not d:
+                    continue
+                e = byd.setdefault(str(d)[:10], {"imp": 0, "clk": 0, "cost": 0})
+                e["imp"] += num(row.get("impCnt"))
+                e["clk"] += num(row.get("clkCnt"))
+                e["cost"] += num(row.get("salesAmt"))
         daily = [{"date": d, "imp": byd[d]["imp"], "clk": byd[d]["clk"], "cost": byd[d]["cost"]} for d in sorted(byd)]
 
     bytype = {}
