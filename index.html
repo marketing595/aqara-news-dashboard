@@ -2331,7 +2331,7 @@
     let DCINSIDE={posts:[]};
     const DC_HASS='https://gall.dcinside.com/mgallery/board/lists/?id=hass&s_type=search_subject_memo&s_keyword=%EC%95%84%EC%B9%B4%EB%9D%BC';
     const DC_ST='https://gall.dcinside.com/mgallery/board/lists/?id=smartthings&s_type=search_subject_memo&s_keyword=%EC%95%84%EC%B9%B4%EB%9D%BC';
-    function loadDcinside(){ fetch('dcinside.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d){ DCINSIDE=d; renderDcinside(); } }).catch(()=>{ renderDcinside(); }); }
+    function loadDcinside(){ fetch('dcinside.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d){ DCINSIDE=d; renderDcinside(); if(document.getElementById('cafeBody')) renderCafe(); } }).catch(()=>{ renderDcinside(); }); }
     function dcRows(arr,search){ if(!arr||!arr.length) return `<p class="text-sm text-slate-400 py-6 text-center">자동 수집된 글이 없습니다. <a href="${search}" target="_blank" rel="noopener" class="lnk">갤러리에서 '아카라' 검색 ↗</a></p>`;
       return arr.map(p=>`<div class="py-2.5"><a href="${esc(p.link)}" target="_blank" rel="noopener" class="lnk line-clamp-2 text-[13px]">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a><div class="text-[11px] text-slate-400 mt-0.5">${esc(p.date||'')} · 조회 ${(p.views||0).toLocaleString()} · 댓글 ${p.replies||0}</div></div>`).join(''); }
     function renderDcinside(){
@@ -2406,9 +2406,11 @@
         </div>`;
       }).join('');
     }
+    function dcAsCafe(){ const g={hass:'DC 홈어시스턴트',smartthings:'DC 스마트싱스'};
+      return (DCINSIDE.posts||[]).filter(p=>/[?&]id=(smartthings|hass)(&|$)/.test(p.link||'')).map(p=>({no:p.no||0,title:p.title||'',desc:p.desc||('DCInside · '+(g[p.gid]||'갤러리')),link:p.link,cafe:g[p.gid]||'DC 갤러리'})); }
     function renderCafe(){
-      CAFE_POSTS.forEach(p=>{ if(!p._sen){ p._sen=cafeSentiment(p.title,p.desc); p._typ=cafeType(p.title,p.desc); } if(!p.cafe) p.cafe='아카라 스마트홈'; });
-      const posts=CAFE_POSTS;
+      const posts=CAFE_POSTS.concat(dcAsCafe());
+      posts.forEach(p=>{ if(!p._sen){ p._sen=cafeSentiment(p.title,p.desc); p._typ=cafeType(p.title,p.desc); } if(!p.cafe) p.cafe='아카라 스마트홈'; });
       const cnt={긍정:0,중립:0,부정:0}; posts.forEach(p=>cnt[p._sen.k]++);
       const cafes=[...new Set(posts.map(p=>p.cafe))];
       const ccnt=cafes.map(c=>c+' '+posts.filter(p=>p.cafe===c).length).join(' · ');
