@@ -2679,29 +2679,32 @@
     function renderPrOpp(){ const el=document.getElementById('mktPrHotKw'); if(!el) return;
       const norm=s=>(s||'').toLowerCase().replace(/\s+/g,'');
       const titles=(ALL||[]).map(r=>norm(r['기사명']));
-      let rows=(KWTREND||[]).map(k=>{ const nk=norm(k.name); const cov=nk?titles.filter(t=>t.indexOf(nk)>-1).length:0; const vol=(k.vol!=null?k.vol:k.latest)||0; return {name:k.name, cat:k.cat||'', vol:vol, mom:(k.mom==null?0:k.mom), cov:cov}; });
+      let rows=(KWTREND||[]).map(k=>{ const nk=norm(k.name); const cov=nk?titles.filter(t=>t.indexOf(nk)>-1).length:0; const q=(k.qMonthly!=null?k.qMonthly:null); const vol=(q!=null?q:(k.vol!=null?k.vol:k.latest))||0; return {name:k.name, cat:k.cat||'', vol:vol, q:q, mom:(k.mom==null?0:k.mom), cov:cov}; });
       if(!rows.length){ el.innerHTML='<div class="rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-3 text-[12px] text-slate-400">키워드 트렌드 수집 대기 (배포 후 워크플로우 1회 실행 필요)</div>'; return; }
+      const EXCL={'경쟁사':1,'자사':1};   // 경쟁사·자사 브랜드 키워드는 '선점 기회'가 아님
       const vols=rows.map(r=>r.vol).slice().sort((a,b)=>a-b), maxVol=Math.max(1,vols[vols.length-1]||1), median=vols[Math.floor(vols.length/2)]||0, thr=Math.max(8, median);
-      rows.forEach(r=>{ r.opp = r.mom>=5 && r.vol>=thr && r.cov<=2; });
+      rows.forEach(r=>{ r.opp = r.mom>=5 && r.vol>=thr && r.cov<=2 && !EXCL[r.cat]; });
       rows.sort((a,b)=>(b.opp-a.opp)||(b.mom-a.mom)||(b.vol-a.vol));
-      const chip=r=>{ const mm=(r.mom>=0?'▲':'▼')+Math.abs(r.mom)+'%', w=Math.max(4,Math.round(Math.sqrt(r.vol/maxVol)*100));
+      const chip=r=>{ const mm=(r.mom>=0?'▲':'▼')+Math.abs(r.mom)+'%', w=Math.max(4,Math.round(Math.sqrt(r.vol/maxVol)*100)), comp=EXCL[r.cat];
         return `<div class="rounded-lg border ${r.opp?'border-[#FBC400] bg-[#FFFBEA]':'border-[#EEE] bg-white'} px-2.5 py-1.5">
-          <div class="flex items-center gap-2">
-            <span class="text-[13px] font-semibold text-ink flex-1 truncate" title="${esc(r.cat)}">${esc(r.name)}</span>
-            <span class="text-[11px] ${r.mom>=0?'text-agreen':'text-ared'} font-semibold whitespace-nowrap">${mm}</span>
+          <div class="flex items-center gap-1.5">
+            <span class="text-[13px] font-semibold text-ink truncate">${esc(r.name)}</span>
+            ${r.cat?`<span class="text-[9px] px-1 rounded ${comp?'bg-slate-200 text-slate-500':'bg-[#EDE9FF] text-[#5B44C7]'} shrink-0">${esc(r.cat)}</span>`:''}
+            <span class="text-[11px] ${r.mom>=0?'text-agreen':'text-ared'} font-semibold whitespace-nowrap ml-auto">${mm}</span>
             ${r.opp?'<span class="text-[9px] px-1.5 py-0.5 rounded-full bg-[#FBC400] text-[#5a4a00] font-bold whitespace-nowrap">기회</span>':''}
           </div>
-          <div class="flex items-center gap-1.5 mt-1"><div class="flex-1 bg-slate-100 rounded-full h-1.5 overflow-hidden"><div class="h-1.5 bg-[#8FB9D8]" style="width:${w}%"></div></div><span class="text-[9px] text-slate-400 whitespace-nowrap">발행 ${r.cov}</span></div>
+          <div class="flex items-center gap-1.5 mt-1"><div class="flex-1 bg-slate-100 rounded-full h-1.5 overflow-hidden"><div class="h-1.5 ${comp?'bg-slate-300':'bg-[#8FB9D8]'}" style="width:${w}%"></div></div>${r.q!=null?`<span class="text-[9px] text-slate-500 whitespace-nowrap">월 ${r.q.toLocaleString()}회</span>`:''}<span class="text-[9px] text-slate-400 whitespace-nowrap">발행 ${r.cov}</span></div>
         </div>`; };
       const oppN=rows.filter(r=>r.opp).length;
       const per=KWMETA.startDate?(KWMETA.startDate.slice(0,7)+' ~ '+(KWMETA.endDate||'').slice(0,7)):'';
+      const volLbl=KWMETA.hasQuery?'네이버 검색광고 <b>월간 검색수(PC+모바일, 실제 쿼리량)</b>':'데이터랩 상대 관심도 <span class="text-slate-300">(검색광고 키 연결 시 실제 쿼리량으로 대체)</span>';
       el.innerHTML=`<div class="rounded-lg border border-[#EDE9FF] bg-[#FBFAFF] p-3">
         <div class="flex items-baseline justify-between flex-wrap gap-1 mb-2">
           <p class="text-[12px] font-bold text-[#4B32C3]">🎯 기회 키워드 <span class="font-normal text-slate-400">(검색 관심↑ · 우리 발행↓ = 선점 기회)</span> <span class="text-[#8a6d00] font-semibold">${oppN}개</span></p>
           <a href="${esc(KWMETA.source||'https://datalab.naver.com/keyword/trendSearch.naver')}" target="_blank" rel="noopener" class="text-[10px] text-slate-400 hover:text-ink font-medium">네이버 데이터랩 ↗</a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">${rows.map(chip).join('')}</div>
-        <p class="text-[10px] text-slate-400 mt-2 leading-relaxed">※ <b class="text-[#8a6d00]">기회</b> = 전월대비 관심 +5%↑ · 검색량 충분(상위권) · 우리 발행 2건 이하. 막대 = 상대 검색량(‘스마트홈’ 앵커 교차정규화 · 서로 비교 가능). 발행수 = 뉴스 목록 제목 매칭.<br>· <b>출처</b> 네이버 데이터랩 검색어트렌드 API · 월간 관심도 · 기간 <b>${per||'수집 중'}</b> · <b>${KWTREND.length}개</b> 키워드 추적${KWMETA.generatedAt?' · '+esc(KWMETA.generatedAt)+' 기준':''}</p>
+        <p class="text-[10px] text-slate-400 mt-2 leading-relaxed">※ <b class="text-[#8a6d00]">기회</b> = 전월대비 관심 +5%↑ · 검색량 상위(중앙값 이상) · 우리 발행 2건 이하 · <b>경쟁사·자사 키워드 제외</b>.<br>· <b>%(▲▼)</b> = <b>전월대비 관심도 변화율</b> = (이번달−전달)÷전달×100 (관심도 = 데이터랩 월간 상대지수 0~100)<br>· <b>검색량(월 N회)</b> = ${volLbl}<br>· <b>출처</b> 네이버 데이터랩·검색광고 · 월간 · 기간 <b>${per||'수집 중'}</b> · <b>${KWTREND.length}개</b> 추적 · <b>매달 1일 갱신</b>${KWMETA.generatedAt?' · '+esc(KWMETA.generatedAt)+' 기준':''}</p>
       </div>`; }
     function renderMktPr(){ prLoadKw(renderPrOpp); prSyncStart(); renderPrAngles(); renderPrCalendar(); }
     // ===== PR 앵글 기획 · 캘린더 (Firebase 실시간 공유) =====

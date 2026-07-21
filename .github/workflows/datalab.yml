@@ -1,9 +1,9 @@
 name: DataLab Trend
 
-# 매월 초 파워링크 키워드 합산 검색 트렌드 수집 → datalab.json (매주 갱신)
+# 매달 1일 09:00(KST) 검색 트렌드·키워드 검색량 수집 → datalab.json / keywords_trend.json
 on:
   schedule:
-    - cron: '20 23 * * 1'
+    - cron: '0 0 1 * *'
   workflow_dispatch: {}
   push:
     paths:
@@ -36,6 +36,9 @@ jobs:
         env:
           NAVER_ID: ${{ secrets.NAVER_ID }}
           NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+          SEARCHAD_API_KEY: ${{ secrets.SEARCHAD_API_KEY }}
+          SEARCHAD_SECRET: ${{ secrets.SEARCHAD_SECRET }}
+          SEARCHAD_CUSTOMER_ID: ${{ secrets.SEARCHAD_CUSTOMER_ID }}
         run: python crawler/keyword_trend_fetch.py
       - name: Commit if changed
         run: |

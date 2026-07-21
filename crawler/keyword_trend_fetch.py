@@ -4,7 +4,7 @@
    '스마트홈' 앵커를 매 배치에 넣어 교차 정규화 → 키워드 간 비교 가능한 관심도(vol) 산출.
    latest/mom(전월대비)/yoy(전년대비) + 정규화 시계열. 카테고리 태그 포함.
    GitHub Actions 실행. 키: NAVER_ID/NAVER_SECRET."""
-import os, json, datetime
+import os, json, datetime, time, hmac, hashlib, base64
 import requests
 
 NID = os.environ.get("NAVER_ID", "")
@@ -13,6 +13,52 @@ H = {"X-Naver-Client-Id": NID, "X-Naver-Client-Secret": NSEC, "Content-Type": "a
 API = "https://openapi.naver.com/v1/datalab/search"
 ANCHOR = "스마트홈"
 SOURCE = "https://datalab.naver.com/keyword/trendSearch.naver"
+
+# 네이버 검색광고 키워드도구 API — 실제 월간 검색수(PC+모바일). 키 없으면 건너뜀.
+SA_KEY = os.environ.get("SEARCHAD_API_KEY", "")
+SA_SEC = os.environ.get("SEARCHAD_SECRET", "")
+SA_CID = os.environ.get("SEARCHAD_CUSTOMER_ID", "")
+SA_BASE = "https://api.searchad.naver.com"
+
+
+def _sa_num(x):
+    if isinstance(x, (int, float)):
+        return int(x)
+    s = str(x).replace("<", "").replace(",", "").strip()
+    try:
+        return int(s)
+    except Exception:
+        return 0
+
+
+def searchad_volumes(keywords):
+    """검색광고 키워드도구로 키워드별 월간 검색수(PC+모바일) 조회. 키 없으면 {}."""
+    if not (SA_KEY and SA_SEC and SA_CID):
+        print("SEARCHAD 키 미설정 — 쿼리량 수집 생략(데이터랩 관심도만)")
+        return {}
+    path = "/keywordstool"
+    out = {}
+    norm = lambda s: (s or "").replace(" ", "").upper()
+    for kw in keywords:
+        ts = str(int(time.time() * 1000))
+        msg = "%s.%s.%s" % (ts, "GET", path)
+        sign = base64.b64encode(hmac.new(SA_SEC.encode(), msg.encode(), hashlib.sha256).digest()).decode()
+        headers = {"X-Timestamp": ts, "X-API-KEY": SA_KEY, "X-Customer": SA_CID, "X-Signature": sign}
+        try:
+            r = requests.get(SA_BASE + path, params={"hintKeywords": kw.replace(" ", ""), "showDetail": "1"},
+                             headers=headers, timeout=15)
+            if r.status_code != 200:
+                print("searchad %s -> %s %s" % (kw, r.status_code, r.text[:120]))
+                continue
+            for it in r.json().get("keywordList", []):
+                if norm(it.get("relKeyword")) == norm(kw):
+                    pc, mo = _sa_num(it.get("monthlyPcQcCnt")), _sa_num(it.get("monthlyMobileQcCnt"))
+                    out[kw] = {"pc": pc, "mobile": mo, "total": pc + mo}
+                    break
+            time.sleep(0.12)   # 레이트리밋 여유
+        except Exception as e:
+            print("searchad 실패 %s: %s" % (kw, e))
+    return out
 
 # (키워드, 카테고리) — 자사 / 카테고리 / 시즌 / 경쟁사 / 틈새 / 인테리어
 KEYWORDS = [
@@ -119,11 +165,23 @@ def main():
     for k in kws:
         k["volPct"] = round(k["vol"] / maxvol * 100) if maxvol else 0
 
+    # 실제 월간 검색수(검색광고 키워드도구) 병합 — 키 있을 때만
+    qv = searchad_volumes([k["name"] for k in kws])
+    for k in kws:
+        q = qv.get(k["name"])
+        if q:
+            k["qMonthly"] = q["total"]
+            k["qPc"] = q["pc"]
+            k["qMobile"] = q["mobile"]
+    has_q = bool(qv)
+
     data = {
         "generatedAt": kst.strftime("%Y-%m-%d %H:%M"),
         "period": "month", "startDate": s, "endDate": e, "anchor": ANCHOR,
-        "source": SOURCE,
-        "method": "네이버 데이터랩 검색어트렌드 API · 월간 상대 관심도 · 키워드별 개별 조회 후 '스마트홈' 앵커로 교차 정규화(검색량 상대비교 가능). vol=정규화 관심도(앵커 기준), mom/yoy=해당 키워드 전월/전년 대비.",
+        "source": SOURCE, "hasQuery": has_q,
+        "pctBasis": "mom(전월대비) = (이번달 관심도 − 전달 관심도) ÷ 전달 관심도 × 100. 관심도는 네이버 데이터랩 월간 상대지수(0~100).",
+        "queryBasis": "qMonthly = 네이버 검색광고 키워드도구 최근 30일 PC+모바일 검색수(실제 쿼리량).",
+        "method": "관심도 추세(mom/yoy): 데이터랩 검색어트렌드 API, 키워드별 개별 조회 후 '스마트홈' 앵커로 교차 정규화. 검색량(qMonthly): 검색광고 키워드도구 월간 검색수.",
         "keywords": kws,
     }
     path = os.path.join(os.path.dirname(__file__), "..", "keywords_trend.json")
