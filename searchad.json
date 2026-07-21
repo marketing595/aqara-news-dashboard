@@ -1,79 +1,829 @@
 {
- "generatedAt": "2026-07-21 11:09",
- "since": "2026-06-21",
- "until": "2026-07-20",
- "source": "네이버 검색광고 API · /stats",
- "campaigns": [
-  {
-   "id": "cmp-a001-01-000000010498342",
-   "name": "(파워링크) B2B_PC_스마트홈 인테리어",
-   "type": "파워링크",
-   "imp": 3007,
-   "clk": 19,
-   "ctr": 0.63,
-   "cpc": 5301,
-   "cost": 100723,
-   "conv": 1,
-   "convRate": 5.26,
-   "convAmt": 1
+ "generatedAt": "2026-07-21 12:27",
+ "source": "네이버 검색광고 API",
+ "defaultPeriod": "30d",
+ "periods": {
+  "7d": {
+   "since": "2026-07-14",
+   "until": "2026-07-20",
+   "campaigns": [
+    {
+     "id": "cmp-a001-01-000000010498342",
+     "name": "(파워링크) B2B_PC_스마트홈 인테리어",
+     "type": "파워링크",
+     "imp": 355,
+     "clk": 4,
+     "ctr": 1.13,
+     "cpc": 6523,
+     "cost": 26091,
+     "conv": 0,
+     "convRate": 0,
+     "convAmt": 0,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-01-000000010498370",
+     "name": "(파워링크) B2B_MO_스마트홈 인테리어",
+     "type": "파워링크",
+     "imp": 870,
+     "clk": 13,
+     "ctr": 1.49,
+     "cpc": 2923,
+     "cost": 37998,
+     "conv": 0,
+     "convRate": 0,
+     "convAmt": 0,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-04-000000005070622",
+     "name": "B2C 브랜드검색",
+     "type": "브랜드검색",
+     "imp": 6841,
+     "clk": 2394,
+     "ctr": 34.99,
+     "cpc": 0,
+     "cost": 0,
+     "conv": 515,
+     "convRate": 21.51,
+     "convAmt": 22717101,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-04-000000009226053",
+     "name": "B2B 브랜드검색",
+     "type": "브랜드검색",
+     "imp": 1167,
+     "clk": 348,
+     "ctr": 29.82,
+     "cpc": 0,
+     "cost": 0,
+     "conv": 32,
+     "convRate": 9.2,
+     "convAmt": 1705404,
+     "roas": 0
+    }
+   ],
+   "byType": {
+    "파워링크": {
+     "imp": 1225,
+     "clk": 17,
+     "cost": 64089,
+     "conv": 0,
+     "convAmt": 0,
+     "ctr": 1.39,
+     "cpc": 3770,
+     "roas": 0
+    },
+    "브랜드검색": {
+     "imp": 8008,
+     "clk": 2742,
+     "cost": 0,
+     "conv": 547,
+     "convAmt": 24422505,
+     "ctr": 34.24,
+     "cpc": 0,
+     "roas": 0
+    }
+   }
   },
-  {
-   "id": "cmp-a001-01-000000010498370",
-   "name": "(파워링크) B2B_MO_스마트홈 인테리어",
-   "type": "파워링크",
-   "imp": 6430,
-   "clk": 71,
-   "ctr": 1.1,
-   "cpc": 2717,
-   "cost": 192907,
-   "conv": 1,
-   "convRate": 1.41,
-   "convAmt": 1
+  "30d": {
+   "since": "2026-06-21",
+   "until": "2026-07-20",
+   "campaigns": [
+    {
+     "id": "cmp-a001-01-000000010498342",
+     "name": "(파워링크) B2B_PC_스마트홈 인테리어",
+     "type": "파워링크",
+     "imp": 3007,
+     "clk": 19,
+     "ctr": 0.63,
+     "cpc": 5301,
+     "cost": 100723,
+     "conv": 1,
+     "convRate": 5.26,
+     "convAmt": 1,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-01-000000010498370",
+     "name": "(파워링크) B2B_MO_스마트홈 인테리어",
+     "type": "파워링크",
+     "imp": 6430,
+     "clk": 71,
+     "ctr": 1.1,
+     "cpc": 2717,
+     "cost": 192907,
+     "conv": 1,
+     "convRate": 1.41,
+     "convAmt": 1,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-04-000000005070622",
+     "name": "B2C 브랜드검색",
+     "type": "브랜드검색",
+     "imp": 30286,
+     "clk": 10702,
+     "ctr": 35.34,
+     "cpc": 0,
+     "cost": 0,
+     "conv": 2542,
+     "convRate": 23.75,
+     "convAmt": 120442210,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-04-000000009226053",
+     "name": "B2B 브랜드검색",
+     "type": "브랜드검색",
+     "imp": 4967,
+     "clk": 1541,
+     "ctr": 31.02,
+     "cpc": 0,
+     "cost": 0,
+     "conv": 218,
+     "convRate": 14.15,
+     "convAmt": 7637232,
+     "roas": 0
+    }
+   ],
+   "byType": {
+    "파워링크": {
+     "imp": 9437,
+     "clk": 90,
+     "cost": 293630,
+     "conv": 2,
+     "convAmt": 2,
+     "ctr": 0.95,
+     "cpc": 3263,
+     "roas": 0
+    },
+    "브랜드검색": {
+     "imp": 35253,
+     "clk": 12243,
+     "cost": 0,
+     "conv": 2760,
+     "convAmt": 128079442,
+     "ctr": 34.73,
+     "cpc": 0,
+     "roas": 0
+    }
+   }
   },
-  {
-   "id": "cmp-a001-04-000000005070622",
-   "name": "B2C 브랜드검색",
-   "type": "브랜드검색",
-   "imp": 30286,
-   "clk": 10702,
-   "ctr": 35.34,
-   "cpc": 0,
-   "cost": 0,
-   "conv": 2542,
-   "convRate": 23.75,
-   "convAmt": 120442210
+  "90d": {
+   "since": "2026-04-22",
+   "until": "2026-07-20",
+   "campaigns": [
+    {
+     "id": "cmp-a001-01-000000010498342",
+     "name": "(파워링크) B2B_PC_스마트홈 인테리어",
+     "type": "파워링크",
+     "imp": 11444,
+     "clk": 125,
+     "ctr": 1.09,
+     "cpc": 4881,
+     "cost": 610127,
+     "conv": 47,
+     "convRate": 37.6,
+     "convAmt": 4,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-01-000000010498370",
+     "name": "(파워링크) B2B_MO_스마트홈 인테리어",
+     "type": "파워링크",
+     "imp": 21464,
+     "clk": 271,
+     "ctr": 1.26,
+     "cpc": 2468,
+     "cost": 668763,
+     "conv": 10,
+     "convRate": 3.69,
+     "convAmt": 10,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-01-000000010547914",
+     "name": "(파워링크) B2B_PC_스마트홈 인테리어_구경하는집",
+     "type": "파워링크",
+     "imp": 435,
+     "clk": 9,
+     "ctr": 2.07,
+     "cpc": 2739,
+     "cost": 24655,
+     "conv": 0,
+     "convRate": 0,
+     "convAmt": 0,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-01-000000010547990",
+     "name": "(파워링크) B2B_MO_스마트홈 인테리어_구경하는집",
+     "type": "파워링크",
+     "imp": 1012,
+     "clk": 27,
+     "ctr": 2.67,
+     "cpc": 1991,
+     "cost": 53744,
+     "conv": 0,
+     "convRate": 0,
+     "convAmt": 0,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-04-000000005070622",
+     "name": "B2C 브랜드검색",
+     "type": "브랜드검색",
+     "imp": 92275,
+     "clk": 32230,
+     "ctr": 34.93,
+     "cpc": 0,
+     "cost": 0,
+     "conv": 7424,
+     "convRate": 23.03,
+     "convAmt": 322960188,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-04-000000009226053",
+     "name": "B2B 브랜드검색",
+     "type": "브랜드검색",
+     "imp": 15036,
+     "clk": 4651,
+     "ctr": 30.93,
+     "cpc": 0,
+     "cost": 0,
+     "conv": 700,
+     "convRate": 15.05,
+     "convAmt": 24466117,
+     "roas": 0
+    }
+   ],
+   "byType": {
+    "파워링크": {
+     "imp": 34355,
+     "clk": 432,
+     "cost": 1357289,
+     "conv": 57,
+     "convAmt": 14,
+     "ctr": 1.26,
+     "cpc": 3142,
+     "roas": 0
+    },
+    "브랜드검색": {
+     "imp": 107311,
+     "clk": 36881,
+     "cost": 0,
+     "conv": 8124,
+     "convAmt": 347426305,
+     "ctr": 34.37,
+     "cpc": 0,
+     "roas": 0
+    }
+   }
   },
-  {
-   "id": "cmp-a001-04-000000009226053",
-   "name": "B2B 브랜드검색",
-   "type": "브랜드검색",
-   "imp": 4967,
-   "clk": 1541,
-   "ctr": 31.02,
-   "cpc": 0,
-   "cost": 0,
-   "conv": 218,
-   "convRate": 14.15,
-   "convAmt": 7637232
-  }
- ],
- "byType": {
-  "파워링크": {
-   "imp": 9437,
-   "clk": 90,
-   "cost": 293630,
-   "conv": 2,
-   "ctr": 0.95,
-   "cpc": 3263
-  },
-  "브랜드검색": {
-   "imp": 35253,
-   "clk": 12243,
-   "cost": 0,
-   "conv": 2760,
-   "ctr": 34.73,
-   "cpc": 0
+  "month": {
+   "since": "2026-07-01",
+   "until": "2026-07-20",
+   "campaigns": [
+    {
+     "id": "cmp-a001-01-000000010498342",
+     "name": "(파워링크) B2B_PC_스마트홈 인테리어",
+     "type": "파워링크",
+     "imp": 536,
+     "clk": 5,
+     "ctr": 0.93,
+     "cpc": 6652,
+     "cost": 33259,
+     "conv": 0,
+     "convRate": 0,
+     "convAmt": 0,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-01-000000010498370",
+     "name": "(파워링크) B2B_MO_스마트홈 인테리어",
+     "type": "파워링크",
+     "imp": 1338,
+     "clk": 23,
+     "ctr": 1.72,
+     "cpc": 2850,
+     "cost": 65553,
+     "conv": 0,
+     "convRate": 0,
+     "convAmt": 0,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-04-000000005070622",
+     "name": "B2C 브랜드검색",
+     "type": "브랜드검색",
+     "imp": 19562,
+     "clk": 6836,
+     "ctr": 34.95,
+     "cpc": 0,
+     "cost": 0,
+     "conv": 1575,
+     "convRate": 23.04,
+     "convAmt": 62394306,
+     "roas": 0
+    },
+    {
+     "id": "cmp-a001-04-000000009226053",
+     "name": "B2B 브랜드검색",
+     "type": "브랜드검색",
+     "imp": 3288,
+     "clk": 1025,
+     "ctr": 31.17,
+     "cpc": 0,
+     "cost": 0,
+     "conv": 104,
+     "convRate": 10.15,
+     "convAmt": 3063724,
+     "roas": 0
+    }
+   ],
+   "byType": {
+    "파워링크": {
+     "imp": 1874,
+     "clk": 28,
+     "cost": 98812,
+     "conv": 0,
+     "convAmt": 0,
+     "ctr": 1.49,
+     "cpc": 3529,
+     "roas": 0
+    },
+    "브랜드검색": {
+     "imp": 22850,
+     "clk": 7861,
+     "cost": 0,
+     "conv": 1679,
+     "convAmt": 65458030,
+     "ctr": 34.4,
+     "cpc": 0,
+     "roas": 0
+    }
+   }
   }
  },
- "daily": []
+ "creatives": [
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "유튜버 잇섭이 추천한 도어락",
+   "desc": "260만 유튜버 잇섭이 추천한 스마트 도어락. 재입고 이벤트! 놓치면 또 품절",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "유튜버 잇섭이 소개한 도어락",
+   "desc": "아카라라이프 완판 기념 EVENT! 5월까지 완판 기념 22% 할인 이벤트",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "타공이 필요없는 스마트도어락",
+   "desc": "260만 유튜버 잇섭이 추천한 스마트 도어락. 완판 기념 22% 할인 이벤트",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "유튜버 잇섭이 추천한 도어락",
+   "desc": "260만 유튜버 잇섭이 추천한 스마트 도어락. 완판 기념 22% 할인 혜택",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "유튜버 잇섭이 추천한 도어락",
+   "desc": "270만 유튜버 잇섭이 추천한 스마트 도어락. 자취생 사은 이벤트! 무타공 도어락",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "유튜버 잇섭이 소개한 도어락",
+   "desc": "아카라라이프 자취생 사은 EVENT! 타공이 필요 없는 무타공 도어락",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "유튜버 잇섭이 추천한 도어락",
+   "desc": "270만 유튜버 잇섭이 추천한 무타공 도어락. 자취생 사은 EVENT 진행 중!",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "타공이 필요없는 스마트도어락",
+   "desc": "270만 유튜버 잇섭이 추천한 스마트도어락. 자취생 사은 대잔치 32% 할인이벤트",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "타공이 필요없는 스마트도어락",
+   "desc": "260만 유튜버 잇섭이 추천한 스마트 도어락. 완판 기념 22% 할인 이벤트",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "유튜버 잇섭이 추천한 도어락",
+   "desc": "260만 유튜버 잇섭이 추천한 스마트 도어락. 완판 기념 22% 할인 혜택",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "유튜버 잇섭이 추천한 도어락",
+   "desc": "260만 유튜버 잇섭이 추천한 스마트 도어락. 재입고 이벤트! 놓치면 또 품절",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "WP_L100 파워링크",
+   "type": "파워링크",
+   "headline": "유튜버 잇섭이 소개한 도어락",
+   "desc": "아카라라이프 완판 기념 EVENT! 5월까지 완판 기념 22% 할인 이벤트",
+   "url": "https://aqaralife.shop/product/detail.html?product_no=349&utm_source=naver&utm_medium=cpc&utm_campaign={campaign}&utm_term={keyword}&utm_content={ad_group}",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문가",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치실습까지",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "PAUSED"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문가",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치실습까지",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문가",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치실습까지",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문가",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치실습까지",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문가",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치실습까지",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "PAUSED"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문가",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치실습까지",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "PAUSED"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문가",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치실습까지",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문가",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치실습까지",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_인테리어교육k",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문가",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치실습까지",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_인테리어교육k",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "PAUSED"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_인테리어교육k",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문가",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치실습까지",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_인테리어교육k",
+   "type": "파워링크",
+   "headline": "이거면 나도 스마트홈 전문",
+   "desc": "누구나 할 수 있는 스마트홈! 스마트홈 인테리어 온라인 무료교육부터 설치",
+   "url": "https://www.aqaralife.kr/smarthome-bible",
+   "status": "PAUSED"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "인테리어 사장님, 고민 끝!",
+   "desc": "어떤 제품을 쓰고 시공을 어떻게 해야할지, IoT 전문 업체와 상담 한번이면 해결",
+   "url": "https://aqaralife.kr",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "스마트홈 시공 원스톱 서비스",
+   "desc": "설계/설치/앱 세팅까지 스마트홈 전담팀이 밀착 지원. 매출이 달라지는 통합 솔루션",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_pc&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_A-2",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "IoT시공은 아카라 맡기세요",
+   "desc": "스마트홈 시공 설계부터 앱설정까지 한번에! IoT 전문 업체에 맡기세요",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_pc&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_B-1",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "인테리어 사장님, 고민 끝!",
+   "desc": "어떤 제품을 쓰고 시공을 어떻게 해야할지, IoT 전문 업체와 상담 한번이면 해결",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_pc&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_B-2",
+   "status": "PAUSED"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "인테리어 사장님, 고민 끝!",
+   "desc": "어떤 제품을 쓰고 시공을 어떻게 해야할지, IoT 전문 업체와 상담 한번이면 해결",
+   "url": "https://aqaralife.kr",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "스마트홈 시공 원스톱 서비스",
+   "desc": "설계/설치/앱 세팅까지 스마트홈 전담팀이 밀착 지원. 매출이 달라지는 통합 솔루션",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_pc&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_A-2",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "IoT시공은 아카라 맡기세요",
+   "desc": "스마트홈 시공 설계부터 앱설정까지 한번에! IoT 전문 업체에 맡기세요",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_pc&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_B-1",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "스마트홈 설계/시공 한번에!",
+   "desc": "제품 선정부터 전문 시공까지 원스톱으로 지원, 처음 해도 스마트홈 전문가처럼!",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_pc&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_A-1",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "스마트홈 설계/시공 한번에!",
+   "desc": "제품 선정부터 전문 시공까지 원스톱으로 지원, 처음 해도 스마트홈 전문가처럼!",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_mo&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_A-1",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "인테리어 사장님, 고민 끝!",
+   "desc": "어떤 제품을 쓰고 시공을 어떻게 해야할지, IoT 전문 업체와 상담 한번이면 해결",
+   "url": "https://aqaralife.kr",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "스마트홈 시공 원스톱 서비스",
+   "desc": "설계/설치/앱 세팅까지 스마트홈 전담팀이 밀착 지원. 매출이 달라지는 통합 솔루션",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_mo&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_A-2",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "IoT시공은 아카라 맡기세요",
+   "desc": "스마트홈 시공 설계부터 앱설정까지 한번에! IoT 전문 업체에 맡기세요",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_mo&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_B-1",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "스마트홈 설계/시공 한번에!",
+   "desc": "제품 선정부터 전문 시공까지 원스톱으로 지원, 처음 해도 스마트홈 전문가처럼!",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_mo&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_A-1",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "인테리어 사장님, 고민 끝!",
+   "desc": "어떤 제품을 쓰고 시공을 어떻게 해야할지, IoT 전문 업체와 상담 한번이면 해결",
+   "url": "https://aqaralife.kr",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "스마트홈 시공 원스톱 서비스",
+   "desc": "설계/설치/앱 세팅까지 스마트홈 전담팀이 밀착 지원. 매출이 달라지는 통합 솔루션",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_mo&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_A-2",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어",
+   "type": "파워링크",
+   "headline": "IoT시공은 아카라 맡기세요",
+   "desc": "스마트홈 시공 설계부터 앱설정까지 한번에! IoT 전문 업체에 맡기세요",
+   "url": "https://www.aqaralife.kr/inrequest?utm_source=naver&utm_medium=psa_mo&utm_campaign=smarthome-interior&utm_term={keyword}&utm_content=main_B-1",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "신혼집 인테리어 구경하는집",
+   "desc": "조명/커튼/가전 제어하는 편리함! 스마트홈으로 완성된 신혼집을 직접 경험해볼 기회",
+   "url": "https://aqaralife.kr",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "스마트홈 구경하는집 OPEN",
+   "desc": "스마트홈 인테리어, 궁금하다면? 직접 경험하고 전문가의 인테리어팁까지 얻어가세요",
+   "url": "https://aqaralife.kr",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "스마트홈 구경하는집 OPEN",
+   "desc": "스마트홈 인테리어, 궁금하다면? 직접 경험하고 전문가의 인테리어팁까지 얻어가세요",
+   "url": "https://docs.google.com/forms/d/e/1FAIpQLSe-4bIqcX1U3GeffhPTJ4Iz29VQJh2Li1htD0YsGCu3I6nm-A/viewform?usp=dialog",
+   "status": "PAUSED"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "신혼집 인테리어 구경하는집",
+   "desc": "조명/커튼/가전 제어하는 편리함! 스마트홈으로 완성된 신혼집을 직접 경험해볼 기회",
+   "url": "https://docs.google.com/forms/d/e/1FAIpQLSe-4bIqcX1U3GeffhPTJ4Iz29VQJh2Li1htD0YsGCu3I6nm-A/viewform?usp=dialog",
+   "status": "PAUSED"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "신혼집 인테리어 구경하는집",
+   "desc": "조명/커튼/가전 제어하는 편리함! 스마트홈으로 완성된 신혼집을 직접 경험해볼 기회",
+   "url": "https://www.aqaralife.kr/notice/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=171042099&t=board&utm_source=naver&utm_medium=psa_pc&utm_campaign=smarthome-interior-B2C&utm_term={keyword}&utm_content=main_2",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_PC_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "스마트홈 구경하는집 OPEN",
+   "desc": "스마트홈 인테리어, 궁금하다면? 직접 경험하고 전문가의 인테리어팁까지 얻어가세요",
+   "url": "https://www.aqaralife.kr/notice/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=171042099&t=board&utm_source=naver&utm_medium=psa_pc&utm_campaign=smarthome-interior-B2C&utm_term={keyword}&utm_content=main_1",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "신혼집 인테리어 구경하는집",
+   "desc": "조명/커튼/가전 제어하는 편리함! 스마트홈으로 완성된 신혼집을 직접 경험해볼 기회",
+   "url": "https://aqaralife.kr",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "스마트홈 구경하는집 OPEN",
+   "desc": "스마트홈 인테리어, 궁금하다면? 직접 경험하고 전문가의 인테리어팁까지 얻어가세요",
+   "url": "https://aqaralife.kr",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "신혼집 인테리어 구경하는집",
+   "desc": "조명/커튼/가전 제어하는 편리함! 스마트홈으로 완성된 신혼집을 직접 경험해볼 기회",
+   "url": "https://docs.google.com/forms/d/e/1FAIpQLSe-4bIqcX1U3GeffhPTJ4Iz29VQJh2Li1htD0YsGCu3I6nm-A/viewform?usp=dialog",
+   "status": "PAUSED"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "스마트홈 구경하는집 OPEN",
+   "desc": "스마트홈 인테리어, 궁금하다면? 직접 경험하고 전문가의 인테리어팁까지 얻어가세요",
+   "url": "https://docs.google.com/forms/d/e/1FAIpQLSe-4bIqcX1U3GeffhPTJ4Iz29VQJh2Li1htD0YsGCu3I6nm-A/viewform?usp=dialog",
+   "status": "PAUSED"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "신혼집 인테리어 구경하는집",
+   "desc": "조명/커튼/가전 제어하는 편리함! 스마트홈으로 완성된 신혼집을 직접 경험해볼 기회",
+   "url": "https://www.aqaralife.kr/notice/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=171042099&t=board&utm_source=naver&utm_medium=psa_pc&utm_campaign=smarthome-interior-B2C&utm_term={keyword}&utm_content=main_2",
+   "status": "ELIGIBLE"
+  },
+  {
+   "campaign": "(파워링크) B2B_MO_스마트홈 인테리어_구경하는집",
+   "type": "파워링크",
+   "headline": "스마트홈 구경하는집 OPEN",
+   "desc": "스마트홈 인테리어, 궁금하다면? 직접 경험하고 전문가의 인테리어팁까지 얻어가세요",
+   "url": "https://www.aqaralife.kr/notice/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=171042099&t=board&utm_source=naver&utm_medium=psa_pc&utm_campaign=smarthome-interior-B2C&utm_term={keyword}&utm_content=main_1",
+   "status": "ELIGIBLE"
+  }
+ ]
 }
