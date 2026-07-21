@@ -1,206 +1,342 @@
 {
- "generatedAt": "2026-07-21 12:27",
+ "generatedAt": "2026-07-21 13:02",
  "campaigns": 20,
- "adSample": {
-  "nccAdId": "nad-a001-01-000000384579671",
-  "nccAdgroupId": "grp-a001-01-000000048741269",
-  "customerId": 2469840,
-  "inspectStatus": "APPROVED",
-  "type": "RSA_AD",
-  "ad": {
-   "mobile": {
-    "display": "https://aqaralife.kr",
-    "final": "https://aqaralife.kr/news/notice/5?utm_source=naver&utm_medium=naver_powerlink&utm_campaign=purchase_aqaralife&utm_term=apara_showroom_mo",
-    "punyCode": "https://aqaralife.kr/news/notice/5?utm_source=naver&utm_medium=naver_powerlink&utm_campaign=purchase_aqaralife&utm_term=apara_showroom_mo"
+ "sampleByType": {
+  "파워링크": {
+   "nccAdId": "nad-a001-01-000000384579671",
+   "nccAdgroupId": "grp-a001-01-000000048741269",
+   "customerId": 2469840,
+   "inspectStatus": "APPROVED",
+   "type": "RSA_AD",
+   "ad": {
+    "mobile": {
+     "display": "https://aqaralife.kr",
+     "final": "https://aqaralife.kr/news/notice/5?utm_source=naver&utm_medium=naver_powerlink&utm_campaign=purchase_aqaralife&utm_term=apara_showroom_mo",
+     "punyCode": "https://aqaralife.kr/news/notice/5?utm_source=naver&utm_medium=naver_powerlink&utm_campaign=purchase_aqaralife&utm_term=apara_showroom_mo"
+    },
+    "pc": {
+     "display": "https://aqaralife.kr",
+     "final": "https://aqaralife.kr/news/notice/5?utm_source=naver&utm_medium=naver_powerlink&utm_campaign=purchase_aqaralife&utm_term=apara_showroom_mo",
+     "punyCode": "https://aqaralife.kr/news/notice/5?utm_source=naver&utm_medium=naver_powerlink&utm_campaign=purchase_aqaralife&utm_term=apara_showroom_mo"
+    }
    },
-   "pc": {
-    "display": "https://aqaralife.kr",
-    "final": "https://aqaralife.kr/news/notice/5?utm_source=naver&utm_medium=naver_powerlink&utm_campaign=purchase_aqaralife&utm_term=apara_showroom_mo",
-    "punyCode": "https://aqaralife.kr/news/notice/5?utm_source=naver&utm_medium=naver_powerlink&utm_campaign=purchase_aqaralife&utm_term=apara_showroom_mo"
+   "adAttr": {},
+   "userLock": false,
+   "enable": true,
+   "delFlag": false,
+   "editTm": "2025-05-25T08:27:44.000Z",
+   "regTm": "2025-05-25T08:27:43.000Z",
+   "status": "ELIGIBLE",
+   "statusReason": "ELIGIBLE",
+   "assets": [
+    {
+     "nccAssetId": "ast-a001-000-000000002834517",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "홈 IOT 아카라 쇼룸 오픈"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215493",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "HEADLINE",
+     "pin": "1",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834518",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "최신 IOT 스마트홈 쇼룸"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215494",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "HEADLINE",
+     "pin": "1",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834519",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "아카라 스마트홈 쇼룸 오픈"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215495",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "HEADLINE",
+     "pin": "1",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834520",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "Aqara 스마트홈 쇼룸오픈"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215496",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "HEADLINE",
+     "pin": "1",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834521",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "아카라의 스마트홈을 직접체험"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215497",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "HEADLINE",
+     "pin": "1",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834522",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "쇼룸에서 만나는 미래 기술"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215498",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "HEADLINE",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834523",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "차원이 다른 IOT 스마트홈"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215499",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "HEADLINE",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834524",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "아카라의 특별한 쇼룸 체험"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215500",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "HEADLINE",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834526",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "우리 집을 스마트하고 감각적으로 만드는 IOT 스마트홈 기술을 직접 경험하세요"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215501",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "DESCRIPTION",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834527",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "IoT 인테리어를 위한 필수 방문지! 아카라라이프 '스마트홈' 쇼룸 오픈"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215502",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "DESCRIPTION",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834528",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "최신 IOT를 경험 할 수 있는 아카라라이프 쇼룸 오픈"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215503",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "DESCRIPTION",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    },
+    {
+     "nccAssetId": "ast-a001-000-000000002834529",
+     "customerId": 2469840,
+     "assetType": "TEXT",
+     "assetData": {
+      "text": "편리함과 즐거움까지 담은 IoT 제품들, 아카라라이프 쇼룸에서 직접 경험해보세요"
+     },
+     "inspectStatus": "APPROVED",
+     "nccAdAssetLinkId": "alk-a001-01-000000035215504",
+     "nccAdId": "nad-a001-01-000000384579671",
+     "linkType": "DESCRIPTION",
+     "regTm": "2025-05-25T17:27:43.000Z",
+     "editTm": "2025-05-25T17:27:43.000Z"
+    }
+   ]
+  },
+  "쇼핑검색": {
+   "nccAdId": "nad-a001-02-000000171008120",
+   "nccAdgroupId": "grp-a001-02-000000025714678",
+   "customerId": 2469840,
+   "inspectStatus": "APPROVED",
+   "type": "SHOPPING_PRODUCT_AD",
+   "ad": {
+    "imagePath": null,
+    "productName": "아카라 IoT 스마트 플러그 타이머 스케줄"
+   },
+   "adAttr": {
+    "bidAmt": 50,
+    "useGroupBidAmt": true
+   },
+   "userLock": false,
+   "enable": true,
+   "referenceKey": "82650181042",
+   "referenceData": {
+    "rcvYn": "Y",
+    "imgStatusCd": "I01003",
+    "prodStatusCd": "P02006",
+    "prodTypeCd": "P01001",
+    "saleTp": "0",
+    "id": "82650181042",
+    "mallProductId": "5105658996",
+    "parentId": "82650181042",
+    "productTitle": "아카라 스마트 플러그 타이머 원격제어",
+    "mallProductUrl": "https://smartstore.naver.com/main/products/5105658996",
+    "mallProdMblUrl": "https://m.smartstore.naver.com/main/products/5105658996",
+    "lowPrice": "42900",
+    "mobilePrice": "39000",
+    "imageUrl": "https://shopping-phinf.pstatic.net/main_8265018/82650181042.5.jpg",
+    "dvlryFeeCont": "0",
+    "category1Id": "50000008",
+    "category2Id": "50000165",
+    "category3Id": "50001032",
+    "category4Id": "50003459",
+    "category1Name": "생활/건강",
+    "category2Name": "공구",
+    "category3Name": "전기용품",
+    "category4Name": "기타 전기용품",
+    "openDate": "20200909102733",
+    "priceUnit": "KRW",
+    "fullMallCatNm": "생활/건강>공구>전기용품>기타 전기용품",
+    "mallNo": "1659907",
+    "mallName": "아카라라이프",
+    "maker": "",
+    "brand": "아카라",
+    "displayNx": "1",
+    "isLgtModelMat": "0",
+    "mpTp": "1",
+    "productName": "아카라 스마트 플러그 타이머 원격제어",
+    "registrable": true,
+    "hasDvlryFeeCont": "1",
+    "reviewCountSum": "1192",
+    "purchaseCnt": "0",
+    "keepCnt": "160",
+    "scoreInfo": "4.86",
+    "catId": "50003459",
+    "mallChnlSeq": "1659907100820353",
+    "stdPrchOptValNames": "",
+    "stdPrchCondInfoUpper": "",
+    "APPLY_TM": 1784593653201,
+    "DEL_FLAG": 0
+   },
+   "delFlag": false,
+   "editTm": "2026-06-30T15:21:18.000Z",
+   "regTm": "2022-02-15T04:50:39.000Z",
+   "status": "ELIGIBLE",
+   "statusReason": "ELIGIBLE",
+   "nccQi": {
+    "qiGrade": 4
    }
   },
-  "adAttr": {},
-  "userLock": false,
-  "enable": true,
-  "delFlag": false,
-  "editTm": "2025-05-25T08:27:44.000Z",
-  "regTm": "2025-05-25T08:27:43.000Z",
-  "status": "ELIGIBLE",
-  "statusReason": "ELIGIBLE",
-  "assets": [
-   {
-    "nccAssetId": "ast-a001-000-000000002834517",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "홈 IOT 아카라 쇼룸 오픈"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215493",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "HEADLINE",
-    "pin": "1",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
+  "브랜드검색": {
+   "nccAdId": "nad-a001-04-000000444806059",
+   "nccAdgroupId": "grp-a001-04-000000041374182",
+   "customerId": 2469840,
+   "inspectStatus": "APPROVED",
+   "type": "BRAND_SEARCH_AD",
+   "ad": {
+    "dittoId": "692fe168fe9a9e165178808d",
+    "thumbnail": "https://ad-creative.gfa.naver.com/preview/202512/692fe16877ca30902a9ce80f.png"
    },
-   {
-    "nccAssetId": "ast-a001-000-000000002834518",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "최신 IOT 스마트홈 쇼룸"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215494",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "HEADLINE",
-    "pin": "1",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
+   "adAttr": {
+    "naAccountList": [
+     {
+      "naAccountId": "s_5a32df24976c",
+      "url": "https://aqaralife.shop"
+     },
+     {
+      "naAccountId": "s_3d174eadfd79",
+      "url": "https://aqaralife.kr"
+     }
+    ]
    },
-   {
-    "nccAssetId": "ast-a001-000-000000002834519",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "아카라 스마트홈 쇼룸 오픈"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215495",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "HEADLINE",
-    "pin": "1",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
+   "name": "PC 상시소재(수정)",
+   "targetSummary": {
+    "period": "partially",
+    "week": "all",
+    "time": "all"
    },
-   {
-    "nccAssetId": "ast-a001-000-000000002834520",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "Aqara 스마트홈 쇼룸오픈"
+   "targets": [
+    {
+     "nccTargetId": "tgt-a001-04-000000738594040",
+     "ownerId": "nad-a001-04-000000444806059",
+     "targetTp": "TIME_WEEKLY_TARGET",
+     "target": null,
+     "delFlag": false,
+     "regTm": "2025-12-03T07:06:16.000Z",
+     "editTm": "2025-12-03T07:06:16.000Z"
     },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215496",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "HEADLINE",
-    "pin": "1",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
-   },
-   {
-    "nccAssetId": "ast-a001-000-000000002834521",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "아카라의 스마트홈을 직접체험"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215497",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "HEADLINE",
-    "pin": "1",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
-   },
-   {
-    "nccAssetId": "ast-a001-000-000000002834522",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "쇼룸에서 만나는 미래 기술"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215498",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "HEADLINE",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
-   },
-   {
-    "nccAssetId": "ast-a001-000-000000002834523",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "차원이 다른 IOT 스마트홈"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215499",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "HEADLINE",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
-   },
-   {
-    "nccAssetId": "ast-a001-000-000000002834524",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "아카라의 특별한 쇼룸 체험"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215500",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "HEADLINE",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
-   },
-   {
-    "nccAssetId": "ast-a001-000-000000002834526",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "우리 집을 스마트하고 감각적으로 만드는 IOT 스마트홈 기술을 직접 경험하세요"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215501",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "DESCRIPTION",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
-   },
-   {
-    "nccAssetId": "ast-a001-000-000000002834527",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "IoT 인테리어를 위한 필수 방문지! 아카라라이프 '스마트홈' 쇼룸 오픈"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215502",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "DESCRIPTION",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
-   },
-   {
-    "nccAssetId": "ast-a001-000-000000002834528",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "최신 IOT를 경험 할 수 있는 아카라라이프 쇼룸 오픈"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215503",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "DESCRIPTION",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
-   },
-   {
-    "nccAssetId": "ast-a001-000-000000002834529",
-    "customerId": 2469840,
-    "assetType": "TEXT",
-    "assetData": {
-     "text": "편리함과 즐거움까지 담은 IoT 제품들, 아카라라이프 쇼룸에서 직접 경험해보세요"
-    },
-    "inspectStatus": "APPROVED",
-    "nccAdAssetLinkId": "alk-a001-01-000000035215504",
-    "nccAdId": "nad-a001-01-000000384579671",
-    "linkType": "DESCRIPTION",
-    "regTm": "2025-05-25T17:27:43.000Z",
-    "editTm": "2025-05-25T17:27:43.000Z"
-   }
-  ]
+    {
+     "nccTargetId": "tgt-a001-04-000000738594041",
+     "ownerId": "nad-a001-04-000000444806059",
+     "targetTp": "PERIOD_TARGET",
+     "target": {
+      "startDate": "2025-12-04",
+      "endDate": "2035-09-30"
+     },
+     "delFlag": false,
+     "regTm": "2025-12-03T07:06:16.000Z",
+     "editTm": "2025-12-03T07:06:16.000Z"
+    }
+   ],
+   "userLock": true,
+   "enable": true,
+   "referenceKey": "692fe168fe9a9e165178808d",
+   "delFlag": false,
+   "editTm": "2025-12-05T10:31:54.000Z",
+   "regTm": "2025-12-03T07:06:16.000Z",
+   "status": "PAUSED",
+   "statusReason": "AD_PAUSED"
+  }
  }
 }
