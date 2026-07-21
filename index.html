@@ -210,8 +210,12 @@
         <div class="card p-5 lg:col-span-2"><h2 class="accent font-extrabold text-ink mb-3">② 연도별 발행 건수 <span class="text-xs font-normal text-slate-400">(선택 기간 내 · 연도별 합계)</span></h2><div class="h-72"><canvas id="yearlyChart"></canvas></div></div>
       </section>
       <section class="card p-5">
-        <h2 class="accent font-extrabold text-ink mb-1">월별 헤드라인 요약 <span class="text-xs font-normal text-slate-400">(선택 기간 · 월별 주요 기사)</span></h2>
-        <p class="text-[11px] text-slate-400 mb-3">※ 중복 기사 제거 후 <b>배포일·헤드라인</b>만 요약(기획·특집 우선, 최신순). 제목 클릭 시 원문 이동.</p>
+        <div class="flex items-start justify-between flex-wrap gap-2 mb-1">
+          <h2 class="accent font-extrabold text-ink">월별 헤드라인 요약 <span class="text-xs font-normal text-slate-400">(월별 주요 기사 · 중복 제거)</span></h2>
+          <select id="mhYearSel" onchange="mhYear=this.value;renderMonthlyHeadlines()" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-white font-semibold"></select>
+        </div>
+        <p class="text-[11px] text-slate-400 mb-2">※ 중복 기사 제거 후 <b>배포일·헤드라인</b>만 요약(기획·특집 우선, 최신순). 월 제목 클릭 시 펼침 · 제목 클릭 시 원문 이동.</p>
+        <p id="mhBigYear" class="text-3xl font-extrabold text-ink mb-2"></p>
         <div id="mhBody" class="max-h-[560px] overflow-auto pr-1 divide-y divide-[#EFEDE7]"></div>
       </section>
       <style>
@@ -1242,20 +1246,29 @@
       document.getElementById('rangeInfo').textContent=f+' ~ '+t+' · '+FILTERED.length+'건';
       renderKPIs(f,t); renderPerfHero(); renderTrend(); renderType(); renderMedia(); renderChannel(); renderTopic(); renderYearly(); renderMonthlyHeadlines(); renderTable();
       if(typeof maybeRenderKpi==='function') maybeRenderKpi(); }
+    let mhYear='';
+    function mhTokens(t){ return [...new Set((t||'').toLowerCase().replace(/[^0-9a-z가-힣]/g,' ').split(/\s+/).filter(w=>w.length>=2))]; }
+    function mhDup(a,b){ const B=new Set(b); let inter=0; a.forEach(w=>{ if(B.has(w)) inter++; }); const uni=a.length+b.length-inter, jac=uni?inter/uni:0;
+      if(jac>=0.45) return true; if(jac>=0.3 && a.some(w=>w.length>=6&&B.has(w))) return true; return false; }
     function renderMonthlyHeadlines(){ const el=document.getElementById('mhBody'); if(!el) return;
-      const byM={}; FILTERED.forEach(r=>{ const m=r._ym; if(m) (byM[m]=byM[m]||[]).push(r); });
+      const years=[...new Set(FILTERED.map(r=>(r._ym||'').slice(0,4)).filter(Boolean))].sort().reverse();
+      if(!mhYear || years.indexOf(mhYear)<0) mhYear=years[0]||'';
+      const sel=document.getElementById('mhYearSel'); if(sel) sel.innerHTML=years.map(y=>`<option value="${y}" ${y===mhYear?'selected':''}>${y}년</option>`).join('');
+      const big=document.getElementById('mhBigYear'); if(big) big.textContent=mhYear?mhYear+'년':'';
+      // 선택 연도 기사 → 최신순 → 유사(같은 앵글) 기사 하나로 묶음
+      const rowsY=FILTERED.filter(r=>(r._ym||'').slice(0,4)===mhYear)
+        .slice().sort((a,b)=>(b['게재일']||'').localeCompare(a['게재일']||'')||((a._type==='단신'?1:0)-(b._type==='단신'?1:0)));
+      const keptTok=[], uniq=[];
+      rowsY.forEach(r=>{ const tk=mhTokens(r['기사명']); if(!tk.length||keptTok.some(kt=>mhDup(tk,kt))) return; keptTok.push(tk); uniq.push(r); });
+      const byM={}; uniq.forEach(r=>{ (byM[r._ym]=byM[r._ym]||[]).push(r); });
       const months=Object.keys(byM).sort().reverse();
-      if(!months.length){ el.innerHTML='<p class="text-sm text-slate-400 py-6 text-center">해당 기간 데이터가 없습니다.</p>'; return; }
-      el.innerHTML=months.map((m,idx)=>{ const rs=byM[m];
-        // 같은 헤드라인(제목)은 대표 1개만 — 앵글(각도) 수를 보기 위함. 괄호·기호·띄어쓰기 무시하고 중복 판정
-        const seen=new Set(), uniq=[];
-        rs.slice().sort((a,b)=>{ const ra=(a._type==='단신'?1:0)-(b._type==='단신'?1:0); if(ra) return ra; return (b['게재일']||'').localeCompare(a['게재일']||''); })
-          .forEach(r=>{ const k=(r['기사명']||'').toLowerCase().replace(/[^0-9a-z가-힣]/g,''); if(!k||seen.has(k))return; seen.add(k); uniq.push(r); });
-        const items=uniq.map(r=>`<li class="flex items-baseline gap-3 py-0.5">
+      if(!months.length){ el.innerHTML='<p class="text-sm text-slate-400 py-6 text-center">해당 연도 데이터가 없습니다.</p>'; return; }
+      el.innerHTML=months.map((m,idx)=>{ const list=byM[m];
+        const items=list.map(r=>`<li class="flex items-baseline gap-3 py-0.5">
           <span class="text-[11px] text-slate-400 num shrink-0 w-[76px] whitespace-nowrap">${esc((r['게재일']||'').toString().slice(0,10))}</span>
           <a href="${esc(linkOf(r))}" target="_blank" rel="noopener" class="text-[13px] text-slate-700 hover:text-ink hover:underline truncate flex-1 min-w-0">${esc(r['기사명'])}</a></li>`).join('');
         return `<details class="py-1.5" ${idx===0?'open':''}>
-          <summary class="cursor-pointer select-none flex items-center gap-1.5 py-1"><span class="mhcaret text-slate-400 text-[11px]">▶</span><span class="font-extrabold text-ink text-sm">${m}</span> <span class="text-xs font-normal text-slate-400">· 헤드라인 ${uniq.length}건</span></summary>
+          <summary class="cursor-pointer select-none flex items-center gap-1.5 py-1"><span class="mhcaret text-slate-400 text-[11px]">▶</span><span class="font-extrabold text-ink text-sm">${(+m.slice(5))}월</span> <span class="text-xs font-normal text-slate-400">· 헤드라인 ${list.length}건</span></summary>
           <ul class="space-y-0.5 pl-4 pt-1">${items}</ul>
         </details>`; }).join(''); }
     // ===== 전월/전년 대비 비교표 =====
