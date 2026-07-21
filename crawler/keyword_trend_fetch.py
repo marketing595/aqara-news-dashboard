@@ -191,3 +191,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# trigger: searchad 쿼리량 수집
