@@ -70,31 +70,75 @@ def summarize(ids, s, u, info):
     return {"since": s, "until": u, "campaigns": per, "byType": bytype}
 
 
+def _txt(v):
+    if isinstance(v, str):
+        return v.strip() or None
+    if isinstance(v, dict):
+        for k in ("text", "value", "final", "content"):
+            if isinstance(v.get(k), str) and v.get(k).strip():
+                return v.get(k).strip()
+    return None
+
+
 def get_creatives(ids, info, raw):
     out = []
+    sample_by_type = {}
     for cid in ids:
+        typ = info.get(cid, {}).get("type")
         sc, ags = sa_get("/ncc/adgroups", {"nccCampaignId": cid})
         if not isinstance(ags, list):
             continue
-        for ag in ags[:4]:
+        for ag in ags[:6]:
             sc, adl = sa_get("/ncc/ads", {"nccAdgroupId": ag.get("nccAdgroupId")})
             if not isinstance(adl, list):
                 continue
-            if "adSample" not in raw and adl:
-                raw["adSample"] = adl[0]
-            for a in adl[:4]:
+            for a in adl[:6]:
+                if typ not in sample_by_type:
+                    sample_by_type[typ] = a           # 유형별 원본 1개 덤프(구조 확인용)
                 ad = a.get("ad", {}) or {}
                 pc = ad.get("pc", {}) or {}
                 mo = ad.get("mobile", {}) or {}
-                head = ad.get("headline") or ad.get("subject") or ad.get("title") or pc.get("headline")
-                desc = ad.get("description") or pc.get("description")
-                url = pc.get("final") or mo.get("final") or ad.get("displayUrl") or ad.get("pcFinalUrl")
-                if head or desc:
-                    out.append({"campaign": info.get(cid, {}).get("name"), "type": info.get(cid, {}).get("type"),
-                                "headline": head, "desc": desc, "url": url,
-                                "status": a.get("status") or a.get("statusReason")})
-            if len(out) >= 80:
+                heads, descs = [], []
+                # 1) 레거시 단일 필드
+                for k in ("headline", "subject", "title", "headText", "mainCopy", "brandMessage", "name"):
+                    t = _txt(ad.get(k))
+                    if t:
+                        heads.append(t)
+                for k in ("description", "subText", "desc", "explain"):
+                    t = _txt(ad.get(k))
+                    if t:
+                        descs.append(t)
+                # 2) RSA 배열(headlines/descriptions)
+                for h in (ad.get("headlines") or []):
+                    t = _txt(h)
+                    if t:
+                        heads.append(t)
+                for d in (ad.get("descriptions") or []):
+                    t = _txt(d)
+                    if t:
+                        descs.append(t)
+                # 3) assets(확장소재) — assetType으로 제목/설명 분류
+                for asset in (a.get("assets") or []) + (ad.get("assets") or []):
+                    t = _txt(asset) or _txt(asset.get("adTextAsset") if isinstance(asset, dict) else None)
+                    if not t:
+                        continue
+                    at = (asset.get("assetType") or asset.get("type") or "") if isinstance(asset, dict) else ""
+                    if "DESCRIPTION" in str(at).upper():
+                        descs.append(t)
+                    else:
+                        heads.append(t)
+                url = _txt(pc.get("final")) or _txt(mo.get("final")) or _txt(ad.get("displayUrl")) or _txt(ad.get("pcFinalUrl")) or _txt(pc.get("display"))
+                dh = list(dict.fromkeys(heads))
+                dd = list(dict.fromkeys(descs))
+                if dh or dd:
+                    out.append({"campaign": info.get(cid, {}).get("name"), "type": typ,
+                                "headline": (" · ".join(dh))[:140] if dh else None,
+                                "desc": (" · ".join(dd))[:240] if dd else None,
+                                "url": url})
+            if len(out) >= 140:
+                raw["sampleByType"] = sample_by_type
                 return out
+    raw["sampleByType"] = sample_by_type
     return out
 
 
