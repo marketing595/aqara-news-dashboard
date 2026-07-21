@@ -1506,14 +1506,19 @@
       const tbl=document.getElementById('trendTable'); if(tbl){
         const types=['단신','기획','언급','매거진'].filter(t=>cats.includes(t)).concat(cats.filter(c=>['단신','기획','언급','매거진'].indexOf(c)<0));
         const cnt=(m,t)=>FILTERED.filter(r=>r._ym===m&&(t?r._type===t:true)).length;
-        const c=(v,cls)=>`<td class="px-2 py-1 text-right num ${cls||''}">${v||0}</td>`;
-        const head='<th class="px-2 py-1 text-left sticky left-0 bg-slate-50 z-10 whitespace-nowrap">성격</th>'+ms.map(m=>`<th class="px-2 py-1 text-right whitespace-nowrap font-semibold">${m.slice(2,4)+'.'+(+m.slice(5))}</th>`).join('')+'<th class="px-2 py-1 text-right bg-slate-50 whitespace-nowrap">합계</th>';
+        const yearFirst=i=>i===0||ms[i].slice(0,4)!==ms[i-1].slice(0,4);
+        const bl=i=>yearFirst(i)&&i>0?' border-l border-[#E6E6E3]':'';
+        const cells=(vals,cls)=>vals.map((v,i)=>`<td class="px-2 py-1 text-right num ${cls||''}${bl(i)}">${v||0}</td>`).join('');
+        // 연도별 그룹(colspan)
+        const yg=[]; ms.forEach(m=>{ const y=m.slice(0,4), g=yg[yg.length-1]; if(g&&g.y===y) g.n++; else yg.push({y:y,n:1}); });
+        const h1='<th class="px-2 py-1 text-left sticky left-0 bg-slate-50 z-10 whitespace-nowrap" rowspan="2">성격</th>'+yg.map((g,i)=>`<th class="px-2 py-1 text-center font-bold text-ink ${i?'border-l border-[#E6E6E3]':''}" colspan="${g.n}">${g.y}</th>`).join('')+'<th class="px-2 py-1 text-right bg-slate-50 whitespace-nowrap" rowspan="2">합계</th>';
+        const h2=ms.map((m,i)=>`<th class="px-2 py-1 text-right whitespace-nowrap font-semibold${bl(i)}">${(+m.slice(5))}월</th>`).join('');
         const body=types.map(t=>{ const per=ms.map(m=>cnt(m,t)), tot=per.reduce((a,b)=>a+b,0);
           const dot='<span class="inline-block w-2 h-2 rounded-full mr-1 align-middle" style="background:'+typeColor(t)+'"></span>';
-          return `<tr class="border-t border-[#EFEDE7]"><td class="px-2 py-1 font-medium text-ink whitespace-nowrap sticky left-0 bg-white">${dot}${esc(t)}</td>${per.map(v=>c(v)).join('')}${c(tot,'font-bold text-ink bg-[#FAFAF9]')}</tr>`; }).join('');
+          return `<tr class="border-t border-[#EFEDE7]"><td class="px-2 py-1 font-medium text-ink whitespace-nowrap sticky left-0 bg-white">${dot}${esc(t)}</td>${cells(per)}<td class="px-2 py-1 text-right num font-bold text-ink bg-[#FAFAF9]">${tot}</td></tr>`; }).join('');
         const mt=ms.map(m=>cnt(m,null)), gt=mt.reduce((a,b)=>a+b,0);
-        const totalRow=`<tr class="border-t-2 border-[#E6E6E3] bg-[#FBF7E8] font-bold"><td class="px-2 py-1 text-ink sticky left-0 bg-[#FBF7E8] whitespace-nowrap">TOTAL</td>${mt.map(v=>c(v,'text-ink')).join('')}${c(gt,'text-ink')}</tr>`;
-        tbl.innerHTML=ms.length?('<table class="text-[11px] w-full"><thead><tr class="bg-slate-50 text-slate-500">'+head+'</tr></thead><tbody>'+body+totalRow+'</tbody></table>'):'<p class="text-xs text-slate-400 p-4 text-center">데이터 없음</p>';
+        const totalRow=`<tr class="border-t-2 border-[#E6E6E3] bg-[#FBF7E8] font-bold"><td class="px-2 py-1 text-ink sticky left-0 bg-[#FBF7E8] whitespace-nowrap">TOTAL</td>${cells(mt,'text-ink')}<td class="px-2 py-1 text-right num text-ink">${gt}</td></tr>`;
+        tbl.innerHTML=ms.length?('<table class="text-[11px] w-full"><thead class="bg-slate-50 text-slate-500"><tr>'+h1+'</tr><tr>'+h2+'</tr></thead><tbody>'+body+totalRow+'</tbody></table>'):'<p class="text-xs text-slate-400 p-4 text-center">데이터 없음</p>';
       } }
     function donutFrom(counts,id,colorFn){ let a=Object.entries(counts).sort((x,y)=>y[1]-x[1]); const top=a.slice(0,8),etc=a.slice(8).reduce((s,x)=>s+x[1],0);
       const labels=top.map(x=>x[0]).concat(etc?['기타']:[]),data=top.map(x=>x[1]).concat(etc?[etc]:[]);
