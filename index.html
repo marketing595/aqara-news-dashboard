@@ -149,12 +149,31 @@
     <div id="loading" class="text-center py-24 text-slate-400">데이터를 불러오는 중…</div>
     <div id="error" class="hidden text-center py-24 text-red-500"></div>
     <div id="content" class="hidden space-y-5">
+      <!-- 발행 실적 요약 (MTD·YTD) -->
+      <section class="card p-5 sm:p-6">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+          <h2 class="text-lg font-extrabold text-ink">발행 실적 요약 <span id="perfHeroMonth" class="text-sm font-medium text-muted"></span></h2>
+          <span id="perfHeroSub" class="text-xs text-slate-400"></span>
+        </div>
+        <div id="perfHeroCards" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        <div class="mt-5 pt-4 border-t border-[#ECE9E1]">
+          <button onclick="toggleHalfCmp()" class="flex items-center gap-1.5 text-sm font-bold text-ink hover:text-brand-ink"><span id="halfCmpCaret" class="text-slate-400 text-[11px]">▶</span> 반기 성과 비교 <span class="text-xs font-normal text-slate-400">(상·하반기 결산 · 클릭해 펼치기)</span></button>
+          <div id="halfCmpWrap" class="hidden mt-3">
+            <div class="flex items-center justify-end mb-3"><div class="flex gap-1.5 text-xs">
+              <button id="hcBtnYoy" onclick="halfCmpMode='yoy';renderHalfCompare()">전년 동반기</button>
+              <button id="hcBtnPrev" onclick="halfCmpMode='prev';renderHalfCompare()">직전 반기</button>
+            </div></div>
+            <div id="perfHalfCmp"></div>
+          </div>
+        </div>
+      </section>
+      <!-- 기간 선택 -->
       <section class="card p-4 flex flex-wrap items-end gap-3">
         <div><label class="block text-[11px] text-slate-500 mb-1">시작일</label>
           <input id="fromDate" type="date" onchange="applyAndRender()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm" /></div>
         <div><label class="block text-[11px] text-slate-500 mb-1">종료일</label>
           <input id="toDate" type="date" onchange="applyAndRender()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm" /></div>
-        <div class="flex gap-1.5">
+        <div class="flex gap-1.5 flex-wrap">
           <button onclick="preset('all')" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">전체</button>
           <button onclick="preset('12m')" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">최근 12개월</button>
           <button onclick="preset('month')" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">이번 달</button>
@@ -164,55 +183,21 @@
         </div>
         <div class="ml-auto text-xs text-slate-400 self-center" id="rangeInfo"></div>
       </section>
-      <section class="card p-5 sm:p-6">
-        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
-          <h2 class="text-lg font-extrabold text-ink">발행 실적 요약 <span id="perfHeroMonth" class="text-sm font-medium text-muted"></span></h2>
-          <span id="perfHeroSub" class="text-xs text-slate-400"></span>
-        </div>
-        <div id="perfHeroCards" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
-        <div class="mt-5 pt-5 border-t border-[#ECE9E1]">
-          <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-            <h3 class="font-bold text-ink text-sm">반기 성과 비교 <span class="text-xs font-normal text-slate-400">(직전 완료 반기 결산 · 건수·성격·주요이슈)</span></h3>
-            <div class="flex gap-1.5 text-xs">
-              <button id="hcBtnYoy" onclick="halfCmpMode='yoy';renderHalfCompare()">전년 동반기</button>
-              <button id="hcBtnPrev" onclick="halfCmpMode='prev';renderHalfCompare()">직전 반기</button>
-            </div>
-          </div>
-          <div id="perfHalfCmp"></div>
-        </div>
-      </section>
+      <!-- 기간 KPI -->
       <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">기간 내 기사</p><p id="kpiTotal" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p id="kpiDelta" class="text-xs mt-1"></p></div>
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">활동 매체 수</p><p id="kpiMedia" class="num text-3xl font-extrabold text-ink mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도된 고유 매체</p></div>
         <div class="card card-hover p-5 relative"><button onclick="prRatioEdit()" class="absolute top-2.5 right-2.5 text-slate-300 hover:text-ink text-[13px]" title="비율 직접 수정 (비밀번호)">✏️</button><p class="text-sm text-slate-500">단신 : 기획 : 언급 <span id="kpiRatioTag"></span></p><p id="kpiRatio" class="num text-2xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">보도자료 : 기획·특집 : 단순 언급 (%)</p></div>
         <div class="card card-hover p-5"><p class="text-sm text-slate-500">월 평균 발행</p><p id="kpiAvg" class="num text-3xl font-extrabold text-slate-900 mt-1">–</p><p class="text-xs text-slate-400 mt-1">기간 내 월평균 건수</p></div>
       </section>
-      <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div class="card p-5">
-          <div class="flex items-baseline justify-between mb-3">
-            <h2 class="accent font-extrabold text-ink">발행 성과 비교 <span id="cmpMonthLabel" class="text-xs font-normal text-slate-400"></span></h2>
-          </div>
-          <div class="overflow-auto rounded-lg border border-[#ECE9E1]">
-            <table class="w-full text-sm">
-              <thead><tr class="text-left">
-                <th class="px-3 py-2.5 whitespace-nowrap">지표</th>
-                <th class="px-3 py-2.5 text-right whitespace-nowrap">선택 기간</th>
-                <th class="px-3 py-2.5 text-right whitespace-nowrap">전월 대비</th>
-                <th class="px-3 py-2.5 text-right whitespace-nowrap">전년 대비</th>
-              </tr></thead>
-              <tbody id="cmpBody" class="divide-y divide-slate-100"></tbody>
-            </table>
-          </div>
-          <p class="text-xs text-slate-400 mt-2">※ 위 시작일~종료일(선택 기간) 기준. 전월/전년은 같은 길이의 기간을 1개월/1년 앞으로 이동해 비교. 괄호는 비교 기간 실제 건수.</p>
+      <!-- 경쟁사 노출량 -->
+      <section class="card p-5">
+        <div class="flex items-baseline justify-between mb-3">
+          <h2 class="accent font-extrabold text-ink">경쟁사 대비 언론 노출량 <span id="cmpCompeteYearLbl" class="text-xs font-normal text-slate-400">(올해 기준)</span></h2>
+          <span id="cmpCompeteStamp" class="text-xs text-slate-400"></span>
         </div>
-        <div class="card p-5">
-          <div class="flex items-baseline justify-between mb-3">
-            <h2 class="accent font-extrabold text-ink">경쟁사 대비 언론 노출량 <span class="text-xs font-normal text-slate-400">(참고)</span></h2>
-            <span id="cmpCompeteStamp" class="text-xs text-slate-400"></span>
-          </div>
-          <div id="cmpCompeteBody" class="space-y-2.5"></div>
-          <p class="text-xs text-slate-400 mt-3">※ 네이버 뉴스 '브랜드 검색' 누적 노출량(스마트홈 맥락). 삼성·LG는 종합 대기업 특성상 절대량이 커 <b class="text-ink">점유율보다 추세 비교</b>에 활용하세요.</p>
-        </div>
+        <div id="cmpCompeteBody" class="space-y-2.5"></div>
+        <p class="text-xs text-slate-400 mt-3">※ 네이버 뉴스 '브랜드 검색' 노출량(스마트홈 맥락) · <b class="text-ink">올해 누적</b> 기준. 삼성·LG는 종합 대기업 특성상 절대량이 커 <b class="text-ink">점유율보다 추세</b>에 활용하세요.</p>
       </section>
       <section class="card p-5"><h2 class="accent font-extrabold text-ink mb-3">① 월별 발행 추이 <span class="text-xs font-normal text-slate-400">(선택 기간 · 성격별 누적)</span></h2><div class="h-72"><canvas id="trendChart"></canvas></div></section>
       <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -230,6 +215,8 @@
         <div id="mhBody" class="max-h-[560px] overflow-auto pr-1 divide-y divide-[#EFEDE7]"></div>
       </section>
       <style>
+        #mhBody details>summary{ list-style:none; } #mhBody details>summary::-webkit-details-marker{ display:none; }
+        #mhBody .mhcaret{ display:inline-block; transition:transform .15s; } #mhBody details[open] .mhcaret{ transform:rotate(90deg); }
         #newsListSection .col-chk, #newsListSection .col-edit, #newsListSection #bulkEditBar{ display:none; }
         #newsListSection.editon .col-chk, #newsListSection.editon .col-edit{ display:table-cell; }
         #newsListSection.editon #bulkEditBar{ display:contents; }
@@ -1167,6 +1154,9 @@
     let ALL=[], FILTERED=[], sortKey='게재일', sortDir=-1, charts={};
     // 아카라 브랜드 서브컬러 기반 차트 팔레트 (옐로우·블루·오렌지·그린·레드·그레이 + 톤)
     const PALETTE=['#FBC400','#8FB9D8','#D68134','#716A3C','#BF5332','#5E625F','#E3A93C','#B4915E','#A9C7DE','#9A9169'];
+    // 성격(구분) 고정 색 — 차트 간 통일
+    const TYPE_COLOR={'단신':'#8FB9D8','기획':'#FBC400','매거진':'#5E7350','언급':'#BF5332','(미분류)':'#B4915E','기타':'#C9C4B4'};
+    const typeColor=t=>TYPE_COLOR[t]||'#9A9169';
 
     function fType(r){ return (r['구분']||'').toString().trim() || '(미분류)'; }
     // 보도자료 종류 8분류 정규화(요청 기준): 대외협력 / 기타 / [인테리어] 쇼룸·시공사례·서비스·트렌드 / 회사 이슈 / 신제품
@@ -1250,13 +1240,13 @@
     function applyAndRender(){ const f=document.getElementById('fromDate').value,t=document.getElementById('toDate').value;
       FILTERED=ALL.filter(r=>{const d=r['게재일']; if(!d)return false; if(f&&d<f)return false; if(t&&d>t)return false; return true;});
       document.getElementById('rangeInfo').textContent=f+' ~ '+t+' · '+FILTERED.length+'건';
-      renderKPIs(f,t); renderCompare(); renderTrend(); renderType(); renderMedia(); renderChannel(); renderTopic(); renderYearly(); renderMonthlyHeadlines(); renderTable();
+      renderKPIs(f,t); renderPerfHero(); renderTrend(); renderType(); renderMedia(); renderChannel(); renderTopic(); renderYearly(); renderMonthlyHeadlines(); renderTable();
       if(typeof maybeRenderKpi==='function') maybeRenderKpi(); }
     function renderMonthlyHeadlines(){ const el=document.getElementById('mhBody'); if(!el) return;
       const byM={}; FILTERED.forEach(r=>{ const m=r._ym; if(m) (byM[m]=byM[m]||[]).push(r); });
       const months=Object.keys(byM).sort().reverse();
       if(!months.length){ el.innerHTML='<p class="text-sm text-slate-400 py-6 text-center">해당 기간 데이터가 없습니다.</p>'; return; }
-      el.innerHTML=months.map(m=>{ const rs=byM[m];
+      el.innerHTML=months.map((m,idx)=>{ const rs=byM[m];
         // 같은 헤드라인(제목)은 대표 1개만 — 앵글(각도) 수를 보기 위함. 괄호·기호·띄어쓰기 무시하고 중복 판정
         const seen=new Set(), uniq=[];
         rs.slice().sort((a,b)=>{ const ra=(a._type==='단신'?1:0)-(b._type==='단신'?1:0); if(ra) return ra; return (b['게재일']||'').localeCompare(a['게재일']||''); })
@@ -1264,10 +1254,10 @@
         const items=uniq.map(r=>`<li class="flex items-baseline gap-3 py-0.5">
           <span class="text-[11px] text-slate-400 num shrink-0 w-[76px] whitespace-nowrap">${esc((r['게재일']||'').toString().slice(0,10))}</span>
           <a href="${esc(linkOf(r))}" target="_blank" rel="noopener" class="text-[13px] text-slate-700 hover:text-ink hover:underline truncate flex-1 min-w-0">${esc(r['기사명'])}</a></li>`).join('');
-        return `<div class="py-3">
-          <p class="font-extrabold text-ink text-sm mb-1.5">${m} <span class="text-xs font-normal text-slate-400">· 헤드라인 ${uniq.length}건</span></p>
-          <ul class="space-y-0.5">${items}</ul>
-        </div>`; }).join(''); }
+        return `<details class="py-1.5" ${idx===0?'open':''}>
+          <summary class="cursor-pointer select-none flex items-center gap-1.5 py-1"><span class="mhcaret text-slate-400 text-[11px]">▶</span><span class="font-extrabold text-ink text-sm">${m}</span> <span class="text-xs font-normal text-slate-400">· 헤드라인 ${uniq.length}건</span></summary>
+          <ul class="space-y-0.5 pl-4 pt-1">${items}</ul>
+        </details>`; }).join(''); }
     // ===== 전월/전년 대비 비교표 =====
     function ymShift(ym,delta){ let y=+ym.slice(0,4),m=+ym.slice(5,7)+delta; while(m<1){m+=12;y--;} while(m>12){m-=12;y++;} return y+'-'+String(m).padStart(2,'0'); }
     function cmpCell(cur,base){
@@ -1292,6 +1282,32 @@
     function shiftPeriod(lo,hi,m,y){
       const shift=s=>{ const p=(s||'').split('-'); let yy=+p[0]-y, mm=(+p[1])-1-m, dd=+p[2]; while(mm<0){mm+=12;yy--;} const dim=new Date(yy,mm+1,0).getDate(); dd=Math.min(dd,dim); return yy+'-'+String(mm+1).padStart(2,'0')+'-'+String(dd).padStart(2,'0'); };
       return [shift(lo),shift(hi)]; }
+    function toggleHalfCmp(){ const w=document.getElementById('halfCmpWrap'), c=document.getElementById('halfCmpCaret'); if(!w) return; w.classList.toggle('hidden'); const open=!w.classList.contains('hidden'); if(c) c.textContent=open?'▼':'▶'; if(open) renderHalfCompare(); }
+    function renderPerfHero(){
+      const cards=document.getElementById('perfHeroCards'); if(!cards) return;
+      const cnt=(a,b)=>ALL.filter(r=>{const d=(r['게재일']||'').slice(0,10);return d&&d>=a&&d<=b;}).length;
+      const now=new Date(), y=now.getFullYear(), m=now.getMonth()+1, d=now.getDate(), p2=n=>String(n).padStart(2,'0');
+      const today=y+'-'+p2(m)+'-'+p2(d);
+      const mStart=y+'-'+p2(m)+'-01', mtd=cnt(mStart,today);
+      let pm=m-1, py=y; if(pm<1){pm=12;py--;} const pmDim=new Date(py,pm,0).getDate(), pmd=Math.min(d,pmDim);
+      const pmStart=py+'-'+p2(pm)+'-01', pmEnd=py+'-'+p2(pm)+'-'+p2(pmd), prevMtd=cnt(pmStart,pmEnd);
+      const yStart=y+'-01-01', ytd=cnt(yStart,today);
+      const lyDim=new Date(y-1,m,0).getDate(), lyd=Math.min(d,lyDim);
+      const lyStart=(y-1)+'-01-01', lyEnd=(y-1)+'-'+p2(m)+'-'+p2(lyd), prevYtd=cnt(lyStart,lyEnd);
+      const pct=(c0,b)=>b?Math.round((c0-b)/b*100):null;
+      const badge=v=>{ if(v==null) return '<span class="text-slate-300">–</span>'; const up=v>=0; return '<span class="'+(up?'text-agreen':'text-ared')+' font-bold">'+(up?'▲':'▼')+Math.abs(v)+'%</span>'; };
+      const card=(label,badgeLbl,val,cmpBadge,cmpDetail)=>`<div class="rounded-xl border border-[#ECE9E1] bg-gradient-to-b from-[#FDFCF9] to-white p-5">
+        <p class="text-sm text-slate-500 font-medium">${label}</p>
+        <p class="num text-4xl font-extrabold text-ink mt-1">${val.toLocaleString()}<span class="text-lg font-bold"> 건</span></p>
+        <p class="text-[13px] mt-2"><span class="font-bold text-ink">${badgeLbl}</span> ${cmpBadge} <span class="text-slate-400 text-xs">(${cmpDetail})</span></p>
+      </div>`;
+      cards.innerHTML=
+        card('이번 달 발행 (MTD)','MoM 전월 동기간', mtd, badge(pct(mtd,prevMtd)), pmStart.slice(5)+'~'+pmEnd.slice(5)+' '+prevMtd+'건')+
+        card('올해 발행 (YTD)','YoY 전년 동기간', ytd, badge(pct(ytd,prevYtd)), (y-1)+' 동기간 '+prevYtd+'건');
+      const hm=document.getElementById('perfHeroMonth'); if(hm) hm.textContent='· '+today+' 기준';
+      const hs=document.getElementById('perfHeroSub'); if(hs) hs.textContent='이번 달·올해 누적(오늘까지 실시간) · MTD/YTD';
+      const w=document.getElementById('halfCmpWrap'); if(w && !w.classList.contains('hidden')) renderHalfCompare();
+    }
     function renderCompare(){
       const dts=ALL.map(r=>r['게재일']).filter(Boolean).sort();
       if(!dts.length){ document.getElementById('cmpBody').innerHTML=''; document.getElementById('perfHeroCards').innerHTML=''; return; }
@@ -1416,13 +1432,15 @@
       wrap.appendChild(box); }); }
     setInterval(attachChartDownloaders, 1500);
     function months(){ return [...new Set(FILTERED.map(r=>r._ym).filter(Boolean))].sort(); }
-    function renderTrend(){ const ms=months(); const cats=[...new Set(ALL.map(r=>r._type))];
-      const ds=cats.map((c,i)=>({label:c,data:ms.map(m=>FILTERED.filter(r=>r._ym===m&&r._type===c).length),backgroundColor:PALETTE[i%PALETTE.length],borderRadius:3}));
+    function renderTrend(){ const ms=months(); const ORD=['단신','기획','매거진','언급'];
+      const cats=[...new Set(ALL.map(r=>r._type))].sort((a,b)=>{const ia=ORD.indexOf(a),ib=ORD.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib);});
+      const ds=cats.map(c=>({label:c,data:ms.map(m=>FILTERED.filter(r=>r._ym===m&&r._type===c).length),backgroundColor:typeColor(c),borderRadius:3}));
       draw('trendChart',{type:'bar',data:{labels:ms,datasets:ds},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}},plugins:{legend:{position:'top'}}}}); }
-    function donutFrom(counts,id){ let a=Object.entries(counts).sort((x,y)=>y[1]-x[1]); const top=a.slice(0,8),etc=a.slice(8).reduce((s,x)=>s+x[1],0);
+    function donutFrom(counts,id,colorFn){ let a=Object.entries(counts).sort((x,y)=>y[1]-x[1]); const top=a.slice(0,8),etc=a.slice(8).reduce((s,x)=>s+x[1],0);
       const labels=top.map(x=>x[0]).concat(etc?['기타']:[]),data=top.map(x=>x[1]).concat(etc?[etc]:[]);
-      draw(id,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:PALETTE,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}}); }
-    function renderType(){ const c={}; FILTERED.forEach(r=>c[r._type]=(c[r._type]||0)+1); donutFrom(c,'typeChart'); }
+      const bg=colorFn?labels.map(colorFn):PALETTE;
+      draw(id,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:bg,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}}); }
+    function renderType(){ const c={}; FILTERED.forEach(r=>c[r._type]=(c[r._type]||0)+1); donutFrom(c,'typeChart',typeColor); }
     function renderMedia(){ const c={}; FILTERED.forEach(r=>c[r._media]=(c[r._media]||0)+1); donutFrom(c,'mediaChart'); }
     function renderChannel(){ const c={}; FILTERED.forEach(r=>c[r._chan]=(c[r._chan]||0)+1); donutFrom(c,'channelChart'); }
     function renderTopic(){ const ms=months(); const tops=[...new Set(FILTERED.map(r=>r._topic))].sort((a,b)=>{const ia=TOPIC_ORDER.indexOf(a),ib=TOPIC_ORDER.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib);}).slice(0,8);
