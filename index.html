@@ -1304,8 +1304,8 @@
       cards.innerHTML=
         card('이번 달 발행 (MTD)','MoM 전월 동기간', mtd, badge(pct(mtd,prevMtd)), pmStart.slice(5)+'~'+pmEnd.slice(5)+' '+prevMtd+'건')+
         card('올해 발행 (YTD)','YoY 전년 동기간', ytd, badge(pct(ytd,prevYtd)), (y-1)+' 동기간 '+prevYtd+'건');
-      const hm=document.getElementById('perfHeroMonth'); if(hm) hm.textContent='· '+today+' 기준';
-      const hs=document.getElementById('perfHeroSub'); if(hs) hs.textContent='이번 달·올해 누적(오늘까지 실시간) · MTD/YTD';
+      const hm=document.getElementById('perfHeroMonth'); if(hm) hm.innerHTML='· '+today+' 기준 <span class="text-agreen font-bold">● 실시간</span>';
+      const hs=document.getElementById('perfHeroSub'); if(hs) hs.innerHTML='MTD/YTD · 오늘까지 누적 · <span class="text-agreen font-semibold">갱신 '+p2(now.getHours())+':'+p2(now.getMinutes())+':'+p2(now.getSeconds())+'</span>';
       const w=document.getElementById('halfCmpWrap'); if(w && !w.classList.contains('hidden')) renderHalfCompare();
     }
     function renderCompare(){
