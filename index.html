@@ -1471,7 +1471,9 @@
       if(!items.length||!items.some(i=>(i.topKw||[]).length)){ body.className='space-y-2.5'; body.innerHTML='<p class="text-sm text-slate-400 py-4 text-center">키워드 분석 수집 대기 (경쟁사 워크플로우 실행 필요)</p>'; return; }
       body.className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4';
       body.innerHTML=items.map(i=>{ const kws=i.topKw||[], max=Math.max(1,...kws.map(k=>k.n));
-        const chips=kws.map(k=>{ const sz=11+Math.round(k.n/max*7); return `<span class="inline-block rounded-full px-2 py-0.5 mr-1 mb-1 leading-tight ${i.me?'bg-brand/20 text-brand-ink':'bg-slate-100 text-slate-600'}" style="font-size:${sz}px" title="${k.n}회 언급">${esc(k.kw)}</span>`; }).join('');
+        const base=i.me?'bg-brand/20 text-brand-ink':'bg-slate-100 text-slate-600';
+        const chips=kws.map(k=>{ const sz=11+Math.round(k.n/max*7);
+          return k.link?`<a href="${esc(k.link)}" target="_blank" rel="noopener" class="inline-block rounded-full px-2 py-0.5 mr-1 mb-1 leading-tight ${base} hover:ring-1 hover:ring-slate-400" style="font-size:${sz}px" title="${esc(k.title||'')} · ${k.n}회 · 대표기사 ↗">${esc(k.kw)}</a>`:`<span class="inline-block rounded-full px-2 py-0.5 mr-1 mb-1 leading-tight ${base}" style="font-size:${sz}px" title="${k.n}회 언급">${esc(k.kw)}</span>`; }).join('');
         return `<div class="rounded-xl border ${i.me?'border-brand/40 bg-brand/5':'border-[#ECE9E1]'} p-4">
           <div class="flex items-baseline justify-between mb-2"><p class="font-bold ${i.me?'text-ink':'text-slate-700'}">${esc(i.name)}</p><span class="text-[11px] text-slate-400">${i.analyzed||0}건${i.capped?'+':''} 분석</span></div>
           <div>${chips||'<span class="text-xs text-slate-400">키워드 없음</span>'}</div>

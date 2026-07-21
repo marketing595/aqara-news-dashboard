@@ -76,8 +76,11 @@ def analyze(query, brand_stop, year):
     else:
         capped = True
     bstop = set(x.lower() for x in brand_stop)
+    rep = {}
     for it in items:
-        text = clean(it.get("title")) + " " + clean(it.get("description"))
+        ttl = clean(it.get("title"))
+        link = it.get("originallink") or it.get("link")
+        text = ttl + " " + clean(it.get("description"))
         for w in re.findall(r"[가-힣A-Za-z0-9]{2,}", text):
             wl = strip_josa(w) if re.search(r"[가-힣]", w) else w
             key = wl.lower()
@@ -86,8 +89,11 @@ def analyze(query, brand_stop, year):
             if re.fullmatch(r"[0-9]+", wl):
                 continue
             cnt[wl] = cnt.get(wl, 0) + 1
+            if wl not in rep:   # items가 최신순 → 첫 등장 = 가장 최근 대표 기사
+                rep[wl] = {"title": ttl, "link": link}
     top = sorted(cnt.items(), key=lambda x: -x[1])[:18]
-    return ytd, capped, [{"kw": k, "n": v} for k, v in top if v >= 2], len(items)
+    return ytd, capped, [{"kw": k, "n": v, "title": rep.get(k, {}).get("title"), "link": rep.get(k, {}).get("link")}
+                         for k, v in top if v >= 2], len(items)
 
 
 def main():
