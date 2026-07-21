@@ -1,11 +1,14 @@
 {
- "generatedAt": "2026-07-21 09:13",
+ "generatedAt": "2026-07-21 09:14",
  "period": "month",
  "startDate": "2024-05-01",
  "endDate": "2026-06-30",
  "anchor": "스마트홈",
  "source": "https://datalab.naver.com/keyword/trendSearch.naver",
- "method": "네이버 데이터랩 검색어트렌드 API · 월간 상대 관심도 · 키워드별 개별 조회 후 '스마트홈' 앵커로 교차 정규화(검색량 상대비교 가능). vol=정규화 관심도(앵커 기준), mom/yoy=해당 키워드 전월/전년 대비.",
+ "hasQuery": false,
+ "pctBasis": "mom(전월대비) = (이번달 관심도 − 전달 관심도) ÷ 전달 관심도 × 100. 관심도는 네이버 데이터랩 월간 상대지수(0~100).",
+ "queryBasis": "qMonthly = 네이버 검색광고 키워드도구 최근 30일 PC+모바일 검색수(실제 쿼리량).",
+ "method": "관심도 추세(mom/yoy): 데이터랩 검색어트렌드 API, 키워드별 개별 조회 후 '스마트홈' 앵커로 교차 정규화. 검색량(qMonthly): 검색광고 키워드도구 월간 검색수.",
  "keywords": [
   {
    "name": "아카라",
