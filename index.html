@@ -109,8 +109,6 @@
       <button id="grpBtn-pr" onclick="switchGroup('pr')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-brand text-ink whitespace-nowrap">PR</button>
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
       <button id="grpBtn-ad" onclick="switchGroup('ad')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">퍼포먼스AD</button>
-      <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페·커뮤니티</button>
-      <button id="grpBtn-report" onclick="switchGroup('report')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">종합 리포트</button>
       <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
       <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
     </div>
@@ -132,15 +130,14 @@
       <button id="ownBtn-newsletter" onclick="switchOwned('newsletter')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">뉴스레터</button>
     </div>
   </div>
-  <!-- 종합 리포트 하위탭 -->
-  <div id="subnav-report" class="bg-[#FAFAF9] border-b border-[#E6E6E3] sticky top-[100px] z-10 hidden">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-2 py-2 overflow-x-auto">
-      <button id="rptBtn-report" onclick="switchTab('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-ink text-white whitespace-nowrap transition">통합 리포트</button>
-      <button id="rptBtn-campaign" onclick="switchTab('campaign')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">캠페인</button>
-      <button id="rptBtn-market" onclick="switchTab('market')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">시장 분석</button>
-      <button id="rptBtn-competitor" onclick="switchTab('competitor')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">경쟁사 분석</button>
-      <button id="rptBtn-cdj" onclick="switchTab('cdj')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">자사 분석</button>
-      <button id="rptBtn-export" onclick="switchTab('export')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">📑 보고서 추출하기</button>
+  <!-- 종합 리포트 하위탭 (ONLY MKT 내부로 편입 · mktReportSlot으로 이동) -->
+  <div id="subnav-report" class="rounded-xl border border-[#E6E6E3] bg-white mb-5 hidden">
+    <div class="flex gap-2 px-3 py-2 overflow-x-auto">
+      <button id="rptBtn-report" onclick="mktReportSub('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-ink text-white whitespace-nowrap transition">통합 리포트</button>
+      <button id="rptBtn-campaign" onclick="mktReportSub('campaign')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">캠페인</button>
+      <button id="rptBtn-market" onclick="mktReportSub('market')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">시장 분석</button>
+      <button id="rptBtn-owncomp" onclick="mktReportSub('owncomp')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">자사/경쟁사 분석</button>
+      <button id="rptBtn-export" onclick="mktReportSub('export')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">📑 보고서 추출하기</button>
     </div>
   </div>
 
@@ -289,7 +286,7 @@
    </div>
 
    <div id="view-briefing" class="hidden">
-     <div class="card p-5 mb-5">
+     <div class="card p-5 mb-5" id="briefInsightCard">
        <h2 class="accent font-extrabold text-ink mb-1">검색어 · 키워드 인사이트 <span class="text-xs font-normal text-slate-400">(네이버 검색 기준)</span></h2>
        <div class="flex items-center justify-between flex-wrap gap-2 mb-2 mt-3">
          <p class="text-sm font-semibold text-slate-600">파워링크 키워드 합산 검색 트렌드 <span class="text-xs font-normal text-slate-400">(스마트홈·인테리어 100개 키워드 묶음 · 데이터랩 상대지수)</span> <button onclick="document.getElementById('plkwBox').classList.toggle('hidden')" class="text-[11px] text-brand-ink font-semibold hover:underline ml-1">포함 키워드 보기 ▾</button></p>
@@ -328,7 +325,7 @@
          </div>
        </div>
      </div>
-     <div class="card p-5 mb-5">
+     <div class="card p-5 mb-5" id="assocCard">
        <h2 class="accent font-extrabold text-ink mb-1">브랜드 × 인테리어 연관도 <span class="text-xs font-normal text-slate-400">(아카라가 인테리어 키워드와 함께 언급되는 정도)</span></h2>
        <p class="text-sm mt-1 mb-3"><span class="font-semibold text-aorange">종합: 아직 약함 → 미개척 기회 영역</span> <span class="text-slate-500">· 연관검색어엔 미노출, 뉴스 동시언급도 1% 미만. '스마트홈 브랜드' 인지는 강하나 '인테리어' 문맥 선점은 아직.</span></p>
        <div id="assocBox" class="space-y-2.5"></div>
@@ -651,17 +648,20 @@
        <div id="cafeStats" class="flex flex-wrap gap-1.5"></div>
      </div>
      <div class="card p-4 mb-5 bg-[#FAFAF9] border-[#E6E6E3]">
-       <p class="text-[12px] font-bold text-ink mb-1.5">감성 분류 기준 <span class="font-normal text-slate-400">(제목·내용 키워드 규칙 기반 자동 분류 · 참고용)</span></p>
+       <p class="text-[12px] font-bold text-ink mb-1.5">제품군 분류 기준 <span class="font-normal text-slate-400">(제목·내용 키워드 규칙 기반 자동 분류 · 참고용)</span></p>
        <ul class="text-[12px] leading-relaxed text-slate-500 space-y-1">
-         <li>· <b class="text-agreen">긍정</b>: 해결완료·해결됨·만족·추천·좋아요·편하다·굿·최고·감사·잘 됨·덕분 등 <b>긍정 표현이 있고 부정 표현이 없을 때</b></li>
-         <li>· <b class="text-ared">부정</b>: 오류·에러·안됨·안돼·실패·딜레이·먹통·불편·불만·최악·문제·하지마·ㅠㅠ 등 <b>부정 표현이 있고 긍정 표현이 없을 때</b></li>
-         <li>· <b class="text-agray">중립</b>: 위 둘에 해당하지 않거나(단순 문의·정보), 긍정·부정이 함께 있는 경우, <b>가입/신규 인사글(안녕하세요·가입인사 등)</b></li>
-         <li>· ※ 규칙 기반 자동 분류라 문맥상 오분류가 있을 수 있어 <b>추세 참고용</b>입니다. 정밀 분석이 필요하면 개별 글을 확인하세요.</li>
+         <li>· <b style="color:#4E6E96">도어락</b>: K100 · L100 · U100 · 도어락</li>
+         <li>· <b style="color:#3f7d78">센서</b>: FP300 · FP2 · 재실센서 · 활동모니터링센서 · 센서</li>
+         <li>· <b style="color:#5c7e46">인테리어</b>: 스마트홈 인테리어 · IoT 인테리어 · 인테리어</li>
+         <li>· <b style="color:#916225">CS</b>: CS · 채널톡</li>
+         <li>· <b style="color:#6b4fa0">홈페이지</b>: 홈페이지</li>
+         <li>· <b class="text-slate-400">기타</b>: 위 키워드에 해당하지 않는 글</li>
+         <li>· ※ 여러 키워드가 겹치면 <b>도어락 → 센서 → 인테리어 → CS → 홈페이지</b> 순으로 우선 분류합니다. 규칙 기반이라 오분류가 있을 수 있어 <b>추세 참고용</b>입니다.</li>
        </ul>
      </div>
      <div id="cafeInsight" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5"></div>
      <div class="card p-5 mb-5">
-       <h3 class="accent font-extrabold text-ink mb-3">카페별 수집 현황 <span class="text-xs font-normal text-slate-400">(글 수 · 감성 구성 · 최근 추이)</span></h3>
+       <h3 class="accent font-extrabold text-ink mb-3">카페별 수집 현황 <span class="text-xs font-normal text-slate-400">(글 수 · 제품군 구성 · 최근 추이)</span></h3>
        <div id="cafeByCafe" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"></div>
      </div>
      <div class="card p-5">
@@ -670,7 +670,7 @@
          <div class="flex flex-wrap gap-2">
            <input id="cafeSearch" type="text" placeholder="제목·내용 검색" oninput="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 w-44 focus:outline-none focus:ring-2 focus:ring-brand" />
            <select id="cafeCafeFilter" onchange="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 카페</option></select>
-           <select id="cafeFilter" onchange="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 감성</option></select>
+           <select id="cafeFilter" onchange="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 제품군</option></select>
          </div>
        </div>
        <div id="cafeBody" class="divide-y divide-slate-100"></div>
@@ -847,7 +847,8 @@
         <span class="text-xs text-slate-400">네이버 실측 키워드 관심도 반영 · 노란 버블 = 실측(크기=관심도)</span>
       </div>
       <div class="card p-4 overflow-x-auto"><div id="cdjMap" class="min-w-[1060px]"></div></div>
-      <div id="cdjSource" class="card p-4 mt-3 bg-[#FAFAF9] border-[#E6E6E3] text-[12px] text-slate-600 leading-relaxed"></div>
+      <div id="cdjSource" class="card p-4 mt-3 mb-5 bg-[#FAFAF9] border-[#E6E6E3] text-[12px] text-slate-600 leading-relaxed"></div>
+      <div id="cdjInsightSlot"></div>
    </div>
 
    <!-- 보고서 추출하기 · 월간 PPT 리포트 -->
@@ -1136,11 +1137,15 @@
            <button id="mktBtn-insta" onclick="mktSub('insta')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
            <button id="mktBtn-blog" onclick="mktSub('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
            <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
+           <span class="w-px self-stretch my-1 bg-[#D9D0FF]"></span>
+           <button id="mktBtn-cafe" onclick="mktSub('cafe')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">카페·커뮤니티</button>
+           <button id="mktBtn-report" onclick="mktSub('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">종합 리포트</button>
            <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
          </div>
        </div>
        <div id="mktKpiSlot"></div>
        <div id="mktCafeSlot"></div>
+       <div id="mktReportSlot"></div>
        <div id="mktMedialistSlot"></div>
        <div id="mktCalendarSlot"></div>
        <div id="mktSec-insta" class="hidden">
@@ -2351,6 +2356,19 @@
       if(pos.test(s)&&!neg.test(s)) return {k:'긍정',c:'bg-agreen/15 text-agreen'};
       if(neg.test(s)&&!pos.test(s)) return {k:'부정',c:'bg-ared/15 text-ared'};
       return {k:'중립',c:'bg-agray/15 text-agray'}; }
+    // 제품군 분류(감성 대신) — 제목·내용 키워드 기반, 공백 무시. 우선순위 순서대로 첫 매칭.
+    const CAFE_GROUPS=[
+      {k:'도어락', c:'bg-[#4E6E96]/15 text-[#3a5474]', col:'#4E6E96', kws:['k100','l100','u100','도어락']},
+      {k:'센서', c:'bg-[#5EA6A0]/15 text-[#3f7d78]', col:'#5EA6A0', kws:['fp300','fp2','재실센서','활동모니터링센서','센서']},
+      {k:'인테리어', c:'bg-[#7BA65E]/15 text-[#5c7e46]', col:'#7BA65E', kws:['스마트홈인테리어','iot인테리어','인테리어']},
+      {k:'CS', c:'bg-[#C08A3E]/15 text-[#916225]', col:'#C08A3E', kws:['cs','채널톡']},
+      {k:'홈페이지', c:'bg-[#8A6EC0]/15 text-[#6b4fa0]', col:'#8A6EC0', kws:['홈페이지']},
+    ];
+    const CAFE_GROUP_ETC={k:'기타', c:'bg-slate-100 text-slate-500', col:'#cbd5e1'};
+    const CAFE_GROUP_KEYS=CAFE_GROUPS.map(g=>g.k).concat(CAFE_GROUP_ETC.k);
+    function cafeGroup(t,d){ const s=((t||'')+' '+(d||'')).toLowerCase().replace(/\s+/g,'');
+      for(const g of CAFE_GROUPS){ if(g.kws.some(k=>s.indexOf(k)>-1)) return {k:g.k,c:g.c,col:g.col}; }
+      return {k:CAFE_GROUP_ETC.k,c:CAFE_GROUP_ETC.c,col:CAFE_GROUP_ETC.col}; }
     function cafeType(t,d){ const s=(t+' '+d).toLowerCase();
       if(/공식몰|프로모션|할인|off|혜택|출시기념|적립/.test(s)) return '프로모션';
       if(/오류|에러|안됨|안돼|안되|실패|연결\s*안|문제|불쾌|하지마/.test(s)) return '오류·불만';
@@ -2395,36 +2413,37 @@
       const cafes=[...new Set(posts.map(p=>p.cafe))]; const total=posts.length||1;
       box.innerHTML=cafes.map(c=>{
         const cp=posts.filter(p=>p.cafe===c), n=cp.length;
-        const s={긍정:0,중립:0,부정:0}; cp.forEach(p=>{ const k=p._sen?p._sen.k:'중립'; s[k]=(s[k]||0)+1; });
+        const gc={}; cp.forEach(p=>{ const k=(p._grp?p._grp.k:'기타'); gc[k]=(gc[k]||0)+1; });
         const mc={}; cp.forEach(p=>{ const m=(p.date||'').slice(0,7); if(m) mc[m]=(mc[m]||0)+1; });
         const ms=Object.keys(mc).sort().slice(-6); const spark=ms.length>=2?kwSpark(ms.map(m=>mc[m])):'';
         const pct=Math.round(n/total*100);
-        const seg=(v,col)=>v?`<div class="${col}" style="width:${v/n*100}%"></div>`:'';
+        const allG=CAFE_GROUPS.concat([CAFE_GROUP_ETC]);
+        const seg=allG.map(g=>gc[g.k]?`<div style="width:${gc[g.k]/n*100}%;background:${g.col}"></div>`:'').join('');
+        const legend=allG.filter(g=>gc[g.k]).map(g=>`<span style="color:${g.col}">${g.k} ${gc[g.k]}</span>`).join(' · ');
         const cu=cafeUrlOf(c);
         const nameHtml=cu?`<a href="${esc(cu)}" target="_blank" rel="noopener" class="font-semibold text-ink text-sm truncate pr-2 hover:underline">${esc(c)} <span class="text-slate-300 text-xs">↗</span></a>`:`<span class="font-semibold text-ink text-sm truncate pr-2">${esc(c)}</span>`;
         return `<div class="rounded-lg border border-[#E6E6E3] p-3">
           <div class="flex items-center justify-between mb-0.5">${nameHtml}<span class="num text-lg font-extrabold text-ink whitespace-nowrap">${n}<span class="text-xs font-normal text-slate-400">건</span></span></div>
           <div class="text-[11px] text-slate-400 mb-2">전체의 ${pct}%</div>
-          <div class="flex rounded-full overflow-hidden h-1.5 mb-1 bg-slate-100">${seg(s.긍정,'bg-agreen')}${seg(s.중립,'bg-slate-300')}${seg(s.부정,'bg-ared')}</div>
-          <div class="flex justify-between text-[10px] mb-2"><span class="text-agreen">긍정 ${s.긍정}</span><span class="text-slate-400">중립 ${s.중립}</span><span class="text-ared">부정 ${s.부정}</span></div>
+          <div class="flex rounded-full overflow-hidden h-1.5 mb-1 bg-slate-100">${seg}</div>
+          <div class="flex flex-wrap gap-x-2 text-[10px] mb-2">${legend||'<span class="text-slate-300">분류 없음</span>'}</div>
           <div class="flex items-center justify-between"><span class="text-[10px] text-slate-400">최근 추이</span>${spark||'<span class="text-[10px] text-slate-300">데이터 부족</span>'}</div>
         </div>`;
       }).join('')||'<p class="text-sm text-slate-400">데이터 로딩 중…</p>';
     }
     function renderCafeInsight(posts){
-      const groups=[['긍정','bg-agreen/5 border-agreen/20','text-agreen','bg-agreen/15 text-agreen'],
-                    ['중립','bg-slate-50 border-slate-200','text-agray','bg-agray/15 text-agray'],
-                    ['부정','bg-ared/5 border-ared/20','text-ared','bg-ared/15 text-ared']];
-      document.getElementById('cafeInsight').innerHTML=groups.map(([k,cardc,titc,chip])=>{
-        const gp=posts.filter(p=>p._sen.k===k);
+      const allG=CAFE_GROUPS.concat([CAFE_GROUP_ETC]);
+      document.getElementById('cafeInsight').innerHTML=allG.map(g=>{
+        const k=g.k, col=g.col, chip=g.c;
+        const gp=posts.filter(p=>p._grp&&p._grp.k===k);
         const kws=cafeKeywords(gp,8);
         const top5=gp.slice(0,5);
         const kwHtml=kws.length?kws.map(([w,c])=>`<span class="inline-block px-2 py-0.5 rounded-md text-[11px] ${chip} mr-1 mb-1">${esc(w)} <span class="opacity-60">${c}</span></span>`).join(''):'<span class="text-xs text-slate-400">데이터 없음</span>';
-        const topHtml=top5.length?top5.map((p,i)=>`<li class="text-xs text-slate-600 leading-snug mb-1.5 flex gap-1.5"><span class="${titc} font-bold">${i+1}</span><a href="${esc(p.link)}" target="_blank" rel="noopener" class="hover:underline line-clamp-1">${esc(p.title)}</a></li>`).join(''):'<li class="text-xs text-slate-400">데이터 없음</li>';
-        return `<div class="card p-4 border ${cardc}">
+        const topHtml=top5.length?top5.map((p,i)=>`<li class="text-xs text-slate-600 leading-snug mb-1.5 flex gap-1.5"><span class="font-bold" style="color:${col}">${i+1}</span><a href="${esc(p.link)}" target="_blank" rel="noopener" class="hover:underline line-clamp-1">${esc(p.title)}</a></li>`).join(''):'<li class="text-xs text-slate-400">데이터 없음</li>';
+        return `<div class="card p-4 border" style="border-color:${col}55">
           <div class="flex items-center justify-between mb-2">
-            <span class="font-bold ${titc}">${k}</span>
-            <span class="text-xs ${titc} font-semibold">${gp.length}건</span>
+            <span class="font-bold" style="color:${col}">${k}</span>
+            <span class="text-xs font-semibold" style="color:${col}">${gp.length}건</span>
           </div>
           <div class="mb-3">
             <div class="text-[11px] font-semibold text-slate-400 mb-1">주요 언급 키워드</div>
@@ -2441,27 +2460,25 @@
       return (DCINSIDE.posts||[]).filter(p=>/[?&]id=(smartthings|hass)(&|$)/.test(p.link||'')).map(p=>({no:p.no||0,title:p.title||'',desc:p.desc||('DCInside · '+(g[p.gid]||'갤러리')),link:p.link,cafe:g[p.gid]||'DC 갤러리'})); }
     function renderCafe(){
       const posts=CAFE_POSTS.concat(dcAsCafe());
-      posts.forEach(p=>{ if(!p._sen){ p._sen=cafeSentiment(p.title,p.desc); p._typ=cafeType(p.title,p.desc); } if(!p.cafe) p.cafe='아카라 스마트홈'; });
-      const cnt={긍정:0,중립:0,부정:0}; posts.forEach(p=>cnt[p._sen.k]++);
+      posts.forEach(p=>{ if(!p._sen){ p._sen=cafeSentiment(p.title,p.desc); p._typ=cafeType(p.title,p.desc); } if(!p._grp){ p._grp=cafeGroup(p.title,p.desc); } if(!p.cafe) p.cafe='아카라 스마트홈'; });
+      const cnt={}; CAFE_GROUP_KEYS.forEach(k=>cnt[k]=0); posts.forEach(p=>cnt[p._grp.k]++);
       const cafes=[...new Set(posts.map(p=>p.cafe))];
       const ccnt=cafes.map(c=>c+' '+posts.filter(p=>p.cafe===c).length).join(' · ');
       const mdl=histDelta(CAFE_HIST,'total',7);
       const mtrend=mdl?`<span class="px-2.5 py-1 rounded-lg text-xs font-semibold ${mdl.d>=0?'bg-agreen/15 text-agreen':'bg-ared/15 text-ared'}">언급량 ${mdl.d>=0?'▲':'▼'} ${Math.abs(mdl.d)} <span class="font-normal opacity-70">(${mdl.from} 대비)</span></span>`
         :`<span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-400 text-xs">언급량 추세 기록 중</span>`;
       document.getElementById('cafeStats').innerHTML=
-        `<span class="px-2.5 py-1 rounded-lg bg-agreen/15 text-agreen text-xs font-semibold">긍정 ${cnt['긍정']}</span>
-         <span class="px-2.5 py-1 rounded-lg bg-agray/15 text-agray text-xs font-semibold">중립 ${cnt['중립']}</span>
-         <span class="px-2.5 py-1 rounded-lg bg-ared/15 text-ared text-xs font-semibold">부정 ${cnt['부정']}</span>`+mtrend;
+        CAFE_GROUPS.concat([CAFE_GROUP_ETC]).map(g=>`<span class="px-2.5 py-1 rounded-lg text-xs font-semibold ${g.c}">${g.k} ${cnt[g.k]||0}</span>`).join('')+mtrend;
       const csel=document.getElementById('cafeCafeFilter'); if(csel.options.length!==cafes.length+1){ const cur=csel.value; csel.innerHTML='<option value="">전체 카페</option>'+cafes.map(c=>`<option>${esc(c)}</option>`).join(''); if(cafes.indexOf(cur)>-1) csel.value=cur; }
-      const fsel=document.getElementById('cafeFilter'); if(fsel.options.length<=1){ fsel.innerHTML='<option value="">전체 감성</option><option>긍정</option><option>중립</option><option>부정</option>'; }
+      const fsel=document.getElementById('cafeFilter'); if(fsel.options.length<=1){ fsel.innerHTML='<option value="">전체 제품군</option>'+CAFE_GROUP_KEYS.map(k=>`<option>${k}</option>`).join(''); }
       const f=fsel.value, cf=csel.value; const nq=(document.getElementById('cafeSearch').value||'').toLowerCase().replace(/\s+/g,'');
       renderCafeInsight(posts.filter(p=>!cf||p.cafe===cf));
       renderCafeByCafe(posts);
-      let rows=posts.filter(p=>(!f||p._sen.k===f) && (!cf||p.cafe===cf) && (!nq||((p.title+' '+p.desc).toLowerCase().replace(/\s+/g,'').indexOf(nq)>-1)));
+      let rows=posts.filter(p=>(!f||p._grp.k===f) && (!cf||p.cafe===cf) && (!nq||((p.title+' '+p.desc).toLowerCase().replace(/\s+/g,'').indexOf(nq)>-1)));
       document.getElementById('cafeCount').textContent='('+ccnt+' · 필터 '+rows.length+'건'+(window.__cafeStamp?(' · '+window.__cafeStamp):'')+')';
       const shown=rows.slice(0,200);
       document.getElementById('cafeBody').innerHTML=shown.map(p=>`<div class="py-3 flex items-start gap-3">
-        <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap ${p._sen.c}">${p._sen.k}</span>
+        <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap ${p._grp.c}">${p._grp.k}</span>
         <div class="flex-1 min-w-0">
           <a href="${esc(p.link)}" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-800 hover:text-ink hover:underline">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
           <p class="text-xs text-slate-500 mt-0.5">${esc(p.desc)}</p>
@@ -2478,25 +2495,16 @@
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
-      ['analytics','briefing','campaign','owned','cafe','report','competitor','market','cdj','export','ad','calendar','medialist','library','mkt','kpi'].forEach(v=>{
+      // 상위 뷰만 토글(카페·리포트 클러스터는 view-mkt 내부로 편입 → mktSub/mktReportSub가 관리)
+      ['analytics','briefing','owned','ad','library','mkt'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','report','ad','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
+      ['pr','owned','ad','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
-      document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
-      ['report','campaign','market','competitor','cdj','export'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
-      if(t==='briefing' && !briefingReady){ renderSearchInsight(); briefingReady=true; }
-      if(t==='campaign'){ renderCampaign(); loadYoutube(); }
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
-      if(t==='cafe'){ renderCafe(); loadCafe(); loadDcinside(); }
-      if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
-      if(t==='competitor'){ loadCompetitor(); }
-      if(t==='market'){ loadCompetitor(); renderMarket(); }
-      if(t==='cdj'){ renderCDJ(); }
-      if(t==='export'){ loadOwned(); renderExport(); }
       if(t==='ad'){ loadAd(); }
       if(t==='library'){ loadLibrary(); }
       if(t==='mkt'){ mktEnter(); }
@@ -2789,10 +2797,15 @@
     let mktSection='kpi';
     let mktMoved=false;
     function mktMovePanels(){ if(mktMoved) return;
-      const ml=document.getElementById('view-medialist'), mls=document.getElementById('mktMedialistSlot');
-      const cal=document.getElementById('view-calendar'), cals=document.getElementById('mktCalendarSlot');
-      const kp=document.getElementById('view-kpi'), kps=document.getElementById('mktKpiSlot');
-      if(kp&&kps) kps.appendChild(kp); if(ml&&mls) mls.appendChild(ml); if(cal&&cals) cals.appendChild(cal); mktMoved=true; }
+      const mv=(id,slot)=>{ const e=document.getElementById(id), s=document.getElementById(slot); if(e&&s) s.appendChild(e); };
+      mv('view-kpi','mktKpiSlot'); mv('view-medialist','mktMedialistSlot'); mv('view-calendar','mktCalendarSlot');
+      mv('view-cafe','mktCafeSlot');
+      // 종합 리포트 클러스터(서브내브 + 6개 뷰)를 리포트 슬롯으로 편입
+      mv('subnav-report','mktReportSlot');
+      ['view-report','view-campaign','view-market','view-cdj','view-competitor','view-export'].forEach(id=>mv(id,'mktReportSlot'));
+      // 데일리 브리핑의 검색어·키워드 인사이트 + 브랜드×인테리어 연관도 → 자사분석으로 이동
+      mv('briefInsightCard','cdjInsightSlot'); mv('assocCard','cdjInsightSlot');
+      mktMoved=true; }
     function mktEnter(){ const ok=sessionStorage.getItem('mktUnlocked')==='1';
       document.getElementById('mktGate').classList.toggle('hidden', ok);
       document.getElementById('mktInner').classList.toggle('hidden', !ok);
@@ -2804,11 +2817,15 @@
       const kp=document.getElementById('view-kpi'); if(kp) kp.classList.toggle('hidden', s!=='kpi');
       const ml=document.getElementById('view-medialist'); if(ml) ml.classList.toggle('hidden', s!=='medialist');
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
+      const cf=document.getElementById('view-cafe'); if(cf) cf.classList.toggle('hidden', s!=='cafe');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
       document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
       document.getElementById('mktSec-weekly').classList.toggle('hidden', s!=='weekly');
-      ['kpi','weekly','medialist','calendar','insta','blog','prpitch'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
+      // 종합 리포트 클러스터
+      const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
+      if(s!=='report'){ ['report','campaign','market','competitor','cdj','export'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
+      ['kpi','weekly','medialist','calendar','insta','blog','prpitch','cafe','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(s==='medialist'){ renderMediaList(); }
@@ -2816,6 +2833,22 @@
       if(s==='insta'){ renderMktInsta(); }
       if(s==='blog'){ renderMktBlog(); }
       if(s==='prpitch'){ renderMktPr(); }
+      if(s==='cafe'){ renderCafe(); loadCafe(); loadDcinside(); }
+      if(s==='report'){ mktReportSub(mktRptView); }
+    }
+    // 종합 리포트 하위 탭 (자사/경쟁사 분석 = cdj + competitor 통합)
+    let mktRptView='report';
+    const RPT_VIEWS={ report:['report'], campaign:['campaign'], market:['market'], owncomp:['cdj','competitor'], export:['export'] };
+    function mktReportSub(t){ mktRptView=t;
+      const all=['report','campaign','market','competitor','cdj','export'];
+      const show=RPT_VIEWS[t]||['report'];
+      all.forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', show.indexOf(v)<0); });
+      ['report','campaign','market','owncomp','export'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
+      if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
+      else if(t==='campaign'){ renderCampaign(); loadYoutube(); }
+      else if(t==='market'){ loadCompetitor(); renderMarket(); }
+      else if(t==='owncomp'){ renderCDJ(); renderSearchInsight(); loadCompetitor(); }
+      else if(t==='export'){ loadOwned(); renderExport(); }
     }
     let mktEdits=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraMktEdits')||'{}');}catch(e){return {};} })();
     function mktSaveEdit(el){ mktEdits[el.dataset.mk]=el.innerText.trim(); try{ localStorage.setItem('aqaraMktEdits',JSON.stringify(mktEdits)); }catch(e){} }
@@ -3966,6 +3999,7 @@
         }
       }).catch(()=>{});
     }
+    try{ mktMovePanels(); }catch(e){}   // 카페·리포트·브리핑 인사이트를 ONLY MKT 내부로 편입(로드 시 1회)
     initBriefing();
     loadBriefing();
     loadData();
