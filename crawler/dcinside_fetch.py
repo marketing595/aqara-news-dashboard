@@ -16,8 +16,9 @@ def clean(s):
 
 
 def fetch_gallery(gid):
-    posts = []
-    for page in range(1, 4):
+    posts, seen = [], set()
+    rx = re.compile(r'href="(/mgallery/board/view/\?id=' + re.escape(gid) + r'&no=(\d+)[^"]*)"[^>]*>(.*?)</a>', re.S)
+    for page in range(1, 5):
         url = ("https://gall.dcinside.com/mgallery/board/lists/?id=%s"
                "&s_type=search_subject_memo&s_keyword=%s&page=%d" % (gid, requests.utils.quote(KW), page))
         try:
@@ -25,28 +26,21 @@ def fetch_gallery(gid):
             t = r.text
         except Exception:
             break
-        # 게시글 행 파싱: 제목 링크
-        rows = re.findall(r'gall_tit[^>]*>\s*<a href="([^"]+)"[^>]*>(.*?)</a>', t, re.S)
         found = 0
-        for href, title_html in rows:
-            title = clean(title_html)
-            if not title or ("아카라" not in title and "aqara" not in title.lower()):
+        for href, no, title_html in rx.findall(t):
+            if "t=cv" in href or no in seen:      # 댓글(t=cv) 링크·중복 제외
                 continue
-            link = href if href.startswith("http") else ("https://gall.dcinside.com" + href)
-            # 날짜/조회/댓글은 행 단위로 못 묶으면 생략(제목·링크 우선)
-            posts.append({"gid": gid, "title": title, "link": link, "date": "", "views": 0, "replies": 0})
+            title = clean(title_html)
+            if not title or title.isdigit() or len(title) < 2:
+                continue
+            seen.add(no)
+            posts.append({"gid": gid, "title": title, "date": "", "views": 0, "replies": 0,
+                          "link": "https://gall.dcinside.com/mgallery/board/view/?id=%s&no=%s" % (gid, no)})
             found += 1
         if found == 0:
             break
         time.sleep(0.5)
-    # 링크 기준 중복 제거
-    seen, uniq = set(), []
-    for p in posts:
-        if p["link"] in seen:
-            continue
-        seen.add(p["link"])
-        uniq.append(p)
-    return uniq
+    return posts
 
 
 def main():
