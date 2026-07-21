@@ -110,6 +110,7 @@
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
       <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페·커뮤니티</button>
       <button id="grpBtn-report" onclick="switchGroup('report')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">종합 리포트</button>
+      <button id="grpBtn-ad" onclick="switchGroup('ad')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">퍼포먼스AD</button>
       <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
       <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
     </div>
@@ -1023,6 +1024,38 @@
      </div>
    </div>
 
+   <!-- 퍼포먼스AD · 검색광고 성과 -->
+   <div id="view-ad" class="hidden">
+     <div class="flex items-baseline justify-between flex-wrap gap-2 mb-4">
+       <h2 class="text-xl font-extrabold text-ink">퍼포먼스 AD <span class="text-sm font-normal text-slate-400">(네이버 검색광고 성과 · 실측)</span></h2>
+       <span id="adStamp" class="text-xs text-slate-400"></span>
+     </div>
+     <section id="adTypeCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5"></section>
+     <section class="card p-5 mb-5">
+       <h3 class="accent font-extrabold text-ink mb-3">일별 성과 추이 <span class="text-xs font-normal text-slate-400">(노출·클릭·광고비)</span></h3>
+       <div class="h-64"><canvas id="adDailyChart"></canvas></div>
+       <p id="adDailyNote" class="text-[11px] text-slate-400 mt-2"></p>
+     </section>
+     <section class="card p-5">
+       <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+         <h3 class="accent font-extrabold text-ink">캠페인별 성과 <span id="adCampCount" class="text-sm font-normal text-slate-400"></span></h3>
+         <select id="adCampType" onchange="renderAd()" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-white"><option value="">전체 유형</option></select>
+       </div>
+       <div class="overflow-auto rounded-lg border border-[#ECE9E1] max-h-[520px]">
+         <table class="w-full text-sm">
+           <thead class="bg-slate-50 text-slate-500 sticky top-0"><tr class="text-left">
+             <th class="px-3 py-2.5">캠페인</th><th class="px-3 py-2.5 whitespace-nowrap">유형</th>
+             <th class="px-3 py-2.5 text-right whitespace-nowrap">노출</th><th class="px-3 py-2.5 text-right whitespace-nowrap">클릭</th>
+             <th class="px-3 py-2.5 text-right whitespace-nowrap">CTR</th><th class="px-3 py-2.5 text-right whitespace-nowrap">CPC</th>
+             <th class="px-3 py-2.5 text-right whitespace-nowrap">광고비</th><th class="px-3 py-2.5 text-right whitespace-nowrap">전환</th>
+           </tr></thead>
+           <tbody id="adCampBody" class="divide-y divide-slate-100"></tbody>
+         </table>
+       </div>
+       <p class="text-[11px] text-slate-400 mt-3">※ 네이버 검색광고 API 실측(최근 30일) · 광고비=지출액(salesAmt). 브랜드검색은 정액상품 특성상 광고비가 0으로 표기될 수 있습니다.</p>
+     </section>
+   </div>
+
    <!-- 미디어 라이브러리 -->
    <div id="view-library" class="hidden">
      <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
@@ -1455,6 +1488,38 @@
       fetch('compete.json?_='+Date.now()).then(r=>r.json()).then(p=>{ if(p&&p.items&&p.items.length) renderCompete(p); }).catch(()=>{});
     }
     loadCompete();
+    // ===== 퍼포먼스 AD (검색광고 성과) =====
+    let AD={campaigns:[],byType:{},daily:[]};
+    function loadAd(){ fetch('searchad.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d){ AD=d; renderAd(); } }).catch(()=>{ renderAd(); }); }
+    function renderAd(){
+      const won=v=>'₩'+(+v||0).toLocaleString();
+      const st=document.getElementById('adStamp'); if(st) st.textContent=(AD.since?AD.since+' ~ '+AD.until+' (최근 30일)':'')+(AD.generatedAt?(' · '+AD.generatedAt+' 기준'):'');
+      const tc=document.getElementById('adTypeCards');
+      if(tc){ const types=Object.keys(AD.byType||{}); tc.innerHTML=types.length?types.map(t=>{ const e=AD.byType[t];
+        const m=(l,v)=>`<div><p class="text-xs text-slate-400">${l}</p><p class="num font-bold text-ink">${v}</p></div>`;
+        return `<div class="card p-5"><p class="text-sm font-extrabold text-ink mb-2">${esc(t)}</p><div class="grid grid-cols-3 gap-y-2">${m('노출',(+e.imp||0).toLocaleString())}${m('클릭',(+e.clk||0).toLocaleString())}${m('CTR',(+e.ctr||0)+'%')}${m('CPC',won(e.cpc))}${m('광고비',won(e.cost))}${m('전환',(+e.conv||0).toLocaleString())}</div></div>`; }).join(''):'<p class="text-sm text-slate-400 p-4">수집 대기 — 워크플로우 실행 후 표시됩니다.</p>'; }
+      const sel=document.getElementById('adCampType'), camps=AD.campaigns||[];
+      if(sel && sel.options.length<=1){ const types=[...new Set(camps.map(c=>c.type).filter(Boolean))]; sel.innerHTML='<option value="">전체 유형</option>'+types.map(t=>`<option>${esc(t)}</option>`).join(''); }
+      const ft=sel?sel.value:'';
+      const rows=camps.filter(c=>!ft||c.type===ft).slice().sort((a,b)=>(b.imp||0)-(a.imp||0));
+      const cc=document.getElementById('adCampCount'); if(cc) cc.textContent='· '+rows.length+'개';
+      const tb=document.getElementById('adCampBody'); if(tb) tb.innerHTML=rows.length?rows.map(c=>`<tr class="hover:bg-slate-50">
+        <td class="px-3 py-2.5 min-w-[180px] font-medium text-ink">${esc(c.name||'-')}</td>
+        <td class="px-3 py-2.5 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] ${c.type==='브랜드검색'?'bg-[#EAF3FF] text-[#2c5b8a]':'bg-[#FFF3D6] text-[#8a6d00]'}">${esc(c.type||'')}</span></td>
+        <td class="px-3 py-2.5 text-right num">${(+c.imp||0).toLocaleString()}</td>
+        <td class="px-3 py-2.5 text-right num">${(+c.clk||0).toLocaleString()}</td>
+        <td class="px-3 py-2.5 text-right num">${(+c.ctr||0)}%</td>
+        <td class="px-3 py-2.5 text-right num">${won(c.cpc)}</td>
+        <td class="px-3 py-2.5 text-right num font-semibold">${won(c.cost)}</td>
+        <td class="px-3 py-2.5 text-right num">${(+c.conv||0).toLocaleString()}</td></tr>`).join(''):'<tr><td colspan="8" class="text-center py-8 text-slate-400">데이터 없음</td></tr>';
+      const daily=AD.daily||[], note=document.getElementById('adDailyNote');
+      if(daily.length){ if(note) note.textContent='';
+        draw('adDailyChart',{type:'line',data:{labels:daily.map(d=>d.date.slice(5)),datasets:[
+          {label:'노출',data:daily.map(d=>d.imp),borderColor:'#8FB9D8',borderWidth:2,tension:.3,pointRadius:0,yAxisID:'y'},
+          {label:'클릭',data:daily.map(d=>d.clk),borderColor:'#BF5332',borderWidth:2,tension:.3,pointRadius:0,yAxisID:'y1'}]},
+          options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:11}}},scales:{y:{position:'left',beginAtZero:true},y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false}}}}});
+      } else { if(note) note.textContent='※ 일별 추이는 보완 예정(검색광고 일별 API). 현재는 최근 30일 합계·캠페인별 성과를 제공합니다.'; if(charts['adDailyChart']){ charts['adDailyChart'].destroy(); delete charts['adDailyChart']; } }
+    }
     function renderKPIs(f,t){ const n=FILTERED.length; document.getElementById('kpiTotal').textContent=n.toLocaleString(); let dh='';
       if(f&&t){ const days=(new Date(t)-new Date(f))/864e5+1; const pe=iso(new Date(new Date(f)-864e5)),ps=iso(new Date(new Date(f)-days*864e5));
         const prev=ALL.filter(r=>{const d=r['게재일'];return d&&d>=ps&&d<=pe;}).length;
@@ -2376,18 +2441,18 @@
     }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], report:['report','campaign','market','competitor','cdj','export'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
-      ['analytics','briefing','campaign','owned','cafe','report','competitor','market','cdj','export','calendar','medialist','library','mkt','kpi'].forEach(v=>{
+      ['analytics','briefing','campaign','owned','cafe','report','competitor','market','cdj','export','ad','calendar','medialist','library','mkt','kpi'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','report','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
+      ['pr','owned','cafe','report','ad','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       document.getElementById('subnav-report').classList.toggle('hidden', g!=='report');
@@ -2402,6 +2467,7 @@
       if(t==='market'){ loadCompetitor(); renderMarket(); }
       if(t==='cdj'){ renderCDJ(); }
       if(t==='export'){ loadOwned(); renderExport(); }
+      if(t==='ad'){ loadAd(); }
       if(t==='library'){ loadLibrary(); }
       if(t==='mkt'){ mktEnter(); }
     }
