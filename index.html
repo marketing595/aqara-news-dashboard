@@ -1266,7 +1266,15 @@
     let mhYear='', mhCalYM='';
     function mhTokens(t){ return [...new Set((t||'').toLowerCase().replace(/[^0-9a-z가-힣]/g,' ').split(/\s+/).filter(w=>w.length>=2))]; }
     function mhDup(a,b){ const B=new Set(b); let inter=0; a.forEach(w=>{ if(B.has(w)) inter++; }); const uni=a.length+b.length-inter, jac=uni?inter/uni:0;
-      if(jac>=0.45) return true; if(jac>=0.3 && a.some(w=>w.length>=6&&B.has(w))) return true; return false; }
+      if(jac>=0.45) return true;
+      // 조사·어미 붙은 부분일치까지 인정(예: 한국실내디자인학회 ⊂ 한국실내디자인학회와)
+      const match=x=> B.has(x) || (x.length>=4 && b.some(y=>y.length>=4 && (y.indexOf(x)>-1||x.indexOf(y)>-1)));
+      let shared=0, strong=0, veryLong=false;
+      a.forEach(x=>{ if(match(x)){ shared++; if(x.length>=5) strong++; if(x.length>=7) veryLong=true; } });
+      const denom=Math.min(a.length,b.length)||1, ratio=shared/denom;
+      if(ratio>=0.5 && (strong>=2 || veryLong)) return true;
+      if(strong>=2 && ratio>=0.34) return true;
+      return false; }
     function renderMonthlyHeadlines(){ const el=document.getElementById('mhBody'); if(!el) return;
       const years=[...new Set(FILTERED.map(r=>(r._ym||'').slice(0,4)).filter(Boolean))].sort().reverse();
       if(!mhYear || years.indexOf(mhYear)<0) mhYear=years[0]||'';
