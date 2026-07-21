@@ -1,56 +1,664 @@
 {
- "generatedAt": "2026-07-21 09:11",
+ "generatedAt": "2026-07-21 13:47",
  "keyword": "아카라",
- "count": 6,
+ "count": 82,
  "note": "DCInside hass·smartthings 갤러리 아카라 언급(제목·메모 검색). 봇 차단으로 수집이 불안정할 수 있음.",
  "posts": [
   {
    "gid": "hass",
-   "title": "애니참 잘못클릭해서 아카라한테 팔았는데 ㅈ됬다",
-   "link": "https://gall.dcinside.com/mgallery/board/view/?id=diablo2resurrected&no=3088690",
+   "title": "뉴비 HA 구축 현황",
    "date": "",
    "views": 0,
-   "replies": 0
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=hass&no=247"
   },
   {
    "gid": "hass",
-   "title": "아카라멜명조진짜재밌다!!!!!",
-   "link": "https://gall.dcinside.com/mini/board/view/?id=spv&no=679778",
+   "title": "HA에서 쓸만한 캠 뭐가 있나용",
    "date": "",
    "views": 0,
-   "replies": 0
-  },
-  {
-   "gid": "hass",
-   "title": "누가 자동아카라 했냐?",
-   "link": "https://gall.dcinside.com/board/view/?id=doosanbears_new1&no=11184280",
-   "date": "",
-   "views": 0,
-   "replies": 0
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=hass&no=171"
   },
   {
    "gid": "smartthings",
-   "title": "애니참 잘못클릭해서 아카라한테 팔았는데 ㅈ됬다",
-   "link": "https://gall.dcinside.com/mgallery/board/view/?id=diablo2resurrected&no=3088690",
+   "title": "iot 인테리어 설계하다가 별거다하는중 내용좀김",
    "date": "",
    "views": 0,
-   "replies": 0
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15614"
   },
   {
    "gid": "smartthings",
-   "title": "아카라멜명조진짜재밌다!!!!!",
-   "link": "https://gall.dcinside.com/mini/board/view/?id=spv&no=679778",
+   "title": "유튜브에 '시하스 프리미엄 풀버튼' 스위치 영상은 왜 한개도 없지?",
    "date": "",
    "views": 0,
-   "replies": 0
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15598"
   },
   {
    "gid": "smartthings",
-   "title": "누가 자동아카라 했냐?",
-   "link": "https://gall.dcinside.com/board/view/?id=doosanbears_new1&no=11184280",
+   "title": "뉴비가 네스트 온도조절기 설치 질문있음!!",
    "date": "",
    "views": 0,
-   "replies": 0
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15574"
+  },
+  {
+   "gid": "smartthings",
+   "title": "형님들 인테리어 공사 준비중인데 초보 좀 도와줘",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15568"
+  },
+  {
+   "gid": "smartthings",
+   "title": "[뉴비] 시하스 이너릴레이 설치하신 분 있나요?? + 융스위치",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15510"
+  },
+  {
+   "gid": "smartthings",
+   "title": "집 인테리어하는데 조명 이렇게 할까 하는데 어떻게 생각해?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15471"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 스마트 도어벨 g400 페어링 및 기능들",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15461"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 g400 도어벨 타오바오직구판 지역락 풀림",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15454"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 지역락 해제 안해주길래 벙쪘는데",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15435"
+  },
+  {
+   "gid": "smartthings",
+   "title": "알리에 무선 3갱 4갱 스마트스위치가 있을까요?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15434"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 g400 도어벨",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15423"
+  },
+  {
+   "gid": "smartthings",
+   "title": "내야심찬 iot계획",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15402"
+  },
+  {
+   "gid": "smartthings",
+   "title": "전동커튼 드디어 도착해서 설치함",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15355"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 M2 허브에 소노프 온습도계 안붙나요?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15339"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 온습도계가 삼성 에어컨내 습도계보다 정확도가 높겠지?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15310"
+  },
+  {
+   "gid": "smartthings",
+   "title": "스싱스에 직결한 아카라 도어락이 애플홈에 뜨나요?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15249"
+  },
+  {
+   "gid": "smartthings",
+   "title": "뉴비 조명 질문 해도 될까요??",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15186"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 도어락 L100 질문있어요",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15182"
+  },
+  {
+   "gid": "smartthings",
+   "title": "Totem gelubu 도어락 R60 스마트싱스 인증 (WWST)",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15141"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 도어락 복도식 아파트에선 못써?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15125"
+  },
+  {
+   "gid": "smartthings",
+   "title": "인테리어 하려고합니다! 다운라이트랑 조명스위치 추천해주시는 거 잇을까요?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15086"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 Fp300",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15075"
+  },
+  {
+   "gid": "smartthings",
+   "title": "IoT아파트 스마트싱스 세팅 후기",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15068"
+  },
+  {
+   "gid": "smartthings",
+   "title": "전동커튼 아카라 가성비 안좋다해서 투야로 바꿈",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15057"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라는 쓰면 쓸수록 거지 같네",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15050"
+  },
+  {
+   "gid": "smartthings",
+   "title": "전동커튼 사버렷다",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15044"
+  },
+  {
+   "gid": "smartthings",
+   "title": "장기로 집 비우는데 여름철 습도 어느정도로 해야함?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15043"
+  },
+  {
+   "gid": "smartthings",
+   "title": "전동커튼 입문인데연..",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15026"
+  },
+  {
+   "gid": "smartthings",
+   "title": "완전 뉴비라 허브 질문좀..",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15020"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 한국 정발 커튼 모터 + 직구 레일",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=15010"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 고객 대응 as 처리 떨어지면 국내껄 왜삼? 직구하지",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14987"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 무선 스위치 도배완료..",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14958"
+  },
+  {
+   "gid": "smartthings",
+   "title": "타포 스싱 연동 구데기네",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14935"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 H1노브 돌려서 밝기, 색온도조절 궁금점",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14927"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 욕실히터 청젠뜨 후기 꼭사라",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14903"
+  },
+  {
+   "gid": "smartthings",
+   "title": "어카라k100 삼성 스싱허브? 연결햣는디 자꾸 오프라인되네",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14902"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 도어락 J200 스마트싱스 인증(WWST)",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14868"
+  },
+  {
+   "gid": "smartthings",
+   "title": "FP300 스마트싱스 Zigbee 연결안됨?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14820"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 k100 이거 박스 왜케 큼",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14785"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라는 야스지!",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14784"
+  },
+  {
+   "gid": "smartthings",
+   "title": "스싱스 꼭 사야하는 건가요? (중간결론 불필요/ 최종결론 필요)",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14774"
+  },
+  {
+   "gid": "smartthings",
+   "title": "스마트플러그를 다원, 투야, 싱스원만 추천하는 이유",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14749"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 k100 집 월패드 연동 어려움??",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14745"
+  },
+  {
+   "gid": "smartthings",
+   "title": "minidsp shd 시리즈 엣지 드라이버",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14731"
+  },
+  {
+   "gid": "smartthings",
+   "title": "안녕하세요 아카라 조명스위치 H1_WH도 스싱 가능한가요?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14713"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 노브 이거 사면되나요 너무 싸서 이상해서요",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14708"
+  },
+  {
+   "gid": "smartthings",
+   "title": "스싱스 커버리지 너무 좁은데 어케함?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14633"
+  },
+  {
+   "gid": "smartthings",
+   "title": "iot 하려고 물건 사모으는중",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14629"
+  },
+  {
+   "gid": "smartthings",
+   "title": "드리미 NAVO 도어락 E10 스마트싱스 인증 (WWST)",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14616"
+  },
+  {
+   "gid": "smartthings",
+   "title": "부모님댁 화장실에 좀 설치해보려고 하는데",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14592"
+  },
+  {
+   "gid": "smartthings",
+   "title": "님들은 아카라 h1 노브 어따씀?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14547"
+  },
+  {
+   "gid": "smartthings",
+   "title": "어우 디밍+색온도+지그비 되는 천장등은 가격이 말이 안되네",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14502"
+  },
+  {
+   "gid": "smartthings",
+   "title": "fp300 지그비모드로 변경 후 스싱허브에 연결했을때 재실감지가 안돼요",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14500"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 할인 관련 정보",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14480"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 K100 vs L100",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14473"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 도어락 할인하네",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14472"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 H1 vs 빌레사 스크롤 휠 - 볼륨디밍",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14397"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 욕실 히터 H1 스마트싱스 인증 (WWST)",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14387"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 H1 vs 빌레사 스크롤 휠 - 조명디밍",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14355"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 노브 클릭해서 뮤직프레임 재생/정지 제어가 가능하냐?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14344"
+  },
+  {
+   "gid": "smartthings",
+   "title": "누수 감지 센서 뭐가 조음?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14342"
+  },
+  {
+   "gid": "smartthings",
+   "title": "욕실장 하부에 iot 간접등 시공하기",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14328"
+  },
+  {
+   "gid": "smartthings",
+   "title": "씨발 아카라 노브 살려줘 나좀",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14277"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 H1무선노브 만듦새 지리긴한다",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14273"
+  },
+  {
+   "gid": "smartthings",
+   "title": "내가 시하스스위치 1구만 5개산 이유",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14250"
+  },
+  {
+   "gid": "smartthings",
+   "title": "iot 노브 돌려서 삼성 에어컨 온도 조절 마스터함",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14198"
+  },
+  {
+   "gid": "smartthings",
+   "title": "삼성 에어컨 돌려서 온도조절 성공했다(q9000, 아카라 무선노브 h1)",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14170"
+  },
+  {
+   "gid": "smartthings",
+   "title": "뉴비 아카라 도어센서 T1 샀워 (후기)",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14149"
+  },
+  {
+   "gid": "smartthings",
+   "title": "알리에서 아카라 H1 스위치 살까 싶은데",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14140"
+  },
+  {
+   "gid": "smartthings",
+   "title": "뮤직 프레임 볼륨 아카라 H1 노브로 조절 성공했다",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14101"
+  },
+  {
+   "gid": "smartthings",
+   "title": "문 닫아도 센서가 열림으로 바뀌는데 고장난건가?",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14088"
+  },
+  {
+   "gid": "smartthings",
+   "title": "빌레사 휠 버튼 다른버튼에 비해 왜이리 느리지",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14070"
+  },
+  {
+   "gid": "smartthings",
+   "title": "온도 센서 질문",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14048"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 무선 노브 H1 반응속도 (IoT 무선 디밍 스위치로 밝기 제어)",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14044"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 무선 노브 H1 간단후기",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=14043"
+  },
+  {
+   "gid": "smartthings",
+   "title": "제미스마트 스트립 드라이버 끼워팔기하네..",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=13968"
+  },
+  {
+   "gid": "smartthings",
+   "title": "안녕하세요. 스싱린 iot 구성하는데 있어서 제품 추천 부탁드립니다.",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=13966"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 스위치 vs 시하스 프리미엄 선택장애",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=13930"
+  },
+  {
+   "gid": "smartthings",
+   "title": "도어센서 및 스마트 스위치 추천 부탁드립니다",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=13919"
+  },
+  {
+   "gid": "smartthings",
+   "title": "아카라 g4랑 k100 연동하려면",
+   "date": "",
+   "views": 0,
+   "replies": 0,
+   "link": "https://gall.dcinside.com/mgallery/board/view/?id=smartthings&no=13880"
   }
  ]
 }
