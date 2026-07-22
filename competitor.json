@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-21 19:35",
+ "generatedAt": "2026-07-22 19:35",
  "brands": [
   {
    "name": "아카라",
@@ -126,10 +126,10 @@
     "아카라 k100",
     "아카라 스위치",
     "아카라 홈캠",
-    "아카라카",
     "아카라 l100",
-    "니케 아카라이브",
-    "이환 아카라이브"
+    "아카라카",
+    "이환 아카라이브",
+    "니케 아카라이브"
    ],
    "recent": [
     {
@@ -348,11 +348,11 @@
     "헤이홈 sd카드",
     "헤이홈 연결",
     "헤이홈 거치대",
-    "헤이홈 중국",
     "헤이홈 공유",
+    "헤이홈 중국",
     "헤이홈 오프라인",
     "헤이홈 프로",
-    "헤이홈 카메라"
+    "헤이홈 g2"
    ],
    "recent": [
     {
@@ -451,222 +451,198 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67033,
+   "total": 67074,
    "sentiment": {
-    "pos": 35,
-    "neu": 25,
+    "pos": 46,
+    "neu": 14,
     "neg": 0
    },
    "keywords": [
     [
-     "AI",
-     87
+     "가전",
+     37
     ],
     [
-     "8년",
-     39
-    ],
-    [
-     "연속",
+     "삼성전자서비스",
      36
     ],
     [
-     "에너지",
+     "AI",
+     35
+    ],
+    [
+     "1위",
+     31
+    ],
+    [
+     "연결",
      28
     ],
     [
-     "냉장고는",
+     "모바일",
+     27
+    ],
+    [
+     "연속",
+     27
+    ],
+    [
+     "AS",
+     25
+    ],
+    [
+     "고객이",
+     25
+    ],
+    [
+     "소모품",
      24
     ],
     [
-     "에어컨은",
-     24
-    ],
-    [
-     "고효율",
+     "교체",
      23
     ],
     [
-     "세탁기는",
-     23
-    ],
-    [
-     "문종승",
+     "플러스점검",
      22
     ],
     [
-     "절약모드",
-     21
-    ],
-    [
-     "DA사업부",
-     21
-    ],
-    [
-     "까지",
-     21
-    ],
-    [
-     "에너지대상",
-     20
-    ],
-    [
-     "수상",
+     "시기",
      19
     ],
     [
-     "부사장은",
+     "KSQI",
+     19
+    ],
+    [
+     "8년",
+     19
+    ],
+    [
+     "다른",
      18
     ],
     [
-     "추가로",
-     18
+     "점검하는",
+     14
     ],
     [
-     "에너지위너상",
-     17
-    ],
-    [
-     "사용량을",
-     17
+     "확인할",
+     14
     ]
    ],
    "posWords": [
     [
-     "수상",
-     24
-    ],
-    [
-     "확대",
-     4
-    ],
-    [
-     "강화",
-     3
-    ],
-    [
-     "혁신",
-     2
-    ],
-    [
-     "글로벌",
-     2
-    ],
-    [
-     "계약",
-     2
-    ],
-    [
-     "공략",
-     2
-    ],
-    [
      "1위",
-     1
+     32
+    ],
+    [
+     "수상",
+     13
     ]
    ],
    "related": [
-    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 에어컨",
+    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 세탁기",
+    "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 선풍기",
+    "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 아이폰",
+    "삼성 스마트싱스 선풍기",
     "삼성 스마트싱스 에어컨 연동"
    ],
    "recent": [
     {
-     "title": "삼성전자, 에너지위너상 8년 연속 '에너지대상'…총 10개 부문 수상",
-     "source": "wolyo.co.kr",
-     "date": "2026-07-21",
-     "link": "https://www.wolyo.co.kr/news/articleView.html?idxno=315376"
+     "title": "삼성전자서비스, 서비스 품질 평가 ‘싹쓸이’…KSQI도 1위",
+     "source": "metroseoul.co.kr",
+     "date": "2026-07-22",
+     "link": "http://www.metroseoul.co.kr/article/20260722500396"
     },
     {
-     "title": "AI 폼팩터의 새 미래… '갤럭시 글래스' 출격",
-     "source": "asiatoday.co.kr",
-     "date": "2026-07-21",
-     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20260722010007662"
+     "title": "삼성전자서비스, ‘한국산업의 서비스품질지수’ 가전, 모바일·IT AS 품...",
+     "source": "viva100.com",
+     "date": "2026-07-22",
+     "link": "https://www.viva100.com/article/20260722501100"
     },
     {
-     "title": "“고효율 AI 가전의 힘”…삼성전자, 8년 연속 ‘에너지대상’ 수상",
-     "source": "swtvnews.com",
-     "date": "2026-07-21",
-     "link": "https://swtvnews.com/news/newsview.php?ncode=1065588515992542"
+     "title": "삼성전자서비스, KSQI 가전 16년·모바일·IT 15년 연속 1위",
+     "source": "gpkorea.com",
+     "date": "2026-07-22",
+     "link": "https://www.gpkorea.com/news/articleView.html?idxno=144968"
     },
     {
-     "title": "'美법인 본사 이전' 삼성전자, 새 둥지에 관리직 대거 충원…\"가전·모바...",
-     "source": "뉴시스",
-     "date": "2026-07-21",
-     "link": "https://n.news.naver.com/mnews/article/003/0014079281?sid=101"
+     "title": "삼성전자서비스, KSQI 가전·모바일·IT AS 1위…고객 맞춤 서비스로 경...",
+     "source": "public25.com",
+     "date": "2026-07-22",
+     "link": "https://www.public25.com/news/articleView.html?idxno=51192"
     },
     {
-     "title": "삼성전자, 제철 만난 삼성 비스포크 AI 얼음정수기…하루 1000알 '척척'",
-     "source": "한국경제",
-     "date": "2026-07-21",
-     "link": "https://n.news.naver.com/mnews/article/015/0005312126?sid=101"
+     "title": "삼성전자서비스, 서비스품질지수 조사서 가전·모바일·IT기기 AS 1위",
+     "source": "아이뉴스24",
+     "date": "2026-07-22",
+     "link": "https://n.news.naver.com/mnews/article/031/0001043939?sid=101"
     },
     {
-     "title": "삼성전자, 에어컨 등 7개 고효율 제품 에너지위너상 수상",
+     "title": "삼성전자서비스, KSQI 가전·모바일 AS 1위…올해 조사 전 부문 석권",
+     "source": "beyondpost.co.kr",
+     "date": "2026-07-22",
+     "link": "http://www.beyondpost.co.kr/view.php?ud=202607221423065352be44c0aacd_30"
+    },
+    {
+     "title": "삼성전자서비스, 가전 모바일 AS 품질 1위",
+     "source": "pointdaily.co.kr",
+     "date": "2026-07-22",
+     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=312755"
+    },
+    {
+     "title": "삼성전자서비스, KSQI 가전·모바일 AS 전 부문 1위… 주요 조사 '석권'",
+     "source": "pointe.co.kr",
+     "date": "2026-07-22",
+     "link": "https://www.pointe.co.kr/news/articleView.html?idxno=82097"
+    },
+    {
+     "title": "삼성전자서비스, 서비스품질지수 가전 모바일.IT AS 품질 1위",
      "source": "autodaily.co.kr",
-     "date": "2026-07-21",
-     "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=545933"
+     "date": "2026-07-22",
+     "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=545974"
     },
     {
-     "title": "제습기 시장 달군 기술 경쟁…LG 독주 속 위닉스·삼성 추격",
-     "source": "news.mtn.co.kr",
-     "date": "2026-07-21",
-     "link": "https://news.mtn.co.kr/news-detail/2026072115104789540"
+     "title": "삼성전자서비스, KSQI 가전·모바일 AS…16년·15년 연속 1위",
+     "source": "ezyeconomy.com",
+     "date": "2026-07-22",
+     "link": "https://www.ezyeconomy.com/news/articleView.html?idxno=237825"
     },
     {
-     "title": "[가전 트렌드] LG전자, '엑스붐 스테이지 501' 출시 外",
-     "source": "ibabynews.com",
-     "date": "2026-07-21",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=153062"
+     "title": "삼성전자서비스, 서비스품질 평가 1위 행진",
+     "source": "매일경제",
+     "date": "2026-07-22",
+     "link": "https://n.news.naver.com/mnews/article/009/0005710566?sid=101"
     },
     {
-     "title": "삼성전자, 고효율 AI 가전으로 8년 연속 '에너지대상' 수상",
-     "source": "techholic.co.kr",
-     "date": "2026-07-21",
-     "link": "http://www.techholic.co.kr/news/articleView.html?idxno=222179"
+     "title": "삼성전자서비스, KSQI 1위 수성…올해 서비스 품질 평가 '전관왕' 달성",
+     "source": "cstimes.com",
+     "date": "2026-07-22",
+     "link": "https://www.cstimes.com/news/articleView.html?idxno=714220"
     },
     {
-     "title": "삼성전자·LG전자, 고효율 AI가전으로 '에너지위너상' 휩쓸어",
-     "source": "m-i.kr",
-     "date": "2026-07-21",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1393400"
+     "title": "삼성전자서비스, KSQI 가전·모바일 AS 부문 1위",
+     "source": "ddaily.co.kr",
+     "date": "2026-07-22",
+     "link": "https://n.news.naver.com/mnews/article/138/0002234929?sid=105"
     },
     {
-     "title": "삼성전자, 에너지대상 8년 연속 수상…AI 가전 효율 경쟁력 입증",
+     "title": "삼성전자서비스, KSQI 16년 연속 정상…서비스 경쟁력 입증",
      "source": "파이낸셜뉴스",
-     "date": "2026-07-21",
-     "link": "https://n.news.naver.com/mnews/article/014/0005550725?sid=101"
+     "date": "2026-07-22",
+     "link": "https://n.news.naver.com/mnews/article/014/0005551202?sid=101"
     },
     {
-     "title": "삼성전자, 고효율 AI 가전 앞세워 8년 연속 '에너지대상' 수상",
-     "source": "cnbizm.com",
-     "date": "2026-07-21",
-     "link": "https://www.cnbizm.com/news/articleView.html?idxno=309122"
-    },
-    {
-     "title": "삼성·LG, AI·고효율 앞세워 '에너지위너상'서 기술력 경쟁",
-     "source": "thebigdata.co.kr",
-     "date": "2026-07-21",
-     "link": "http://www.thebigdata.co.kr/view.php?ud=2026072113280565510ecbf9426b_23"
-    },
-    {
-     "title": "삼성전자, '로봇 드라이브' 건다...AI 시대 차세대 플랫폼 정조준",
-     "source": "opinionnews.co.kr",
-     "date": "2026-07-21",
-     "link": "http://www.opinionnews.co.kr/news/articleView.html?idxno=141816"
-    },
-    {
-     "title": "삼성전자, '올해의 에너지위너상' 10개 수상...8년 연속 에너지대상",
-     "source": "hbnpress.com",
-     "date": "2026-07-21",
-     "link": "https://hbnpress.com/news/view/1065583093900731"
+     "title": "삼성전자서비스, AS 품질 또 휩쓸었다…가전 16년·모바일 15년 연속 1위",
+     "source": "whitepaper.co.kr",
+     "date": "2026-07-22",
+     "link": "http://www.whitepaper.co.kr/news/articleView.html?idxno=264807"
     }
    ]
   },
@@ -674,7 +650,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76932,
+   "total": 76934,
    "sentiment": {
     "pos": 28,
     "neu": 32,
@@ -682,40 +658,40 @@
    },
    "keywords": [
     [
-     "가전",
-     55
-    ],
-    [
      "단지",
-     55
+     54
     ],
     [
      "LG전자",
-     55
+     54
+    ],
+    [
+     "가전",
+     52
     ],
     [
      "구독",
-     51
+     50
     ],
     [
      "AI홈",
-     46
-    ],
-    [
-     "압구정",
      45
     ],
     [
-     "아파트",
+     "압구정",
      44
     ],
     [
+     "아파트",
+     43
+    ],
+    [
      "우리",
-     33
+     32
     ],
     [
      "연결",
-     32
+     31
     ],
     [
      "세대",
@@ -723,45 +699,41 @@
     ],
     [
      "LG전자는",
-     28
+     27
     ],
     [
      "특화",
-     28
+     27
     ],
     [
      "상반기",
-     28
+     27
     ],
     [
      "재건축",
-     28
+     27
     ],
     [
      "허브",
-     26
+     25
     ],
     [
      "앱을",
-     24
-    ],
-    [
-     "30만",
      23
     ],
     [
-     "B2B",
+     "30만",
      22
+    ],
+    [
+     "ThinQ",
+     20
     ]
    ],
    "posWords": [
     [
      "확대",
-     13
-    ],
-    [
-     "프리미엄",
-     5
+     14
     ],
     [
      "공략",
@@ -770,6 +742,10 @@
     [
      "성장",
      5
+    ],
+    [
+     "프리미엄",
+     4
     ],
     [
      "돌파",
@@ -790,10 +766,10 @@
    ],
    "related": [
     "lg 씽큐",
-    "lg 씽큐 오류",
     "lg 씽큐 어플 오류",
-    "lg 씽큐앱",
+    "lg 씽큐 오류",
     "lg 씽큐온",
+    "lg 씽큐앱",
     "lg 씽큐 e1031 오류",
     "lg 씽큐 에어컨 연결",
     "lg 씽큐 어플",
@@ -801,6 +777,18 @@
     "lg 씽큐앱 오류"
    ],
    "recent": [
+    {
+     "title": "'V'가 뜬다…욕실·주방으로 번진 HVAC 경쟁",
+     "source": "전자신문",
+     "date": "2026-07-22",
+     "link": "https://n.news.naver.com/mnews/article/030/0003449926?sid=105"
+    },
+    {
+     "title": "AI로 맞춤 환경 제공…건설업계 '차세대 스마트홈' 선점 경쟁",
+     "source": "ebn.co.kr",
+     "date": "2026-07-22",
+     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1717228"
+    },
     {
      "title": "압구정 7천세대 잡은 LG… 파는 건 가전 아닌 '5년 방문'",
      "source": "the-biz.co.kr",
@@ -878,18 +866,6 @@
      "source": "todayenergy.kr",
      "date": "2026-07-20",
      "link": "https://www.todayenergy.kr/news/articleView.html?idxno=300558"
-    },
-    {
-     "title": "LG전자, 현대건설과 손잡았다…압구정 재건축에 '가전 구독' 도입",
-     "source": "cstimes.com",
-     "date": "2026-07-20",
-     "link": "https://www.cstimes.com/news/articleView.html?idxno=713904"
-    },
-    {
-     "title": "LG전자 류재철, 구독으로 B2B 주거 시장 정조준",
-     "source": "smartbizn.com",
-     "date": "2026-07-20",
-     "link": "https://www.smartbizn.com/news/articleView.html?idxno=148836"
     }
    ]
   },
@@ -897,118 +873,118 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75173,
+   "total": 75189,
    "sentiment": {
     "pos": 26,
-    "neu": 26,
-    "neg": 8
+    "neu": 24,
+    "neg": 10
    },
    "keywords": [
     [
      "AI",
-     29
-    ],
-    [
-     "고객을",
-     20
-    ],
-    [
-     "투자지원금",
-     19
+     25
     ],
     [
      "제미나이",
-     14
-    ],
-    [
-     "할인",
-     14
-    ],
-    [
-     "제공한다",
-     14
-    ],
-    [
-     "대신증권",
-     14
-    ],
-    [
-     "다음",
      13
     ],
     [
-     "이용권과",
-     13
+     "고객을",
+     12
     ],
     [
-     "도미노피자",
-     13
+     "Google",
+     11
+    ],
+    [
+     "투자지원금",
+     11
+    ],
+    [
+     "그래픽",
+     10
     ],
     [
      "Gemini",
-     12
+     10
+    ],
+    [
+     "활용",
+     10
+    ],
+    [
+     "이미지",
+     10
+    ],
+    [
+     "제공한다",
+     10
+    ],
+    [
+     "번역",
+     9
+    ],
+    [
+     "플랫폼",
+     9
     ],
     [
      "사용할",
-     12
+     9
     ],
     [
-     "프로",
-     12
+     "홈플러스",
+     9
     ],
     [
-     "수요일",
-     11
+     "할인",
+     9
     ],
     [
-     "LG유플러스에서",
-     11
+     "대신증권",
+     9
     ],
     [
-     "포함한",
-     11
+     "아래는",
+     8
     ],
     [
-     "개인",
-     11
-    ],
-    [
-     "대상으로",
-     11
+     "기사를",
+     8
     ]
    ],
    "posWords": [
     [
      "투자",
-     24
+     16
     ],
     [
      "글로벌",
-     9
+     8
     ],
     [
      "성장",
-     8
+     6
+    ],
+    [
+     "1위",
+     5
     ],
     [
      "돌파",
      3
     ],
     [
-     "1위",
+     "혁신",
      2
     ],
     [
      "최초",
-     1
+     2
     ],
     [
      "확대",
-     1
-    ],
-    [
-     "프리미엄",
-     1
+     2
     ]
    ],
    "related": [
@@ -1016,103 +992,103 @@
     "구글 홈",
     "구글 홈 미니",
     "구글 홈 허브",
-    "구글 홈페이지",
     "구글 홈 어시스턴트",
+    "구글 홈페이지",
     "구글 홈 미니 연결",
+    "구글 홈 스피커 연결",
     "구글 홈 미니 초기화",
-    "구글 홈 제미나이",
-    "구글 홈 스피커 연결"
+    "구글 홈 팟"
    ],
    "recent": [
     {
-     "title": "스포츠 클럽 통합 관리 플랫폼 '팀플러스' 정식 출시",
-     "source": "abcn.kr",
-     "date": "2026-07-21",
-     "link": "https://www.abcn.kr/news/articleView.html?idxno=89648"
-    },
-    {
-     "title": "디지털 기반 스포츠 클럽 관리 통합 플랫폼 ‘팀플러스’ 출시",
-     "source": "swtvnews.com",
-     "date": "2026-07-21",
-     "link": "https://swtvnews.com/news/newsview.php?ncode=1065593440997382"
-    },
-    {
-     "title": "스포츠 클럽 통합 관리 플랫폼 ‘팀플러스’ 출시",
-     "source": "gosiweek.com",
-     "date": "2026-07-21",
-     "link": "https://www.gosiweek.com/article/1065594539103314"
-    },
-    {
-     "title": "2000억으로 1조800억 빚 막는다?…홈플러스 회생, 숫자가 말하는 냉혹한...",
-     "source": "joongangenews.com",
-     "date": "2026-07-21",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=534211"
-    },
-    {
-     "title": "김용태 의원 \"MBK, 고려아연 경영권 분쟁 멈추고 홈플러스 회생에 집중...",
-     "source": "joongangenews.com",
-     "date": "2026-07-21",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=534119"
-    },
-    {
-     "title": "미국증시 DOW 지수 '또 하락'...애플 · 캐터필러 · 제약주 '뚝'",
-     "source": "choicenews.co.kr",
-     "date": "2026-07-21",
-     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=168430"
-    },
-    {
-     "title": "[비바100] “AI시대의 광고, 반복적 노출보다 ‘새로운 선택지’와 연결...",
-     "source": "viva100.com",
-     "date": "2026-07-21",
-     "link": "https://www.viva100.com/article/20260720500010"
-    },
-    {
-     "title": "NAS 입문 해볼까? 부담 낮은 20만원대 NAS, 아이피타임 'NAS2plus'",
-     "source": "betanews.net",
-     "date": "2026-07-20",
-     "link": "https://www.betanews.net/article/view/beta202607200126"
-    },
-    {
-     "title": "[게임뉴스] 스마일게이트 및 웹젠 소식 외",
-     "source": "gamevu.co.kr",
-     "date": "2026-07-20",
-     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=59430"
-    },
-    {
-     "title": "BTS 월드컵 첫 하프타임쇼·정호연 트로피 운반·하지원 MLB 시구…오늘...",
-     "source": "sports.khan.co.kr",
-     "date": "2026-07-20",
-     "link": "https://m.entertain.naver.com/article/144/0001127133"
-    },
-    {
-     "title": "거실을 영화관처럼, 뷰소닉 포터블 빔프로젝터 'X11-4K' 등 3종 4K 시네마...",
-     "source": "betanews.net",
-     "date": "2026-07-20",
-     "link": "https://www.betanews.net/article/view/beta202607200122"
-    },
-    {
-     "title": "챗GPT로 가전도 조작…LG 씽큐, AI홈 창구 넓힌다",
-     "source": "전자신문",
-     "date": "2026-07-20",
-     "link": "https://n.news.naver.com/mnews/article/030/0003449191?sid=105"
-    },
-    {
-     "title": "화장품 회사 넘어 글로벌 플랫폼…에이피알이 다시 쓴 K뷰티 성장공식",
-     "source": "joongangenews.com",
-     "date": "2026-07-20",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=533912"
-    },
-    {
-     "title": "에이트코 홀딩스, 보유자산 4억600만 달러…오픈AI·월드코인 편입",
-     "source": "tokenpost.kr",
-     "date": "2026-07-20",
-     "link": "https://www.tokenpost.kr/news/blockchain/379353"
-    },
-    {
-     "title": "이도현, 이모개 감독 ‘남벌’로 스크린 복귀..이병헌·고윤정과 호흡",
+     "title": "안성시, 법률홈닥터 배치 무료 법률상담 서비스 운영",
      "source": "breaknews.com",
-     "date": "2026-07-20",
-     "link": "http://www.breaknews.com/1222646"
+     "date": "2026-07-22",
+     "link": "http://www.breaknews.com/1223571"
+    },
+    {
+     "title": "여름 휴가철 빈집 관리 고민… 원격 제어 가전 주목",
+     "source": "fntoday.co.kr",
+     "date": "2026-07-22",
+     "link": "https://www.fntoday.co.kr/news/articleView.html?idxno=388650"
+    },
+    {
+     "title": "“축구장이야 워터파크야?”… 춘천시민축구단, 26일 짜릿한 ‘물놀이’...",
+     "source": "breaknews.com",
+     "date": "2026-07-22",
+     "link": "http://www.breaknews.com/1223523"
+    },
+    {
+     "title": "갤럭시 언팩 D-DAY, 진짜 주인공은…삼성 'AI 플랫폼'이 열린다",
+     "source": "itdaily.kr",
+     "date": "2026-07-22",
+     "link": "https://www.itdaily.kr/news/articleView.html?idxno=240531"
+    },
+    {
+     "title": "스마트카라, 여름 빈집 음식물 처리 공략",
+     "source": "hansbiz.co.kr",
+     "date": "2026-07-22",
+     "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=851743"
+    },
+    {
+     "title": "여름 휴가, 비어있는 우리집 위생은?… 원격 제어 가전으로 해",
+     "source": "theviewers.co.kr",
+     "date": "2026-07-22",
+     "link": "https://theviewers.co.kr/View.aspx?No=4158070"
+    },
+    {
+     "title": "개봉 D-7 ‘스파이더맨: 브랜드 뉴 데이’, 사전 예매량 31만장 돌파 ‘...",
+     "source": "breaknews.com",
+     "date": "2026-07-22",
+     "link": "http://www.breaknews.com/1223440"
+    },
+    {
+     "title": "갤럭시 언팩, AI와 폴더블 새 기준 제시할까···삼성, '주름 없는 폴더...",
+     "source": "smartbizn.com",
+     "date": "2026-07-22",
+     "link": "https://www.smartbizn.com/news/articleView.html?idxno=149092"
+    },
+    {
+     "title": "홈플러스, 회생절차 연장에 영업정상화 박차..매각 작업 본격화",
+     "source": "breaknews.com",
+     "date": "2026-07-22",
+     "link": "http://www.breaknews.com/1223355"
+    },
+    {
+     "title": "정일우 \"전 세계 휩쓴 달고나 커피 특허 냈어야 했네\"",
+     "source": "mediafine.co.kr",
+     "date": "2026-07-22",
+     "link": "https://www.mediafine.co.kr/news/articleView.html?idxno=84241"
+    },
+    {
+     "title": "\"MBK, DIP로 회생 주도권 노렸나\"…국회 직격에 금융당국도 제도개선 시...",
+     "source": "joongangenews.com",
+     "date": "2026-07-22",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=534360"
+    },
+    {
+     "title": "[부산대] 지역 거점국립대 1위…\"세계 TOP 100위 대학 도약\"",
+     "source": "kyosu.net",
+     "date": "2026-07-22",
+     "link": "https://www.kyosu.net/news/articleView.html?idxno=207875"
+    },
+    {
+     "title": "“AI 공산주의”, 중국산 오픈 웨이트 모델이 판을 흔들고 있다: 슬로우...",
+     "source": "slownews.kr",
+     "date": "2026-07-22",
+     "link": "https://slownews.kr/163556"
+    },
+    {
+     "title": "정일우, 코로나19 '달고나 커피' 창시자였다 \"BBC랑 인터뷰도 해..특허 ...",
+     "source": "starnewskorea.com",
+     "date": "2026-07-22",
+     "link": "https://m.entertain.naver.com/article/108/0003454801"
+    },
+    {
+     "title": "[미국주식] 고배당 블루칩만 투자하는 '다우의 개' 전략",
+     "source": "itooza.com",
+     "date": "2026-07-22",
+     "link": "https://www.itooza.com/common/iview.php?no=2026072111194671767"
     }
    ]
   }
