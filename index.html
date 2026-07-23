@@ -346,6 +346,7 @@
          <li class="pl-3">└ <b>자사</b>: 아카라라이프, 아카라, aqara, aqaralife</li>
          <li class="pl-3">└ <b>경쟁사</b>: 스마트싱스, LG 씽큐, 구글홈, 애플 홈킷, 샤오미, 투야, 스위치봇, 헤이홈, 카카오홈</li>
          <li class="pl-3">└ <b>시장</b>: IoT 인테리어, 스마트홈 시공, 신축 아파트 IoT, 스마트 도어락, AI 인테리어, 스마트홈 에너지, 지능형 홈, 스마트빌딩, 시니어케어 IoT, 매터·스레드·지그비, 스마트홈, AIoT, 아카라 M3 허브·K100, 바인드, 홈닉, 스마트오피스, 스마트주택, 스마트홈 해킹, 스마트홈 오류, IoT 시장, IoT 업계, 스마트홈 업계, 스마트홈 협회</li>
+         <li class="pl-3">└ <b>AX</b>: AI 전환, AI 트랜스포메이션, AI 에이전트, 온디바이스 AI, 생성형 AI, 피지컬 AI, AI 가전, AI 반도체, AI 데이터센터, AI 비서, AI 홈</li>
          <li>· <b class="text-slate-600">선별·분류</b>: AI(Gemini)가 관련도 높은 8~12건을 선별해 [자사/경쟁사/시장/업계]로 분류하고 주요 내용 요약 작성</li>
          <li>· <b class="text-slate-600">갱신</b>: 매일 오전 8시 자동 (수동 수정 시 해당 내용 우선 유지)</li>
        </ul>
@@ -1992,7 +1993,7 @@
       {kw:'스마트인테리어', recent:0, total:223},
       {kw:'ai 인테리어', recent:0, total:119}
     ];
-    const CAT_COLOR={'자사':'bg-brand/20 text-ink','경쟁사':'bg-ared/15 text-ared','시장':'bg-ablue/25 text-[#365b7a]','업계':'bg-aorange/15 text-aorange'};
+    const CAT_COLOR={'자사':'bg-brand/20 text-ink','경쟁사':'bg-ared/15 text-ared','시장':'bg-ablue/25 text-[#365b7a]','업계':'bg-aorange/15 text-aorange','AX':'bg-[#EEF2FF] text-[#4F46E5]'};
     let brEdits=(()=>{ try{return JSON.parse(localStorage.getItem('brEdits')||'{}');}catch(e){return {};} })();
     let brEditMode=false;
     function toggleBrEdit(){
@@ -2008,7 +2009,7 @@
     function briefDow(date){ return ['일','월','화','수','목','금','토'][(new Date(date)).getDay()]; }
     function buildMail(date){ const b=BRIEFINGS[date]; if(!b)return'';
       let m='[일일 언론 모니터링 보고] '+date.replace(/-/g,'.')+' ('+briefDow(date)+')\n\n■ 종합 요약 (Headlines)\n';
-      const h=b.headlines||{}; ['자사','업계','경쟁사'].forEach(k=>{ if(h[k]) m+='· '+k+': '+h[k]+'\n'; });
+      const h=b.headlines||{}; ['자사','경쟁사','업계','AX'].forEach(k=>{ if(h[k]) m+='· '+k+': '+h[k]+'\n'; });
       m+='\n■ 상세 내역\n';
       (b.rows||[]).forEach(r=>{ m+='['+r.cat+'] '+r.s+' | '+r.t+'\n   → '+r.ins+'\n   '+(r.link||'')+'\n'; });
       return m; }
@@ -2023,29 +2024,19 @@
       document.getElementById('brDate').textContent='[일일 언론 모니터링 보고] '+date.replace(/-/g,'.')+' ('+briefDow(date)+')';
       const h=b.headlines||{};
       document.getElementById('brHeadline').innerHTML='<p class="text-sm font-bold text-slate-800 mb-2">종합 요약 (Headlines)'+(brEditMode?' <span class="text-[11px] font-normal text-ink">· 편집 모드: 글자를 클릭해 수정 후 저장</span>':'')+'</p>'+
-        ['자사','업계','경쟁사'].map(k=>{ const v=(edH[k]!=null?edH[k]:(h[k]||'')); if(!v&&!brEditMode)return''; return `<p class="text-sm text-slate-700 mb-1.5 flex gap-2"><span class="px-1.5 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[k]||'bg-slate-100 text-slate-500'} h-fit whitespace-nowrap">${k}</span><span data-eh="${k}" ${brEditMode?'contenteditable="true"':''} class="flex-1${ec}">${esc(v)}</span></p>`; }).join('');
+        ['자사','경쟁사','업계','AX'].map(k=>{ const v=(edH[k]!=null?edH[k]:(h[k]||'')); if(!v&&!brEditMode)return''; return `<p class="text-sm text-slate-700 mb-1.5 flex gap-2"><span class="px-1.5 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[k]||'bg-slate-100 text-slate-500'} h-fit whitespace-nowrap">${k}</span><span data-eh="${k}" ${brEditMode?'contenteditable="true"':''} class="flex-1${ec}">${esc(v)}</span></p>`; }).join('');
       const rows=b.rows||[];
       const catOf=r=>{ const c=(r.cat||'').trim(); return c==='시장'?'업계':c; };   // 시장→업계 통합
-      const GRP=[{key:'자사',label:'자사'},{key:'경쟁사',label:'경쟁사'},{key:'업계',label:'업계 · 시장'}];
-      const th='<thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2.5 font-semibold whitespace-nowrap">매체명</th><th class="px-3 py-2.5 font-semibold">기사 제목</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">링크</th></tr></thead>';
-      const rowHtml=(r)=>`<tr class="hover:bg-slate-50 align-top"><td class="px-3 py-2.5 whitespace-nowrap font-medium text-slate-600">${esc(r.s)}</td><td class="px-3 py-2.5 font-semibold text-slate-800">${esc(r.t)}</td><td class="px-3 py-2.5 whitespace-nowrap">${r.link?`<a href="${esc(r.link)}" target="_blank" rel="noopener noreferrer" class="text-ink hover:underline font-medium">[이동]</a>`:'-'}</td></tr>`;
-      const sum=b.summary||{};
-      const tableBox=items=>`<div class="card overflow-auto"><table class="w-full text-sm">${th}<tbody class="divide-y divide-slate-100">`
-          +(items.length?items.map(x=>rowHtml(x[0])).join(''):'<tr><td colspan="3" class="text-center py-6 text-slate-400">해당 구분 기사가 없습니다.</td></tr>')
-          +'</tbody></table></div>';
+      const GRP=[{key:'자사',label:'자사'},{key:'경쟁사',label:'경쟁사'},{key:'업계',label:'업계 · 시장'},{key:'AX',label:'AX · AI 전환'}];
+      const th='<thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2.5 font-semibold whitespace-nowrap">매체명</th><th class="px-3 py-2.5 font-semibold">기사 제목</th><th class="px-3 py-2.5 font-semibold">주요 내용</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">링크</th></tr></thead>';
+      const rowHtml=(r,i)=>{ const iv=(edI[i]!=null?edI[i]:r.ins); return `<tr class="hover:bg-slate-50 align-top"><td class="px-3 py-3 whitespace-nowrap font-medium text-slate-600">${esc(r.s)}</td><td class="px-3 py-3 font-semibold text-slate-800 min-w-[180px]">${esc(r.t)}</td><td class="px-3 py-3 text-slate-600 min-w-[280px]" data-ei="${i}" ${brEditMode?'contenteditable="true"':''}><span>${esc(iv)}</span></td><td class="px-3 py-3 whitespace-nowrap">${r.link?`<a href="${esc(r.link)}" target="_blank" rel="noopener noreferrer" class="text-ink hover:underline font-medium">[이동]</a>`:'-'}</td></tr>`; };
       let html='<p class="text-sm font-bold text-slate-800 mb-3">상세 내역</p>';
       GRP.forEach(g=>{
         const items=rows.map((r,i)=>[r,i]).filter(x=>catOf(x[0])===g.key);
-        const segs=(sum[g.key]||[]).filter(s=>s&&s.t);
-        html+=`<div class="mb-5"><p class="text-sm font-bold text-slate-800 mb-1.5 flex items-center gap-2"><span class="px-2 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[g.key]||'bg-slate-100 text-slate-500'}">${g.label}</span><span class="text-xs font-normal text-slate-400">${items.length}건</span></p>`;
-        if(segs.length){
-          const sentence=segs.map(s=>s.link
-            ? `<a href="${esc(s.link)}" target="_blank" rel="noopener noreferrer" class="hover:underline font-medium" style="color:#2563EB">${esc(s.t)}</a>`
-            : `<span>${esc(s.t)}</span>`).join(' ');
-          html+=`<div class="card p-4 mb-2"><p class="text-[13px] leading-relaxed text-slate-700">${sentence}</p><p class="text-[11px] text-slate-400 mt-2">※ <span style="color:#2563EB">파란 글씨</span>를 클릭하면 해당 기사로 이동합니다</p></div>`;
-        }
-        html+=tableBox(items);   // 기사 리스트(매체·제목·링크 · 주요내용 열 없음)
-        html+='</div>';
+        html+=`<div class="mb-5"><p class="text-sm font-bold text-slate-800 mb-1.5 flex items-center gap-2"><span class="px-2 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[g.key]||'bg-slate-100 text-slate-500'}">${g.label}</span><span class="text-xs font-normal text-slate-400">${items.length}건</span></p>`
+          +`<div class="card overflow-auto"><table class="w-full text-sm">${th}<tbody class="divide-y divide-slate-100">`
+          +(items.length?items.map(x=>rowHtml(x[0],x[1])).join(''):'<tr><td colspan="4" class="text-center py-6 text-slate-400">해당 구분 기사가 없습니다.</td></tr>')
+          +'</tbody></table></div></div>';
       });
       document.getElementById('briefingBody').innerHTML=html+(brEditMode?'<p class="text-xs text-ink mt-2">편집 내용은 이 브라우저에 저장됩니다(수동 수정 우선). 원문 자동갱신 시에도 유지됩니다.</p>':'');
     }

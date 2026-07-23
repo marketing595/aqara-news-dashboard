@@ -21,10 +21,15 @@ CATS = [
       "지능형 홈", "스마트빌딩", "시니어케어 IoT", "매터 스마트홈", "스레드 스마트홈", "지그비", "스마트홈",
       "AIoT", "아카라 M3 허브", "아카라 K100", "바인드 스마트홈", "홈닉",
       "스마트오피스", "스마트주택", "스마트홈 해킹", "스마트홈 오류", "IoT 시장", "IoT 업계", "스마트홈 업계", "스마트홈 협회"]),
+    ("ax", "🤖", "4. AX (AI 전환 트렌드)",
+     ["AI 전환", "AI 트랜스포메이션", "AX 인공지능", "AI 에이전트", "온디바이스 AI", "생성형 AI",
+      "피지컬 AI", "AI 가전", "AI 반도체", "AI 데이터센터", "AI 비서", "AI 홈"]),
 ]
 REL = re.compile("스마트홈|스마트 도어|도어락|스마트 조명|재실|스마트 커튼|월패드|홈네트워크|매터|스레드|지그비|smartthings|스마트싱스|씽큐|thinq|홈킷|구글홈|샤오미|미홈|aiot|스마트 가전|홈 iot|aqara|아카라|스마트 스위치|홈캠|홈 cctv|스마트빌딩|공간 지능|스마트홈 인테리어", re.I)
 # 곁가지·비뉴스성 기사 제외(인물 프로필/인사/동정/부고/증시/포토/채용/운세/신간 등) — 제목 기준
 NEG_TITLE = re.compile(r"who\s*is|대표이사|\bceo\b|취임|\[?인사\]|인사\s*내정|동정|부고|별세|\[?포토\]?|화보|\[?게시판\]?|증시|코스피|코스닥|주가|공모주|청약|실적발표|배당|채용|공채|오늘의\s*운세|운세|\[?신간\]?|카드뉴스|\[?사설\]?|칼럼|기고|\[?날씨\]?", re.I)
+# AX(AI 전환) 카테고리 전용 관련도 — 일반 AI 전환 트렌드 기사(스마트홈 용어 없어도 통과)
+AX_REL = re.compile(r"ai\s*전환|ai\s*트랜스|ai\s*에이전트|에이전트|온디바이스|생성형|피지컬\s*ai|물리\s*ai|ai\s*가전|ai\s*홈|ai\s*비서|초거대|거대언어|\bllm\b|ai\s*반도체|ai\s*데이터센터|ai\s*인프라|\bax\b|인공지능", re.I)
 DOMAIN = {"mt.co.kr": "머니투데이", "news.mt.co.kr": "머니투데이", "heraldcorp.com": "헤럴드경제", "sedaily.com": "서울경제",
           "hankyung.com": "한국경제", "etnews.com": "전자신문", "mk.co.kr": "매일경제", "dt.co.kr": "디지털타임스",
           "yna.co.kr": "연합뉴스", "asiae.co.kr": "아시아경제", "dailian.co.kr": "데일리안", "biz.chosun.com": "조선비즈",
@@ -57,7 +62,8 @@ def collect():
             for it in arr:
                 title = clean(it.get("title"))
                 desc = clean(it.get("description"))
-                if not REL.search(title + " " + desc):
+                rel = AX_REL if key == "ax" else REL   # AX는 일반 AI전환 관련도로 판정
+                if not rel.search(title + " " + desc):
                     continue
                 if NEG_TITLE.search(title):        # 인물 프로필·인사·증시 등 곁가지 기사 제외
                     continue
@@ -97,8 +103,9 @@ def gemini(cand):
         "  - 제목만 그럴듯하고 내용은 홍보성 나열이거나 스마트홈과 무관한 기사, 중복 기사.\n"
         "  - 특정 회사 CEO 소개/약력 기사처럼 스마트홈은 배경으로만 언급된 기사.\n"
         "판단 기준: '이 기사를 스마트홈 담당자가 아침에 꼭 봐야 하는가?' 아니라면 버려라.\n"
-        "선별한 기사는 [자사/경쟁사/시장/업계] 중 하나로 분류한다.\n"
-        "(자사=아카라 직접 관련, 경쟁사=삼성·LG·샤오미·구글·애플·투야·스위치봇·헤이홈 등 경쟁 스마트홈 브랜드, 시장=인테리어·시공·표준(매터·스레드)·거시 트렌드 등)\n"
+        "선별한 기사는 [자사/경쟁사/시장/업계/AX] 중 하나로 분류한다.\n"
+        "(자사=아카라 직접 관련, 경쟁사=삼성·LG·샤오미·구글·애플·투야·스위치봇·헤이홈 등 경쟁 스마트홈 브랜드, 시장=인테리어·시공·표준(매터·스레드)·거시 트렌드 등,\n"
+        " AX=AI 전환(AI Transformation) 트렌드: AI 에이전트·생성형 AI·온디바이스 AI·피지컬 AI·AI 가전·AI 반도체/인프라 등 인공지능 전환 관련 기사)\n"
         "★가장 중요한 규칙★ 'insight'는 '그 기사 한 건'에 실제로 보도된 사실만 3인칭으로 건조하게 요약한다(1~2문장).\n"
         "- 경쟁사·시장·업계 기사의 insight에는 '아카라'를 절대 언급하지 마라. 그 기사의 사실만 옮겨라.\n"
         "- 여러 기사나 회사를 서로 연결짓지 마라. '~하는 가운데/~에 대응하여/~에 따라 아카라는…' 같은 연결·훈수 문장 금지.\n"
@@ -106,14 +113,9 @@ def gemini(cand):
         "  나쁜 예(절대 금지): '삼성·LG가 AI홈을 확장하는 가운데, 아카라는 Matter 호환성을 무기로 틈새시장을 확대해야 함.'\n"
         "  좋은 예(이렇게): '삼성전자가 신형 스마트싱스 허브를 공개하고 Matter 지원 기기를 확대했다고 밝혔다.'\n"
         "즉 기자가 쓴 사실 보도 문장처럼, 누가/무엇을/어떻게 했는지 사실만 옮겨라.\n"
-        "headlines도 마찬가지로 자사/업계/경쟁사 각 한 줄 '사실' 종합(제언·평가 금지, 경쟁사·업계엔 아카라 언급 금지).\n"
-        "★summary(가장 중요)★ 자사/경쟁사/업계 3개 그룹별로, 그 날 선택한 기사들을 '종합'해 1~3문장 요약을 만든다(시장으로 분류한 기사는 '업계'에 합산).\n"
-        " - 각 문장은 배열의 원소 {\"id\":기사id,\"t\":문장}로 출력한다. id는 그 문장의 근거가 되는 대표 기사 하나(선택한 rows 중에서).\n"
-        " - 기사를 한 건씩 나열하지 말고 핵심만 묶어라. 기사가 적으면 1문장, 많아도 3문장 이내. 해당 그룹 기사가 없으면 빈 배열([]).\n"
-        " - 사실만(제언·해석·전망 금지), 경쟁사·업계 문장엔 아카라 언급 금지.\n"
+        "headlines도 마찬가지로 자사/업계/경쟁사/AX 각 한 줄 '사실' 종합(제언·평가 금지, 경쟁사·업계·AX엔 아카라 언급 금지).\n"
         "반드시 아래 JSON 스키마로만 출력(선택 기사는 후보의 대괄호 id로 지정):\n"
-        '{"headlines":{"자사":"...","업계":"...","경쟁사":"..."},'
-        '"summary":{"자사":[{"id":"own-0","t":"..."}],"경쟁사":[{"id":"comp-0","t":"..."}],"업계":[{"id":"market-0","t":"..."}]},'
+        '{"headlines":{"자사":"...","업계":"...","경쟁사":"...","AX":"..."},'
         '"rows":[{"id":"own-0","cat":"자사","insight":"기사에 적힌 사실만 요약(제언·시사점·해석 없이)"}]}\n\n'
         "뉴스 후보:\n" + newsblock)
     if not GKEY:
@@ -183,23 +185,11 @@ def main():
         ins = raw if not is_opinion(raw, cat) else ((it.get("snippet") or "").strip() or raw)
         rows.append({"cat": cat, "s": it["source"], "t": it["title"],
                      "d": it["date"], "ins": ins, "link": it["link"]})
-    # 카테고리별 요약 박스(1~3문장, 각 문장에 대표 기사 링크) — 시장→업계 합산
-    summ_in = res.get("summary", {}) or {}
-    summary = {}
-    for cat in ("자사", "경쟁사", "업계"):
-        segs = []
-        for seg in (summ_in.get(cat) or []):
-            it = idx.get((seg or {}).get("id"))
-            t = clean_headline(((seg or {}).get("t", "") or "").strip(), cat)
-            if not t or is_opinion(t, cat):
-                continue
-            segs.append({"t": t, "link": (it.get("link") if it else None), "s": (it.get("source") if it else None)})
-        summary[cat] = segs
     kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
     day = kst.strftime("%Y-%m-%d")
     hl = res.get("headlines", {}) or {}
     hl = {k: clean_headline(v, k) for k, v in hl.items()}
-    today = {"headlines": hl, "summary": summary, "rows": rows}
+    today = {"headlines": hl, "rows": rows}
 
     path = os.path.join(os.path.dirname(__file__), "..", "briefing.json")
     store = {"generatedAt": kst.strftime("%Y-%m-%d %H:%M"), "briefings": {}}
