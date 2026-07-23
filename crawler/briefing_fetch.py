@@ -107,8 +107,13 @@ def gemini(cand):
         "  좋은 예(이렇게): '삼성전자가 신형 스마트싱스 허브를 공개하고 Matter 지원 기기를 확대했다고 밝혔다.'\n"
         "즉 기자가 쓴 사실 보도 문장처럼, 누가/무엇을/어떻게 했는지 사실만 옮겨라.\n"
         "headlines도 마찬가지로 자사/업계/경쟁사 각 한 줄 '사실' 종합(제언·평가 금지, 경쟁사·업계엔 아카라 언급 금지).\n"
+        "★summary(가장 중요)★ 자사/경쟁사/업계 3개 그룹별로, 그 날 선택한 기사들을 '종합'해 1~3문장 요약을 만든다(시장으로 분류한 기사는 '업계'에 합산).\n"
+        " - 각 문장은 배열의 원소 {\"id\":기사id,\"t\":문장}로 출력한다. id는 그 문장의 근거가 되는 대표 기사 하나(선택한 rows 중에서).\n"
+        " - 기사를 한 건씩 나열하지 말고 핵심만 묶어라. 기사가 적으면 1문장, 많아도 3문장 이내. 해당 그룹 기사가 없으면 빈 배열([]).\n"
+        " - 사실만(제언·해석·전망 금지), 경쟁사·업계 문장엔 아카라 언급 금지.\n"
         "반드시 아래 JSON 스키마로만 출력(선택 기사는 후보의 대괄호 id로 지정):\n"
         '{"headlines":{"자사":"...","업계":"...","경쟁사":"..."},'
+        '"summary":{"자사":[{"id":"own-0","t":"..."}],"경쟁사":[{"id":"comp-0","t":"..."}],"업계":[{"id":"market-0","t":"..."}]},'
         '"rows":[{"id":"own-0","cat":"자사","insight":"기사에 적힌 사실만 요약(제언·시사점·해석 없이)"}]}\n\n'
         "뉴스 후보:\n" + newsblock)
     if not GKEY:
@@ -178,11 +183,23 @@ def main():
         ins = raw if not is_opinion(raw, cat) else ((it.get("snippet") or "").strip() or raw)
         rows.append({"cat": cat, "s": it["source"], "t": it["title"],
                      "d": it["date"], "ins": ins, "link": it["link"]})
+    # 카테고리별 요약 박스(1~3문장, 각 문장에 대표 기사 링크) — 시장→업계 합산
+    summ_in = res.get("summary", {}) or {}
+    summary = {}
+    for cat in ("자사", "경쟁사", "업계"):
+        segs = []
+        for seg in (summ_in.get(cat) or []):
+            it = idx.get((seg or {}).get("id"))
+            t = clean_headline(((seg or {}).get("t", "") or "").strip(), cat)
+            if not t or is_opinion(t, cat):
+                continue
+            segs.append({"t": t, "link": (it.get("link") if it else None), "s": (it.get("source") if it else None)})
+        summary[cat] = segs
     kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
     day = kst.strftime("%Y-%m-%d")
     hl = res.get("headlines", {}) or {}
     hl = {k: clean_headline(v, k) for k, v in hl.items()}
-    today = {"headlines": hl, "rows": rows}
+    today = {"headlines": hl, "summary": summary, "rows": rows}
 
     path = os.path.join(os.path.dirname(__file__), "..", "briefing.json")
     store = {"generatedAt": kst.strftime("%Y-%m-%d %H:%M"), "briefings": {}}

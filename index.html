@@ -2029,13 +2029,25 @@
       const GRP=[{key:'자사',label:'자사'},{key:'경쟁사',label:'경쟁사'},{key:'업계',label:'업계 · 시장'}];
       const th='<thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-3 py-2.5 font-semibold whitespace-nowrap">매체명</th><th class="px-3 py-2.5 font-semibold">기사 제목</th><th class="px-3 py-2.5 font-semibold">주요 내용</th><th class="px-3 py-2.5 font-semibold whitespace-nowrap">링크</th></tr></thead>';
       const rowHtml=(r,i)=>{ const iv=(edI[i]!=null?edI[i]:r.ins); return `<tr class="hover:bg-slate-50 align-top"><td class="px-3 py-3 whitespace-nowrap font-medium text-slate-600">${esc(r.s)}</td><td class="px-3 py-3 font-semibold text-slate-800 min-w-[180px]">${esc(r.t)}</td><td class="px-3 py-3 text-slate-600 min-w-[280px]" data-ei="${i}" ${brEditMode?'contenteditable="true"':''}><span>${esc(iv)}</span></td><td class="px-3 py-3 whitespace-nowrap">${r.link?`<a href="${esc(r.link)}" target="_blank" rel="noopener noreferrer" class="text-ink hover:underline font-medium">[이동]</a>`:'-'}</td></tr>`; };
+      const sum=b.summary||{};
+      const tableBox=items=>`<div class="card overflow-auto"><table class="w-full text-sm">${th}<tbody class="divide-y divide-slate-100">`
+          +(items.length?items.map(x=>rowHtml(x[0],x[1])).join(''):'<tr><td colspan="4" class="text-center py-6 text-slate-400">해당 구분 기사가 없습니다.</td></tr>')
+          +'</tbody></table></div>';
       let html='<p class="text-sm font-bold text-slate-800 mb-3">상세 내역</p>';
       GRP.forEach(g=>{
         const items=rows.map((r,i)=>[r,i]).filter(x=>catOf(x[0])===g.key);
-        html+=`<div class="mb-5"><p class="text-sm font-bold text-slate-800 mb-1.5 flex items-center gap-2"><span class="px-2 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[g.key]||'bg-slate-100 text-slate-500'}">${g.label}</span><span class="text-xs font-normal text-slate-400">${items.length}건</span></p>`
-          +`<div class="card overflow-auto"><table class="w-full text-sm">${th}<tbody class="divide-y divide-slate-100">`
-          +(items.length?items.map(x=>rowHtml(x[0],x[1])).join(''):'<tr><td colspan="4" class="text-center py-6 text-slate-400">해당 구분 기사가 없습니다.</td></tr>')
-          +'</tbody></table></div></div>';
+        const segs=(sum[g.key]||[]).filter(s=>s&&s.t);
+        html+=`<div class="mb-5"><p class="text-sm font-bold text-slate-800 mb-1.5 flex items-center gap-2"><span class="px-2 py-0.5 rounded text-[11px] font-semibold ${CAT_COLOR[g.key]||'bg-slate-100 text-slate-500'}">${g.label}</span><span class="text-xs font-normal text-slate-400">${items.length}건</span></p>`;
+        if(segs.length){
+          const sentence=segs.map(s=>s.link
+            ? `<a href="${esc(s.link)}" target="_blank" rel="noopener noreferrer" class="hover:underline font-medium" style="color:#2563EB">${esc(s.t)}</a>`
+            : `<span>${esc(s.t)}</span>`).join(' ');
+          html+=`<div class="card p-4 mb-2"><p class="text-[13px] leading-relaxed text-slate-700">${sentence}</p><p class="text-[11px] text-slate-400 mt-2">※ <span style="color:#2563EB">파란 글씨</span>를 클릭하면 해당 기사로 이동합니다</p></div>`
+            +`<details ${brEditMode?'open':''} class="mt-1"><summary class="cursor-pointer text-[12px] text-slate-400 hover:text-ink font-semibold list-none pl-1 py-1">관련 기사 ${items.length}건 · 원문·내용 보기 ▾</summary><div class="mt-1">${tableBox(items)}</div></details>`;
+        } else {
+          html+=tableBox(items);   // 요약 없음(구버전 데이터) → 기존 표
+        }
+        html+='</div>';
       });
       document.getElementById('briefingBody').innerHTML=html+(brEditMode?'<p class="text-xs text-ink mt-2">편집 내용은 이 브라우저에 저장됩니다(수동 수정 우선). 원문 자동갱신 시에도 유지됩니다.</p>':'');
     }
