@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-23 19:36",
+ "generatedAt": "2026-07-24 19:29",
  "brands": [
   {
    "name": "아카라",
@@ -125,8 +125,8 @@
     "아카라",
     "아카라 k100",
     "아카라 스위치",
-    "아카라 l100",
     "아카라 홈캠",
+    "아카라 l100",
     "아카라카",
     "니케 아카라이브",
     "명조 아카라이브"
@@ -228,10 +228,10 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 959,
+   "total": 960,
    "sentiment": {
-    "pos": 29,
-    "neu": 30,
+    "pos": 28,
+    "neu": 31,
     "neg": 1
    },
    "keywords": [
@@ -322,12 +322,12 @@
      4
     ],
     [
-     "확대",
+     "1위",
      3
     ],
     [
-     "1위",
-     3
+     "확대",
+     2
     ],
     [
      "투자",
@@ -352,9 +352,15 @@
     "헤이홈 공유",
     "헤이홈 오프라인",
     "헤이홈 프로",
-    "헤이홈 g2"
+    "헤이홈 홈캠거치대"
    ],
    "recent": [
+    {
+     "title": "헤이홈, 에어컨·전동커튼 연동한 여름철 '스마트홈 루틴' 제안",
+     "source": "머니투데이",
+     "date": "2026-07-24",
+     "link": "https://n.news.naver.com/mnews/article/008/0005390674?sid=101"
+    },
     {
      "title": "도둑보다 택배 도난이 무섭다… '홈 보안' 키우는 보안업계",
      "source": "the-biz.co.kr",
@@ -438,12 +444,6 @@
      "source": "womentimes.co.kr",
      "date": "2026-07-08",
      "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=104238"
-    },
-    {
-     "title": "KT, 가족용 홈캠 상품 확대...'아기상어 에디션' 선보여",
-     "source": "hbnpress.com",
-     "date": "2026-07-08",
-     "link": "https://hbnpress.com/news/view/1065590168485577"
     }
    ]
   },
@@ -451,39 +451,35 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67079,
+   "total": 67095,
    "sentiment": {
-    "pos": 43,
-    "neu": 16,
-    "neg": 1
+    "pos": 39,
+    "neu": 18,
+    "neg": 3
    },
    "keywords": [
     [
-     "가전",
-     39
+     "삼성전자서비스",
+     37
     ],
     [
-     "삼성전자서비스",
-     38
+     "가전",
+     36
     ],
     [
      "1위",
-     32
+     31
     ],
     [
      "연결",
-     30
-    ],
-    [
-     "모바일",
-     28
+     29
     ],
     [
      "AI",
      28
     ],
     [
-     "AS",
+     "모바일",
      26
     ],
     [
@@ -491,11 +487,11 @@
      26
     ],
     [
-     "소모품",
+     "AS",
      25
     ],
     [
-     "교체",
+     "소모품",
      24
     ],
     [
@@ -503,42 +499,58 @@
      23
     ],
     [
+     "교체",
+     23
+    ],
+    [
+     "한옥",
+     20
+    ],
+    [
+     "기술을",
+     20
+    ],
+    [
      "KSQI",
-     20
-    ],
-    [
-     "시기",
-     20
-    ],
-    [
-     "연속",
-     20
-    ],
-    [
-     "다른",
      19
     ],
     [
-     "확인할",
-     15
+     "시기",
+     19
     ],
     [
-     "AIoT",
+     "다른",
+     18
+    ],
+    [
+     "에어비앤비",
      14
     ],
     [
-     "점검하는",
+     "확인할",
      14
     ]
    ],
    "posWords": [
     [
      "1위",
-     33
+     32
     ],
     [
-     "수상",
-     9
+     "첨단",
+     3
+    ],
+    [
+     "강화",
+     1
+    ],
+    [
+     "협업",
+     1
+    ],
+    [
+     "글로벌",
+     1
     ],
     [
      "혁신",
@@ -548,105 +560,105 @@
    "related": [
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스",
+    "삼성 스마트싱스 에어컨",
+    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 선풍기",
     "삼성 스마트싱스 아이폰",
-    "삼성 스마트싱스 에어컨 연동"
+    "삼성 스마트싱스 선풍기",
+    "삼성 스마트싱스 전력량"
    ],
    "recent": [
     {
-     "title": "미 ITC, 갤럭시 S25 수입금지 권고 예비판결…삼성전자-맥셀 특허전 가열",
-     "source": "ilyo.co.kr",
-     "date": "2026-07-23",
-     "link": "https://ilyo.co.kr/?ac=article_view&entry_id=511989"
+     "title": "에어비앤비, 삼성전자와 손잡고 '스마트 숙박' 선보여...부암동 한옥 숙...",
+     "source": "tournews21.com",
+     "date": "2026-07-24",
+     "link": "https://www.tournews21.com/news/articleView.html?idxno=139341"
     },
     {
-     "title": "[기업들] LG유플러스·삼성전자·코웨이·기아, 기술 혁신과 고객 가치 ...",
-     "source": "dailypop.kr",
-     "date": "2026-07-23",
-     "link": "http://www.dailypop.kr/news/articleView.html?idxno=100823"
+     "title": "\"한옥은 불편하다? 편견 깼다\" 에어비앤비가 삼성 AI 입혀 선보인 '스마...",
+     "source": "insight.co.kr",
+     "date": "2026-07-24",
+     "link": "https://www.insight.co.kr/news/564601"
     },
     {
-     "title": "삼성전자, AI 안경 연내 출시…스마트폰 넘어 웨어러블 확장",
-     "source": "bizwork.co.kr",
-     "date": "2026-07-23",
-     "link": "https://www.bizwork.co.kr/news/articleView.html?idxno=417540"
-    },
-    {
-     "title": "[가전 트렌드] 삼성전자서비스, '한국산업의 서비스품질지수' 가전, 모바...",
-     "source": "ibabynews.com",
-     "date": "2026-07-23",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=153095"
-    },
-    {
-     "title": "[Who Is ?] 구본학 쿠쿠홈시스 대표이사 사장",
-     "source": "businesspost.co.kr",
-     "date": "2026-07-23",
-     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=442066"
-    },
-    {
-     "title": "삼성전자서비스, 서비스 품질 평가 ‘싹쓸이’…KSQI도 1위",
-     "source": "metroseoul.co.kr",
-     "date": "2026-07-22",
-     "link": "http://www.metroseoul.co.kr/article/20260722500396"
-    },
-    {
-     "title": "삼성전자서비스, ‘한국산업의 서비스품질지수’ 가전, 모바일·IT AS 품...",
-     "source": "viva100.com",
-     "date": "2026-07-22",
-     "link": "https://www.viva100.com/article/20260722501100"
-    },
-    {
-     "title": "삼성전자서비스, KSQI 가전 16년·모바일·IT 15년 연속 1위",
-     "source": "gpkorea.com",
-     "date": "2026-07-22",
-     "link": "https://www.gpkorea.com/news/articleView.html?idxno=144968"
-    },
-    {
-     "title": "삼성전자서비스, KSQI 가전·모바일·IT AS 1위…고객 맞춤 서비스로 경...",
-     "source": "public25.com",
-     "date": "2026-07-22",
-     "link": "https://www.public25.com/news/articleView.html?idxno=51192"
-    },
-    {
-     "title": "삼성전자서비스, 서비스품질지수 조사서 가전·모바일·IT기기 AS 1위",
-     "source": "아이뉴스24",
-     "date": "2026-07-22",
-     "link": "https://n.news.naver.com/mnews/article/031/0001043939?sid=101"
-    },
-    {
-     "title": "삼성전자서비스, KSQI 가전·모바일 AS 1위…올해 조사 전 부문 석권",
-     "source": "beyondpost.co.kr",
-     "date": "2026-07-22",
-     "link": "http://www.beyondpost.co.kr/view.php?ud=202607221423065352be44c0aacd_30"
-    },
-    {
-     "title": "삼성전자서비스, 가전 모바일 AS 품질 1위",
-     "source": "pointdaily.co.kr",
-     "date": "2026-07-22",
-     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=312755"
-    },
-    {
-     "title": "삼성전자서비스, KSQI 가전·모바일 AS 전 부문 1위… 주요 조사 '석권'",
-     "source": "pointe.co.kr",
-     "date": "2026-07-22",
-     "link": "https://www.pointe.co.kr/news/articleView.html?idxno=82097"
-    },
-    {
-     "title": "삼성전자서비스, 서비스품질지수 가전 모바일.IT AS 품질 1위",
+     "title": "삼성 'EHS 히트펌프 보일러' VS 경동나비엔 'PEM550', 어느 쪽이 유리?",
      "source": "autodaily.co.kr",
-     "date": "2026-07-22",
-     "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=545974"
+     "date": "2026-07-24",
+     "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=546079"
     },
     {
-     "title": "삼성전자서비스, KSQI 가전·모바일 AS…16년·15년 연속 1위",
-     "source": "ezyeconomy.com",
-     "date": "2026-07-22",
-     "link": "https://www.ezyeconomy.com/news/articleView.html?idxno=237825"
+     "title": "NOL 뮤지컬 라방·여기어때 첫 ESG보고서·에어비앤비 AI 한옥 [똑똑한여...",
+     "source": "ekn.kr",
+     "date": "2026-07-24",
+     "link": "https://www.ekn.kr/web/view.php?key=20260724025545833"
+    },
+    {
+     "title": "[유통레이더] 메디큐브, BBQ, 오션월드, 롯데웰푸드, 유한킴벌리, 교원 ...",
+     "source": "daily.hankooki.com",
+     "date": "2026-07-24",
+     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1388978"
+    },
+    {
+     "title": "[유통브리핑] 쿠팡풀필먼트서비스, 화재 피해 지역 주민 대상 '종합 피해...",
+     "source": "seoulfn.com",
+     "date": "2026-07-24",
+     "link": "https://www.seoulfn.com/news/articleView.html?idxno=634071"
+    },
+    {
+     "title": "에어비앤비, 한옥에 인공지능 기술 접목",
+     "source": "naeil.com",
+     "date": "2026-07-24",
+     "link": "https://www.naeil.com/news/read/596420?ref=naver"
+    },
+    {
+     "title": "한옥에 삼성 AI 기술의 만남…에어비앤비, 스마트 숙소 공개",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-07-24",
+     "link": "https://n.news.naver.com/mnews/article/016/0002674653?sid=103"
+    },
+    {
+     "title": "에어비앤비, '삼성 AI가전·스마트싱스 기술' 숙소에 적용...소비자 관심...",
+     "source": "thebigdata.co.kr",
+     "date": "2026-07-24",
+     "link": "http://www.thebigdata.co.kr/view.php?ud=202607241053463366bbceadc3c9_23"
+    },
+    {
+     "title": "삼성전자, 넓은 폴더블폰과 스마트 안경 '언팩'…핵심은 '갤럭시 AI'",
+     "source": "electimes.com",
+     "date": "2026-07-24",
+     "link": "https://www.electimes.com/news/articleView.html?idxno=370619"
+    },
+    {
+     "title": "삼성 갤럭시 링, 올가을 수면 무호흡증 위험 감지 기능 추가.. 스마트 링...",
+     "source": "kbench.com",
+     "date": "2026-07-24",
+     "link": "https://kbench.com/?q=node/280629"
+    },
+    {
+     "title": "충전 노이로제 해방…한 번 충전해 1년 쓰는 전자종이 생활판 [ER라이프...",
+     "source": "econovill.com",
+     "date": "2026-07-24",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=746020"
+    },
+    {
+     "title": "에어비앤비, 서울 부암동 한옥 숙소에 삼성 AI 가전 및 스마트싱스 기술...",
+     "source": "discoverynews.kr",
+     "date": "2026-07-24",
+     "link": "https://www.discoverynews.kr/news/articleView.html?idxno=1096889"
+    },
+    {
+     "title": "에어비앤비 한옥에 삼성 AI 입었다…'스마트 숙소' 운영",
+     "source": "news1.kr",
+     "date": "2026-07-24",
+     "link": "https://n.news.naver.com/mnews/article/421/0009076436?sid=103"
+    },
+    {
+     "title": "삼성 AI가 입주한 부암동 한옥, 에어비앤비의 새 실험",
+     "source": "econovill.com",
+     "date": "2026-07-24",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=746036"
     }
    ]
   },
@@ -654,75 +666,71 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76935,
+   "total": 76939,
    "sentiment": {
-    "pos": 28,
+    "pos": 27,
     "neu": 32,
-    "neg": 0
+    "neg": 1
    },
    "keywords": [
     [
-     "가전",
-     53
+     "단지",
+     51
     ],
     [
      "LG전자",
-     53
+     50
     ],
     [
-     "단지",
-     53
+     "가전",
+     50
     ],
     [
      "구독",
-     49
-    ],
-    [
-     "AI홈",
-     45
-    ],
-    [
-     "압구정",
      43
     ],
     [
+     "AI홈",
+     42
+    ],
+    [
      "아파트",
-     41
+     39
+    ],
+    [
+     "압구정",
+     39
     ],
     [
      "우리",
-     31
+     30
     ],
     [
      "연결",
-     30
+     29
     ],
     [
      "세대",
-     30
-    ],
-    [
-     "LG전자는",
-     27
+     26
     ],
     [
      "특화",
-     26
-    ],
-    [
-     "상반기",
-     26
-    ],
-    [
-     "재건축",
-     26
-    ],
-    [
-     "허브",
      25
     ],
     [
-     "앱을",
+     "상반기",
+     25
+    ],
+    [
+     "재건축",
+     25
+    ],
+    [
+     "허브",
+     24
+    ],
+    [
+     "LG전자는",
      22
     ],
     [
@@ -730,25 +738,25 @@
      21
     ],
     [
-     "ThinQ",
-     20
+     "앱을",
+     21
+    ],
+    [
+     "AI",
+     19
     ]
    ],
    "posWords": [
     [
      "확대",
-     14
-    ],
-    [
-     "공략",
-     5
-    ],
-    [
-     "성장",
-     5
+     12
     ],
     [
      "프리미엄",
+     4
+    ],
+    [
+     "공략",
      4
     ],
     [
@@ -756,8 +764,12 @@
      4
     ],
     [
+     "성장",
+     4
+    ],
+    [
      "계약",
-     1
+     2
     ],
     [
      "주목",
@@ -771,16 +783,40 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐 어플 오류",
-    "lg 씽큐온",
-    "lg 씽큐 오류",
     "lg 씽큐 e1031 오류",
+    "lg 씽큐온",
     "lg 씽큐앱",
     "lg 씽큐 에어컨 연결",
-    "lg 씽큐 연결",
+    "lg 씽큐 어플 안됨",
     "lg 씽큐 어플",
-    "lg 씽큐 어플 안됨"
+    "lg 씽큐 앱 에러",
+    "lg 씽큐앱 오류"
    ],
    "recent": [
+    {
+     "title": "[CEO풍향계] '로봇사업 깃발' 노태문…'AI 홈 확장' 류재철",
+     "source": "yonhapnewstv.co.kr",
+     "date": "2026-07-24",
+     "link": "https://n.news.naver.com/mnews/article/422/0000888507?sid=101"
+    },
+    {
+     "title": "GS건설, 분양부터 입주까지 전자계약 도입…‘목동윤슬자이’ 첫 적용",
+     "source": "viva100.com",
+     "date": "2026-07-24",
+     "link": "https://www.viva100.com/article/20260724500443"
+    },
+    {
+     "title": "충전 노이로제 해방…한 번 충전해 1년 쓰는 전자종이 생활판 [ER라이프...",
+     "source": "econovill.com",
+     "date": "2026-07-24",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=746020"
+    },
+    {
+     "title": "“5060 정년 앞두고 세컨하우스로 딱”…LG 가전·AI 집약된 ‘LG 스마트...",
+     "source": "sportsseoul.com",
+     "date": "2026-07-24",
+     "link": "https://n.news.naver.com/mnews/article/468/0001255571?sid=101"
+    },
     {
      "title": "[Who Is ?] 구본학 쿠쿠홈시스 대표이사 사장",
      "source": "businesspost.co.kr",
@@ -846,30 +882,6 @@
      "source": "전자신문",
      "date": "2026-07-20",
      "link": "https://n.news.naver.com/mnews/article/030/0003449191?sid=105"
-    },
-    {
-     "title": "LG전자, 건설사 동맹으로 '구독' 확장…AI홈 몸집 불린다",
-     "source": "asiatime.co.kr",
-     "date": "2026-07-20",
-     "link": "https://www.asiatime.co.kr/article/20260720500231"
-    },
-    {
-     "title": "[기업경쟁력]LG전자, 가전 구독 솔루션 통해 B2B 시장 확대…압구정 재...",
-     "source": "nspna.com",
-     "date": "2026-07-20",
-     "link": "https://www.nspna.com/news/?mode=view&newsid=821056"
-    },
-    {
-     "title": "현대건설 손잡은 LG전자…압구정 재건축에 프리미엄 가전 구독 도입",
-     "source": "thepublic.kr",
-     "date": "2026-07-20",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=311732"
-    },
-    {
-     "title": "LG전자, 압구정 재건축에 가전 구독 도입…B2B 시장 확대",
-     "source": "nongaek.com",
-     "date": "2026-07-20",
-     "link": "http://www.nongaek.com/news/articleView.html?idxno=96140"
     }
    ]
   },
@@ -877,35 +889,63 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75205,
+   "total": 75217,
    "sentiment": {
-    "pos": 19,
-    "neu": 29,
+    "pos": 15,
+    "neu": 33,
     "neg": 12
    },
    "keywords": [
     [
      "AI",
-     24
+     21
     ],
     [
      "제미나이",
-     18
+     16
     ],
     [
-     "Google",
+     "번역",
+     14
+    ],
+    [
+     "번역한",
+     13
+    ],
+    [
+     "기사의",
+     13
+    ],
+    [
+     "전문",
+     13
+    ],
+    [
+     "입니다",
+     13
+    ],
+    [
+     "아래는",
      12
     ],
     [
-     "그래픽",
+     "기사를",
+     12
+    ],
+    [
+     "으로",
+     12
+    ],
+    [
+     "구글번역",
      11
     ],
     [
-     "Gemini",
+     "번역에",
      11
     ],
     [
-     "활용",
+     "오류가",
      11
     ],
     [
@@ -913,48 +953,20 @@
      11
     ],
     [
-     "번역한",
+     "높이기를",
      10
     ],
     [
-     "기사의",
+     "노력하고",
      10
     ],
     [
-     "전문",
+     "있습니다",
      10
-    ],
-    [
-     "입니다",
-     10
-    ],
-    [
-     "번역",
-     10
-    ],
-    [
-     "앱을",
-     9
     ],
     [
      "홈플러스",
-     9
-    ],
-    [
-     "아래는",
-     9
-    ],
-    [
-     "기사를",
-     9
-    ],
-    [
-     "으로",
-     9
-    ],
-    [
-     "플랫폼",
-     9
+     10
     ]
    ],
    "posWords": [
@@ -967,19 +979,11 @@
      5
     ],
     [
-     "투자",
-     5
-    ],
-    [
      "최초",
      3
     ],
     [
      "협업",
-     2
-    ],
-    [
-     "프리미엄",
      2
     ],
     [
@@ -989,6 +993,14 @@
     [
      "확대",
      2
+    ],
+    [
+     "프리미엄",
+     1
+    ],
+    [
+     "주목",
+     1
     ]
    ],
    "related": [
@@ -996,14 +1008,86 @@
     "구글 홈 미니",
     "구글 홈",
     "구글 홈 허브",
-    "구글 홈 어시스턴트",
     "구글 홈페이지",
     "구글 홈 미니 연결",
-    "구글 홈 미니 초기화",
     "구글 홈 스피커 연결",
+    "구글 홈 미니 초기화",
+    "구글 홈 연결",
     "구글 홈 팟"
    ],
    "recent": [
+    {
+     "title": "‘동궁’ 홍수주, 확연한 연기 변신..승은상궁 비극적 서사 완성",
+     "source": "breaknews.com",
+     "date": "2026-07-24",
+     "link": "http://www.breaknews.com/1224336"
+    },
+    {
+     "title": "한병도 민주당 원내대표 “'글로벌 AI 외교' 시동 건 이재명 대통령… ...",
+     "source": "breaknews.com",
+     "date": "2026-07-24",
+     "link": "http://www.breaknews.com/1224313"
+    },
+    {
+     "title": "\"전원 버튼 눌렀는데 웬 빅스비·시리?\" 스마트폰 전원 끄기 이모저모",
+     "source": "it.donga.com",
+     "date": "2026-07-24",
+     "link": "https://it.donga.com/109252/"
+    },
+    {
+     "title": "제천시 평생학습관, '26 하반기 34개 강좌 수강생 모집… 약초·한방 등...",
+     "source": "breaknews.com",
+     "date": "2026-07-24",
+     "link": "http://www.breaknews.com/1224283"
+    },
+    {
+     "title": "홈플러스 공백 길어지자…이마트·롯데마트 반사효과 ‘점점 뚜렷’",
+     "source": "inthenews.co.kr",
+     "date": "2026-07-24",
+     "link": "https://www.inthenews.co.kr/news/article.html?no=89694"
+    },
+    {
+     "title": "[스포츠엔터] 하지원·장원영 릴레이 시구…MLB 홀린 K스타",
+     "source": "yonhapnewstv.co.kr",
+     "date": "2026-07-24",
+     "link": "https://m.sports.naver.com/wbaseball/article/422/0000888469"
+    },
+    {
+     "title": "샤오미, 웨어러블·홈카메라 등 AIoT 신제품 5종 국내 출시",
+     "source": "itdaily.kr",
+     "date": "2026-07-24",
+     "link": "https://www.itdaily.kr/news/articleView.html?idxno=240574"
+    },
+    {
+     "title": "충전 노이로제 해방…한 번 충전해 1년 쓰는 전자종이 생활판 [ER라이프...",
+     "source": "econovill.com",
+     "date": "2026-07-24",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=746020"
+    },
+    {
+     "title": "“현장의 목소리로 교육자치 꽃피운다”… 2026학년도 광주학교운영위...",
+     "source": "breaknews.com",
+     "date": "2026-07-24",
+     "link": "http://www.breaknews.com/1224109"
+    },
+    {
+     "title": "[Who Is ?] 윤준오 클래시스 대표집행임원",
+     "source": "businesspost.co.kr",
+     "date": "2026-07-24",
+     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=441751"
+    },
+    {
+     "title": "[가전 트렌드] 삼성전자, AI 안경 '인텔리전트 아이웨어' 추가 공개…연...",
+     "source": "ibabynews.com",
+     "date": "2026-07-23",
+     "link": "https://www.ibabynews.com/news/articleView.html?idxno=153130"
+    },
+    {
+     "title": "[갤럭시 언팩 2026] 삼성전자, 폴더블 라인업 '선택의 시대' 연다",
+     "source": "econovill.com",
+     "date": "2026-07-23",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=745976"
+    },
     {
      "title": "[기획] 우주선 티타늄 입더니…삼성, 폴더블 주름·두께 다 잡았다",
      "source": "kfenews.co.kr",
@@ -1021,78 +1105,6 @@
      "source": "consumernews.co.kr",
      "date": "2026-07-23",
      "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=759878"
-    },
-    {
-     "title": "포항스틸야드 새 단장…관람 편의 높이고 잔디도 전면 교체",
-     "source": "breaknews.com",
-     "date": "2026-07-23",
-     "link": "http://www.breaknews.com/1223932"
-    },
-    {
-     "title": "이마트, ‘우베·두바이스타일’ 빙수 밀키트 선봬",
-     "source": "breaknews.com",
-     "date": "2026-07-23",
-     "link": "http://www.breaknews.com/1223898"
-    },
-    {
-     "title": "이케아 인천 첫 매장 '현대프리미엄아울렛 송도점' 오픈",
-     "source": "breaknews.com",
-     "date": "2026-07-23",
-     "link": "http://www.breaknews.com/1223860"
-    },
-    {
-     "title": "즉석밥, 알고 사면 다르다?…'쌀(국산)' 뒤에 숨은 품종 경쟁",
-     "source": "joongangenews.com",
-     "date": "2026-07-23",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=534854"
-    },
-    {
-     "title": "부천원미서, K리그1 경기서 유관기관 합동‘관계성 범죄 근절’캠페인 ...",
-     "source": "breaknews.com",
-     "date": "2026-07-23",
-     "link": "http://www.breaknews.com/1223810"
-    },
-    {
-     "title": "[현장] 삼성전자 \"폴더블 대화면과 AI 결합…멀티태스킹 경험 진화\"",
-     "source": "ebn.co.kr",
-     "date": "2026-07-23",
-     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1717469"
-    },
-    {
-     "title": "[AI 인사이드] 인류는 ‘사각형 유리판(휴대폰)’에서 해방될 것인가",
-     "source": "news2day.co.kr",
-     "date": "2026-07-23",
-     "link": "https://www.news2day.co.kr/article/20260723500077"
-    },
-    {
-     "title": "\"아이폰 넘어라\" 오픈AI '하드웨어 드림팀'의 야망",
-     "source": "fortunekorea.co.kr",
-     "date": "2026-07-23",
-     "link": "https://www.fortunekorea.co.kr/news/articleView.html?idxno=53298"
-    },
-    {
-     "title": "방탄소년단 정국, 깜짝 변신! 귀여움 폭발 셀카..팬심도 '폭발♥'",
-     "source": "starnewskorea.com",
-     "date": "2026-07-23",
-     "link": "https://m.entertain.naver.com/article/108/0003455152"
-    },
-    {
-     "title": "방탄소년단 정국, \"홈 윗스 홈\" 셀카로 월드컵 무대 뒤 반전 매력",
-     "source": "topstarnews.net",
-     "date": "2026-07-23",
-     "link": "https://www.topstarnews.net/news/articleView.html?idxno=16143426"
-    },
-    {
-     "title": "구글, 아이폰→안드로이드 무선전송에 비밀번호·eSIM 추가",
-     "source": "wikitree.co.kr",
-     "date": "2026-07-23",
-     "link": "https://www.wikitree.co.kr/articles/1147920"
-    },
-    {
-     "title": "[글로벌 ‘AI+X’ 스타트업 (35)] ‘파노 AI(Pano AI)’, 산불 대응의 골...",
-     "source": "news2day.co.kr",
-     "date": "2026-07-23",
-     "link": "https://www.news2day.co.kr/article/20260722500244"
     }
    ]
   }
