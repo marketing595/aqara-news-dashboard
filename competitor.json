@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-24 19:29",
+ "generatedAt": "2026-07-25 19:01",
  "brands": [
   {
    "name": "아카라",
@@ -343,16 +343,16 @@
     ]
    ],
    "related": [
-    "헤이홈",
     "헤이홈 홈캠",
+    "헤이홈",
     "헤이홈 sd카드",
-    "헤이홈 거치대",
     "헤이홈 연결",
+    "헤이홈 거치대",
     "헤이홈 중국",
     "헤이홈 공유",
     "헤이홈 오프라인",
     "헤이홈 프로",
-    "헤이홈 홈캠거치대"
+    "헤이홈 카메라"
    ],
    "recent": [
     {
@@ -451,60 +451,60 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67095,
+   "total": 67097,
    "sentiment": {
-    "pos": 39,
-    "neu": 18,
+    "pos": 37,
+    "neu": 20,
     "neg": 3
    },
    "keywords": [
     [
      "삼성전자서비스",
-     37
+     35
     ],
     [
      "가전",
-     36
-    ],
-    [
-     "1위",
-     31
-    ],
-    [
-     "연결",
-     29
+     34
     ],
     [
      "AI",
-     28
+     30
+    ],
+    [
+     "1위",
+     29
+    ],
+    [
+     "연결",
+     27
     ],
     [
      "모바일",
-     26
-    ],
-    [
-     "고객이",
-     26
-    ],
-    [
-     "AS",
-     25
-    ],
-    [
-     "소모품",
      24
     ],
     [
-     "플러스점검",
+     "고객이",
+     24
+    ],
+    [
+     "소모품",
      23
+    ],
+    [
+     "AS",
+     22
     ],
     [
      "교체",
-     23
+     22
     ],
     [
      "한옥",
-     20
+     21
+    ],
+    [
+     "플러스점검",
+     21
     ],
     [
      "기술을",
@@ -512,29 +512,29 @@
     ],
     [
      "KSQI",
-     19
+     18
     ],
     [
      "시기",
-     19
-    ],
-    [
-     "다른",
      18
     ],
     [
      "에어비앤비",
-     14
+     16
     ],
     [
-     "확인할",
+     "다른",
+     16
+    ],
+    [
+     "숙소",
      14
     ]
    ],
    "posWords": [
     [
      "1위",
-     32
+     30
     ],
     [
      "첨단",
@@ -558,18 +558,30 @@
     ]
    ],
    "related": [
-    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 허브",
-    "삼성 스마트싱스",
+    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 공유",
+    "삼성 스마트싱스",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 아이폰",
-    "삼성 스마트싱스 선풍기",
-    "삼성 스마트싱스 전력량"
+    "삼성 스마트싱스 전력량",
+    "삼성 스마트싱스 에어컨 연동"
    ],
    "recent": [
+    {
+     "title": "[오늘의 여행] 놀유니버스 NOL, 라이브 통해 뮤지컬·전시 특집 방송 진...",
+     "source": "ftoday.co.kr",
+     "date": "2026-07-25",
+     "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=362562"
+    },
+    {
+     "title": "유럽 덮친 역대급 폭염… ‘에어컨 불모지’ 삼성-LG 새 격전지로",
+     "source": "donga.com",
+     "date": "2026-07-25",
+     "link": "https://n.news.naver.com/mnews/article/020/0003736428?sid=101"
+    },
     {
      "title": "에어비앤비, 삼성전자와 손잡고 '스마트 숙박' 선보여...부암동 한옥 숙...",
      "source": "tournews21.com",
@@ -647,18 +659,6 @@
      "source": "discoverynews.kr",
      "date": "2026-07-24",
      "link": "https://www.discoverynews.kr/news/articleView.html?idxno=1096889"
-    },
-    {
-     "title": "에어비앤비 한옥에 삼성 AI 입었다…'스마트 숙소' 운영",
-     "source": "news1.kr",
-     "date": "2026-07-24",
-     "link": "https://n.news.naver.com/mnews/article/421/0009076436?sid=103"
-    },
-    {
-     "title": "삼성 AI가 입주한 부암동 한옥, 에어비앤비의 새 실험",
-     "source": "econovill.com",
-     "date": "2026-07-24",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=746036"
     }
    ]
   },
@@ -782,15 +782,15 @@
    ],
    "related": [
     "lg 씽큐",
+    "lg 씽큐온",
     "lg 씽큐 어플 오류",
     "lg 씽큐 e1031 오류",
-    "lg 씽큐온",
-    "lg 씽큐앱",
-    "lg 씽큐 에어컨 연결",
-    "lg 씽큐 어플 안됨",
+    "lg 씽큐 연결",
+    "lg 씽큐 냉장고",
+    "lg 씽큐 공유",
+    "lg 씽큐 앱",
     "lg 씽큐 어플",
-    "lg 씽큐 앱 에러",
-    "lg 씽큐앱 오류"
+    "lg 씽큐 어플 안됨"
    ],
    "recent": [
     {
@@ -889,79 +889,79 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75217,
+   "total": 75228,
    "sentiment": {
-    "pos": 15,
-    "neu": 33,
+    "pos": 14,
+    "neu": 34,
     "neg": 12
    },
    "keywords": [
     [
      "AI",
-     21
+     20
     ],
     [
      "제미나이",
-     16
+     17
+    ],
+    [
+     "메타",
+     15
     ],
     [
      "번역",
-     14
+     13
+    ],
+    [
+     "플랫폼",
+     12
     ],
     [
      "번역한",
-     13
+     12
     ],
     [
      "기사의",
-     13
+     12
     ],
     [
      "전문",
-     13
+     12
     ],
     [
      "입니다",
-     13
+     12
+    ],
+    [
+     "일본",
+     11
+    ],
+    [
+     "구글과",
+     11
     ],
     [
      "아래는",
-     12
+     11
     ],
     [
      "기사를",
-     12
+     11
     ],
     [
      "으로",
-     12
+     11
     ],
     [
      "구글번역",
-     11
+     10
     ],
     [
      "번역에",
-     11
+     10
     ],
     [
      "오류가",
-     11
-    ],
-    [
-     "이미지",
-     11
-    ],
-    [
-     "높이기를",
-     10
-    ],
-    [
-     "노력하고",
-     10
-    ],
-    [
-     "있습니다",
      10
     ],
     [
@@ -972,26 +972,22 @@
    "posWords": [
     [
      "글로벌",
-     7
+     6
     ],
     [
      "1위",
-     5
-    ],
-    [
-     "최초",
-     3
+     4
     ],
     [
      "협업",
+     3
+    ],
+    [
+     "최초",
      2
     ],
     [
      "혁신",
-     2
-    ],
-    [
-     "확대",
      2
     ],
     [
@@ -1001,21 +997,85 @@
     [
      "주목",
      1
+    ],
+    [
+     "공략",
+     1
     ]
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈 미니",
     "구글 홈",
+    "구글 홈 미니",
     "구글 홈 허브",
     "구글 홈페이지",
     "구글 홈 미니 연결",
     "구글 홈 스피커 연결",
     "구글 홈 미니 초기화",
-    "구글 홈 연결",
-    "구글 홈 팟"
+    "구글 홈 미니 2세대",
+    "구글 홈 연결"
    ],
    "recent": [
+    {
+     "title": "日, 구글·X 등 플랫폼 5개사에 시정 권고…\"부적절 게시물 대처 미흡\"",
+     "source": "news1.kr",
+     "date": "2026-07-25",
+     "link": "https://n.news.naver.com/mnews/article/421/0009078800?sid=104"
+    },
+    {
+     "title": "日, 구글·X·메타 등에 시정권고…\"악성 게시물 대응 미흡\"",
+     "source": "뉴시스",
+     "date": "2026-07-25",
+     "link": "https://n.news.naver.com/mnews/article/003/0014087891?sid=104"
+    },
+    {
+     "title": "일본, 구글·X·메타에 시정권고…\"악성 게시물 대응 불충분\"",
+     "source": "yonhapnewstv.co.kr",
+     "date": "2026-07-25",
+     "link": "https://n.news.naver.com/mnews/article/422/0000888835?sid=104"
+    },
+    {
+     "title": "美 빅테크 수호 나선 트럼프… EU의 구글 과징금에 \"대가 치를 것\"",
+     "source": "hankookilbo.com",
+     "date": "2026-07-25",
+     "link": "https://n.news.naver.com/mnews/article/469/0000944334?sid=104"
+    },
+    {
+     "title": "[AI 이슈 트렌드] 쿠팡 화재·삼전닉스 레버리지 논란...BTS 월드컵·영화...",
+     "source": "aitimes.com",
+     "date": "2026-07-25",
+     "link": "https://www.aitimes.com/news/articleView.html?idxno=213170"
+    },
+    {
+     "title": "일본 정부, 구글·메타·X 등 5곳에 첫 시정 권고…\"유해 게시물 대응 부...",
+     "source": "pinpointnews.co.kr",
+     "date": "2026-07-25",
+     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=471463"
+    },
+    {
+     "title": "일, 구글·X·메타 등에 시정권고...\"악성 게시물 대응 불충분\"",
+     "source": "ytn.co.kr",
+     "date": "2026-07-25",
+     "link": "https://n.news.naver.com/mnews/article/052/0002384404?sid=104"
+    },
+    {
+     "title": "日, 구글·X·메타 등에 시정권고…\"악성 게시물 대응 불충분\"",
+     "source": "연합뉴스",
+     "date": "2026-07-25",
+     "link": "https://n.news.naver.com/mnews/article/001/0016214438?sid=104"
+    },
+    {
+     "title": "[집중분석] 노조 파업의 역설…현대차·삼성·LG, 로보틱스 본격화",
+     "source": "thepublic.kr",
+     "date": "2026-07-25",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=312611"
+    },
+    {
+     "title": "구글홈 미니도 제미나이 라이브, 월 10달러 구독 필요",
+     "source": "wikitree.co.kr",
+     "date": "2026-07-25",
+     "link": "https://www.wikitree.co.kr/articles/1148378"
+    },
     {
      "title": "‘동궁’ 홍수주, 확연한 연기 변신..승은상궁 비극적 서사 완성",
      "source": "breaknews.com",
@@ -1045,66 +1105,6 @@
      "source": "inthenews.co.kr",
      "date": "2026-07-24",
      "link": "https://www.inthenews.co.kr/news/article.html?no=89694"
-    },
-    {
-     "title": "[스포츠엔터] 하지원·장원영 릴레이 시구…MLB 홀린 K스타",
-     "source": "yonhapnewstv.co.kr",
-     "date": "2026-07-24",
-     "link": "https://m.sports.naver.com/wbaseball/article/422/0000888469"
-    },
-    {
-     "title": "샤오미, 웨어러블·홈카메라 등 AIoT 신제품 5종 국내 출시",
-     "source": "itdaily.kr",
-     "date": "2026-07-24",
-     "link": "https://www.itdaily.kr/news/articleView.html?idxno=240574"
-    },
-    {
-     "title": "충전 노이로제 해방…한 번 충전해 1년 쓰는 전자종이 생활판 [ER라이프...",
-     "source": "econovill.com",
-     "date": "2026-07-24",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=746020"
-    },
-    {
-     "title": "“현장의 목소리로 교육자치 꽃피운다”… 2026학년도 광주학교운영위...",
-     "source": "breaknews.com",
-     "date": "2026-07-24",
-     "link": "http://www.breaknews.com/1224109"
-    },
-    {
-     "title": "[Who Is ?] 윤준오 클래시스 대표집행임원",
-     "source": "businesspost.co.kr",
-     "date": "2026-07-24",
-     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=441751"
-    },
-    {
-     "title": "[가전 트렌드] 삼성전자, AI 안경 '인텔리전트 아이웨어' 추가 공개…연...",
-     "source": "ibabynews.com",
-     "date": "2026-07-23",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=153130"
-    },
-    {
-     "title": "[갤럭시 언팩 2026] 삼성전자, 폴더블 라인업 '선택의 시대' 연다",
-     "source": "econovill.com",
-     "date": "2026-07-23",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=745976"
-    },
-    {
-     "title": "[기획] 우주선 티타늄 입더니…삼성, 폴더블 주름·두께 다 잡았다",
-     "source": "kfenews.co.kr",
-     "date": "2026-07-23",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=661037"
-    },
-    {
-     "title": "홈플러스 이어 고려아연까지…한국노총, 고려아연 노사와 MBK 전면 대응...",
-     "source": "joongangenews.com",
-     "date": "2026-07-23",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=534998"
-    },
-    {
-     "title": "베일 벗은 갤럭시 Z 폴드8·플립8, 가장 가볍고 얇아...10년간 고객 목소...",
-     "source": "consumernews.co.kr",
-     "date": "2026-07-23",
-     "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=759878"
     }
    ]
   }
