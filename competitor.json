@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-25 19:01",
+ "generatedAt": "2026-07-27 20:43",
  "brands": [
   {
    "name": "아카라",
@@ -129,7 +129,7 @@
     "아카라 l100",
     "아카라카",
     "니케 아카라이브",
-    "명조 아카라이브"
+    "던파 아카라이브"
    ],
    "recent": [
     {
@@ -343,11 +343,11 @@
     ]
    ],
    "related": [
-    "헤이홈 홈캠",
     "헤이홈",
+    "헤이홈 홈캠",
     "헤이홈 sd카드",
-    "헤이홈 연결",
     "헤이홈 거치대",
+    "헤이홈 연결",
     "헤이홈 중국",
     "헤이홈 공유",
     "헤이홈 오프라인",
@@ -451,51 +451,35 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67097,
+   "total": 67102,
    "sentiment": {
-    "pos": 37,
-    "neu": 20,
+    "pos": 35,
+    "neu": 22,
     "neg": 3
    },
    "keywords": [
     [
+     "AI",
+     32
+    ],
+    [
      "삼성전자서비스",
-     35
+     31
     ],
     [
      "가전",
-     34
-    ],
-    [
-     "AI",
-     30
+     31
     ],
     [
      "1위",
-     29
+     25
     ],
     [
      "연결",
-     27
+     24
     ],
     [
      "모바일",
-     24
-    ],
-    [
-     "고객이",
-     24
-    ],
-    [
-     "소모품",
-     23
-    ],
-    [
-     "AS",
-     22
-    ],
-    [
-     "교체",
      22
     ],
     [
@@ -503,42 +487,66 @@
      21
     ],
     [
-     "플러스점검",
-     21
-    ],
-    [
-     "기술을",
+     "AS",
      20
     ],
     [
-     "KSQI",
-     18
+     "소모품",
+     20
     ],
     [
-     "시기",
-     18
+     "고객이",
+     19
+    ],
+    [
+     "기술을",
+     19
+    ],
+    [
+     "교체",
+     19
+    ],
+    [
+     "KSQI",
+     17
+    ],
+    [
+     "플러스점검",
+     17
     ],
     [
      "에어비앤비",
      16
     ],
     [
-     "다른",
+     "시기",
      16
     ],
     [
      "숙소",
+     14
+    ],
+    [
+     "웰컴",
      14
     ]
    ],
    "posWords": [
     [
      "1위",
-     30
+     26
     ],
     [
      "첨단",
      3
+    ],
+    [
+     "돌파",
+     1
+    ],
+    [
+     "확대",
+     1
     ],
     [
      "강화",
@@ -559,17 +567,47 @@
    ],
    "related": [
     "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 스테이션",
+    "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스",
     "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 아이폰",
     "삼성 스마트싱스 전력량",
-    "삼성 스마트싱스 에어컨 연동"
+    "삼성 스마트싱스 선풍기",
+    "삼성 스마트싱스 아이폰"
    ],
    "recent": [
+    {
+     "title": "'보이는 냉장고'의 진화…식생활까지 품었다",
+     "source": "asiatime.co.kr",
+     "date": "2026-07-27",
+     "link": "https://www.asiatime.co.kr/article/20260727500326"
+    },
+    {
+     "title": "AI가 달군 '냉각경제'…삼성·LG HVAC, 진짜 캐시카우 될까",
+     "source": "newslock.co.kr",
+     "date": "2026-07-27",
+     "link": "http://www.newslock.co.kr/news/articleView.html?idxno=133469"
+    },
+    {
+     "title": "삼성전자서비스, '2026 KSQI' 전자제품 AS 부문 14년 연속 1위",
+     "source": "etoday.co.kr",
+     "date": "2026-07-27",
+     "link": "https://www.etoday.co.kr/news/view/2607678"
+    },
+    {
+     "title": "말 한마디에 40개 앱 움직인다…'대화' 넘어 '실행' 나선 폰AI[언팩, 그 ...",
+     "source": "뉴시스",
+     "date": "2026-07-26",
+     "link": "https://n.news.naver.com/mnews/article/003/0014088596?sid=105"
+    },
+    {
+     "title": "LG·삼성·코웨이·위닉스, 제습기·얼음정수기 앞세워 여름가전 경쟁 본...",
+     "source": "thebigdata.co.kr",
+     "date": "2026-07-26",
+     "link": "http://www.thebigdata.co.kr/view.php?ud=2026072412522140550ecbf9426b_23"
+    },
     {
      "title": "[오늘의 여행] 놀유니버스 NOL, 라이브 통해 뮤지컬·전시 특집 방송 진...",
      "source": "ftoday.co.kr",
@@ -629,36 +667,6 @@
      "source": "biz.heraldcorp.com",
      "date": "2026-07-24",
      "link": "https://n.news.naver.com/mnews/article/016/0002674653?sid=103"
-    },
-    {
-     "title": "에어비앤비, '삼성 AI가전·스마트싱스 기술' 숙소에 적용...소비자 관심...",
-     "source": "thebigdata.co.kr",
-     "date": "2026-07-24",
-     "link": "http://www.thebigdata.co.kr/view.php?ud=202607241053463366bbceadc3c9_23"
-    },
-    {
-     "title": "삼성전자, 넓은 폴더블폰과 스마트 안경 '언팩'…핵심은 '갤럭시 AI'",
-     "source": "electimes.com",
-     "date": "2026-07-24",
-     "link": "https://www.electimes.com/news/articleView.html?idxno=370619"
-    },
-    {
-     "title": "삼성 갤럭시 링, 올가을 수면 무호흡증 위험 감지 기능 추가.. 스마트 링...",
-     "source": "kbench.com",
-     "date": "2026-07-24",
-     "link": "https://kbench.com/?q=node/280629"
-    },
-    {
-     "title": "충전 노이로제 해방…한 번 충전해 1년 쓰는 전자종이 생활판 [ER라이프...",
-     "source": "econovill.com",
-     "date": "2026-07-24",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=746020"
-    },
-    {
-     "title": "에어비앤비, 서울 부암동 한옥 숙소에 삼성 AI 가전 및 스마트싱스 기술...",
-     "source": "discoverynews.kr",
-     "date": "2026-07-24",
-     "link": "https://www.discoverynews.kr/news/articleView.html?idxno=1096889"
     }
    ]
   },
@@ -666,7 +674,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76939,
+   "total": 76944,
    "sentiment": {
     "pos": 27,
     "neu": 32,
@@ -675,92 +683,92 @@
    "keywords": [
     [
      "단지",
-     51
+     48
     ],
     [
      "LG전자",
-     50
+     48
     ],
     [
      "가전",
-     50
-    ],
-    [
-     "구독",
-     43
+     46
     ],
     [
      "AI홈",
-     42
+     39
+    ],
+    [
+     "구독",
+     38
     ],
     [
      "아파트",
-     39
+     37
     ],
     [
      "압구정",
-     39
+     35
     ],
     [
      "우리",
-     30
-    ],
-    [
-     "연결",
-     29
-    ],
-    [
-     "세대",
      26
     ],
     [
-     "특화",
+     "연결",
      25
     ],
     [
-     "상반기",
-     25
-    ],
-    [
-     "재건축",
-     25
+     "세대",
+     24
     ],
     [
      "허브",
      24
     ],
     [
-     "LG전자는",
+     "특화",
      22
     ],
     [
-     "30만",
+     "재건축",
+     22
+    ],
+    [
+     "LG전자는",
      21
     ],
     [
-     "앱을",
+     "상반기",
      21
     ],
     [
      "AI",
+     19
+    ],
+    [
+     "ThinQ",
+     19
+    ],
+    [
+     "30만",
      19
     ]
    ],
    "posWords": [
     [
      "확대",
-     12
-    ],
-    [
-     "프리미엄",
-     4
-    ],
-    [
-     "공략",
-     4
+     10
     ],
     [
      "돌파",
+     5
+    ],
+    [
+     "프리미엄",
+     5
+    ],
+    [
+     "공략",
      4
     ],
     [
@@ -768,31 +776,61 @@
      4
     ],
     [
+     "강화",
+     2
+    ],
+    [
      "계약",
      2
     ],
     [
-     "주목",
-     1
-    ],
-    [
-     "혁신",
+     "글로벌",
      1
     ]
    ],
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐 어플 오류",
     "lg 씽큐 e1031 오류",
-    "lg 씽큐 연결",
-    "lg 씽큐 냉장고",
+    "lg 씽큐 에어컨 연결",
+    "lg 씽큐 어플 오류",
     "lg 씽큐 공유",
+    "lg 씽큐 냉장고",
+    "lg 씽큐 허브",
     "lg 씽큐 앱",
-    "lg 씽큐 어플",
-    "lg 씽큐 어플 안됨"
+    "lg 씽큐 와이파이"
    ],
    "recent": [
+    {
+     "title": "입지·브랜드만으론 부족…건설사, 주거 서비스 ‘승부수’",
+     "source": "dailian.co.kr",
+     "date": "2026-07-27",
+     "link": "https://n.news.naver.com/mnews/article/119/0003115011?sid=101"
+    },
+    {
+     "title": "[재계 이슈] 현대의 '거북선 외교'… 조선 명가와 英 왕실의 반세기 인...",
+     "source": "economychosun.com",
+     "date": "2026-07-27",
+     "link": "https://economychosun.com/site/data/html_dir/2026/07/20/2026072000026.html"
+    },
+    {
+     "title": "LG전자 '인스타뷰 냉장고' 글로벌 판매 500만대 돌파... \"유럽·신흥시장...",
+     "source": "econonews.co.kr",
+     "date": "2026-07-26",
+     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=441832"
+    },
+    {
+     "title": "LG전자 모듈러 주택에서 스타링크 위성통신 쓴다…SK텔링크 제공",
+     "source": "전자신문",
+     "date": "2026-07-26",
+     "link": "https://n.news.naver.com/mnews/article/030/0003451010?sid=105"
+    },
+    {
+     "title": "아파트·모듈러·차량까지…LG전자 B2B로 가전 판 키운다",
+     "source": "it.chosun.com",
+     "date": "2026-07-26",
+     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092166506"
+    },
     {
      "title": "[CEO풍향계] '로봇사업 깃발' 노태문…'AI 홈 확장' 류재철",
      "source": "yonhapnewstv.co.kr",
@@ -852,36 +890,6 @@
      "source": "naeil.com",
      "date": "2026-07-21",
      "link": "https://www.naeil.com/news/read/595895?ref=naver"
-    },
-    {
-     "title": "LG, 노벨상 기술 더하고 ‘생존형 필수가전’된 공기청정기",
-     "source": "biz.heraldcorp.com",
-     "date": "2026-07-21",
-     "link": "https://n.news.naver.com/mnews/article/016/0002672783?sid=101"
-    },
-    {
-     "title": "[바캉스 소비지도 ⑥] \"집 밖은 위험해\"…에어컨·로봇청소기 완성 '스마...",
-     "source": "ddaily.co.kr",
-     "date": "2026-07-21",
-     "link": "https://n.news.naver.com/mnews/article/138/0002234734?sid=105"
-    },
-    {
-     "title": "KCC글라스·LG전자·고려아연, 기술 혁신부터 주거·조선·안전까지 미래...",
-     "source": "dailypop.kr",
-     "date": "2026-07-20",
-     "link": "http://www.dailypop.kr/news/articleView.html?idxno=100720"
-    },
-    {
-     "title": "LG전자의 건설 B2B 확대…'AI홈 동맹' GS건설 '반사이익'도 커진다",
-     "source": "asiatoday.co.kr",
-     "date": "2026-07-20",
-     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20260720010006947"
-    },
-    {
-     "title": "챗GPT로 가전도 조작…LG 씽큐, AI홈 창구 넓힌다",
-     "source": "전자신문",
-     "date": "2026-07-20",
-     "link": "https://n.news.naver.com/mnews/article/030/0003449191?sid=105"
     }
    ]
   },
@@ -889,117 +897,117 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75228,
+   "total": 75252,
    "sentiment": {
-    "pos": 14,
-    "neu": 34,
-    "neg": 12
+    "pos": 6,
+    "neu": 31,
+    "neg": 23
    },
    "keywords": [
     [
-     "AI",
-     20
+     "HUG",
+     22
     ],
     [
-     "제미나이",
-     17
+     "온라인",
+     19
+    ],
+    [
+     "세이브더칠드런",
+     16
     ],
     [
      "메타",
      15
     ],
     [
-     "번역",
-     13
+     "남부지역본부",
+     14
     ],
     [
-     "플랫폼",
+     "제미나이",
+     14
+    ],
+    [
+     "구글과",
      12
     ],
     [
-     "번역한",
-     12
-    ],
-    [
-     "기사의",
-     12
-    ],
-    [
-     "전문",
-     12
-    ],
-    [
-     "입니다",
+     "제출하면",
      12
     ],
     [
      "일본",
+     12
+    ],
+    [
+     "번역",
      11
     ],
     [
-     "구글과",
+     "번역한",
      11
     ],
     [
-     "아래는",
+     "기사의",
      11
     ],
     [
-     "기사를",
+     "전문",
      11
     ],
     [
-     "으로",
+     "입니다",
      11
     ],
     [
-     "구글번역",
+     "AI",
      10
     ],
     [
-     "번역에",
+     "부산",
      10
     ],
     [
-     "오류가",
+     "신청은",
      10
     ],
     [
-     "홈플러스",
+     "증빙",
      10
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     6
-    ],
-    [
-     "1위",
-     4
-    ],
-    [
-     "협업",
      3
     ],
     [
-     "최초",
+     "협업",
      2
     ],
     [
      "혁신",
-     2
+     1
+    ],
+    [
+     "호응",
+     1
+    ],
+    [
+     "계약",
+     1
+    ],
+    [
+     "수출",
+     1
+    ],
+    [
+     "개선",
+     1
     ],
     [
      "프리미엄",
-     1
-    ],
-    [
-     "주목",
-     1
-    ],
-    [
-     "공략",
      1
     ]
    ],
@@ -1008,103 +1016,103 @@
     "구글 홈",
     "구글 홈 미니",
     "구글 홈 허브",
-    "구글 홈페이지",
     "구글 홈 미니 연결",
-    "구글 홈 스피커 연결",
+    "구글 홈페이지",
     "구글 홈 미니 초기화",
+    "구글 홈 연결",
     "구글 홈 미니 2세대",
-    "구글 홈 연결"
+    "구글 홈 미니 사용법"
    ],
    "recent": [
     {
-     "title": "日, 구글·X 등 플랫폼 5개사에 시정 권고…\"부적절 게시물 대처 미흡\"",
-     "source": "news1.kr",
-     "date": "2026-07-25",
-     "link": "https://n.news.naver.com/mnews/article/421/0009078800?sid=104"
-    },
-    {
-     "title": "日, 구글·X·메타 등에 시정권고…\"악성 게시물 대응 미흡\"",
-     "source": "뉴시스",
-     "date": "2026-07-25",
-     "link": "https://n.news.naver.com/mnews/article/003/0014087891?sid=104"
-    },
-    {
-     "title": "일본, 구글·X·메타에 시정권고…\"악성 게시물 대응 불충분\"",
-     "source": "yonhapnewstv.co.kr",
-     "date": "2026-07-25",
-     "link": "https://n.news.naver.com/mnews/article/422/0000888835?sid=104"
-    },
-    {
-     "title": "美 빅테크 수호 나선 트럼프… EU의 구글 과징금에 \"대가 치를 것\"",
-     "source": "hankookilbo.com",
-     "date": "2026-07-25",
-     "link": "https://n.news.naver.com/mnews/article/469/0000944334?sid=104"
-    },
-    {
-     "title": "[AI 이슈 트렌드] 쿠팡 화재·삼전닉스 레버리지 논란...BTS 월드컵·영화...",
-     "source": "aitimes.com",
-     "date": "2026-07-25",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=213170"
-    },
-    {
-     "title": "일본 정부, 구글·메타·X 등 5곳에 첫 시정 권고…\"유해 게시물 대응 부...",
-     "source": "pinpointnews.co.kr",
-     "date": "2026-07-25",
-     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=471463"
-    },
-    {
-     "title": "일, 구글·X·메타 등에 시정권고...\"악성 게시물 대응 불충분\"",
-     "source": "ytn.co.kr",
-     "date": "2026-07-25",
-     "link": "https://n.news.naver.com/mnews/article/052/0002384404?sid=104"
-    },
-    {
-     "title": "日, 구글·X·메타 등에 시정권고…\"악성 게시물 대응 불충분\"",
+     "title": "[연합뉴스 이 시각 헤드라인] - 18:00",
      "source": "연합뉴스",
-     "date": "2026-07-25",
-     "link": "https://n.news.naver.com/mnews/article/001/0016214438?sid=104"
+     "date": "2026-07-27",
+     "link": "https://n.news.naver.com/mnews/article/001/0016217646?sid=100"
     },
     {
-     "title": "[집중분석] 노조 파업의 역설…현대차·삼성·LG, 로보틱스 본격화",
-     "source": "thepublic.kr",
-     "date": "2026-07-25",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=312611"
+     "title": "AI·웨어러블…'수면 혁신기술' 한자리에",
+     "source": "한국경제",
+     "date": "2026-07-27",
+     "link": "https://n.news.naver.com/mnews/article/015/0005314352?sid=105"
     },
     {
-     "title": "구글홈 미니도 제미나이 라이브, 월 10달러 구독 필요",
-     "source": "wikitree.co.kr",
-     "date": "2026-07-25",
-     "link": "https://www.wikitree.co.kr/articles/1148378"
+     "title": "HUG, 부산 취약 아동가구에 최대 900만원 지원",
+     "source": "segye.com",
+     "date": "2026-07-27",
+     "link": "https://n.news.naver.com/mnews/article/022/0004146226?sid=101"
     },
     {
-     "title": "‘동궁’ 홍수주, 확연한 연기 변신..승은상궁 비극적 서사 완성",
+     "title": "횡성군, 방학 중 초등 돌봄·급식 공백 제로화… ‘틈새돌봄’ 신규 추...",
      "source": "breaknews.com",
-     "date": "2026-07-24",
-     "link": "http://www.breaknews.com/1224336"
+     "date": "2026-07-27",
+     "link": "http://www.breaknews.com/1224600"
     },
     {
-     "title": "한병도 민주당 원내대표 “'글로벌 AI 외교' 시동 건 이재명 대통령… ...",
+     "title": "HUG, 부산 취약 아동 가정에 주거·의료비 최대 900만원 지원",
+     "source": "newspim.com",
+     "date": "2026-07-27",
+     "link": "https://www.newspim.com/news/view/20260727001028"
+    },
+    {
+     "title": "HUG, 부산지역 주거ㆍ의료 취약 아동 위한 ‘골든타임 세이프홈’ 사업...",
+     "source": "dnews.co.kr",
+     "date": "2026-07-27",
+     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607271401332080665"
+    },
+    {
+     "title": "춘천시, 외국인 유학생 지역기업 취업연계 인턴십 '호응'",
      "source": "breaknews.com",
-     "date": "2026-07-24",
-     "link": "http://www.breaknews.com/1224313"
+     "date": "2026-07-27",
+     "link": "http://www.breaknews.com/1224581"
     },
     {
-     "title": "\"전원 버튼 눌렀는데 웬 빅스비·시리?\" 스마트폰 전원 끄기 이모저모",
-     "source": "it.donga.com",
-     "date": "2026-07-24",
-     "link": "https://it.donga.com/109252/"
+     "title": "[아유경제_부동산] HUG, 부산 주거ㆍ의료 취약 가정 지원… 최대 900만 원",
+     "source": "areyou.co.kr",
+     "date": "2026-07-27",
+     "link": "http://www.areyou.co.kr/news/articleView.html?idxno=94630"
     },
     {
-     "title": "제천시 평생학습관, '26 하반기 34개 강좌 수강생 모집… 약초·한방 등...",
-     "source": "breaknews.com",
-     "date": "2026-07-24",
-     "link": "http://www.breaknews.com/1224283"
+     "title": "전기 많이 쓰는 데이터센터, 주민 배터리 비용 낸다...뉴저지의 역발상",
+     "source": "impacton.net",
+     "date": "2026-07-27",
+     "link": "http://www.impacton.net/news/articleView.html?idxno=19725"
     },
     {
-     "title": "홈플러스 공백 길어지자…이마트·롯데마트 반사효과 ‘점점 뚜렷’",
-     "source": "inthenews.co.kr",
-     "date": "2026-07-24",
-     "link": "https://www.inthenews.co.kr/news/article.html?no=89694"
+     "title": "HUG, 부산 취약 아동 지원…10가구 모집",
+     "source": "dailian.co.kr",
+     "date": "2026-07-27",
+     "link": "https://n.news.naver.com/mnews/article/119/0003115179?sid=101"
+    },
+    {
+     "title": "HUG, 부산 취약계층 지원…10가구에 최대 900만원 실비 지급",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-07-27",
+     "link": "https://n.news.naver.com/mnews/article/016/0002675483?sid=101"
+    },
+    {
+     "title": "HUG, 부산 취약 아동 가정 ‘골든타임 세이프홈’ 참여가정 모집",
+     "source": "lawissue.co.kr",
+     "date": "2026-07-27",
+     "link": "http://www.lawissue.co.kr/view.php?ud=20260727104746121067191f6c6e_12"
+    },
+    {
+     "title": "HUG, 부산 위기 아동 가구에 주거·의료비 최대 900만 원 지원",
+     "source": "서울경제",
+     "date": "2026-07-27",
+     "link": "https://n.news.naver.com/mnews/article/011/0004645512?sid=101"
+    },
+    {
+     "title": "HUG, 부산 취약계층 아동양육 10가구에 최대 900만원 지원",
+     "source": "뉴시스",
+     "date": "2026-07-27",
+     "link": "https://n.news.naver.com/mnews/article/003/0014089546?sid=101"
+    },
+    {
+     "title": "[게시판] HUG, 부산 주거·의료 취약 아동 지원사업 참여가정 모집",
+     "source": "연합뉴스",
+     "date": "2026-07-27",
+     "link": "https://n.news.naver.com/mnews/article/001/0016216036?sid=101"
     }
    ]
   }
