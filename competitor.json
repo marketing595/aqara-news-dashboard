@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-28 19:46",
+ "generatedAt": "2026-07-29 19:57",
  "brands": [
   {
    "name": "아카라",
@@ -124,8 +124,8 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
-    "아카라 스위치",
     "아카라 홈캠",
+    "아카라 스위치",
     "아카라 l100",
     "아카라카",
     "니케 아카라이브",
@@ -343,8 +343,8 @@
     ]
    ],
    "related": [
-    "헤이홈",
     "헤이홈 홈캠",
+    "헤이홈",
     "헤이홈 sd카드",
     "헤이홈 거치대",
     "헤이홈 연결",
@@ -352,7 +352,7 @@
     "헤이홈 공유",
     "헤이홈 오프라인",
     "헤이홈 프로",
-    "헤이홈 카메라"
+    "헤이홈 g2"
    ],
    "recent": [
     {
@@ -451,7 +451,7 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67156,
+   "total": 67159,
    "sentiment": {
     "pos": 31,
     "neu": 29,
@@ -460,27 +460,27 @@
    "keywords": [
     [
      "AI",
-     90
+     94
     ],
     [
      "녹색상품",
-     71
+     73
     ],
     [
      "올해의",
-     64
+     66
     ],
     [
      "16개",
-     59
+     60
     ],
     [
      "대한민국",
-     40
+     42
     ],
     [
      "세탁",
-     37
+     38
     ],
     [
      "에너지",
@@ -488,11 +488,11 @@
     ],
     [
      "절약",
-     30
+     31
     ],
     [
      "선정",
-     29
+     30
     ],
     [
      "건조",
@@ -500,11 +500,11 @@
     ],
     [
      "최다",
-     24
+     25
     ],
     [
      "생활가전과",
-     23
+     24
     ],
     [
      "까지",
@@ -516,14 +516,14 @@
     ],
     [
      "삼성전자가",
-     19
-    ],
-    [
-     "스마트폰",
-     18
+     20
     ],
     [
      "모바일",
+     18
+    ],
+    [
+     "스마트폰",
      18
     ],
     [
@@ -545,6 +545,14 @@
      2
     ],
     [
+     "1위",
+     1
+    ],
+    [
+     "프리미엄",
+     1
+    ],
+    [
      "인기",
      1
     ],
@@ -555,29 +563,39 @@
     [
      "돌파",
      1
-    ],
-    [
-     "확대",
-     1
-    ],
-    [
-     "1위",
-     1
     ]
    ],
    "related": [
+    "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 공유",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 허브",
+    "삼성 스마트싱스",
     "삼성 스마트싱스 전력량",
-    "삼성 스마트싱스 세탁기",
+    "삼성 스마트싱스 아이폰",
     "삼성 스마트싱스 선풍기",
-    "삼성 스마트싱스 아이폰"
+    "삼성 스마트싱스 세탁기"
    ],
    "recent": [
+    {
+     "title": "삼성 공기청정기, 7월 브랜드평판 1위…LG·다이슨 제쳤다",
+     "source": "pinpointnews.co.kr",
+     "date": "2026-07-29",
+     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=472362"
+    },
+    {
+     "title": "로봇 동선까지 고려… 주택 설계 공식 바뀐다",
+     "source": "chosun.com",
+     "date": "2026-07-29",
+     "link": "https://n.news.naver.com/mnews/article/023/0003990125?sid=105"
+    },
+    {
+     "title": "삼성전자, '2026 대한민국 올해의 녹색상품' 최다 선정… AI·고효율 기술...",
+     "source": "mediafine.co.kr",
+     "date": "2026-07-28",
+     "link": "https://www.mediafine.co.kr/news/articleView.html?idxno=84868"
+    },
     {
      "title": "AI·고효율 기술 앞세운 삼성전자, 환경단체·소비자 선정 '녹색상품' 최...",
      "source": "thedailypost.kr",
@@ -649,24 +667,6 @@
      "source": "joongangenews.com",
      "date": "2026-07-28",
      "link": "https://www.joongangenews.com/news/articleView.html?idxno=535809"
-    },
-    {
-     "title": "삼성전자, ‘올해의 녹색상품’ 업계 최다 16개…AI·고효율 기술 인정",
-     "source": "socialvalue.kr",
-     "date": "2026-07-28",
-     "link": "https://www.socialvalue.kr/news/view/1065576950403029"
-    },
-    {
-     "title": "삼성전자, '2026 대한민국 올해의 녹색상품' 16개 제품 선정·인기상 2개...",
-     "source": "womentimes.co.kr",
-     "date": "2026-07-28",
-     "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=104747"
-    },
-    {
-     "title": "삼성전자, '올해의 녹색상품'서 16개 제품 선정",
-     "source": "전자신문",
-     "date": "2026-07-28",
-     "link": "https://n.news.naver.com/mnews/article/030/0003451698?sid=101"
     }
    ]
   },
@@ -789,16 +789,16 @@
     ]
    ],
    "related": [
-    "lg 씽큐",
     "lg 씽큐온",
+    "lg 씽큐",
     "lg 씽큐 에어컨 연결",
     "lg 씽큐 공유",
     "lg 씽큐 허브",
-    "lg 씽큐 어플 오류",
+    "lg 씽큐 제습기",
     "lg 씽큐 에어컨 청소",
+    "lg 씽큐 연결 안됨",
     "lg 씽큐 냉장고",
-    "lg 씽큐 앱",
-    "lg 씽큐 제습기"
+    "lg 씽큐 앱"
    ],
    "recent": [
     {
@@ -897,16 +897,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75279,
+   "total": 75293,
    "sentiment": {
     "pos": 22,
-    "neu": 20,
-    "neg": 18
+    "neu": 21,
+    "neg": 17
    },
    "keywords": [
     [
      "AI",
-     32
+     35
     ],
     [
      "HUG",
@@ -941,10 +941,6 @@
      14
     ],
     [
-     "메타",
-     14
-    ],
-    [
      "보상",
      13
     ],
@@ -961,34 +957,42 @@
      12
     ],
     [
-     "일본",
-     12
+     "허브",
+     10
     ],
     [
      "프리미엄플러스",
      10
     ],
     [
-     "게시물",
+     "부산",
      10
     ],
     [
-     "부산",
+     "신청은",
+     10
+    ],
+    [
+     "증빙",
      10
     ]
    ],
    "posWords": [
     [
      "프리미엄",
-     14
-    ],
-    [
-     "글로벌",
-     5
+     15
     ],
     [
      "협업",
      4
+    ],
+    [
+     "글로벌",
+     4
+    ],
+    [
+     "혁신",
+     2
     ],
     [
      "투자",
@@ -999,15 +1003,11 @@
      2
     ],
     [
-     "수출",
-     2
-    ],
-    [
-     "기대",
+     "파트너십",
      1
     ],
     [
-     "성장",
+     "최초",
      1
     ]
    ],
@@ -1018,101 +1018,101 @@
     "구글 홈 허브",
     "구글 홈 미니 연결",
     "구글 홈페이지",
-    "구글 홈 스피커 연결",
-    "구글 홈 미니 초기화",
     "구글 홈 연결",
+    "구글 홈 미니 초기화",
+    "구글 홈 미니 사용법",
     "구글 홈 미니 2세대"
    ],
    "recent": [
+    {
+     "title": "[이슈] 구관이 명관?···은행 앱 개편 초기 진통, 왜",
+     "source": "seoulfn.com",
+     "date": "2026-07-29",
+     "link": "https://www.seoulfn.com/news/articleView.html?idxno=634417"
+    },
+    {
+     "title": "장시간 대화면 시청도 눈 편안하게… 엡손, 프리미엄 홈프로젝터 시장 ...",
+     "source": "biz.chosun.com",
+     "date": "2026-07-29",
+     "link": "https://n.news.naver.com/mnews/article/366/0001182833?sid=105"
+    },
+    {
+     "title": "[2027 수시 부산대] 특성화 얼라이언스로 최고 수준 연구 환경 갖춘 ‘국...",
+     "source": "busan.com",
+     "date": "2026-07-29",
+     "link": "https://n.news.naver.com/mnews/article/082/0001391797?sid=102"
+    },
+    {
+     "title": "[미국 특징주] 애플, 신형 홈허브·홈팟미니로 스마트홈 시장 재도전",
+     "source": "newspim.com",
+     "date": "2026-07-29",
+     "link": "https://www.newspim.com/news/view/20260729000845"
+    },
+    {
+     "title": "벤큐, '여름 홈캉스 & 휴가비 지원' 빔프로젝터 6종 프로모션",
+     "source": "ilovepc.co.kr",
+     "date": "2026-07-29",
+     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=60162"
+    },
+    {
+     "title": "애플 저렴한 기기 임대 美서 시작...장중 시총 5조 달러 터치",
+     "source": "chosun.com",
+     "date": "2026-07-29",
+     "link": "https://n.news.naver.com/mnews/article/023/0003990236?sid=105"
+    },
+    {
+     "title": "벽에 붙이고 사람 알아본다… 애플, AI 기반 스마트 홈 거점 기기 연내...",
+     "source": "ddaily.co.kr",
+     "date": "2026-07-29",
+     "link": "https://n.news.naver.com/mnews/article/138/0002235790?sid=105"
+    },
+    {
+     "title": "이케아 코리아, 사계절 맞춤 홈퍼니싱 할인 ‘이케사는 세일’ 론칭",
+     "source": "breaknews.com",
+     "date": "2026-07-29",
+     "link": "http://www.breaknews.com/1225181"
+    },
+    {
+     "title": "애플, '시리AI'로 스마트홈 혁명 이끈다",
+     "source": "지디넷",
+     "date": "2026-07-29",
+     "link": "https://n.news.naver.com/mnews/article/092/0002432272?sid=105"
+    },
+    {
+     "title": "4천 명 몰린 첫 브랜드콘…아임웹이 묻고 현장의 리더들이 답한 ‘브랜...",
+     "source": "venturesquare.net",
+     "date": "2026-07-29",
+     "link": "https://www.venturesquare.net/1101859/"
+    },
+    {
+     "title": "미국증시 다우지수 '활짝'...SHW·SW주 '껑충', 엔비디아 '선방'",
+     "source": "choicenews.co.kr",
+     "date": "2026-07-29",
+     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=168939"
+    },
+    {
+     "title": "애플, '시리AI' 들고 스마트홈 출시…아마존·구글에 도전장[모닝폰]",
+     "source": "이데일리",
+     "date": "2026-07-29",
+     "link": "https://n.news.naver.com/mnews/article/018/0006338692?sid=105"
+    },
+    {
+     "title": "애플, 시총 5조달러 터치…폰 임대·스마트홈 잇단 승부수",
+     "source": "이데일리",
+     "date": "2026-07-29",
+     "link": "https://n.news.naver.com/mnews/article/018/0006338685?sid=101"
+    },
+    {
+     "title": "애플, 이번엔 '집' 정조준…시리AI로 스마트홈 승부수",
+     "source": "이데일리",
+     "date": "2026-07-28",
+     "link": "https://n.news.naver.com/mnews/article/018/0006338617?sid=101"
+    },
     {
      "title": "카카오뱅크, '투자탭' 누적 이용자 500만 명 돌파 外",
      "source": "rcast.co.kr",
      "date": "2026-07-28",
      "link": "https://www.rcast.co.kr/news/articleView.html?idxno=31349"
-    },
-    {
-     "title": "하나자산운용, 엔비디아·알파벳 25%씩 담은 미국채혼합 ETF 출시",
-     "source": "머니투데이",
-     "date": "2026-07-28",
-     "link": "https://n.news.naver.com/mnews/article/008/0005392237?sid=101"
-    },
-    {
-     "title": "‘스파이더맨: 브랜드 뉴 데이’, 사전 예매량 71만장 돌파..올해 개봉작...",
-     "source": "breaknews.com",
-     "date": "2026-07-28",
-     "link": "http://www.breaknews.com/1225039"
-    },
-    {
-     "title": "'1TB 업그레이드부터 넷플릭스까지'… 이통 3사, 갤럭시 Z8 사전예약 개...",
-     "source": "the-pr.co.kr",
-     "date": "2026-07-28",
-     "link": "https://www.the-pr.co.kr/news/articleView.html?idxno=62064"
-    },
-    {
-     "title": "이통3사, ‘갤럭시 Z 폴더블8’ 사전예약 돌입…혜택 경쟁 후끈",
-     "source": "dailian.co.kr",
-     "date": "2026-07-28",
-     "link": "https://n.news.naver.com/mnews/article/119/0003115762?sid=105"
-    },
-    {
-     "title": "통신 3사, 갤럭시 신형 폴더블 출시 앞두고 사전예약 경쟁",
-     "source": "seoulfn.com",
-     "date": "2026-07-28",
-     "link": "https://www.seoulfn.com/news/articleView.html?idxno=634311"
-    },
-    {
-     "title": "하나자산운용, 엔비디아·알파벳에 미국채 결합한 ETF 상장",
-     "source": "pinpointnews.co.kr",
-     "date": "2026-07-28",
-     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=472162"
-    },
-    {
-     "title": "갤럭시 Z 폴드8 사전예약 개시...이통 3사, 혜택 경쟁 돌입",
-     "source": "dizzotv.com",
-     "date": "2026-07-28",
-     "link": "https://www.dizzotv.com/site/data/html_dir/2026/07/28/2026072880019.html"
-    },
-    {
-     "title": "경북 대표 e스포츠 선수 선발전 8월 2일 개최…대통령배 출전권 놓고 경...",
-     "source": "breaknews.com",
-     "date": "2026-07-28",
-     "link": "http://www.breaknews.com/1224879"
-    },
-    {
-     "title": "화성FC, 충남아산 3-2 제압… 구단 역사상 첫 승",
-     "source": "breaknews.com",
-     "date": "2026-07-28",
-     "link": "http://www.breaknews.com/1224857"
-    },
-    {
-     "title": "구글 협업부터 투자플랫폼 성장까지... 금융권 디지털 행보",
-     "source": "pressman.kr",
-     "date": "2026-07-28",
-     "link": "https://www.pressman.kr/news/articleView.html?idxno=102922"
-    },
-    {
-     "title": "이통 3사, '갤럭시 Z8' 사전예약 시작",
-     "source": "asiaa.co.kr",
-     "date": "2026-07-28",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=256608"
-    },
-    {
-     "title": "[유통갤러리] 롯데百, '블랙핑크X다마고치' 팝업스토어 오픈 外",
-     "source": "theviewers.co.kr",
-     "date": "2026-07-28",
-     "link": "https://theviewers.co.kr/View.aspx?No=4164578"
-    },
-    {
-     "title": "이통3사, 신제품 ‘갤럭시 Z 시리즈’ 사전예약 돌입..통신사별 혜택은...",
-     "source": "breaknews.com",
-     "date": "2026-07-28",
-     "link": "http://www.breaknews.com/1224847"
-    },
-    {
-     "title": "갤럭시 Z8 사전예약 개시…통신3사 'AI·보상·경품' 총력전",
-     "source": "4th.kr",
-     "date": "2026-07-28",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2115356"
     }
    ]
   }
