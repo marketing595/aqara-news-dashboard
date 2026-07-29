@@ -671,7 +671,6 @@
            <select id="cafeFilter" onchange="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 제품군</option></select>
          </div>
        </div>
-       <p class="text-[11px] text-slate-400 mb-2">※ 우측 날짜 = <b>자사(아카라 스마트홈) 카페는 실제 작성일·조회수(👁)</b>, 그 외 카페는 <b>최초 수집일</b>(모니터링에 처음 잡힌 날 ≈ 작성일)입니다. 네이버 검색 API가 작성일을 안 줘서, 자사 카페 날짜·조회수는 <b>apply-aqara-dates</b> 갱신분 기준이며 그 외 과거 글은 <b>—</b>로 표시됩니다.</p>
        <div id="cafeBody" class="divide-y divide-slate-100"></div>
      </div>
      <p class="text-center text-xs text-slate-400 pt-4">※ 키워드 기반 수집 스냅샷이라 카페 '전체 글'은 아닙니다. 전체 글·자동갱신은 네이버 카페 API 인증(관리자 로그인) 연동이 필요합니다.</p>
@@ -2490,9 +2489,7 @@
           <p class="text-xs text-slate-500 mt-0.5">${esc(p.desc)}</p>
           <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] ${CAFE_BADGE[p.cafe]||'bg-slate-100 text-slate-500'}">${esc(p.cafe)}</span>
           <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500">${esc(p._typ)}</span>
-        </div>
-        <span class="text-[11px] text-slate-400 whitespace-nowrap tabular-nums mt-0.5 shrink-0 text-right leading-tight" title="${p.date?'작성일(자사 카페) 또는 최초 수집일':'수집일 미상(과거 글)'}">${p.date?esc(p.date):'—'}${p.views!=null?`<br><span class="text-slate-300">👁 ${Number(p.views).toLocaleString()}</span>`:''}</span>
-        </div>`).join('') + (rows.length>200?'<div class="text-center py-3 text-xs text-slate-400">상위 200건 표시 · 검색·필터로 좁혀보세요</div>':'');
+        </div></div>`).join('') + (rows.length>200?'<div class="text-center py-3 text-xs text-slate-400">상위 200건 표시 · 검색·필터로 좁혀보세요</div>':'');
     }
 
     // GNB: 상위 그룹 → 하위 뷰
