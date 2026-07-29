@@ -126,6 +126,29 @@ def main():
     out += clien
 
     kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
+    today = kst.strftime("%Y-%m-%d")
+    # 글별 '최초 수집일(date)' 부여. 네이버 카페 검색 API는 작성일을 주지 않으므로
+    #   ① 이전 cafe.json에 date가 있던 글 → 그대로 유지
+    #   ② 이전에 있었으나 date가 없던 글(과거 백로그) → 소급 불가라 비워둠
+    #   ③ 이번에 처음 등장한 글 → 오늘 날짜(매시간 최신순 수집이라 ≈ 실제 작성일)
+    prev_dates, prev_links = {}, set()
+    if os.path.exists(path):
+        try:
+            for pp in json.load(open(path, encoding="utf-8")).get("posts", []):
+                lk = pp.get("link")
+                if lk:
+                    prev_links.add(lk)
+                    if pp.get("date"):
+                        prev_dates[lk] = pp["date"]
+        except Exception:
+            pass
+    for p in out:
+        lk = p.get("link")
+        if lk in prev_dates:
+            p["date"] = prev_dates[lk]
+        elif lk not in prev_links:
+            p["date"] = today
+
     data = {"ok": True, "generatedAt": kst.strftime("%Y-%m-%d %H:%M"),
             "count": len(out), "posts": out}
     with open(path, "w", encoding="utf-8") as f:

@@ -671,6 +671,7 @@
            <select id="cafeFilter" onchange="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 제품군</option></select>
          </div>
        </div>
+       <p class="text-[11px] text-slate-400 mb-2">※ 우측 <b>날짜 = 최초 수집일</b>(모니터링에 처음 잡힌 날 ≈ 작성일). 네이버 카페 검색 API가 작성일을 제공하지 않아, 이 기능 적용 이전에 쌓인 과거 글은 <b>—</b>로 표시되며 지금부터 올라오는 새 글은 날짜가 채워집니다.</p>
        <div id="cafeBody" class="divide-y divide-slate-100"></div>
      </div>
      <p class="text-center text-xs text-slate-400 pt-4">※ 키워드 기반 수집 스냅샷이라 카페 '전체 글'은 아닙니다. 전체 글·자동갱신은 네이버 카페 API 인증(관리자 로그인) 연동이 필요합니다.</p>
@@ -2462,7 +2463,7 @@
       }).join('');
     }
     function dcAsCafe(){ const g={hass:'DC 홈어시스턴트',smartthings:'DC 스마트싱스'};
-      return (DCINSIDE.posts||[]).filter(p=>/[?&]id=(smartthings|hass)(&|$)/.test(p.link||'')).map(p=>({no:p.no||0,title:p.title||'',desc:p.desc||('DCInside · '+(g[p.gid]||'갤러리')),link:p.link,cafe:g[p.gid]||'DC 갤러리'})); }
+      return (DCINSIDE.posts||[]).filter(p=>/[?&]id=(smartthings|hass)(&|$)/.test(p.link||'')).map(p=>({no:p.no||0,title:p.title||'',desc:p.desc||('DCInside · '+(g[p.gid]||'갤러리')),link:p.link,cafe:g[p.gid]||'DC 갤러리',date:p.date||''})); }
     function renderCafe(){
       const posts=CAFE_POSTS.concat(dcAsCafe());
       posts.forEach(p=>{ if(!p._sen){ p._sen=cafeSentiment(p.title,p.desc); p._typ=cafeType(p.title,p.desc); } if(!p._grp){ p._grp=cafeGroup(p.title,p.desc); } if(!p.cafe) p.cafe='아카라 스마트홈'; });
@@ -2489,7 +2490,9 @@
           <p class="text-xs text-slate-500 mt-0.5">${esc(p.desc)}</p>
           <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] ${CAFE_BADGE[p.cafe]||'bg-slate-100 text-slate-500'}">${esc(p.cafe)}</span>
           <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500">${esc(p._typ)}</span>
-        </div></div>`).join('') + (rows.length>200?'<div class="text-center py-3 text-xs text-slate-400">상위 200건 표시 · 검색·필터로 좁혀보세요</div>':'');
+        </div>
+        <span class="text-[11px] text-slate-400 whitespace-nowrap tabular-nums mt-0.5 shrink-0" title="${p.date?'최초 수집일':'수집일 미상(과거 글)'}">${p.date?esc(p.date):'—'}</span>
+        </div>`).join('') + (rows.length>200?'<div class="text-center py-3 text-xs text-slate-400">상위 200건 표시 · 검색·필터로 좁혀보세요</div>':'');
     }
 
     // GNB: 상위 그룹 → 하위 뷰
