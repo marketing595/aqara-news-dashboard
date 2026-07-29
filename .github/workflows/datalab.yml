@@ -1,9 +1,9 @@
 name: DataLab Trend
 
-# 매달 1일 09:00(KST) 검색 트렌드·키워드 검색량 수집 → datalab.json / keywords_trend.json
+# 매일 09:00(KST) 검색 트렌드·키워드 검색량 수집 → datalab.json / keywords_trend.json
 on:
   schedule:
-    - cron: '0 0 1 * *'
+    - cron: '0 0 * * *'   # 매일 09:00 KST (00:00 UTC)
   workflow_dispatch: {}
   push:
     paths:
