@@ -149,6 +149,24 @@ def main():
         elif lk not in prev_links:
             p["date"] = today
 
+    # 자사 aqara 카페: 로그인 세션으로 수집한 실제 작성일·조회수 맵(aqara_dates.json)이 있으면 우선 반영.
+    #   맵은 사용자 PC 브라우저 콘솔 스니펫 → apply-aqara-dates.bat로 repo에 커밋됨(비밀번호 저장 없음).
+    dmap = {}
+    dpath = os.path.join(os.path.dirname(__file__), "..", "aqara_dates.json")
+    if os.path.exists(dpath):
+        try:
+            dmap = (json.load(open(dpath, encoding="utf-8")) or {}).get("dates", {}) or {}
+        except Exception:
+            dmap = {}
+    for p in out:
+        if p.get("cafe") == "아카라 스마트홈":
+            v = dmap.get(str(p.get("no")))
+            if v:
+                if v.get("date"):
+                    p["date"] = v["date"]
+                if v.get("views") is not None:
+                    p["views"] = v["views"]
+
     data = {"ok": True, "generatedAt": kst.strftime("%Y-%m-%d %H:%M"),
             "count": len(out), "posts": out}
     with open(path, "w", encoding="utf-8") as f:
