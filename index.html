@@ -664,7 +664,7 @@
      </div>
      <div class="card p-5">
        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
-         <h2 class="accent font-extrabold text-ink">카페 글 <span id="cafeCount" class="text-sm font-normal text-slate-400"></span></h2>
+         <h2 class="accent font-extrabold text-ink">카페 글 <span id="cafeCount" class="text-sm font-normal text-slate-400"></span> <span class="ml-1 inline-flex items-center gap-1 text-[11px] font-normal text-slate-400"><span class="inline-block w-3 h-3 rounded-sm bg-[#FDE7EF] border-l-[3px] border-[#EC5B94]"></span>= 오늘 수집된 당일 글</span></h2>
          <div class="flex flex-wrap gap-2">
            <input id="cafeSearch" type="text" placeholder="제목·내용 검색" oninput="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 w-44 focus:outline-none focus:ring-2 focus:ring-brand" />
            <select id="cafeCafeFilter" onchange="renderCafe()" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"><option value="">전체 카페</option></select>
@@ -2481,16 +2481,17 @@
       renderCafeByCafe(posts);
       let rows=posts.filter(p=>(!f||p._grp.k===f) && (!cf||p.cafe===cf) && (!nq||((p.title+' '+p.desc).toLowerCase().replace(/\s+/g,'').indexOf(nq)>-1)));
       document.getElementById('cafeCount').textContent='('+ccnt+' · 필터 '+rows.length+'건'+(window.__cafeStamp?(' · '+window.__cafeStamp):'')+')';
-      const shown=rows.slice(0,200);
-      document.getElementById('cafeBody').innerHTML=shown.map(p=>`<div class="py-3 flex items-start gap-3">
+      const shown=rows.slice(0,200); const today=kstToday();
+      document.getElementById('cafeBody').innerHTML=shown.map(p=>{ const isNew=p.date===today; return `<div class="py-3 flex items-start gap-3${isNew?' bg-[#FDE7EF] border-l-[3px] border-[#EC5B94] -mx-2 pl-2 pr-2 rounded-r-md':''}">
         <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap ${p._grp.c}">${p._grp.k}</span>
         <div class="flex-1 min-w-0">
-          <a href="${esc(p.link)}" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-800 hover:text-ink hover:underline">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
+          <a href="${esc(p.link)}" target="_blank" rel="noopener noreferrer" class="font-medium text-slate-800 hover:text-ink hover:underline">${isNew?'<span class="inline-block align-middle mr-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#EC5B94] text-white">오늘</span>':''}${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>
           <p class="text-xs text-slate-500 mt-0.5">${esc(p.desc)}</p>
           <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] ${CAFE_BADGE[p.cafe]||'bg-slate-100 text-slate-500'}">${esc(p.cafe)}</span>
           <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500">${esc(p._typ)}</span>
-        </div></div>`).join('') + (rows.length>200?'<div class="text-center py-3 text-xs text-slate-400">상위 200건 표시 · 검색·필터로 좁혀보세요</div>':'');
+        </div></div>`; }).join('') + (rows.length>200?'<div class="text-center py-3 text-xs text-slate-400">상위 200건 표시 · 검색·필터로 좁혀보세요</div>':'');
     }
+    function kstToday(){ const d=new Date(Date.now()+9*36e5); return d.toISOString().slice(0,10); }
 
     // GNB: 상위 그룹 → 하위 뷰
     const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], mkt:['mkt'] };

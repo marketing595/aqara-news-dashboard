@@ -1,9 +1,9 @@
 name: Cafe Monitor
 
-# 매시간 카페 최신글 수집 → cafe.json 갱신 → 커밋(Vercel 자동 반영)
+# 매일 오전 8시(KST) 카페 최신글 수집 → cafe.json 갱신 → 커밋(Vercel 자동 반영)
 on:
   schedule:
-    - cron: '10 * * * *'
+    - cron: '0 23 * * *'   # 08:00 KST (23:00 UTC)
   workflow_dispatch: {}
 
 permissions:
