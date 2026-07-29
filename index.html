@@ -652,11 +652,9 @@
        <ul class="text-[12px] leading-relaxed text-slate-500 space-y-1">
          <li>· <b style="color:#4E6E96">도어락</b>: K100 · L100 · U100 · 도어락</li>
          <li>· <b style="color:#3f7d78">센서</b>: FP300 · FP2 · 재실센서 · 활동모니터링센서 · 센서</li>
-         <li>· <b style="color:#5c7e46">인테리어</b>: 스마트홈 인테리어 · IoT 인테리어 · 인테리어</li>
-         <li>· <b style="color:#916225">CS</b>: CS · 채널톡</li>
-         <li>· <b style="color:#6b4fa0">홈페이지</b>: 홈페이지</li>
+         <li>· <b style="color:#5c7e46">인테리어</b>: 스마트홈 인테리어 · IoT 인테리어 · 인테리어 · 공사 · 시공</li>
          <li>· <b class="text-slate-400">기타</b>: 위 키워드에 해당하지 않는 글</li>
-         <li>· ※ 여러 키워드가 겹치면 <b>도어락 → 센서 → 인테리어 → CS → 홈페이지</b> 순으로 우선 분류합니다. 규칙 기반이라 오분류가 있을 수 있어 <b>추세 참고용</b>입니다.</li>
+         <li>· ※ 여러 키워드가 겹치면 <b>도어락 → 센서 → 인테리어</b> 순으로 우선 분류합니다. 규칙 기반이라 오분류가 있을 수 있어 <b>추세 참고용</b>입니다.</li>
        </ul>
      </div>
      <div id="cafeInsight" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5"></div>
@@ -2369,9 +2367,7 @@
     const CAFE_GROUPS=[
       {k:'도어락', c:'bg-[#4E6E96]/15 text-[#3a5474]', col:'#4E6E96', kws:['k100','l100','u100','도어락']},
       {k:'센서', c:'bg-[#5EA6A0]/15 text-[#3f7d78]', col:'#5EA6A0', kws:['fp300','fp2','재실센서','활동모니터링센서','센서']},
-      {k:'인테리어', c:'bg-[#7BA65E]/15 text-[#5c7e46]', col:'#7BA65E', kws:['스마트홈인테리어','iot인테리어','인테리어']},
-      {k:'CS', c:'bg-[#C08A3E]/15 text-[#916225]', col:'#C08A3E', kws:['cs','채널톡']},
-      {k:'홈페이지', c:'bg-[#8A6EC0]/15 text-[#6b4fa0]', col:'#8A6EC0', kws:['홈페이지']},
+      {k:'인테리어', c:'bg-[#7BA65E]/15 text-[#5c7e46]', col:'#7BA65E', kws:['스마트홈인테리어','iot인테리어','인테리어','공사','시공']},
     ];
     const CAFE_GROUP_ETC={k:'기타', c:'bg-slate-100 text-slate-500', col:'#cbd5e1'};
     const CAFE_GROUP_KEYS=CAFE_GROUPS.map(g=>g.k).concat(CAFE_GROUP_ETC.k);
