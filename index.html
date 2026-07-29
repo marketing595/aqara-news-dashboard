@@ -73,6 +73,7 @@
     /* 링크 hover */
     a.lnk{ color:var(--ink); text-decoration:none; }
     a.lnk:hover{ text-decoration:underline; text-decoration-color:#C7C7C4; text-underline-offset:3px; text-decoration-thickness:1.5px; }
+    #cafeBriefMemo:empty:before{ content:attr(data-ph); color:#b4b4b4; }
     .chart-dl{ position:absolute; top:-2px; right:0; display:flex; gap:3px; z-index:5; opacity:0; transition:opacity .15s; }
     [data-dl]:hover .chart-dl, .chart-dl:hover{ opacity:1; }
     .chart-dl button{ font-size:10px; font-weight:600; color:#6E6E73; background:#fff; border:1px solid #E6E6E3; border-radius:5px; padding:2px 6px; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.05); }
@@ -128,6 +129,13 @@
       <button id="ownBtn-instagram" onclick="switchOwned('instagram')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">인스타그램</button>
       <button id="ownBtn-blog" onclick="switchOwned('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">블로그</button>
       <button id="ownBtn-newsletter" onclick="switchOwned('newsletter')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">뉴스레터</button>
+    </div>
+  </div>
+  <!-- 카페·커뮤니티 하위탭 -->
+  <div id="subnav-cafe" class="bg-[#FAFAF9] border-b border-[#E6E6E3] sticky top-[100px] z-10 hidden">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-2 py-2 overflow-x-auto">
+      <button id="cafeSubBtn-cafe" onclick="switchTab('cafe')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-ink text-white whitespace-nowrap transition">카페 모니터링</button>
+      <button id="cafeSubBtn-cafebrief" onclick="switchTab('cafebrief')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">📋 데일리 브리핑</button>
     </div>
   </div>
   <!-- 종합 리포트 하위탭 (ONLY MKT 내부로 편입 · mktReportSlot으로 이동) -->
@@ -691,6 +699,18 @@
      <div class="card p-4 mt-5 bg-[#FAFAF9] border-[#E6E6E3]">
        <p class="text-[12px] text-slate-500 leading-relaxed">※ 디시인사이드는 공개 API가 없고 봇 차단이 있어 <b>자동 수집이 불안정</b>합니다. 수집되는 글은 <code class="bg-white px-1 rounded border">dcinside.json</code>으로 표시하며, 위 <b>'아카라 검색'</b> 링크로 각 갤러리에서 실시간 확인할 수 있습니다.</p>
      </div>
+   </div>
+
+   <!-- 카페·커뮤니티 데일리 브리핑 -->
+   <div id="view-cafebrief" class="hidden">
+     <div class="card p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
+       <div>
+         <h2 class="text-xl font-extrabold text-slate-900">카페·커뮤니티 데일리 브리핑</h2>
+         <p class="text-sm text-slate-500 mt-1">모니터링 중인 카페·커뮤니티의 <b>여론 스냅샷 요약</b> · <span id="cafeBriefStamp" class="text-slate-400">수집일 –</span></p>
+       </div>
+       <button onclick="cafeBriefCopy(this)" class="text-[13px] bg-ink text-white px-3.5 py-2 rounded-lg font-medium hover:brightness-110 self-start whitespace-nowrap">📋 브리핑 복사</button>
+     </div>
+     <div id="cafeBriefBody" class="space-y-5"></div>
    </div>
 
    <div id="view-competitor" class="hidden">
@@ -2385,7 +2405,7 @@
     let DCINSIDE={posts:[]};
     const DC_HASS='https://gall.dcinside.com/mgallery/board/lists/?id=hass&s_type=search_subject_memo&s_keyword=%EC%95%84%EC%B9%B4%EB%9D%BC';
     const DC_ST='https://gall.dcinside.com/mgallery/board/lists/?id=smartthings&s_type=search_subject_memo&s_keyword=%EC%95%84%EC%B9%B4%EB%9D%BC';
-    function loadDcinside(){ fetch('dcinside.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d){ DCINSIDE=d; renderDcinside(); if(document.getElementById('cafeBody')) renderCafe(); } }).catch(()=>{ renderDcinside(); }); }
+    function loadDcinside(){ fetch('dcinside.json?_='+Date.now()).then(r=>r.json()).then(d=>{ if(d){ DCINSIDE=d; renderDcinside(); if(document.getElementById('cafeBody')) renderCafe(); renderCafeBrief(); } }).catch(()=>{ renderDcinside(); }); }
     function dcRows(arr,search){ if(!arr||!arr.length) return `<p class="text-sm text-slate-400 py-6 text-center">자동 수집된 글이 없습니다. <a href="${search}" target="_blank" rel="noopener" class="lnk">갤러리에서 '아카라' 검색 ↗</a></p>`;
       return arr.map(p=>`<div class="py-2.5"><a href="${esc(p.link)}" target="_blank" rel="noopener" class="lnk line-clamp-2 text-[13px]">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a><div class="text-[11px] text-slate-400 mt-0.5">${esc(p.date||'')} · 조회 ${(p.views||0).toLocaleString()} · 댓글 ${p.replies||0}</div></div>`).join(''); }
     function renderDcinside(){
@@ -2399,9 +2419,9 @@
     }
     function loadCafe(silent){
       fetch('cafe.json?_='+Date.now()).then(r=>r.json()).then(p=>{
-        if(p&&p.posts&&p.posts.length){ CAFE_POSTS=p.posts; if(p.generatedAt) window.__cafeStamp=p.generatedAt; renderCafe(); maybeRenderReport(); }
+        if(p&&p.posts&&p.posts.length){ CAFE_POSTS=p.posts; if(p.generatedAt) window.__cafeStamp=p.generatedAt; renderCafe(); renderCafeBrief(); maybeRenderReport(); }
       }).catch(()=>{});
-      fetch('cafe_history.json?_='+Date.now()).then(r=>r.json()).then(h=>{ if(Array.isArray(h)){ CAFE_HIST=h; renderCafe(); maybeRenderReport(); } }).catch(()=>{});
+      fetch('cafe_history.json?_='+Date.now()).then(r=>r.json()).then(h=>{ if(Array.isArray(h)){ CAFE_HIST=h; renderCafe(); renderCafeBrief(); maybeRenderReport(); } }).catch(()=>{});
     }
     const CAFE_BADGE={'아카라 스마트홈':'bg-ablue/25 text-[#365b7a]','모두의 스마트홈':'bg-agreen/15 text-agreen'};
     const CAFE_STOP=new Set('아카라 아카라라이프 aqara 스마트홈 있나요 있을까요 되나요 하나요 가능 문의 질문 관련 방법 사용 하는 되는 이거 저거 그거 그리고 근데 하는데 해서 위해 대한 대해 인데 인가요 어떤 어떻게 무슨 진짜 정말 너무 다시 처음 이번 지금 오늘 어제 부탁 드립니다 합니다 습니다 해요 네요 어요 인지 하고 하면 하니 해도 있어요 없어요 같아요 같은 같이 이런 저런 그런 여기 거기 저기 하실 하시 하세요'.split(' '));
@@ -2492,25 +2512,112 @@
         </div></div>`).join('') + (rows.length>200?'<div class="text-center py-3 text-xs text-slate-400">상위 200건 표시 · 검색·필터로 좁혀보세요</div>':'');
     }
 
+    // ===== 카페·커뮤니티 데일리 브리핑 =====
+    function cafeBriefPosts(){
+      const posts=CAFE_POSTS.concat(dcAsCafe());
+      posts.forEach(p=>{ if(!p._sen){ p._sen=cafeSentiment(p.title,p.desc); p._typ=cafeType(p.title,p.desc); } if(!p._grp){ p._grp=cafeGroup(p.title,p.desc); } if(!p.cafe) p.cafe='아카라 스마트홈'; });
+      return posts;
+    }
+    function kstToday(){ const d=new Date(Date.now()+9*36e5); return d.toISOString().slice(0,10); }
+    let __cafeBriefText='';
+    function renderCafeBrief(){
+      const box=document.getElementById('cafeBriefBody'); if(!box) return;
+      const posts=cafeBriefPosts();
+      const stampEl=document.getElementById('cafeBriefStamp'); if(stampEl) stampEl.textContent='수집일 '+(window.__cafeStamp||'–');
+      if(!posts.length){ box.innerHTML='<div class="card p-8 text-center text-slate-400">데이터 로딩 중…</div>'; return; }
+      const total=posts.length;
+      const pos=posts.filter(p=>p._sen.k==='긍정').length, neg=posts.filter(p=>p._sen.k==='부정').length, neu=total-pos-neg;
+      const net=Math.round((pos-neg)/total*100);
+      const issues=posts.filter(p=>p._typ==='오류·불만'||p._sen.k==='부정');
+      const questions=posts.filter(p=>p._typ==='문의');
+      const reviews=posts.filter(p=>p._typ==='후기');
+      const hot=cafeKeywords(posts,12);
+      const cafes=[...new Set(posts.map(p=>p.cafe))];
+      const today=kstToday();
+      const newToday=posts.filter(p=>p.date===today).length;
+      const mdl=histDelta(CAFE_HIST,'total',7);
+      const pct=n=>total?Math.round(n/total*100):0;
+      // KPI
+      const kpi=(l,v,s,col)=>`<div class="card card-hover p-4"><p class="text-xs text-slate-500">${l}</p><p class="num text-2xl font-extrabold mt-1 ${col||'text-ink'}">${v}</p><p class="text-[11px] text-slate-400 mt-0.5">${s}</p></div>`;
+      const trendTxt=mdl?`${mdl.d>=0?'▲ +':'▼ '}${mdl.d} (${mdl.from} 대비)`:'추세 기록 중';
+      const kpiRow=`<div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        ${kpi('총 모니터링 글', total.toLocaleString()+'건', cafes.length+'개 채널'+(newToday?' · 오늘 신규 '+newToday:''))}
+        ${kpi('언급량 추세(7일)', trendTxt, '누적 글 수 기준')}
+        ${kpi('순감성', (net>=0?'+':'')+net+'%p', '긍정 '+pct(pos)+'% · 부정 '+pct(neg)+'%', net>=0?'text-agreen':'text-ared')}
+        ${kpi('관리 필요(오류·불만·부정)', issues.length+'건', '전체의 '+pct(issues.length)+'%', issues.length?'text-ared':'text-ink')}
+      </div>`;
+      // 감성 바
+      const senBar=`<div class="card p-5">
+        <h3 class="accent font-extrabold text-ink mb-3">여론 감성 요약</h3>
+        <div class="flex rounded-full overflow-hidden h-3 bg-slate-100 mb-2">
+          <div style="width:${pct(pos)}%;background:#716A3C"></div><div style="width:${pct(neu)}%;background:#9AA0A6"></div><div style="width:${pct(neg)}%;background:#BF5332"></div>
+        </div>
+        <div class="flex flex-wrap gap-x-4 gap-y-1 text-[12px]">
+          <span><b class="text-agreen">긍정</b> ${pos}건 (${pct(pos)}%)</span>
+          <span><b class="text-agray">중립</b> ${neu}건 (${pct(neu)}%)</span>
+          <span><b class="text-ared">부정</b> ${neg}건 (${pct(neg)}%)</span>
+          <span class="text-slate-400">· 후기 ${reviews.length} · 문의 ${questions.length}</span>
+        </div>
+      </div>`;
+      // 리스트 헬퍼
+      const list=(arr,col)=>arr.slice(0,6).map(p=>`<li class="text-[13px] leading-snug mb-1.5 flex gap-2">
+        <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap ${p._grp.c} shrink-0">${p._grp.k}</span>
+        <a href="${esc(p.link)}" target="_blank" rel="noopener" class="text-slate-700 hover:underline line-clamp-1">${esc(p.title)}</a>
+        <span class="text-[10px] text-slate-400 whitespace-nowrap shrink-0">${esc(p.cafe)}</span>
+      </li>`).join('')||`<li class="text-xs text-slate-400">해당 글 없음</li>`;
+      const twoCol=`<div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div class="card p-5"><h3 class="accent font-extrabold text-ared mb-3">🔥 주목 이슈 <span class="text-xs font-normal text-slate-400">(오류·불만·부정 ${issues.length}건)</span></h3><ul>${list(issues)}</ul></div>
+        <div class="card p-5"><h3 class="accent font-extrabold text-ink mb-3">❓ 사용자 문의 <span class="text-xs font-normal text-slate-400">(질문·요청 ${questions.length}건)</span></h3><ul>${list(questions)}</ul></div>
+      </div>`;
+      // 핫 키워드
+      const mx=hot.length?hot[0][1]:1;
+      const hotHtml=`<div class="card p-5"><h3 class="accent font-extrabold text-ink mb-3">🔑 핫 키워드 TOP ${hot.length}</h3>
+        <div class="flex flex-wrap gap-2">${hot.map(([w,c])=>`<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[12px] bg-brand/10 text-brand-ink" style="font-size:${11+Math.round(c/mx*5)}px">${esc(w)} <span class="text-brand-ink/50 text-[10px]">${c}</span></span>`).join('')||'<span class="text-xs text-slate-400">데이터 없음</span>'}</div></div>`;
+      // 채널별
+      const chanHtml=`<div class="card p-5"><h3 class="accent font-extrabold text-ink mb-3">채널별 활동</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">${cafes.map(c=>{const n=posts.filter(p=>p.cafe===c).length;return `<div class="rounded-lg border border-[#E6E6E3] px-3 py-2 flex items-center justify-between"><span class="text-[12px] text-slate-600 truncate pr-1">${esc(c)}</span><span class="num text-sm font-bold text-ink">${n}</span></div>`;}).join('')}</div></div>`;
+      // 자동 브리핑 문장
+      const topKw=hot.slice(0,5).map(x=>x[0]).join(', ');
+      const senWord=net>=10?'전반적으로 우호적':net>=0?'긍·부정이 팽팽':'부정 우세로 관리 필요';
+      __cafeBriefText=[`[카페·커뮤니티 데일리 브리핑] ${today}`,
+        `· 모니터링 총 ${total}건 (${cafes.length}개 채널)${newToday?`, 오늘 신규 ${newToday}건`:''}`,
+        `· 여론: 긍정 ${pct(pos)}% / 중립 ${pct(neu)}% / 부정 ${pct(neg)}% → ${senWord}(순감성 ${net>=0?'+':''}${net}%p)`,
+        `· 관리 필요(오류·불만·부정) ${issues.length}건${issues.length?` — 예: ${issues.slice(0,3).map(p=>p.title).join(' / ')}`:''}`,
+        `· 사용자 문의 ${questions.length}건${questions.length?` — 예: ${questions.slice(0,3).map(p=>p.title).join(' / ')}`:''}`,
+        `· 핫 키워드: ${topKw}`].join('\n');
+      const memo=localStorage.getItem('aqaraCafeBriefMemo')||'';
+      const memoBox=`<div class="card p-5"><div class="flex items-center justify-between mb-2"><h3 class="accent font-extrabold text-ink">✏️ 담당자 코멘트 <span class="text-xs font-normal text-slate-400">(이 브라우저에 저장)</span></h3></div>
+        <div id="cafeBriefMemo" contenteditable="true" oninput="localStorage.setItem('aqaraCafeBriefMemo',this.innerText)" class="min-h-[70px] text-[13px] text-slate-700 leading-relaxed border border-dashed border-[#E6E6E3] rounded-lg p-3 focus:outline-none focus:border-brand" data-ph="오늘 커뮤니티 여론에 대한 코멘트·대응 메모를 자유롭게 남기세요…">${esc(memo)}</div></div>`;
+      box.innerHTML=kpiRow+senBar+twoCol+hotHtml+chanHtml+memoBox;
+      const m=document.getElementById('cafeBriefMemo'); if(m&&!memo){ m.setAttribute('data-empty','1'); }
+    }
+    function cafeBriefCopy(btn){ if(!__cafeBriefText){ renderCafeBrief(); }
+      const ok=()=>{ if(btn){ const o=btn.textContent; btn.textContent='✅ 복사됨'; setTimeout(()=>{btn.textContent=o;},1500); } };
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(__cafeBriefText).then(ok).catch(()=>alert(__cafeBriefText)); }
+      else { alert(__cafeBriefText); } }
+
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe','cafebrief'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', cafebrief:'cafe', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
     function switchTab(t){
       // 상위 뷰만 토글(카페·리포트 클러스터는 view-mkt 내부로 편입 → mktSub/mktReportSub가 관리)
-      ['analytics','briefing','owned','cafe','library','mkt'].forEach(v=>{
+      ['analytics','briefing','owned','cafe','cafebrief','library','mkt'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
       ['pr','owned','cafe','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
+      document.getElementById('subnav-cafe').classList.toggle('hidden', g!=='cafe');
       ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
+      ['cafe','cafebrief'].forEach(v=>{ const b=document.getElementById('cafeSubBtn-'+v); if(b) b.className=subClass(v===t); });
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
       if(t==='cafe'){ renderCafe(); loadCafe(); loadDcinside(); }
+      if(t==='cafebrief'){ loadCafe(); loadDcinside(); renderCafeBrief(); }
       if(t==='library'){ loadLibrary(); }
       if(t==='mkt'){ mktEnter(); }
     }
