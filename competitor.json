@@ -1,11 +1,11 @@
 {
- "generatedAt": "2026-07-29 19:57",
+ "generatedAt": "2026-07-30 19:35",
  "brands": [
   {
    "name": "아카라",
    "me": true,
    "query": "아카라 스마트홈",
-   "total": 1499,
+   "total": 1502,
    "sentiment": {
     "pos": 20,
     "neu": 38,
@@ -26,7 +26,7 @@
     ],
     [
      "공간",
-     14
+     15
     ],
     [
      "기업",
@@ -37,6 +37,10 @@
      13
     ],
     [
+     "이상헌",
+     11
+    ],
+    [
      "공간디자인",
      11
     ],
@@ -45,11 +49,11 @@
      11
     ],
     [
-     "이상헌",
-     10
+     "AI",
+     9
     ],
     [
-     "설치",
+     "구축",
      9
     ],
     [
@@ -65,16 +69,8 @@
      8
     ],
     [
-     "구축",
+     "설치",
      8
-    ],
-    [
-     "가전",
-     7
-    ],
-    [
-     "글로벌",
-     7
     ],
     [
      "사례",
@@ -83,16 +79,28 @@
     [
      "욕실",
      7
+    ],
+    [
+     "T1",
+     7
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     7
+     6
     ],
     [
      "최초",
      3
+    ],
+    [
+     "강화",
+     2
+    ],
+    [
+     "주목",
+     2
     ],
     [
      "선도",
@@ -105,14 +113,6 @@
     [
      "인기",
      2
-    ],
-    [
-     "강화",
-     2
-    ],
-    [
-     "주목",
-     1
     ],
     [
      "확대",
@@ -128,10 +128,28 @@
     "아카라 스위치",
     "아카라 l100",
     "아카라카",
-    "니케 아카라이브",
-    "원신 아카라이브"
+    "아카라이브 핫딜",
+    "니케 아카라이브"
    ],
    "recent": [
+    {
+     "title": "아카라라이프, 임직원 전용 AI 포털 구축",
+     "source": "getnews.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.getnews.co.kr/news/articleView.html?idxno=876498"
+    },
+    {
+     "title": "청담동 고급 빌라, 공간의 완성도 결정짓는 '이것'에 주목",
+     "source": "전자신문",
+     "date": "2026-07-30",
+     "link": "https://n.news.naver.com/mnews/article/030/0003452837?sid=105"
+    },
+    {
+     "title": "아카라라이프, 임직원 전용 AI 포털 오픈…전사적 AX 가속화",
+     "source": "it-b.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.it-b.co.kr/news/articleView.html?idxno=89324"
+    },
     {
      "title": "가톨릭대, 산학협력 업무협약 체결...스마트 공간디자인 교육 본격화",
      "source": "kyosu.net",
@@ -203,24 +221,6 @@
      "source": "thepowernews.co.kr",
      "date": "2026-06-25",
      "link": "https://www.thepowernews.co.kr/view.php?ud=2026062514104660596cf2d78c68_7"
-    },
-    {
-     "title": "[현장] '중개' 넘어 '직접 시공'으로…오늘의집, 판교 거점으로 시공 사...",
-     "source": "news2day.co.kr",
-     "date": "2026-06-25",
-     "link": "https://www.news2day.co.kr/article/20260624500207"
-    },
-    {
-     "title": "운동화·뷰티·건기식부터 스마트홈까지…유통가 관통하는 '도어인(Door...",
-     "source": "전자신문",
-     "date": "2026-06-22",
-     "link": "https://n.news.naver.com/mnews/article/030/0003439990?sid=103"
-    },
-    {
-     "title": "[산업 이모저모] 아카라라이프, 코레일유통, 한국앤컴퍼니",
-     "source": "bizwnews.com",
-     "date": "2026-06-16",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=138822"
     }
    ]
   },
@@ -352,7 +352,7 @@
     "헤이홈 공유",
     "헤이홈 오프라인",
     "헤이홈 프로",
-    "헤이홈 g2"
+    "헤이홈 카메라"
    ],
    "recent": [
     {
@@ -451,101 +451,109 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67159,
+   "total": 67223,
    "sentiment": {
-    "pos": 31,
-    "neu": 29,
-    "neg": 0
+    "pos": 11,
+    "neu": 48,
+    "neg": 1
    },
    "keywords": [
     [
-     "AI",
-     94
+     "안전관리",
+     136
     ],
     [
-     "녹색상품",
-     73
+     "기업전용",
+     75
     ],
     [
-     "올해의",
-     66
+     "갤럭시",
+     72
     ],
     [
-     "16개",
-     60
+     "프로",
+     70
     ],
     [
-     "대한민국",
+     "KT",
+     47
+    ],
+    [
+     "솔루션",
      42
     ],
     [
-     "세탁",
-     38
+     "삼성전자의",
+     42
     ],
     [
-     "에너지",
+     "탑재된",
+     36
+    ],
+    [
+     "워치",
      35
     ],
     [
-     "절약",
-     31
+     "워치를",
+     35
     ],
     [
-     "선정",
-     30
+     "산업",
+     35
     ],
     [
-     "건조",
-     28
+     "현장의",
+     34
     ],
     [
-     "최다",
-     25
+     "습도",
+     34
     ],
     [
-     "생활가전과",
-     24
+     "환경",
+     34
     ],
     [
-     "까지",
-     23
+     "제공된다",
+     33
     ],
     [
-     "소비를",
+     "정보와",
+     27
+    ],
+    [
+     "Watch",
+     26
+    ],
+    [
+     "5G",
      22
-    ],
-    [
-     "삼성전자가",
-     20
-    ],
-    [
-     "모바일",
-     18
-    ],
-    [
-     "스마트폰",
-     18
-    ],
-    [
-     "수상",
-     17
     ]
    ],
    "posWords": [
     [
-     "수상",
-     23
+     "확대",
+     3
     ],
     [
-     "기대",
+     "공략",
+     3
+    ],
+    [
+     "돌파",
+     3
+    ],
+    [
+     "강화",
+     3
+    ],
+    [
+     "개선",
      2
     ],
     [
-     "혁신",
-     2
-    ],
-    [
-     "1위",
+     "주목",
      1
     ],
     [
@@ -553,120 +561,112 @@
      1
     ],
     [
-     "인기",
-     1
-    ],
-    [
-     "우수",
-     1
-    ],
-    [
-     "돌파",
+     "협업",
      1
     ]
    ],
    "related": [
-    "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스 허브",
+    "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스",
     "삼성 스마트싱스 전력량",
     "삼성 스마트싱스 아이폰",
-    "삼성 스마트싱스 선풍기",
-    "삼성 스마트싱스 세탁기"
+    "삼성 스마트싱스 세탁기",
+    "삼성 스마트싱스 선풍기"
    ],
    "recent": [
     {
-     "title": "삼성 공기청정기, 7월 브랜드평판 1위…LG·다이슨 제쳤다",
-     "source": "pinpointnews.co.kr",
-     "date": "2026-07-29",
-     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=472362"
+     "title": "KT, 삼성전자와 산업안전 솔루션 출시 … 기업전용 5G에 갤럭시 워치 연...",
+     "source": "worktoday.co.kr",
+     "date": "2026-07-30",
+     "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=87350"
     },
     {
-     "title": "로봇 동선까지 고려… 주택 설계 공식 바뀐다",
-     "source": "chosun.com",
-     "date": "2026-07-29",
-     "link": "https://n.news.naver.com/mnews/article/023/0003990125?sid=105"
+     "title": "KT, 삼성전자 갤럭시 워치로 산업현장 안전관리 돕는다",
+     "source": "디지털타임스",
+     "date": "2026-07-30",
+     "link": "https://n.news.naver.com/mnews/article/029/0003039937?sid=105"
     },
     {
-     "title": "삼성전자, '2026 대한민국 올해의 녹색상품' 최다 선정… AI·고효율 기술...",
-     "source": "mediafine.co.kr",
-     "date": "2026-07-28",
-     "link": "https://www.mediafine.co.kr/news/articleView.html?idxno=84868"
+     "title": "[Telecom & Now] KT, 기업전용 5G에 '갤럭시 워치' 연동",
+     "source": "ebn.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1718360"
     },
     {
-     "title": "AI·고효율 기술 앞세운 삼성전자, 환경단체·소비자 선정 '녹색상품' 최...",
-     "source": "thedailypost.kr",
-     "date": "2026-07-28",
-     "link": "https://www.thedailypost.kr/news/articleView.html?idxno=114822"
+     "title": "KT·삼성전자, 갤럭시 워치 기반 산업현장 안전관리 서비스 출시",
+     "source": "todayeconomic.com",
+     "date": "2026-07-30",
+     "link": "https://www.todayeconomic.com/news/article.html?no=31544"
     },
     {
-     "title": "삼성전자, '2026 대한민국 올해의 녹색상품' 최다 수상…가전·모바일 1...",
-     "source": "public25.com",
-     "date": "2026-07-28",
-     "link": "https://www.public25.com/news/articleView.html?idxno=51595"
+     "title": "KT, 삼성전자와 맞손…기업전용 5G에 갤워치 연동",
+     "source": "m-i.kr",
+     "date": "2026-07-30",
+     "link": "https://www.m-i.kr/news/articleView.html?idxno=1397383"
     },
     {
-     "title": "삼성·LG 이어 중국까지…가전 격전지 ‘인도’",
-     "source": "newstomato.com",
-     "date": "2026-07-28",
-     "link": "http://www.newstomato.com/ReadNews.aspx?no=1308471&inflow=N"
+     "title": "KT, 산업현장 안전 돕는 '안전관리 Watch' 출시…기업용 5G와 갤럭시 워...",
+     "source": "lcnews.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.lcnews.co.kr/news/articleView.html?idxno=205804"
     },
     {
-     "title": "삼성전자, ‘올해의 녹색상품’서 16개 제품 선정…업계 ‘최다 수상’",
-     "source": "swtvnews.com",
-     "date": "2026-07-28",
-     "link": "https://swtvnews.com/news/newsview.php?ncode=1065574285314975"
+     "title": "청담동 고급 빌라, 공간의 완성도 결정짓는 '이것'에 주목",
+     "source": "전자신문",
+     "date": "2026-07-30",
+     "link": "https://n.news.naver.com/mnews/article/030/0003452837?sid=105"
     },
     {
-     "title": "삼성전자, '2026 올해의 녹색상품'서 가전·모바일 16개 제품 선정",
-     "source": "ziksir.com",
-     "date": "2026-07-28",
-     "link": "https://www.ziksir.com/news/articleView.html?idxno=141386"
+     "title": "[#통신 풍향계] SKT '요금·멤버십 혜택' 확대·KT '생활밀착형 혜택' 확...",
+     "source": "newsworks.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=848907"
     },
     {
-     "title": "삼성전자, '대한민국 올해의 녹색상품' 최다 수상…AI·고효율 가전 경...",
+     "title": "KT·삼성전자, 기업전용 5G 부가서비스 '안전관리 워치' 출시",
+     "source": "dizzotv.com",
+     "date": "2026-07-30",
+     "link": "https://www.dizzotv.com/site/data/html_dir/2026/07/30/2026073080082.html"
+    },
+    {
+     "title": "KT·삼성전자, 산업안전 시장 공략... 기업전용 5G 기반 '안전관리 워치...",
      "source": "thefirstmedia.net",
-     "date": "2026-07-28",
-     "link": "http://www.thefirstmedia.net/news/articleView.html?idxno=204775"
+     "date": "2026-07-30",
+     "link": "http://www.thefirstmedia.net/news/articleView.html?idxno=205011"
     },
     {
-     "title": "삼성전자, '2026 대한민국 올해의 녹색상품'에 가전·모바일 16개 제품 선...",
-     "source": "techholic.co.kr",
-     "date": "2026-07-28",
-     "link": "http://www.techholic.co.kr/news/articleView.html?idxno=222272"
+     "title": "KT, 갤럭시워치로 산업현장 안전 관리",
+     "source": "지디넷",
+     "date": "2026-07-30",
+     "link": "https://n.news.naver.com/mnews/article/092/0002432564?sid=105"
     },
     {
-     "title": "삼성전자, AI 절전 기술 앞세워 '올해의 녹색상품' 업계 최다 수상",
-     "source": "metroseoul.co.kr",
-     "date": "2026-07-28",
-     "link": "http://www.metroseoul.co.kr/article/20260728500257"
+     "title": "KT, '기업전용 5G'에 '갤럭시 워치' 연동···\"산업현장 안전관리 돕는...",
+     "source": "enewstoday.co.kr",
+     "date": "2026-07-30",
+     "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2454224"
     },
     {
-     "title": "삼성전자, '대한민국 올해의 녹색상품' 최다 석권…16개 제품 선정",
-     "source": "ezyeconomy.com",
-     "date": "2026-07-28",
-     "link": "https://www.ezyeconomy.com/news/articleView.html?idxno=238049"
+     "title": "KT, 갤럭시 워치로 산업현장 안전관리…기업전용 5G 연동",
+     "source": "sentv.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.sentv.co.kr/article/view/sentv202607300119"
     },
     {
-     "title": "냉장고·TV만 넣던 시대 끝… 삼성·LG, 아파트 '뼈대'에 AI·로봇 심는다",
-     "source": "thepublic.kr",
-     "date": "2026-07-28",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=312870"
+     "title": "KT·삼성전자, 갤럭시 워치 기반 산업안전 서비스 출시",
+     "source": "4th.kr",
+     "date": "2026-07-30",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2115530"
     },
     {
-     "title": "삼성전자, '올해의 녹색상품' 16개 선정…업계 최다 수상",
-     "source": "econovill.com",
-     "date": "2026-07-28",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=746401"
-    },
-    {
-     "title": "삼성전자, '대한민국 올해의 녹색상품' 16관왕…AI 가전 친환경 경쟁력...",
-     "source": "joongangenews.com",
-     "date": "2026-07-28",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=535809"
+     "title": "KT·삼성전자, 5G·갤럭시워치로 산업현장 안전관리 나선다",
+     "source": "dailian.co.kr",
+     "date": "2026-07-30",
+     "link": "https://n.news.naver.com/mnews/article/119/0003116640?sid=105"
     }
    ]
   },
@@ -674,90 +674,90 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76944,
+   "total": 76947,
    "sentiment": {
-    "pos": 27,
-    "neu": 32,
+    "pos": 26,
+    "neu": 33,
     "neg": 1
    },
    "keywords": [
     [
      "단지",
-     47
-    ],
-    [
-     "LG전자",
-     46
-    ],
-    [
-     "가전",
      44
     ],
     [
+     "LG전자",
+     43
+    ],
+    [
+     "가전",
+     41
+    ],
+    [
      "AI홈",
-     40
+     38
     ],
     [
      "아파트",
-     37
-    ],
-    [
-     "구독",
-     35
-    ],
-    [
-     "압구정",
      33
     ],
     [
-     "우리",
-     25
+     "구독",
+     32
+    ],
+    [
+     "압구정",
+     30
     ],
     [
      "허브",
-     24
-    ],
-    [
-     "세대",
-     24
-    ],
-    [
-     "연결",
-     24
+     23
     ],
     [
      "AI",
-     21
+     22
+    ],
+    [
+     "세대",
+     22
+    ],
+    [
+     "우리",
+     22
     ],
     [
      "LG전자는",
      21
     ],
     [
-     "특화",
+     "연결",
      21
     ],
     [
-     "상반기",
-     20
+     "특화",
+     18
     ],
     [
      "재건축",
-     20
+     18
     ],
     [
      "ThinQ",
-     18
+     17
     ],
     [
-     "30만",
-     18
+     "상반기",
+     17
+    ],
+    [
+     "차세대",
+     16
     ]
    ],
    "posWords": [
     [
      "확대",
-     10
+     9
     ],
     [
      "돌파",
@@ -784,23 +784,41 @@
      2
     ],
     [
-     "글로벌",
+     "최초",
      1
     ]
    ],
    "related": [
-    "lg 씽큐온",
     "lg 씽큐",
-    "lg 씽큐 에어컨 연결",
+    "lg 씽큐온",
     "lg 씽큐 공유",
-    "lg 씽큐 허브",
-    "lg 씽큐 제습기",
     "lg 씽큐 에어컨 청소",
+    "lg 씽큐 허브",
     "lg 씽큐 연결 안됨",
+    "lg 씽큐 제습기",
+    "lg 씽큐 세탁기",
     "lg 씽큐 냉장고",
     "lg 씽큐 앱"
    ],
    "recent": [
+    {
+     "title": "[디지털라이프] 걸레받이 속으로 들어간 로봇청소기…LG전자 홈봇 '로니...",
+     "source": "전자신문",
+     "date": "2026-07-30",
+     "link": "https://n.news.naver.com/mnews/article/030/0003452809?sid=105"
+    },
+    {
+     "title": "[박정로의 주간 브리핑] 일본 구조용 집성재, 국내 2시간 내화 인정 획득",
+     "source": "imwood.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.imwood.co.kr/news/articleView.html?idxno=41483"
+    },
+    {
+     "title": "[경제일보] 로봇 삼국지… 현대차 '몸·공장' vs 삼성 '두뇌·부품' vs LG...",
+     "source": "ajunews.com",
+     "date": "2026-07-30",
+     "link": "https://www.ajunews.com/view/20260728141411115"
+    },
     {
      "title": "냉장고·TV만 넣던 시대 끝… 삼성·LG, 아파트 '뼈대'에 AI·로봇 심는다",
      "source": "thepublic.kr",
@@ -872,24 +890,6 @@
      "source": "businesspost.co.kr",
      "date": "2026-07-23",
      "link": "https://www.businesspost.co.kr/BP?command=article_view&num=442066"
-    },
-    {
-     "title": "'V'가 뜬다…욕실·주방으로 번진 HVAC 경쟁",
-     "source": "전자신문",
-     "date": "2026-07-22",
-     "link": "https://n.news.naver.com/mnews/article/030/0003449926?sid=105"
-    },
-    {
-     "title": "AI로 맞춤 환경 제공…건설업계 '차세대 스마트홈' 선점 경쟁",
-     "source": "ebn.co.kr",
-     "date": "2026-07-22",
-     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1717228"
-    },
-    {
-     "title": "압구정 7천세대 잡은 LG… 파는 건 가전 아닌 '5년 방문'",
-     "source": "the-biz.co.kr",
-     "date": "2026-07-21",
-     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=724749"
     }
    ]
   },
@@ -897,27 +897,19 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75293,
+   "total": 75310,
    "sentiment": {
-    "pos": 22,
-    "neu": 21,
-    "neg": 17
+    "pos": 32,
+    "neu": 23,
+    "neg": 5
    },
    "keywords": [
     [
      "AI",
-     35
-    ],
-    [
-     "HUG",
-     22
+     39
     ],
     [
      "보상패스",
-     19
-    ],
-    [
-     "온라인",
      19
     ],
     [
@@ -929,15 +921,7 @@
      16
     ],
     [
-     "세이브더칠드런",
-     16
-    ],
-    [
      "구글원",
-     14
-    ],
-    [
-     "남부지역본부",
      14
     ],
     [
@@ -953,28 +937,44 @@
      12
     ],
     [
-     "제출하면",
-     12
-    ],
-    [
-     "허브",
-     10
-    ],
-    [
      "프리미엄플러스",
      10
     ],
     [
-     "부산",
-     10
+     "스파이더맨",
+     9
     ],
     [
-     "신청은",
-     10
+     "번역한",
+     9
     ],
     [
-     "증빙",
-     10
+     "기사의",
+     9
+    ],
+    [
+     "전문",
+     9
+    ],
+    [
+     "입니다",
+     9
+    ],
+    [
+     "허브",
+     9
+    ],
+    [
+     "제공한다",
+     9
+    ],
+    [
+     "서비스와",
+     9
+    ],
+    [
+     "결합한",
+     9
     ]
    ],
    "posWords": [
@@ -984,31 +984,31 @@
     ],
     [
      "협업",
-     4
+     7
     ],
     [
      "글로벌",
+     5
+    ],
+    [
+     "우수",
      4
     ],
     [
+     "돌파",
+     3
+    ],
+    [
      "혁신",
+     3
+    ],
+    [
+     "성장",
      2
     ],
     [
      "투자",
      2
-    ],
-    [
-     "돌파",
-     2
-    ],
-    [
-     "파트너십",
-     1
-    ],
-    [
-     "최초",
-     1
     ]
    ],
    "related": [
@@ -1018,101 +1018,101 @@
     "구글 홈 허브",
     "구글 홈 미니 연결",
     "구글 홈페이지",
-    "구글 홈 연결",
     "구글 홈 미니 초기화",
-    "구글 홈 미니 사용법",
+    "구글 홈 스피커 연결",
+    "구글 홈 연결",
     "구글 홈 미니 2세대"
    ],
    "recent": [
     {
-     "title": "[이슈] 구관이 명관?···은행 앱 개편 초기 진통, 왜",
-     "source": "seoulfn.com",
-     "date": "2026-07-29",
-     "link": "https://www.seoulfn.com/news/articleView.html?idxno=634417"
+     "title": "경주시, 적극행정 우수공무원 7건 선정…창의행정 성과 빛났다",
+     "source": "kyongbuk.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.kyongbuk.co.kr/news/articleView.html?idxno=4079837"
     },
     {
-     "title": "장시간 대화면 시청도 눈 편안하게… 엡손, 프리미엄 홈프로젝터 시장 ...",
-     "source": "biz.chosun.com",
-     "date": "2026-07-29",
-     "link": "https://n.news.naver.com/mnews/article/366/0001182833?sid=105"
+     "title": "아카라라이프, 임직원 전용 AI 포털 구축",
+     "source": "getnews.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.getnews.co.kr/news/articleView.html?idxno=876498"
     },
     {
-     "title": "[2027 수시 부산대] 특성화 얼라이언스로 최고 수준 연구 환경 갖춘 ‘국...",
-     "source": "busan.com",
-     "date": "2026-07-29",
-     "link": "https://n.news.naver.com/mnews/article/082/0001391797?sid=102"
-    },
-    {
-     "title": "[미국 특징주] 애플, 신형 홈허브·홈팟미니로 스마트홈 시장 재도전",
-     "source": "newspim.com",
-     "date": "2026-07-29",
-     "link": "https://www.newspim.com/news/view/20260729000845"
-    },
-    {
-     "title": "벤큐, '여름 홈캉스 & 휴가비 지원' 빔프로젝터 6종 프로모션",
-     "source": "ilovepc.co.kr",
-     "date": "2026-07-29",
-     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=60162"
-    },
-    {
-     "title": "애플 저렴한 기기 임대 美서 시작...장중 시총 5조 달러 터치",
-     "source": "chosun.com",
-     "date": "2026-07-29",
-     "link": "https://n.news.naver.com/mnews/article/023/0003990236?sid=105"
-    },
-    {
-     "title": "벽에 붙이고 사람 알아본다… 애플, AI 기반 스마트 홈 거점 기기 연내...",
-     "source": "ddaily.co.kr",
-     "date": "2026-07-29",
-     "link": "https://n.news.naver.com/mnews/article/138/0002235790?sid=105"
-    },
-    {
-     "title": "이케아 코리아, 사계절 맞춤 홈퍼니싱 할인 ‘이케사는 세일’ 론칭",
+     "title": "‘스파이더맨: 브랜드 뉴 데이’, 개봉 2일째 100만 관객 돌파..올해 최...",
      "source": "breaknews.com",
-     "date": "2026-07-29",
-     "link": "http://www.breaknews.com/1225181"
+     "date": "2026-07-30",
+     "link": "http://www.breaknews.com/1225678"
     },
     {
-     "title": "애플, '시리AI'로 스마트홈 혁명 이끈다",
-     "source": "지디넷",
-     "date": "2026-07-29",
-     "link": "https://n.news.naver.com/mnews/article/092/0002432272?sid=105"
+     "title": "경주·영천·포항·경산, 지역민 체감 복지·경제·문화 행정 '가속도'",
+     "source": "view.asiae.co.kr",
+     "date": "2026-07-30",
+     "link": "https://n.news.naver.com/mnews/article/277/0005796933?sid=102"
     },
     {
-     "title": "4천 명 몰린 첫 브랜드콘…아임웹이 묻고 현장의 리더들이 답한 ‘브랜...",
-     "source": "venturesquare.net",
-     "date": "2026-07-29",
-     "link": "https://www.venturesquare.net/1101859/"
+     "title": "아카라라이프, 임직원 전용 AI 포털 오픈…전사적 AX 가속화",
+     "source": "it-b.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.it-b.co.kr/news/articleView.html?idxno=89324"
     },
     {
-     "title": "미국증시 다우지수 '활짝'...SHW·SW주 '껑충', 엔비디아 '선방'",
-     "source": "choicenews.co.kr",
-     "date": "2026-07-29",
-     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=168939"
+     "title": "덕수고, 대통령배 정상…포항, 3년 연속 대회 유치 '고교야구 성지' 입증",
+     "source": "breaknews.com",
+     "date": "2026-07-30",
+     "link": "http://www.breaknews.com/1225624"
     },
     {
-     "title": "애플, '시리AI' 들고 스마트홈 출시…아마존·구글에 도전장[모닝폰]",
+     "title": "경주시, 2026년 상반기 적극행정 우수공무원 선정",
+     "source": "kbsm.net",
+     "date": "2026-07-30",
+     "link": "https://www.kbsm.net/news/view.php?idx=528671"
+    },
+    {
+     "title": "(영상)전설로만 전해지던 펠레의 '그 골', AI가 살려냈다",
      "source": "이데일리",
-     "date": "2026-07-29",
-     "link": "https://n.news.naver.com/mnews/article/018/0006338692?sid=105"
+     "date": "2026-07-30",
+     "link": "https://n.news.naver.com/mnews/article/018/0006340094?sid=105"
     },
     {
-     "title": "애플, 시총 5조달러 터치…폰 임대·스마트홈 잇단 승부수",
-     "source": "이데일리",
-     "date": "2026-07-29",
-     "link": "https://n.news.naver.com/mnews/article/018/0006338685?sid=101"
+     "title": "아임웹,브랜드컨퍼런스 '브랜드콘 26'개최",
+     "source": "platum.kr",
+     "date": "2026-07-30",
+     "link": "https://platum.kr/archives/291654"
     },
     {
-     "title": "애플, 이번엔 '집' 정조준…시리AI로 스마트홈 승부수",
-     "source": "이데일리",
-     "date": "2026-07-28",
-     "link": "https://n.news.naver.com/mnews/article/018/0006338617?sid=101"
+     "title": "“AI보다 중요한 건 브랜드의 깊이”…1000명 모인 아임웹 브랜드콘",
+     "source": "ddaily.co.kr",
+     "date": "2026-07-30",
+     "link": "https://n.news.naver.com/mnews/article/138/0002235962?sid=101"
     },
     {
-     "title": "카카오뱅크, '투자탭' 누적 이용자 500만 명 돌파 外",
-     "source": "rcast.co.kr",
-     "date": "2026-07-28",
-     "link": "https://www.rcast.co.kr/news/articleView.html?idxno=31349"
+     "title": "‘스파이더맨: 브랜드 뉴 데이’, 개봉 첫날 박스오피스 1위 등극..2위 ‘...",
+     "source": "breaknews.com",
+     "date": "2026-07-30",
+     "link": "http://www.breaknews.com/1225503"
+    },
+    {
+     "title": "아임웹 '브랜드콘 26' 성료…AI 시대 브랜드 성장 전략 공유",
+     "source": "뉴시스",
+     "date": "2026-07-30",
+     "link": "https://n.news.naver.com/mnews/article/003/0014097322?sid=101"
+    },
+    {
+     "title": "아임웹, 브랜드콘 26 성황리 개최",
+     "source": "hansbiz.co.kr",
+     "date": "2026-07-30",
+     "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=853341"
+    },
+    {
+     "title": "충남교육청, 학교 공간 혁신 통합 플랫폼 ‘공간, 배움을 바꾸다’ 개통",
+     "source": "breaknews.com",
+     "date": "2026-07-30",
+     "link": "http://www.breaknews.com/1225484"
+    },
+    {
+     "title": "‘더댐 데드존’ VOD 오픈",
+     "source": "bntnews.co.kr",
+     "date": "2026-07-30",
+     "link": "https://www.bntnews.co.kr/article/view/bnt202607300044"
     }
    ]
   }
