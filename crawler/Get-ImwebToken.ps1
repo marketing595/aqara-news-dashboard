@@ -17,7 +17,7 @@ $ErrorActionPreference = 'Stop'
 
 $BASE        = 'https://openapi.imweb.me'
 $REDIRECT    = 'https://aqara-news-dashboard.vercel.app/imweb-auth.html'
-$SCOPE       = 'community:read site-info:read'
+$SCOPE       = 'community:read site-info:read site-info:write'   # write는 '연동완료 처리'용(1회)
 $DEFAULT_SITE = 'S202509250f66ad55637e1'   # 아카라라이프 아임웹 사이트 코드(자동 확인값)
 $WEB_DIR     = Split-Path -Parent $PSScriptRoot
 $OUT_JSON    = Join-Path $WEB_DIR 'homepage.json'
@@ -72,8 +72,17 @@ Write-Host $refresh -ForegroundColor Yellow
 Write-Host ''
 try { Set-Clipboard -Value $refresh; Write-Host '(refresh token을 클립보드에 복사했습니다)' -ForegroundColor DarkGray } catch {}
 
-# ---- 유닛 코드 확인 ----
+# ---- 연동완료 처리 (아임웹 앱 상태를 '연동중' → '연동완료'로 바꿔야 API가 정상 동작) ----
 $hdr = @{ Authorization = "Bearer $access" }
+try {
+  Invoke-RestMethod -Method Patch -Uri "$BASE/site-info/integration-complete" -Headers $hdr `
+    -ContentType 'application/json' -Body '{}' | Out-Null
+  Write-Host '연동완료 처리 OK' -ForegroundColor DarkGray
+} catch {
+  Write-Host ('연동완료 처리 건너뜀 (이미 완료 상태일 수 있음): ' + $_.Exception.Message) -ForegroundColor DarkGray
+}
+
+# ---- 유닛 코드 확인 ----
 $unit = ''
 try {
   $site = Invoke-RestMethod -Method Get -Uri "$BASE/site-info" -Headers $hdr
