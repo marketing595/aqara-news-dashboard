@@ -1,0 +1,12 @@
+{
+ "generatedAt": "2026-07-31T00:00:00Z",
+ "source": "none",
+ "site": "www.aqaralife.kr",
+ "note": "아임웹 Open API 연동 대기 상태. IMWEB_CLIENT_ID/SECRET/REFRESH_TOKEN Secret 등록 후 homepage.yml 워크플로가 자동으로 채웁니다.",
+ "forms": [
+  { "formNo": null, "boardCode": "b20260122406d95278d50a", "name": "문의하기" },
+  { "formNo": null, "boardCode": "b2026072459b66e8b57ea8", "name": "소비자 인테리어 문의" }
+ ],
+ "monthly": {},
+ "submissions": []
+}
