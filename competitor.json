@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-01 19:12",
+ "generatedAt": "2026-08-02 19:10",
  "brands": [
   {
    "name": "아카라",
@@ -124,12 +124,12 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
-    "아카라 스위치",
     "아카라 홈캠",
+    "아카라 스위치",
     "아카라 l100",
     "아카라카",
-    "니케 아카라이브",
-    "아카라이브 핫딜"
+    "아카라이브 핫딜",
+    "니케 아카라이브"
    ],
    "recent": [
     {
@@ -352,7 +352,7 @@
     "헤이홈 공유",
     "헤이홈 오프라인",
     "헤이홈 프로",
-    "헤이홈 허브"
+    "헤이홈 카메라"
    ],
    "recent": [
     {
@@ -451,84 +451,84 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67316,
+   "total": 67327,
    "sentiment": {
-    "pos": 35,
-    "neu": 24,
+    "pos": 31,
+    "neu": 28,
     "neg": 1
    },
    "keywords": [
     [
      "히트펌프",
-     93
+     85
     ],
     [
      "보일러",
-     52
-    ],
-    [
-     "EHS",
      47
     ],
     [
-     "실내",
-     39
-    ],
-    [
-     "원격",
-     39
-    ],
-    [
-     "출수",
+     "EHS",
      37
     ],
     [
-     "터치",
-     36
+     "원격",
+     34
     ],
     [
-     "기능을",
+     "터치",
      33
     ],
     [
+     "실내",
+     32
+    ],
+    [
      "가정용",
-     32
-    ],
-    [
-     "설치",
-     32
-    ],
-    [
-     "주요",
-     31
-    ],
-    [
-     "가능하다",
-     31
-    ],
-    [
-     "온도와",
      30
     ],
     [
-     "조작할",
-     29
+     "기능을",
+     30
     ],
     [
-     "난방",
-     29
+     "출수",
+     30
     ],
     [
-     "온도",
+     "주요",
+     27
+    ],
+    [
+     "설치",
      26
     ],
     [
-     "있으며",
+     "가능하다",
+     26
+    ],
+    [
+     "조작할",
      25
     ],
     [
-     "공급",
+     "난방",
+     24
+    ],
+    [
+     "온도와",
+     24
+    ],
+    [
+     "온도",
      22
+    ],
+    [
+     "AI",
+     20
+    ],
+    [
+     "공급",
+     20
     ]
    ],
    "posWords": [
@@ -538,7 +538,7 @@
     ],
     [
      "공략",
-     10
+     9
     ],
     [
      "최초",
@@ -553,23 +553,93 @@
      3
     ],
     [
+     "협업",
+     1
+    ],
+    [
      "기대",
      1
     ]
    ],
    "related": [
-    "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 에어컨",
+    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스",
     "삼성 스마트싱스 선풍기",
     "삼성 스마트싱스 전력량",
     "삼성 스마트싱스 아이폰",
-    "삼성 스마트싱스 세탁기"
+    "아이폰 삼성 스마트싱스"
    ],
    "recent": [
+    {
+     "title": "LG전자 '모듈러 주택' 홈쇼핑에서 판다",
+     "source": "한국경제",
+     "date": "2026-08-02",
+     "link": "https://n.news.naver.com/mnews/article/015/0005316478?sid=101"
+    },
+    {
+     "title": "'홈쇼핑에서 집을 산다'... LG.삼성, AI 모듈러주택 시장 공략 '한창'",
+     "source": "metroseoul.co.kr",
+     "date": "2026-08-02",
+     "link": "http://www.metroseoul.co.kr/article/20260802500202"
+    },
+    {
+     "title": "‘30평에 1.5억’ 이젠 집도 만드는 삼성·LG…“3개월 만에 완공” 모듈...",
+     "source": "서울경제",
+     "date": "2026-08-02",
+     "link": "https://n.news.naver.com/mnews/article/011/0004647719?sid=101"
+    },
+    {
+     "title": "TV 홈쇼핑서 주택도 판다",
+     "source": "한국경제",
+     "date": "2026-08-02",
+     "link": "https://n.news.naver.com/mnews/article/015/0005316392?sid=101"
+    },
+    {
+     "title": "유럽서 키운 히트펌프…삼성·LG, 국내 주거시장 공략 ‘속도’",
+     "source": "etoday.co.kr",
+     "date": "2026-08-02",
+     "link": "https://www.etoday.co.kr/news/view/2609745"
+    },
+    {
+     "title": "스마트폰·TV 말고 집도 팝니다…삼성·LG가 만드는 'AI 모듈러 주택' [수...",
+     "source": "segye.com",
+     "date": "2026-08-02",
+     "link": "https://n.news.naver.com/mnews/article/022/0004147718?sid=101"
+    },
+    {
+     "title": "난방 전기화 이끄는 삼성·LG…제주서 히트펌프 경쟁 본격화",
+     "source": "newstomato.com",
+     "date": "2026-08-02",
+     "link": "http://www.newstomato.com/ReadNews.aspx?no=1308951&inflow=N"
+    },
+    {
+     "title": "홈쇼핑서 '집'도 판다…LG전자, CJ온스타일서 모듈러주택 '스마트코티지...",
+     "source": "livebiz.today",
+     "date": "2026-08-02",
+     "link": "https://www.livebiz.today/news/articleView.html?idxno=203760"
+    },
+    {
+     "title": "SKT '달리기' vs KT '안전'...통신사, 웨어러블 시장 '격돌'",
+     "source": "techm.kr",
+     "date": "2026-08-02",
+     "link": "https://www.techm.kr/news/articleView.html?idxno=153914"
+    },
+    {
+     "title": "삼성전자, 제주서 가정용 'EHS 히트펌프 보일러' 공급 '본격화'",
+     "source": "thepublic.kr",
+     "date": "2026-08-02",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=313373"
+    },
+    {
+     "title": "[Biz&Law] 삼성전자, '갤럭시 전력관리 시스템' 美 특허침해 피소",
+     "source": "the-biz.co.kr",
+     "date": "2026-08-02",
+     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=725484"
+    },
     {
      "title": "\"실외기 하나로 냉난방·온수까지\"…삼성 'EHS 올인원' 제주 실증",
      "source": "econovill.com",
@@ -593,72 +663,6 @@
      "source": "segye.com",
      "date": "2026-08-01",
      "link": "https://n.news.naver.com/mnews/article/022/0004147585?sid=101"
-    },
-    {
-     "title": "삼성전자, 제주에 ‘EHS 히트펌프 보일러’ 설치…현장 실증도",
-     "source": "newstomato.com",
-     "date": "2026-07-31",
-     "link": "http://www.newstomato.com/ReadNews.aspx?no=1308909&inflow=N"
-    },
-    {
-     "title": "'100조 팔고도 남는 게 없다' 기로에 선 삼성 DX, 부품값 폭등에 사상 첫...",
-     "source": "newsquest.co.kr",
-     "date": "2026-07-31",
-     "link": "https://www.newsquest.co.kr/news/articleView.html?idxno=270870"
-    },
-    {
-     "title": "삼성전자, 제주 애월에 'EHS 히트펌프 보일러' 첫 설치…고효율 냉난방...",
-     "source": "cbci.co.kr",
-     "date": "2026-07-31",
-     "link": "https://www.cbci.co.kr/news/articleView.html?idxno=593428"
-    },
-    {
-     "title": "삼성전자, 가정용 'EHS 히트펌프 보일러' 본격 공급…제주 1호 설치",
-     "source": "electimes.com",
-     "date": "2026-07-31",
-     "link": "https://www.electimes.com/news/articleView.html?idxno=370863"
-    },
-    {
-     "title": "삼성전자, 가정용 ‘EHS 히트펌프 보일러’ 공급 개시…차세대 고효율 ...",
-     "source": "swtvnews.com",
-     "date": "2026-07-31",
-     "link": "https://swtvnews.com/news/newsview.php?ncode=1065574852680502"
-    },
-    {
-     "title": "[재계 투데이] LG디스플레이, 국민성장펀드 지원기업 선정 外",
-     "source": "news.dealsitetv.com",
-     "date": "2026-07-31",
-     "link": "https://news.dealsitetv.com/articles/174098"
-    },
-    {
-     "title": "삼성전자, 가정용 'EHS 히트펌프 보일러' 본격 공급...소비자 관심도 증...",
-     "source": "thebigdata.co.kr",
-     "date": "2026-07-31",
-     "link": "http://www.thebigdata.co.kr/view.php?ud=202607311544175232bbceadc3c9_23"
-    },
-    {
-     "title": "삼성전자, 제주서 EHS 히트펌프 보일러 첫 설치⋯고효율 난방 시장 '공략...",
-     "source": "finomy.com",
-     "date": "2026-07-31",
-     "link": "http://www.finomy.com/news/articleView.html?idxno=258443"
-    },
-    {
-     "title": "삼성전자, 가정용 ‘EHS 히트펌프 보일러’ 본격 공급 시작",
-     "source": "breaknews.com",
-     "date": "2026-07-31",
-     "link": "http://www.breaknews.com/1225949"
-    },
-    {
-     "title": "삼성전자, 제주서 'EHS 히트펌프 보일러' 첫 설치⋯고효율 난방시장 공...",
-     "source": "autodaily.co.kr",
-     "date": "2026-07-31",
-     "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=546312"
-    },
-    {
-     "title": "삼성 가정용 'EHS 히트펌프 보일러' 제주서 첫선",
-     "source": "kfenews.co.kr",
-     "date": "2026-07-31",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=661657"
     }
    ]
   },
@@ -666,222 +670,222 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 76951,
+   "total": 76994,
    "sentiment": {
-    "pos": 25,
-    "neu": 34,
-    "neg": 1
+    "pos": 39,
+    "neu": 21,
+    "neg": 0
    },
    "keywords": [
     [
+     "히트펌프",
+     62
+    ],
+    [
      "LG전자",
-     42
+     56
     ],
     [
-     "단지",
-     42
-    ],
-    [
-     "가전",
-     41
-    ],
-    [
-     "AI홈",
+     "원격",
      38
     ],
     [
-     "아파트",
+     "R32",
+     37
+    ],
+    [
+     "냉매를",
+     36
+    ],
+    [
+     "낮은",
+     35
+    ],
+    [
+     "제주",
      32
     ],
     [
-     "구독",
-     32
+     "앱을",
+     29
     ],
     [
-     "압구정",
-     27
+     "지구온난화지수",
+     28
     ],
     [
-     "AI",
-     24
-    ],
-    [
-     "허브",
-     23
+     "GWP",
+     28
     ],
     [
      "LG전자는",
-     21
+     28
     ],
     [
-     "우리",
-     20
+     "난방",
+     28
     ],
     [
-     "세대",
-     19
+     "제어",
+     28
     ],
     [
-     "연결",
-     19
+     "전기화",
+     24
+    ],
+    [
+     "글로벌",
+     24
+    ],
+    [
+     "사업을",
+     23
     ],
     [
      "ThinQ",
+     21
+    ],
+    [
+     "시장에서",
      18
-    ],
-    [
-     "차세대",
-     16
-    ],
-    [
-     "특화",
-     16
-    ],
-    [
-     "재건축",
-     16
-    ],
-    [
-     "가전과",
-     15
     ]
    ],
    "posWords": [
     [
-     "확대",
-     9
+     "글로벌",
+     24
     ],
     [
-     "돌파",
-     5
+     "1위",
+     16
     ],
     [
-     "프리미엄",
-     5
+     "강화",
+     11
     ],
     [
      "공략",
-     3
+     7
     ],
     [
-     "성장",
+     "확대",
+     5
+    ],
+    [
+     "선도",
      3
     ],
     [
      "주목",
-     2
+     1
     ],
     [
-     "강화",
-     2
-    ],
-    [
-     "계약",
-     2
+     "최초",
+     1
     ]
    ],
    "related": [
     "lg 씽큐온",
     "lg 씽큐",
+    "lg 씽큐 연결 안됨",
     "lg 씽큐 공유",
+    "lg 씽큐 세탁기",
+    "lg 씽큐 허브",
     "lg 씽큐 냉장고",
     "lg 씽큐 앱",
-    "lg 씽큐 연결 안됨",
-    "lg 씽큐 에어컨 청소",
-    "lg 씽큐 허브",
-    "lg 씽큐 세탁기",
-    "lg 씽큐 제습기"
+    "lg 씽큐 제습기",
+    "lg 씽큐 어플 오류"
    ],
    "recent": [
     {
-     "title": "“로봇이 택배 들고 문 앞까지”…2030년 아파트 미리 살아보니",
-     "source": "economist.co.kr",
-     "date": "2026-08-01",
-     "link": "https://n.news.naver.com/mnews/article/243/0000101132?sid=101"
+     "title": "'탄소 제로' 앞장선 LG전자, 제주서 히트펌프 1호 달성",
+     "source": "newslock.co.kr",
+     "date": "2026-08-02",
+     "link": "http://www.newslock.co.kr/news/articleView.html?idxno=133817"
     },
     {
-     "title": "AI가전 다음 승부처는 데이터…개인 맞춤형 집이 온다",
-     "source": "news.mtn.co.kr",
-     "date": "2026-07-31",
-     "link": "https://news.mtn.co.kr/news-detail/2026073116402858839"
-    },
-    {
-     "title": "가짜 공기청정기 필터서 유해물질 검출…정품 사용 중요성 커져",
-     "source": "it.chosun.com",
-     "date": "2026-07-31",
-     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092167072"
-    },
-    {
-     "title": "호환·비정품 소모품 정말 괜찮을까?...공기청정기 호환필터의 두 얼굴",
-     "source": "it.donga.com",
-     "date": "2026-07-31",
-     "link": "https://it.donga.com/109283/"
-    },
-    {
-     "title": "[디지털라이프] 걸레받이 속으로 들어간 로봇청소기…LG전자 홈봇 '로니...",
-     "source": "전자신문",
-     "date": "2026-07-30",
-     "link": "https://n.news.naver.com/mnews/article/030/0003452809?sid=105"
-    },
-    {
-     "title": "[박정로의 주간 브리핑] 일본 구조용 집성재, 국내 2시간 내화 인정 획득",
-     "source": "imwood.co.kr",
-     "date": "2026-07-30",
-     "link": "https://www.imwood.co.kr/news/articleView.html?idxno=41483"
-    },
-    {
-     "title": "[경제일보] 로봇 삼국지… 현대차 '몸·공장' vs 삼성 '두뇌·부품' vs LG...",
+     "title": "EU 'AI 법' 발효…삼성·LG, 유럽향 AI 가전 '투명성 표기' 선제 대응",
      "source": "ajunews.com",
-     "date": "2026-07-30",
-     "link": "https://www.ajunews.com/view/20260728141411115"
+     "date": "2026-08-02",
+     "link": "https://www.ajunews.com/view/20260802145635368"
     },
     {
-     "title": "냉장고·TV만 넣던 시대 끝… 삼성·LG, 아파트 '뼈대'에 AI·로봇 심는다",
-     "source": "thepublic.kr",
-     "date": "2026-07-28",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=312870"
+     "title": "‘30평에 1.5억’ 이젠 집도 만드는 삼성·LG…“3개월 만에 완공” 모듈...",
+     "source": "서울경제",
+     "date": "2026-08-02",
+     "link": "https://n.news.naver.com/mnews/article/011/0004647719?sid=101"
     },
     {
-     "title": "삼성·LG전자도 집 판다… 건축 효율 높여 '스마트' [모듈러 주택 속도전...",
-     "source": "it.chosun.com",
-     "date": "2026-07-28",
-     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092166693"
+     "title": "LG전자, 제주 히트펌프 보급사업 1위 사업자 선정, 국내 난방 전기화 시...",
+     "source": "businessplus.kr",
+     "date": "2026-08-02",
+     "link": "https://www.businessplus.kr/news/articleView.html?idxno=114956"
     },
     {
-     "title": "입지·브랜드만으론 부족…건설사, 주거 서비스 ‘승부수’",
-     "source": "dailian.co.kr",
-     "date": "2026-07-27",
-     "link": "https://n.news.naver.com/mnews/article/119/0003115011?sid=101"
+     "title": "LG전자, 제주 히트펌프 보급사업 본격화…1호 현판식 개최",
+     "source": "metroseoul.co.kr",
+     "date": "2026-08-02",
+     "link": "http://www.metroseoul.co.kr/article/20260802500184"
     },
     {
-     "title": "[재계 이슈] 현대의 '거북선 외교'… 조선 명가와 英 왕실의 반세기 인...",
-     "source": "economychosun.com",
-     "date": "2026-07-27",
-     "link": "https://economychosun.com/site/data/html_dir/2026/07/20/2026072000026.html"
+     "title": "유럽서 키운 히트펌프…삼성·LG, 국내 주거시장 공략 ‘속도’",
+     "source": "etoday.co.kr",
+     "date": "2026-08-02",
+     "link": "https://www.etoday.co.kr/news/view/2609745"
     },
     {
-     "title": "LG전자 '인스타뷰 냉장고' 글로벌 판매 500만대 돌파... \"유럽·신흥시장...",
-     "source": "econonews.co.kr",
-     "date": "2026-07-26",
-     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=441832"
+     "title": "[산업 뉴스브리핑]LG전자, 제주 히트펌프 보급 1위 사업자 선정…\"국내...",
+     "source": "asiatime.co.kr",
+     "date": "2026-08-02",
+     "link": "https://www.asiatime.co.kr/article/20260802500063"
     },
     {
-     "title": "LG전자 모듈러 주택에서 스타링크 위성통신 쓴다…SK텔링크 제공",
+     "title": "LG전자, 제주 히트펌프 보급사업 최대 물량 맡는다-450가구 설치로 난방...",
+     "source": "mediafine.co.kr",
+     "date": "2026-08-02",
+     "link": "https://www.mediafine.co.kr/news/articleView.html?idxno=85383"
+    },
+    {
+     "title": "LG전자, 제주서 히트펌프 450가구 공급…국내 난방 전기화 주도",
+     "source": "ftoday.co.kr",
+     "date": "2026-08-02",
+     "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=362920"
+    },
+    {
+     "title": "LG전자, 제주 히트펌프 보급사업 사업자 선정…450가구 설치 맡는다",
+     "source": "lcnews.co.kr",
+     "date": "2026-08-02",
+     "link": "https://www.lcnews.co.kr/news/articleView.html?idxno=205894"
+    },
+    {
+     "title": "LG전자, 제주에 히트펌프 보급…국내 난방 전기화 시장 공략 개시",
+     "source": "m-i.kr",
+     "date": "2026-08-02",
+     "link": "https://www.m-i.kr/news/articleView.html?idxno=1397914"
+    },
+    {
+     "title": "제주서 맞붙은 LG·삼성 '히트펌프'..유럽 이어 내수 선점 경쟁 불붙어",
+     "source": "머니투데이",
+     "date": "2026-08-02",
+     "link": "https://n.news.naver.com/mnews/article/008/0005394423?sid=101"
+    },
+    {
+     "title": "LG전자, 제주 히트펌프 450가구 설치…국내 난방 전기화 '속도'",
+     "source": "pinpointnews.co.kr",
+     "date": "2026-08-02",
+     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=473575"
+    },
+    {
+     "title": "LG전자, 제주 히트펌프 450가구 설치…난방 전기화 사업 확대",
+     "source": "ddaily.co.kr",
+     "date": "2026-08-02",
+     "link": "https://n.news.naver.com/mnews/article/138/0002236274?sid=105"
+    },
+    {
+     "title": "LG전자, 제주 히트펌프 보급 사업 1위…“국내 탈탄소 전환 가속화”",
      "source": "전자신문",
-     "date": "2026-07-26",
-     "link": "https://n.news.naver.com/mnews/article/030/0003451010?sid=105"
-    },
-    {
-     "title": "아파트·모듈러·차량까지…LG전자 B2B로 가전 판 키운다",
-     "source": "it.chosun.com",
-     "date": "2026-07-26",
-     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092166506"
-    },
-    {
-     "title": "[CEO풍향계] '로봇사업 깃발' 노태문…'AI 홈 확장' 류재철",
-     "source": "yonhapnewstv.co.kr",
-     "date": "2026-07-24",
-     "link": "https://n.news.naver.com/mnews/article/422/0000888507?sid=101"
+     "date": "2026-08-02",
+     "link": "https://n.news.naver.com/mnews/article/030/0003453347?sid=105"
     }
    ]
   },
@@ -889,7 +893,7 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75328,
+   "total": 75329,
    "sentiment": {
     "pos": 25,
     "neu": 26,
@@ -898,7 +902,7 @@
    "keywords": [
     [
      "AI",
-     33
+     34
     ],
     [
      "번역한",
@@ -949,15 +953,15 @@
      9
     ],
     [
-     "구글의",
-     8
-    ],
-    [
      "자동화",
      8
     ],
     [
      "한편",
+     7
+    ],
+    [
+     "구글의",
      7
     ],
     [
@@ -971,12 +975,12 @@
    ],
    "posWords": [
     [
-     "협업",
-     7
-    ],
-    [
      "우수",
      6
+    ],
+    [
+     "협업",
+     5
     ],
     [
      "돌파",
@@ -992,32 +996,38 @@
     ],
     [
      "성장",
-     3
+     2
+    ],
+    [
+     "1위",
+     2
     ],
     [
      "투자",
-     3
-    ],
-    [
-     "글로벌",
-     3
+     2
     ]
    ],
    "related": [
     "구글 홈 스피커",
     "구글 홈",
-    "구글 홈 미니",
     "구글 홈 허브",
+    "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 연결",
     "구글 홈 미니 초기화",
+    "구글 홈 초기화",
     "구글 홈 연결",
-    "구글 홈 미니 2세대",
-    "구글 홈 초기화"
+    "구글 홈 미니 사용법"
    ],
    "recent": [
     {
-     "title": "‘메모리 갑질’ 하다가 중국제 쓰겠다는 아이폰 [트럼프 스톡커]",
+     "title": "EU 'AI 법' 발효…삼성·LG, 유럽향 AI 가전 '투명성 표기' 선제 대응",
+     "source": "ajunews.com",
+     "date": "2026-08-02",
+     "link": "https://www.ajunews.com/view/20260802145635368"
+    },
+    {
+     "title": "[트럼프 스톡커] ‘메모리 갑질’ 하다가 중국제 쓰겠다는 아이폰",
      "source": "서울경제",
      "date": "2026-08-01",
      "link": "https://n.news.naver.com/mnews/article/011/0004647577?sid=104"
@@ -1099,12 +1109,6 @@
      "source": "breaknews.com",
      "date": "2026-07-31",
      "link": "http://www.breaknews.com/1225836"
-    },
-    {
-     "title": "애플, 메모리 가격 상승에도 수익성 개선…TSMC 병목 지적",
-     "source": "news.mtn.co.kr",
-     "date": "2026-07-31",
-     "link": "https://news.mtn.co.kr/news-detail/2026073108351231546"
     }
    ]
   }
