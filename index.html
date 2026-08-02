@@ -265,7 +265,7 @@
           <button onclick="restoreDeleted()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg text-slate-500" title="숨긴(삭제한) 기사 모두 복원">삭제 복원</button>
         </div>
         <p class="text-[11px] text-slate-400 mb-1">※ <b>배포 구분</b>: 기본은 <b class="text-brand-ink">자사보도</b>(우리가 배포), 제목이 <b>타사 발신사</b> 이름으로 시작하면 <b>오가닉</b>(제3자 발행)으로 분류. <button onclick="addOriginOther()" class="text-ink font-semibold hover:underline">오가닉 발신사 추가 +</button></p>
-        <p class="text-[11px] text-slate-400 mb-3">※ <b>수집 기준·출처</b>: <b class="text-brand-ink">오가닉(자동수집)</b>은 네이버 <b>뉴스 검색 오픈API</b>(통합검색 화면 아님)로 <b>「아카라라이프 · 아카라 스마트홈 · 아카라 도어락 · 아카라코리아 · 아카라 매터」 5개 쿼리</b>를 최신순 수집 → <b>제목·본문에 '아카라/aqara' 포함</b>분만 남기고 제목 중복 제거(2021~). <b>자사보도</b>는 구글 시트 수기 집계분이며, 대시보드가 둘을 재중복제거 후 병합합니다.</p>
+        <p class="text-[11px] text-slate-400 mb-3">※ <b>수집 기준·출처</b>: <b class="text-brand-ink">오가닉(자동수집)</b>은 네이버 <b>뉴스 검색 오픈API</b>(통합검색 화면 아님)로 <b>「아카라라이프 · 아카라 스마트홈 · 아카라 도어락 · 아카라코리아 · 아카라 매터」 5개 쿼리</b>를 최신순 수집 → <b>제목·본문에 '아카라/aqara' 포함</b>분만 남기고 제목 중복 제거(2021~). <b>자사보도</b>는 구글 시트 수기 집계분이며, 대시보드가 둘을 재중복제거 후 병합합니다. 여기에 <b class="text-brand-ink">데일리 브리핑</b>이 매일 아침 수집한 <b>자사 기사</b>도 함께 병합해, 시트·오가닉 갱신 전의 <b>최신 기사</b>까지 바로 표시합니다.</p>
         <div class="overflow-auto max-h-[600px] rounded-lg border border-slate-100">
           <table class="w-full text-sm">
             <thead class="bg-slate-50 text-slate-500 sticky top-0 z-10"><tr class="text-left">
@@ -706,6 +706,7 @@
        </div>
        <div id="hpSourceBadge" class="flex flex-wrap gap-1.5"></div>
      </div>
+     <div id="hpCatTabs" class="flex flex-wrap gap-2 mb-5"></div>
 
      <div id="hpSetup" class="hidden card p-5 mb-5 border-2 border-brand/50 bg-[#FFFDF3]">
        <p class="font-extrabold text-ink mb-2">⚙️ 아직 아임웹 연동이 켜지지 않았습니다</p>
@@ -1365,11 +1366,21 @@
 
     let jt=null;
     // 네이버 추가 수집 기사(organic_news.json) 병합 — 시트에 없는 건 오가닉으로 추가
-    let ORG_ADDED=0;
+    let ORG_ADDED=0, BRF_ADDED=0, DATA_GEN='';
+    const normTitle=s=>(s||'').toString().replace(/[^0-9A-Za-z가-힣]/g,'');
+    // 뉴스 목록 상단 '업데이트' 문구 — 시트 + 오가닉 + 브리핑 최신분 합산 표기
+    function stampUpdated(gen){
+      if(gen&&!DATA_GEN) DATA_GEN=gen;   // 기준 시각은 시트 갱신 시각 우선
+      const u=document.getElementById('updated'); if(!u) return;
+      let s='업데이트: '+DATA_GEN+' · 시트 '+(ALL.length-ORG_ADDED-BRF_ADDED)+'건';
+      if(ORG_ADDED) s+=' + 네이버 오가닉 '+ORG_ADDED+'건';
+      if(BRF_ADDED) s+=' + 브리핑 최신 '+BRF_ADDED+'건';
+      u.textContent=s+' = 총 '+ALL.length+'건';
+    }
     function mergeOrganic(){
       fetch('organic_news.json?_='+Date.now()).then(r=>r.json()).then(d=>{
         if(!d||!d.items||!d.items.length) return;
-        const norm=s=>(s||'').toString().replace(/[^0-9A-Za-z가-힣]/g,'');
+        const norm=normTitle;
         const seen=new Set(ALL.map(r=>norm(r['기사명'])));
         let added=0;
         d.items.forEach((it,i)=>{ const k=norm(it['기사명']); if(!k||seen.has(k)) return; seen.add(k);
@@ -1377,7 +1388,32 @@
           if(deletedRows.has(r._key)) return;   // 공유 삭제 반영(오가닉 자동수집분도 숨김 유지)
           applyRowEdit(r); deriveRow(r); r._origin='오가닉'; ALL.push(r); added++; });
         ORG_ADDED=added;
-        if(added){ const u=document.getElementById('updated'); if(u) u.textContent='업데이트: '+(d.generatedAt||'')+' · 시트 '+(ALL.length-added)+'건 + 네이버 오가닉 '+added+'건 = 총 '+ALL.length+'건';
+        if(added){ stampUpdated(d.generatedAt||'');
+          try{ initRange(); populateFilters(); applyAndRender(); }catch(e){ console.error(e); } }
+      }).catch(()=>{}).then(()=>mergeBriefingNews());
+    }
+    // 데일리 브리핑(briefing.json) 자사 기사 병합 — 시트·오가닉 갱신 전의 '최신 기사'를 뉴스 목록에 바로 반영
+    function mergeBriefingNews(){
+      fetch('briefing.json?_='+Date.now()).then(r=>r.json()).then(d=>{
+        const bs=(d&&d.briefings)||{}; const days=Object.keys(bs).sort(); if(!days.length) return;
+        // 브리핑 제목은 40자 내외로 잘려 있어(…) 전체 제목과 다를 수 있음 → 앞부분·링크로 중복 판정
+        const pre=s=>normTitle(s).substring(0,16);
+        const linkKey=u=>(u||'').toString().split('?')[0].replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'');
+        const seen=new Set(ALL.map(r=>pre(r['기사명'])));
+        const seenLink=new Set(ALL.map(r=>linkKey(urlOf(r))).filter(Boolean));
+        let added=0;
+        days.forEach(day=>{ ((bs[day]||{}).rows||[]).forEach(it=>{
+          if((it.cat||'')!=='자사') return;                       // 자사 관련 기사만 뉴스 목록에 반영
+          const title=(it.t||'').toString().replace(/[.…]+$/,'').trim();
+          const k=pre(title), lk=linkKey(it.link);
+          if(!k||seen.has(k)||(lk&&seenLink.has(lk))) return;
+          seen.add(k); if(lk) seenLink.add(lk);
+          const r={ '기사명':title, '매체':it.s||'', '게재일':(it.d||day||'').toString().substring(0,10), '_href':it.link||'', '_added':true, '_key':'brf§'+normTitle(title) };
+          if(deletedRows.has(r._key)) return;   // 공유 삭제 반영
+          applyRowEdit(r); deriveRow(r); r._origin='오가닉'; ALL.push(r); added++; });
+        });
+        BRF_ADDED=added;
+        if(added){ stampUpdated(d.generatedAt||'');
           try{ initRange(); populateFilters(); applyAndRender(); }catch(e){ console.error(e); } }
       }).catch(()=>{});
     }
@@ -1386,7 +1422,8 @@
       window.__onAqaraData=function(p){ clearTimeout(jt);
         if(!p||!p.ok){ if(!silent) showErr('응답 오류: '+(p&&p.error||'?')); return; }
         ALL=(p.rows||[]).filter(r=>r['기사명']).map((r,i)=>{ r._key=(r['기사명']||'')+'§'+(r['게재일']||'')+'§'+(r['매체']||''); applyRowEdit(r); deriveRow(r); return r; }).filter(r=>!deletedRows.has(r._key));
-        document.getElementById('updated').textContent='업데이트: '+(p.generatedAt||'')+' · 총 '+ALL.length+'건';
+        DATA_GEN=(p.generatedAt||''); ORG_ADDED=0; BRF_ADDED=0;
+        document.getElementById('updated').textContent='업데이트: '+DATA_GEN+' · 총 '+ALL.length+'건';
         try{ initRange(); populateFilters(); applyAndRender(); }catch(e){ console.error('render 오류:', e); }
         show('content');   // 렌더 중 일부 오류가 나도 화면은 표시
         mergeOrganic();    // 네이버 추가 수집분(오가닉) 병합
@@ -1403,8 +1440,14 @@
     if(REFRESH_MINUTES>0){ setInterval(()=>{ if(busyEditing())return; loadData(true);loadCafe(true);},REFRESH_MINUTES*60000); document.addEventListener('visibilitychange',()=>{ if(!document.hidden && !busyEditing()){ loadData(true);loadCafe(true);} }); }
 
     function sortedDates(){ return ALL.map(r=>r['게재일']).filter(Boolean).sort(); }
+    let autoFrom='', autoTo='';   // 자동으로 넣어준 기간값(사용자가 직접 바꿨는지 판별용)
     function initRange(){ const ds=sortedDates(); if(!ds.length)return; const f=document.getElementById('fromDate'),t=document.getElementById('toDate');
-      if(!f.value)f.value=ds[0]; if(!t.value)t.value=ds[ds.length-1]; f.min=t.min=ds[0]; f.max=t.max=ds[ds.length-1]; }
+      const first=ds[0], last=ds[ds.length-1];
+      // 오가닉·브리핑 병합으로 더 최신 기사가 들어오면, 사용자가 직접 고른 기간이 아닐 때 자동으로 확장
+      if(!f.value||f.value===autoFrom) f.value=first;
+      if(!t.value||t.value===autoTo) t.value=last;
+      autoFrom=first; autoTo=last;
+      f.min=t.min=first; f.max=t.max=last; }
     function iso(d){ return d.toISOString().substring(0,10); }
     function preset(k){ const ds=sortedDates(); if(!ds.length)return; const last=ds[ds.length-1],f=document.getElementById('fromDate'),t=document.getElementById('toDate'); t.value=last;
       if(k==='all')f.value=ds[0]; else if(k==='90d'){const d=new Date(last);d.setDate(d.getDate()-90);f.value=iso(d);}
@@ -2631,17 +2674,35 @@
         .catch(()=>{ if(!HOME){ HOME={source:'none',forms:[],submissions:[]}; renderHome(); } });
     }
     function hpMonthKey(s){ return (s||'').slice(0,7); }
+    // 폼 이름 정리: 아임웹에서 복제된 폼('… copy')을 원본과 합치고, 성격별로 분류
+    function hpNorm(n){ let s=(n||'문의').trim(); while(/\s*copy\s*$/i.test(s)) s=s.replace(/\s*copy\s*$/i,'').trim(); return s||'문의'; }
+    const HP_CATS=[{k:'inq',label:'문의',desc:'상담·문의 접수'},{k:'dl',label:'자료 다운로드',desc:'리드(자료 요청)'},{k:'hr',label:'채용 지원',desc:'입사 지원'},{k:'all',label:'전체',desc:'모든 입력폼'}];
+    function hpCat(n){ const s=hpNorm(n);
+      if(/다운로드|카탈로그|소개서|리포트|바이블|자료/.test(s)) return 'dl';
+      if(/채용|입사|지원서/.test(s)) return 'hr';
+      return 'inq'; }
+    let HP_CAT='inq';
+    function hpSetCat(c){ HP_CAT=c; renderHome(); }
     function hpAddMonths(ym,n){ const y=+ym.slice(0,4), m=+ym.slice(5,7)-1+n; const d=new Date(Date.UTC(y,m,1)); return d.toISOString().slice(0,7); }
     function renderHome(){
-      const H=HOME||{}, subs=Array.isArray(H.submissions)?H.submissions:[];
-      const forms=(H.forms&&H.forms.length)?H.forms.map(f=>f.name):[...new Set(subs.map(s=>s.form))];
+      const H=HOME||{}, subsAll=(Array.isArray(H.submissions)?H.submissions:[]).map(s=>Object.assign({},s,{form:hpNorm(s.form),cat:hpCat(s.form)}));
+      const subs=HP_CAT==='all'?subsAll:subsAll.filter(s=>s.cat===HP_CAT);
+      const forms=[...new Set(subs.map(s=>s.form))];
+      // 분류 탭(문의 / 자료 다운로드 / 채용 / 전체)
+      const catN={}; subsAll.forEach(s=>{ catN[s.cat]=(catN[s.cat]||0)+1; }); catN.all=subsAll.length;
+      document.getElementById('hpCatTabs').innerHTML = subsAll.length? HP_CATS.map(c=>{
+        const on=HP_CAT===c.k, n=catN[c.k]||0;
+        return `<button onclick="hpSetCat('${c.k}')" class="px-3.5 py-2 rounded-xl border text-left transition ${on?'bg-ink text-white border-ink':'bg-white text-muted border-[#E6E6E3] hover:text-ink'}">
+          <span class="text-[13px] font-bold">${c.label}</span> <span class="num text-[13px] font-extrabold ${on?'text-brand':'text-ink'}">${n.toLocaleString()}</span>
+          <span class="block text-[10px] ${on?'text-white/60':'text-slate-400'}">${c.desc}</span></button>`;
+      }).join('') : '';
       const kc=(l,v,s)=>`<div class="card card-hover p-5"><p class="text-sm text-slate-500">${l}</p><p class="num text-3xl font-extrabold text-ink mt-1">${v}</p><p class="text-xs text-slate-400 mt-1">${s||''}</p></div>`;
       // 소스 배지 · 안내
-      const src=H.source||'none', hasData=subs.length>0||(H.monthly&&Object.keys(H.monthly).length>0);
+      const src=H.source||'none', hasData=subsAll.length>0||(H.monthly&&Object.keys(H.monthly).length>0);
       const badge=(t,c)=>`<span class="text-[11px] font-semibold px-2.5 py-1 rounded-full ${c}">${t}</span>`;
       document.getElementById('hpSourceBadge').innerHTML =
         (src==='imweb-api'?badge('아임웹 API 자동수집','bg-agreen/15 text-agreen'):src==='excel'?badge('엑셀 수동 반영','bg-ablue/25 text-[#365b7a]'):badge('연동 대기','bg-slate-100 text-slate-500'))
-        + (hasData?badge('총 '+(H.totalCount!=null?H.totalCount:subs.length).toLocaleString()+'건','bg-brand/20 text-brand-ink'):'');
+        + (hasData?badge('전체 입력폼 '+(H.totalCount!=null?H.totalCount:subsAll.length).toLocaleString()+'건','bg-brand/20 text-brand-ink'):'');
       document.getElementById('hpStamp').textContent = H.generatedAt?' · 수집 '+H.generatedAt.slice(0,16).replace('T',' '):'';
       document.getElementById('hpSetup').classList.toggle('hidden', hasData);
       if(!hasData){
@@ -2673,12 +2734,13 @@
       const rate=prev?Math.round((cur-prev)/prev*100):null;
       const dlt=rate==null?'<span class="text-slate-400">비교 데이터 없음</span>':`<span class="${rate>=0?'text-agreen':'text-ared'} font-semibold">${rate>=0?'▲':'▼'} ${Math.abs(rate)}%</span> <span class="text-slate-400">전월 ${prev}건</span>`;
       const dim=months.length?months[months.length-1]:curM;
+      const CL=(HP_CATS.find(c=>c.k===HP_CAT)||{}).label||'문의';
       document.getElementById('hpKpi').innerHTML=
-        kc('이번 달 문의',cur.toLocaleString()+'건',curM+' · 진행 중')+
+        kc('이번 달 '+CL,cur.toLocaleString()+'건',curM+' · 진행 중')+
         kc('전월 대비',(rate==null?'–':(rate>=0?'+':'')+rate+'%'),dlt)+
         kc('최근 7일',subs.length?last7.toLocaleString()+'건':'–',subs.length?'일평균 '+(last7/7).toFixed(1)+'건':'일별 데이터 없음')+
         kc('오늘',subs.length?todayN.toLocaleString()+'건':'–',today)+
-        kc('누적 문의',total.toLocaleString()+'건','최근 데이터 '+dim);
+        kc('누적 '+CL,total.toLocaleString()+'건','최근 데이터 '+dim);
       // 일별 (최근 90일)
       const dc={}; subs.forEach(s=>{ if(s.d) dc[s.d]=(dc[s.d]||0)+1; });
       const days=[]; for(let i=89;i>=0;i--) days.push(new Date(Date.now()+9*36e5-i*864e5).toISOString().slice(0,10));
