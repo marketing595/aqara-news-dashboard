@@ -1369,6 +1369,13 @@
     // 네이버 추가 수집 기사(organic_news.json) 병합 — 시트에 없는 건 오가닉으로 추가
     let ORG_ADDED=0, BRF_ADDED=0, DATA_GEN='';
     const normTitle=s=>(s||'').toString().replace(/[^0-9A-Za-z가-힣]/g,'');
+    // 삭제 판정: 시트에 적재된 자동수집분도, 예전에 대시보드에서 지운 오가닉/브리핑 키로 계속 숨긴다
+    // (시트 동기화로 다시 들어와도 지웠던 기사가 되살아나지 않게)
+    function isRowDeleted(r){
+      if(deletedRows.has(r._key)) return true;
+      const k=normTitle(r['기사명']); if(!k) return false;
+      return deletedRows.has('org§'+k)||deletedRows.has('brf§'+k);
+    }
     // 뉴스 목록 상단 '업데이트' 문구 — 시트 + 오가닉 + 브리핑 최신분 합산 표기
     function stampUpdated(gen){
       if(gen&&!DATA_GEN) DATA_GEN=gen;   // 기준 시각은 시트 갱신 시각 우선
@@ -1422,7 +1429,7 @@
       if(!silent) show('loading');
       window.__onAqaraData=function(p){ clearTimeout(jt);
         if(!p||!p.ok){ if(!silent) showErr('응답 오류: '+(p&&p.error||'?')); return; }
-        ALL=(p.rows||[]).filter(r=>r['기사명']).map((r,i)=>{ r._key=(r['기사명']||'')+'§'+(r['게재일']||'')+'§'+(r['매체']||''); applyRowEdit(r); deriveRow(r); return r; }).filter(r=>!deletedRows.has(r._key));
+        ALL=(p.rows||[]).filter(r=>r['기사명']).map((r,i)=>{ r._key=(r['기사명']||'')+'§'+(r['게재일']||'')+'§'+(r['매체']||''); applyRowEdit(r); deriveRow(r); return r; }).filter(r=>!isRowDeleted(r));
         DATA_GEN=(p.generatedAt||''); ORG_ADDED=0; BRF_ADDED=0;
         document.getElementById('updated').textContent='업데이트: '+DATA_GEN+' · 총 '+ALL.length+'건';
         try{ initRange(); populateFilters(); applyAndRender(); }catch(e){ console.error('render 오류:', e); }
@@ -1801,7 +1808,7 @@
     function prDelSyncStart(){ const ref=prDelRef(); if(!ref||prDelSynced) return; prDelSynced=true;
       ref.on('value', s=>{ const v=s.val()||{}; const nw=new Set(Object.values(v)); const shrank=nw.size<deletedRows.size; deletedRows=nw; saveDeleted();
         // 시트 재요청 없이 메모리에서 필터(추가 삭제) · 복원(집합 축소) 때만 재로드
-        if(typeof ALL!=='undefined'){ if(shrank){ loadData(true); } else { try{ ALL=ALL.filter(r=>!deletedRows.has(r._key)); applyAndRender(); }catch(e){} } } });
+        if(typeof ALL!=='undefined'){ if(shrank){ loadData(true); } else { try{ ALL=ALL.filter(r=>!isRowDeleted(r)); applyAndRender(); }catch(e){} } } });
       // 단신:기획:언급 비율 수기 override 동기화(전 사용자 공유)
       WK_DB.ref('prNews/ratioOverride').on('value', s=>{ const v=s.val(); prRatioOverride=v||null;
         try{ if(v) localStorage.setItem('aqaraRatioOverride',v); else localStorage.removeItem('aqaraRatioOverride'); }catch(e){}
@@ -1897,7 +1904,7 @@
     function updateDelCount(){ const n=document.querySelectorAll('#tableBody .rowchk:checked').length; const el=document.getElementById('delSelCount'); if(el) el.textContent=n?('선택 삭제 ('+n+')'):'선택 삭제'; }
     function deleteSelected(){ const chk=[...document.querySelectorAll('#tableBody .rowchk:checked')]; if(!chk.length){ alert('삭제할 기사를 체크하세요.'); return; }
       if(!confirm(chk.length+'건을 목록에서 삭제할까요? (모든 사용자에게 반영 · \'삭제 복원\'으로 되돌리기)')) return;
-      const dkeys=chk.map(c=>c.dataset.k); dkeys.forEach(k=>deletedRows.add(k)); saveDeleted(); prDelPush(dkeys); checkedKeys.clear(); ALL=ALL.filter(r=>!deletedRows.has(r._key)); applyAndRender(); }
+      const dkeys=chk.map(c=>c.dataset.k); dkeys.forEach(k=>deletedRows.add(k)); saveDeleted(); prDelPush(dkeys); checkedKeys.clear(); ALL=ALL.filter(r=>!isRowDeleted(r)); applyAndRender(); }
     function applyBulk(field, sel){ const v=sel.value; sel.value=''; if(!v) return;
       const disp=field==='구분'?'성격':field;
       const chk=[...document.querySelectorAll('#tableBody .rowchk:checked')]; if(!chk.length){ alert('먼저 분류할 기사를 체크하세요.'); return; }
