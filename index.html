@@ -1390,8 +1390,13 @@
         if(!d||!d.items||!d.items.length) return;
         const norm=normTitle;
         const seen=new Set(ALL.map(r=>norm(r['기사명'])));
+        // 제목이 …로 잘린 기사는 앞 16자로도 중복 판정(시트 동기화 스크립트와 동일 규칙)
+        const seenPre=new Set([...seen].filter(Boolean).map(k=>k.substring(0,16)));
         let added=0;
-        d.items.forEach((it,i)=>{ const k=norm(it['기사명']); if(!k||seen.has(k)) return; seen.add(k);
+        d.items.forEach((it,i)=>{ const k=norm(it['기사명']); if(!k||seen.has(k)) return;
+          const p=k.substring(0,16);
+          if(/[.…]+$/.test((it['기사명']||'').toString())&&seenPre.has(p)) return;
+          seen.add(k); seenPre.add(p);
           const r={ '기사명':it['기사명'], '매체':it['매체']||'', '게재일':it['게재일']||'', '_href':it['link']||'', '_added':true, '_key':'org§'+k };
           if(deletedRows.has(r._key)) return;   // 공유 삭제 반영(오가닉 자동수집분도 숨김 유지)
           applyRowEdit(r); deriveRow(r); r._origin='오가닉'; ALL.push(r); added++; });
