@@ -1,48 +1,44 @@
 {
- "generatedAt": "2026-08-03 20:47",
+ "generatedAt": "2026-08-04 19:58",
  "brands": [
   {
    "name": "아카라",
    "me": true,
    "query": "아카라 스마트홈",
-   "total": 1506,
+   "total": 1507,
    "sentiment": {
-    "pos": 21,
-    "neu": 37,
+    "pos": 22,
+    "neu": 36,
     "neg": 2
    },
    "keywords": [
     [
-     "IoT",
-     24
+     "AI",
+     26
     ],
     [
-     "AI",
-     23
+     "IoT",
+     25
     ],
     [
      "AIoT",
      19
     ],
     [
+     "기업",
+     16
+    ],
+    [
      "인테리어",
      16
     ],
     [
-     "기업",
+     "AX",
      15
     ],
     [
      "공간",
      13
-    ],
-    [
-     "AX",
-     12
-    ],
-    [
-     "도어락",
-     12
     ],
     [
      "공간디자인",
@@ -57,6 +53,14 @@
      10
     ],
     [
+     "도어락",
+     10
+    ],
+    [
+     "업무",
+     9
+    ],
+    [
      "전문기업",
      9
     ],
@@ -65,30 +69,26 @@
      9
     ],
     [
+     "제1회",
+     8
+    ],
+    [
+     "혁신",
+     8
+    ],
+    [
+     "사물인터넷",
+     8
+    ],
+    [
      "김현철",
-     8
-    ],
-    [
-     "포털",
-     8
-    ],
-    [
-     "가톨릭대",
-     8
-    ],
-    [
-     "산학협력",
-     8
-    ],
-    [
-     "조명",
      8
     ]
    ],
    "posWords": [
     [
      "혁신",
-     6
+     8
     ],
     [
      "글로벌",
@@ -96,7 +96,7 @@
     ],
     [
      "강화",
-     2
+     3
     ],
     [
      "주목",
@@ -124,14 +124,20 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
-    "아카라 홈캠",
     "아카라 스위치",
+    "아카라 홈캠",
     "아카라 l100",
     "아카라카",
     "아카라이브 핫딜",
-    "젠존제 아카라이브"
+    "아카라카초"
    ],
    "recent": [
+    {
+     "title": "아카라라이프, '제1회 AX 업무 혁신 사내 경진대회' 마무리…비개발자도...",
+     "source": "bizwnews.com",
+     "date": "2026-08-04",
+     "link": "http://www.bizwnews.com/news/articleView.html?idxno=142336"
+    },
     {
      "title": "아카라라이프, 제1회 AX 업무 혁신 사내 경진대회 개최",
      "source": "머니투데이",
@@ -215,12 +221,6 @@
      "source": "dailyt.co.kr",
      "date": "2026-07-08",
      "link": "https://www.dailyt.co.kr/newsView/dlt202607070013"
-    },
-    {
-     "title": "“지문으로 0.3초 만에 인식” 280만 유튜버 '잇섭'도 꽂힌 그 제품 뭐길...",
-     "source": "전자신문",
-     "date": "2026-06-30",
-     "link": "https://n.news.naver.com/mnews/article/030/0003442917?sid=105"
     }
    ]
   },
@@ -352,7 +352,7 @@
     "헤이홈 공유",
     "헤이홈 오프라인",
     "헤이홈 프로",
-    "헤이홈 허브"
+    "헤이홈 카메라"
    ],
    "recent": [
     {
@@ -451,98 +451,94 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67333,
+   "total": 67342,
    "sentiment": {
-    "pos": 28,
-    "neu": 31,
+    "pos": 24,
+    "neu": 35,
     "neg": 1
    },
    "keywords": [
     [
      "히트펌프",
-     77
-    ],
-    [
-     "보일러",
-     41
-    ],
-    [
-     "EHS",
-     35
-    ],
-    [
-     "원격",
-     32
-    ],
-    [
-     "터치",
-     29
-    ],
-    [
-     "실내",
-     28
-    ],
-    [
-     "출수",
-     28
-    ],
-    [
-     "가정용",
-     25
-    ],
-    [
-     "기능을",
-     25
+     66
     ],
     [
      "AI",
+     34
+    ],
+    [
+     "보일러",
+     34
+    ],
+    [
+     "EHS",
+     30
+    ],
+    [
+     "원격",
+     27
+    ],
+    [
+     "터치",
      24
     ],
     [
-     "난방",
+     "실내",
      24
     ],
     [
-     "설치",
+     "출수",
      24
-    ],
-    [
-     "가능하다",
-     24
-    ],
-    [
-     "주요",
-     23
-    ],
-    [
-     "온도와",
-     23
-    ],
-    [
-     "조작할",
-     21
     ],
     [
      "삼성전자는",
+     22
+    ],
+    [
+     "난방",
+     22
+    ],
+    [
+     "기능을",
+     21
+    ],
+    [
+     "가능하다",
+     21
+    ],
+    [
+     "주요",
      20
     ],
     [
-     "온도",
+     "온도와",
+     20
+    ],
+    [
+     "가정용",
      19
+    ],
+    [
+     "모듈러",
+     18
+    ],
+    [
+     "조작할",
+     18
+    ],
+    [
+     "설치",
+     17
     ]
    ],
    "posWords": [
     [
      "확대",
-     15
+     13
     ],
     [
      "공략",
-     9
-    ],
-    [
-     "최초",
-     4
+     7
     ],
     [
      "성장",
@@ -553,31 +549,85 @@
      3
     ],
     [
+     "최초",
+     3
+    ],
+    [
      "돌파",
      1
     ],
     [
      "협업",
      1
-    ],
-    [
-     "기대",
-     1
     ]
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스 허브",
     "삼성 스마트싱스",
+    "삼성 스마트싱스 허브",
+    "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 파인드",
     "아이폰 삼성 스마트싱스",
     "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 아이폰",
-    "삼성 스마트싱스 선풍기"
+    "삼성 스마트싱스 선풍기",
+    "삼성 스마트싱스 오프라인"
    ],
    "recent": [
+    {
+     "title": "역대급 폭염에 산업현장 '비상'…휴식 늘리고 AI로 건강관리",
+     "source": "이데일리",
+     "date": "2026-08-04",
+     "link": "https://n.news.naver.com/mnews/article/018/0006344171?sid=103"
+    },
+    {
+     "title": "LG전자, 모듈러 주택 판 키운다…실거주형·홈쇼핑으로 선점 굳히기",
+     "source": "seouleconews.com",
+     "date": "2026-08-04",
+     "link": "http://www.seouleconews.com/news/articleView.html?idxno=92840"
+    },
+    {
+     "title": "[모듈러 홈 전쟁] [삼성전자] 1만호 청사진…성패는 기술 아닌 제도에",
+     "source": "dealsite.co.kr",
+     "date": "2026-08-04",
+     "link": "https://dealsite.co.kr/articles/166475"
+    },
+    {
+     "title": "[가전 트렌드] 삼성전자, '2026 대한민국 올해의 녹색상품'서 16개 제품 ...",
+     "source": "ibabynews.com",
+     "date": "2026-08-04",
+     "link": "https://www.ibabynews.com/news/articleView.html?idxno=153434"
+    },
+    {
+     "title": "삼성전자·LG전자가 만든 스마트 주거 플랫폼 '모듈러 주택'",
+     "source": "woman.chosun.com",
+     "date": "2026-08-04",
+     "link": "http://woman.chosun.com/news/articleView.html?idxno=126363"
+    },
+    {
+     "title": "\"삼성에 안 뺏겨\"… LG전자, 모듈러 주택 선발 주자 굳히기",
+     "source": "it.chosun.com",
+     "date": "2026-08-04",
+     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092167191"
+    },
+    {
+     "title": "유럽 휩쓴 '히트펌프' 韓 상륙…삼성·LG 제주서 주도권 쟁탈전",
+     "source": "ebn.co.kr",
+     "date": "2026-08-04",
+     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1718837"
+    },
+    {
+     "title": "빌트인 가전의 반전, ‘AI홈’ 전쟁 시작됐다",
+     "source": "seoul.co.kr",
+     "date": "2026-08-04",
+     "link": "https://n.news.naver.com/mnews/article/081/0003667243?sid=101"
+    },
+    {
+     "title": "AI·웨어러블 장착…더위 스마트 관리",
+     "source": "seoul.co.kr",
+     "date": "2026-08-04",
+     "link": "https://n.news.naver.com/mnews/article/081/0003667251?sid=101"
+    },
     {
      "title": "폭염 대응 의무화에 달라진 산업현장…AI·웨어러블 장착, 더위 스마트...",
      "source": "seoul.co.kr",
@@ -613,60 +663,6 @@
      "source": "kookje.co.kr",
      "date": "2026-08-02",
      "link": "https://n.news.naver.com/mnews/article/658/0000151187?sid=101"
-    },
-    {
-     "title": "LG전자 '모듈러 주택' 홈쇼핑에서도 판다",
-     "source": "한국경제",
-     "date": "2026-08-02",
-     "link": "https://n.news.naver.com/mnews/article/015/0005316478?sid=101"
-    },
-    {
-     "title": "'홈쇼핑에서 집을 산다'... LG.삼성, AI 모듈러주택 시장 공략 '한창'",
-     "source": "metroseoul.co.kr",
-     "date": "2026-08-02",
-     "link": "http://www.metroseoul.co.kr/article/20260802500202"
-    },
-    {
-     "title": "‘30평에 1.5억’ 이젠 집도 만드는 삼성·LG…“3개월 만에 완공” 모듈...",
-     "source": "서울경제",
-     "date": "2026-08-02",
-     "link": "https://n.news.naver.com/mnews/article/011/0004647719?sid=101"
-    },
-    {
-     "title": "TV 홈쇼핑서 주택도 판다",
-     "source": "한국경제",
-     "date": "2026-08-02",
-     "link": "https://n.news.naver.com/mnews/article/015/0005316392?sid=101"
-    },
-    {
-     "title": "유럽서 키운 히트펌프…삼성·LG, 국내 주거시장 공략 ‘속도’",
-     "source": "etoday.co.kr",
-     "date": "2026-08-02",
-     "link": "https://www.etoday.co.kr/news/view/2609745"
-    },
-    {
-     "title": "스마트폰·TV 말고 집도 팝니다…삼성·LG가 만드는 'AI 모듈러 주택' [수...",
-     "source": "segye.com",
-     "date": "2026-08-02",
-     "link": "https://n.news.naver.com/mnews/article/022/0004147718?sid=101"
-    },
-    {
-     "title": "난방 전기화 이끄는 삼성·LG…제주서 히트펌프 경쟁 본격화",
-     "source": "newstomato.com",
-     "date": "2026-08-02",
-     "link": "http://www.newstomato.com/ReadNews.aspx?no=1308951&inflow=N"
-    },
-    {
-     "title": "홈쇼핑서 '집'도 판다…LG전자, CJ온스타일서 모듈러주택 '스마트코티지...",
-     "source": "livebiz.today",
-     "date": "2026-08-02",
-     "link": "https://www.livebiz.today/news/articleView.html?idxno=203760"
-    },
-    {
-     "title": "SKT '달리기' vs KT '안전'...통신사, 웨어러블 시장 '격돌'",
-     "source": "techm.kr",
-     "date": "2026-08-02",
-     "link": "https://www.techm.kr/news/articleView.html?idxno=153914"
     }
    ]
   },
@@ -674,51 +670,51 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77003,
+   "total": 77007,
    "sentiment": {
-    "pos": 44,
-    "neu": 16,
+    "pos": 46,
+    "neu": 14,
     "neg": 0
    },
    "keywords": [
     [
      "히트펌프",
-     76
+     77
     ],
     [
      "LG전자",
-     58
-    ],
-    [
-     "R32",
-     43
+     61
     ],
     [
      "원격",
-     43
+     44
+    ],
+    [
+     "R32",
+     44
     ],
     [
      "낮은",
-     41
+     42
     ],
     [
      "냉매를",
-     41
+     42
     ],
     [
      "제주",
      39
     ],
     [
-     "LG전자는",
+     "지구온난화지수",
      35
     ],
     [
-     "지구온난화지수",
-     34
+     "GWP",
+     35
     ],
     [
-     "GWP",
+     "LG전자는",
      34
     ],
     [
@@ -727,7 +723,7 @@
     ],
     [
      "제어",
-     32
+     33
     ],
     [
      "난방",
@@ -738,26 +734,26 @@
      29
     ],
     [
+     "글로벌",
+     28
+    ],
+    [
      "전기화",
      28
     ],
     [
-     "글로벌",
-     27
-    ],
-    [
      "ThinQ",
-     23
+     25
     ],
     [
      "시장에서",
-     22
+     23
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     27
+     28
     ],
     [
      "1위",
@@ -769,38 +765,64 @@
     ],
     [
      "확대",
-     8
+     9
     ],
     [
      "공략",
-     7
+     8
     ],
     [
      "선도",
      4
     ],
     [
-     "주목",
-     1
-    ],
-    [
-     "최초",
+     "프리미엄",
      1
     ]
    ],
    "related": [
-    "lg 씽큐",
     "lg 씽큐온",
+    "lg 씽큐",
     "lg 씽큐 공유",
     "lg 씽큐 연결 안됨",
-    "lg 씽큐 허브",
     "lg 씽큐 세탁기",
+    "lg 씽큐 허브",
     "lg 씽큐 앱",
-    "lg 씽큐 냉장고",
-    "lg 씽큐 어플 오류",
-    "lg 씽큐 에어컨 청소"
+    "lg 씽큐 연결",
+    "lg 씽큐 티비연결",
+    "lg 씽큐 냉장고"
    ],
    "recent": [
+    {
+     "title": "LG전자, AI홈 SoC 풀 라인업 국산화…프리미엄부터 엔트리까지",
+     "source": "전자신문",
+     "date": "2026-08-04",
+     "link": "https://n.news.naver.com/mnews/article/030/0003454155?sid=105"
+    },
+    {
+     "title": "삼성전자·LG전자가 만든 스마트 주거 플랫폼 '모듈러 주택'",
+     "source": "woman.chosun.com",
+     "date": "2026-08-04",
+     "link": "http://woman.chosun.com/news/articleView.html?idxno=126363"
+    },
+    {
+     "title": "LG전자, 냉난방공조 라인업 확대…중동·유럽 공략 가속도",
+     "source": "디지털타임스",
+     "date": "2026-08-04",
+     "link": "https://n.news.naver.com/mnews/article/029/0003040484?sid=101"
+    },
+    {
+     "title": "빌트인 가전의 반전, ‘AI홈’ 전쟁 시작됐다",
+     "source": "seoul.co.kr",
+     "date": "2026-08-04",
+     "link": "https://n.news.naver.com/mnews/article/081/0003667243?sid=101"
+    },
+    {
+     "title": "LG전자, 제주도 450가구에 히트펌프 설치 시작",
+     "source": "e2news.com",
+     "date": "2026-08-04",
+     "link": "http://www.e2news.com/news/articleView.html?idxno=332935"
+    },
     {
      "title": "'국내 히트펌프 시장 선도'…LG전자, 제주 공식 1호 현판식 개최",
      "source": "ppss.kr",
@@ -860,36 +882,6 @@
      "source": "newslock.co.kr",
      "date": "2026-08-02",
      "link": "http://www.newslock.co.kr/news/articleView.html?idxno=133817"
-    },
-    {
-     "title": "EU 'AI 법' 발효…삼성·LG, 유럽향 AI 가전 '투명성 표기' 선제 대응",
-     "source": "ajunews.com",
-     "date": "2026-08-02",
-     "link": "https://www.ajunews.com/view/20260802145635368"
-    },
-    {
-     "title": "‘30평에 1.5억’ 이젠 집도 만드는 삼성·LG…“3개월 만에 완공” 모듈...",
-     "source": "서울경제",
-     "date": "2026-08-02",
-     "link": "https://n.news.naver.com/mnews/article/011/0004647719?sid=101"
-    },
-    {
-     "title": "LG전자, 제주 히트펌프 보급사업 1위 사업자 선정, 국내 난방 전기화 시...",
-     "source": "businessplus.kr",
-     "date": "2026-08-02",
-     "link": "https://www.businessplus.kr/news/articleView.html?idxno=114956"
-    },
-    {
-     "title": "LG전자, 제주 히트펌프 보급사업 본격화…1호 현판식 개최",
-     "source": "metroseoul.co.kr",
-     "date": "2026-08-02",
-     "link": "http://www.metroseoul.co.kr/article/20260802500184"
-    },
-    {
-     "title": "유럽서 키운 히트펌프…삼성·LG, 국내 주거시장 공략 ‘속도’",
-     "source": "etoday.co.kr",
-     "date": "2026-08-02",
-     "link": "https://www.etoday.co.kr/news/view/2609745"
     }
    ]
   },
@@ -897,63 +889,71 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75343,
+   "total": 75354,
    "sentiment": {
-    "pos": 24,
-    "neu": 28,
-    "neg": 8
+    "pos": 26,
+    "neu": 27,
+    "neg": 7
    },
    "keywords": [
     [
      "AI",
-     38
+     41
     ],
     [
      "스파이더맨",
-     15
+     18
     ],
     [
      "번역한",
-     14
+     16
     ],
     [
      "기사의",
-     14
+     16
     ],
     [
      "전문",
-     14
+     16
     ],
     [
      "으로",
-     13
+     15
     ],
     [
      "입니다",
-     13
+     15
     ],
     [
      "아래는",
-     12
+     14
     ],
     [
      "기사를",
-     12
+     14
     ],
     [
      "번역",
-     12
+     14
     ],
     [
      "구글번역",
-     11
-    ],
-    [
-     "데이",
-     10
+     13
     ],
     [
      "제미나이",
+     12
+    ],
+    [
+     "데이",
+     12
+    ],
+    [
+     "사건으로",
+     8
+    ],
+    [
+     "한편",
      8
     ],
     [
@@ -961,37 +961,37 @@
      8
     ],
     [
-     "한편",
+     "Gemini",
      7
     ],
     [
-     "업무",
+     "이미지",
      7
-    ],
-    [
-     "아임웹",
-     7
-    ],
-    [
-     "웨이",
-     6
     ]
    ],
    "posWords": [
+    [
+     "투자",
+     7
+    ],
     [
      "우수",
      6
     ],
     [
      "개선",
-     4
-    ],
-    [
-     "투자",
-     3
+     5
     ],
     [
      "돌파",
+     4
+    ],
+    [
+     "파트너십",
+     3
+    ],
+    [
+     "성장",
      3
     ],
     [
@@ -1001,14 +1001,6 @@
     [
      "1위",
      3
-    ],
-    [
-     "협업",
-     3
-    ],
-    [
-     "파트너십",
-     2
     ]
    ],
    "related": [
@@ -1016,14 +1008,80 @@
     "구글 홈",
     "구글 홈 허브",
     "구글 홈 미니",
-    "구글 홈 미니 연결",
     "구글 홈페이지",
+    "구글 홈 미니 연결",
     "구글 홈 미니 초기화",
     "구글 홈 연결",
     "구글 홈 초기화",
-    "구글 홈버튼"
+    "구글 홈 미니 사용법"
    ],
    "recent": [
+    {
+     "title": "충북혁신도시 공유평생학습관, 14일까지 하반기 7개 분야 맞춤형 강좌 ...",
+     "source": "breaknews.com",
+     "date": "2026-08-04",
+     "link": "http://www.breaknews.com/1226647"
+    },
+    {
+     "title": "\"MBK 먼저 받고 피해자는 10년?\"…홈플러스 전단채 피해자, DIP 손질 촉구",
+     "source": "joongangenews.com",
+     "date": "2026-08-04",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=537698"
+    },
+    {
+     "title": "MBK 잇단 리스크에도 \"고려아연은 예외\"…투자자 신뢰, 도덕적 해이 논...",
+     "source": "joongangenews.com",
+     "date": "2026-08-04",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=537693"
+    },
+    {
+     "title": "파리 생제르맹, 구글과 AI 파트너십...'제미나이' 공식 어시스턴트 도입",
+     "source": "aitimes.com",
+     "date": "2026-08-04",
+     "link": "https://www.aitimes.com/news/articleView.html?idxno=213517"
+    },
+    {
+     "title": "[전자는 지금] SK하이닉스-샌디스크, HBF 첫 표준 규격 공개 外",
+     "source": "dealsite.co.kr",
+     "date": "2026-08-04",
+     "link": "https://dealsite.co.kr/articles/166521"
+    },
+    {
+     "title": "오세훈 서울시장, 정부 부동산 세제정책에 '세금지옥'이라 맞선 이유?",
+     "source": "breaknews.com",
+     "date": "2026-08-04",
+     "link": "http://www.breaknews.com/1226565"
+    },
+    {
+     "title": "‘스파이더맨: 브랜드 뉴 데이’, 개봉 7일째 400만 돌파..올해 최단 속...",
+     "source": "breaknews.com",
+     "date": "2026-08-04",
+     "link": "http://www.breaknews.com/1226547"
+    },
+    {
+     "title": "샘모바일 “갤럭시 Z폴드8에서 광속으로 변경해야 할 10가지” 제안",
+     "source": "디지털타임스",
+     "date": "2026-08-04",
+     "link": "https://n.news.naver.com/mnews/article/029/0003040498?sid=104"
+    },
+    {
+     "title": "뉴욕증시 다우지수 '사상 최고'...보잉·알파벳A·MSFT·아마존 '급등'",
+     "source": "choicenews.co.kr",
+     "date": "2026-08-04",
+     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=169271"
+    },
+    {
+     "title": "빌트인 가전의 반전, ‘AI홈’ 전쟁 시작됐다",
+     "source": "seoul.co.kr",
+     "date": "2026-08-04",
+     "link": "https://n.news.naver.com/mnews/article/081/0003667243?sid=101"
+    },
+    {
+     "title": "[투자를IT다] 2026년 7월 5주차 IT기업 주요 소식과 시장 전망",
+     "source": "it.donga.com",
+     "date": "2026-08-03",
+     "link": "https://it.donga.com/109300/"
+    },
     {
      "title": "송인헌 괴산군수, 인구감소지역협의회 이끌 적임자로 재신임… 맞춤형...",
      "source": "breaknews.com",
@@ -1047,72 +1105,6 @@
      "source": "이데일리",
      "date": "2026-08-03",
      "link": "https://n.news.naver.com/mnews/article/018/0006343256?sid=105"
-    },
-    {
-     "title": "가짜 전쟁도 만들어…구글어스 AI, 공개 하루 만에 긴급 중단",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-08-03",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=689327"
-    },
-    {
-     "title": "살린다더니 결국 인력 줄인다?…홈플러스, 30% 유급휴직에 MBK 책임론 재...",
-     "source": "joongangenews.com",
-     "date": "2026-08-03",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=537289"
-    },
-    {
-     "title": "챗GPT 광고주 820곳 돌파…오픈AI, 10억 이용자 기반 수익화 속도",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-08-03",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=689280"
-    },
-    {
-     "title": "이찬일의 글로벌 경제 브리프 233-1",
-     "source": "woodkorea.co.kr",
-     "date": "2026-08-03",
-     "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=90598"
-    },
-    {
-     "title": "구글, 음성 검색 UI 개편... 서치 라이브·AI 모드 바로 쓴다",
-     "source": "ditoday.com",
-     "date": "2026-08-03",
-     "link": "https://ditoday.com/%ea%b5%ac%ea%b8%80-%ec%9d%8c%ec%84%b1-%ea%b2%80%ec%83%89-ui-%ea%b0%9c%ed%8e%b8-%ec%84%9c%ec%b9%98-%eb%9d%bc%ec%9d%b4%eb%b8%8c%c2%b7ai-%eb%aa%a8%eb%93%9c-%eb%b0%94%eb%a1%9c-%ec%93%b4%eb%8b%a4/"
-    },
-    {
-     "title": "창작의 열정에 생존 전략을 더하다, 글로벌 도약 꿈꾸는 BIC 2026",
-     "source": "gamevu.co.kr",
-     "date": "2026-08-03",
-     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=59767"
-    },
-    {
-     "title": "덩치 아닌 효율로 승부한다… 빅테크들 ‘AI모델 다이어트’[ICT]",
-     "source": "munhwa.com",
-     "date": "2026-08-03",
-     "link": "https://n.news.naver.com/mnews/article/021/0002808659?sid=101"
-    },
-    {
-     "title": "‘스파이더맨: 브랜드 뉴 데이’, 5일 연속 박스오피스 1위..2위 ‘호프...",
-     "source": "breaknews.com",
-     "date": "2026-08-03",
-     "link": "http://www.breaknews.com/1226124"
-    },
-    {
-     "title": "SK인텔릭스, 웰니스 로봇 '나무엑스' 신규 광고 공개...\"로봇과 함께 사...",
-     "source": "popcornnews.net",
-     "date": "2026-08-03",
-     "link": "http://www.popcornnews.net/news/articleView.html?idxno=128418"
-    },
-    {
-     "title": "“집, 짓지 말고 홈쇼핑 주문하세요”",
-     "source": "seoul.co.kr",
-     "date": "2026-08-03",
-     "link": "https://n.news.naver.com/mnews/article/081/0003666875?sid=101"
-    },
-    {
-     "title": "EU 'AI 법' 발효…삼성·LG, 유럽향 AI 가전 '투명성 표기' 선제 대응",
-     "source": "ajunews.com",
-     "date": "2026-08-02",
-     "link": "https://www.ajunews.com/view/20260802145635368"
     }
    ]
   }
