@@ -4,7 +4,8 @@
 //  - 정적 파일·데이터(json)까지 모두 이 미들웨어를 거치므로 함께 보호됨
 export const config = {
   // /api/auth/* (로그인 처리) 와 내부 리소스는 제외하고 나머지 전부 보호
-  matcher: ['/((?!api/auth|_next|favicon.ico|robots.txt|sitemap.xml).*)'],
+  // 파비콘 파일은 로그인 화면에서도 떠야 하므로 제외 대상에 포함
+  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml).*)'],
 };
 
 function fromB64url(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; return atob(s); }
