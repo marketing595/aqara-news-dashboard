@@ -263,6 +263,7 @@
           <button onclick="applyBulkAll()" class="text-sm bg-[#5B44C7] text-white hover:brightness-110 px-4 py-2 rounded-lg font-bold">반영하기</button>
           <span class="flex-1 min-w-[8px]"></span>
           <button onclick="deleteSelected()" class="text-sm border border-ared/40 text-ared hover:bg-ared/5 px-3 py-2 rounded-lg font-semibold" title="체크한 기사 삭제"><span id="delSelCount">선택 삭제</span></button>
+          <button onclick="copyDeletedList()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg font-semibold text-slate-600" title="삭제한 기사 제목을 복사 → 구글 시트 [삭제요청] 탭에 붙여넣으면 [삭제 기사] 시트로 옮겨집니다">삭제 목록 복사</button>
           <button onclick="restoreDeleted()" class="text-sm border border-slate-300 hover:bg-slate-50 px-3 py-2 rounded-lg text-slate-500" title="숨긴(삭제한) 기사 모두 복원">삭제 복원</button>
         </div>
         <p class="text-[11px] text-slate-400 mb-1">※ <b>배포 구분</b>: 기본은 <b class="text-brand-ink">자사보도</b>(우리가 배포), 제목이 <b>타사 발신사</b> 이름으로 시작하면 <b>오가닉</b>(제3자 발행)으로 분류. <button onclick="addOriginOther()" class="text-ink font-semibold hover:underline">오가닉 발신사 추가 +</button></p>
@@ -1369,6 +1370,7 @@
     // 네이버 추가 수집 기사(organic_news.json) 병합 — 시트에 없는 건 오가닉으로 추가
     let ORG_ADDED=0, BRF_ADDED=0, DATA_GEN='';
     const normTitle=s=>(s||'').toString().replace(/[^0-9A-Za-z가-힣]/g,'');
+    let ORGTITLE={};   // 정규화 제목 → 원제목(자동수집분). 삭제 목록을 사람이 읽는 제목으로 복원할 때 사용
     // 삭제 판정: 시트에 적재된 자동수집분도, 예전에 대시보드에서 지운 오가닉/브리핑 키로 계속 숨긴다
     // (시트 동기화로 다시 들어와도 지웠던 기사가 되살아나지 않게)
     function isRowDeleted(r){
@@ -1393,7 +1395,9 @@
         // 제목이 …로 잘린 기사는 앞 16자로도 중복 판정(시트 동기화 스크립트와 동일 규칙)
         const seenPre=new Set([...seen].filter(Boolean).map(k=>k.substring(0,16)));
         let added=0;
-        d.items.forEach((it,i)=>{ const k=norm(it['기사명']); if(!k||seen.has(k)) return;
+        d.items.forEach((it,i)=>{ const k=norm(it['기사명']); if(!k) return;
+          ORGTITLE[k]=it['기사명'];        // 삭제 목록을 원제목으로 되살리기 위한 표
+          if(seen.has(k)) return;
           const p=k.substring(0,16);
           if(/[.…]+$/.test((it['기사명']||'').toString())&&seenPre.has(p)) return;
           seen.add(k); seenPre.add(p);
@@ -1418,6 +1422,7 @@
         days.forEach(day=>{ ((bs[day]||{}).rows||[]).forEach(it=>{
           if((it.cat||'')!=='자사') return;                       // 자사 관련 기사만 뉴스 목록에 반영
           const title=(it.t||'').toString().replace(/[.…]+$/,'').trim();
+          ORGTITLE[normTitle(title)]=title;
           const k=pre(title), lk=linkKey(it.link);
           if(!k||seen.has(k)||(lk&&seenLink.has(lk))) return;
           seen.add(k); if(lk) seenLink.add(lk);
@@ -1826,6 +1831,21 @@
       const ref=(typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('prNews/ratioOverride'):null;
       if(ref){ if(val) ref.set(val).catch(()=>{}); else ref.remove().catch(()=>{}); }
       try{ applyAndRender(); }catch(e){} }
+    // 삭제한 기사 제목을 클립보드로 복사 → 구글 시트 [삭제요청] 탭에 붙여넣어 [삭제 기사] 시트로 옮기는 용도
+    function copyDeletedList(){
+      const out=[];
+      deletedRows.forEach(k=>{ if(!k) return;
+        if(k.indexOf('org§')===0||k.indexOf('brf§')===0){ const n=k.slice(4); out.push(ORGTITLE[n]||n); }
+        else out.push(k.split('§')[0]); });
+      const list=[...new Set(out)].filter(Boolean);
+      if(!list.length){ alert('삭제한 기사가 없습니다.'); return; }
+      const done=()=>alert(list.length+'건의 기사 제목을 복사했습니다.\n\n구글 시트 → [삭제요청] 탭 A2에 붙여넣기 →\n[아카라 뉴스] > [[삭제요청] 시트 목록을 옮기기] 실행하면\n[삭제 기사] 시트로 옮겨집니다.');
+      const txt=list.join('\n');
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done).catch(()=>copyFallback(txt,done)); }
+      else copyFallback(txt,done);
+    }
+    function copyFallback(txt,cb){ const ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.left='-9999px';
+      document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove(); cb&&cb(); }
     let editingKey=null, TABLE_ROWS=[];
     function deleteRow(){ if(!editingKey) return; if(!confirm('이 기사를 목록에서 삭제할까요? (모든 사용자에게 반영 · 되돌리려면 \'삭제 복원\')')) return;
       deletedRows.add(editingKey); saveDeleted(); prDelPush([editingKey]); ALL=ALL.filter(r=>r._key!==editingKey); editingKey=null; applyAndRender(); }
