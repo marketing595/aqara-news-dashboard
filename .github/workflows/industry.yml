@@ -1,0 +1,41 @@
+name: Industry News
+
+# 업계 뉴스(인테리어·스마트홈·도어락·시장) 수집 → industry_news.json
+# 매일 한국 07시 30분 + 수동 + 크롤러/워크플로 변경 시
+on:
+  schedule:
+    - cron: '30 22 * * *'   # 07:30 KST
+  workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/industry.yml'
+      - 'crawler/industry_fetch.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: industry-news
+  cancel-in-progress: false
+
+jobs:
+  industry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Fetch industry news
+        env:
+          NAVER_ID: ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+        run: python crawler/industry_fetch.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add industry_news.json
+          git diff --staged --quiet || git commit -m "industry_news.json 자동 갱신"
+          git push
