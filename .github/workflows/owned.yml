@@ -1,9 +1,11 @@
 name: Owned Media
 
-# 매일 09:50(UTC)=한국 18:50 자사 유튜브 채널 지표 수집 → owned.json
+# 자사 채널(유튜브·인스타·블로그) 지표 수집 → owned.json
+# 하루 2회: 한국 07:50 / 18:50 — 오후에 올린 블로그 글이 다음 날 아침에는 반영되도록
 on:
   schedule:
-    - cron: '50 9 * * *'
+    - cron: '50 9 * * *'    # 18:50 KST
+    - cron: '50 22 * * *'   # 07:50 KST
   workflow_dispatch: {}
   push:
     paths:

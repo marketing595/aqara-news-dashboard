@@ -644,7 +644,7 @@
      </section>
      <section class="card p-5">
        <div class="flex flex-wrap items-center justify-between mb-3 gap-3">
-         <h3 class="accent font-extrabold text-ink">발행 글 <span id="ownedBlogCount" class="text-sm font-normal text-slate-400"></span></h3>
+         <h3 class="accent font-extrabold text-ink">발행 글 <span id="ownedBlogCount" class="text-sm font-normal text-slate-400"></span> <span id="ownedBlogStamp" class="text-[11px] font-normal text-slate-400"></span></h3>
          <div class="flex flex-wrap gap-2 items-center">
            <input id="ownedBlogFrom" type="date" onchange="renderOwnedBlog()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" />
            <span class="text-slate-400 text-xs">~</span>
@@ -4032,6 +4032,9 @@
       const rows=all.filter(p=>(!bf||p.blogName===bf)&&(!nq||(p.title||'').toLowerCase().replace(/\s+/g,'').indexOf(nq)>-1)&&(!from||(p.date&&p.date>=from))&&(!to||(p.date&&p.date<=to)));
       const filt=bf||nq||from||to;
       document.getElementById('ownedBlogCount').textContent=filt?('· '+rows.length+'/'+all.length+'개'):('· 총 '+all.length+'개');
+      const bstamp=document.getElementById('ownedBlogStamp');   // 수집 시각 표시(반영 지연 여부를 바로 알 수 있게)
+      if(bstamp){ const bg=((OWNED.blog&&OWNED.blog.blogs)||[])[0]||{};
+        bstamp.textContent=bg.fetchedAt?('· 수집 '+bg.fetchedAt+(bg.status&&bg.status!=='api+rss'?' ('+bg.status+')':'')):''; }
       document.getElementById('ownedBlogBody').innerHTML=rows.length?rows.map(p=>`<div class="py-2.5 flex items-baseline gap-3">
         <span class="text-xs text-slate-400 num whitespace-nowrap w-24 shrink-0">${esc(p.date||'-')}</span>
         <a href="${esc(p.link)}" target="_blank" rel="noopener" class="lnk text-sm font-medium flex-1 min-w-0">${esc(p.title)} <span class="text-slate-300 text-xs">↗</span></a>

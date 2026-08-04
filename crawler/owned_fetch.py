@@ -94,34 +94,61 @@ def _blog_via_rss(bid):
     return posts, len(posts)
 
 
+def _post_key(p):
+    """같은 글 판정: 링크의 logNo 우선, 없으면 제목."""
+    m = re.search(r"/(\d{6,})(?:\?|$)", p.get("link", "") or "")
+    return m.group(1) if m else re.sub(r"[^0-9A-Za-z가-힣]", "", p.get("title", "") or "")
+
+
 def _one_blog(bid):
-    posts, total = [], 0
+    """API(전체 목록) + RSS(최근 50건)를 '항상 둘 다' 받아 병합한다.
+       API만 쓰면 ①호출 실패 시 조용히 옛 목록이 남고 ②최근 글 addDate가 '18시간 전'처럼
+       상대시간으로 와서 날짜가 흔들린다. RSS는 정확한 발행시각을 주므로 최신 글 확보용으로 병용."""
+    api_posts, api_total, rss_posts = [], 0, []
     try:
-        posts, total = _blog_via_api(bid)
+        api_posts, api_total = _blog_via_api(bid)
     except Exception as e:
         print("blog API 실패(%s):" % bid, e)
-    if not posts:
-        try:
-            posts, total = _blog_via_rss(bid)
-            print("blog RSS 폴백(%s):" % bid, len(posts))
-        except Exception as e:
-            print("blog RSS 실패(%s):" % bid, e)
-    posts.sort(key=lambda x: x["date"], reverse=True)
-    return posts, (total or len(posts))
+    try:
+        rss_posts, _ = _blog_via_rss(bid)
+    except Exception as e:
+        print("blog RSS 실패(%s):" % bid, e)
+
+    merged, seen = [], {}
+    for p in api_posts + rss_posts:                 # API 목록이 기준, RSS에만 있는 최신 글을 보강
+        if not p.get("title"):
+            continue
+        k = _post_key(p)
+        if k in seen:
+            old = seen[k]
+            if not old.get("date") and p.get("date"):   # 상대시간으로 비었던 날짜를 RSS 값으로 보정
+                old["date"] = p["date"]
+            continue
+        seen[k] = p
+        merged.append(p)
+    added = len(merged) - len(api_posts)
+    if added > 0:
+        print("blog RSS 보강(%s): +%d건" % (bid, added))
+
+    merged.sort(key=lambda x: x.get("date") or "", reverse=True)
+    status = ("api+rss" if api_posts and rss_posts else "api" if api_posts else "rss" if rss_posts else "fail")
+    return merged, max(api_total, len(merged)), status
 
 
 def fetch_blog():
     """관리 블로그 여러 개의 전체 글 수집 → {blogs:[...], total, recent30}. 조회수는 정책상 비공개."""
     cutoff = (datetime.datetime.utcnow() + datetime.timedelta(hours=9) - datetime.timedelta(days=30)).strftime("%Y-%m-%d")
     blogs = []
+    now = (datetime.datetime.utcnow() + datetime.timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
     for b in BLOGS:
-        posts, total = _one_blog(b["id"])
+        posts, total, status = _one_blog(b["id"])
         if not posts and total == 0:
-            print("blog 건너뜀(글없음):", b["id"])
+            print("blog 건너뜀(수집 실패):", b["id"], status)
             continue
-        r30 = sum(1 for p in posts if p["date"] >= cutoff)
+        r30 = sum(1 for p in posts if (p.get("date") or "") >= cutoff)
         blogs.append({"id": b["id"], "name": b["name"], "url": "https://blog.naver.com/%s" % b["id"],
-                      "total": total, "recent30": r30, "recent": posts})
+                      "total": total, "recent30": r30, "status": status, "fetchedAt": now,
+                      "latest": (posts[0].get("date") if posts else ""), "recent": posts})
     if not blogs:
         return None
     return {"blogs": blogs,
