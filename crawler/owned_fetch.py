@@ -3,7 +3,7 @@
    채널 통계(구독자·총조회·영상수) + 최근 업로드 12개(조회·좋아요·댓글).
    Instagram은 정책상 자동수집 불가 → 기존 owned.json의 instagram 블록을 보존(수기 관리).
    GitHub Actions 매일 실행. 키: YT_API_KEY."""
-import os, json, re, html, datetime
+import os, json, re, html, time, datetime
 from urllib.parse import unquote_plus
 import requests
 
@@ -105,14 +105,21 @@ def _one_blog(bid):
        API만 쓰면 ①호출 실패 시 조용히 옛 목록이 남고 ②최근 글 addDate가 '18시간 전'처럼
        상대시간으로 와서 날짜가 흔들린다. RSS는 정확한 발행시각을 주므로 최신 글 확보용으로 병용."""
     api_posts, api_total, rss_posts = [], 0, []
-    try:
-        api_posts, api_total = _blog_via_api(bid)
-    except Exception as e:
-        print("blog API 실패(%s):" % bid, e)
-    try:
-        rss_posts, _ = _blog_via_rss(bid)
-    except Exception as e:
-        print("blog RSS 실패(%s):" % bid, e)
+    for attempt in (1, 2):          # Actions IP에서 간헐적으로 막히므로 1회 재시도
+        try:
+            api_posts, api_total = _blog_via_api(bid)
+            break
+        except Exception as e:
+            print("blog API 실패(%s, %d차):" % (bid, attempt), e)
+            time.sleep(2)
+    for attempt in (1, 2):
+        try:
+            rss_posts, _ = _blog_via_rss(bid)
+            if rss_posts:
+                break
+        except Exception as e:
+            print("blog RSS 실패(%s, %d차):" % (bid, attempt), e)
+            time.sleep(2)
 
     merged, seen = [], {}
     for p in api_posts + rss_posts:                 # API 목록이 기준, RSS에만 있는 최신 글을 보강
@@ -133,6 +140,29 @@ def _one_blog(bid):
     merged.sort(key=lambda x: x.get("date") or "", reverse=True)
     status = ("api+rss" if api_posts and rss_posts else "api" if api_posts else "rss" if rss_posts else "fail")
     return merged, max(api_total, len(merged)), status
+
+
+def _merge_blog_entry(pb, nb):
+    """직전 결과(pb)와 이번 결과(nb)를 합친다.
+       RSS 폴백으로 목록이 50건으로 줄어도 과거 이력을 잃지 않고, 새 글도 놓치지 않는다."""
+    posts, seen = [], set()
+    for p in (nb.get("recent") or []) + (pb.get("recent") or []):
+        k = _post_key(p)
+        if not k or k in seen:
+            continue
+        seen.add(k)
+        posts.append(p)
+    posts.sort(key=lambda x: x.get("date") or "", reverse=True)
+    cutoff = (datetime.datetime.utcnow() + datetime.timedelta(hours=9) - datetime.timedelta(days=30)).strftime("%Y-%m-%d")
+    out = dict(nb)
+    out["recent"] = posts
+    out["total"] = max(pb.get("total", 0), nb.get("total", 0), len(posts))
+    out["recent30"] = sum(1 for p in posts if (p.get("date") or "") >= cutoff)
+    out["latest"] = posts[0].get("date") if posts else ""
+    added = len(posts) - len(pb.get("recent") or [])
+    if added:
+        print("blog[%s] 직전 %d건 + 신규 %d건 → %d건" % (nb.get("id"), len(pb.get("recent") or []), added, len(posts)))
+    return out
 
 
 def fetch_blog():
@@ -466,17 +496,19 @@ def main():
     # blog: 신규 수집 실패/빈값이면 직전 blog 보존(자동 워크플로가 블로그를 지우지 않도록)
     blog = fetch_blog()
     prev_blog = prev.get("blog") if isinstance(prev.get("blog"), dict) else None
-    # Actions에서 API 차단→RSS 폴백으로 글 수가 줄어드는 것 방지: 블로그별로 직전보다 적으면 직전 데이터 유지
+    # Actions에서 목록 API가 차단되면 RSS(최근 50건)만 잡혀 글 수가 줄어든다.
+    # 예전에는 이때 '직전 데이터를 통째로 유지'했는데, 그러면 RSS로 새로 잡힌 최신 글까지 버려졌다.
+    # → 직전 목록과 이번 목록을 합집합으로 병합한다(과거 이력 유지 + 최신 글 반영).
     if blog and blog.get("blogs") and prev_blog and prev_blog.get("blogs"):
         prevmap = {b.get("id"): b for b in prev_blog["blogs"]}
         merged = []
         for b in blog["blogs"]:
             pb = prevmap.get(b.get("id"))
-            if pb and (pb.get("total", 0) > b.get("total", 0) or len(pb.get("recent", [])) > len(b.get("recent", []))):
-                print("blog[%s] 직전(%d) > 신규(%d) → 직전 유지" % (b.get("id"), pb.get("total", 0), b.get("total", 0)))
+            merged.append(_merge_blog_entry(pb, b) if pb else b)
+        for pid, pb in prevmap.items():                      # 이번에 아예 실패한 블로그는 직전 것 유지
+            if not any(x.get("id") == pid for x in merged):
+                print("blog[%s] 이번 수집 실패 → 직전 유지" % pid)
                 merged.append(pb)
-            else:
-                merged.append(b)
         blog = {"blogs": merged, "total": sum(x.get("total", 0) for x in merged),
                 "recent30": sum(x.get("recent30", 0) for x in merged)}
     if (not blog or not blog.get("blogs")) and prev_blog and prev_blog.get("blogs"):
