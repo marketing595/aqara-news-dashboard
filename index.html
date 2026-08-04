@@ -1270,7 +1270,8 @@
        <div id="mktSec-blog" class="hidden">
          <div class="card p-5 mb-5"><h3 class="accent font-extrabold text-ink mb-1">블로그 글 자동 제안 <span class="text-xs font-normal text-slate-400">(관리 블로그 4개 컨셉별)</span></h3>
            <p class="text-[12px] text-slate-400 mb-3">블로그별 컨셉에 맞춘 <b>초안·SEO 키워드·이미지 방향</b> 제안입니다. 편집 가능(이 브라우저 저장).</p>
-           <div id="mktBlogIdeas" class="space-y-4"></div>
+           <div id="mktBlogIdeas" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-start"></div>
+           <div id="mktBlogAi" class="hidden mt-5"></div>
          </div>
        </div>
        <div id="mktSec-weekly" class="hidden">
@@ -3520,19 +3521,118 @@
     ];
     function renderMktBlog(){
       document.getElementById('mktBlogIdeas').innerHTML=BLOG_CONCEPTS.map((b,bi)=>`
-        <div class="rounded-lg border border-[#EDE9FF] overflow-hidden">
-          <div class="px-4 py-2.5 bg-[#F4F1FF] flex items-center justify-between"><span class="font-bold text-[#4B32C3]">${esc(b.name)}</span><span class="text-[11px] text-[#7C5CFF]">블로그 컨셉</span></div>
-          <div class="p-4">
+        <div class="rounded-lg border border-[#EDE9FF] overflow-hidden flex flex-col h-full">
+          <div class="px-3.5 py-2.5 bg-[#F4F1FF]"><span class="font-bold text-[#4B32C3] text-[13px] leading-tight block">${esc(b.name)}</span><span class="text-[11px] text-[#7C5CFF]">블로그 컨셉</span></div>
+          <div class="p-3.5 flex-1 flex flex-col">
             <div class="text-[12px] text-slate-500 mb-3" contenteditable="true" data-mk="blog-c-${bi}" oninput="mktSaveEdit(this)"><b class="text-ink">컨셉</b> · ${esc(mktEdits['blog-c-'+bi]||b.concept)}</div>
             <p class="text-[12px] font-bold text-ink mb-1">📝 글 초안 아이디어</p>
             <ul class="mb-3 space-y-1">${b.drafts.map((d,di)=>`<li class="text-[13px] text-slate-700 leading-snug" contenteditable="true" data-mk="blog-d-${bi}-${di}" oninput="mktSaveEdit(this)">· ${esc(mktEdits['blog-d-'+bi+'-'+di]||d)}</li>`).join('')}</ul>
             <p class="text-[12px] font-bold text-ink mb-1">🔍 SEO 키워드</p>
             <div class="mb-3">${b.seo.map(k=>`<span class="inline-block text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7] mr-1 mb-1">${esc(k)}</span>`).join('')}</div>
             <p class="text-[12px] font-bold text-ink mb-1">🖼️ 이미지 방향</p>
-            <div class="text-[12px] text-slate-500" contenteditable="true" data-mk="blog-i-${bi}" oninput="mktSaveEdit(this)">${esc(mktEdits['blog-i-'+bi]||b.img)}</div>
+            <div class="text-[12px] text-slate-500 mb-3" contenteditable="true" data-mk="blog-i-${bi}" oninput="mktSaveEdit(this)">${esc(mktEdits['blog-i-'+bi]||b.img)}</div>
+            <button onclick="mktBlogAiOpen(${bi})" class="mt-auto w-full text-[13px] font-bold text-white bg-[#7C5CFF] hover:brightness-110 transition px-3 py-2 rounded-lg">✨ AI 초안작성</button>
           </div>
         </div>`).join('');
     }
+    /* ===== 블로그 AI 초안작성 (컨셉 + SEO 키워드 반영) ===== */
+    let MKT_BLOG_AI=null;
+    function mktBlogAiOpen(bi){
+      MKT_BLOG_AI=bi;
+      const b=BLOG_CONCEPTS[bi], box=document.getElementById('mktBlogAi');
+      const concept=(mktEdits['blog-c-'+bi]||b.concept);
+      box.classList.remove('hidden');
+      box.innerHTML=`
+        <div class="rounded-xl border border-[#7C5CFF]/35 bg-[#FBFAFF] p-4">
+          <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+            <p class="font-extrabold text-[#4B32C3]">✨ AI 초안작성 <span class="text-[12px] font-medium text-[#7C5CFF]">· ${esc(b.name)}</span></p>
+            <button onclick="mktBlogAiClose()" class="text-[12px] text-slate-400 hover:text-ink">닫기 ✕</button>
+          </div>
+          <p class="text-[11px] text-slate-500 mb-3">이 블로그의 결(<b class="text-ink">${esc(concept)}</b>)에 맞춰 씁니다.</p>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 mb-1">글 주제</label>
+              <select id="bdTopicSel" onchange="bdTopicPick()" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white mb-2">
+                ${b.drafts.map((d,di)=>`<option value="${esc(mktEdits['blog-d-'+bi+'-'+di]||d)}">${esc(mktEdits['blog-d-'+bi+'-'+di]||d)}</option>`).join('')}
+                <option value="">직접 입력…</option>
+              </select>
+              <input id="bdTopic" type="text" value="${esc(b.drafts[0]||'')}" placeholder="쓰고 싶은 주제를 입력하세요" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 mb-1">🔍 키워드 SEO <span class="font-normal">— 여기 넣은 키워드가 제목·본문에 반영됩니다 (쉼표로 구분)</span></label>
+              <input id="bdKw" type="text" value="${esc(b.seo.join(', '))}" placeholder="예: 스마트홈 인테리어, 무타공 스마트조명" class="w-full text-sm border border-[#7C5CFF]/50 rounded-lg px-3 py-2 bg-white" oninput="bdKwHint()" />
+              <div id="bdKwChips" class="mt-1.5 flex flex-wrap gap-1"></div>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-end gap-3 mt-3">
+            <div><label class="block text-[11px] font-bold text-slate-500 mb-1">톤</label>
+              <select id="bdTone" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white">
+                <option>컨셉에 맞는 톤</option><option>전문적·신뢰감</option><option>친근한 1인칭 경험담</option><option>담백한 미니멀</option><option>발랄한 라이프스타일</option>
+              </select></div>
+            <div><label class="block text-[11px] font-bold text-slate-500 mb-1">분량</label>
+              <select id="bdLen" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white">
+                <option value="short">짧게 (900~1,200자)</option><option value="mid" selected>보통 (1,500~2,000자)</option><option value="long">길게 (2,500~3,000자)</option>
+              </select></div>
+            <button onclick="mktBlogGen()" id="bdGoBtn" class="text-sm font-bold text-white bg-[#7C5CFF] hover:brightness-110 px-5 py-2.5 rounded-lg">초안 생성</button>
+            <span class="text-[11px] text-slate-400">생성에 10~20초 걸립니다.</span>
+          </div>
+          <div id="bdOut" class="mt-4"></div>
+        </div>`;
+      bdKwHint();
+      box.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+    function mktBlogAiClose(){ MKT_BLOG_AI=null; const b=document.getElementById('mktBlogAi'); b.classList.add('hidden'); b.innerHTML=''; }
+    function bdTopicPick(){ const s=document.getElementById('bdTopicSel'), t=document.getElementById('bdTopic'); if(s.value) t.value=s.value; else { t.value=''; t.focus(); } }
+    function bdKwList(){ return (document.getElementById('bdKw').value||'').split(',').map(s=>s.trim()).filter(Boolean); }
+    function bdKwHint(){ const el=document.getElementById('bdKwChips'); if(!el) return;
+      const ks=bdKwList();
+      el.innerHTML=ks.length?ks.map(k=>`<span class="text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7]">${esc(k)}</span>`).join('')
+        :'<span class="text-[11px] text-slate-400">키워드를 비우면 AI가 주제에 맞게 직접 선정합니다.</span>'; }
+    function mktBlogGen(){
+      if(MKT_BLOG_AI==null) return;
+      const b=BLOG_CONCEPTS[MKT_BLOG_AI], out=document.getElementById('bdOut'), btn=document.getElementById('bdGoBtn');
+      const payload={ blog:b.name, concept:(mktEdits['blog-c-'+MKT_BLOG_AI]||b.concept),
+        topic:(document.getElementById('bdTopic').value||'').trim(), keywords:bdKwList(),
+        tone:document.getElementById('bdTone').value, length:document.getElementById('bdLen').value };
+      btn.disabled=true; btn.textContent='작성 중…';
+      out.innerHTML='<p class="text-sm text-slate-400 py-6 text-center">AI가 초안을 쓰는 중입니다… (10~20초)</p>';
+      fetch('/api/blog-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+        .then(r=>r.json()).then(d=>{
+          btn.disabled=false; btn.textContent='초안 생성';
+          if(!d||!d.ok){ out.innerHTML='<div class="rounded-lg border border-[#F0E2E2] bg-[#FDF7F7] p-3 text-sm"><b class="text-ared">초안을 만들지 못했습니다.</b><p class="text-slate-500 text-[13px] mt-1">'+esc((d&&d.hint)||'')+'</p><p class="text-slate-400 text-[11px] mt-1">'+esc((d&&d.error)||'')+'</p></div>'; return; }
+          bdRender(d.draft||{}, d.model||'');
+        }).catch(e=>{ btn.disabled=false; btn.textContent='초안 생성';
+          out.innerHTML='<p class="text-sm text-ared py-4 text-center">생성 실패: '+esc(String(e))+'</p>'; });
+    }
+    let BD_LAST=null;
+    function bdRender(d,model){
+      BD_LAST=d;
+      const titles=(d.titles||[]).map(t=>`<li class="py-1 flex items-start gap-2"><span class="text-[13px] text-ink flex-1">${esc(t)}</span><button onclick="bdCopy(this.previousElementSibling.textContent)" class="text-[11px] text-[#5B44C7] hover:underline shrink-0">복사</button></li>`).join('');
+      const tags=(d.tags||[]).map(t=>`<span class="inline-block text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7] mr-1 mb-1">#${esc(t)}</span>`).join('');
+      const ku=(d.keywordUsage||[]).map(k=>`<span class="inline-block text-[11px] px-2 py-0.5 rounded-full border border-[#7C5CFF]/40 text-[#5B44C7] mr-1 mb-1">${esc(k.keyword)} <b class="num">${esc(String(k.count))}</b>회</span>`).join('');
+      document.getElementById('bdOut').innerHTML=`
+        <div class="rounded-lg border border-[#EDE9FF] bg-white p-4">
+          <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <p class="text-[12px] font-extrabold text-ink">생성 결과 <span class="text-[11px] font-normal text-slate-400">${esc(model)}</span></p>
+            <div class="flex gap-2">
+              <button onclick="bdCopy(BD_LAST.body||'')" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-3 py-1.5 rounded-lg font-semibold">본문 복사</button>
+              <button onclick="bdCopyAll()" class="text-[12px] bg-ink text-white hover:brightness-110 px-3 py-1.5 rounded-lg font-semibold">전체 복사</button>
+            </div>
+          </div>
+          ${titles?`<p class="text-[12px] font-bold text-ink mt-2 mb-0.5">제목 후보</p><ul class="divide-y divide-[#F1EFE9] mb-2">${titles}</ul>`:''}
+          ${d.meta?`<p class="text-[12px] font-bold text-ink mb-0.5">요약(메타 설명)</p><p class="text-[13px] text-slate-600 mb-2">${esc(d.meta)}</p>`:''}
+          ${ku?`<p class="text-[12px] font-bold text-ink mb-1">키워드 반영</p><div class="mb-2">${ku}</div>`:''}
+          <p class="text-[12px] font-bold text-ink mb-1">본문</p>
+          <div class="text-[13px] text-slate-700 leading-relaxed whitespace-pre-wrap max-h-[420px] overflow-auto rounded-lg border border-slate-100 p-3 bg-[#FCFCFB]">${esc(d.body||'')}</div>
+          ${tags?`<p class="text-[12px] font-bold text-ink mt-3 mb-1">태그</p><div>${tags}</div>`:''}
+          ${d.imageGuide?`<p class="text-[12px] font-bold text-ink mt-3 mb-1">🖼️ 이미지 가이드</p><p class="text-[12px] text-slate-500">${esc(d.imageGuide)}</p>`:''}
+          <p class="text-[11px] text-slate-400 mt-3">※ AI 초안입니다. 수치·가격·효과 표현은 반드시 사실 확인 후 발행하세요.</p>
+        </div>`;
+    }
+    function bdCopy(txt){ const done=()=>alert('복사했습니다.');
+      if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done).catch(()=>copyFallback(txt,done)); else copyFallback(txt,done); }
+    function bdCopyAll(){ const d=BD_LAST||{};
+      bdCopy([ (d.titles||[])[0]||'', '', d.body||'', '', ((d.tags||[]).map(t=>'#'+t).join(' ')) ].join('\n')); }
     const PR_PITCHES=[
       {ind:'유통업계',ideas:[
         {t:'"집이 매장이 된다" — 리테일 자동화와 스마트홈',angle:'유통사 무인·자동화 트렌드에 아카라 IoT 접목 사례로 연결',stat:'무인점포·리테일테크 시장 성장률·이커머스 침투율 인용'},
