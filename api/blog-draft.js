@@ -81,7 +81,11 @@ module.exports = async (req, res) => {
     if (req.method !== 'POST') { res.status(405).json({ ok: false, error: 'POST only' }); return; }
     const key = (process.env.GEMINI_API_KEY || '').trim();
     if (!key) {
-      res.status(200).json({ ok: false, error: 'NO_ENV', hint: 'Vercel 환경변수 GEMINI_API_KEY 를 등록한 뒤 재배포하세요. (GitHub Secrets에 있는 값과 동일)' });
+      res.status(200).json({
+        ok: false, error: 'NO_ENV',
+        hint: 'Vercel 환경변수 GEMINI_API_KEY 가 이 배포에 들어오지 않았습니다. ①등록 후 반드시 Redeploy ②Production 환경 체크 ③이름 오타 확인. '
+            + '/api/env-check 주소를 브라우저에서 열면 어떤 변수가 들어와 있는지 볼 수 있습니다.',
+      });
       return;
     }
     let b = req.body;
