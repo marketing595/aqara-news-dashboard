@@ -118,6 +118,7 @@
   <div id="subnav-pr" class="bg-[#FAFAF9] border-b border-[#E6E6E3] sticky top-[100px] z-10">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-2 py-2 overflow-x-auto">
       <button id="tabBtn-analytics" onclick="switchTab('analytics')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-ink text-white whitespace-nowrap transition">통계 분석</button>
+      <button id="tabBtn-issue" onclick="switchTab('issue')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">이슈</button>
       <button id="tabBtn-briefing" onclick="switchTab('briefing')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">데일리 브리핑</button>
     </div>
   </div>
@@ -286,6 +287,38 @@
       </section>
       <p class="text-center text-xs text-slate-400 pt-1">데이터 출처: 구글 시트 · 기사명 클릭 시 원문 이동 · 채널은 링크 주소로 자동 판별</p>
     </div>
+   </div>
+
+   <!-- ===== 이슈 NOW (PR 하위탭) — 기사 제목 키워드로 이슈를 자동으로 묶어 카드로 보여줌 ===== -->
+   <div id="view-issue" class="hidden">
+     <section class="card p-4 flex flex-wrap items-center gap-3 mb-5">
+       <h2 class="accent font-extrabold text-ink">이슈 NOW <span id="issSub" class="text-xs font-normal text-slate-400"></span></h2>
+       <div class="ml-auto flex flex-wrap items-center gap-1.5">
+         <span class="text-[11px] text-slate-500 mr-1">기간</span>
+         <button data-iss="3" onclick="issSetRange(3)" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">최근 3개월</button>
+         <button data-iss="6" onclick="issSetRange(6)" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">최근 6개월</button>
+         <button data-iss="12" onclick="issSetRange(12)" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">최근 1년</button>
+         <button data-iss="0" onclick="issSetRange(0)" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">전체</button>
+         <select id="issSortSel" onchange="issSort=this.value;renderIssues()" class="ml-2 text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white font-semibold">
+           <option value="recent">최신 이슈순</option>
+           <option value="count">기사 많은순</option>
+         </select>
+       </div>
+     </section>
+     <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5 items-start">
+       <div id="issGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+       <aside class="space-y-5">
+         <div class="card p-4">
+           <h3 class="text-[13px] font-extrabold text-ink mb-2">관심 이슈 <span class="text-[11px] font-normal text-slate-400">(★ 표시)</span></h3>
+           <div id="issFav" class="space-y-1.5"></div>
+         </div>
+         <div class="card p-4">
+           <h3 class="text-[13px] font-extrabold text-ink mb-2">기간 내 매체 TOP <span class="text-[11px] font-normal text-slate-400">(기사 수)</span></h3>
+           <div id="issMedia" class="space-y-1.5"></div>
+         </div>
+         <p class="text-[11px] text-slate-400 leading-relaxed px-1">※ 이슈는 기사 <b>제목의 공통 키워드</b>로 자동으로 묶은 것입니다(3건 이상). 같은 사안을 여러 매체가 보도한 건이 한 이슈로 모입니다.</p>
+       </aside>
+     </div>
    </div>
 
    <div id="view-briefing" class="hidden">
@@ -1476,7 +1509,9 @@
       FILTERED=ALL.filter(r=>{const d=r['게재일']; if(!d)return false; if(f&&d<f)return false; if(t&&d>t)return false; return true;});
       document.getElementById('rangeInfo').textContent=f+' ~ '+t+' · '+FILTERED.length+'건';
       renderKPIs(f,t); renderPerfHero(); renderTrend(); renderType(); renderMedia(); renderChannel(); renderTopic(); renderYearly(); renderMonthlyHeadlines(); renderTable();
-      if(typeof maybeRenderKpi==='function') maybeRenderKpi(); }
+      if(typeof maybeRenderKpi==='function') maybeRenderKpi();
+      const vi=document.getElementById('view-issue');   // 이슈 탭이 열려 있으면 새 데이터로 다시 묶는다
+      if(vi&&!vi.classList.contains('hidden')&&typeof renderIssues==='function') renderIssues(); }
     let mhYear='', mhCalYM='';
     function mhTokens(t){ return [...new Set((t||'').toLowerCase().replace(/[^0-9a-z가-힣]/g,' ').split(/\s+/).filter(w=>w.length>=2))]; }
     function mhDup(a,b){ const B=new Set(b); let inter=0; a.forEach(w=>{ if(B.has(w)) inter++; }); const uni=a.length+b.length-inter, jac=uni?inter/uni:0;
@@ -2680,21 +2715,127 @@
 
     // GNB: 상위 그룹 → 하위 뷰
     const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], home:['home'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', briefing:'pr', owned:'owned', cafe:'cafe', home:'home', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const VIEW_GROUP={ analytics:'pr', issue:'pr', briefing:'pr', owned:'owned', cafe:'cafe', home:'home', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
     function switchGroup(g){ switchTab(g==='pr' ? (prLastView||'analytics') : GROUPS[g][0]); }
+    /* ===== 이슈 NOW — 제목 키워드로 기사를 자동 클러스터링해 카드로 보여준다 ===== */
+    let issMonths=6, issSort='recent';
+    let issFavs=(()=>{ try{ return new Set(JSON.parse(localStorage.getItem('aqaraIssueFavs')||'[]')); }catch(e){ return new Set(); } })();
+    // 이슈명이 될 수 없는 일반어(브랜드명·상투어) — 여기 단어는 이슈 키워드에서 제외
+    const ISS_STOP=new Set(['아카라','아카라라이프','aqara','aqaralife','스마트홈','스마트','기자','뉴스','종합','포토','단독','영상','올해','내년','관련','업계','기업','대표','제품','서비스','출시','공개','발표','진행','확대','강화','도입','적용','선정','참여','개최','운영','지원','구축','협력','통해','위한','대한','시장','최초','국내','사업','고객','플랫폼','브랜드','솔루션','기술','공간','생활','사람','이슈','현장','신제품','성료','성공','새로운','다양한','본격','만에','대해','통한','따른','기준','최근','오늘','내일','지난','이번','올해','모두','가장','더욱','함께','비롯','중인','있는','했다','한다','밝혔','전했']);
+    const ISS_JOSA2=/(으로|에서|에게|부터|까지|이나)$/;   // 2글자 조사 먼저 제거('지문으로'→'지문')
+    const ISS_JOSA=/(은|는|이|가|을|를|의|에|와|과|도|로|만)$/;
+    const jq=s=>esc(s).replace(/'/g,"\\'");
+    function issNorm(w){ let s=(w||'').trim();
+      if(s.length>=4&&/[가-힣]$/.test(s)) s=s.replace(ISS_JOSA2,'');
+      if(s.length>=3&&/[가-힣]$/.test(s)) s=s.replace(ISS_JOSA,'');
+      return s; }
+    function issTokens(t){
+      const out=new Set();
+      (t||'').replace(/[^0-9A-Za-z가-힣 ]/g,' ').split(/\s+/).forEach(w=>{
+        w=issNorm(w); if(w.length<2||/^\d+$/.test(w)||/^20\d{2}$/.test(w)) return;
+        const lw=w.toLowerCase(); if(ISS_STOP.has(lw)) return; out.add(lw); });
+      return [...out];
+    }
+    // 이슈명: 대표 기사 제목에서 핵심 키워드들을 '제목에 나온 순서·표기 그대로' 이어 붙인다
+    // (예: 키워드 {ai, 임직원, 전용, 포털} → "임직원 전용 AI 포털")
+    function issName(keys,arts){
+      let best=arts[0], bestN=-1;
+      arts.forEach(r=>{ const lt=(r['기사명']||'').toString().toLowerCase();
+        let n=0; keys.forEach(k=>{ if(lt.indexOf(k)>-1) n++; }); if(n>bestN){ bestN=n; best=r; } });
+      const title=((best&&best['기사명'])||'').toString(), lt=title.toLowerCase();
+      const parts=keys.map(k=>({k,i:lt.indexOf(k)})).filter(x=>x.i>=0).sort((a,b)=>a.i-b.i);
+      const out=[]; let end=-1;
+      parts.forEach(p=>{ if(p.i<end) return; out.push(title.substr(p.i,p.k.length)); end=p.i+p.k.length; });
+      return out.length?out.join(' '):keys[0];
+    }
+    // 문서빈도 높은 키워드부터 기사를 가져가는 그리디 클러스터링(한 기사는 한 이슈에만 속함)
+    function buildIssues(rows){
+      const docs=rows.map(r=>({r,ts:issTokens(r['기사명'])}));
+      const df={}; docs.forEach(d=>d.ts.forEach(t=>{ df[t]=(df[t]||0)+1; }));
+      const cands=Object.keys(df).filter(t=>df[t]>=3).sort((a,b)=>df[b]-df[a]||a.localeCompare(b));
+      const used=new Set(), out=[];
+      cands.forEach(t=>{
+        const mem=docs.filter(d=>!used.has(d)&&d.ts.indexOf(t)>-1);
+        if(mem.length<3) return;
+        mem.forEach(m=>used.add(m));
+        const co={}; mem.forEach(m=>m.ts.forEach(x=>{ if(x!==t) co[x]=(co[x]||0)+1; }));
+        const tags=Object.keys(co).sort((a,b)=>co[b]-co[a]);
+        const strong=tags.filter(x=>co[x]>=Math.max(2,Math.ceil(mem.length*0.5)));
+        const arts=mem.map(m=>m.r).sort((a,b)=>((b['게재일']||'')+'').localeCompare((a['게재일']||'')+''));
+        const nameKeys=(strong.length?[t].concat(strong):[t].concat(tags.slice(0,1))).slice(0,4);
+        out.push({ key:t, name:issName(nameKeys,arts), n:arts.length,
+                   last:((arts[0]&&arts[0]['게재일'])||'').toString().slice(0,10), tags:tags.slice(0,4), arts });
+      });
+      return out;
+    }
+    function issSetRange(n){ issMonths=n; renderIssues(); }
+    function issFavToggle(k){ if(issFavs.has(k)) issFavs.delete(k); else issFavs.add(k);
+      try{ localStorage.setItem('aqaraIssueFavs',JSON.stringify([...issFavs])); }catch(e){}
+      renderIssues(); }
+    // 이슈·태그·매체를 누르면 통계 분석 탭 뉴스 목록에서 그 키워드로 검색
+    function issGo(k){ switchTab('analytics');
+      const s=document.getElementById('search'); if(s){ s.value=k; renderTable(); }
+      const sec=document.getElementById('newsListSection');
+      if(sec) setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),80); }
+    function issCard(i){
+      const fav=issFavs.has(i.key);
+      const arts=i.arts.slice(0,4).map(r=>`<li class="py-1.5 border-t border-[#F1EFE9] first:border-0">
+          <a href="${esc(linkOf(r))}" target="_blank" rel="noopener" class="block group">
+            <span class="num text-[11px] text-slate-400">${esc((r['게재일']||'').toString().slice(0,10))}</span>
+            <span class="text-[11px] text-slate-400 ml-1.5">${esc(r._media||'')}</span>
+            <span class="block text-[13px] text-ink leading-snug group-hover:text-brand-ink">${esc(r['기사명']||'')}</span>
+          </a></li>`).join('');
+      const tags=i.tags.map(t=>`<button onclick="issGo('${jq(t)}')" class="text-[11px] text-brand-ink bg-brand/15 rounded-full px-2 py-0.5 hover:bg-brand/25 transition">#${esc(t)}</button>`).join(' ');
+      return `<div class="card p-5 flex flex-col">
+        <div class="flex items-start justify-between gap-2">
+          <h3 class="text-[15px] font-extrabold text-ink leading-snug">${esc(i.name)}</h3>
+          <button onclick="issFavToggle('${jq(i.key)}')" title="관심 이슈로 표시" class="shrink-0 text-[11px] px-2 py-1 rounded-lg border transition ${fav?'border-brand bg-brand/20 text-brand-ink font-bold':'border-slate-300 text-slate-400 hover:text-ink'}">${fav?'★ 관심':'☆ 관심'}</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-1">기사 <b class="num text-ink">${i.n}</b>건 · 최근 ${esc(i.last)}</p>
+        <div class="flex flex-wrap gap-1 mt-2">${tags}</div>
+        <ul class="mt-2 flex-1">${arts}</ul>
+        <button onclick="issGo('${jq(i.key)}')" class="mt-3 text-[12px] font-semibold text-brand-ink hover:underline text-left">${i.n}개 기사 전체보기 →</button>
+      </div>`;
+    }
+    function renderIssues(){
+      const grid=document.getElementById('issGrid'); if(!grid) return;
+      document.querySelectorAll('#view-issue [data-iss]').forEach(b=>{ const on=+b.dataset.iss===issMonths;
+        b.className='text-xs px-3 py-1.5 rounded-lg border transition '+(on?'border-ink bg-ink text-white font-semibold':'border-slate-300 hover:bg-slate-50'); });
+      if(typeof ALL==='undefined'||!ALL.length){ grid.innerHTML='<p class="text-sm text-slate-400 py-10 text-center">데이터를 불러오는 중…</p>'; return; }
+      let rows=ALL.filter(r=>r['게재일']);
+      if(issMonths){ const d=new Date(); d.setMonth(d.getMonth()-issMonths); const cut=iso(d); rows=rows.filter(r=>(r['게재일']||'')>=cut); }
+      const iss=buildIssues(rows);
+      iss.sort(issSort==='count' ? (a,b)=>b.n-a.n||b.last.localeCompare(a.last) : (a,b)=>b.last.localeCompare(a.last)||b.n-a.n);
+      iss.sort((a,b)=>(issFavs.has(b.key)?1:0)-(issFavs.has(a.key)?1:0));   // 관심 이슈 최상단(정렬 안정성 유지)
+      const sub=document.getElementById('issSub');
+      if(sub) sub.textContent='('+(issMonths?('최근 '+issMonths+'개월'):'전체 기간')+' · 이슈 '+iss.length+'개 · 기사 '+rows.length+'건)';
+      grid.innerHTML=iss.length ? iss.slice(0,30).map(issCard).join('')
+        : '<p class="text-sm text-slate-400 py-10 text-center">이 기간에는 3건 이상 묶이는 이슈가 없습니다.</p>';
+      const fav=iss.filter(i=>issFavs.has(i.key));
+      const fe=document.getElementById('issFav');
+      if(fe) fe.innerHTML=fav.length ? fav.map(i=>`<button onclick="issGo('${jq(i.key)}')" class="w-full flex justify-between gap-2 text-left text-[12px] px-2 py-1.5 rounded-lg hover:bg-slate-50"><span class="font-semibold text-ink truncate">${esc(i.name)}</span><span class="num text-slate-400">${i.n}</span></button>`).join('')
+        : '<p class="text-[11px] text-slate-400">카드의 ☆를 누르면 여기에 모입니다.</p>';
+      const mc={}; rows.forEach(r=>{ const m=r._media||'(미상)'; mc[m]=(mc[m]||0)+1; });
+      const top=Object.keys(mc).sort((a,b)=>mc[b]-mc[a]).slice(0,10), max=top.length?mc[top[0]]:1;
+      const me=document.getElementById('issMedia');
+      if(me) me.innerHTML=top.map(m=>`<button onclick="issGo('${jq(m)}')" class="w-full text-left group">
+          <div class="flex justify-between text-[12px]"><span class="truncate text-slate-600 group-hover:text-ink">${esc(m)}</span><span class="num font-semibold text-ink">${mc[m]}</span></div>
+          <div class="h-1 rounded bg-slate-100 mt-0.5"><div class="h-1 rounded bg-brand" style="width:${Math.round(mc[m]/max*100)}%"></div></div></button>`).join('');
+    }
     function switchTab(t){
       // 상위 뷰만 토글(카페·리포트 클러스터는 view-mkt 내부로 편입 → mktSub/mktReportSub가 관리)
-      ['analytics','briefing','owned','cafe','home','library','mkt'].forEach(v=>{
+      ['analytics','issue','briefing','owned','cafe','home','library','mkt'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
       ['pr','owned','cafe','home','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
-      ['analytics','briefing'].forEach(v=>{ document.getElementById('tabBtn-'+v).className=subClass(v===t); });
+      ['analytics','issue','briefing'].forEach(v=>{ const b=document.getElementById('tabBtn-'+v); if(b) b.className=subClass(v===t); });
+      if(t==='issue'){ renderIssues(); }
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
       if(t==='cafe'){ renderCafe(); loadCafe(); loadDcinside(); }
       if(t==='home'){ loadHome(); }
