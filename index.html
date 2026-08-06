@@ -2819,11 +2819,37 @@
           <tfoot><tr class="border-t-2 border-slate-200 font-bold"><td class="px-2 py-2">합계</td><td class="px-2 py-2 num text-right">${nf(imp)}</td><td class="px-2 py-2 num text-right">${nf(clk)}</td><td class="px-2 py-2 num text-right">${ctr.toFixed(2)}%</td><td class="px-2 py-2 num text-right">${nf(cost)}원</td><td class="px-2 py-2 num text-right">${nf(conv)}</td></tr></tfoot></table>
         </div>`:`<p class="text-[12px] text-slate-400 rounded-xl border border-[#E6E6E3] p-4">해당 키워드의 검색광고 데이터가 없습니다. 매체별 성과는 직접 입력하세요: ${ed('adManual')}</p>`}
         <p class="text-[12px] text-slate-500 mt-2">소재·매체 인사이트: ${ed('adInsight')}</p>
-        ${h('4','바이럴','커뮤니티 · 블로그')}
+        ${h('4','바이럴','블로그 · 인스타그램 체험단 · 커뮤니티')}
+        <p class="text-[12px] font-bold text-ink mb-1.5">체험단 성과 <span class="font-normal text-slate-400">(레뷰 리포트 기준 · 직접 입력)</span></p>
+        <div class="overflow-auto rounded-xl border border-[#E6E6E3] mb-2">
+          <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
+            <th class="px-2 py-2">채널</th><th class="px-2 py-2 text-right">모집/선정</th><th class="px-2 py-2 text-right">발행</th>
+            <th class="px-2 py-2 text-right">조회·도달</th><th class="px-2 py-2 text-right">좋아요·공감</th><th class="px-2 py-2 text-right">댓글</th>
+            <th class="px-2 py-2 text-right">상위노출</th><th class="px-2 py-2">비고</th></tr></thead>
+          <tbody>
+            <tr class="border-t border-slate-100"><td class="px-2 py-1.5 font-semibold text-ink">네이버 블로그</td>
+              <td class="px-2 py-1.5 text-right">${ed('rvBlogPick')}</td><td class="px-2 py-1.5 text-right">${ed('rvBlogPost')}</td>
+              <td class="px-2 py-1.5 text-right">${ed('rvBlogView')}</td><td class="px-2 py-1.5 text-right">${ed('rvBlogLike')}</td>
+              <td class="px-2 py-1.5 text-right">${ed('rvBlogCmt')}</td><td class="px-2 py-1.5 text-right">${ed('rvBlogSeo')}</td>
+              <td class="px-2 py-1.5">${ed('rvBlogNote')}</td></tr>
+            <tr class="border-t border-slate-100"><td class="px-2 py-1.5 font-semibold text-ink">인스타그램</td>
+              <td class="px-2 py-1.5 text-right">${ed('rvIgPick')}</td><td class="px-2 py-1.5 text-right">${ed('rvIgPost')}</td>
+              <td class="px-2 py-1.5 text-right">${ed('rvIgView')}</td><td class="px-2 py-1.5 text-right">${ed('rvIgLike')}</td>
+              <td class="px-2 py-1.5 text-right">${ed('rvIgCmt')}</td><td class="px-2 py-1.5 text-right">${ed('rvIgSeo')}</td>
+              <td class="px-2 py-1.5">${ed('rvIgNote')}</td></tr>
+            <tr class="border-t-2 border-slate-200 font-bold"><td class="px-2 py-2">합계</td>
+              <td class="px-2 py-2 text-right">${ed('rvSumPick')}</td><td class="px-2 py-2 text-right">${ed('rvSumPost')}</td>
+              <td class="px-2 py-2 text-right">${ed('rvSumView')}</td><td class="px-2 py-2 text-right">${ed('rvSumLike')}</td>
+              <td class="px-2 py-2 text-right">${ed('rvSumCmt')}</td><td class="px-2 py-2 text-right">${ed('rvSumSeo')}</td>
+              <td class="px-2 py-2">${ed('rvSumNote')}</td></tr>
+          </tbody></table>
+        </div>
+        <p class="text-[12px] text-slate-500 mb-3">캠페인·기간: ${ed('rvPeriod')} · 상위노출 키워드: ${ed('rvKeywords')} · 참고: <a href="https://report.revu.net/service/dashboard" target="_blank" rel="noopener" class="text-brand-ink hover:underline">레뷰 리포트 대시보드 ↗</a></p>
+        <p class="text-[12px] font-bold text-ink mb-1">커뮤니티 반응 <span class="font-normal text-slate-400">(대시보드 자동 수집)</span></p>
         <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600">
           <p>수집된 커뮤니티 언급 <b class="num text-ink">${nf(cafeHit.length)}</b>건${cafeTop?'':' (해당 키워드 글 없음)'}</p>
           ${cafeTop?`<ul class="mt-1">${cafeTop}</ul>`:''}
-          <p class="mt-2">상위 노출 확보: ${ed('viralSeo')} · 총 공감·댓글: ${ed('viralEng')}</p>
+          <p class="mt-2">체험단·바이럴 성과 요약: ${ed('viralEng')}</p>
         </div>
         ${h('5','라이브커머스')}
         <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">
