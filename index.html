@@ -114,7 +114,6 @@
       <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페·커뮤니티</button>
       <button id="grpBtn-home" onclick="switchGroup('home')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">홈페이지</button>
       <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
-      <button id="grpBtn-seminar" onclick="switchGroup('seminar')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">세미나</button>
       <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
     </div>
   </div>
@@ -1259,10 +1258,12 @@
            <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
            <span class="w-px self-stretch my-1 bg-[#D9D0FF]"></span>
            <button id="mktBtn-ad" onclick="mktSub('ad')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">파워링크/브랜드검색</button>
+           <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">세미나</button>
            <button id="mktBtn-report" onclick="mktSub('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">종합 리포트</button>
            <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
          </div>
        </div>
+       <div id="mktSeminarSlot"></div>
        <div id="mktKpiSlot"></div>
        <div id="mktAdSlot"></div>
        <div id="mktReportSlot"></div>
@@ -3106,8 +3107,8 @@
     function kstToday(){ const d=new Date(Date.now()+9*36e5); return d.toISOString().slice(0,10); }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], home:['home'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], seminar:['seminar'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', issue:'pr', briefing:'pr', owned:'owned', cafe:'cafe', home:'home', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', seminar:'seminar', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], home:['home'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', issue:'pr', briefing:'pr', owned:'owned', cafe:'cafe', home:'home', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', mkt:'mkt', seminar:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
@@ -3414,6 +3415,13 @@
         ${tbl(['목표','세미나에서 만들 변화','중장기 성과'],S.goals.map(g=>`<tr class="border-t border-slate-100">
           <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(g.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(g.s)}</td><td class="px-2.5 py-2 text-slate-600">${esc(g.l)}</td></tr>`).join(''))}`)}
 
+      ${S.agenda?sec('1-1','아젠다','A → D 흐름',`
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          ${S.agenda.map(a=>`<div class="rounded-xl border border-[#E6E6E3] p-4">
+            <p class="text-[13px] font-extrabold text-ink"><span class="inline-block w-5 h-5 leading-5 text-center rounded bg-ink text-white text-[11px] mr-1.5">${esc(a.k)}</span>${esc(a.t)}</p>
+            <p class="text-[12px] text-slate-600 leading-relaxed mt-1.5">${esc(a.d)}</p></div>`).join('')}
+        </div>`):''}
+
       ${sec('2','왜 지금 스마트홈 인테리어인가','',`
         ${ul(S.why)}
         <div class="mt-3 rounded-xl bg-[#FBFAFF] border border-[#EDE9FF] p-4">
@@ -3426,8 +3434,15 @@
           <td class="px-2.5 py-2 text-slate-700">${esc(r.kosid)}</td><td class="px-2.5 py-2 text-slate-700">${esc(r.aqara)}</td><td class="px-2.5 py-2 font-semibold text-ink">${esc(r.both)}</td></tr>`).join(''))}
         <p class="text-[12px] font-bold text-ink mt-4 mb-1">공동 추진의 방향성</p>${ul(S.direction)}`)}
 
-      ${sec('4','프로그램 구성(안)',S.flow,`
-        ${tbl(['세션','주제','핵심 내용','발표 주체(안)'],S.program.map(p=>`<tr class="border-t border-slate-100">
+      ${sec('4','프로그램 · 타임테이블',(S.timetable?'13:30 ~ 17:30 (4시간) · 사전 등록 13:00':S.flow),`
+        ${(S.timetable&&S.timetable.length)?tbl(['시간','소요','세션 구분','발표 주제','상세','발표 주체'],S.timetable.map(p=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 num whitespace-nowrap font-semibold text-ink">${esc(p.time)}</td>
+          <td class="px-2.5 py-2 num text-slate-400 whitespace-nowrap">${esc(p.dur)}</td>
+          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
+          <td class="px-2.5 py-2 font-semibold text-ink">${esc(p.t)}</td>
+          <td class="px-2.5 py-2 text-slate-600">${esc(p.d||'')}</td>
+          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(p.w||'미정')}</td></tr>`).join(''))
+        :tbl(['세션','주제','핵심 내용','발표 주체(안)'],(S.program||[]).map(p=>`<tr class="border-t border-slate-100">
           <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
           <td class="px-2.5 py-2 font-semibold text-ink">${esc(p.t)}</td><td class="px-2.5 py-2 text-slate-600">${esc(p.d)}</td>
           <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(p.w)}</td></tr>`).join(''))}
@@ -3463,7 +3478,29 @@
 
       ${sec('9','협의 요청 · 다음 단계','',`<p class="text-[13px] text-slate-700 leading-relaxed">${esc(S.nextStep)}</p>`)}
 
-      ${sec('10','준비 체크리스트',done+'/'+S.checklist.length+' 완료',`
+      ${S.tasks?sec('10','준비 타임라인',(S.note?esc(S.note):''),`
+        ${tbl(['구분','항목','형태','담당','일정 흐름','비고'],S.tasks.map(t=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${esc(t.cat)}</span></td>
+          <td class="px-2.5 py-2 font-semibold text-ink">${esc(t.item)}</td>
+          <td class="px-2.5 py-2 text-slate-500">${esc(t.form||'')}</td>
+          <td class="px-2.5 py-2 whitespace-nowrap ${t.owner?'text-ink font-semibold':'text-slate-300'}">${esc(t.owner||'미정')}</td>
+          <td class="px-2.5 py-2 text-slate-600">${esc(t.sched||'')}</td>
+          <td class="px-2.5 py-2 text-slate-400">${esc(t.action||'')}</td></tr>`).join(''))}`):''}
+
+      ${S.budget?sec('11','예산','총 '+(S.budget.total||0).toLocaleString()+'원',`
+        ${tbl(['분류','항목','단가','수량','비용','소계','지급 대상','일정·주체'],S.budget.items.map(b=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${esc(b.cat)}</span></td>
+          <td class="px-2.5 py-2 text-slate-700">${esc(b.item)}</td>
+          <td class="px-2.5 py-2 num text-right text-slate-500">${b.unit!=null?b.unit.toLocaleString():'-'}</td>
+          <td class="px-2.5 py-2 num text-right text-slate-500">${b.qty!=null?b.qty.toLocaleString():'-'}</td>
+          <td class="px-2.5 py-2 num text-right font-semibold text-ink">${b.cost!=null?b.cost.toLocaleString()+'원':'<span class="text-slate-300">미정</span>'}</td>
+          <td class="px-2.5 py-2 num text-right text-brand-ink font-bold">${b.sub!=null?b.sub.toLocaleString()+'원':''}</td>
+          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(b.payee||'')}</td>
+          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(b.when||'')}</td></tr>`).join('')
+          +`<tr class="border-t-2 border-slate-200 font-bold"><td class="px-2.5 py-2" colspan="5">Total</td>
+            <td class="px-2.5 py-2 num text-right text-ink">${(S.budget.total||0).toLocaleString()}원</td><td colspan="2"></td></tr>`)}`):''}
+
+      ${sec('12','준비 체크리스트',done+'/'+S.checklist.length+' 완료',`
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
           ${S.checklist.map((c,i)=>`<label class="flex items-start gap-2 py-1.5 border-b border-[#F1EFE9] cursor-pointer group">
             <input type="checkbox" ${semChk[i]?'checked':''} onchange="semToggle(${i})" class="mt-0.5 accent-[#FBC400]" />
@@ -3473,14 +3510,13 @@
     }
     function switchTab(t){
       // 상위 뷰만 토글(카페·리포트 클러스터는 view-mkt 내부로 편입 → mktSub/mktReportSub가 관리)
-      ['analytics','issue','briefing','owned','cafe','home','library','seminar','mkt'].forEach(v=>{
+      ['analytics','issue','briefing','owned','cafe','home','library','mkt'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','home','library','seminar','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
+      ['pr','owned','cafe','home','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
-      if(t==='seminar') renderSeminar();
       ['analytics','issue','briefing'].forEach(v=>{ const b=document.getElementById('tabBtn-'+v); if(b) b.className=subClass(v===t); });
       if(t==='issue'){ renderIssues(); }
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
@@ -3921,7 +3957,7 @@
     function mktMovePanels(){ if(mktMoved) return;
       const mv=(id,slot)=>{ const e=document.getElementById(id), s=document.getElementById(slot); if(e&&s) s.appendChild(e); };
       mv('view-kpi','mktKpiSlot'); mv('view-medialist','mktMedialistSlot'); mv('view-calendar','mktCalendarSlot');
-      mv('view-ad','mktAdSlot');
+      mv('view-ad','mktAdSlot'); mv('view-seminar','mktSeminarSlot');
       // 종합 리포트 클러스터(서브내브 + 6개 뷰)를 리포트 슬롯으로 편입
       mv('subnav-report','mktReportSlot');
       ['view-report','view-campaign','view-market','view-cdj','view-competitor','view-export'].forEach(id=>mv(id,'mktReportSlot'));
@@ -3940,6 +3976,7 @@
       const ml=document.getElementById('view-medialist'); if(ml) ml.classList.toggle('hidden', s!=='medialist');
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       const adv=document.getElementById('view-ad'); if(adv) adv.classList.toggle('hidden', s!=='ad');
+      const sem=document.getElementById('view-seminar'); if(sem) sem.classList.toggle('hidden', s!=='seminar');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
       document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
@@ -3947,7 +3984,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['kpi','weekly','medialist','calendar','insta','blog','prpitch','ad','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
+      ['kpi','weekly','medialist','calendar','insta','blog','prpitch','ad','seminar','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(s==='medialist'){ renderMediaList(); }
@@ -3956,6 +3993,7 @@
       if(s==='blog'){ renderMktBlog(); }
       if(s==='prpitch'){ renderMktPr(); }
       if(s==='ad'){ loadAd(); }
+      if(s==='seminar'){ renderSeminar(); }
       if(s==='report'){ mktReportSub(mktRptView); }
     }
     // 종합 리포트 하위 탭 (자사/경쟁사 분석 = cdj + competitor 통합)
