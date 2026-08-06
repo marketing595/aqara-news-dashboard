@@ -1567,7 +1567,22 @@
         return `<details class="py-1.5" ${idx===0?'open':''}>
           <summary class="cursor-pointer select-none flex items-center gap-1.5 py-1"><span class="mhcaret text-slate-400 text-[11px]">▶</span><span class="font-extrabold text-ink text-sm">${(+m.slice(5))}월</span> <span class="text-xs font-normal text-slate-400">· 헤드라인 ${list.length}건</span></summary>
           <ul class="space-y-0.5 pl-4 pt-1">${items}</ul>
-        </details>`; }).join('');
+        </details>
+      ${sec('4','프로그램 · 타임테이블',(S.timetable?'13:30 ~ 17:30 (4시간) · 사전 등록 13:00':S.flow),`
+        ${(S.timetable&&S.timetable.length)?tbl(['시간','소요','세션 구분','발표 주제','상세','발표 주체'],S.timetable.map((p,i)=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 num whitespace-nowrap font-semibold text-ink">${esc(p.time)}</td>
+          <td class="px-2.5 py-2 num text-slate-400 whitespace-nowrap">${esc(p.dur)}</td>
+          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
+          <td class="px-2.5 py-2 font-semibold text-ink">${se('tt.'+i+'.t',p.t)}</td>
+          <td class="px-2.5 py-2 text-slate-600">${se('tt.'+i+'.d',p.d||'')}</td>
+          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${se('tt.'+i+'.w',p.w||'미정')}</td></tr>`).join(''))
+        :tbl(['세션','주제','핵심 내용','발표 주체(안)'],(S.program||[]).map(p=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
+          <td class="px-2.5 py-2 font-semibold text-ink">${esc(p.t)}</td><td class="px-2.5 py-2 text-slate-600">${esc(p.d)}</td>
+          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(p.w)}</td></tr>`).join(''))}
+        <p class="text-[12px] font-bold text-ink mt-4 mb-1">핵심 세션 메시지</p>${ul(S.messages)}`)}
+
+      `; }).join('');
       if(!mhCalYM || mhCalYM.slice(0,4)!==mhYear || months.indexOf(mhCalYM)<0) mhCalYM=months[0];
       renderMhCal(); }
     function mhCalMove(d){ if(!mhCalYM) return; let a=mhCalYM.split('-').map(Number),y=a[0],m=a[1]; let mm=m-1+d,yy=y; while(mm<0){mm+=12;yy--;} while(mm>11){mm-=12;yy++;} mhCalYM=yy+'-'+String(mm+1).padStart(2,'0'); renderMhCal(); }
@@ -3396,6 +3411,56 @@
       semTimer=setTimeout(()=>semSave(k,v),500);
     }
     function semToggle(i){ const k='chk.'+i; semSave(semKey(k), V(k,'')?'':'1'); renderSeminar(); }
+    function semShare(){
+      const u=location.origin+location.pathname+'#seminar';
+      const txt='[세미나 공동작업] '+V('title',(SEMINAR&&SEMINAR.title)||'')+'\n'+V('dateLabel',(SEMINAR&&SEMINAR.dateLabel)||'')+'\n'+u
+        +'\n※ 대시보드 로그인(@aqara.kr) 후 ONLY MKT > 세미나 탭에서 함께 편집하실 수 있습니다.';
+      bdCopy(txt);
+    }
+    function semOvToggle(el){ try{ localStorage.setItem('aqaraSemOv', el.open?'1':''); }catch(e){} }
+    // 간트 막대 드래그 — 좌우로 끌어 주(week) 단위로 일정 이동
+    let semDrag=null;
+    function semAddDays(s,n){ const d=new Date(s+'T00:00:00+09:00'); d.setDate(d.getDate()+n);
+      return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+    function semBarDown(ev,i){
+      ev.preventDefault();
+      const bar=ev.currentTarget, cell=bar.closest('div[style*="grid-column"]');
+      const w=Math.max(20,(cell?cell.getBoundingClientRect().width:60)/Math.max(1,parseInt((cell.style.gridColumn.match(/\d+/)||[1])[0],10)));
+      semDrag={ i, x0:ev.clientX, w, bar, moved:0 };
+      bar.style.cursor='grabbing'; bar.style.opacity='0.75';
+      document.addEventListener('mousemove',semBarMove);
+      document.addEventListener('mouseup',semBarUp);
+    }
+    function semBarMove(ev){
+      if(!semDrag) return;
+      const dx=ev.clientX-semDrag.x0;
+      semDrag.moved=Math.round(dx/semDrag.w);
+      semDrag.bar.style.transform='translateX('+dx+'px)';
+    }
+    function semBarUp(){
+      document.removeEventListener('mousemove',semBarMove);
+      document.removeEventListener('mouseup',semBarUp);
+      if(!semDrag) return;
+      const {i,moved,bar}=semDrag; bar.style.cursor='grab'; bar.style.opacity=''; bar.style.transform='';
+      semDrag=null;
+      if(!moved) return;
+      const S=SEMINAR, t=S.tasks[i];
+      const ts=V('task.'+i+'.start',t.start), te=V('task.'+i+'.end',t.end);
+      if(!ts||!te) return;
+      semSave(semKey('task.'+i+'.start'), semAddDays(ts,moved*7));
+      semSave(semKey('task.'+i+'.end'),   semAddDays(te,moved*7));
+      renderSeminar();
+    }
+    // 간트 막대 기간 수정 — 시작/종료일을 직접 입력받아 공유 저장
+    function semDate(i,which){
+      const S=SEMINAR; if(!S) return; const t=S.tasks[i];
+      const cur=V('task.'+i+'.'+which, which==='start'?t.start:t.end);
+      const v=prompt(t.item+' — '+(which==='start'?'시작':'종료')+'일 (YYYY-MM-DD)', cur);
+      if(v===null) return;
+      const s=v.trim();
+      if(s && !/^\d{4}-\d{2}-\d{2}$/.test(s)){ alert('YYYY-MM-DD 형식으로 입력해주세요.'); return; }
+      semSave(semKey('task.'+i+'.'+which), s); renderSeminar();
+    }
     function semChecked(i){ return !!V('chk.'+i,''); }
     function renderSeminar(){
       const box=document.getElementById('semBody'); if(!box) return;
@@ -3436,6 +3501,7 @@
             <p class="text-[13px] text-slate-500 mt-1">${se('subtitle',S.subtitle)}</p>
           </div>
           <div class="text-right">
+            <button onclick="semShare()" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold mr-1.5">🔗 공유 링크 복사</button>
             <span class="inline-block text-[13px] font-extrabold px-3 py-1.5 rounded-xl bg-ink text-white">${dday}</span>
             <p class="text-[11px] text-slate-400 mt-1">${esc(S.dateLabel)}</p>
           </div>
@@ -3449,6 +3515,12 @@
         <p class="text-[11px] text-slate-400 mt-3">출처: ${esc(S.source)}</p>
       </div>
 
+      <details id="semOv" class="mb-4" ${V('ovOpen','')?'open':''} ontoggle="semOvToggle(this)">
+        <summary class="card p-4 cursor-pointer list-none flex items-center justify-between hover:bg-[#FAFAF9]">
+          <span class="text-[15px] font-extrabold text-ink">OVERVIEW <span class="text-[12px] font-normal text-slate-400">· 제안 배경 · 아젠다 · 협력 구조 · 기대효과</span></span>
+          <span class="text-[12px] text-slate-400">펼치기 / 접기 ▾</span>
+        </summary>
+        <div class="mt-3">
       ${sec('1','제안 개요','핵심 제안과 추진 목표',`
         <p class="text-[13px] text-slate-700 leading-relaxed mb-2">${esc(S.core)}</p>
         <p class="text-[12px] text-slate-500 leading-relaxed mb-3">${esc(S.purpose)}</p>
@@ -3473,20 +3545,6 @@
         ${tbl(['KOSID의 역할','아카라라이프의 역할','공동으로 만드는 결과'],S.roles.map(r=>`<tr class="border-t border-slate-100">
           <td class="px-2.5 py-2 text-slate-700">${esc(r.kosid)}</td><td class="px-2.5 py-2 text-slate-700">${esc(r.aqara)}</td><td class="px-2.5 py-2 font-semibold text-ink">${esc(r.both)}</td></tr>`).join(''))}
         <p class="text-[12px] font-bold text-ink mt-4 mb-1">공동 추진의 방향성</p>${ul(S.direction)}`)}
-
-      ${sec('4','프로그램 · 타임테이블',(S.timetable?'13:30 ~ 17:30 (4시간) · 사전 등록 13:00':S.flow),`
-        ${(S.timetable&&S.timetable.length)?tbl(['시간','소요','세션 구분','발표 주제','상세','발표 주체'],S.timetable.map((p,i)=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 num whitespace-nowrap font-semibold text-ink">${esc(p.time)}</td>
-          <td class="px-2.5 py-2 num text-slate-400 whitespace-nowrap">${esc(p.dur)}</td>
-          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
-          <td class="px-2.5 py-2 font-semibold text-ink">${se('tt.'+i+'.t',p.t)}</td>
-          <td class="px-2.5 py-2 text-slate-600">${se('tt.'+i+'.d',p.d||'')}</td>
-          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${se('tt.'+i+'.w',p.w||'미정')}</td></tr>`).join(''))
-        :tbl(['세션','주제','핵심 내용','발표 주체(안)'],(S.program||[]).map(p=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
-          <td class="px-2.5 py-2 font-semibold text-ink">${esc(p.t)}</td><td class="px-2.5 py-2 text-slate-600">${esc(p.d)}</td>
-          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(p.w)}</td></tr>`).join(''))}
-        <p class="text-[12px] font-bold text-ink mt-4 mb-1">핵심 세션 메시지</p>${ul(S.messages)}`)}
 
       ${sec('5','아카라라이프가 제공하는 가치','',`
         ${tbl(['역량','제공 가치','인테리어 업계의 효과'],S.value.map(v=>`<tr class="border-t border-slate-100">
@@ -3517,14 +3575,17 @@
         </div>`)}
 
       ${sec('9','협의 요청 · 다음 단계','',`<p class="text-[13px] text-slate-700 leading-relaxed">${esc(S.nextStep)}</p>`)}
+        </div>
+      </details>
+
 
       ${S.tasks?sec('10','준비 타임라인',(S.note?esc(S.note):''),`
         ${tbl(['','구분','항목','담당','기간','일정 흐름','비고'],S.tasks.map((t,i)=>`<tr class="border-t border-slate-100 ${semChecked(i)?'bg-[#F7FBF5]':''}">
           <td class="px-2 py-2"><input type="checkbox" ${semChecked(i)?'checked':''} onchange="semToggle(${i})" class="accent-[#5E7350]" /></td>
-          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${esc(t.cat)}</span></td>
-          <td class="px-2.5 py-2 font-semibold ${semChecked(i)?'text-slate-400 line-through':'text-ink'}">${esc(t.item)}${t.form?`<span class="block text-[11px] font-normal text-slate-400">${esc(t.form)}</span>`:''}</td>
+          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${se('task.'+i+'.cat',t.cat)}</span></td>
+          <td class="px-2.5 py-2 font-semibold ${semChecked(i)?'text-slate-400 line-through':'text-ink'}">${se('task.'+i+'.item',t.item)}${t.form?`<span class="block text-[11px] font-normal text-slate-400">${se('task.'+i+'.form',t.form)}</span>`:''}</td>
           <td class="px-2.5 py-2 whitespace-nowrap text-ink font-semibold">${se('task.'+i+'.owner',t.owner||'미정')}</td>
-          <td class="px-2.5 py-2 num whitespace-nowrap text-slate-500">${esc((t.start||'').slice(5))} ~ ${esc((t.end||'').slice(5))}</td>
+          <td class="px-2.5 py-2 num whitespace-nowrap text-slate-500"><button onclick="semDate(${i},'start')" class="hover:text-brand-ink underline">${esc(V('task.'+i+'.start',t.start).slice(5))}</button> ~ <button onclick="semDate(${i},'end')" class="hover:text-brand-ink underline">${esc(V('task.'+i+'.end',t.end).slice(5))}</button></td>
           <td class="px-2.5 py-2 text-slate-600">${se('task.'+i+'.sched',t.sched||'')}</td>
           <td class="px-2.5 py-2 text-slate-400">${se('task.'+i+'.action',t.action||'')}</td></tr>`).join(''))}
         <p class="text-[11px] text-slate-400 mt-2">체크·담당·일정 수정은 접속한 모두에게 실시간 공유됩니다.</p>`):''}
@@ -3535,12 +3596,16 @@
             <div class="grid" style="grid-template-columns:220px repeat(${GW.length},minmax(30px,1fr));">
               <div class="text-[11px] font-bold text-slate-500 px-1 py-1">항목 · 담당</div>
               ${GW.map(w=>`<div class="text-[10px] text-center ${w.m?'font-bold text-ink':'text-slate-400'} py-1 border-l border-[#F1EFE9]">${w.label}</div>`).join('')}
-              ${S.tasks.map((t,i)=>{ const s=GIDX(t.start), e=GIDX(t.end);
+              ${S.tasks.map((t,i)=>{ const ts=V('task.'+i+'.start',t.start), te=V('task.'+i+'.end',t.end);
+                const s=GIDX(ts), e=GIDX(te);
                 const done=semChecked(i);
-                return `<div class="text-[11px] px-1 py-1.5 border-t border-[#F1EFE9] truncate ${done?'text-slate-400 line-through':'text-slate-700'}" title="${esc(t.item)}">${esc(t.item)} <span class="text-slate-400">· ${esc(t.owner||'')}</span></div>`
-                  + GW.map((w,wi)=>{ const on=(wi>=s&&wi<=e);
-                    const first=(wi===s), last=(wi===e);
-                    return `<div class="border-t border-l border-[#F1EFE9] py-1.5 px-0.5">${on?`<div class="h-3 ${done?'bg-agreen/50':'bg-brand'} ${first?'rounded-l':''} ${last?'rounded-r':''}"></div>`:''}</div>`; }).join(''); }).join('')}
+                return `<div class="text-[11px] px-1 py-1.5 border-t border-[#F1EFE9] truncate ${done?'text-slate-400 line-through':'text-slate-700'}" title="${esc(t.item)}">${esc(t.item)}
+                  <button onclick="semDate(${i},'start')" class="text-[10px] text-slate-400 hover:text-brand-ink underline" title="시작일 수정">${esc((ts||'').slice(5))}</button>~<button onclick="semDate(${i},'end')" class="text-[10px] text-slate-400 hover:text-brand-ink underline" title="종료일 수정">${esc((te||'').slice(5))}</button></div>`
+                  + (s>0?`<div class="border-t border-l border-[#F1EFE9]" style="grid-column:span ${s}"></div>`:'')
+                  + `<div class="border-t border-l border-[#F1EFE9] py-1 px-0.5" style="grid-column:span ${Math.max(1,e-s+1)}">
+                       <div onmousedown="semBarDown(event,${i})" title="드래그해서 일정 이동 · ${esc(V('task.'+i+'.sched',t.sched||''))}"
+                         class="gbar h-4 rounded ${done?'bg-agreen/60':'bg-brand'} text-[9px] leading-4 px-1 text-ink truncate cursor-grab select-none">${esc((V('task.'+i+'.sched',t.sched||'')||t.item).slice(0,40))}</div></div>`
+                  + (e<GW.length-1?`<div class="border-t border-l border-[#F1EFE9]" style="grid-column:span ${GW.length-1-e}"></div>`:''); }).join('')}
             </div>
           </div>
         </div>
@@ -3579,11 +3644,17 @@
           <div class="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden"><div class="h-2.5 rounded-full bg-brand transition-all" style="width:${Math.round(done/S.checklist.length*100)}%"></div></div>
           <span class="num text-[13px] font-extrabold text-ink">${Math.round(done/S.checklist.length*100)}%</span>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
-          ${S.checklist.map((c,i)=>`<label class="flex items-start gap-2 py-2 border-b border-[#F1EFE9] cursor-pointer group hover:bg-[#FAFAF9] rounded px-1 -mx-1">
-            <input type="checkbox" ${semChecked(100+i)?'checked':''} onchange="semToggle(${100+i})" class="mt-0.5 w-4 h-4 accent-[#FBC400]" />
-            <span class="text-[13px] ${semChecked(100+i)?'text-slate-400 line-through':'text-slate-700 group-hover:text-ink'}">${esc(c)}</span></label>`).join('')}
-        </div>
+        ${[{n:'협의·확정',r:[0,1]},{n:'장소·프로그램',r:[2,5]},{n:'초청·홍보',r:[6,8]},{n:'제작·현장',r:[9,12]},{n:'사후',r:[13,13]}].map(g=>{
+          const idxs=S.checklist.map((_,i)=>i).filter(i=>i>=g.r[0]&&i<=g.r[1]);
+          const gd=idxs.filter(i=>semChecked(100+i)).length;
+          return `<div class="mb-3">
+            <p class="text-[12px] font-extrabold text-ink mb-1">${esc(g.n)} <span class="num font-normal text-slate-400">${gd}/${idxs.length}</span></p>
+            <div class="rounded-xl border border-[#E6E6E3] divide-y divide-[#F1EFE9]">
+              ${idxs.map(i=>`<div class="flex items-center gap-2 px-3 py-2 hover:bg-[#FAFAF9] ${semChecked(100+i)?'bg-[#F7FBF5]':''}">
+                <input type="checkbox" ${semChecked(100+i)?'checked':''} onchange="semToggle(${100+i})" class="w-4 h-4 accent-[#FBC400] shrink-0" />
+                <span class="flex-1 text-[13px] ${semChecked(100+i)?'text-slate-400 line-through':'text-slate-700'}">${se('cl.'+i+'.t',S.checklist[i])}</span>
+                <span class="text-[11px] text-slate-400 shrink-0">담당 ${se('cl.'+i+'.owner','미정')}</span></div>`).join('')}
+            </div></div>`; }).join('')}
         <p class="text-[11px] text-slate-400 mt-2">체크 상태는 접속한 모두에게 실시간 공유됩니다.</p>`)}`;
     }
     // 담당자별 AI 도우미 — 그 사람의 R&R·업무·마감으로 실행안을 뽑아준다
