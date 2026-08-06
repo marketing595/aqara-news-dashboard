@@ -2453,6 +2453,20 @@
     }
     function rvSeoClear(){ if(!confirm('넣은 캡처 이미지를 지울까요?')) return;
       try{ localStorage.removeItem('aqaraRvSeoCap'); }catch(e){} rvSeoRender(); }
+    // 캠페인 리포트의 SA(파워링크·브랜드검색) 표는 searchad.json이 필요하다.
+    // 광고 탭을 아직 안 열었으면 여기서 한 번 불러오고, 도착하면 리포트를 다시 그린다.
+    let AD_FOR_CAMP=false;
+    function loadAdForCamp(){
+      if(AD_FOR_CAMP || (AD.periods && Object.keys(AD.periods).length)) return;
+      AD_FOR_CAMP=true;
+      fetch('searchad.json?_='+Date.now()).then(r=>r.json()).then(d=>{
+        if(d&&d.periods){ AD=d;
+          if(!(AD.periods||{})[adPeriod]) adPeriod=AD.defaultPeriod||Object.keys(AD.periods)[0]||'30d';
+          const v=document.getElementById('view-campaign');
+          if(v&&!v.classList.contains('hidden')) renderCampaign();
+        }
+      }).catch(()=>{});
+    }
     function campReportCharts(){
       rvSeoRender();
       const F=CAMP_FINAL[curCampaign]; if(!F||typeof draw!=='function') return;
@@ -2736,7 +2750,8 @@
             <div><p class="text-slate-500">총 클릭</p><p class="num text-lg font-extrabold text-ink">${nf(TOT.clk)}</p></div>
             <div><p class="text-slate-500">통합 CTR</p><p class="num text-lg font-extrabold text-ink">${TOT.ctr.toFixed(2)}%</p></div>
           </div>
-          <p class="text-[11px] text-slate-400 mt-1.5">DA(대행사 리포트) + SA(파워링크·브랜드검색 API 실측) 단순 합산. 매출·ROAS는 중복 집계 우려가 있어 합산하지 않고 DA 기준으로만 표기합니다.</p>
+          <p class="text-[11px] text-slate-500 mt-1.5">DA CTR ${F.ad.ctr}% · SA CTR ${sa.ctr.toFixed(2)}% <span class="text-slate-400">— SA는 브랜드검색(브랜드명 직접 검색) 비중이 커 CTR이 구조적으로 높습니다. 통합 CTR은 참고치로만 보세요.</span></p>
+          <p class="text-[11px] text-slate-400 mt-1">DA(대행사 리포트) + SA(파워링크·브랜드검색 API 실측) 단순 합산. 매출·ROAS는 중복 집계 우려가 있어 합산하지 않고 DA 기준으로만 표기합니다. <b>브랜드검색은 정액 상품이라 API 비용이 0원으로 집계</b>되므로, SA 집행비는 파워링크 중심 금액입니다.</p>
         </div>`:`<p class="text-[11px] text-slate-400 mb-3">※ 파워링크·브랜드검색(SA) 캠페인 구간 데이터는 다음 수집(매일 자동) 후 표시됩니다.</p>`}
         <p class="text-[12px] font-bold text-ink mb-1">참고 · 최근 검색광고 실시간 집계</p>`:''}
         ${cps.length?`<div class="overflow-auto rounded-xl border border-[#E6E6E3]">
@@ -2837,8 +2852,6 @@
           <tbody>${[
             {k:'rp4',n:'4회차 · MAX 얼리버드 프로모션',p:'K100',d:'2026-05-20~05-26'},
             {k:'rp3',n:'3회차 · L100 MAX 얼리버드 프로모션',p:'L100',d:'2026-05-20~05-26'},
-            {k:'rp2',n:'2회차 · 아카라라이프X더현대 하이라이브',p:'K100',d:'2026-04-23~04-30'},
-            {k:'rp1',n:'1회차 · 아카라라이프X더현대 하이라이브',p:'L100',d:'2026-04-23~04-30'}
           ].map(r=>`<tr class="border-t border-slate-100">
             <td class="px-2 py-1.5 text-slate-700">${esc(r.n)}</td>
             <td class="px-2 py-1.5"><span class="text-[10px] px-1.5 py-0.5 rounded ${r.p==='L100'?'bg-brand/20 text-brand-ink':'bg-slate-100 text-slate-500'} font-semibold">${r.p}</span></td>
@@ -3839,7 +3852,7 @@
       all.forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', show.indexOf(v)<0); });
       ['report','campaign','market','owncomp','export'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
-      else if(t==='campaign'){ loadReports(()=>renderCampaign()); loadYoutube(); }
+      else if(t==='campaign'){ loadReports(()=>renderCampaign()); loadYoutube(); loadAdForCamp(); }
       else if(t==='market'){ loadCompetitor(); renderMarket(); }
       else if(t==='owncomp'){ renderCDJ(); renderSearchInsight(); loadCompetitor(); }
       else if(t==='export'){ loadOwned(); renderExport(); }
