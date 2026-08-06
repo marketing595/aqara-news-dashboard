@@ -903,6 +903,9 @@
        <div id="rpt-summary" data-rk="summary" class="text-sm text-slate-700 leading-relaxed rpt-edit"></div>
      </div>
 
+     <!-- 월간 마케팅 리포트 본문 (목차 1~7 · 선택 기간 데이터로 자동 작성) -->
+     <div id="rptMonthly" class="mb-6"></div>
+
      <!-- 통합 KPI -->
      <section id="reportKpi" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
 
@@ -2536,11 +2539,184 @@
         } else { rc.classList.add('hidden'); }
       } else { cc.classList.add('hidden'); }
       document.getElementById('campPos').innerHTML=c.pos;
-      document.getElementById('campReport').innerHTML=(curCampaign==='interior')?INTERIOR_REPORT:'';
-      if(curCampaign==='interior') applyIrEdits();
+      document.getElementById('campReport').innerHTML=((curCampaign==='interior')?INTERIOR_REPORT:'')+campFullReport(c);
+      applyIrEdits();
     }
     let irEdits={}; try{ irEdits=JSON.parse(localStorage.getItem('aqaraIrEdits')||'{}'); }catch(e){}
     let irEditMode=false;
+    /* ===== 캠페인 종합 리포트 (사내 최종보고 양식) =====
+       양식: 2026 L100 캠페인 최종 리포트 — Ⅰ.캠페인 요약 / Ⅱ.캠페인 활동 / Ⅲ.마무리
+       대시보드에 있는 데이터(광고·보도·검색량·온드·카페)는 자동으로 채우고,
+       매출·KOL·라이브커머스·프로모션처럼 사내 자료가 필요한 값은 [ ]로 두고 직접 편집한다.
+       기존 리포트(INTERIOR_REPORT)는 그대로 두고 그 아래에 덧붙인다. */
+    function campFullReport(c){
+      if(!c) return '';
+      const K=k=>curCampaign+':'+k;
+      const ed=(k,d)=>`<span class="ir-edit" data-k="${K(k)}">${d||'[ ]'}</span>`;
+      const edb=(k,d)=>`<b class="ir-edit text-ink" data-k="${K(k)}">${d||'[ ]'}</b>`;
+      const nf=n=>(+n||0).toLocaleString();
+      const box=(t,v,s)=>`<div class="rounded-xl border border-[#E6E6E3] bg-white p-4"><p class="text-[11px] text-slate-500">${t}</p><p class="num text-2xl font-extrabold text-ink mt-0.5">${v}</p>${s?`<p class="text-[11px] text-slate-400 mt-0.5">${s}</p>`:''}</div>`;
+      const h=(n,t,s)=>`<div class="flex items-baseline gap-2 mt-6 mb-2"><span class="text-[12px] font-extrabold text-white bg-[#7C5CFF] rounded px-1.5 py-0.5">${n}</span><h3 class="text-[15px] font-extrabold text-ink">${t}</h3>${s?`<span class="text-[11px] text-slate-400">${s}</span>`:''}</div>`;
+      const period=(c.start||'')+' ~ '+(c.end||'');
+
+      // 광고 — 네이버 검색광고 API(캠페인명에 해당 키워드가 들어간 것만 합산)
+      const kwRe = curCampaign==='l100' ? /도어락|l100/i : /인테리어|스마트홈/i;
+      const per=(AD.periods||{})[adPeriod]||{};
+      const cps=(per.campaigns||[]).filter(x=>kwRe.test(x.name||''));
+      const S=f=>cps.reduce((a,b)=>a+(+b[f]||0),0);
+      const imp=S('imp'), clk=S('clk'), cost=S('cost'), conv=S('conv'), ctr=imp?clk/imp*100:0;
+      const adRows=cps.slice().sort((a,b)=>b.imp-a.imp).slice(0,8).map(x=>`<tr class="border-t border-slate-100">
+          <td class="px-2 py-1.5 text-[12px] text-slate-700">${esc(x.name||'')}</td>
+          <td class="px-2 py-1.5 num text-right">${nf(x.imp)}</td><td class="px-2 py-1.5 num text-right">${nf(x.clk)}</td>
+          <td class="px-2 py-1.5 num text-right">${(+x.ctr||0).toFixed(2)}%</td><td class="px-2 py-1.5 num text-right">${nf(x.cost)}원</td>
+          <td class="px-2 py-1.5 num text-right">${nf(x.conv)}</td></tr>`).join('');
+
+      // 언론 보도 — 캠페인 기간 내
+      const inP=r=>{const d=r['게재일']; return d&&(!c.start||d>=c.start)&&(!c.end||d<=c.end);};
+      const prN=(typeof ALL!=='undefined'?ALL:[]).filter(inP).length;
+      const prMedia=new Set((typeof ALL!=='undefined'?ALL:[]).filter(inP).map(r=>r._media)).size;
+      const heads=(typeof ALL!=='undefined'?ALL:[]).filter(inP).sort((a,b)=>(b['게재일']||'').localeCompare(a['게재일']||'')).slice(0,5)
+        .map(r=>`<li class="py-1 text-[12px] text-slate-600"><span class="num text-slate-400">${esc((r['게재일']||'').slice(0,10))}</span> · ${esc(r._media||'')} — <a href="${esc(linkOf(r))}" target="_blank" rel="noopener" class="hover:text-brand-ink">${esc(r['기사명']||'')}</a></li>`).join('');
+
+      // 검색량 모멘텀 — 캠페인 KPI 키워드 지수
+      const sKeys=Object.keys(c.series||{});
+      const mainK=(c.kpi&&c.kpi[0])||sKeys[0]||'';
+      const arr=(c.series||{})[mainK]||[];
+      const peak=arr.length?Math.max(...arr):0, avg=arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0, last=arr.length?arr[arr.length-1]:0;
+      const searchLine=arr.length?`<b class="text-ink">${esc(mainK)}</b> 지수 최고 <b class="num text-ink">${peak.toFixed(1)}</b> · 기간 평균 <b class="num text-ink">${avg.toFixed(1)}</b> · 최근 <b class="num text-ink">${last.toFixed(1)}</b>`:'검색 지수 데이터 없음';
+
+      // 카페·커뮤니티 바이럴
+      const cKw = curCampaign==='l100' ? /도어락|l100/i : /인테리어|시공|쇼룸/i;
+      const cafeHit=(typeof CAFE_POSTS!=='undefined'?CAFE_POSTS:[]).filter(p=>cKw.test((p.title||'')+(p.desc||'')));
+      const cafeTop=cafeHit.slice(0,3).map(p=>`<li class="py-1 text-[12px] text-slate-600">· <a href="${esc(p.link||'#')}" target="_blank" rel="noopener" class="hover:text-brand-ink">${esc(p.title||'')}</a></li>`).join('');
+
+      // 온드미디어
+      const ig=(OWNED&&OWNED.instagram)||{}, ch=(OWNED&&OWNED.youtube&&OWNED.youtube.channel)||{};
+      const igD=(typeof histDeltaSince==='function'&&c.start)?histDeltaSince(OWNED_HIST,'igFollowers',c.start,c.end||'9999-12-31'):null;
+      const ytD=(typeof histDeltaSince==='function'&&c.start)?histDeltaSince(OWNED_HIST,'ytSubs',c.start,c.end||'9999-12-31'):null;
+      const nlSubs=(typeof NEWSLETTER!=='undefined'&&NEWSLETTER.subscribers)||0;
+
+      return `
+      <div class="card p-5 sm:p-6 mt-5">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h2 class="text-lg font-extrabold text-ink">캠페인 최종 보고 <span class="text-xs font-normal text-slate-400">(사내 리포트 양식 · ${esc(c.name||'')})</span></h2>
+            <p class="text-[12px] text-slate-500 mt-0.5">캠페인 기간 <b class="text-ink">${esc(period)}</b> · 대시보드 데이터는 자동 반영, <b class="text-brand-ink">[ ]</b>는 직접 입력</p>
+          </div>
+          <button id="irEditBtn2" onclick="toggleIrEdit()" class="text-sm border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg font-semibold">수치·문구 편집</button>
+        </div>
+
+        <p class="text-[13px] font-extrabold text-[#4B32C3] mt-5 pb-1 border-b-2 border-[#EDE9FF]">Ⅰ. 캠페인 요약</p>
+        ${h('1','캠페인 활동 개요')}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">
+            <p class="font-bold text-ink mb-1">기간 · 판매 차수</p>
+            <p>캠페인 기간: <b class="text-ink">${esc(period)}</b></p>
+            <p>1차(예약판매): ${ed('p1')} · 2차(일반판매): ${ed('p2')} · 3차: ${ed('p3')}</p>
+            <p>주요 이벤트: ${ed('pEvent')}</p>
+          </div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">
+            <p class="font-bold text-ink mb-1">타겟 · 주요 활동</p>
+            <p>캠페인 타겟: ${ed('target')}</p>
+            <p>주요 활동: ${ed('acts')}</p>
+          </div>
+        </div>
+        ${h('2','캠페인 활동 전략','고객여정 커버를 위한 360º 노출')}
+        <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">${ed('strategy','채널 간 상호보완 구조: 콘텐츠 기반 바이럴로 인지 형성 → 미디어 채널로 메시지 강화 → 구매 의사 형성 &amp; 전환 유도')}</div>
+        ${h('3','캠페인 활동 결과','매출·광고·온드채널')}
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          ${box('판매 수량',ed('sales')+'개','공식몰+제휴채널')}
+          ${box('직접 기여 매출',ed('revenue')+'원','캠페인 기간 · VAT 별도')}
+          ${box('ROAS',ed('roas')+'%','광고 직접 기여 매출 '+ed('adRev'))}
+          ${box('ROI',ed('roi')+'%','총 비용 대비')}
+          ${box('광고 노출',nf(imp),'검색광고 '+esc(adPeriod)+' 기준')}
+          ${box('클릭 · CTR',nf(clk)+' · '+ctr.toFixed(2)+'%','광고 유입')}
+          ${box('언론 보도',nf(prN)+'건',prMedia+'개 매체')}
+          ${box('뉴스레터 구독자',nf(nlSubs)+'명',(igD?('인스타 '+(igD.d>=0?'+':'')+nf(igD.d)+'명'):'인스타 증감 데이터 없음'))}
+        </div>
+        ${h('4','네이버 검색량','캠페인 모멘텀')}
+        <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">
+          <p>${searchLine}</p>
+          <p class="mt-1">경쟁사 대비 포지션: ${ed('searchPos')} · 검색 점유율: ${ed('searchShare')}</p>
+        </div>
+        ${h('5','캠페인 타임라인','PREP → MAIN → WRAP-UP')}
+        <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed space-y-1">
+          <p><b class="text-ink">PREP</b> · ${ed('tlPrep','사전 바이럴 · 출시 PR')}</p>
+          <p><b class="text-ink">MAIN</b> · ${ed('tlMain','MEGA KOL · 디지털 광고 · 프로모션')}</p>
+          <p><b class="text-ink">WRAP-UP</b> · ${ed('tlWrap','KOL 영상 2차 활용 · 온드미디어 홍보')}</p>
+        </div>
+
+        <p class="text-[13px] font-extrabold text-[#4B32C3] mt-7 pb-1 border-b-2 border-[#EDE9FF]">Ⅱ. 캠페인 활동</p>
+        ${h('1','컨텐츠 제작','상세페이지 · 비주얼')}
+        <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">${ed('content','제품 외관과 활용 사례를 담은 3D·scene 이미지/영상 제작. 상세페이지·프로모션 페이지 구성')}</div>
+        ${h('2','KOL 협업','채널별 성과')}
+        <div class="overflow-auto rounded-xl border border-[#E6E6E3]">
+          <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
+            <th class="px-2 py-2">채널 · KOL</th><th class="px-2 py-2">구독자/팔로워</th><th class="px-2 py-2">업로드</th><th class="px-2 py-2 text-right">조회수</th><th class="px-2 py-2 text-right">좋아요·댓글</th><th class="px-2 py-2 text-right">자사몰 유입</th></tr></thead>
+          <tbody>${[1,2,3].map(i=>`<tr class="border-t border-slate-100">
+            <td class="px-2 py-1.5">${ed('kol'+i+'n')}</td><td class="px-2 py-1.5">${ed('kol'+i+'s')}</td><td class="px-2 py-1.5">${ed('kol'+i+'d')}</td>
+            <td class="px-2 py-1.5 text-right">${ed('kol'+i+'v')}</td><td class="px-2 py-1.5 text-right">${ed('kol'+i+'e')}</td><td class="px-2 py-1.5 text-right">${ed('kol'+i+'t')}</td></tr>`).join('')}</tbody></table>
+        </div>
+        <p class="text-[12px] text-slate-500 mt-2">협업 전략·목적: ${ed('kolStrategy')}</p>
+        ${h('3','디지털 광고','네이버 검색광고 API 자동 집계 · '+esc(adPeriod))}
+        ${cps.length?`<div class="overflow-auto rounded-xl border border-[#E6E6E3]">
+          <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
+            <th class="px-2 py-2">캠페인</th><th class="px-2 py-2 text-right">노출</th><th class="px-2 py-2 text-right">클릭</th><th class="px-2 py-2 text-right">CTR</th><th class="px-2 py-2 text-right">비용</th><th class="px-2 py-2 text-right">전환</th></tr></thead>
+          <tbody>${adRows}</tbody>
+          <tfoot><tr class="border-t-2 border-slate-200 font-bold"><td class="px-2 py-2">합계</td><td class="px-2 py-2 num text-right">${nf(imp)}</td><td class="px-2 py-2 num text-right">${nf(clk)}</td><td class="px-2 py-2 num text-right">${ctr.toFixed(2)}%</td><td class="px-2 py-2 num text-right">${nf(cost)}원</td><td class="px-2 py-2 num text-right">${nf(conv)}</td></tr></tfoot></table>
+        </div>`:`<p class="text-[12px] text-slate-400 rounded-xl border border-[#E6E6E3] p-4">해당 키워드의 검색광고 데이터가 없습니다. 매체별 성과는 직접 입력하세요: ${ed('adManual')}</p>`}
+        <p class="text-[12px] text-slate-500 mt-2">소재·매체 인사이트: ${ed('adInsight')}</p>
+        ${h('4','바이럴','커뮤니티 · 블로그')}
+        <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600">
+          <p>수집된 커뮤니티 언급 <b class="num text-ink">${nf(cafeHit.length)}</b>건${cafeTop?'':' (해당 키워드 글 없음)'}</p>
+          ${cafeTop?`<ul class="mt-1">${cafeTop}</ul>`:''}
+          <p class="mt-2">상위 노출 확보: ${ed('viralSeo')} · 총 공감·댓글: ${ed('viralEng')}</p>
+        </div>
+        ${h('5','라이브커머스')}
+        <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">
+          <p>플랫폼 · 일자: ${ed('liveWhen')}</p><p>홍보: ${ed('livePromo')}</p><p>프로모션 · 매출: ${ed('liveSales')}</p>
+        </div>
+        ${h('6','온드미디어','인스타 · 카카오채널 · 뉴스레터')}
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          ${box('인스타 팔로워',(ig.followers!=null?nf(ig.followers)+'명':'[ ]'),(igD?((igD.d>=0?'+':'')+nf(igD.d)+'명 (기간)'):'기간 증감 없음'))}
+          ${box('유튜브 구독자',(ch.subs!=null?nf(ch.subs)+'명':'[ ]'),(ytD?((ytD.d>=0?'+':'')+nf(ytD.d)+'명 (기간)'):''))}
+          ${box('카카오채널 친구',ed('kakao')+'명','증감 '+ed('kakaoD'))}
+          ${box('뉴스레터 구독자',nf(nlSubs)+'명','오픈율 '+ed('nlOpen'))}
+        </div>
+        <p class="text-[12px] text-slate-500 mt-2">메시지 발송 성과: ${ed('msgPerf')}</p>
+        ${h('7','POS · 프로모션','판매 차수별 구성')}
+        <div class="overflow-auto rounded-xl border border-[#E6E6E3]">
+          <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
+            <th class="px-2 py-2">차수</th><th class="px-2 py-2">기간</th><th class="px-2 py-2">구성</th><th class="px-2 py-2 text-right">판매가</th><th class="px-2 py-2 text-right">할인율</th></tr></thead>
+          <tbody>${[1,2,3].map(i=>`<tr class="border-t border-slate-100">
+            <td class="px-2 py-1.5">${ed('pr'+i+'n')}</td><td class="px-2 py-1.5">${ed('pr'+i+'p')}</td><td class="px-2 py-1.5">${ed('pr'+i+'c')}</td>
+            <td class="px-2 py-1.5 text-right">${ed('pr'+i+'v')}</td><td class="px-2 py-1.5 text-right">${ed('pr'+i+'d')}</td></tr>`).join('')}</tbody></table>
+        </div>
+        <p class="text-[12px] text-slate-500 mt-2">배너·팝업 운영: ${ed('posBanner')}</p>
+
+        <p class="text-[13px] font-extrabold text-[#4B32C3] mt-7 pb-1 border-b-2 border-[#EDE9FF]">Ⅲ. 마무리</p>
+        ${h('1','비용')}
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          ${box('검색광고 집행비',nf(cost)+'원','API 자동 · '+esc(adPeriod))}
+          ${box('총 광고비',ed('costAd')+'원','SA+DA 합계')}
+          ${box('콘텐츠·KOL',ed('costKol')+'원','')}
+          ${box('총 캠페인 비용',ed('costTotal')+'원','')}
+        </div>
+        ${h('2','LESSONS &amp; LEARN')}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="rounded-xl border-l-4 border-agreen border border-[#E6E6E3] p-4"><p class="font-bold text-agreen mb-1">GOOD</p><div class="text-[13px] text-slate-600 leading-relaxed">${ed('good')}</div></div>
+          <div class="rounded-xl border-l-4 border-ared border border-[#E6E6E3] p-4"><p class="font-bold text-ared mb-1">BAD</p><div class="text-[13px] text-slate-600 leading-relaxed">${ed('bad')}</div></div>
+        </div>
+        ${h('3','NEXT','채널 확대 · 후속 프로모션')}
+        <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">
+          <p>입점·확대 채널: ${ed('nextCh')}</p>
+          <p class="mt-1">후속 프로모션: ${ed('nextPromo')}</p>
+          <p class="mt-1">개선 과제: ${ed('nextTodo')}</p>
+        </div>
+        ${heads?`<p class="text-[12px] font-bold text-ink mt-6 mb-1">참고 · 캠페인 기간 주요 보도</p><ul class="divide-y divide-[#F1EFE9]">${heads}</ul>`:''}
+        <p class="text-[11px] text-slate-400 mt-4">※ 양식 출처: 2026 L100 캠페인 최종 리포트. 광고·보도·검색·온드 수치는 대시보드 데이터에서 자동 반영되며, 매출·KOL·라이브커머스·프로모션·비용은 '수치·문구 편집'으로 입력합니다(이 브라우저에 저장).</p>
+      </div>`;
+    }
     function applyIrEdits(){
       const ci=CAMPAIGNS.interior;
       // 인사이트: 상반기 전체(H1, 1/1~6/30) 보도자료 종류별 집계
@@ -2562,7 +2738,7 @@
         else if(auto[k]!=null) el.textContent=auto[k];
         el.contentEditable=irEditMode;
         el.classList.toggle('bg-brand/10',irEditMode); el.classList.toggle('ring-1',irEditMode); el.classList.toggle('ring-brand/40',irEditMode); el.classList.toggle('rounded',irEditMode); el.classList.toggle('px-1',irEditMode); });
-      const b=document.getElementById('irEditBtn'); if(b) b.textContent=irEditMode?'저장':'수치·문구 편집';
+      ['irEditBtn','irEditBtn2'].forEach(id=>{ const b=document.getElementById(id); if(b) b.textContent=irEditMode?'저장':'수치·문구 편집'; });
     }
     function toggleIrEdit(){
       if(irEditMode){ document.querySelectorAll('#campReport .ir-edit').forEach(el=>{ irEdits[el.dataset.k]=el.textContent.trim(); }); localStorage.setItem('aqaraIrEdits',JSON.stringify(irEdits)); }
