@@ -425,7 +425,7 @@
      </div>
      <section id="campKpis" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5"></section>
      <div class="card p-5 mb-5">
-       <h2 class="accent font-extrabold text-ink mb-1">주별 검색량 추이 <span class="text-xs font-normal text-slate-400">(네이버 데이터랩 · 음영 = 캠페인 기간)</span></h2>
+       <h2 class="accent font-extrabold text-ink mb-1">주별 검색량 추이 <span id="campTrendSub" class="text-xs font-normal text-slate-400">(네이버 데이터랩 · 캠페인 기간 + 직전 동기간 · 음영 = 캠페인 기간)</span></h2>
        <div class="h-72 mt-2"><canvas id="campTrendChart"></canvas></div>
      </div>
      <div id="campContentCard" class="card p-5 mb-5 hidden">
@@ -470,11 +470,13 @@
          </div>
        </div>
      </div>
+     <div id="campReport" class="mb-5"></div>
+     <!-- APPENDIX — 본 보고서 뒤에 붙는 참고 자료 -->
      <div class="card p-5 mb-5">
+       <p class="text-[11px] font-extrabold tracking-wider text-slate-400 mb-1">APPENDIX</p>
        <h2 class="accent font-extrabold text-ink mb-2">포지셔닝 분석</h2>
        <div id="campPos" class="text-sm text-slate-600 space-y-2"></div>
      </div>
-     <div id="campReport" class="mb-5"></div>
      <p class="text-xs text-slate-400">※ SNS(인스타·유튜브 등) 언급량은 별도 소셜 API 연동이 필요해 현재 미포함입니다. 검색량=네이버 데이터랩, 자사 커버리지=구글 시트 기준.</p>
    </div>
 
@@ -2483,9 +2485,15 @@
       const cs=fromEl.value||c.start, ce=toEl.value||defEnd, custom=(cs!==c.start||ce!==defEnd), inC=w=>w>=cs&&w<=ce;
       document.getElementById('campPeriod').innerHTML='기간: <b>'+cs+' ~ '+ce+'</b>'+(custom?' <span class="text-brand font-semibold">· 사용자 지정 기간</span>':' · 캠페인 기본기간')+' · 검색량/커버리지 전(기간 이전) vs 중(기간 내) 비교';
       const keys=Object.keys(S);
-      const band={label:'선택 기간',type:'bar',data:W.map(w=>inC(w)?110:0),backgroundColor:'rgba(251,196,0,0.14)',borderWidth:0,barPercentage:1,categoryPercentage:1,order:1};
-      const lines=keys.map((k,i)=>({label:k,type:'line',data:S[k],borderColor:PALETTE[i],backgroundColor:'transparent',borderWidth:2,tension:0.3,pointRadius:0,order:0}));
-      draw('campTrendChart',{type:'bar',data:{labels:W,datasets:[band,...lines]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      // 표시 구간 = 선택(캠페인) 기간 + 직전 동기간(같은 주 수) — 전/중 비교가 한 화면에 보이게
+      const inIdx=W.map((w,i)=>inC(w)?i:-1).filter(i=>i>=0);
+      const i0=inIdx.length?inIdx[0]:0, i1=inIdx.length?inIdx[inIdx.length-1]:W.length-1;
+      const vFrom=Math.max(0,i0-(i1-i0+1)), Wv=W.slice(vFrom,i1+1);
+      const band={label:'선택 기간',type:'bar',data:Wv.map(w=>inC(w)?110:0),backgroundColor:'rgba(251,196,0,0.14)',borderWidth:0,barPercentage:1,categoryPercentage:1,order:1};
+      const lines=keys.map((k,i)=>({label:k,type:'line',data:S[k].slice(vFrom,i1+1),borderColor:PALETTE[i],backgroundColor:'transparent',borderWidth:2,tension:0.3,pointRadius:0,order:0}));
+      const tSub=document.getElementById('campTrendSub');
+      if(tSub) tSub.textContent='(네이버 데이터랩 · 캠페인 기간 + 직전 동기간 · 음영 = 캠페인 기간)';
+      draw('campTrendChart',{type:'bar',data:{labels:Wv,datasets:[band,...lines]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
         plugins:{legend:{position:'top',labels:{boxWidth:11,filter:it=>it.text!=='선택 기간'}}},scales:{y:{beginAtZero:true,suggestedMax:110},x:{ticks:{maxRotation:60,minRotation:60,font:{size:9}}}}}});
       function avg(k,f){ let s=0,n=0; W.forEach((w,i)=>{ if(f(w)){s+=S[k][i];n++;} }); return n?s/n:0; }
       let html=c.kpi.map(k=>{ const pre=avg(k,w=>w<cs),dur=avg(k,w=>inC(w)); const pct=pre>0?Math.round((dur-pre)/pre*100):(dur>0?100:0),up=pct>=0;
@@ -2650,6 +2658,15 @@
       const period=(c.start||'')+' ~ '+(c.end||'');
       const F=CAMP_FINAL[curCampaign]||null;                 // 확정 실적(대행사·내부 정산)
       const RV=(F&&F.revu)||null;                            // 레뷰 체험단 리포트
+      // 파워링크·브랜드검색(SA) — 캠페인 확정 구간(searchad.json periods.camp_*)
+      const SA=(AD.periods||{})['camp_'+curCampaign]||null;
+      const saC=(SA&&SA.campaigns)||[];
+      const saS=f=>saC.reduce((a,b)=>a+(+b[f]||0),0);
+      const sa={imp:saS('imp'),clk:saS('clk'),cost:saS('cost'),conv:saS('conv')};
+      sa.ctr=sa.imp?sa.clk/sa.imp*100:0; sa.cpc=sa.clk?Math.round(sa.cost/sa.clk):0;
+      // OVERVIEW용 합산 (DA 대행사 실적 + SA 검색광고)
+      const TOT=F?{ spend:F.ad.spend+sa.cost, imp:F.ad.imp+sa.imp, clk:F.ad.clk+sa.clk,
+                    ctr:(F.ad.imp+sa.imp)?((F.ad.clk+sa.clk)/(F.ad.imp+sa.imp)*100):0 }:null;
       const won=n=>(+n||0).toLocaleString()+'원';
       const eok=n=>((+n||0)/1e8).toFixed(2)+'억';
 
@@ -2723,7 +2740,7 @@
           ${box('총 매출액',ed('revenue',F?F.roi.rev:'')+(F?'':'원'),F?('VAT 제외 · 비캠 대비 '+F.roi.revX+'배 · ASP '+nf(F.roi.asp)+'원'):'캠페인 기간 · VAT 별도')}
           ${box('광고 ROAS',ed('roas',F?nf(F.ad.roas):'')+'%',F?('광고 기여 매출 '+eok(F.ad.rev)+' · 목표 '+F.ad.goal.roas+'% 대비 '+Math.round(F.ad.roas/F.ad.goal.roas*100)+'%'):'광고 직접 기여 매출 '+ed('adRev'))}
           ${box('증분 실매출이익',ed('roi',F?F.roi.incProfit:''),F?('캠페인 '+F.roi.profit+' − 비캠 '+F.roi.profitBase+' · 이익률 '+F.roi.margin+' ('+F.roi.marginDelta+')'):'총 비용 대비')}
-          ${box('광고 노출',F?nf(F.ad.imp):nf(imp),F?('클릭 '+nf(F.ad.clk)+' · CTR '+F.ad.ctr+'%'):'검색광고 '+esc(adPeriod)+' 기준')}
+          ${box('광고 노출',TOT?nf(TOT.imp):(F?nf(F.ad.imp):nf(imp)),TOT&&sa.imp?('DA '+nf(F.ad.imp)+' + SA '+nf(sa.imp)+' · 클릭 '+nf(TOT.clk)+' · CTR '+TOT.ctr.toFixed(2)+'%'):(F?('클릭 '+nf(F.ad.clk)+' · CTR '+F.ad.ctr+'%'):'검색광고 '+esc(adPeriod)+' 기준'))}
           ${box('광고 구매전환',F?nf(F.ad.buy)+'건':nf(clk)+' · '+ctr.toFixed(2)+'%',F?('CVR '+F.ad.cvr+'% · CPA '+nf(F.ad.cpa)+'원'):'광고 유입')}
           ${box('언론 보도',nf(prN)+'건',prMedia+'개 매체')}
           ${box('신규 고객 DB',F?nf(F.roi.crm)+'명':ed('crm')+'명',F?('설치 완료 기준 · 순증분 '+F.roi.net):'CRM 확보')}
@@ -2795,7 +2812,7 @@
         ${h('3','디지털 광고',F?('최종 성과 · '+esc(F.period)):('네이버 검색광고 API 자동 집계 · '+esc(adPeriod)))}
         ${F?`
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
-          ${box('총 집행비',won(F.ad.spend),'예산 '+won(F.ad.budget)+' 대비 '+Math.round(F.ad.spend/F.ad.budget*100)+'%')}
+          ${box('총 집행비',won(TOT?TOT.spend:F.ad.spend),(sa.cost?('DA '+won(F.ad.spend)+' + SA '+won(sa.cost)):('예산 '+won(F.ad.budget)+' 대비 '+Math.round(F.ad.spend/F.ad.budget*100)+'%')))}
           ${box('노출 · 클릭',nf(F.ad.imp)+' · '+nf(F.ad.clk),'CTR '+F.ad.ctr+'% · CPC '+nf(F.ad.cpc)+'원 · CPM '+nf(F.ad.cpm)+'원')}
           ${box('구매 · CVR',nf(F.ad.buy)+'건 · '+F.ad.cvr+'%','CPA '+nf(F.ad.cpa)+'원')}
           ${box('광고 매출 · ROAS',eok(F.ad.rev)+' · '+nf(F.ad.roas)+'%','목표 ROAS '+F.ad.goal.roas+'% 대비 '+Math.round(F.ad.roas/F.ad.goal.roas*100)+'%')}
@@ -2829,7 +2846,32 @@
               <td class="px-2 py-2 num text-right">${nf(F.ad.buy)}</td><td class="px-2 py-2 num text-right">${eok(F.ad.rev)}</td><td class="px-2 py-2 num text-right">${nf(F.ad.roas)}%</td></tr>
           </tbody></table>
         </div>
-        <p class="text-[11px] text-slate-400 mb-3">※ 출처: ${esc(F.src)} · 7월 매체별 구매·매출은 대행사 리포트에 매체 단위로 분리되어 있지 않아 '-'로 표기.</p>
+        <p class="text-[11px] text-slate-400 mb-3">※ 위 표는 <b>DA(디스플레이·소셜)</b> 대행사 실적입니다. 출처: ${esc(F.src)} · 7월 매체별 구매·매출은 대행사 리포트에 매체 단위로 분리되어 있지 않아 '-'로 표기.</p>
+        ${SA?`
+        <p class="text-[12px] font-bold text-ink mb-1.5">파워링크 · 브랜드검색 (SA) <span class="font-normal text-slate-400">${esc(SA.since)} ~ ${esc(SA.until)} · 네이버 검색광고 API 실측</span></p>
+        <div class="overflow-auto rounded-xl border border-[#E6E6E3] mb-2">
+          <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
+            <th class="px-2 py-2">캠페인</th><th class="px-2 py-2 text-right">노출</th><th class="px-2 py-2 text-right">클릭</th><th class="px-2 py-2 text-right">CTR</th><th class="px-2 py-2 text-right">CPC</th><th class="px-2 py-2 text-right">비용</th><th class="px-2 py-2 text-right">전환</th></tr></thead>
+          <tbody>${saC.slice().sort((a,b)=>b.imp-a.imp).map(x=>`<tr class="border-t border-slate-100">
+            <td class="px-2 py-1.5 text-slate-700">${esc(x.name||'')}</td><td class="px-2 py-1.5 num text-right">${nf(x.imp)}</td>
+            <td class="px-2 py-1.5 num text-right">${nf(x.clk)}</td><td class="px-2 py-1.5 num text-right">${(+x.ctr||0).toFixed(2)}%</td>
+            <td class="px-2 py-1.5 num text-right">${nf(x.cpc)}원</td><td class="px-2 py-1.5 num text-right">${nf(x.cost)}원</td>
+            <td class="px-2 py-1.5 num text-right">${nf(x.conv)}</td></tr>`).join('')}
+            <tr class="border-t-2 border-slate-200 font-bold"><td class="px-2 py-2">SA 합계</td><td class="px-2 py-2 num text-right">${nf(sa.imp)}</td>
+              <td class="px-2 py-2 num text-right">${nf(sa.clk)}</td><td class="px-2 py-2 num text-right">${sa.ctr.toFixed(2)}%</td>
+              <td class="px-2 py-2 num text-right">${nf(sa.cpc)}원</td><td class="px-2 py-2 num text-right">${nf(sa.cost)}원</td><td class="px-2 py-2 num text-right">${nf(sa.conv)}</td></tr>
+          </tbody></table>
+        </div>
+        <div class="rounded-xl border-2 border-[#EDE9FF] bg-[#FBFAFF] p-3 mb-3">
+          <p class="text-[12px] font-extrabold text-[#4B32C3] mb-1.5">OVERVIEW · DA + SA 합산</p>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 text-[12px]">
+            <div><p class="text-slate-500">총 집행비</p><p class="num text-lg font-extrabold text-ink">${nf(TOT.spend)}원</p></div>
+            <div><p class="text-slate-500">총 노출</p><p class="num text-lg font-extrabold text-ink">${nf(TOT.imp)}</p></div>
+            <div><p class="text-slate-500">총 클릭</p><p class="num text-lg font-extrabold text-ink">${nf(TOT.clk)}</p></div>
+            <div><p class="text-slate-500">통합 CTR</p><p class="num text-lg font-extrabold text-ink">${TOT.ctr.toFixed(2)}%</p></div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1.5">DA(대행사 리포트) + SA(파워링크·브랜드검색 API 실측) 단순 합산. 매출·ROAS는 중복 집계 우려가 있어 합산하지 않고 DA 기준으로만 표기합니다.</p>
+        </div>`:`<p class="text-[11px] text-slate-400 mb-3">※ 파워링크·브랜드검색(SA) 캠페인 구간 데이터는 다음 수집(매일 자동) 후 표시됩니다.</p>`}
         <p class="text-[12px] font-bold text-ink mb-1">참고 · 최근 검색광고 실시간 집계</p>`:''}
         ${cps.length?`<div class="overflow-auto rounded-xl border border-[#E6E6E3]">
           <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">

@@ -153,6 +153,13 @@ def get_creatives(ids, info, raw):
     return out
 
 
+# 리포트에 고정으로 쓰는 캠페인 구간 (키, 시작, 종료)
+CAMPAIGN_RANGES = [
+    ("camp_l100", "2026-05-27", "2026-07-06"),   # L100 스마트 도어락 캠페인
+    ("camp_interior", "2026-04-13", "2026-06-30"),  # 스마트홈 인테리어 캠페인
+]
+
+
 def main():
     if not (KEY and SEC and CID):
         print("SEARCHAD 키 미설정 — 건너뜀")
@@ -179,6 +186,10 @@ def main():
             periods[key] = summarize(ids, s, until.strftime("%Y-%m-%d"), info)
         mStart = today.replace(day=1).strftime("%Y-%m-%d")
         periods["month"] = summarize(ids, mStart, until.strftime("%Y-%m-%d"), info)
+        # 캠페인 확정 구간 — 리포트에서 캠페인 기간 실적을 그대로 쓰기 위해 고정 구간도 함께 수집
+        for key, s, u in CAMPAIGN_RANGES:
+            if s <= until.strftime("%Y-%m-%d"):
+                periods[key] = summarize(ids, s, min(u, until.strftime("%Y-%m-%d")), info)
 
     creatives = get_creatives(ids, info, raw) if ids else []
 
