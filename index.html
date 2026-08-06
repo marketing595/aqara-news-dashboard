@@ -2572,6 +2572,24 @@
                       {n:'3주 06/10-06/16', spend:7860805,  imp:504675, clk:6233,  ctr:1.24, buy:100, rev:34239525, roas:436},
                       {n:'4주 06/17-06/23', spend:3568505,  imp:205243, clk:3063,  ctr:1.49, buy:84,  rev:28563950, roas:800},
                       {n:'5주 06/24-06/30', spend:7694313,  imp:477860, clk:6979,  ctr:1.46, buy:164, rev:60559205, roas:787} ] },
+        /* 레뷰(revu) 체험단 리포트
+           · 캠페인: 1/10차 [아카라] 스마트 도어락 L100 · 프리미어형 · 선정 인플루언서 18명
+           · 캠페인 누적성과 기준일 2026-08-05 / 상위노출 검색결과 기준일 2026-06-23 */
+        revu:{ asOf:'2026-08-05',
+          camp:{ name:'1/10차 [아카라] 스마트 도어락 L100', type:'프리미어형', picked:18,
+                 sched:[['인플루언서 모집','26.05.22~05.25'],['인플루언서 선정','26.05.26'],['인플루언서 발표','26.05.26'],
+                        ['콘텐츠 등록','26.05.27~06.12'],['보고서 확인','26.06.16']] },
+          camp성과:{ posts:36, views:14927, viewsAvg:414, mo:10497, moAvg:291, pc:4430, pcAvg:123 },
+          blog:{ posts:85, views:247000, likes:1300, cmts:358, viewsL:'247.0K', likesL:'1.3K' },
+          seoDate:'2026.06.23',
+          seo:[['스마트 도어락 추천',4],['아카라 L100',10],['아카라 도어락',10],['스마트도어락추천',4]],
+          seoKw:[['아카라 L100',159],['아카라 도어락',104],['스마트 도어락 추천',41],['스마트도어락추천',41],
+                 ['도어락추천',12],['스마트홈인테리어',2],['IOT인테리어',0]],
+          inKw:[['아카라 도어락',28.52],['아카라 L100',21.73],['도어락 추천',12.34],['스마트 도어락',9.91],
+                ['지문인식 도어락 추천',7.13],['아카라',4.52],['도어락추천',4.17],['잇섭 도어락',4.17],
+                ['지문 도어락 추천',4.00],['스마트도어락',3.47]],
+          imgs:[{src:'img/revu-blog-views.png', cap:'레뷰 블로그 누적 조회수 추이 (총조회수·모바일·PC · 5/27~8/01)'},
+                {src:'img/revu-seo-capture.png', cap:'블로그 상위노출 검색결과 캡처 (2026.06.23)'}] },
         roi:{ units:2435, unitsOn:1812, unitsOff:623, unitsX:2.09, rev:'9.22억', revX:2.33, asp:378568,
               profit:'3.64억', profitBase:'1.69억', profitX:2.11, margin:'40%', marginDelta:'-4%p',
               incProfit:'+1.88억', mktCost:'-1.98억', net:'-961만원', crm:1467,
@@ -2631,6 +2649,7 @@
       const h=(n,t,s)=>`<div class="flex items-baseline gap-2 mt-6 mb-2"><span class="text-[12px] font-extrabold text-white bg-[#7C5CFF] rounded px-1.5 py-0.5">${n}</span><h3 class="text-[15px] font-extrabold text-ink">${t}</h3>${s?`<span class="text-[11px] text-slate-400">${s}</span>`:''}</div>`;
       const period=(c.start||'')+' ~ '+(c.end||'');
       const F=CAMP_FINAL[curCampaign]||null;                 // 확정 실적(대행사·내부 정산)
+      const RV=(F&&F.revu)||null;                            // 레뷰 체험단 리포트
       const won=n=>(+n||0).toLocaleString()+'원';
       const eok=n=>((+n||0)/1e8).toFixed(2)+'억';
 
@@ -2820,7 +2839,55 @@
         </div>`:`<p class="text-[12px] text-slate-400 rounded-xl border border-[#E6E6E3] p-4">해당 키워드의 검색광고 데이터가 없습니다. 매체별 성과는 직접 입력하세요: ${ed('adManual')}</p>`}
         <p class="text-[12px] text-slate-500 mt-2">소재·매체 인사이트: ${ed('adInsight')}</p>
         ${h('4','바이럴','블로그 · 인스타그램 체험단 · 커뮤니티')}
-        <p class="text-[12px] font-bold text-ink mb-1.5">체험단 성과 <span class="font-normal text-slate-400">(레뷰 리포트 기준 · 직접 입력)</span></p>
+        <p class="text-[12px] font-bold text-ink mb-1.5">체험단 성과 <span class="font-normal text-slate-400">(레뷰 리포트 기준${RV?' · '+esc(RV.asOf)+' 확인':' · 직접 입력'})</span></p>
+        ${RV?`
+        <div class="rounded-xl border border-[#E6E6E3] p-4 mb-3">
+          <div class="flex flex-wrap items-baseline gap-2 mb-2">
+            <p class="text-[13px] font-extrabold text-ink">${esc(RV.camp.name)}</p>
+            <span class="text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7] font-semibold">${esc(RV.camp.type)}</span>
+            <span class="text-[11px] text-slate-500">선정 인플루언서 <b class="num text-ink">${RV.camp.picked}명</b></span>
+          </div>
+          <div class="flex flex-wrap gap-1.5">${RV.camp.sched.map(s=>`<span class="text-[11px] rounded-lg border border-[#ECE9E1] bg-[#FAFAF9] px-2 py-1"><b class="text-slate-600">${esc(s[0])}</b> <span class="num text-slate-400">${esc(s[1])}</span></span>`).join('')}</div>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
+          ${box('캠페인 콘텐츠',nf(RV.camp성과.posts)+'건','기준일 '+esc(RV.asOf))}
+          ${box('총 조회수',nf(RV.camp성과.views),'콘텐츠 평균 '+nf(RV.camp성과.viewsAvg)+'회')}
+          ${box('모바일 조회',nf(RV.camp성과.mo),'평균 '+nf(RV.camp성과.moAvg)+'회 · 비중 '+Math.round(RV.camp성과.mo/RV.camp성과.views*100)+'%')}
+          ${box('PC 조회',nf(RV.camp성과.pc),'평균 '+nf(RV.camp성과.pcAvg)+'회 · 비중 '+Math.round(RV.camp성과.pc/RV.camp성과.views*100)+'%')}
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
+          ${box('레뷰 전체 콘텐츠',nf(RV.blog.posts)+'건','전 캠페인 누적')}
+          ${box('전체 누적 조회수',RV.blog.viewsL,nf(RV.blog.views)+'회 · 건당 '+nf(Math.round(RV.blog.views/RV.blog.posts))+'회')}
+          ${box('전체 누적 좋아요',RV.blog.likesL,'건당 '+(RV.blog.likes/RV.blog.posts).toFixed(1)+'개')}
+          ${box('전체 누적 댓글',nf(RV.blog.cmts)+'개','건당 '+(RV.blog.cmts/RV.blog.posts).toFixed(1)+'개')}
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-3">
+          <div class="overflow-auto rounded-xl border border-[#E6E6E3]">
+            <p class="text-[12px] font-bold text-ink px-3 py-2 bg-slate-50">상위 노출 키워드 <span class="font-normal text-slate-400">(노출 건수)</span></p>
+            <table class="w-full text-[12px]"><tbody>${RV.seoKw.map((k,i)=>`<tr class="border-t border-slate-100">
+              <td class="px-2 py-1.5 num text-slate-400 w-6">${i+1}</td><td class="px-2 py-1.5 text-slate-700">${esc(k[0])}</td>
+              <td class="px-2 py-1.5 num text-right font-semibold ${k[1]?'text-ink':'text-slate-300'}">${nf(k[1])}건</td></tr>`).join('')}</tbody></table>
+          </div>
+          <div class="overflow-auto rounded-xl border border-[#E6E6E3]">
+            <p class="text-[12px] font-bold text-ink px-3 py-2 bg-slate-50">유입 키워드 TOP 10 <span class="font-normal text-slate-400">(유입 비중)</span></p>
+            <table class="w-full text-[12px]"><tbody>${RV.inKw.map((k,i)=>`<tr class="border-t border-slate-100">
+              <td class="px-2 py-1.5 num text-slate-400 w-6">${i+1}</td><td class="px-2 py-1.5 text-slate-700">${esc(k[0])}</td>
+              <td class="px-2 py-1.5 w-24"><div class="h-1.5 rounded bg-slate-100"><div class="h-1.5 rounded bg-brand" style="width:${Math.round(k[1]/RV.inKw[0][1]*100)}%"></div></div></td>
+              <td class="px-2 py-1.5 num text-right font-semibold text-ink">${k[1]}%</td></tr>`).join('')}</tbody></table>
+          </div>
+        </div>
+        <div class="rounded-xl border border-[#E6E6E3] p-3 mb-3">
+          <p class="text-[12px] font-bold text-ink mb-2">상위 노출 검색 결과 <span class="font-normal text-slate-400">기준일 ${esc(RV.seoDate)}</span></p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            ${RV.seo.map(s=>`<div class="rounded-lg bg-[#FAFAF9] border border-[#ECE9E1] p-2 text-center">
+              <p class="text-[11px] text-slate-600 truncate">${esc(s[0])}</p><p class="num text-lg font-extrabold text-ink">${s[1]}건</p></div>`).join('')}
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
+          ${RV.imgs.map(im=>`<figure class="rounded-xl border border-[#E6E6E3] overflow-hidden bg-white">
+            <img src="${esc(im.src)}" loading="lazy" alt="${esc(im.cap)}" class="w-full object-contain bg-[#FAFAF9]" onerror="this.closest('figure').style.display='none'"/>
+            <figcaption class="text-[11px] text-slate-500 px-3 py-2 border-t border-[#F1EFE9]">${esc(im.cap)}</figcaption></figure>`).join('')}
+        </div>`:''}
         <div class="overflow-auto rounded-xl border border-[#E6E6E3] mb-2">
           <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
             <th class="px-2 py-2">채널</th><th class="px-2 py-2 text-right">모집/선정</th><th class="px-2 py-2 text-right">발행</th>
@@ -2828,9 +2895,9 @@
             <th class="px-2 py-2 text-right">상위노출</th><th class="px-2 py-2">비고</th></tr></thead>
           <tbody>
             <tr class="border-t border-slate-100"><td class="px-2 py-1.5 font-semibold text-ink">네이버 블로그</td>
-              <td class="px-2 py-1.5 text-right">${ed('rvBlogPick')}</td><td class="px-2 py-1.5 text-right">${ed('rvBlogPost')}</td>
-              <td class="px-2 py-1.5 text-right">${ed('rvBlogView')}</td><td class="px-2 py-1.5 text-right">${ed('rvBlogLike')}</td>
-              <td class="px-2 py-1.5 text-right">${ed('rvBlogCmt')}</td><td class="px-2 py-1.5 text-right">${ed('rvBlogSeo')}</td>
+              <td class="px-2 py-1.5 text-right">${ed('rvBlogPick')}</td><td class="px-2 py-1.5 text-right">${ed('rvBlogPost',RV?nf(RV.blog.posts):'')}</td>
+              <td class="px-2 py-1.5 text-right">${ed('rvBlogView',RV?nf(RV.blog.views):'')}</td><td class="px-2 py-1.5 text-right">${ed('rvBlogLike',RV?nf(RV.blog.likes):'')}</td>
+              <td class="px-2 py-1.5 text-right">${ed('rvBlogCmt',RV?nf(RV.blog.cmts):'')}</td><td class="px-2 py-1.5 text-right">${ed('rvBlogSeo')}</td>
               <td class="px-2 py-1.5">${ed('rvBlogNote')}</td></tr>
             <tr class="border-t border-slate-100"><td class="px-2 py-1.5 font-semibold text-ink">인스타그램</td>
               <td class="px-2 py-1.5 text-right">${ed('rvIgPick')}</td><td class="px-2 py-1.5 text-right">${ed('rvIgPost')}</td>
