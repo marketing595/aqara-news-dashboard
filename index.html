@@ -114,6 +114,7 @@
       <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페·커뮤니티</button>
       <button id="grpBtn-home" onclick="switchGroup('home')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">홈페이지</button>
       <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
+      <button id="grpBtn-seminar" onclick="switchGroup('seminar')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">세미나</button>
       <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
     </div>
   </div>
@@ -1229,6 +1230,11 @@
    </div>
 
    <!-- ONLY MKT (팀 전용) -->
+   <!-- ===== 세미나 (KOSID 공동주최) ===== -->
+   <div id="view-seminar" class="hidden">
+     <div id="semBody"></div>
+   </div>
+
    <div id="view-mkt" class="hidden">
      <div id="mktGate" class="max-w-md mx-auto card p-8 mt-8 text-center">
        <div class="text-3xl mb-2">🔒</div>
@@ -3100,8 +3106,8 @@
     function kstToday(){ const d=new Date(Date.now()+9*36e5); return d.toISOString().slice(0,10); }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], home:['home'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', issue:'pr', briefing:'pr', owned:'owned', cafe:'cafe', home:'home', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], home:['home'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], seminar:['seminar'], mkt:['mkt'] };
+    const VIEW_GROUP={ analytics:'pr', issue:'pr', briefing:'pr', owned:'owned', cafe:'cafe', home:'home', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', seminar:'seminar', mkt:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
@@ -3357,15 +3363,124 @@
           <div class="flex justify-between text-[12px]"><span class="truncate text-slate-600 group-hover:text-ink">${esc(m)}</span><span class="num font-semibold text-ink">${mc[m]}</span></div>
           <div class="h-1 rounded bg-slate-100 mt-0.5"><div class="h-1 rounded bg-brand" style="width:${Math.round(mc[m]/max*100)}%"></div></div></button>`).join('');
     }
+    /* ===== 세미나 (KOSID 공동주최) — seminar.json을 탭 진입 시에만 불러와 렌더 ===== */
+    let SEMINAR=null, SEM_LOADING=false;
+    let semChk=(()=>{ try{ return JSON.parse(localStorage.getItem('aqaraSemChk')||'{}'); }catch(e){ return {}; } })();
+    function semToggle(i){ semChk[i]=!semChk[i]; try{ localStorage.setItem('aqaraSemChk',JSON.stringify(semChk)); }catch(e){} renderSeminar(); }
+    function renderSeminar(){
+      const box=document.getElementById('semBody'); if(!box) return;
+      if(!SEMINAR){
+        box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">세미나 자료를 불러오는 중…</p>';
+        if(SEM_LOADING) return; SEM_LOADING=true;
+        fetch('seminar.json?_='+Date.now()).then(r=>r.json()).then(d=>{ SEMINAR=d; SEM_LOADING=false; renderSeminar(); })
+          .catch(()=>{ SEM_LOADING=false; box.innerHTML='<p class="text-sm text-ared py-16 text-center">세미나 자료를 불러오지 못했습니다.</p>'; });
+        return;
+      }
+      const S=SEMINAR;
+      const dday=(()=>{ const t=new Date(S.date+'T00:00:00+09:00')-new Date(); const d=Math.ceil(t/864e5);
+        return d>0?('D-'+d):(d===0?'D-DAY':('종료 +'+Math.abs(d)+'일')); })();
+      const sec=(n,t,s,b)=>`<section class="card p-5 sm:p-6 mb-4">
+        <div class="flex items-baseline gap-2 mb-3"><span class="text-[12px] font-extrabold text-white bg-ink rounded px-1.5 py-0.5">${n}</span>
+          <h3 class="text-[16px] font-extrabold text-ink">${t}</h3>${s?`<span class="text-[11px] text-slate-400">${s}</span>`:''}</div>${b}</section>`;
+      const kv=(k,v)=>`<div class="flex gap-3 py-1.5 border-b border-[#F1EFE9] last:border-0"><span class="w-24 shrink-0 text-[12px] font-bold text-slate-500">${esc(k)}</span><span class="text-[13px] text-slate-700">${esc(v)}</span></div>`;
+      const ul=a=>`<ul class="space-y-1.5">${a.map(x=>`<li class="text-[13px] text-slate-600 leading-relaxed">· ${esc(x)}</li>`).join('')}</ul>`;
+      const th=a=>`<thead class="bg-slate-50 text-slate-500"><tr class="text-left">${a.map(x=>`<th class="px-2.5 py-2 font-semibold">${esc(x)}</th>`).join('')}</tr></thead>`;
+      const tbl=(head,rows)=>`<div class="overflow-auto rounded-xl border border-[#E6E6E3]"><table class="w-full text-[12px]">${th(head)}<tbody>${rows}</tbody></table></div>`;
+      const done=S.checklist.filter((_,i)=>semChk[i]).length;
+
+      box.innerHTML=`
+      <div class="card p-5 sm:p-6 mb-5">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p class="text-[11px] font-extrabold tracking-wider text-brand-ink">KOSID × AQARA LIFE</p>
+            <h2 class="text-[22px] sm:text-[26px] font-extrabold text-ink leading-tight mt-0.5">${esc(S.title)}</h2>
+            <p class="text-[13px] text-slate-500 mt-1">${esc(S.subtitle)}</p>
+          </div>
+          <div class="text-right">
+            <span class="inline-block text-[13px] font-extrabold px-3 py-1.5 rounded-xl bg-ink text-white">${dday}</span>
+            <p class="text-[11px] text-slate-400 mt-1">${esc(S.dateLabel)}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-4 pt-4 border-t border-[#ECE9E1]">
+          ${kv('주최·주관',S.host)}${kv('일정',S.dateLabel)}${kv('장소',S.place)}${kv('목표 규모',S.scale)}
+          ${kv('참석 대상',S.target)}${kv('행사 형식',S.format)}
+        </div>
+        <p class="text-[11px] text-slate-400 mt-3">출처: ${esc(S.source)}</p>
+      </div>
+
+      ${sec('1','제안 개요','핵심 제안과 추진 목표',`
+        <p class="text-[13px] text-slate-700 leading-relaxed mb-2">${esc(S.core)}</p>
+        <p class="text-[12px] text-slate-500 leading-relaxed mb-3">${esc(S.purpose)}</p>
+        ${tbl(['목표','세미나에서 만들 변화','중장기 성과'],S.goals.map(g=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(g.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(g.s)}</td><td class="px-2.5 py-2 text-slate-600">${esc(g.l)}</td></tr>`).join(''))}`)}
+
+      ${sec('2','왜 지금 스마트홈 인테리어인가','',`
+        ${ul(S.why)}
+        <div class="mt-3 rounded-xl bg-[#FBFAFF] border border-[#EDE9FF] p-4">
+          <p class="text-[11px] font-bold text-[#5B44C7] mb-1">정의</p>
+          <p class="text-[14px] font-semibold text-ink leading-relaxed">${esc(S.definition)}</p>
+        </div>`)}
+
+      ${sec('3','KOSID와 함께해야 하는 이유','역할 분담',`
+        ${tbl(['KOSID의 역할','아카라라이프의 역할','공동으로 만드는 결과'],S.roles.map(r=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 text-slate-700">${esc(r.kosid)}</td><td class="px-2.5 py-2 text-slate-700">${esc(r.aqara)}</td><td class="px-2.5 py-2 font-semibold text-ink">${esc(r.both)}</td></tr>`).join(''))}
+        <p class="text-[12px] font-bold text-ink mt-4 mb-1">공동 추진의 방향성</p>${ul(S.direction)}`)}
+
+      ${sec('4','프로그램 구성(안)',S.flow,`
+        ${tbl(['세션','주제','핵심 내용','발표 주체(안)'],S.program.map(p=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
+          <td class="px-2.5 py-2 font-semibold text-ink">${esc(p.t)}</td><td class="px-2.5 py-2 text-slate-600">${esc(p.d)}</td>
+          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(p.w)}</td></tr>`).join(''))}
+        <p class="text-[12px] font-bold text-ink mt-4 mb-1">핵심 세션 메시지</p>${ul(S.messages)}`)}
+
+      ${sec('5','아카라라이프가 제공하는 가치','',`
+        ${tbl(['역량','제공 가치','인테리어 업계의 효과'],S.value.map(v=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(v.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(v.v)}</td><td class="px-2.5 py-2 text-slate-600">${esc(v.e)}</td></tr>`).join(''))}`)}
+
+      ${sec('6','참여 인테리어 기업이 얻는 ROI','',`
+        ${tbl(['ROI 영역','가치 창출 방식','측정 지표(예시)'],S.roi.map(r=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(r.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(r.v)}</td><td class="px-2.5 py-2 text-slate-500">${esc(r.m)}</td></tr>`).join(''))}
+        <p class="text-[12px] text-brand-ink font-semibold mt-2">핵심 · ${esc(S.roiCore)}</p>`)}
+
+      ${sec('7','공동 추진체계 및 요청사항','',`
+        ${tbl(['구분','KOSID','아카라라이프','공동'],S.system.map(s=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(s.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(s.kosid)}</td>
+          <td class="px-2.5 py-2 text-slate-600">${esc(s.aqara)}</td><td class="px-2.5 py-2 text-slate-600">${esc(s.both)}</td></tr>`).join(''))}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+          <div class="rounded-xl border-l-4 border-brand border border-[#E6E6E3] p-4"><p class="font-bold text-brand-ink mb-1 text-[13px]">KOSID에 제안드리는 사항</p>${ul(S.askKosid)}</div>
+          <div class="rounded-xl border-l-4 border-ink border border-[#E6E6E3] p-4"><p class="font-bold text-ink mb-1 text-[13px]">아카라라이프의 실행 책임</p>${ul(S.doAqara)}</div>
+        </div>`)}
+
+      ${sec('8','기대효과','',`
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          ${S.effect.map(e=>`<div class="rounded-xl border border-[#E6E6E3] p-4">
+            <p class="font-extrabold text-ink mb-1.5 text-[13px]">${esc(e.who)}</p>${ul(e.items)}</div>`).join('')}
+        </div>
+        <div class="mt-3 rounded-xl bg-[#FAFAF9] border border-[#E6E6E3] p-4">
+          <p class="text-[11px] font-bold text-slate-500 mb-1">제안의 결론</p>
+          <p class="text-[14px] font-semibold text-ink leading-relaxed">${esc(S.conclusion)}</p>
+        </div>`)}
+
+      ${sec('9','협의 요청 · 다음 단계','',`<p class="text-[13px] text-slate-700 leading-relaxed">${esc(S.nextStep)}</p>`)}
+
+      ${sec('10','준비 체크리스트',done+'/'+S.checklist.length+' 완료',`
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
+          ${S.checklist.map((c,i)=>`<label class="flex items-start gap-2 py-1.5 border-b border-[#F1EFE9] cursor-pointer group">
+            <input type="checkbox" ${semChk[i]?'checked':''} onchange="semToggle(${i})" class="mt-0.5 accent-[#FBC400]" />
+            <span class="text-[13px] ${semChk[i]?'text-slate-400 line-through':'text-slate-700 group-hover:text-ink'}">${esc(c)}</span></label>`).join('')}
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2">※ 체크 상태는 이 브라우저에 저장됩니다.</p>`)}`;
+    }
     function switchTab(t){
       // 상위 뷰만 토글(카페·리포트 클러스터는 view-mkt 내부로 편입 → mktSub/mktReportSub가 관리)
-      ['analytics','issue','briefing','owned','cafe','home','library','mkt'].forEach(v=>{
+      ['analytics','issue','briefing','owned','cafe','home','library','seminar','mkt'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','home','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
+      ['pr','owned','cafe','home','library','seminar','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
+      if(t==='seminar') renderSeminar();
       ['analytics','issue','briefing'].forEach(v=>{ const b=document.getElementById('tabBtn-'+v); if(b) b.className=subClass(v===t); });
       if(t==='issue'){ renderIssues(); }
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
