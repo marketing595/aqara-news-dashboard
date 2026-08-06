@@ -473,10 +473,6 @@
        <h2 class="accent font-extrabold text-ink mb-1">주별 검색량 추이 <span id="campTrendSub" class="text-xs font-normal text-slate-400">(네이버 데이터랩 · 캠페인 기간 + 직전 동기간 · 음영 = 캠페인 기간)</span></h2>
        <div class="h-72 mt-2"><canvas id="campTrendChart"></canvas></div>
      </div>
-     <div class="card p-5 mb-5">
-       <h2 class="accent font-extrabold text-ink mb-2">포지셔닝 분석</h2>
-       <div id="campPos" class="text-sm text-slate-600 space-y-2"></div>
-     </div>
      <p class="text-xs text-slate-400">※ SNS(인스타·유튜브 등) 언급량은 별도 소셜 API 연동이 필요해 현재 미포함입니다. 검색량=네이버 데이터랩, 자사 커버리지=구글 시트 기준.</p>
    </div>
 
@@ -2543,7 +2539,7 @@
           document.getElementById('campTopComments').innerHTML=(c.topComments||[]).map(x=>`<div class="border-l-2 border-brand/50 pl-3 py-1"><p class="text-sm text-slate-700">"${esc(x.t)}"</p><p class="text-xs text-slate-400 mt-0.5">${esc(x.v)} · ♥ ${x.l}</p></div>`).join('');
         } else { rc.classList.add('hidden'); }
       } else { cc.classList.add('hidden'); }
-      document.getElementById('campPos').innerHTML=c.pos;
+      { const _pe=document.getElementById('campPos'); if(_pe) _pe.innerHTML=c.pos; }   // 포지셔닝 내용은 LESSONS&LEARN·NEXT로 편입
       campContentPark();   // 리포트를 새로 그리기 전에 인플루언서 카드를 원래 자리로 빼둔다(노드·차트 보존)
       document.getElementById('campReport').innerHTML=((curCampaign==='interior')?INTERIOR_REPORT:'')+campFullReport(c);
       applyIrEdits();
@@ -2628,11 +2624,19 @@
     function campReportCharts(){
       const F=CAMP_FINAL[curCampaign]; if(!F||typeof draw!=='function') return;
       const opt=(extra)=>Object.assign({responsive:true,maintainAspectRatio:false},extra||{});
-      if(document.getElementById('rptAdWeekChart')) draw('rptAdWeekChart',{ type:'bar',
+      // 막대·선 위에 수치를 직접 그려주는 인라인 플러그인(외부 라이브러리 불필요)
+      const vlab={ id:'vlab', afterDatasetsDraw(ch){ const ctx=ch.ctx;
+        ch.data.datasets.forEach((ds,di)=>{ const meta=ch.getDatasetMeta(di); if(meta.hidden) return;
+          meta.data.forEach((pt,i)=>{ const v=ds.data[i]; if(v==null) return;
+            ctx.save(); ctx.font='bold 10px Pretendard, sans-serif'; ctx.textAlign='center';
+            ctx.fillStyle=(ds.type==='line')?'#3F5136':'#8A6A00';
+            ctx.fillText((ds.type==='line')?(Math.round(v)+'%'):(v.toFixed(1)+'억'), pt.x, pt.y-((ds.type==='line')?9:5));
+            ctx.restore(); }); }); } };
+      if(document.getElementById('rptAdWeekChart')) draw('rptAdWeekChart',{ type:'bar', plugins:[vlab],
         data:{ labels:F.ad.weekly.map(w=>w.n.split(' ')[0]),
           datasets:[{type:'bar',label:'매출(억)',data:F.ad.weekly.map(w=>+(w.rev/1e8).toFixed(2)),backgroundColor:'#FBC400',borderRadius:4,yAxisID:'y'},
                     {type:'line',label:'ROAS(%)',data:F.ad.weekly.map(w=>w.roas),borderColor:'#5E7350',backgroundColor:'#5E7350',tension:.3,yAxisID:'y1'}]},
-        options:opt({plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},
+        options:opt({layout:{padding:{top:18}},plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},
           scales:{y:{beginAtZero:true,ticks:{font:{size:10}}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}) });
       if(document.getElementById('rptAdMediaChart')){
         const agg={}; F.ad.media.forEach(m=>{ const k=m.n.replace(/\(.*$/,'').trim(); agg[k]=(agg[k]||0)+m.spend; });
@@ -2654,7 +2658,10 @@
       '할인 대신 \'설치 포함 패키지\'로 대당 결제액을 지켜 실매출이익률 43%→39%로 하락 폭을 제한(정가 신뢰 유지·오픈몰 최저가 경쟁 미유발).',
       '7월 매체 효율 개선 — CTR 1.78%→2.07%, CPC 966원→721원. 메타 어드밴티지+ CTR 3.37%, 네이버GFA AD Voost ROAS 1,361%로 쇼핑탭 전용 상품 효율 검증.',
       '캠페인 종료 후에도 7월 공식몰 도어락 기저가 월 5,960만원으로 캠페인 전(3,800~4,000만) 대비 +50% 유지 — 일회성 스파이크가 아닌 기저 상승.',
-      '블로그 체험단으로 \'아카라 L100\' 159건·\'아카라 도어락\' 104건 상위노출 확보, 유입 키워드 1·2위를 브랜드+제품명이 차지.'
+      '블로그 체험단으로 \'아카라 L100\' 159건·\'아카라 도어락\' 104건 상위노출 확보, 유입 키워드 1·2위를 브랜드+제품명이 차지.',
+      '검색 지표로 인지 효과 확인 — \'L100\' 검색 약 2배(+89%, 6월 초 피크 15.3), \'아카라 도어락\' +21%, \'스마트도어락\' +11%로 브랜드 도어락 전반으로 관심 확대.',
+      '구모델 → 신모델 전환 성공 — 같은 기간 \'K100\' 검색 -17%로 관심이 L100으로 이동, 신제품 전환이라는 캠페인 목표에 부합.',
+      'KOL 콘텐츠 도달 확보 — 유튜브 7편 누적 133만 조회 + 인스타 6건 52만 조회, 유튜브 댓글 부정 비중 8%로 여론 리스크 없이 볼륨 확보.'
     ];
     const BAD_D=[
       '증분 실매출이익 +1.88억 대비 잔여 마케팅비 1.98억 — 순증분 약 -961만원으로 사실상 본전, 이익 기여는 아직 미검증.',
@@ -2662,7 +2669,9 @@
       'K100과 기능 차별점이 크지 않아 L100 단독 소구 포인트가 약했고, 동일 인플루언서·유사 프로모션 구조로 새로움 부족.',
       '매체 효율 편차 — 인스타그램 PA는 ROAS 265%(리타겟팅 173%)로 최저. 예산 배분 재조정 필요.',
       '성장이 온라인에 편중 — 오프라인 총판은 623대로 정체, 캠페인의 오프라인 파급 효과 없음.',
-      '\'스마트홈인테리어\'·\'IOT인테리어\' 키워드 노출이 2건·0건 — 인테리어 문맥으로의 확장은 실패.'
+      '도달이 곧 제품 관심은 아니었음 — 최대 도달 영상(동네친구강나미 115만뷰)은 댓글이 창작자 사연에 집중돼 제품 인지 기여가 낮았고, 실제 제품 반응·설치 의향은 제품 맥락이 분명한 영상(김한용의모카 테슬라 연동, 지니스펙트럼 아동 실종 방지)에서 발생.',
+      '판매는 2.1배 늘었지만 홈페이지 문의는 캠페인 기간 232건으로 직전 동기간(236건)과 보합 — 광고 트래픽이 구매로는 이어졌으나 상담·B2B 리드 인입 증가로는 연결되지 않음.',
+      '체험단 원고가 도어락 키워드에 집중돼 \'스마트홈인테리어\' 2건·\'IOT인테리어\' 0건 노출 — 인테리어 문맥 확산은 이번 캠페인 설계 범위 밖이었고, 다음 캠페인의 확장 과제로 남음.'
     ];
     const NEXT_D=[
       '채널 확대 — 29CM·CJ오쇼핑 등 신규 입점 및 8월 홈캉스 기획전(네이버 브랜드스토어) 연계로 오픈몰 확산 국면 유지.',
@@ -2670,7 +2679,10 @@
       '확보한 설치 완료 고객 DB 1,467명 대상 CRM 시나리오 설계(설치 후기 요청 → 액세서리 추가 구매 → 리퍼럴).',
       '고효율 매체 집중 — 네이버GFA AD Voost·메타 어드밴티지+ 비중 확대, 인스타그램 PA·리타겟팅 축소.',
       'L100 전용 USP 개발(무타공·전월세·1인가구)로 K100과 포지션 분리, 카니발리제이션 완화.',
-      '인테리어 문맥 키워드(스마트홈인테리어·IOT인테리어) 콘텐츠·검색광고 보강으로 다음 캠페인의 확장 축 확보.'
+      '인테리어 문맥 키워드(스마트홈인테리어·IOT인테리어) 콘텐츠·검색광고 보강으로 다음 캠페인의 확장 축 확보.',
+      '메가 KOL 콘텐츠 2차 활용 — 초대형 채널은 즉각 전환보다 노출·화제성 자산에 가까우므로, 검증된 고조회 영상의 2차 라이선스를 구매해 자사 채널·퍼포먼스 광고 소재로 재확산(도달 재활용 + 전환 연결).',
+      'KOL 편성 재설계 — \'초대형 1편\' 의존을 낮추고 제품 맥락이 뚜렷한 중형 크리에이터 다수 + 참여율 높은 마이크로 조합으로 전환 효율 중심 편성.',
+      '상담·리드 전환 설계 보완 — 구매 외 경로(홈페이지 문의·시공 상담)로 이어지는 랜딩·CTA를 캠페인 초기에 함께 설계.'
     ];
     function campFullReport(c){
       if(!c) return '';
@@ -2983,6 +2995,31 @@
           </tbody></table>
         </div>
         <p class="text-[12px] text-slate-500 mb-3">캠페인·기간: ${ed('rvPeriod')} · 상위노출 키워드: ${ed('rvKeywords')} · 참고: <a href="https://report.revu.net/service/dashboard" target="_blank" rel="noopener" class="text-brand-ink hover:underline">레뷰 리포트 대시보드 ↗</a></p>
+        <p class="text-[12px] font-bold text-ink mb-1.5">리뷰플레이스 (기자단) <span class="font-normal text-slate-400">· K100 / L100 분리 진행 · 아이즈커뮤니케이션즈</span></p>
+        <div class="overflow-auto rounded-xl border border-[#E6E6E3] mb-2">
+          <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
+            <th class="px-2 py-2">회차 · 캠페인</th><th class="px-2 py-2">제품</th><th class="px-2 py-2">기간</th>
+            <th class="px-2 py-2 text-right">리뷰어</th><th class="px-2 py-2 text-right">콘텐츠</th><th class="px-2 py-2 text-right">총 조회수</th>
+            <th class="px-2 py-2 text-right">PC</th><th class="px-2 py-2 text-right">모바일</th><th class="px-2 py-2 text-right">상위노출</th></tr></thead>
+          <tbody>${[
+            {k:'rp4',n:'4회차 · MAX 얼리버드 프로모션',p:'K100',d:'2026-05-20~05-26'},
+            {k:'rp3',n:'3회차 · L100 MAX 얼리버드 프로모션',p:'L100',d:'2026-05-20~05-26'},
+            {k:'rp2',n:'2회차 · 아카라라이프X더현대 하이라이브',p:'K100',d:'2026-04-23~04-30'},
+            {k:'rp1',n:'1회차 · 아카라라이프X더현대 하이라이브',p:'L100',d:'2026-04-23~04-30'}
+          ].map(r=>`<tr class="border-t border-slate-100">
+            <td class="px-2 py-1.5 text-slate-700">${esc(r.n)}</td>
+            <td class="px-2 py-1.5"><span class="text-[10px] px-1.5 py-0.5 rounded ${r.p==='L100'?'bg-brand/20 text-brand-ink':'bg-slate-100 text-slate-500'} font-semibold">${r.p}</span></td>
+            <td class="px-2 py-1.5 num text-slate-500">${esc(r.d)}</td>
+            <td class="px-2 py-1.5 text-right">${ed(r.k+'rev')}</td><td class="px-2 py-1.5 text-right">${ed(r.k+'post')}</td>
+            <td class="px-2 py-1.5 text-right">${ed(r.k+'view')}</td><td class="px-2 py-1.5 text-right">${ed(r.k+'pc')}</td>
+            <td class="px-2 py-1.5 text-right">${ed(r.k+'mo')}</td><td class="px-2 py-1.5 text-right">${ed(r.k+'seo')}</td></tr>`).join('')}
+            <tr class="border-t-2 border-slate-200 font-bold"><td class="px-2 py-2" colspan="3">리뷰플레이스 합계</td>
+              <td class="px-2 py-2 text-right">${ed('rpSumRev')}</td><td class="px-2 py-2 text-right">${ed('rpSumPost')}</td>
+              <td class="px-2 py-2 text-right">${ed('rpSumView')}</td><td class="px-2 py-2 text-right">${ed('rpSumPc')}</td>
+              <td class="px-2 py-2 text-right">${ed('rpSumMo')}</td><td class="px-2 py-2 text-right">${ed('rpSumSeo')}</td></tr>
+          </tbody></table>
+        </div>
+        <p class="text-[12px] text-slate-500 mb-3">결과 리포트: <a href="https://newreport.izcomms.co.kr/bbs/reportChart.php?bo_table=report&wr_id=95422&w=p&camp_no=287813" target="_blank" rel="noopener" class="text-brand-ink hover:underline">L100 ↗</a> · <a href="https://newreport.izcomms.co.kr/bbs/reportChart.php?bo_table=report&wr_id=95423&w=p&camp_no=287812" target="_blank" rel="noopener" class="text-brand-ink hover:underline">K100 ↗</a> <span class="text-slate-400">(리포트 비밀번호 필요)</span></p>
         <p class="text-[12px] font-bold text-ink mb-1">커뮤니티 반응 <span class="font-normal text-slate-400">(대시보드 자동 수집)</span></p>
         <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600">
           <p>수집된 커뮤니티 언급 <b class="num text-ink">${nf(cafeHit.length)}</b>건${cafeTop?'':' (해당 키워드 글 없음)'}</p>
