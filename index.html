@@ -143,6 +143,7 @@
       <button id="rptBtn-market" onclick="mktReportSub('market')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">시장 분석</button>
       <button id="rptBtn-owncomp" onclick="mktReportSub('owncomp')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">자사/경쟁사 분석</button>
       <button id="rptBtn-export" onclick="mktReportSub('export')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">📑 보고서 추출하기</button>
+      <button id="rptBtn-kpi" onclick="mktReportSub('kpi')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-muted hover:text-ink whitespace-nowrap transition">2026 KPI</button>
     </div>
   </div>
 
@@ -1252,7 +1253,6 @@
      <div id="mktInner" class="hidden">
        <div class="bg-[#F4F1FF] border-b border-[#E1DBFF] -mt-5 mb-5">
          <div class="max-w-[1400px] mx-auto px-1 flex gap-2 py-2 overflow-x-auto">
-           <button id="mktBtn-kpi" onclick="mktSub('kpi')" class="px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-[#7C5CFF] text-white whitespace-nowrap">2026 KPI</button>
            <button id="mktBtn-weekly" onclick="mktSub('weekly')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">주간보고</button>
            <button id="mktBtn-medialist" onclick="mktSub('medialist')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">미디어리스트</button>
            <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
@@ -4133,11 +4133,11 @@
     let mktMoved=false;
     function mktMovePanels(){ if(mktMoved) return;
       const mv=(id,slot)=>{ const e=document.getElementById(id), s=document.getElementById(slot); if(e&&s) s.appendChild(e); };
-      mv('view-kpi','mktKpiSlot'); mv('view-medialist','mktMedialistSlot'); mv('view-calendar','mktCalendarSlot');
+       mv('view-medialist','mktMedialistSlot'); mv('view-calendar','mktCalendarSlot');
       mv('view-ad','mktAdSlot'); mv('view-seminar','mktSeminarSlot');
       // 종합 리포트 클러스터(서브내브 + 6개 뷰)를 리포트 슬롯으로 편입
       mv('subnav-report','mktReportSlot');
-      ['view-report','view-campaign','view-market','view-cdj','view-competitor','view-export'].forEach(id=>mv(id,'mktReportSlot'));
+      ['view-report','view-campaign','view-market','view-cdj','view-competitor','view-export','view-kpi'].forEach(id=>mv(id,'mktReportSlot'));
       // 데일리 브리핑의 검색어·키워드 인사이트 + 브랜드×인테리어 연관도 → 자사분석으로 이동
       mv('briefInsightCard','cdjInsightSlot'); mv('assocCard','cdjInsightSlot');
       mktMoved=true; }
@@ -4149,7 +4149,6 @@
     function mktUnlock(){ const v=document.getElementById('mktPw').value; if(v===MKT_PW){ sessionStorage.setItem('mktUnlocked','1'); document.getElementById('mktPwErr').classList.add('hidden'); mktEnter(); } else { document.getElementById('mktPwErr').classList.remove('hidden'); } }
     function mktLock(){ sessionStorage.removeItem('mktUnlocked'); mktEnter(); }
     function mktSub(s){ mktSection=s;
-      const kp=document.getElementById('view-kpi'); if(kp) kp.classList.toggle('hidden', s!=='kpi');
       const ml=document.getElementById('view-medialist'); if(ml) ml.classList.toggle('hidden', s!=='medialist');
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       const adv=document.getElementById('view-ad'); if(adv) adv.classList.toggle('hidden', s!=='ad');
@@ -4160,10 +4159,9 @@
       document.getElementById('mktSec-weekly').classList.toggle('hidden', s!=='weekly');
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
-      if(s!=='report'){ ['report','campaign','market','competitor','cdj','export'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['kpi','weekly','medialist','calendar','insta','blog','prpitch','ad','seminar','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
+      if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
+      ['weekly','medialist','calendar','insta','blog','prpitch','ad','seminar','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
       if(s==='weekly'){ wkOpen(); }
-      if(s==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
       if(s==='insta'){ renderMktInsta(); }
@@ -4175,17 +4173,18 @@
     }
     // 종합 리포트 하위 탭 (자사/경쟁사 분석 = cdj + competitor 통합)
     let mktRptView='report';
-    const RPT_VIEWS={ report:['report'], campaign:['campaign'], market:['market'], owncomp:['cdj','competitor'], export:['export'] };
+    const RPT_VIEWS={ report:['report'], campaign:['campaign'], market:['market'], owncomp:['cdj','competitor'], export:['export'], kpi:['kpi'] };
     function mktReportSub(t){ mktRptView=t;
-      const all=['report','campaign','market','competitor','cdj','export'];
+      const all=['report','campaign','market','competitor','cdj','export','kpi'];
       const show=RPT_VIEWS[t]||['report'];
       all.forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', show.indexOf(v)<0); });
-      ['report','campaign','market','owncomp','export'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
+      ['report','campaign','market','owncomp','export','kpi'].forEach(v=>{ const b=document.getElementById('rptBtn-'+v); if(b) b.className=subClass(v===t); });
       if(t==='report'){ loadOwned(); loadCafe(); renderReport(); }
       else if(t==='campaign'){ loadReports(()=>renderCampaign()); loadYoutube(); loadAdForCamp(); }
       else if(t==='market'){ loadCompetitor(); renderMarket(); }
       else if(t==='owncomp'){ renderCDJ(); renderSearchInsight(); loadCompetitor(); }
       else if(t==='export'){ loadOwned(); renderExport(); }
+      else if(t==='kpi'){ loadOwned(); loadCafe(); renderKpi(); }
     }
     let mktEdits=(()=>{ try{return JSON.parse(localStorage.getItem('aqaraMktEdits')||'{}');}catch(e){return {};} })();
     function mktSaveEdit(el){ mktEdits[el.dataset.mk]=el.innerText.trim(); try{ localStorage.setItem('aqaraMktEdits',JSON.stringify(mktEdits)); }catch(e){} }
