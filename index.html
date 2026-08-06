@@ -1147,7 +1147,7 @@
    <!-- 퍼포먼스AD · 검색광고 성과 -->
    <div id="view-ad" class="hidden">
      <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
-       <h2 class="text-xl font-extrabold text-ink">퍼포먼스 AD <span class="text-sm font-normal text-slate-400">(네이버 검색광고 실측)</span></h2>
+       <h2 class="text-xl font-extrabold text-ink">파워링크/브랜드검색 <span class="text-sm font-normal text-slate-400">(네이버 검색광고 실측)</span></h2>
        <div class="flex items-center gap-1.5 flex-wrap"><div id="adPeriodBtns" class="flex gap-1"></div><span id="adStamp" class="text-xs text-slate-400 ml-1"></span></div>
      </div>
      <section id="adTypeCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5"></section>
@@ -1254,7 +1254,7 @@
            <button id="mktBtn-blog" onclick="mktSub('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
            <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
            <span class="w-px self-stretch my-1 bg-[#D9D0FF]"></span>
-           <button id="mktBtn-ad" onclick="mktSub('ad')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">퍼포먼스AD</button>
+           <button id="mktBtn-ad" onclick="mktSub('ad')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">파워링크/브랜드검색</button>
            <button id="mktBtn-report" onclick="mktSub('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">종합 리포트</button>
            <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
          </div>
@@ -2536,8 +2536,11 @@
         } else { rc.classList.add('hidden'); }
       } else { cc.classList.add('hidden'); }
       document.getElementById('campPos').innerHTML=c.pos;
+      campContentPark();   // 리포트를 새로 그리기 전에 인플루언서 카드를 원래 자리로 빼둔다(노드·차트 보존)
       document.getElementById('campReport').innerHTML=((curCampaign==='interior')?INTERIOR_REPORT:'')+campFullReport(c);
       applyIrEdits();
+      campContentMount();  // 리포트 안 'KOL 협업' 자리로 옮긴다
+      campReportCharts();  // 최종 실적 그래프
     }
     let irEdits={}; try{ irEdits=JSON.parse(localStorage.getItem('aqaraIrEdits')||'{}'); }catch(e){}
     let irEditMode=false;
@@ -2546,6 +2549,78 @@
        대시보드에 있는 데이터(광고·보도·검색량·온드·카페)는 자동으로 채우고,
        매출·KOL·라이브커머스·프로모션처럼 사내 자료가 필요한 값은 [ ]로 두고 직접 편집한다.
        기존 리포트(INTERIOR_REPORT)는 그대로 두고 그 아래에 덧붙인다. */
+    /* 캠페인 최종 실적(대행사·내부 확정치) — 리포트에 자동 반영
+       출처 ① (pentacle) 아카라라이프 26년 5~7월 도어락 캠페인 Final Report (2026-08-03)
+            ② L100 캠페인 판매/ROI 분석 (2026-08-05, 주문일 기준·VAT 제외·취소 제외) */
+    const CAMP_FINAL={
+      l100:{
+        period:'2026.05.27 ~ 07.31 (66일)',
+        src:'(pentacle) 26년 5~7월 도어락 캠페인 Final Report(8/3) · L100 캠페인 ROI 분석(8/5)',
+        ad:{ budget:58000000, spend:59891042, imp:3588969, clk:65962, ctr:1.84, cpm:16688, cpc:908,
+             cvr:1.38, buy:908, rev:309535828, roas:517, cpa:65959,
+             goal:{ spend:58000000, imp:2250873, clk:19330, buy:404, rev:161240502, roas:278, cpa:143525 },
+             phase:[ {n:'5~6월', spend:48590277, imp:2831662, clk:50289, ctr:1.78, cpc:966, buy:622, rev:220630643, roas:454, cpa:78119},
+                     {n:'7월',   spend:11300766, imp:757307,  clk:15673, ctr:2.07, cpc:721, buy:286, rev:88905185,  roas:787, cpa:39513} ],
+             media:[ {n:'메타(전환)',        p:'5~6월', spend:38308550, imp:2308663, clk:41862, ctr:1.81, buy:481, rev:172308174, roas:450},
+                     {n:'인스타그램(PA)',    p:'5~6월', spend:8358833,  imp:437798,  clk:6565,  ctr:1.50, buy:72,  rev:22158199,  roas:265},
+                     {n:'네이버GFA(AD Voost)',p:'5~6월', spend:1922894,  imp:85201,   clk:1862,  ctr:2.19, buy:69,  rev:26164270,  roas:1361},
+                     {n:'메타(어드밴티지+)',  p:'7월',   spend:2912722,  imp:246048,  clk:8298,  ctr:3.37, buy:null, rev:null, roas:null},
+                     {n:'메타(데모+관심사)',  p:'7월',   spend:2000000,  imp:103638,  clk:2463,  ctr:2.38, buy:null, rev:null, roas:null},
+                     {n:'네이버GFA(AD Voost)',p:'7월',   spend:6388044,  imp:407621,  clk:4922,  ctr:1.21, buy:null, rev:null, roas:null} ],
+             weekly:[ {n:'1주 05/27-06/02', spend:13739445, imp:774392, clk:18101, ctr:2.34, buy:99,  rev:36038201, roas:262},
+                      {n:'2주 06/03-06/09', spend:15727209, imp:869492, clk:15913, ctr:1.83, buy:175, rev:61229762, roas:389},
+                      {n:'3주 06/10-06/16', spend:7860805,  imp:504675, clk:6233,  ctr:1.24, buy:100, rev:34239525, roas:436},
+                      {n:'4주 06/17-06/23', spend:3568505,  imp:205243, clk:3063,  ctr:1.49, buy:84,  rev:28563950, roas:800},
+                      {n:'5주 06/24-06/30', spend:7694313,  imp:477860, clk:6979,  ctr:1.46, buy:164, rev:60559205, roas:787} ] },
+        roi:{ units:2435, unitsOn:1812, unitsOff:623, unitsX:2.09, rev:'9.22억', revX:2.33, asp:378568,
+              profit:'3.64억', profitBase:'1.69억', profitX:2.11, margin:'40%', marginDelta:'-4%p',
+              incProfit:'+1.88억', mktCost:'-1.98억', net:'-961만원', crm:1467,
+              models:[ {n:'K100 (플래그십)', u:1517, rev:'6.01억', day:'23.0대', asp:'396,356원 (-13.6%)', profit:'2.22억', rate:'37% (-10%p)', x:'4.97배'},
+                       {n:'L100 (가성비)',   u:918,  rev:'3.21억', day:'13.9대', asp:'349,175원 (-4.2%)',  profit:'1.43억', rate:'45% (-3%p)',  x:'2.58배'} ],
+              phase:[ {n:'1국면 5/27~6/30 (35일) · 공식몰 집중', u:1653, rev:'6.45억', profit:'2.47억', note:'L100 공식몰 비중 70% · K100 33%'},
+                      {n:'2국면 7/01~7/31 (31일) · 오픈몰 확산', u:782,  rev:'2.77억', profit:'1.17억', note:'L100 공식몰 비중 21% · K100 14%'} ],
+              keys:['온라인만 539대 → 1,812대(x3.4), 총판(ERP 3사)은 627→628대로 불변 — 계절·시장이 아닌 캠페인이 만든 순수 신규 수요.',
+                    '캠페인 후에도 7월 공식몰 도어락 기저 월 5,960만원으로 캠페인 전(3,800~4,000만) 대비 +50% 유지 — 일회성 스파이크가 아니라 기저 상승.',
+                    '할인 대신 설치 포함 패키지로 대당 결제액 방어 — 실매출이익률 43%→39%로 하락 제한, 정가 신뢰·오픈몰 최저가 경쟁 미유발.',
+                    '증분 실매출이익 +1.88억 vs 잔여 마케팅비 1.98억 → 순증분 약 -961만(사실상 본전) + 설치 완료 신규 고객 DB 1,467명 확보.',
+                    'CJ온스타일 공구(수수료 33%) 기간 K100 이익률 13~31%로 저하 / 오늘의집 라이브는 2.84% 특혜 수수료로 자체 실이익 478만(13.0%).'] }
+      }
+    };
+    // '인플루언서 콘텐츠 성과' 카드는 리포트의 KOL 협업 자리로 옮겨 쓴다.
+    // innerHTML을 다시 그릴 때 노드가 사라지지 않도록, 그리기 전에 원래 자리로 뺐다가 다시 넣는다.
+    let CC_ANCHOR=null;
+    function campContentPark(){
+      const el=document.getElementById('campContentCard'); if(!el) return;
+      if(!CC_ANCHOR){ CC_ANCHOR=document.createComment('campContentCard-home'); el.parentNode.insertBefore(CC_ANCHOR,el); }
+      if(el.parentNode!==CC_ANCHOR.parentNode) CC_ANCHOR.parentNode.insertBefore(el,CC_ANCHOR.nextSibling);
+    }
+    function campContentMount(){
+      const el=document.getElementById('campContentCard'), slot=document.getElementById('kolSlot');
+      if(el&&slot&&!el.classList.contains('hidden')){ el.classList.remove('mb-5'); slot.appendChild(el); }
+    }
+    // 캠페인 최종 보고 그래프 — 주차별 매출·ROAS / 매체별 집행비 / 모델·국면별 판매
+    function campReportCharts(){
+      const F=CAMP_FINAL[curCampaign]; if(!F||typeof draw!=='function') return;
+      const opt=(extra)=>Object.assign({responsive:true,maintainAspectRatio:false},extra||{});
+      if(document.getElementById('rptAdWeekChart')) draw('rptAdWeekChart',{ type:'bar',
+        data:{ labels:F.ad.weekly.map(w=>w.n.split(' ')[0]),
+          datasets:[{type:'bar',label:'매출(억)',data:F.ad.weekly.map(w=>+(w.rev/1e8).toFixed(2)),backgroundColor:'#FBC400',borderRadius:4,yAxisID:'y'},
+                    {type:'line',label:'ROAS(%)',data:F.ad.weekly.map(w=>w.roas),borderColor:'#5E7350',backgroundColor:'#5E7350',tension:.3,yAxisID:'y1'}]},
+        options:opt({plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},
+          scales:{y:{beginAtZero:true,ticks:{font:{size:10}}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}) });
+      if(document.getElementById('rptAdMediaChart')){
+        const agg={}; F.ad.media.forEach(m=>{ const k=m.n.replace(/\(.*$/,'').trim(); agg[k]=(agg[k]||0)+m.spend; });
+        const ks=Object.keys(agg);
+        draw('rptAdMediaChart',{ type:'doughnut', data:{labels:ks,datasets:[{data:ks.map(k=>agg[k]),backgroundColor:(typeof PALETTE!=='undefined'?PALETTE:['#FBC400','#8FB9D8','#5E7350','#D68134']),borderWidth:0}]},
+          options:opt({cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}}}) });
+      }
+      if(document.getElementById('rptRoiModelChart')) draw('rptRoiModelChart',{ type:'bar',
+        data:{labels:F.roi.models.map(m=>m.n.split(' ')[0]),datasets:[{label:'판매량(대)',data:F.roi.models.map(m=>m.u),backgroundColor:['#5E7350','#FBC400'],borderRadius:4}]},
+        options:opt({plugins:{legend:{display:false},title:{display:true,text:'모델별 판매량(대)',font:{size:11}}},scales:{y:{beginAtZero:true,ticks:{font:{size:10}}}}}) });
+      if(document.getElementById('rptRoiPhaseChart')) draw('rptRoiPhaseChart',{ type:'bar',
+        data:{labels:F.roi.phase.map(p=>p.n.split(' ')[0]),datasets:[{label:'판매량(대)',data:F.roi.phase.map(p=>p.u),backgroundColor:'#8FB9D8',borderRadius:4}]},
+        options:opt({plugins:{legend:{display:false},title:{display:true,text:'국면별 판매량(대)',font:{size:11}}},scales:{y:{beginAtZero:true,ticks:{font:{size:10}}}}}) });
+    }
     function campFullReport(c){
       if(!c) return '';
       const K=k=>curCampaign+':'+k;
@@ -2555,6 +2630,9 @@
       const box=(t,v,s)=>`<div class="rounded-xl border border-[#E6E6E3] bg-white p-4"><p class="text-[11px] text-slate-500">${t}</p><p class="num text-2xl font-extrabold text-ink mt-0.5">${v}</p>${s?`<p class="text-[11px] text-slate-400 mt-0.5">${s}</p>`:''}</div>`;
       const h=(n,t,s)=>`<div class="flex items-baseline gap-2 mt-6 mb-2"><span class="text-[12px] font-extrabold text-white bg-[#7C5CFF] rounded px-1.5 py-0.5">${n}</span><h3 class="text-[15px] font-extrabold text-ink">${t}</h3>${s?`<span class="text-[11px] text-slate-400">${s}</span>`:''}</div>`;
       const period=(c.start||'')+' ~ '+(c.end||'');
+      const F=CAMP_FINAL[curCampaign]||null;                 // 확정 실적(대행사·내부 정산)
+      const won=n=>(+n||0).toLocaleString()+'원';
+      const eok=n=>((+n||0)/1e8).toFixed(2)+'억';
 
       // 광고 — 네이버 검색광고 API(캠페인명에 해당 키워드가 들어간 것만 합산)
       const kwRe = curCampaign==='l100' ? /도어락|l100/i : /인테리어|스마트홈/i;
@@ -2622,15 +2700,42 @@
         <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">${ed('strategy','채널 간 상호보완 구조: 콘텐츠 기반 바이럴로 인지 형성 → 미디어 채널로 메시지 강화 → 구매 의사 형성 &amp; 전환 유도')}</div>
         ${h('3','캠페인 활동 결과','매출·광고·온드채널')}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          ${box('판매 수량',ed('sales')+'개','공식몰+제휴채널')}
-          ${box('직접 기여 매출',ed('revenue')+'원','캠페인 기간 · VAT 별도')}
-          ${box('ROAS',ed('roas')+'%','광고 직접 기여 매출 '+ed('adRev'))}
-          ${box('ROI',ed('roi')+'%','총 비용 대비')}
-          ${box('광고 노출',nf(imp),'검색광고 '+esc(adPeriod)+' 기준')}
-          ${box('클릭 · CTR',nf(clk)+' · '+ctr.toFixed(2)+'%','광고 유입')}
+          ${box('판매 수량',ed('sales',F?nf(F.roi.units):'')+'대',F?('온라인 '+nf(F.roi.unitsOn)+' · 오프라인 '+nf(F.roi.unitsOff)+' · 비캠 대비 '+F.roi.unitsX+'배'):'공식몰+제휴채널')}
+          ${box('총 매출액',ed('revenue',F?F.roi.rev:'')+(F?'':'원'),F?('VAT 제외 · 비캠 대비 '+F.roi.revX+'배 · ASP '+nf(F.roi.asp)+'원'):'캠페인 기간 · VAT 별도')}
+          ${box('광고 ROAS',ed('roas',F?nf(F.ad.roas):'')+'%',F?('광고 기여 매출 '+eok(F.ad.rev)+' · 목표 '+F.ad.goal.roas+'% 대비 '+Math.round(F.ad.roas/F.ad.goal.roas*100)+'%'):'광고 직접 기여 매출 '+ed('adRev'))}
+          ${box('증분 실매출이익',ed('roi',F?F.roi.incProfit:''),F?('캠페인 '+F.roi.profit+' − 비캠 '+F.roi.profitBase+' · 이익률 '+F.roi.margin+' ('+F.roi.marginDelta+')'):'총 비용 대비')}
+          ${box('광고 노출',F?nf(F.ad.imp):nf(imp),F?('클릭 '+nf(F.ad.clk)+' · CTR '+F.ad.ctr+'%'):'검색광고 '+esc(adPeriod)+' 기준')}
+          ${box('광고 구매전환',F?nf(F.ad.buy)+'건':nf(clk)+' · '+ctr.toFixed(2)+'%',F?('CVR '+F.ad.cvr+'% · CPA '+nf(F.ad.cpa)+'원'):'광고 유입')}
           ${box('언론 보도',nf(prN)+'건',prMedia+'개 매체')}
-          ${box('뉴스레터 구독자',nf(nlSubs)+'명',(igD?('인스타 '+(igD.d>=0?'+':'')+nf(igD.d)+'명'):'인스타 증감 데이터 없음'))}
+          ${box('신규 고객 DB',F?nf(F.roi.crm)+'명':ed('crm')+'명',F?('설치 완료 기준 · 순증분 '+F.roi.net):'CRM 확보')}
         </div>
+        ${F?`
+        <div class="mt-3 rounded-xl border border-[#E6E6E3] p-4">
+          <div class="flex items-baseline justify-between flex-wrap gap-2 mb-2">
+            <p class="text-[13px] font-extrabold text-ink">판매 · 손익 분석 <span class="text-[11px] font-normal text-slate-400">${esc(F.period)} · 주문일 기준 · VAT/취소 제외</span></p>
+            <p class="text-[11px] text-slate-400">비캠페인(02/24~04/30, 동일 66일) 대비</p>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="h-56"><canvas id="rptRoiModelChart"></canvas></div>
+            <div class="h-56"><canvas id="rptRoiPhaseChart"></canvas></div>
+          </div>
+          <div class="overflow-auto rounded-lg border border-[#E6E6E3] mt-3">
+            <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
+              <th class="px-2 py-2">모델</th><th class="px-2 py-2 text-right">판매</th><th class="px-2 py-2 text-right">매출</th><th class="px-2 py-2 text-right">일평균</th><th class="px-2 py-2 text-right">ASP</th><th class="px-2 py-2 text-right">실매출이익</th><th class="px-2 py-2 text-right">이익률</th><th class="px-2 py-2 text-right">성장</th></tr></thead>
+            <tbody>${F.roi.models.map(m=>`<tr class="border-t border-slate-100"><td class="px-2 py-1.5 font-semibold text-ink">${esc(m.n)}</td>
+              <td class="px-2 py-1.5 num text-right">${nf(m.u)}대</td><td class="px-2 py-1.5 num text-right">${esc(m.rev)}</td><td class="px-2 py-1.5 num text-right">${esc(m.day)}</td>
+              <td class="px-2 py-1.5 num text-right">${esc(m.asp)}</td><td class="px-2 py-1.5 num text-right">${esc(m.profit)}</td><td class="px-2 py-1.5 num text-right">${esc(m.rate)}</td>
+              <td class="px-2 py-1.5 num text-right text-agreen font-semibold">${esc(m.x)}</td></tr>`).join('')}</tbody></table>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+            ${F.roi.phase.map(p=>`<div class="rounded-lg bg-[#FAFAF9] border border-[#E6E6E3] p-3">
+              <p class="text-[12px] font-bold text-ink">${esc(p.n)}</p>
+              <p class="text-[13px] text-slate-600 mt-1"><b class="num text-ink">${nf(p.u)}대</b> · 매출 ${esc(p.rev)} · 실이익 ${esc(p.profit)}</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">${esc(p.note)}</p></div>`).join('')}
+          </div>
+          <p class="text-[12px] font-bold text-ink mt-4 mb-1">핵심 해석</p>
+          <ul class="space-y-1">${F.roi.keys.map((k,i)=>`<li class="text-[12px] text-slate-600 leading-relaxed flex gap-2"><span class="shrink-0 num font-bold text-brand-ink">${i+1}</span><span>${esc(k)}</span></li>`).join('')}</ul>
+        </div>`:''}
         ${h('4','네이버 검색량','캠페인 모멘텀')}
         <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">
           <p>${searchLine}</p>
@@ -2646,7 +2751,20 @@
         <p class="text-[13px] font-extrabold text-[#4B32C3] mt-7 pb-1 border-b-2 border-[#EDE9FF]">Ⅱ. 캠페인 활동</p>
         ${h('1','컨텐츠 제작','상세페이지 · 비주얼')}
         <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">${ed('content','제품 외관과 활용 사례를 담은 3D·scene 이미지/영상 제작. 상세페이지·프로모션 페이지 구성')}</div>
-        ${h('2','KOL 협업','채널별 성과')}
+        ${h('2','KOL 협업','인플루언서 콘텐츠 성과 · 채널별 실적')}
+        ${(c.videos&&c.videos.length)?`
+        <p class="text-[12px] font-bold text-ink mb-1.5">협업 콘텐츠 <span class="font-normal text-slate-400">(썸네일 클릭 시 원본)</span></p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+          ${c.videos.slice(0,8).map(v=>`<a href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener" class="group block rounded-lg overflow-hidden border border-[#ECE9E1] bg-white hover:shadow-md transition">
+            <img src="https://i.ytimg.com/vi/${esc(v.id)}/mqdefault.jpg" loading="lazy" class="w-full aspect-video object-cover bg-slate-100" onerror="this.style.display='none'" alt="${esc(v.title||'')}"/>
+            <div class="p-2">
+              <p class="text-[11px] text-slate-400">${esc(v.n||'')} <span class="text-[10px] px-1 rounded bg-slate-100">${esc(v.t||'')}</span></p>
+              <p class="text-[12px] text-ink leading-snug line-clamp-2 group-hover:text-brand-ink">${esc(v.title||'')}</p>
+              <p class="text-[11px] num text-slate-500 mt-1">조회 ${nf(v.views)} · 좋아요 ${nf(v.likes)} · 댓글 ${nf(v.comments)}</p>
+            </div></a>`).join('')}
+        </div>`:''}
+        <div id="kolSlot" class="mb-3"></div>
+        <p class="text-[12px] font-bold text-ink mb-1">협업 채널별 실적 <span class="font-normal text-slate-400">(직접 입력)</span></p>
         <div class="overflow-auto rounded-xl border border-[#E6E6E3]">
           <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
             <th class="px-2 py-2">채널 · KOL</th><th class="px-2 py-2">구독자/팔로워</th><th class="px-2 py-2">업로드</th><th class="px-2 py-2 text-right">조회수</th><th class="px-2 py-2 text-right">좋아요·댓글</th><th class="px-2 py-2 text-right">자사몰 유입</th></tr></thead>
@@ -2655,7 +2773,45 @@
             <td class="px-2 py-1.5 text-right">${ed('kol'+i+'v')}</td><td class="px-2 py-1.5 text-right">${ed('kol'+i+'e')}</td><td class="px-2 py-1.5 text-right">${ed('kol'+i+'t')}</td></tr>`).join('')}</tbody></table>
         </div>
         <p class="text-[12px] text-slate-500 mt-2">협업 전략·목적: ${ed('kolStrategy')}</p>
-        ${h('3','디지털 광고','네이버 검색광고 API 자동 집계 · '+esc(adPeriod))}
+        ${h('3','디지털 광고',F?('최종 성과 · '+esc(F.period)):('네이버 검색광고 API 자동 집계 · '+esc(adPeriod)))}
+        ${F?`
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
+          ${box('총 집행비',won(F.ad.spend),'예산 '+won(F.ad.budget)+' 대비 '+Math.round(F.ad.spend/F.ad.budget*100)+'%')}
+          ${box('노출 · 클릭',nf(F.ad.imp)+' · '+nf(F.ad.clk),'CTR '+F.ad.ctr+'% · CPC '+nf(F.ad.cpc)+'원 · CPM '+nf(F.ad.cpm)+'원')}
+          ${box('구매 · CVR',nf(F.ad.buy)+'건 · '+F.ad.cvr+'%','CPA '+nf(F.ad.cpa)+'원')}
+          ${box('광고 매출 · ROAS',eok(F.ad.rev)+' · '+nf(F.ad.roas)+'%','목표 ROAS '+F.ad.goal.roas+'% 대비 '+Math.round(F.ad.roas/F.ad.goal.roas*100)+'%')}
+        </div>
+        <div class="rounded-xl border border-[#E6E6E3] p-3 mb-3">
+          <p class="text-[12px] font-bold text-ink mb-2">목표 대비 진척률</p>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+            ${[['노출',F.ad.imp,F.ad.goal.imp],['클릭',F.ad.clk,F.ad.goal.clk],['구매',F.ad.buy,F.ad.goal.buy],['매출',F.ad.rev,F.ad.goal.rev],['ROAS',F.ad.roas,F.ad.goal.roas]]
+              .map(([n,a,g])=>{ const p=Math.round(a/g*100); return `<div class="rounded-lg bg-[#FAFAF9] border border-[#ECE9E1] p-2 text-center">
+                <p class="text-[11px] text-slate-500">${n}</p><p class="num text-lg font-extrabold ${p>=100?'text-agreen':'text-ared'}">${p}%</p></div>`; }).join('')}
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-3">
+          <div><p class="text-[12px] font-bold text-ink mb-1">주차별 매출 · ROAS</p><div class="h-56"><canvas id="rptAdWeekChart"></canvas></div></div>
+          <div><p class="text-[12px] font-bold text-ink mb-1">매체별 집행비 비중</p><div class="h-56"><canvas id="rptAdMediaChart"></canvas></div></div>
+        </div>
+        <div class="overflow-auto rounded-xl border border-[#E6E6E3] mb-2">
+          <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
+            <th class="px-2 py-2">구분</th><th class="px-2 py-2 text-right">집행비</th><th class="px-2 py-2 text-right">노출</th><th class="px-2 py-2 text-right">클릭</th><th class="px-2 py-2 text-right">CTR</th><th class="px-2 py-2 text-right">구매</th><th class="px-2 py-2 text-right">매출</th><th class="px-2 py-2 text-right">ROAS</th></tr></thead>
+          <tbody>
+            ${F.ad.phase.map(p=>`<tr class="border-t border-slate-100 bg-[#FBFAFF]"><td class="px-2 py-1.5 font-bold text-ink">${esc(p.n)}</td>
+              <td class="px-2 py-1.5 num text-right">${nf(p.spend)}</td><td class="px-2 py-1.5 num text-right">${nf(p.imp)}</td><td class="px-2 py-1.5 num text-right">${nf(p.clk)}</td>
+              <td class="px-2 py-1.5 num text-right">${p.ctr}%</td><td class="px-2 py-1.5 num text-right">${nf(p.buy)}</td><td class="px-2 py-1.5 num text-right">${eok(p.rev)}</td>
+              <td class="px-2 py-1.5 num text-right font-semibold">${nf(p.roas)}%</td></tr>`).join('')}
+            ${F.ad.media.map(m=>`<tr class="border-t border-slate-100"><td class="px-2 py-1.5 text-slate-600">${esc(m.n)} <span class="text-[10px] text-slate-400">${esc(m.p)}</span></td>
+              <td class="px-2 py-1.5 num text-right">${nf(m.spend)}</td><td class="px-2 py-1.5 num text-right">${nf(m.imp)}</td><td class="px-2 py-1.5 num text-right">${nf(m.clk)}</td>
+              <td class="px-2 py-1.5 num text-right">${m.ctr}%</td><td class="px-2 py-1.5 num text-right">${m.buy!=null?nf(m.buy):'-'}</td>
+              <td class="px-2 py-1.5 num text-right">${m.rev!=null?eok(m.rev):'-'}</td><td class="px-2 py-1.5 num text-right">${m.roas!=null?nf(m.roas)+'%':'-'}</td></tr>`).join('')}
+            <tr class="border-t-2 border-slate-200 font-bold"><td class="px-2 py-2">합계</td><td class="px-2 py-2 num text-right">${nf(F.ad.spend)}</td>
+              <td class="px-2 py-2 num text-right">${nf(F.ad.imp)}</td><td class="px-2 py-2 num text-right">${nf(F.ad.clk)}</td><td class="px-2 py-2 num text-right">${F.ad.ctr}%</td>
+              <td class="px-2 py-2 num text-right">${nf(F.ad.buy)}</td><td class="px-2 py-2 num text-right">${eok(F.ad.rev)}</td><td class="px-2 py-2 num text-right">${nf(F.ad.roas)}%</td></tr>
+          </tbody></table>
+        </div>
+        <p class="text-[11px] text-slate-400 mb-3">※ 출처: ${esc(F.src)} · 7월 매체별 구매·매출은 대행사 리포트에 매체 단위로 분리되어 있지 않아 '-'로 표기.</p>
+        <p class="text-[12px] font-bold text-ink mb-1">참고 · 최근 검색광고 실시간 집계</p>`:''}
         ${cps.length?`<div class="overflow-auto rounded-xl border border-[#E6E6E3]">
           <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
             <th class="px-2 py-2">캠페인</th><th class="px-2 py-2 text-right">노출</th><th class="px-2 py-2 text-right">클릭</th><th class="px-2 py-2 text-right">CTR</th><th class="px-2 py-2 text-right">비용</th><th class="px-2 py-2 text-right">전환</th></tr></thead>
