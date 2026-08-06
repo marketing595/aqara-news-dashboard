@@ -239,6 +239,9 @@
         </div>
       </section>
       <style>
+        .sem-edit{ border-bottom:1px dashed #D8D4C8; cursor:text; outline:none; display:inline-block; min-width:12px; }
+        .sem-edit:hover{ background:#FFFBEC; border-bottom-color:#FBC400; }
+        .sem-edit:focus{ background:#FFF8E1; border-bottom:1px solid #FBC400; border-radius:3px; padding:0 2px; }
         #mhBody details>summary{ list-style:none; } #mhBody details>summary::-webkit-details-marker{ display:none; }
         #mhBody .mhcaret{ display:inline-block; transition:transform .15s; } #mhBody details[open] .mhcaret{ transform:rotate(90deg); }
         #newsListSection .col-chk, #newsListSection .col-edit, #newsListSection #bulkEditBar{ display:none; }
@@ -3365,9 +3368,35 @@
           <div class="h-1 rounded bg-slate-100 mt-0.5"><div class="h-1 rounded bg-brand" style="width:${Math.round(mc[m]/max*100)}%"></div></div></button>`).join('');
     }
     /* ===== 세미나 (KOSID 공동주최) — seminar.json을 탭 진입 시에만 불러와 렌더 ===== */
-    let SEMINAR=null, SEM_LOADING=false;
-    let semChk=(()=>{ try{ return JSON.parse(localStorage.getItem('aqaraSemChk')||'{}'); }catch(e){ return {}; } })();
-    function semToggle(i){ semChk[i]=!semChk[i]; try{ localStorage.setItem('aqaraSemChk',JSON.stringify(semChk)); }catch(e){} renderSeminar(); }
+    let SEMINAR=null, SEM_LOADING=false, SEM_OVER={}, semRefOn=false, semTimer=null;
+    // 공동 편집: 값은 Firebase(seminar/data)에 저장돼 접속자 모두에게 실시간 반영. FB가 없으면 이 브라우저에 저장.
+    function semRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('seminar/data'):null; }
+    function semLocalLoad(){ try{ return JSON.parse(localStorage.getItem('aqaraSeminarEdits')||'{}'); }catch(e){ return {}; } }
+    function semStart(){
+      if(semRefOn) return; const ref=semRef(); if(!ref){ SEM_OVER=Object.assign(semLocalLoad(),SEM_OVER); return; }
+      semRefOn=true;
+      ref.on('value',s=>{ SEM_OVER=s.val()||{};
+        const a=document.activeElement;
+        if(a&&a.dataset&&a.dataset.sk) return;      // 누가 입력 중이면 화면 갱신 보류(커서 튐 방지)
+        if(SEMINAR) renderSeminar(); });
+    }
+    function semSave(k,v){
+      SEM_OVER[k]=v;
+      const ref=semRef();
+      if(ref) ref.child(k.replace(/[.#$/\[\]]/g,'_')).set(v).catch(()=>{});
+      else { try{ localStorage.setItem('aqaraSeminarEdits',JSON.stringify(SEM_OVER)); }catch(e){} }
+    }
+    function semKey(k){ return k.replace(/[.#$/\[\]]/g,'_'); }
+    function V(k,def){ const v=SEM_OVER[semKey(k)]; return (v==null||v==='')?(def==null?'':def):v; }
+    function se(k,def,cls){ return `<span class="sem-edit ${cls||''}" data-sk="${semKey(k)}" contenteditable="true" spellcheck="false" oninput="semInput(this)" onblur="semInput(this,1)">${esc(V(k,def))}</span>`; }
+    function semInput(el,now){
+      const k=el.dataset.sk, v=el.innerText.trim();
+      clearTimeout(semTimer);
+      if(now){ semSave(k,v); return; }
+      semTimer=setTimeout(()=>semSave(k,v),500);
+    }
+    function semToggle(i){ const k='chk.'+i; semSave(semKey(k), V(k,'')?'':'1'); renderSeminar(); }
+    function semChecked(i){ return !!V('chk.'+i,''); }
     function renderSeminar(){
       const box=document.getElementById('semBody'); if(!box) return;
       if(!SEMINAR){
@@ -3377,35 +3406,46 @@
           .catch(()=>{ SEM_LOADING=false; box.innerHTML='<p class="text-sm text-ared py-16 text-center">세미나 자료를 불러오지 못했습니다.</p>'; });
         return;
       }
+      semStart();
       const S=SEMINAR;
       const dday=(()=>{ const t=new Date(S.date+'T00:00:00+09:00')-new Date(); const d=Math.ceil(t/864e5);
         return d>0?('D-'+d):(d===0?'D-DAY':('종료 +'+Math.abs(d)+'일')); })();
       const sec=(n,t,s,b)=>`<section class="card p-5 sm:p-6 mb-4">
         <div class="flex items-baseline gap-2 mb-3"><span class="text-[12px] font-extrabold text-white bg-ink rounded px-1.5 py-0.5">${n}</span>
           <h3 class="text-[16px] font-extrabold text-ink">${t}</h3>${s?`<span class="text-[11px] text-slate-400">${s}</span>`:''}</div>${b}</section>`;
-      const kv=(k,v)=>`<div class="flex gap-3 py-1.5 border-b border-[#F1EFE9] last:border-0"><span class="w-24 shrink-0 text-[12px] font-bold text-slate-500">${esc(k)}</span><span class="text-[13px] text-slate-700">${esc(v)}</span></div>`;
+      const kv=(k,v,sk)=>`<div class="flex gap-3 py-1.5 border-b border-[#F1EFE9] last:border-0"><span class="w-24 shrink-0 text-[12px] font-bold text-slate-500">${esc(k)}</span><span class="text-[13px] text-slate-700">${sk?se(sk,v):esc(v)}</span></div>`;
       const ul=a=>`<ul class="space-y-1.5">${a.map(x=>`<li class="text-[13px] text-slate-600 leading-relaxed">· ${esc(x)}</li>`).join('')}</ul>`;
       const th=a=>`<thead class="bg-slate-50 text-slate-500"><tr class="text-left">${a.map(x=>`<th class="px-2.5 py-2 font-semibold">${esc(x)}</th>`).join('')}</tr></thead>`;
       const tbl=(head,rows)=>`<div class="overflow-auto rounded-xl border border-[#E6E6E3]"><table class="w-full text-[12px]">${th(head)}<tbody>${rows}</tbody></table></div>`;
-      const done=S.checklist.filter((_,i)=>semChk[i]).length;
+      const done=S.checklist.filter((_,i)=>semChecked(100+i)).length;
+      // 간트 주간 축 — 8/3(월)부터 행사 다음 주까지
+      const GW=(()=>{ const out=[], st=new Date('2026-08-03T00:00:00+09:00'), en=new Date('2026-11-23T00:00:00+09:00');
+        for(let d=new Date(st); d<en; d.setDate(d.getDate()+7)){ const m=d.getMonth()+1, day=d.getDate();
+          out.push({label:m+'/'+day, m:(day<=7)}); }
+        return out; })();
+      const GST=new Date('2026-08-03T00:00:00+09:00');
+      const GIDX=s=>{ if(!s) return -1; const d=new Date(s+'T00:00:00+09:00');
+        return Math.max(0,Math.min(GW.length-1,Math.floor((d-GST)/(7*864e5)))); };
 
       box.innerHTML=`
       <div class="card p-5 sm:p-6 mb-5">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p class="text-[11px] font-extrabold tracking-wider text-brand-ink">KOSID × AQARA LIFE</p>
-            <h2 class="text-[22px] sm:text-[26px] font-extrabold text-ink leading-tight mt-0.5">${esc(S.title)}</h2>
-            <p class="text-[13px] text-slate-500 mt-1">${esc(S.subtitle)}</p>
+            <h2 class="text-[22px] sm:text-[26px] font-extrabold text-ink leading-tight mt-0.5">${se('title',S.title)}</h2>
+            <p class="text-[13px] text-slate-500 mt-1">${se('subtitle',S.subtitle)}</p>
           </div>
           <div class="text-right">
             <span class="inline-block text-[13px] font-extrabold px-3 py-1.5 rounded-xl bg-ink text-white">${dday}</span>
             <p class="text-[11px] text-slate-400 mt-1">${esc(S.dateLabel)}</p>
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-4 pt-4 border-t border-[#ECE9E1]">
-          ${kv('주최·주관',S.host)}${kv('일정',S.dateLabel)}${kv('장소',S.place)}${kv('목표 규모',S.scale)}
-          ${kv('참석 대상',S.target)}${kv('행사 형식',S.format)}
+        <div id="semPresence" class="flex flex-wrap items-center gap-1.5 mt-3"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-3 pt-4 border-t border-[#ECE9E1]">
+          ${kv('주최·주관',S.host,'host')}${kv('일정',S.dateLabel,'dateLabel')}${kv('장소',S.place,'place')}${kv('목표 규모',S.scale,'scale')}
+          ${kv('참석 대상',S.target,'target')}${kv('행사 형식',S.format,'format')}
         </div>
+        <p class="text-[11px] text-slate-400 mt-2">✏️ 밑줄 친 항목은 <b>클릭해서 바로 수정</b>할 수 있고, 수정 내용은 접속한 모두에게 실시간 반영됩니다.</p>
         <p class="text-[11px] text-slate-400 mt-3">출처: ${esc(S.source)}</p>
       </div>
 
@@ -3435,13 +3475,13 @@
         <p class="text-[12px] font-bold text-ink mt-4 mb-1">공동 추진의 방향성</p>${ul(S.direction)}`)}
 
       ${sec('4','프로그램 · 타임테이블',(S.timetable?'13:30 ~ 17:30 (4시간) · 사전 등록 13:00':S.flow),`
-        ${(S.timetable&&S.timetable.length)?tbl(['시간','소요','세션 구분','발표 주제','상세','발표 주체'],S.timetable.map(p=>`<tr class="border-t border-slate-100">
+        ${(S.timetable&&S.timetable.length)?tbl(['시간','소요','세션 구분','발표 주제','상세','발표 주체'],S.timetable.map((p,i)=>`<tr class="border-t border-slate-100">
           <td class="px-2.5 py-2 num whitespace-nowrap font-semibold text-ink">${esc(p.time)}</td>
           <td class="px-2.5 py-2 num text-slate-400 whitespace-nowrap">${esc(p.dur)}</td>
           <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
-          <td class="px-2.5 py-2 font-semibold text-ink">${esc(p.t)}</td>
-          <td class="px-2.5 py-2 text-slate-600">${esc(p.d||'')}</td>
-          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(p.w||'미정')}</td></tr>`).join(''))
+          <td class="px-2.5 py-2 font-semibold text-ink">${se('tt.'+i+'.t',p.t)}</td>
+          <td class="px-2.5 py-2 text-slate-600">${se('tt.'+i+'.d',p.d||'')}</td>
+          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${se('tt.'+i+'.w',p.w||'미정')}</td></tr>`).join(''))
         :tbl(['세션','주제','핵심 내용','발표 주체(안)'],(S.program||[]).map(p=>`<tr class="border-t border-slate-100">
           <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
           <td class="px-2.5 py-2 font-semibold text-ink">${esc(p.t)}</td><td class="px-2.5 py-2 text-slate-600">${esc(p.d)}</td>
@@ -3479,13 +3519,47 @@
       ${sec('9','협의 요청 · 다음 단계','',`<p class="text-[13px] text-slate-700 leading-relaxed">${esc(S.nextStep)}</p>`)}
 
       ${S.tasks?sec('10','준비 타임라인',(S.note?esc(S.note):''),`
-        ${tbl(['구분','항목','형태','담당','일정 흐름','비고'],S.tasks.map(t=>`<tr class="border-t border-slate-100">
+        ${tbl(['','구분','항목','담당','기간','일정 흐름','비고'],S.tasks.map((t,i)=>`<tr class="border-t border-slate-100 ${semChecked(i)?'bg-[#F7FBF5]':''}">
+          <td class="px-2 py-2"><input type="checkbox" ${semChecked(i)?'checked':''} onchange="semToggle(${i})" class="accent-[#5E7350]" /></td>
           <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${esc(t.cat)}</span></td>
-          <td class="px-2.5 py-2 font-semibold text-ink">${esc(t.item)}</td>
-          <td class="px-2.5 py-2 text-slate-500">${esc(t.form||'')}</td>
-          <td class="px-2.5 py-2 whitespace-nowrap ${t.owner?'text-ink font-semibold':'text-slate-300'}">${esc(t.owner||'미정')}</td>
-          <td class="px-2.5 py-2 text-slate-600">${esc(t.sched||'')}</td>
-          <td class="px-2.5 py-2 text-slate-400">${esc(t.action||'')}</td></tr>`).join(''))}`):''}
+          <td class="px-2.5 py-2 font-semibold ${semChecked(i)?'text-slate-400 line-through':'text-ink'}">${esc(t.item)}${t.form?`<span class="block text-[11px] font-normal text-slate-400">${esc(t.form)}</span>`:''}</td>
+          <td class="px-2.5 py-2 whitespace-nowrap text-ink font-semibold">${se('task.'+i+'.owner',t.owner||'미정')}</td>
+          <td class="px-2.5 py-2 num whitespace-nowrap text-slate-500">${esc((t.start||'').slice(5))} ~ ${esc((t.end||'').slice(5))}</td>
+          <td class="px-2.5 py-2 text-slate-600">${se('task.'+i+'.sched',t.sched||'')}</td>
+          <td class="px-2.5 py-2 text-slate-400">${se('task.'+i+'.action',t.action||'')}</td></tr>`).join(''))}
+        <p class="text-[11px] text-slate-400 mt-2">체크·담당·일정 수정은 접속한 모두에게 실시간 공유됩니다.</p>`):''}
+
+      ${S.tasks?sec('10-1','간트 차트','8월 ~ 행사 당일(11/19) · 주 단위',`
+        <div class="overflow-auto">
+          <div class="min-w-[860px]">
+            <div class="grid" style="grid-template-columns:220px repeat(${GW.length},minmax(30px,1fr));">
+              <div class="text-[11px] font-bold text-slate-500 px-1 py-1">항목 · 담당</div>
+              ${GW.map(w=>`<div class="text-[10px] text-center ${w.m?'font-bold text-ink':'text-slate-400'} py-1 border-l border-[#F1EFE9]">${w.label}</div>`).join('')}
+              ${S.tasks.map((t,i)=>{ const s=GIDX(t.start), e=GIDX(t.end);
+                const done=semChecked(i);
+                return `<div class="text-[11px] px-1 py-1.5 border-t border-[#F1EFE9] truncate ${done?'text-slate-400 line-through':'text-slate-700'}" title="${esc(t.item)}">${esc(t.item)} <span class="text-slate-400">· ${esc(t.owner||'')}</span></div>`
+                  + GW.map((w,wi)=>{ const on=(wi>=s&&wi<=e);
+                    const first=(wi===s), last=(wi===e);
+                    return `<div class="border-t border-l border-[#F1EFE9] py-1.5 px-0.5">${on?`<div class="h-3 ${done?'bg-agreen/50':'bg-brand'} ${first?'rounded-l':''} ${last?'rounded-r':''}"></div>`:''}</div>`; }).join(''); }).join('')}
+            </div>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2">막대는 준비 타임라인의 시작~종료 주간입니다. 체크한 항목은 초록으로 표시됩니다.</p>`):''}
+
+      ${S.owners?sec('10-2','담당자별 R&R · AI 도우미','내 업무만 모아보기',`
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          ${S.owners.map((o,oi)=>{ const mine=S.tasks.filter(t=>(t.owner||'').indexOf(o.name)>=0);
+            const doneN=S.tasks.filter((t,i)=>(t.owner||'').indexOf(o.name)>=0&&semChecked(i)).length;
+            return `<div class="rounded-xl border border-[#E6E6E3] p-4">
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <p class="text-[14px] font-extrabold text-ink">${esc(o.name)} <span class="text-[11px] font-normal text-slate-400">${doneN}/${mine.length} 완료</span></p>
+                <button onclick="semAi(${oi})" class="text-[11px] font-bold text-white bg-[#7C5CFF] hover:brightness-110 px-2.5 py-1 rounded-lg">✨ AI 도우미</button>
+              </div>
+              <p class="text-[12px] text-slate-500 leading-relaxed mb-2">${se('owner.'+oi+'.rr',o.rr)}</p>
+              <ul class="space-y-1">${mine.length?mine.map(t=>`<li class="text-[12px] text-slate-600">· ${esc(t.item)} <span class="text-slate-400 num">(${esc((t.end||'').slice(5))} 마감)</span></li>`).join(''):'<li class="text-[12px] text-slate-300">담당 업무 없음</li>'}</ul>
+              <div id="semAi${oi}" class="mt-2"></div>
+            </div>`; }).join('')}
+        </div>`):''}
 
       ${S.budget?sec('11','예산','총 '+(S.budget.total||0).toLocaleString()+'원',`
         ${tbl(['분류','항목','단가','수량','비용','소계','지급 대상','일정·주체'],S.budget.items.map(b=>`<tr class="border-t border-slate-100">
@@ -3501,12 +3575,44 @@
             <td class="px-2.5 py-2 num text-right text-ink">${(S.budget.total||0).toLocaleString()}원</td><td colspan="2"></td></tr>`)}`):''}
 
       ${sec('12','준비 체크리스트',done+'/'+S.checklist.length+' 완료',`
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
-          ${S.checklist.map((c,i)=>`<label class="flex items-start gap-2 py-1.5 border-b border-[#F1EFE9] cursor-pointer group">
-            <input type="checkbox" ${semChk[i]?'checked':''} onchange="semToggle(${i})" class="mt-0.5 accent-[#FBC400]" />
-            <span class="text-[13px] ${semChk[i]?'text-slate-400 line-through':'text-slate-700 group-hover:text-ink'}">${esc(c)}</span></label>`).join('')}
+        <div class="flex items-center gap-3 mb-3">
+          <div class="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden"><div class="h-2.5 rounded-full bg-brand transition-all" style="width:${Math.round(done/S.checklist.length*100)}%"></div></div>
+          <span class="num text-[13px] font-extrabold text-ink">${Math.round(done/S.checklist.length*100)}%</span>
         </div>
-        <p class="text-[11px] text-slate-400 mt-2">※ 체크 상태는 이 브라우저에 저장됩니다.</p>`)}`;
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
+          ${S.checklist.map((c,i)=>`<label class="flex items-start gap-2 py-2 border-b border-[#F1EFE9] cursor-pointer group hover:bg-[#FAFAF9] rounded px-1 -mx-1">
+            <input type="checkbox" ${semChecked(100+i)?'checked':''} onchange="semToggle(${100+i})" class="mt-0.5 w-4 h-4 accent-[#FBC400]" />
+            <span class="text-[13px] ${semChecked(100+i)?'text-slate-400 line-through':'text-slate-700 group-hover:text-ink'}">${esc(c)}</span></label>`).join('')}
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2">체크 상태는 접속한 모두에게 실시간 공유됩니다.</p>`)}`;
+    }
+    // 담당자별 AI 도우미 — 그 사람의 R&R·업무·마감으로 실행안을 뽑아준다
+    function semAi(oi){
+      const S=SEMINAR; if(!S) return;
+      const o=S.owners[oi], box=document.getElementById('semAi'+oi);
+      const mine=S.tasks.filter(t=>(t.owner||'').indexOf(o.name)>=0);
+      box.innerHTML='<p class="text-[12px] text-slate-400 py-3 text-center">AI가 실행안을 정리하는 중…</p>';
+      const prompt=[
+        '아래는 2026-11-19 개최 예정인 세미나의 담당자 정보다. 이 담당자가 오늘부터 무엇을 해야 하는지 실무 실행안을 만들어라.',
+        '', '[세미나] '+V('title',S.title)+' · '+V('dateLabel',S.dateLabel)+' · '+V('place',S.place)+' · '+V('scale',S.scale),
+        '[담당자] '+o.name, '[R&R] '+V('owner.'+oi+'.rr',o.rr),
+        '[담당 업무]', ...mine.map(t=>'- '+t.item+' ('+(t.start||'')+'~'+(t.end||'')+') · '+(t.sched||'')+(t.action?' · 비고: '+t.action:'')),
+        '', '요구사항:',
+        '1) 이번 주에 당장 착수할 일 3가지를 먼저 제시(각 1줄, 구체적 행동).',
+        '2) 업무별로 남은 준비 단계를 체크리스트로 쪼갠다(각 항목은 하루 안에 끝낼 수 있는 크기).',
+        '3) 놓치기 쉬운 리스크·의사결정 포인트를 2~3개 짚는다.',
+        '4) 다른 담당자와 협의가 필요한 항목은 누구와 무엇을 정해야 하는지 명시.',
+        '한국어로, 마크다운 없이 간결한 문장과 · 기호 목록으로만 작성.'
+      ].join('\n');
+      fetch('/api/ai-assist',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({system:'너는 국내 B2B 마케팅 행사 PM이다. 실행 가능한 수준으로 구체적으로 쓴다.',prompt})})
+        .then(r=>r.json()).then(d=>{
+          if(!d||!d.ok){ box.innerHTML='<p class="text-[12px] text-ared py-2">'+esc((d&&d.hint)||'AI 호출 실패')+'</p>'; return; }
+          box.innerHTML='<div class="rounded-lg bg-[#FBFAFF] border border-[#EDE9FF] p-3">'
+            +'<p class="text-[11px] font-bold text-[#5B44C7] mb-1">AI 실행안 <span class="font-normal text-slate-400">'+esc(d.model||'')+'</span></p>'
+            +'<div class="text-[12px] text-slate-700 leading-relaxed whitespace-pre-wrap max-h-72 overflow-auto">'+esc(d.text||'')+'</div>'
+            +'<button onclick="bdCopy(this.previousElementSibling.textContent)" class="mt-2 text-[11px] border border-slate-300 hover:bg-white px-2 py-1 rounded">복사</button></div>';
+        }).catch(e=>{ box.innerHTML='<p class="text-[12px] text-ared py-2">호출 실패: '+esc(String(e))+'</p>'; });
     }
     function switchTab(t){
       // 상위 뷰만 토글(카페·리포트 클러스터는 view-mkt 내부로 편입 → mktSub/mktReportSub가 관리)
@@ -4367,6 +4473,7 @@
         if(keys.length>show.length){ av+=dot('#6E6E73','-8px','+'+(keys.length-show.length),''); }
         g.innerHTML='<span class="text-[11px] text-white/50 mr-2 hidden sm:inline">접속 '+keys.length+'</span>'+av; } }
       // 주간보고 내부 상세 칩(있을 때만)
+      ['wkPresence','semPresence'].forEach(function(pid){ const pe=document.getElementById(pid); if(pe&&pid==='semPresence'){ pe.innerHTML=keys.length?('<span class="text-[12px] font-semibold text-slate-500 mr-1">🟢 접속 중 '+keys.length+'명</span> '+keys.map(function(k){ const n=map[k].name, me=(k===mykey); return '<span class="inline-flex items-center gap-1 text-[12px] px-2 py-0.5 rounded-full '+(me?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'bg-slate-100 text-slate-600')+'">'+esc(n)+(me?' (나)':'')+'</span>'; }).join(' ')):''; } });
       const el=document.getElementById('wkPresence'); if(el){ if(!keys.length){ el.innerHTML=''; } else {
         const chips=keys.map(k=>{ const n=map[k].name, me=(k===mykey); return '<span class="inline-flex items-center gap-1 text-[12px] px-2 py-0.5 rounded-full '+(me?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'bg-slate-100 text-slate-600')+'"><span style="width:6px;height:6px;border-radius:9999px;background:#22C55E;display:inline-block"></span>'+esc(n)+(me?' (나)':'')+'</span>'; }).join(' ');
         el.innerHTML='<span class="text-[12px] font-semibold text-slate-500 mr-1">🟢 접속 중 '+keys.length+'명</span> '+chips+' <button onclick="wkRenamePresence()" class="text-[11px] text-slate-400 hover:text-ink underline ml-1">내 이름 변경</button>'; } } }
