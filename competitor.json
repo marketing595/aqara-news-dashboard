@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-06 19:56",
+ "generatedAt": "2026-08-07 18:17",
  "brands": [
   {
    "name": "아카라",
@@ -128,8 +128,8 @@
     "아카라 홈캠",
     "아카라치",
     "아카라 l100",
-    "아카라카",
-    "아카라이브 핫딜"
+    "아카라이브 핫딜",
+    "명조 아카라이브"
    ],
    "recent": [
     {
@@ -228,7 +228,7 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 960,
+   "total": 961,
    "sentiment": {
     "pos": 28,
     "neu": 31,
@@ -343,11 +343,11 @@
     ]
    ],
    "related": [
-    "헤이홈",
     "헤이홈 홈캠",
+    "헤이홈",
     "헤이홈 sd카드",
-    "헤이홈 거치대",
     "헤이홈 연결",
+    "헤이홈 거치대",
     "헤이홈 중국",
     "헤이홈 공유",
     "헤이홈 오프라인",
@@ -355,6 +355,12 @@
     "헤이홈 프로"
    ],
    "recent": [
+    {
+     "title": "헤이홈, 킨텍스 '코베 베이비페어&유아교육전'서 스마트 육아 솔루션 선...",
+     "source": "머니투데이",
+     "date": "2026-08-07",
+     "link": "https://n.news.naver.com/mnews/article/008/0005397135?sid=101"
+    },
     {
      "title": "헤이홈, 에어컨·전동커튼 연동한 여름철 '스마트홈 루틴' 제안",
      "source": "머니투데이",
@@ -438,12 +444,6 @@
      "source": "inthenews.co.kr",
      "date": "2026-07-08",
      "link": "https://www.inthenews.co.kr/news/article.html?no=89090"
-    },
-    {
-     "title": "KT, 3000대 한정판 'KT 홈캠 아기상어 에디션' 10일 출시",
-     "source": "womentimes.co.kr",
-     "date": "2026-07-08",
-     "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=104238"
     }
    ]
   },
@@ -451,7 +451,7 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67398,
+   "total": 67401,
    "sentiment": {
     "pos": 6,
     "neu": 52,
@@ -460,59 +460,59 @@
    "keywords": [
     [
      "에어컨",
-     74
-    ],
-    [
-     "AI",
-     42
+     75
     ],
     [
      "실외기",
+     39
+    ],
+    [
+     "AI",
      38
     ],
     [
      "진단",
-     37
+     38
     ],
     [
      "모터",
-     37
+     38
     ],
     [
      "센서",
-     37
+     38
     ],
     [
      "상태",
-     36
+     37
     ],
     [
      "인공지능",
-     30
+     31
     ],
     [
      "AI가",
-     28
+     29
+    ],
+    [
+     "조치",
+     25
     ],
     [
      "냉매량과",
      25
     ],
     [
-     "조치",
-     24
-    ],
-    [
      "여부",
-     23
+     24
     ],
     [
      "폭염",
      21
     ],
     [
-     "삼성전자는",
-     20
+     "정상",
+     19
     ],
     [
      "관리",
@@ -527,7 +527,7 @@
      19
     ],
     [
-     "정상",
+     "삼성전자는",
      18
     ]
    ],
@@ -564,16 +564,34 @@
    "related": [
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스",
-    "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 에어컨",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 오류",
-    "삼성 스마트싱스 연결",
     "아이폰 삼성 스마트싱스",
-    "삼성 스마트싱스 전력량"
+    "삼성 스마트싱스 연결",
+    "삼성 스마트싱스 오류",
+    "삼성 스마트싱스 전력량",
+    "삼성 스마트싱스 아이폰"
    ],
    "recent": [
+    {
+     "title": "[마켓+]반려동물도 가전 '주 사용자'로…펫가전 경쟁 가속",
+     "source": "businessplus.kr",
+     "date": "2026-08-07",
+     "link": "https://www.businessplus.kr/news/articleView.html?idxno=115189"
+    },
+    {
+     "title": "[체험기] 삼성 비스포크 로봇청소기…'청소로부터의 자유' 얼마나 가능...",
+     "source": "asiatoday.co.kr",
+     "date": "2026-08-07",
+     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20260807010002363"
+    },
+    {
+     "title": "[가전 트렌드] LG전자, 국가브랜드경쟁력지수(NBCI) 가전구독 업종 2년 ...",
+     "source": "ibabynews.com",
+     "date": "2026-08-07",
+     "link": "https://www.ibabynews.com/news/articleView.html?idxno=153526"
+    },
     {
      "title": "삼성·LG전자, ‘아프리카 현지화’ 속도… 신대륙 개척",
      "source": "디지털타임스",
@@ -623,7 +641,7 @@
      "link": "https://kbench.com/?q=node/280946"
     },
     {
-     "title": "롯데하이마트의 체질 개선 과제 : 플랫폼의 쿠팡, 브랜드의 삼성·LG와 ...",
+     "title": "롯데하이마트 체질 개선 한계 보여준 2분기 실적 : 플랫폼의 쿠팡, 브랜...",
      "source": "huffingtonpost.kr",
      "date": "2026-08-05",
      "link": "https://www.huffingtonpost.kr/article/259299"
@@ -645,24 +663,6 @@
      "source": "asiatime.co.kr",
      "date": "2026-08-05",
      "link": "https://www.asiatime.co.kr/article/20260805500132"
-    },
-    {
-     "title": "에어컨 '청·정·확·인'으로 폭염 대응 / 냉방 성능과 에너지 효율 동시...",
-     "source": "topclass.chosun.com",
-     "date": "2026-08-05",
-     "link": "http://topclass.chosun.com/news/articleView.html?idxno=36632"
-    },
-    {
-     "title": "삼성전자서비스, 여름철 에어컨 효율 관리법 안내",
-     "source": "m-i.kr",
-     "date": "2026-08-05",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1399203"
-    },
-    {
-     "title": "[재계 투데이] 삼성전자, 업계 최초 3D 메모리 zHBM·zNAND-O 목업 공개 ...",
-     "source": "news.dealsitetv.com",
-     "date": "2026-08-05",
-     "link": "https://news.dealsitetv.com/articles/174301"
     }
    ]
   },
@@ -670,40 +670,40 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77013,
+   "total": 77014,
    "sentiment": {
-    "pos": 45,
-    "neu": 14,
+    "pos": 44,
+    "neu": 15,
     "neg": 1
    },
    "keywords": [
     [
      "히트펌프",
-     71
+     70
     ],
     [
      "LG전자",
-     62
+     60
     ],
     [
      "원격",
-     42
-    ],
-    [
-     "R32",
      41
     ],
     [
+     "R32",
+     40
+    ],
+    [
      "낮은",
-     39
+     38
     ],
     [
      "냉매를",
-     39
+     38
     ],
     [
      "제주",
-     37
+     35
     ],
     [
      "LG전자는",
@@ -719,11 +719,11 @@
     ],
     [
      "앱을",
-     32
+     31
     ],
     [
      "제어",
-     31
+     30
     ],
     [
      "사업을",
@@ -735,15 +735,15 @@
     ],
     [
      "글로벌",
-     26
-    ],
-    [
-     "ThinQ",
      25
     ],
     [
      "전기화",
      25
+    ],
+    [
+     "ThinQ",
+     24
     ],
     [
      "시장에서",
@@ -753,7 +753,7 @@
    "posWords": [
     [
      "글로벌",
-     26
+     25
     ],
     [
      "1위",
@@ -769,11 +769,11 @@
     ],
     [
      "공략",
-     6
+     7
     ],
     [
      "선도",
-     3
+     4
     ],
     [
      "혁신",
@@ -788,15 +788,21 @@
     "lg 씽큐온",
     "lg 씽큐",
     "lg 씽큐 공유",
-    "lg 씽큐 연결 안됨",
     "lg 씽큐 세탁기",
     "lg 씽큐 앱",
+    "lg 씽큐 허브",
     "lg 씽큐 연결",
     "lg 씽큐 에어컨 등록",
-    "lg 씽큐 앱 에러",
-    "lg 씽큐 허브"
+    "lg 씽큐 연결 안됨",
+    "lg 씽큐 냉장고"
    ],
    "recent": [
+    {
+     "title": "[마켓+]반려동물도 가전 '주 사용자'로…펫가전 경쟁 가속",
+     "source": "businessplus.kr",
+     "date": "2026-08-07",
+     "link": "https://www.businessplus.kr/news/articleView.html?idxno=115189"
+    },
     {
      "title": "삼성·LG전자, ‘아프리카 현지화’ 속도… 신대륙 개척",
      "source": "디지털타임스",
@@ -816,7 +822,7 @@
      "link": "https://n.news.naver.com/mnews/article/469/0000946389?sid=105"
     },
     {
-     "title": "롯데하이마트의 체질 개선 과제 : 플랫폼의 쿠팡, 브랜드의 삼성·LG와 ...",
+     "title": "롯데하이마트 체질 개선 한계 보여준 2분기 실적 : 플랫폼의 쿠팡, 브랜...",
      "source": "huffingtonpost.kr",
      "date": "2026-08-05",
      "link": "https://www.huffingtonpost.kr/article/259299"
@@ -880,12 +886,6 @@
      "source": "todayenergy.kr",
      "date": "2026-08-03",
      "link": "https://www.todayenergy.kr/news/articleView.html?idxno=301135"
-    },
-    {
-     "title": "\"유럽 평정한 히트펌프, 안방으로\" 삼성·LG전자, 국내 '난방 전기화' 시...",
-     "source": "asiaa.co.kr",
-     "date": "2026-08-03",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=257294"
     }
    ]
   },
@@ -893,28 +893,28 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75386,
+   "total": 75393,
    "sentiment": {
-    "pos": 19,
-    "neu": 34,
-    "neg": 7
+    "pos": 17,
+    "neu": 35,
+    "neg": 8
    },
    "keywords": [
     [
      "AI",
-     49
+     44
     ],
     [
      "위버스",
      35
     ],
     [
-     "제미나이",
+     "검색",
      17
     ],
     [
-     "검색",
-     17
+     "제미나이",
+     16
     ],
     [
      "구글의",
@@ -923,6 +923,22 @@
     [
      "전문",
      12
+    ],
+    [
+     "아래는",
+     11
+    ],
+    [
+     "기사를",
+     11
+    ],
+    [
+     "번역",
+     11
+    ],
+    [
+     "으로",
+     11
     ],
     [
      "번역한",
@@ -937,39 +953,23 @@
      11
     ],
     [
-     "스파이더맨",
-     11
-    ],
-    [
-     "아래는",
-     10
-    ],
-    [
-     "기사를",
-     10
-    ],
-    [
-     "번역",
-     10
-    ],
-    [
-     "으로",
-     10
-    ],
-    [
      "구글번역",
-     10
-    ],
-    [
-     "Gemini",
-     10
+     11
     ],
     [
      "이미지",
      10
     ],
     [
-     "버튼을",
+     "Gemini",
+     9
+    ],
+    [
+     "어시스턴트",
+     8
+    ],
+    [
+     "노력하고",
      8
     ]
    ],
@@ -977,10 +977,6 @@
     [
      "투자",
      6
-    ],
-    [
-     "강화",
-     3
     ],
     [
      "글로벌",
@@ -991,11 +987,11 @@
      3
     ],
     [
-     "확대",
+     "강화",
      2
     ],
     [
-     "1위",
+     "확대",
      2
     ],
     [
@@ -1004,6 +1000,10 @@
     ],
     [
      "인기",
+     1
+    ],
+    [
+     "프리미엄",
      1
     ]
    ],
@@ -1014,12 +1014,54 @@
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 연결",
-    "구글 홈 미니 초기화",
     "구글 홈 연결",
-    "구글 홈 초기화",
-    "구글 홈 스피커 연결"
+    "구글 홈 스피커 연결",
+    "구글 홈 미니 초기화",
+    "구글 홈 초기화"
    ],
    "recent": [
+    {
+     "title": "\"홈시네마부터 게임까지\"...뷰소닉 'VX 시리즈' 빔프로젝터 4종 기획전 ...",
+     "source": "betanews.net",
+     "date": "2026-08-07",
+     "link": "https://www.betanews.net/article/view/beta202608060069"
+    },
+    {
+     "title": "제천시민축구단, 지역 학교 찾아 재능기부...\"선수들에게 직접 배우는 ...",
+     "source": "breaknews.com",
+     "date": "2026-08-07",
+     "link": "http://www.breaknews.com/1227502"
+    },
+    {
+     "title": "홈플러스, 67개 핵심 점포 8월 13일 정식 개장 “영업 정상화 속도”",
+     "source": "breaknews.com",
+     "date": "2026-08-07",
+     "link": "http://www.breaknews.com/1227480"
+    },
+    {
+     "title": "애플의 느림보 AI 정책, 전략일까 한계일까",
+     "source": "지디넷",
+     "date": "2026-08-07",
+     "link": "https://n.news.naver.com/mnews/article/092/0002433303?sid=105"
+    },
+    {
+     "title": "구글 클라우드, Cloud KMS서 기업 후양자 암호 표준 지원",
+     "source": "digitaltoday.co.kr",
+     "date": "2026-08-07",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=690848"
+    },
+    {
+     "title": "오픈AI 첫 AI 기기 ‘도넛형 스피커’… 내년 40만원대 출격",
+     "source": "ddaily.co.kr",
+     "date": "2026-08-07",
+     "link": "https://n.news.naver.com/mnews/article/138/0002236960?sid=105"
+    },
+    {
+     "title": "[미국 특징주] \"오픈AI의 스마트 스피커, 300달러 넘을 듯\"",
+     "source": "newspim.com",
+     "date": "2026-08-07",
+     "link": "https://www.newspim.com/news/view/20260807000041"
+    },
     {
      "title": "보은교육지원청, 체험형 프로그램과 밀착 케어로 방학 중 특수교육 돌봄...",
      "source": "breaknews.com",
@@ -1067,48 +1109,6 @@
      "source": "4th.kr",
      "date": "2026-08-06",
      "link": "http://www.4th.kr/news/articleView.html?idxno=2115904"
-    },
-    {
-     "title": "실리콘랩스, 차세대 블루투스 LE SoC 'BG2B' 공개…IoT 전력효율·보안 강...",
-     "source": "ddaily.co.kr",
-     "date": "2026-08-06",
-     "link": "https://n.news.naver.com/mnews/article/138/0002236837?sid=105"
-    },
-    {
-     "title": "실리콘랩스, 차세대 블루투스 LE SoC ‘BG2B’ 공개…전력효율·보안·통...",
-     "source": "venturesquare.net",
-     "date": "2026-08-06",
-     "link": "https://www.venturesquare.net/1104007/"
-    },
-    {
-     "title": "홈플러스·롯데카드·오스템까지…잇단 악재에 김광일 MBK 부회장 책임론...",
-     "source": "joongangenews.com",
-     "date": "2026-08-06",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=538168"
-    },
-    {
-     "title": "[유통갤러리] 롯데백화점, '2026 롯데타운 서머마켓' 공개 外",
-     "source": "theviewers.co.kr",
-     "date": "2026-08-06",
-     "link": "https://theviewers.co.kr/View.aspx?No=4176441"
-    },
-    {
-     "title": "‘3만원’ 배달 피자 대신 남은 재료 활용…가성비 ‘10분 피자’ 즐기...",
-     "source": "segye.com",
-     "date": "2026-08-06",
-     "link": "https://n.news.naver.com/mnews/article/022/0004148880?sid=103"
-    },
-    {
-     "title": "\"헤이 구글\" 사라진다…구글 어시스턴트, 9월 4일 종료",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-08-06",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=690460"
-    },
-    {
-     "title": "구글 어시스턴트 역사 속으로…9월 4일부터 순차 종료",
-     "source": "kbench.com",
-     "date": "2026-08-06",
-     "link": "https://kbench.com/?q=node/280956"
     }
    ]
   }
