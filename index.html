@@ -107,7 +107,7 @@
   </header>
 
   <!-- 상위 GNB -->
-  <div class="bg-white border-b border-[#E6E6E3] sticky top-[53px] z-20">
+  <div id="gnb" class="bg-white border-b border-[#E6E6E3] sticky top-[53px] z-20">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8 flex gap-7 overflow-x-auto">
       <button id="grpBtn-pr" onclick="switchGroup('pr')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-brand text-ink whitespace-nowrap">PR</button>
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
@@ -3412,6 +3412,14 @@
       const ref=semRef();
       if(ref) semTrack(ref.child(k.replace(/[.#$/\[\]]/g,'_')).set(v));
       else { try{ localStorage.setItem('aqaraSeminarEdits',JSON.stringify(SEM_OVER)); }catch(e){} semPaintSave(); }
+      semPaintGantt();                 // 목록에서 고친 내용을 간트에 즉시 반영(입력 포커스는 유지)
+    }
+    // 간트만 다시 그리기 — 전체 재렌더 없이(편집 중 커서·스크롤 유지)
+    function semPaintGantt(){
+      const w=document.getElementById('semGantWrap'); if(!w||!SEMINAR) return;
+      const g0=document.getElementById('semGant'); const sc=g0?g0.scrollLeft:SEM_GSCROLL;
+      w.innerHTML=semGanttHTML(semGroups(semFiltered()));
+      const g1=document.getElementById('semGant'); if(g1&&sc!=null){ g1.scrollLeft=sc; SEM_GSCROLL=sc; }
     }
     function semTrack(p){
       SEM_INFLIGHT++; semPaintSave();
@@ -3443,11 +3451,32 @@
       return `<span class="sem-edit num" data-sk="${semKey(k)}" contenteditable="true" spellcheck="false" oninput="semInput(this)" onblur="semInput(this,1)">${n==null?'':n.toLocaleString()}</span>`; }
     function semChecked(i){ return !!V('chk.'+i,''); }
     function semToggle(i){ const k='chk.'+i; semSave(semKey(k), V(k,'')?'':'1'); renderSeminar(); }
-    function semShare(){
-      const u=location.origin+location.pathname+'#seminar';
-      const txt='[세미나 공동작업] '+V('title',(SEMINAR&&SEMINAR.title)||'')+'\n'+V('dateLabel',(SEMINAR&&SEMINAR.dateLabel)||'')+'\n'+u
-        +'\n※ 대시보드 로그인(@aqara.kr) 후 ONLY MKT > 세미나 탭에서 함께 편집하실 수 있습니다.';
-      bdCopy(txt);
+    // 공유: 세미나만 열리는 전용 링크 '주소만' 복사
+    function semShare(){ bdCopy(location.origin+'/seminar.html'); }
+    /* --- 세미나 단독 모드 (/seminar.html · ?view=seminar · #seminar) --- */
+    function semSoloMode(){
+      const q=location.search||'', h=location.hash||'';
+      if(!/[?&]view=seminar(\b|&|$)/.test(q) && h!=='#seminar') return false;
+      const hd=document.querySelector('header'); if(hd) hd.style.display='none';
+      ['gnb','subnav-pr','subnav-owned','subnav-report'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display='none'; });
+      const mn=document.querySelector('main');
+      if(mn){ const ch=mn.children;
+        for(let i=0;i<ch.length;i++){ ch[i].classList.add('hidden'); ch[i].style.display='none'; } }
+      // mktMovePanels()가 세미나 패널을 ONLY MKT 안으로 옮겨놨으므로 main 직속으로 되돌린다
+      const v=document.getElementById('view-seminar');
+      if(v&&mn){ mn.appendChild(v); v.classList.remove('hidden'); v.style.display='block'; }
+      const gp=document.getElementById('globalPresence'); if(gp) gp.removeAttribute('id');
+      // 단독 모드용 얇은 상단 바
+      const bar=document.createElement('div');
+      bar.className='bg-ink text-white';
+      bar.innerHTML='<div class="max-w-[1400px] mx-auto px-5 sm:px-8 py-2.5 flex items-center justify-between gap-3">'
+        +'<span class="text-[13px] font-bold">아카라라이프 × KOSID 세미나 <span class="font-normal text-white/40 text-[11px] ml-1">공동 작업 페이지</span></span>'
+        +'<span class="flex items-center gap-3"><span id="globalPresence" class="flex items-center"></span>'
+        +'<a href="/" class="text-[12px] bg-white/10 hover:bg-white/20 px-2.5 py-1.5 rounded-lg border border-white/15">마케팅 포털</a></span></div>';
+      document.body.insertBefore(bar, document.body.firstChild);
+      try{ renderSeminar(); }catch(e){ console.warn(e); }
+      try{ if(typeof wkPresenceStart==='function') wkPresenceStart(); }catch(e){}
+      return true;
     }
     function semGo(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
     function semOvToggle(el){ try{ localStorage.setItem('aqaraSemOv', el.open?'1':''); }catch(e){} }
@@ -3523,6 +3552,7 @@
       return order.map(c=>({cat:c,items:g[c]}));
     }
     function semSetF(k,v){ SEM_F[k]=v; renderSeminar(); }
+    function semOwnerFocus(n){ SEM_F.owner=(SEM_F.owner===n?'':n); renderSeminar(); setTimeout(()=>semGo('semSecGant'),60); }
     function semOnly(v){ SEM_F.only=(SEM_F.only===v?'':v); renderSeminar(); }
     function semAddTask(cat){
       const n=parseInt(V('extraN','0'),10)||0, i=500+n, td=semToday();
@@ -3539,6 +3569,53 @@
       if(!confirm('"'+t.item+'" 업무를 목록에서 삭제할까요?')) return;
       semSave(semKey('del.'+i),'1'); renderSeminar();
     }
+    /* --- 할 일 행 드래그 정렬 (핸들 ⠿을 잡고 끌기 · 다른 구분으로 떨어뜨리면 구분도 변경) --- */
+    let SEM_DRAGI=null, SEM_DROP_AFTER=false;
+    function semDragOn(el){ const tr=el.closest('tr'); if(tr) tr.setAttribute('draggable','true'); }
+    function semDragOff(el){ const tr=el.closest('tr'); if(tr) setTimeout(()=>tr.setAttribute('draggable','false'),0); }
+    function semRowStart(ev,i){
+      SEM_DRAGI=i;
+      try{ ev.dataTransfer.effectAllowed='move'; ev.dataTransfer.setData('text/plain',String(i)); }catch(e){}
+      const tr=ev.currentTarget; if(tr) tr.style.opacity='0.45';
+    }
+    function semRowEnd(ev){ const tr=ev.currentTarget; if(tr){ tr.style.opacity=''; tr.setAttribute('draggable','false'); } semRowClear(); SEM_DRAGI=null; }
+    function semRowClear(){ const rs=document.querySelectorAll('tr[data-row],[data-drop]');
+      for(let k=0;k<rs.length;k++) rs[k].style.boxShadow=''; }
+    function semRowOver(ev){
+      if(SEM_DRAGI==null) return;
+      ev.preventDefault(); try{ ev.dataTransfer.dropEffect='move'; }catch(e){}
+      const tr=ev.currentTarget, r=tr.getBoundingClientRect();
+      SEM_DROP_AFTER=(ev.clientY-r.top)>r.height/2;
+      semRowClear();
+      tr.style.boxShadow='inset 0 '+(SEM_DROP_AFTER?'-3px':'3px')+' 0 #FBC400';
+    }
+    function semRowOut(ev){ const tr=ev.currentTarget; if(tr) tr.style.boxShadow=''; }
+    function semRowDrop(ev,j){
+      ev.preventDefault(); ev.stopPropagation();
+      const i=SEM_DRAGI; SEM_DRAGI=null; semRowClear();
+      if(i==null||i===j) return;
+      const groups=semGroups(semFiltered());
+      const gj=groups.filter(g=>g.items.some(t=>t.i===j))[0]; if(!gj) return;
+      const gi=groups.filter(g=>g.items.some(t=>t.i===i))[0];
+      if(!gi||gi.cat!==gj.cat) semSave(semKey('task.'+i+'.cat'), gj.cat);
+      const arr=gj.items.map(t=>t.i).filter(x=>x!==i);
+      let at=arr.indexOf(j); if(at<0) at=arr.length; else if(SEM_DROP_AFTER) at++;
+      arr.splice(at,0,i);
+      arr.forEach((id,n)=>semSave(semKey('task.'+id+'.ord'),String((n+1)*10)));
+      renderSeminar();
+    }
+    function semGroupDrop(ev,cat){          // 그룹 헤더에 떨어뜨리면 그 구분의 맨 아래로
+      ev.preventDefault(); ev.stopPropagation();
+      const i=SEM_DRAGI; SEM_DRAGI=null; semRowClear();
+      if(i==null) return;
+      const g=semGroups(semFiltered()).filter(x=>x.cat===cat)[0];
+      semSave(semKey('task.'+i+'.cat'),cat);
+      const arr=(g?g.items.map(t=>t.i).filter(x=>x!==i):[]); arr.push(i);
+      arr.forEach((id,n)=>semSave(semKey('task.'+id+'.ord'),String((n+1)*10)));
+      renderSeminar();
+    }
+    function semGroupOver(ev){ if(SEM_DRAGI==null) return; ev.preventDefault();
+      ev.currentTarget.style.boxShadow='inset 0 0 0 2px #FBC400'; }
     function semMove(i,dir){
       const grp=semGroups(semTasks()).filter(g=>g.items.some(t=>t.i===i))[0]; if(!grp) return;
       const arr=grp.items.slice(), at=arr.map(t=>t.i).indexOf(i), to=at+dir;
@@ -3644,10 +3721,10 @@
       const s=semMonday(mn), e=semAddDays(semMonday(mx),6);
       return {s:s,e:e,n:semDiff(s,e)+1};
     }
-    function semGanttHTML(gr){
-      const groups=gr.map(g=>({cat:g.cat,items:g.items.filter(t=>t.start&&t.end)})).filter(g=>g.items.length);
+    function semGanttHTML(groups){
+      // 할 일 목록과 1:1 — 기간이 없는 항목도 같은 순서로 행을 만들고 '기간 지정' 버튼을 놓는다
       const flat=[]; groups.forEach(g=>g.items.forEach(t=>flat.push(t)));
-      if(!flat.length) return '<p class="text-[13px] text-slate-400 py-8 text-center">기간이 정해진 업무가 없습니다. 목록에서 시작·종료일을 넣으면 여기에 막대로 표시됩니다.</p>';
+      if(!flat.length) return '<p class="text-[13px] text-slate-400 py-8 text-center">조건에 맞는 업무가 없습니다.</p>';
       const R=semRange(flat), nd=R.n, W=nd*SEM_DW, td=semToday();
       const tIdx=(td>=R.s&&td<=R.e)?semDiff(R.s,td):-1;
       const evd=(SEMINAR&&SEMINAR.date)||'', eIdx=(evd&&evd>=R.s&&evd<=R.e)?semDiff(R.s,evd):-1;
@@ -3666,23 +3743,23 @@
       const leftCell=(inner,cls,h)=>`<div class="${cls||''}" style="position:sticky;left:0;z-index:3;flex:0 0 ${SEM_LW}px;width:${SEM_LW}px;height:${h}px;background:#fff;border-right:1px solid #E6E6E3;box-shadow:2px 0 4px -3px rgba(0,0,0,.25)">${inner}</div>`;
       const marks=(tIdx>=0?`<div style="position:absolute;left:${tIdx*SEM_DW}px;top:0;bottom:0;width:2px;background:#BF5332;opacity:.75;pointer-events:none"></div>`:'')
         +(eIdx>=0?`<div style="position:absolute;left:${eIdx*SEM_DW}px;top:0;bottom:0;width:2px;background:#FBC400;pointer-events:none"></div>`:'')
-        +(tIdx>0?`<div style="position:absolute;left:0;top:0;bottom:0;width:${tIdx*SEM_DW}px;background:rgba(38,40,42,.045);pointer-events:none"></div>`:'');
+        +(tIdx>0?`<div style="position:absolute;left:0;top:0;bottom:0;width:${tIdx*SEM_DW}px;background:rgba(38,40,42,.13);pointer-events:none"></div>`:'');
       // 헤더
       let h='';
       h+=`<div class="flex" style="width:${SEM_LW+W}px">
-        ${leftCell('<div class="px-2 pt-2 text-[10px] font-bold text-slate-400">월</div>','',24)}
+        ${leftCell('','',24)}
         <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:24px;display:flex">
           ${months.map(m=>`<div style="flex:0 0 ${m.n*SEM_DW}px;width:${m.n*SEM_DW}px;border-left:1px solid #E6E6E3" class="text-[11px] font-extrabold text-ink px-1.5 leading-6 bg-[#FAFAF9]">${m.label}</div>`).join('')}
         </div></div>`;
       h+=`<div class="flex" style="width:${SEM_LW+W}px">
-        ${leftCell('<div class="px-2 text-[10px] font-bold text-slate-400">주</div>','',22)}
+        ${leftCell('<div class="px-2 text-[11px] font-extrabold text-slate-500 leading-[22px]">날짜</div>','',22)}
         <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:22px;display:flex">
           ${weeks.map(w=>`<div style="flex:0 0 ${w.n*SEM_DW}px;width:${w.n*SEM_DW}px;border-left:1px solid #EFEDE7" class="text-[10px] num text-center leading-[22px] ${w.past?'text-slate-300':'text-slate-500'}">${w.label}</div>`).join('')}
         </div></div>`;
       h+=`<div class="flex" style="width:${SEM_LW+W}px">
-        ${leftCell('<div class="px-2 text-[10px] font-bold text-slate-400">일</div>','',22)}
+        ${leftCell('','',22)}
         <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:22px;display:flex;border-bottom:1px solid #E6E6E3">
-          ${days.map(d=>`<div style="flex:0 0 ${SEM_DW}px;width:${SEM_DW}px;${d.today?'background:#BF533218;font-weight:800;color:#BF5332;':(d.ev?'background:#FBC40033;font-weight:800;color:#8A6A00;':'')}" class="text-[10px] num text-center leading-[22px] ${d.past&&!d.today?'text-slate-300':(d.w===0||d.w===6?'text-slate-400':'text-slate-600')}">${d.n}</div>`).join('')}
+          ${days.map(d=>`<div style="flex:0 0 ${SEM_DW}px;width:${SEM_DW}px;${d.today?'background:#BF533218;font-weight:800;color:#BF5332;':(d.ev?'background:#FBC40033;font-weight:800;color:#8A6A00;':(d.past?'background:rgba(38,40,42,.13);':''))}" class="text-[10px] num text-center leading-[22px] ${d.past&&!d.today?'text-slate-400':(d.w===0||d.w===6?'text-slate-400':'text-slate-600')}">${d.n}</div>`).join('')}
         </div></div>`;
       // 그룹 · 행
       groups.forEach(g=>{
@@ -3692,13 +3769,17 @@
           <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:26px;background:#FAFAF9;border-top:1px solid #F1EFE9">${marks}</div></div>`;
         g.items.forEach(t=>{
           const st=semState(t);
-          const off=Math.max(0,semDiff(R.s,t.start));
-          const len=Math.max(1,semDiff(t.start,t.end)+1);
+          const has=!!(t.start&&t.end);
+          const off=has?Math.max(0,semDiff(R.s,t.start)):0;
+          const len=has?Math.max(1,semDiff(t.start,t.end)+1):1;
           const bw=len*SEM_DW-2;
           const lbl=(t.sched||t.item||'');
           const inside=bw>=76;
           const bg=t.done?'#5E735099':(st.k==='late'?'#BF5332':catColor(t.cat));
-          const bar=`<div onmousedown="semBarDown(event,${t.i})" title="${esc(t.item+' · '+t.start+' ~ '+t.end+(t.sched?' · '+t.sched:''))}"
+          const bar=!has?`<button onclick="semDate(${t.i},'start')" title="시작일을 넣으면 막대가 생깁니다"
+                 style="position:absolute;left:${Math.max(0,tIdx)*SEM_DW+2}px;top:9px"
+                 class="text-[10px] leading-[18px] px-1.5 rounded border border-dashed border-slate-300 text-slate-400 hover:text-ink hover:border-ink bg-white/70">＋ 기간 지정</button>`
+            :`<div onmousedown="semBarDown(event,${t.i})" title="${esc(t.item+' · '+t.start+' ~ '+t.end+(t.sched?' · '+t.sched:''))}"
                  style="position:absolute;left:${off*SEM_DW+1}px;top:9px;width:${bw}px;height:18px;background:${bg};border-radius:5px"
                  class="gbar text-[10px] leading-[18px] px-1.5 text-white truncate cursor-grab select-none">${inside?esc(lbl):''}</div>`
             +(inside?'':`<div style="position:absolute;left:${off*SEM_DW+bw+7}px;top:9px;white-space:nowrap;pointer-events:none" class="text-[10px] leading-[18px] text-slate-500">${esc(lbl.slice(0,34))}</div>`);
@@ -3778,7 +3859,9 @@
       /* ── 업무 행 ── */
       const taskRow=t=>{
         const st=semState(t), n=semCmtN(t.i);
-        return `<tr class="border-t border-[#F1EFE9] ${t.done?'bg-[#F7FBF5]':''} hover:bg-[#FAFAF9] align-top">
+        return `<tr data-row="${t.i}" draggable="false" ondragstart="semRowStart(event,${t.i})" ondragover="semRowOver(event)" ondragleave="semRowOut(event)" ondrop="semRowDrop(event,${t.i})" ondragend="semRowEnd(event)"
+            class="border-t border-[#F1EFE9] ${t.done?'bg-[#F7FBF5]':''} hover:bg-[#FAFAF9] align-top">
+          <td class="px-1 py-2 text-center align-middle"><span class="cursor-grab select-none text-slate-300 hover:text-slate-500 text-[13px] leading-none px-0.5" title="드래그해서 순서 이동 · 다른 구분으로 떨어뜨리면 구분도 바뀝니다" onmousedown="semDragOn(this)" onmouseup="semDragOff(this)">⠿</span></td>
           <td class="px-2 py-2"><input type="checkbox" ${t.done?'checked':''} onchange="semToggle(${t.i})" class="w-4 h-4 accent-[#5E7350]" /></td>
           <td class="px-2.5 py-2">
             <div class="text-[13px] font-semibold ${t.done?'text-slate-400 line-through':'text-ink'}">${t.src.cl?'<span class="text-[10px] font-bold text-slate-400 border border-slate-200 rounded px-1 mr-1 align-middle">체크</span>':''}${se('task.'+t.i+'.item',t.src.item||'')}</div>
@@ -3794,12 +3877,10 @@
           <td class="px-2 py-2 whitespace-nowrap text-right">
             <button data-cn="${t.i}" onclick="semCmtToggle(${t.i})" title="댓글" class="text-[11px] px-1.5 py-0.5 rounded border ${n?'border-[#EDE9FF] bg-[#FBFAFF] text-[#5B44C7] font-semibold':'border-slate-200 text-slate-400 hover:text-ink'}">💬${n?' <b class="num">'+n+'</b>':''}</button>
             ${catSel(t.i,t.cat)}
-            <button onclick="semMove(${t.i},-1)" title="위로" class="text-[11px] text-slate-300 hover:text-ink px-0.5">▲</button>
-            <button onclick="semMove(${t.i},1)" title="아래로" class="text-[11px] text-slate-300 hover:text-ink px-0.5">▼</button>
             <button onclick="semDelTask(${t.i})" title="삭제" class="text-[11px] text-slate-300 hover:text-ared px-0.5">✕</button>
           </td></tr>
         <tr data-cmt="${t.i}" class="${SEM_CMT_OPEN===t.i?'':'hidden'} bg-[#FBFAFF]">
-          <td colspan="7" class="px-4 py-3 border-t border-[#EDE9FF]">
+          <td colspan="8" class="px-4 py-3 border-t border-[#EDE9FF]">
             <p class="text-[11px] font-bold text-[#5B44C7] mb-1">💬 ${esc(t.item)} — 업무 댓글</p>
             <div id="semCmtBox${t.i}" class="mb-2"></div>
             <div class="flex gap-2">
@@ -3812,7 +3893,7 @@
 
       box.innerHTML=`
       <!-- 헤로 -->
-      <div class="card p-5 sm:p-6 mb-4">
+      <div id="semHero" class="card p-5 sm:p-6 mb-4">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div class="min-w-0">
             <p class="text-[11px] font-extrabold tracking-wider text-brand-ink">KOSID × AQARA LIFE</p>
@@ -3841,6 +3922,28 @@
         ${tile('기간 미정', nodate.length+'건', nodate.length?'시작·종료일 입력 필요':'모두 일정 있음 👍', nodate.length?'#8A6A00':'#5E7350', false, 'semGo(\'semSecTl\')')}
         ${tile('예산 합계', Math.round(budTotal/10000).toLocaleString()+'<span class="text-[13px] text-slate-400">만원</span>', budget.length+'개 항목', '#26282A', false, 'semGo(\'semSecBud\')')}
       </div>
+
+      <!-- 기간 대비 진행률 -->
+      ${(()=>{ let s0=null; all.forEach(t=>{ if(t.start&&(!s0||t.start<s0)) s0=t.start; });
+        s0=s0||td; const e0=S.date||td;
+        const span=Math.max(1,semDiff(s0,e0)), gone=Math.min(span,Math.max(0,semDiff(s0,td)));
+        const ep=Math.round(gone/span*100), gap=pct-ep;
+        const col=gap>=0?'#5E7350':(gap>=-10?'#D68134':'#BF5332');
+        return `<div class="card p-4 sm:p-5 mb-4">
+          <div class="flex flex-wrap items-baseline justify-between gap-2 mb-2">
+            <p class="text-[13px] font-extrabold text-ink">기간 대비 진행률
+              <span class="text-[11px] font-normal text-slate-400">준비 시작 ${esc(semMD(s0))} → 행사 ${esc(semMD(e0))} · 총 ${span}일 중 ${gone}일 경과</span></p>
+            <p class="text-[12px] font-extrabold num" style="color:${col}">${gap>=0?'일정보다 '+gap+'%p 앞섬':'일정보다 '+Math.abs(gap)+'%p 뒤처짐'}</p>
+          </div>
+          <div class="relative h-6 rounded-lg bg-slate-100 overflow-hidden">
+            <div class="absolute inset-y-0 left-0 bg-[#E9E5DA]" style="width:${ep}%"></div>
+            <div class="absolute inset-y-0 left-0" style="width:${pct}%;background:${col};opacity:.85"></div>
+            <div class="absolute inset-y-0" style="left:${ep}%;width:2px;background:#26282A"></div>
+          </div>
+          <div class="flex justify-between mt-1.5 text-[11px]">
+            <span class="text-slate-500">■ 업무 완료 <b class="num text-ink">${pct}%</b> <span class="text-slate-400">(${doneN}/${all.length}건)</span></span>
+            <span class="text-slate-500">▮ 기간 경과 <b class="num text-ink">${ep}%</b> <span class="text-slate-400">(D-${Math.max(0,semDiff(td,e0))})</span></span>
+          </div></div>`; })()}
 
       <!-- 이번 주 / 지연 -->
       ${sec('semSecNow','⚡','이번 주 할 일','오늘 '+semMD(td)+' 기준',`
@@ -3881,13 +3984,14 @@
       ${sec('semSecTl','📋','할 일 목록','준비 업무 · 체크리스트를 하나로 · 구분별 그룹'+(S.note?' · '+esc(S.note):''),`
         ${groups.length?groups.map(g=>`
           <div class="mb-4">
-            <div class="flex items-center gap-2 mb-1.5">
+            <div data-drop="1" ondragover="semGroupOver(event)" ondragleave="semRowOut(event)" ondrop="semGroupDrop(event,'${esc(g.cat)}')"
+                 class="flex items-center gap-2 mb-1.5 rounded px-1 py-0.5">
               <span class="inline-block w-2.5 h-2.5 rounded-sm" style="background:${catColor(g.cat)}"></span>
               <span class="text-[13px] font-extrabold text-ink">${esc(g.cat)}</span>
               <span class="text-[11px] num text-slate-400">${g.items.filter(t=>t.done).length}/${g.items.length} 완료</span>
               <button onclick="semAddTask('${esc(g.cat)}')" class="text-[11px] text-slate-400 hover:text-ink border border-dashed border-slate-300 rounded px-1.5">+ 업무</button>
             </div>
-            ${tbl(['','항목','담당','기간','일정 흐름','비고','도구'],g.items.map(taskRow).join(''))}
+            ${tbl(['','','항목','담당','기간','일정 흐름','비고','도구'],g.items.map(taskRow).join(''))}
           </div>`).join(''):'<p class="text-[13px] text-slate-400 py-6 text-center">조건에 맞는 업무가 없습니다.</p>'}
         <div class="flex items-center justify-between mt-1">
           <p class="text-[11px] text-slate-400">체크·담당·일정·댓글은 접속한 모두에게 실시간 공유됩니다. 밑줄 항목은 클릭해 바로 수정.</p>
@@ -3895,8 +3999,8 @@
         </div>`)}
 
       <!-- 간트 -->
-      ${sec('semSecGant','📊','간트 차트','월 / 주 / 일 · 하루 단위 · 막대를 끌어 일정 이동',`
-        ${semGanttHTML(groups)}
+      ${sec('semSecGant','📊','간트 차트','위 할 일 목록을 수정하면 자동 반영됩니다 · 하루 단위 · 막대를 끌어 일정 이동',`
+        <div id="semGantWrap">${semGanttHTML(groups)}</div>
         <div class="flex flex-wrap items-center gap-3 mt-2">
           <span class="text-[11px] text-slate-400">회색 영역 = 지난 날짜 · <span style="color:#BF5332">빨간 선</span> 오늘 · <span style="color:#8A6A00">노란 선</span> 행사일(${esc(semMD(S.date))})</span>
           <span class="text-[11px] text-slate-400 ml-auto">${SEM_CATS.map(c=>`<span class="inline-flex items-center gap-1 mr-2"><span class="inline-block w-2 h-2 rounded-sm" style="background:${catColor(c)}"></span>${esc(c)}</span>`).join('')}</span>
@@ -3913,7 +4017,7 @@
                   <span class="text-[11px] font-normal text-slate-400 num">${dn}/${mine.length} 완료</span>
                   ${ln?`<span class="text-[11px] font-bold text-ared ml-1">지연 ${ln}</span>`:''}</p>
                 <div class="flex gap-1">
-                  <button onclick="semSetF('owner','${esc(o.name)}')" class="text-[11px] border border-slate-200 hover:bg-slate-50 px-2 py-1 rounded-lg">이 담당만 보기</button>
+                  <button onclick="semOwnerFocus('${esc(o.name)}')" class="text-[11px] border border-slate-200 hover:bg-slate-50 px-2 py-1 rounded-lg">이 담당만 간트로 보기</button>
                   <button onclick="semAi(${oi})" class="text-[11px] font-bold text-white bg-[#7C5CFF] hover:brightness-110 px-2.5 py-1 rounded-lg">✨ AI</button>
                 </div>
               </div>
@@ -4040,6 +4144,9 @@
         </div>
       </details>`;
 
+      // 제안서 원문(접힘)을 헤로 바로 아래로 올린다
+      const ovEl=document.getElementById('semSecOv'), heroEl=document.getElementById('semHero');
+      if(ovEl&&heroEl&&heroEl.parentNode) heroEl.parentNode.insertBefore(ovEl, heroEl.nextSibling);
       semPaintSave(); semCmtPaint();
       // 간트 가로 스크롤 위치 유지(없으면 오늘 근처로)
       const g2=document.getElementById('semGant');
@@ -5829,6 +5936,7 @@
     loadBriefing();
     loadData();
     if(location.hash.indexOf('#wkreport=')===0){ try{ wkShowShared(); }catch(e){} }
+    try{ semSoloMode(); }catch(e){ console.warn('세미나 단독 모드 실패:',e); }
   </script>
 </body>
 </html>
