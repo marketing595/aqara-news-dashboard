@@ -1257,7 +1257,10 @@
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">업무</p>
              <button id="mktBtn-weekly" onclick="mktSub('weekly')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">주간보고</button>
              <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
-             <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">세미나</button>
+           </div>
+           <div class="flex flex-col gap-0.5 min-w-[130px]">
+             <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">프로젝트</p>
+             <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">11월 세미나</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">언론홍보</p>
@@ -3506,11 +3509,45 @@
     }
     function semKey(k){ return k.replace(/[.#$/\[\]]/g,'_'); }
     function V(k,def){ const v=SEM_OVER[semKey(k)]; return (v==null||v==='')?(def==null?'':def):v; }
-    function se(k,def,cls){ return `<span class="sem-edit ${cls||''}" data-sk="${semKey(k)}" contenteditable="true" spellcheck="false" oninput="semInput(this)" onfocus="semEditSet(this.dataset.sk)" onblur="semInput(this,1);semEditClear()">${esc(V(k,def))}</span>`; }
+    function se(k,def,cls){ return `<span class="sem-edit ${cls||''}" data-sk="${semKey(k)}" contenteditable="true" spellcheck="false" oninput="semInput(this)" onfocus="semFocusIn(this)" onblur="semInput(this,1);semEditClear()">${esc(V(k,def))}</span>`; }
+    let SEM_BASE=null;                    // 이 칸을 잡은 순간의 원본값 — 충돌 감지용
+    function semFocusIn(el){
+      const k=el.dataset.sk;
+      SEM_BASE={k:k, v:(SEM_OVER[k]==null?el.innerText.trim():String(SEM_OVER[k]))};
+      const who=semWhoEditing(k);
+      if(who) semNotice('⚠️ '+who+' 님이 지금 이 칸을 고치는 중입니다 — 동시에 쓰면 나중에 저장한 쪽만 남습니다', 5000);
+      semEditSet(k);
+    }
+    function semWhoEditing(k){
+      const mine=semEditRef&&semEditRef.key, ks=Object.keys(SEM_EDITING||{});
+      for(let i=0;i<ks.length;i++){ if(ks[i]===mine) continue;
+        const o=SEM_EDITING[ks[i]];
+        if(o&&o.k===k&&(!o.at||Date.now()-o.at<5*60000)) return o.n||'다른 사용자'; }
+      return null;
+    }
+    let semNoticeT=null;
+    function semNotice(msg,ms){
+      const bar=document.getElementById('semEditingBar'); if(!bar) return;
+      clearTimeout(semNoticeT);
+      bar.innerHTML='<span class="text-[11px] px-2 py-0.5 rounded-full bg-[#FDECEA] text-[#BF5332] font-semibold">'+esc(msg)+'</span>';
+      semNoticeT=setTimeout(function(){ semNoticeT=null; semPaintEditing(); }, ms||4000);
+    }
     function semInput(el,now){
       const k=el.dataset.sk, v=el.innerText.trim();
       clearTimeout(semTimer); semTimer=null;
-      if(now){ semSave(k,v); return; }
+      if(now){
+        // 내가 잡고 있는 동안 남이 같은 칸을 바꿨다면 → 조용히 덮어쓰지 않고 물어본다
+        if(SEM_BASE&&SEM_BASE.k===k){
+          const remote=SEM_OVER[k];
+          if(remote!=null && String(remote)!==SEM_BASE.v && String(remote)!==v){
+            const keep=confirm('이 칸을 고치는 동안 다른 사람이 먼저 바꿨습니다.\n\n[상대가 쓴 내용]\n'+remote
+              +'\n\n[내가 쓴 내용]\n'+v+'\n\n확인 = 내 내용으로 덮어쓰기 / 취소 = 상대 내용 그대로 두기');
+            SEM_BASE=null;
+            if(!keep){ el.innerText=String(remote); return; }
+          }
+        }
+        SEM_BASE=null; semSave(k,v); return;
+      }
       semTimer=setTimeout(()=>{ semTimer=null; semSave(k,v); },200);   // 타이핑 중 0.2초마다 공유(주간보고와 동일 감각)
       semPaintSave();
     }
@@ -4875,7 +4912,7 @@
 
     // ===== ONLY MKT (팀 전용) =====
     const MKT_PW='aqara2026';   // 팀 공유 비밀번호(정적 사이트=화면 가림 수준). 변경 시 이 값 수정.
-    let mktSection='kpi';
+    let mktSection='weekly';   // ONLY MKT 첫 화면 = 주간보고
     let mktMoved=false;
     function mktMovePanels(){ if(mktMoved) return;
       const mv=(id,slot)=>{ const e=document.getElementById(id), s=document.getElementById(slot); if(e&&s) s.appendChild(e); };
