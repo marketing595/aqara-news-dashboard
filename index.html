@@ -3382,34 +3382,66 @@
           <div class="flex justify-between text-[12px]"><span class="truncate text-slate-600 group-hover:text-ink">${esc(m)}</span><span class="num font-semibold text-ink">${mc[m]}</span></div>
           <div class="h-1 rounded bg-slate-100 mt-0.5"><div class="h-1 rounded bg-brand" style="width:${Math.round(mc[m]/max*100)}%"></div></div></button>`).join('');
     }
-    /* ===== 세미나 (KOSID 공동주최) — seminar.json을 탭 진입 시에만 불러와 렌더 ===== */
+    /* ===== 세미나 (KOSID × 아카라라이프) — 실무 운영 화면 =====
+       데이터 = seminar.json(원본) + Firebase seminar/data(공동 편집) + seminar/comments(업무별 댓글) */
     let SEMINAR=null, SEM_LOADING=false, SEM_OVER={}, semRefOn=false, semTimer=null;
-    // 공동 편집: 값은 Firebase(seminar/data)에 저장돼 접속자 모두에게 실시간 반영. FB가 없으면 이 브라우저에 저장.
+    let SEM_INFLIGHT=0, SEM_ERR=false;
+    let SEM_CMT={}, semCmtOn=false, SEM_CMT_OPEN=null, SEM_GSCROLL=null;
+    const SEM_F={cat:'',owner:'',hideDone:false,only:''};
+    const SEM_DW=26, SEM_LW=252;                 // 간트: 하루 폭 / 좌측 라벨 폭(px)
+    const SEM_DOW=['일','월','화','수','목','금','토'];
+
     function semRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('seminar/data'):null; }
+    function semCmtRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('seminar/comments'):null; }
     function semLocalLoad(){ try{ return JSON.parse(localStorage.getItem('aqaraSeminarEdits')||'{}'); }catch(e){ return {}; } }
+    function semCmtLocalLoad(){ try{ return JSON.parse(localStorage.getItem('aqaraSeminarCmt')||'{}'); }catch(e){ return {}; } }
     function semStart(){
-      if(semRefOn) return; const ref=semRef(); if(!ref){ SEM_OVER=Object.assign(semLocalLoad(),SEM_OVER); return; }
+      if(semRefOn) return; const ref=semRef();
+      if(!ref){ SEM_OVER=Object.assign(semLocalLoad(),SEM_OVER); SEM_CMT=semCmtLocalLoad(); return; }
       semRefOn=true;
       ref.on('value',s=>{ SEM_OVER=s.val()||{};
         const a=document.activeElement;
         if(a&&a.dataset&&a.dataset.sk) return;      // 누가 입력 중이면 화면 갱신 보류(커서 튐 방지)
         if(SEMINAR) renderSeminar(); });
+      const cr=semCmtRef();
+      if(cr&&!semCmtOn){ semCmtOn=true; cr.on('value',s=>{ SEM_CMT=s.val()||{}; semCmtPaint(); }); }
     }
+    /* --- 저장 (Firebase 우선 · 없으면 이 브라우저) + 저장 상태 표시 --- */
     function semSave(k,v){
       SEM_OVER[k]=v;
       const ref=semRef();
-      if(ref) ref.child(k.replace(/[.#$/\[\]]/g,'_')).set(v).catch(()=>{});
-      else { try{ localStorage.setItem('aqaraSeminarEdits',JSON.stringify(SEM_OVER)); }catch(e){} }
+      if(ref) semTrack(ref.child(k.replace(/[.#$/\[\]]/g,'_')).set(v));
+      else { try{ localStorage.setItem('aqaraSeminarEdits',JSON.stringify(SEM_OVER)); }catch(e){} semPaintSave(); }
+    }
+    function semTrack(p){
+      SEM_INFLIGHT++; semPaintSave();
+      const done=()=>{ SEM_INFLIGHT=Math.max(0,SEM_INFLIGHT-1); semPaintSave(); };
+      if(p&&p.then) p.then(()=>{ SEM_ERR=false; done(); },e=>{ SEM_ERR=true; console.warn('세미나 저장 실패:',e&&e.message); done(); });
+      else done();
+    }
+    function semPaintSave(){
+      const el=document.getElementById('semSaveState'); if(!el) return;
+      if(SEM_ERR){ el.innerHTML='<span class="font-semibold" style="color:#B91C1C">⚠ 저장 실패</span>'; return; }
+      if(SEM_INFLIGHT>0||semTimer){ el.innerHTML='<span class="font-semibold" style="color:#D97706">● 저장 중…</span>'; return; }
+      const d=new Date();
+      el.innerHTML='<span class="font-semibold" style="color:#16A34A">✓ 저장됨</span> <span class="num text-slate-400">'
+        +d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+'</span>';
     }
     function semKey(k){ return k.replace(/[.#$/\[\]]/g,'_'); }
     function V(k,def){ const v=SEM_OVER[semKey(k)]; return (v==null||v==='')?(def==null?'':def):v; }
     function se(k,def,cls){ return `<span class="sem-edit ${cls||''}" data-sk="${semKey(k)}" contenteditable="true" spellcheck="false" oninput="semInput(this)" onblur="semInput(this,1)">${esc(V(k,def))}</span>`; }
     function semInput(el,now){
       const k=el.dataset.sk, v=el.innerText.trim();
-      clearTimeout(semTimer);
+      clearTimeout(semTimer); semTimer=null;
       if(now){ semSave(k,v); return; }
-      semTimer=setTimeout(()=>semSave(k,v),500);
+      semTimer=setTimeout(()=>{ semTimer=null; semSave(k,v); },500);
+      semPaintSave();
     }
+    function semNum(k,def){ const raw=V(k,(def==null||def==='')?'':String(def));
+      const n=parseFloat(String(raw).replace(/[^0-9.\-]/g,'')); return isNaN(n)?null:n; }
+    function seNum(k,def){ const n=semNum(k,def);
+      return `<span class="sem-edit num" data-sk="${semKey(k)}" contenteditable="true" spellcheck="false" oninput="semInput(this)" onblur="semInput(this,1)">${n==null?'':n.toLocaleString()}</span>`; }
+    function semChecked(i){ return !!V('chk.'+i,''); }
     function semToggle(i){ const k='chk.'+i; semSave(semKey(k), V(k,'')?'':'1'); renderSeminar(); }
     function semShare(){
       const u=location.origin+location.pathname+'#seminar';
@@ -3417,61 +3449,297 @@
         +'\n※ 대시보드 로그인(@aqara.kr) 후 ONLY MKT > 세미나 탭에서 함께 편집하실 수 있습니다.';
       bdCopy(txt);
     }
-    // 준비 업무 구분 — 드롭다운 선택 + 구분별 색상
+    function semGo(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+    function semOvToggle(el){ try{ localStorage.setItem('aqaraSemOv', el.open?'1':''); }catch(e){} }
+
+    /* --- 구분(카테고리) --- */
     const SEM_CATS=['정산','발표','초대','진행·제작','홍보','기타'];
     const SEM_CATC={'정산':'#D68134','발표':'#8FB9D8','초대':'#FBC400','진행·제작':'#5E7350','홍보':'#BF5332','기타':'#9A9169'};
     function catColor(c){ return SEM_CATC[c]||'#9A9169'; }
     function catSel(i,cur){
       const c=catColor(cur);
-      return `<select onchange="semSave(semKey('task.${i}.cat'),this.value);renderSeminar()"
-        class="text-[11px] font-bold rounded px-1.5 py-1 border-0 cursor-pointer"
+      return `<select onchange="semSave(semKey('task.${i}.cat'),this.value);renderSeminar()" title="구분 변경"
+        class="text-[11px] font-bold rounded px-1 py-0.5 border-0 cursor-pointer"
         style="background:${c}26;color:${c}">${SEM_CATS.map(x=>`<option ${x===cur?'selected':''}>${esc(x)}</option>`).join('')}</select>`;
     }
-    function semOvToggle(el){ try{ localStorage.setItem('aqaraSemOv', el.open?'1':''); }catch(e){} }
-    // 간트 막대 드래그 — 좌우로 끌어 주(week) 단위로 일정 이동
-    let semDrag=null;
-    function semAddDays(s,n){ const d=new Date(s+'T00:00:00+09:00'); d.setDate(d.getDate()+n);
-      return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-    function semBarDown(ev,i){
-      ev.preventDefault();
-      const bar=ev.currentTarget, cell=bar.closest('div[style*="grid-column"]');
-      const w=Math.max(20,(cell?cell.getBoundingClientRect().width:60)/Math.max(1,parseInt((cell.style.gridColumn.match(/\d+/)||[1])[0],10)));
-      semDrag={ i, x0:ev.clientX, w, bar, moved:0 };
-      bar.style.cursor='grabbing'; bar.style.opacity='0.75';
-      document.addEventListener('mousemove',semBarMove);
-      document.addEventListener('mouseup',semBarUp);
+
+    /* --- 날짜 유틸(로컬=KST 기준) --- */
+    function semD(s){ return new Date(s+'T00:00:00'); }
+    function semP(n){ return String(n).padStart(2,'0'); }
+    function semStr(d){ return d.getFullYear()+'-'+semP(d.getMonth()+1)+'-'+semP(d.getDate()); }
+    function semToday(){ return semStr(new Date()); }
+    function semAddDays(s,n){ const d=semD(s); d.setDate(d.getDate()+n); return semStr(d); }
+    function semDiff(a,b){ return Math.round((semD(b)-semD(a))/864e5); }
+    function semMonday(s){ const d=semD(s); return semAddDays(s,-((d.getDay()+6)%7)); }
+    function semMD(s){ return s?(s.slice(5,7).replace(/^0/,'')+'/'+s.slice(8,10).replace(/^0/,'')):''; }
+
+    /* --- 업무 목록: seminar.json + 추가분(extra) - 삭제분(del) --- */
+    function semTaskAt(i,t){ t=t||{};
+      return { i:i,
+        cat:V('task.'+i+'.cat',t.cat||'기타'), item:V('task.'+i+'.item',t.item||''),
+        form:V('task.'+i+'.form',t.form||''), owner:V('task.'+i+'.owner',t.owner||''),
+        sched:V('task.'+i+'.sched',t.sched||''), action:V('task.'+i+'.action',t.action||''),
+        start:V('task.'+i+'.start',t.start||''), end:V('task.'+i+'.end',t.end||''),
+        ord:parseFloat(V('task.'+i+'.ord','0'))||0, done:semChecked(i), src:t };
     }
-    function semBarMove(ev){
-      if(!semDrag) return;
-      const dx=ev.clientX-semDrag.x0;
-      semDrag.moved=Math.round(dx/semDrag.w);
-      semDrag.bar.style.transform='translateX('+dx+'px)';
+    // 체크리스트 항목도 같은 '할 일' 목록으로 흡수 (인덱스 100+k · 완료키 chk.100+k 그대로 유지)
+    const SEM_CL_CAT=['기타','발표','정산','발표','발표','발표','초대','초대','홍보','진행·제작','발표','정산','진행·제작','홍보'];
+    function semTasks(){
+      const S=SEMINAR||{}, out=[];
+      (S.tasks||[]).forEach((t,i)=>{ if(V('del.'+i,'')) return; out.push(semTaskAt(i,t)); });
+      (S.checklist||[]).forEach((c,k)=>{ const i=100+k; if(V('del.'+i,'')) return;
+        out.push(semTaskAt(i,{cat:SEM_CL_CAT[k]||'기타', item:V('cl.'+k+'.t',c), owner:V('cl.'+k+'.owner',''), form:'', cl:1})); });
+      const n=parseInt(V('extraN','0'),10)||0;
+      for(let k=0;k<n;k++){ const i=500+k;
+        if(V('del.'+i,'')) continue; if(!V('task.'+i+'.item','')) continue;
+        out.push(semTaskAt(i,null)); }
+      return out;
     }
-    function semBarUp(){
-      document.removeEventListener('mousemove',semBarMove);
-      document.removeEventListener('mouseup',semBarUp);
-      if(!semDrag) return;
-      const {i,moved,bar}=semDrag; bar.style.cursor='grab'; bar.style.opacity=''; bar.style.transform='';
-      semDrag=null;
-      if(!moved) return;
-      const S=SEMINAR, t=S.tasks[i];
-      const ts=V('task.'+i+'.start',t.start), te=V('task.'+i+'.end',t.end);
-      if(!ts||!te) return;
-      semSave(semKey('task.'+i+'.start'), semAddDays(ts,moved*7));
-      semSave(semKey('task.'+i+'.end'),   semAddDays(te,moved*7));
+    function semState(t){
+      const td=semToday();
+      if(t.done) return {k:'done',lbl:'완료',c:'#5E7350'};
+      if(t.end&&t.end<td) return {k:'late',lbl:'지연 +'+semDiff(t.end,td)+'일',c:'#BF5332'};
+      if(t.start&&t.end&&t.start<=td&&t.end>=td) return {k:'now',lbl:'진행 중',c:'#8A6A00'};
+      if(t.start&&t.start>td) return {k:'wait',lbl:'D-'+semDiff(td,t.start),c:'#9A9169'};
+      return {k:'',lbl:'',c:'#9A9169'};
+    }
+    function semWeek(){ const td=semToday(), mon=semMonday(td); return {mon:mon,sun:semAddDays(mon,6)}; }
+    function semFiltered(){
+      const w=semWeek(), td=semToday();
+      return semTasks().filter(t=>{
+        if(SEM_F.cat&&t.cat!==SEM_F.cat) return false;
+        if(SEM_F.owner&&(t.owner||'').indexOf(SEM_F.owner)<0) return false;
+        if(SEM_F.hideDone&&t.done) return false;
+        if(SEM_F.only==='late'&&!(!t.done&&t.end&&t.end<td)) return false;
+        if(SEM_F.only==='week'&&!(!t.done&&t.end&&t.end>=w.mon&&t.end<=w.sun)) return false;
+        return true;
+      });
+    }
+    function semGroups(list){
+      const g={}; list.forEach(t=>{ (g[t.cat]=g[t.cat]||[]).push(t); });
+      const order=SEM_CATS.filter(c=>g[c]); Object.keys(g).forEach(c=>{ if(order.indexOf(c)<0) order.push(c); });
+      const sk=t=>t.start||'9999-99-99';               // 기간 미정은 그룹 맨 아래
+      order.forEach(c=>g[c].sort((a,b)=>(a.ord-b.ord)||(sk(a)<sk(b)?-1:(sk(a)>sk(b)?1:0))));
+      return order.map(c=>({cat:c,items:g[c]}));
+    }
+    function semSetF(k,v){ SEM_F[k]=v; renderSeminar(); }
+    function semOnly(v){ SEM_F.only=(SEM_F.only===v?'':v); renderSeminar(); }
+    function semAddTask(cat){
+      const n=parseInt(V('extraN','0'),10)||0, i=500+n, td=semToday();
+      semSave(semKey('extraN'),String(n+1));
+      semSave(semKey('task.'+i+'.cat'),cat||'기타');
+      semSave(semKey('task.'+i+'.item'),'새 업무');
+      semSave(semKey('task.'+i+'.start'),td);
+      semSave(semKey('task.'+i+'.end'),semAddDays(td,6));
+      semSave(semKey('task.'+i+'.ord'),'9999');
       renderSeminar();
     }
-    // 간트 막대 기간 수정 — 시작/종료일을 직접 입력받아 공유 저장
+    function semDelTask(i){
+      const t=semTaskAt(i,((SEMINAR||{}).tasks||[])[i]);
+      if(!confirm('"'+t.item+'" 업무를 목록에서 삭제할까요?')) return;
+      semSave(semKey('del.'+i),'1'); renderSeminar();
+    }
+    function semMove(i,dir){
+      const grp=semGroups(semTasks()).filter(g=>g.items.some(t=>t.i===i))[0]; if(!grp) return;
+      const arr=grp.items.slice(), at=arr.map(t=>t.i).indexOf(i), to=at+dir;
+      if(at<0||to<0||to>=arr.length) return;
+      const tmp=arr[at]; arr[at]=arr[to]; arr[to]=tmp;
+      arr.forEach((t,n)=>semSave(semKey('task.'+t.i+'.ord'),String((n+1)*10)));
+      renderSeminar();
+    }
     function semDate(i,which){
-      const S=SEMINAR; if(!S) return; const t=S.tasks[i];
-      const cur=V('task.'+i+'.'+which, which==='start'?t.start:t.end);
+      const t=semTaskAt(i,((SEMINAR||{}).tasks||[])[i]);
+      const cur=(which==='start'?t.start:t.end);
       const v=prompt(t.item+' — '+(which==='start'?'시작':'종료')+'일 (YYYY-MM-DD)', cur);
       if(v===null) return;
       const s=v.trim();
       if(s && !/^\d{4}-\d{2}-\d{2}$/.test(s)){ alert('YYYY-MM-DD 형식으로 입력해주세요.'); return; }
       semSave(semKey('task.'+i+'.'+which), s); renderSeminar();
     }
-    function semChecked(i){ return !!V('chk.'+i,''); }
+
+    /* --- 업무별 댓글 (Firebase seminar/comments/<i>) --- */
+    function semCmtList(i){ const o=SEM_CMT[i]||{};
+      return Object.keys(o).map(k=>Object.assign({k:k},o[k])).sort((a,b)=>(a.at||0)-(b.at||0)); }
+    function semCmtN(i){ return semCmtList(i).length; }
+    function semCmtToggle(i){
+      SEM_CMT_OPEN=(SEM_CMT_OPEN===i?null:i);
+      const rows=document.querySelectorAll('tr[data-cmt]');
+      for(let k=0;k<rows.length;k++) rows[k].classList.toggle('hidden', String(SEM_CMT_OPEN)!==rows[k].getAttribute('data-cmt'));
+      semCmtPaint();
+      if(SEM_CMT_OPEN===i){ const ta=document.getElementById('semCmtIn'+i); if(ta) ta.focus(); }
+    }
+    function semCmtAdd(i){
+      const ta=document.getElementById('semCmtIn'+i); if(!ta) return;
+      const v=(ta.value||'').trim(); if(!v) return;
+      const c={n:(typeof wkDeviceName==='function'?wkDeviceName():'익명'), t:v, at:Date.now()};
+      const r=semCmtRef();
+      if(r) semTrack(r.child(String(i)).push(c));
+      else { SEM_CMT[i]=SEM_CMT[i]||{}; SEM_CMT[i]['l'+Date.now()]=c;
+        try{ localStorage.setItem('aqaraSeminarCmt',JSON.stringify(SEM_CMT)); }catch(e){} }
+      ta.value=''; semCmtPaint();
+    }
+    function semCmtDel(i,k){
+      if(!confirm('이 댓글을 삭제할까요?')) return;
+      const r=semCmtRef();
+      if(r) semTrack(r.child(String(i)).child(k).remove());
+      else { if(SEM_CMT[i]) delete SEM_CMT[i][k]; try{ localStorage.setItem('aqaraSeminarCmt',JSON.stringify(SEM_CMT)); }catch(e){} }
+      semCmtPaint();
+    }
+    function semCmtWhen(ts){ if(!ts) return '';
+      const d=new Date(ts); return (d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+semP(d.getMinutes()); }
+    function semCmtPaint(){
+      // 개수 배지 + 열려 있는 스레드만 다시 그린다(전체 재렌더 없이 → 입력 중 커서 유지)
+      const badges=document.querySelectorAll('[data-cn]');
+      for(let k=0;k<badges.length;k++){ const i=badges[k].getAttribute('data-cn'), n=semCmtN(i);
+        badges[k].innerHTML='💬'+(n?' <b class="num">'+n+'</b>':'');
+        badges[k].className='text-[11px] px-1.5 py-0.5 rounded border '+(n?'border-[#EDE9FF] bg-[#FBFAFF] text-[#5B44C7] font-semibold':'border-slate-200 text-slate-400 hover:text-ink'); }
+      if(SEM_CMT_OPEN==null) return;
+      const box=document.getElementById('semCmtBox'+SEM_CMT_OPEN); if(!box) return;
+      const list=semCmtList(SEM_CMT_OPEN);
+      box.innerHTML=(list.length?list.map(c=>`<div class="flex items-start gap-2 py-1.5 border-b border-[#F1EFE9] last:border-0">
+            <span class="text-[11px] font-bold text-ink shrink-0">${esc(c.n||'익명')}</span>
+            <span class="flex-1 text-[12px] text-slate-700 whitespace-pre-wrap">${esc(c.t||'')}</span>
+            <span class="text-[10px] num text-slate-400 shrink-0">${semCmtWhen(c.at)}</span>
+            <button onclick="semCmtDel(${SEM_CMT_OPEN},'${c.k}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="삭제">✕</button>
+          </div>`).join('')
+        :'<p class="text-[12px] text-slate-400 py-2">아직 댓글이 없습니다. 진행 상황·결정사항을 남겨보세요.</p>');
+    }
+
+    /* --- 간트 막대 드래그(하루 단위 이동) --- */
+    let semDrag=null;
+    function semBarDown(ev,i){
+      ev.preventDefault(); ev.stopPropagation();
+      const bar=ev.currentTarget;
+      semDrag={i:i,x0:ev.clientX,bar:bar,moved:0};
+      bar.style.cursor='grabbing'; bar.style.opacity='0.75'; bar.style.zIndex='6';
+      document.addEventListener('mousemove',semBarMove);
+      document.addEventListener('mouseup',semBarUp);
+    }
+    function semBarMove(ev){
+      if(!semDrag) return;
+      semDrag.moved=Math.round((ev.clientX-semDrag.x0)/SEM_DW);
+      semDrag.bar.style.transform='translateX('+(semDrag.moved*SEM_DW)+'px)';
+    }
+    function semBarUp(){
+      document.removeEventListener('mousemove',semBarMove);
+      document.removeEventListener('mouseup',semBarUp);
+      if(!semDrag) return;
+      const d=semDrag; semDrag=null;
+      d.bar.style.cursor='grab'; d.bar.style.opacity=''; d.bar.style.transform=''; d.bar.style.zIndex='';
+      if(!d.moved) return;
+      const t=semTaskAt(d.i,((SEMINAR||{}).tasks||[])[d.i]);
+      if(!t.start||!t.end) return;
+      semSave(semKey('task.'+d.i+'.start'), semAddDays(t.start,d.moved));
+      semSave(semKey('task.'+d.i+'.end'),   semAddDays(t.end,d.moved));
+      renderSeminar();
+    }
+
+    /* --- 간트 (월 / 주 / 일 3행 헤더 · 일 단위 막대 · 구분별 그룹) --- */
+    function semRange(list){
+      let mn=null, mx=null;
+      list.forEach(t=>{ if(t.start&&(!mn||t.start<mn)) mn=t.start; if(t.end&&(!mx||t.end>mx)) mx=t.end; });
+      const ev=(SEMINAR&&SEMINAR.date)||'';
+      if(ev){ if(!mn||ev<mn) mn=ev; if(!mx||ev>mx) mx=ev; }
+      const td=semToday(); if(!mn||td<mn) mn=td; if(!mx||td>mx) mx=td;
+      const s=semMonday(mn), e=semAddDays(semMonday(mx),6);
+      return {s:s,e:e,n:semDiff(s,e)+1};
+    }
+    function semGanttHTML(gr){
+      const groups=gr.map(g=>({cat:g.cat,items:g.items.filter(t=>t.start&&t.end)})).filter(g=>g.items.length);
+      const flat=[]; groups.forEach(g=>g.items.forEach(t=>flat.push(t)));
+      if(!flat.length) return '<p class="text-[13px] text-slate-400 py-8 text-center">기간이 정해진 업무가 없습니다. 목록에서 시작·종료일을 넣으면 여기에 막대로 표시됩니다.</p>';
+      const R=semRange(flat), nd=R.n, W=nd*SEM_DW, td=semToday();
+      const tIdx=(td>=R.s&&td<=R.e)?semDiff(R.s,td):-1;
+      const evd=(SEMINAR&&SEMINAR.date)||'', eIdx=(evd&&evd>=R.s&&evd<=R.e)?semDiff(R.s,evd):-1;
+      // 헤더 3행 데이터
+      const months=[], weeks=[], days=[];
+      for(let k=0;k<nd;k++){
+        const s=semAddDays(R.s,k), d=semD(s), key=d.getFullYear()+'-'+(d.getMonth()+1);
+        const last=months[months.length-1];
+        if(last&&last.key===key) last.n++; else months.push({key:key,n:1,label:(d.getMonth()+1)+'월'});
+        days.push({s:s,n:d.getDate(),w:d.getDay(),past:s<td,today:s===td,ev:s===evd});
+      }
+      for(let k=0;k<nd;k+=7){ const s=semAddDays(R.s,k);
+        weeks.push({n:Math.min(7,nd-k), label:semMD(s), past:semAddDays(s,6)<td}); }
+      const trackBg='background-image:repeating-linear-gradient(90deg,#F1EFE9 0 1px,transparent 1px '+SEM_DW+'px),'
+        +'repeating-linear-gradient(90deg,rgba(0,0,0,0) 0 '+(5*SEM_DW)+'px,#FAF7F0 '+(5*SEM_DW)+'px '+(7*SEM_DW)+'px);';
+      const leftCell=(inner,cls,h)=>`<div class="${cls||''}" style="position:sticky;left:0;z-index:3;flex:0 0 ${SEM_LW}px;width:${SEM_LW}px;height:${h}px;background:#fff;border-right:1px solid #E6E6E3;box-shadow:2px 0 4px -3px rgba(0,0,0,.25)">${inner}</div>`;
+      const marks=(tIdx>=0?`<div style="position:absolute;left:${tIdx*SEM_DW}px;top:0;bottom:0;width:2px;background:#BF5332;opacity:.75;pointer-events:none"></div>`:'')
+        +(eIdx>=0?`<div style="position:absolute;left:${eIdx*SEM_DW}px;top:0;bottom:0;width:2px;background:#FBC400;pointer-events:none"></div>`:'')
+        +(tIdx>0?`<div style="position:absolute;left:0;top:0;bottom:0;width:${tIdx*SEM_DW}px;background:rgba(38,40,42,.045);pointer-events:none"></div>`:'');
+      // 헤더
+      let h='';
+      h+=`<div class="flex" style="width:${SEM_LW+W}px">
+        ${leftCell('<div class="px-2 pt-2 text-[10px] font-bold text-slate-400">월</div>','',24)}
+        <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:24px;display:flex">
+          ${months.map(m=>`<div style="flex:0 0 ${m.n*SEM_DW}px;width:${m.n*SEM_DW}px;border-left:1px solid #E6E6E3" class="text-[11px] font-extrabold text-ink px-1.5 leading-6 bg-[#FAFAF9]">${m.label}</div>`).join('')}
+        </div></div>`;
+      h+=`<div class="flex" style="width:${SEM_LW+W}px">
+        ${leftCell('<div class="px-2 text-[10px] font-bold text-slate-400">주</div>','',22)}
+        <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:22px;display:flex">
+          ${weeks.map(w=>`<div style="flex:0 0 ${w.n*SEM_DW}px;width:${w.n*SEM_DW}px;border-left:1px solid #EFEDE7" class="text-[10px] num text-center leading-[22px] ${w.past?'text-slate-300':'text-slate-500'}">${w.label}</div>`).join('')}
+        </div></div>`;
+      h+=`<div class="flex" style="width:${SEM_LW+W}px">
+        ${leftCell('<div class="px-2 text-[10px] font-bold text-slate-400">일</div>','',22)}
+        <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:22px;display:flex;border-bottom:1px solid #E6E6E3">
+          ${days.map(d=>`<div style="flex:0 0 ${SEM_DW}px;width:${SEM_DW}px;${d.today?'background:#BF533218;font-weight:800;color:#BF5332;':(d.ev?'background:#FBC40033;font-weight:800;color:#8A6A00;':'')}" class="text-[10px] num text-center leading-[22px] ${d.past&&!d.today?'text-slate-300':(d.w===0||d.w===6?'text-slate-400':'text-slate-600')}">${d.n}</div>`).join('')}
+        </div></div>`;
+      // 그룹 · 행
+      groups.forEach(g=>{
+        const c=catColor(g.cat), dn=g.items.filter(t=>t.done).length;
+        h+=`<div class="flex" style="width:${SEM_LW+W}px">
+          ${leftCell(`<div class="px-2 leading-[26px] text-[11px] font-extrabold truncate" style="color:${c}">■ ${esc(g.cat)} <span class="num font-normal text-slate-400">${dn}/${g.items.length}</span></div>`,'',26)}
+          <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:26px;background:#FAFAF9;border-top:1px solid #F1EFE9">${marks}</div></div>`;
+        g.items.forEach(t=>{
+          const st=semState(t);
+          const off=Math.max(0,semDiff(R.s,t.start));
+          const len=Math.max(1,semDiff(t.start,t.end)+1);
+          const bw=len*SEM_DW-2;
+          const lbl=(t.sched||t.item||'');
+          const inside=bw>=76;
+          const bg=t.done?'#5E735099':(st.k==='late'?'#BF5332':catColor(t.cat));
+          const bar=`<div onmousedown="semBarDown(event,${t.i})" title="${esc(t.item+' · '+t.start+' ~ '+t.end+(t.sched?' · '+t.sched:''))}"
+                 style="position:absolute;left:${off*SEM_DW+1}px;top:9px;width:${bw}px;height:18px;background:${bg};border-radius:5px"
+                 class="gbar text-[10px] leading-[18px] px-1.5 text-white truncate cursor-grab select-none">${inside?esc(lbl):''}</div>`
+            +(inside?'':`<div style="position:absolute;left:${off*SEM_DW+bw+7}px;top:9px;white-space:nowrap;pointer-events:none" class="text-[10px] leading-[18px] text-slate-500">${esc(lbl.slice(0,34))}</div>`);
+          h+=`<div class="flex" style="width:${SEM_LW+W}px">
+            ${leftCell(`<div class="px-2 py-1 border-top">
+                <div class="text-[12px] leading-tight truncate ${t.done?'text-slate-400 line-through':'text-ink font-semibold'}" title="${esc(t.item)}">${esc(t.item)}</div>
+                <div class="text-[10px] leading-tight text-slate-400 truncate">
+                  <button onclick="semDate(${t.i},'start')" class="num underline hover:text-brand-ink" title="시작일 수정">${esc(semMD(t.start)||'--')}</button>~<button onclick="semDate(${t.i},'end')" class="num underline hover:text-brand-ink" title="종료일 수정">${esc(semMD(t.end)||'--')}</button>
+                  <span class="mx-1 text-slate-200">|</span><span class="text-slate-500">${esc(t.owner||'미정')}</span>
+                </div></div>`,'',36)}
+            <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:36px;border-top:1px solid #F5F3EE;${trackBg}">${marks}${bar}</div></div>`;
+        });
+      });
+      return `<div id="semGant" class="overflow-x-auto rounded-xl border border-[#E6E6E3]" style="overscroll-behavior-x:contain"><div style="width:${SEM_LW+W}px">${h}</div></div>`;
+    }
+
+    /* --- 예산 --- */
+    function semBudgetAt(i,b){ b=b||{};
+      return { i:i, cat:V('bud.'+i+'.cat',b.cat||'기타'), item:V('bud.'+i+'.item',b.item||''),
+        unit:semNum('bud.'+i+'.unit',b.unit), qty:semNum('bud.'+i+'.qty',b.qty), cost:semNum('bud.'+i+'.cost',b.cost),
+        payee:V('bud.'+i+'.payee',b.payee||''), when:V('bud.'+i+'.when',b.when||''), src:b };
+    }
+    function semBudget(){
+      const S=SEMINAR||{}, out=[];
+      (((S.budget||{}).items)||[]).forEach((b,i)=>{ if(V('bdel.'+i,'')) return; out.push(semBudgetAt(i,b)); });
+      const n=parseInt(V('bextraN','0'),10)||0;
+      for(let k=0;k<n;k++){ const i=600+k;
+        if(V('bdel.'+i,'')) continue; if(!V('bud.'+i+'.item','')) continue; out.push(semBudgetAt(i,null)); }
+      return out;
+    }
+    function semBudCost(b){ return b.cost!=null?b.cost:((b.unit!=null&&b.qty!=null)?b.unit*b.qty:null); }
+    function semAddBudget(){
+      const n=parseInt(V('bextraN','0'),10)||0, i=600+n;
+      semSave(semKey('bextraN'),String(n+1));
+      semSave(semKey('bud.'+i+'.cat'),'기타');
+      semSave(semKey('bud.'+i+'.item'),'새 항목');
+      renderSeminar();
+    }
+    function semDelBudget(i){ if(!confirm('이 예산 항목을 삭제할까요?')) return; semSave(semKey('bdel.'+i),'1'); renderSeminar(); }
+
+    /* ===== 렌더 ===== */
     function renderSeminar(){
       const box=document.getElementById('semBody'); if(!box) return;
       if(!SEMINAR){
@@ -3482,91 +3750,275 @@
         return;
       }
       semStart();
-      const S=SEMINAR;
-      const dday=(()=>{ const t=new Date(S.date+'T00:00:00+09:00')-new Date(); const d=Math.ceil(t/864e5);
-        return d>0?('D-'+d):(d===0?'D-DAY':('종료 +'+Math.abs(d)+'일')); })();
-      const sec=(n,t,s,b)=>`<section class="card p-5 sm:p-6 mb-4">
+      const S=SEMINAR, td=semToday(), wk=semWeek();
+      const gEl=document.getElementById('semGant'); if(gEl) SEM_GSCROLL=gEl.scrollLeft;
+      const dd=semDiff(td,S.date);
+      const dday=dd>0?('D-'+dd):(dd===0?'D-DAY':('종료 +'+Math.abs(dd)+'일'));
+      const all=semTasks();
+      const doneN=all.filter(t=>t.done).length;
+      const late=all.filter(t=>!t.done&&t.end&&t.end<td);
+      const week=all.filter(t=>!t.done&&t.end&&t.end>=wk.mon&&t.end<=wk.sun);
+      const budget=semBudget(), budTotal=budget.reduce((a,b)=>a+(semBudCost(b)||0),0);
+      const nodate=all.filter(t=>!t.done&&(!t.start||!t.end));
+      const pct=all.length?Math.round(doneN/all.length*100):0;
+      const groups=semGroups(semFiltered());
+      const owners=(S.owners||[]).map(o=>o.name);
+      const sec=(id,n,t,s,b)=>`<section id="${id}" class="card p-5 sm:p-6 mb-4" style="scroll-margin-top:80px">
         <div class="flex items-baseline gap-2 mb-3"><span class="text-[12px] font-extrabold text-white bg-ink rounded px-1.5 py-0.5">${n}</span>
           <h3 class="text-[16px] font-extrabold text-ink">${t}</h3>${s?`<span class="text-[11px] text-slate-400">${s}</span>`:''}</div>${b}</section>`;
       const kv=(k,v,sk)=>`<div class="flex gap-3 py-1.5 border-b border-[#F1EFE9] last:border-0"><span class="w-24 shrink-0 text-[12px] font-bold text-slate-500">${esc(k)}</span><span class="text-[13px] text-slate-700">${sk?se(sk,v):esc(v)}</span></div>`;
-      const ul=a=>`<ul class="space-y-1.5">${a.map(x=>`<li class="text-[13px] text-slate-600 leading-relaxed">· ${esc(x)}</li>`).join('')}</ul>`;
+      const ul=a=>`<ul class="space-y-1.5">${(a||[]).map(x=>`<li class="text-[13px] text-slate-600 leading-relaxed">· ${esc(x)}</li>`).join('')}</ul>`;
       const th=a=>`<thead class="bg-slate-50 text-slate-500"><tr class="text-left">${a.map(x=>`<th class="px-2.5 py-2 font-semibold">${esc(x)}</th>`).join('')}</tr></thead>`;
       const tbl=(head,rows)=>`<div class="overflow-auto rounded-xl border border-[#E6E6E3]"><table class="w-full text-[12px]">${th(head)}<tbody>${rows}</tbody></table></div>`;
-      const done=S.checklist.filter((_,i)=>semChecked(100+i)).length;
-      // 간트 주간 축 — 8/3(월)부터 행사 다음 주까지
-      const GW=(()=>{ const out=[], st=new Date('2026-08-03T00:00:00+09:00'), en=new Date('2026-11-23T00:00:00+09:00');
-        for(let d=new Date(st); d<en; d.setDate(d.getDate()+7)){ const m=d.getMonth()+1, day=d.getDate();
-          out.push({label:m+'/'+day, m:(day<=7)}); }
-        return out; })();
-      const GST=new Date('2026-08-03T00:00:00+09:00');
-      const GIDX=s=>{ if(!s) return -1; const d=new Date(s+'T00:00:00+09:00');
-        return Math.max(0,Math.min(GW.length-1,Math.floor((d-GST)/(7*864e5)))); };
+      const tile=(k,v,sub,color,on,click)=>`<button ${click?`onclick="${click}"`:''} class="text-left rounded-xl border p-3 transition ${on?'border-ink bg-[#FAFAF9]':'border-[#E6E6E3] hover:bg-[#FAFAF9]'}">
+          <p class="text-[11px] font-bold text-slate-500">${esc(k)}</p>
+          <p class="text-[19px] font-extrabold num leading-tight mt-0.5" style="color:${color||'#26282A'}">${v}</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">${sub||''}</p></button>`;
+
+      /* ── 업무 행 ── */
+      const taskRow=t=>{
+        const st=semState(t), n=semCmtN(t.i);
+        return `<tr class="border-t border-[#F1EFE9] ${t.done?'bg-[#F7FBF5]':''} hover:bg-[#FAFAF9] align-top">
+          <td class="px-2 py-2"><input type="checkbox" ${t.done?'checked':''} onchange="semToggle(${t.i})" class="w-4 h-4 accent-[#5E7350]" /></td>
+          <td class="px-2.5 py-2">
+            <div class="text-[13px] font-semibold ${t.done?'text-slate-400 line-through':'text-ink'}">${t.src.cl?'<span class="text-[10px] font-bold text-slate-400 border border-slate-200 rounded px-1 mr-1 align-middle">체크</span>':''}${se('task.'+t.i+'.item',t.src.item||'')}</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">${se('task.'+t.i+'.form',t.src.form||'')}</div>
+          </td>
+          <td class="px-2.5 py-2 whitespace-nowrap text-[12px] text-ink font-semibold">${se('task.'+t.i+'.owner',t.src.owner||'미정')}</td>
+          <td class="px-2.5 py-2 whitespace-nowrap">
+            <div class="num text-[12px] text-slate-600"><button onclick="semDate(${t.i},'start')" class="underline hover:text-brand-ink">${esc(semMD(t.start)||'--')}</button> ~ <button onclick="semDate(${t.i},'end')" class="underline hover:text-brand-ink">${esc(semMD(t.end)||'--')}</button></div>
+            ${st.lbl?`<div class="text-[10px] font-bold mt-0.5" style="color:${st.c}">${esc(st.lbl)}</div>`:''}
+          </td>
+          <td class="px-2.5 py-2 text-[12px] text-slate-600">${se('task.'+t.i+'.sched',t.src.sched||'')}</td>
+          <td class="px-2.5 py-2 text-[12px] text-slate-400">${se('task.'+t.i+'.action',t.src.action||'')}</td>
+          <td class="px-2 py-2 whitespace-nowrap text-right">
+            <button data-cn="${t.i}" onclick="semCmtToggle(${t.i})" title="댓글" class="text-[11px] px-1.5 py-0.5 rounded border ${n?'border-[#EDE9FF] bg-[#FBFAFF] text-[#5B44C7] font-semibold':'border-slate-200 text-slate-400 hover:text-ink'}">💬${n?' <b class="num">'+n+'</b>':''}</button>
+            ${catSel(t.i,t.cat)}
+            <button onclick="semMove(${t.i},-1)" title="위로" class="text-[11px] text-slate-300 hover:text-ink px-0.5">▲</button>
+            <button onclick="semMove(${t.i},1)" title="아래로" class="text-[11px] text-slate-300 hover:text-ink px-0.5">▼</button>
+            <button onclick="semDelTask(${t.i})" title="삭제" class="text-[11px] text-slate-300 hover:text-ared px-0.5">✕</button>
+          </td></tr>
+        <tr data-cmt="${t.i}" class="${SEM_CMT_OPEN===t.i?'':'hidden'} bg-[#FBFAFF]">
+          <td colspan="7" class="px-4 py-3 border-t border-[#EDE9FF]">
+            <p class="text-[11px] font-bold text-[#5B44C7] mb-1">💬 ${esc(t.item)} — 업무 댓글</p>
+            <div id="semCmtBox${t.i}" class="mb-2"></div>
+            <div class="flex gap-2">
+              <textarea id="semCmtIn${t.i}" rows="2" placeholder="진행 상황·결정사항·요청 사항을 남겨주세요 (Ctrl+Enter 등록)"
+                onkeydown="if(event.key==='Enter'&&(event.ctrlKey||event.metaKey)){event.preventDefault();semCmtAdd(${t.i});}"
+                class="flex-1 text-[12px] border border-[#E6E6E3] rounded-lg px-2.5 py-1.5"></textarea>
+              <button onclick="semCmtAdd(${t.i})" class="text-[12px] font-semibold bg-[#7C5CFF] text-white px-3 rounded-lg">등록</button>
+            </div></td></tr>`;
+      };
 
       box.innerHTML=`
-      <div class="card p-5 sm:p-6 mb-5">
+      <!-- 헤로 -->
+      <div class="card p-5 sm:p-6 mb-4">
         <div class="flex flex-wrap items-start justify-between gap-3">
-          <div>
+          <div class="min-w-0">
             <p class="text-[11px] font-extrabold tracking-wider text-brand-ink">KOSID × AQARA LIFE</p>
             <h2 class="text-[22px] sm:text-[26px] font-extrabold text-ink leading-tight mt-0.5">${se('title',S.title)}</h2>
             <p class="text-[13px] text-slate-500 mt-1">${se('subtitle',S.subtitle)}</p>
+            <p class="text-[12px] text-slate-500 mt-2">📅 ${se('dateLabel',S.dateLabel)} · 📍 ${se('place',S.place)} · 👥 ${se('scale',S.scale)}</p>
           </div>
-          <div class="text-right">
-            <button onclick="semShare()" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold mr-1.5">🔗 공유 링크 복사</button>
-            <span class="inline-block text-[13px] font-extrabold px-3 py-1.5 rounded-xl bg-ink text-white">${dday}</span>
-            <p class="text-[11px] text-slate-400 mt-1">${esc(S.dateLabel)}</p>
+          <div class="text-right shrink-0">
+            <span class="inline-block text-[15px] font-extrabold px-3.5 py-2 rounded-xl bg-ink text-white num">${dday}</span>
+            <div class="text-[11px] mt-1.5" id="semSaveState"></div>
+            <button onclick="semShare()" class="text-[11px] border border-slate-300 hover:bg-slate-50 px-2 py-1 rounded-lg font-semibold mt-1">🔗 공유 링크</button>
           </div>
         </div>
         <div id="semPresence" class="flex flex-wrap items-center gap-1.5 mt-3"></div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-3 pt-4 border-t border-[#ECE9E1]">
-          ${kv('주최·주관',S.host,'host')}${kv('일정',S.dateLabel,'dateLabel')}${kv('장소',S.place,'place')}${kv('목표 규모',S.scale,'scale')}
-          ${kv('참석 대상',S.target,'target')}${kv('행사 형식',S.format,'format')}
+        <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-[#ECE9E1]">
+          ${[['semSecNow','⚡ 이번 주'],['semSecTl','📋 할 일 목록'],['semSecGant','📊 간트'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecOv','📄 제안서']]
+            .map(x=>`<button onclick="semGo('${x[0]}')" class="text-[11px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">${x[1]}</button>`).join('')}
         </div>
-        <p class="text-[11px] text-slate-400 mt-2">✏️ 밑줄 친 항목은 <b>클릭해서 바로 수정</b>할 수 있고, 수정 내용은 접속한 모두에게 실시간 반영됩니다.</p>
-        <p class="text-[11px] text-slate-400 mt-3">출처: ${esc(S.source)}</p>
       </div>
 
-      <details id="semOv" class="mb-4" ${V('ovOpen','')?'open':''} ontoggle="semOvToggle(this)">
+      <!-- KPI -->
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-2.5 mb-4">
+        ${tile('준비 진행', doneN+'<span class="text-[13px] text-slate-400">/'+all.length+'</span>', pct+'% 완료', '#26282A', false, '')}
+        ${tile('이번 주 마감', week.length+'건', semMD(wk.mon)+' ~ '+semMD(wk.sun), '#8A6A00', SEM_F.only==='week', 'semOnly(\'week\')')}
+        ${tile('지연', late.length+'건', late.length?'마감일 지남 · 클릭해 보기':'없음 👍', late.length?'#BF5332':'#5E7350', SEM_F.only==='late', 'semOnly(\'late\')')}
+        ${tile('기간 미정', nodate.length+'건', nodate.length?'시작·종료일 입력 필요':'모두 일정 있음 👍', nodate.length?'#8A6A00':'#5E7350', false, 'semGo(\'semSecTl\')')}
+        ${tile('예산 합계', Math.round(budTotal/10000).toLocaleString()+'<span class="text-[13px] text-slate-400">만원</span>', budget.length+'개 항목', '#26282A', false, 'semGo(\'semSecBud\')')}
+      </div>
+
+      <!-- 이번 주 / 지연 -->
+      ${sec('semSecNow','⚡','이번 주 할 일','오늘 '+semMD(td)+' 기준',`
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="rounded-xl border border-[#F0D9D2] bg-[#FDF7F5] p-4">
+            <p class="text-[12px] font-extrabold text-ared mb-2">지연 ${late.length}건</p>
+            ${late.length?`<ul class="space-y-1.5">${late.map(t=>`<li class="text-[12px] text-slate-700 flex justify-between gap-2">
+                <span class="truncate">· ${esc(t.item)} <span class="text-slate-400">${esc(t.owner||'미정')}</span></span>
+                <span class="num text-ared shrink-0 font-semibold">${esc(semMD(t.end))} 마감</span></li>`).join('')}</ul>`
+              :'<p class="text-[12px] text-slate-400">지연된 업무가 없습니다.</p>'}
+          </div>
+          <div class="rounded-xl border border-[#E6E6E3] p-4">
+            <p class="text-[12px] font-extrabold text-brand-ink mb-2">이번 주 마감 ${week.length}건</p>
+            ${week.length?`<ul class="space-y-1.5">${week.map(t=>`<li class="text-[12px] text-slate-700 flex justify-between gap-2">
+                <span class="truncate">· ${esc(t.item)} <span class="text-slate-400">${esc(t.owner||'미정')}</span></span>
+                <span class="num text-slate-500 shrink-0">${esc(semMD(t.end))}</span></li>`).join('')}</ul>`
+              :'<p class="text-[12px] text-slate-400">이번 주 마감 업무가 없습니다.</p>'}
+          </div>
+        </div>`)}
+
+      <!-- 필터 -->
+      <div class="card p-3 mb-4 flex flex-wrap items-center gap-2">
+        <button onclick="semSetF('cat','')" class="text-[11px] font-bold rounded-full px-2.5 py-1 border ${SEM_F.cat===''?'bg-ink text-white border-ink':'border-[#E6E6E3] text-slate-500 hover:bg-[#FAFAF9]'}">전체 ${all.length}</button>
+        ${SEM_CATS.map(c=>{ const n=all.filter(t=>t.cat===c).length; if(!n) return '';
+          const on=SEM_F.cat===c, col=catColor(c);
+          return `<button onclick="semSetF('cat','${esc(c)}')" class="text-[11px] font-bold rounded-full px-2.5 py-1 border"
+            style="${on?`background:${col};border-color:${col};color:#fff`:`background:${col}18;border-color:${col}40;color:${col}`}">${esc(c)} ${n}</button>`; }).join('')}
+        <span class="w-px h-4 bg-slate-200 mx-1"></span>
+        <select onchange="semSetF('owner',this.value)" class="text-[12px] border border-[#E6E6E3] rounded-lg px-2 py-1">
+          <option value="">담당 전체</option>${owners.map(o=>`<option ${SEM_F.owner===o?'selected':''}>${esc(o)}</option>`).join('')}</select>
+        <label class="text-[12px] text-slate-600 flex items-center gap-1 cursor-pointer">
+          <input type="checkbox" ${SEM_F.hideDone?'checked':''} onchange="semSetF('hideDone',this.checked)" class="accent-[#5E7350]" /> 완료 숨기기</label>
+        ${SEM_F.only?`<button onclick="semOnly('${SEM_F.only}')" class="text-[11px] font-semibold bg-ink text-white rounded-lg px-2 py-1">${SEM_F.only==='late'?'지연':'이번 주'}만 보는 중 ✕</button>`:''}
+        <span class="text-[11px] text-slate-400 ml-auto">${semFiltered().length} / ${all.length}건 표시</span>
+      </div>
+
+      <!-- 할 일 목록(준비 업무 + 체크리스트 통합) -->
+      ${sec('semSecTl','📋','할 일 목록','준비 업무 · 체크리스트를 하나로 · 구분별 그룹'+(S.note?' · '+esc(S.note):''),`
+        ${groups.length?groups.map(g=>`
+          <div class="mb-4">
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="inline-block w-2.5 h-2.5 rounded-sm" style="background:${catColor(g.cat)}"></span>
+              <span class="text-[13px] font-extrabold text-ink">${esc(g.cat)}</span>
+              <span class="text-[11px] num text-slate-400">${g.items.filter(t=>t.done).length}/${g.items.length} 완료</span>
+              <button onclick="semAddTask('${esc(g.cat)}')" class="text-[11px] text-slate-400 hover:text-ink border border-dashed border-slate-300 rounded px-1.5">+ 업무</button>
+            </div>
+            ${tbl(['','항목','담당','기간','일정 흐름','비고','도구'],g.items.map(taskRow).join(''))}
+          </div>`).join(''):'<p class="text-[13px] text-slate-400 py-6 text-center">조건에 맞는 업무가 없습니다.</p>'}
+        <div class="flex items-center justify-between mt-1">
+          <p class="text-[11px] text-slate-400">체크·담당·일정·댓글은 접속한 모두에게 실시간 공유됩니다. 밑줄 항목은 클릭해 바로 수정.</p>
+          <button onclick="semAddTask('기타')" class="text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 업무 추가</button>
+        </div>`)}
+
+      <!-- 간트 -->
+      ${sec('semSecGant','📊','간트 차트','월 / 주 / 일 · 하루 단위 · 막대를 끌어 일정 이동',`
+        ${semGanttHTML(groups)}
+        <div class="flex flex-wrap items-center gap-3 mt-2">
+          <span class="text-[11px] text-slate-400">회색 영역 = 지난 날짜 · <span style="color:#BF5332">빨간 선</span> 오늘 · <span style="color:#8A6A00">노란 선</span> 행사일(${esc(semMD(S.date))})</span>
+          <span class="text-[11px] text-slate-400 ml-auto">${SEM_CATS.map(c=>`<span class="inline-flex items-center gap-1 mr-2"><span class="inline-block w-2 h-2 rounded-sm" style="background:${catColor(c)}"></span>${esc(c)}</span>`).join('')}</span>
+        </div>`)}
+
+      <!-- 담당자 -->
+      ${S.owners?sec('semSecOwner','🙋','담당자별 R&R · AI 도우미','내 업무만 모아보기',`
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          ${S.owners.map((o,oi)=>{ const mine=all.filter(t=>(t.owner||'').indexOf(o.name)>=0);
+            const dn=mine.filter(t=>t.done).length, ln=mine.filter(t=>!t.done&&t.end&&t.end<td).length;
+            return `<div class="rounded-xl border border-[#E6E6E3] p-4">
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <p class="text-[14px] font-extrabold text-ink">${esc(o.name)}
+                  <span class="text-[11px] font-normal text-slate-400 num">${dn}/${mine.length} 완료</span>
+                  ${ln?`<span class="text-[11px] font-bold text-ared ml-1">지연 ${ln}</span>`:''}</p>
+                <div class="flex gap-1">
+                  <button onclick="semSetF('owner','${esc(o.name)}')" class="text-[11px] border border-slate-200 hover:bg-slate-50 px-2 py-1 rounded-lg">이 담당만 보기</button>
+                  <button onclick="semAi(${oi})" class="text-[11px] font-bold text-white bg-[#7C5CFF] hover:brightness-110 px-2.5 py-1 rounded-lg">✨ AI</button>
+                </div>
+              </div>
+              <p class="text-[12px] text-slate-500 leading-relaxed mb-2">${se('owner.'+oi+'.rr',o.rr)}</p>
+              <ul class="space-y-1">${mine.length?mine.map(t=>{ const st=semState(t);
+                return `<li class="text-[12px] flex justify-between gap-2 ${t.done?'text-slate-400 line-through':'text-slate-600'}">
+                  <span class="truncate">· ${esc(t.item)}</span>
+                  <span class="num shrink-0" style="color:${st.c}">${t.end?esc(semMD(t.end))+' 마감':'기간 미정'}${st.k==='late'?' · '+esc(st.lbl):''}</span></li>`; }).join('')
+                :'<li class="text-[12px] text-slate-300">담당 업무 없음</li>'}</ul>
+              <div id="semAi${oi}" class="mt-2"></div>
+            </div>`; }).join('')}
+        </div>`):''}
+
+      <!-- 예산 -->
+      ${S.budget?sec('semSecBud','💰','예산','편집 반영 총 '+budTotal.toLocaleString()+'원',`
+        ${tbl(['분류','항목','단가','수량','비용','지급 대상','일정·주체',''],
+          (()=>{ const cats=[]; budget.forEach(b=>{ if(cats.indexOf(b.cat)<0) cats.push(b.cat); });
+            return cats.map(c=>{ const rows=budget.filter(b=>b.cat===c), sub=rows.reduce((a,b)=>a+(semBudCost(b)||0),0);
+              return rows.map((b,ri)=>`<tr class="border-t border-slate-100">
+                  <td class="px-2.5 py-2 whitespace-nowrap">${ri===0?`<span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${esc(b.cat)}</span>`:''}</td>
+                  <td class="px-2.5 py-2 text-slate-700">${se('bud.'+b.i+'.item',(b.src.item||''))}</td>
+                  <td class="px-2.5 py-2 num text-right text-slate-500">${seNum('bud.'+b.i+'.unit',b.src.unit)}</td>
+                  <td class="px-2.5 py-2 num text-right text-slate-500">${seNum('bud.'+b.i+'.qty',b.src.qty)}</td>
+                  <td class="px-2.5 py-2 num text-right font-semibold text-ink">${seNum('bud.'+b.i+'.cost',b.src.cost)}${(b.cost==null&&semBudCost(b)!=null)?`<span class="text-[10px] text-slate-400"> (${semBudCost(b).toLocaleString()})</span>`:''}</td>
+                  <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${se('bud.'+b.i+'.payee',(b.src.payee||'-'))}</td>
+                  <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${se('bud.'+b.i+'.when',(b.src.when||'-'))}</td>
+                  <td class="px-1 py-2 text-right"><button onclick="semDelBudget(${b.i})" title="삭제" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join('')
+                +`<tr class="bg-[#FAFAF9]"><td class="px-2.5 py-1.5 text-[11px] text-slate-400" colspan="4">${esc(c)} 소계</td>
+                  <td class="px-2.5 py-1.5 num text-right text-brand-ink font-bold">${sub.toLocaleString()}원</td><td colspan="3"></td></tr>`;
+            }).join('')
+            +`<tr class="border-t-2 border-slate-200 font-bold"><td class="px-2.5 py-2" colspan="4">Total</td>
+              <td class="px-2.5 py-2 num text-right text-ink">${budTotal.toLocaleString()}원</td><td colspan="3"></td></tr>`; })())}
+        <div class="flex items-center justify-between mt-2">
+          <p class="text-[11px] text-slate-400">단가·수량·비용 모두 클릭해서 수정할 수 있습니다. 비용을 비워두면 단가×수량으로 자동 계산됩니다. (원안 총액 ${((S.budget||{}).total||0).toLocaleString()}원)</p>
+          <button onclick="semAddBudget()" class="text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 항목 추가</button>
+        </div>`):''}
+
+      <!-- 제안서 원문(접힘) -->
+      <details id="semSecOv" class="mb-6" ${V('ovOpen','')?'open':''} ontoggle="semOvToggle(this)" style="scroll-margin-top:80px">
         <summary class="card p-4 cursor-pointer list-none flex items-center justify-between hover:bg-[#FAFAF9]">
-          <span class="text-[15px] font-extrabold text-ink">OVERVIEW <span class="text-[12px] font-normal text-slate-400">· 제안 배경 · 아젠다 · 협력 구조 · 기대효과</span></span>
+          <span class="text-[15px] font-extrabold text-ink">📄 제안서 원문 <span class="text-[12px] font-normal text-slate-400">· 개요 · 아젠다 · 협력 구조 · 기대효과 · 프로그램</span></span>
           <span class="text-[12px] text-slate-400">펼치기 / 접기 ▾</span>
         </summary>
         <div class="mt-3">
-      ${sec('1','제안 개요','핵심 제안과 추진 목표',`
+      ${sec('semOv0','0','기본 정보','',`
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+          ${kv('주최·주관',S.host,'host')}${kv('일정',S.dateLabel,'dateLabel')}${kv('장소',S.place,'place')}${kv('목표 규모',S.scale,'scale')}
+          ${kv('참석 대상',S.target,'target')}${kv('행사 형식',S.format,'format')}
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2">출처: ${esc(S.source)}</p>`)}
+
+      ${sec('semOv1','1','제안 개요','핵심 제안과 추진 목표',`
         <p class="text-[13px] text-slate-700 leading-relaxed mb-2">${esc(S.core)}</p>
         <p class="text-[12px] text-slate-500 leading-relaxed mb-3">${esc(S.purpose)}</p>
-        ${tbl(['목표','세미나에서 만들 변화','중장기 성과'],S.goals.map(g=>`<tr class="border-t border-slate-100">
+        ${tbl(['목표','세미나에서 만들 변화','중장기 성과'],(S.goals||[]).map(g=>`<tr class="border-t border-slate-100">
           <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(g.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(g.s)}</td><td class="px-2.5 py-2 text-slate-600">${esc(g.l)}</td></tr>`).join(''))}`)}
 
-      ${S.agenda?sec('1-1','아젠다','A → D 흐름',`
+      ${S.agenda?sec('semOv1a','1-1','아젠다','A → D 흐름',`
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           ${S.agenda.map(a=>`<div class="rounded-xl border border-[#E6E6E3] p-4">
             <p class="text-[13px] font-extrabold text-ink"><span class="inline-block w-5 h-5 leading-5 text-center rounded bg-ink text-white text-[11px] mr-1.5">${esc(a.k)}</span>${esc(a.t)}</p>
             <p class="text-[12px] text-slate-600 leading-relaxed mt-1.5">${esc(a.d)}</p></div>`).join('')}
         </div>`):''}
 
-      ${sec('2','왜 지금 스마트홈 인테리어인가','',`
+      ${S.timetable?sec('semOv1b','1-2','당일 진행표',esc(S.dateLabel||''),`
+        ${tbl(['시간','시간량','세션','내용','설명','담당'],S.timetable.map(x=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 num whitespace-nowrap text-ink font-semibold">${esc(x.time)}</td>
+          <td class="px-2.5 py-2 num whitespace-nowrap text-slate-400">${esc(x.dur||'')}</td>
+          <td class="px-2.5 py-2 whitespace-nowrap text-brand-ink font-semibold">${esc(x.s||'')}</td>
+          <td class="px-2.5 py-2 text-slate-700">${esc(x.t||'')}</td>
+          <td class="px-2.5 py-2 text-slate-500">${esc(x.d||'')}</td>
+          <td class="px-2.5 py-2 whitespace-nowrap text-slate-500">${esc(x.w||'')}</td></tr>`).join(''))}`):''}
+
+      ${sec('semOv2','2','왜 지금 스마트홈 인테리어인가','',`
         ${ul(S.why)}
         <div class="mt-3 rounded-xl bg-[#FBFAFF] border border-[#EDE9FF] p-4">
           <p class="text-[11px] font-bold text-[#5B44C7] mb-1">정의</p>
           <p class="text-[14px] font-semibold text-ink leading-relaxed">${esc(S.definition)}</p>
         </div>`)}
 
-      ${sec('3','KOSID와 함께해야 하는 이유','역할 분담',`
-        ${tbl(['KOSID의 역할','아카라라이프의 역할','공동으로 만드는 결과'],S.roles.map(r=>`<tr class="border-t border-slate-100">
+      ${sec('semOv3','3','KOSID와 함께해야 하는 이유','역할 분담',`
+        ${tbl(['KOSID의 역할','아카라라이프의 역할','공동으로 만드는 결과'],(S.roles||[]).map(r=>`<tr class="border-t border-slate-100">
           <td class="px-2.5 py-2 text-slate-700">${esc(r.kosid)}</td><td class="px-2.5 py-2 text-slate-700">${esc(r.aqara)}</td><td class="px-2.5 py-2 font-semibold text-ink">${esc(r.both)}</td></tr>`).join(''))}
         <p class="text-[12px] font-bold text-ink mt-4 mb-1">공동 추진의 방향성</p>${ul(S.direction)}`)}
 
-      ${sec('5','아카라라이프가 제공하는 가치','',`
-        ${tbl(['역량','제공 가치','인테리어 업계의 효과'],S.value.map(v=>`<tr class="border-t border-slate-100">
+      ${S.program?sec('semOv4','4','프로그램 구성','',`
+        ${tbl(['세션','주제','내용','발표'],S.program.map(p=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 whitespace-nowrap text-brand-ink font-semibold">${esc(p.s)}</td>
+          <td class="px-2.5 py-2 text-ink font-semibold">${esc(p.t)}</td>
+          <td class="px-2.5 py-2 text-slate-600">${esc(p.d)}</td>
+          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(p.w)}</td></tr>`).join(''))}
+        <p class="text-[12px] text-slate-500 mt-2">흐름 · ${esc(S.flow||'')}</p>
+        ${S.messages?`<p class="text-[12px] font-bold text-ink mt-3 mb-1">핵심 메시지</p>${ul(S.messages)}`:''}`):''}
+
+      ${sec('semOv5','5','아카라라이프가 제공하는 가치','',`
+        ${tbl(['역량','제공 가치','인테리어 업계의 효과'],(S.value||[]).map(v=>`<tr class="border-t border-slate-100">
           <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(v.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(v.v)}</td><td class="px-2.5 py-2 text-slate-600">${esc(v.e)}</td></tr>`).join(''))}`)}
 
-      ${sec('6','참여 인테리어 기업이 얻는 ROI','',`
-        ${tbl(['ROI 영역','가치 창출 방식','측정 지표(예시)'],S.roi.map(r=>`<tr class="border-t border-slate-100">
+      ${sec('semOv6','6','참여 인테리어 기업이 얻는 ROI','',`
+        ${tbl(['ROI 영역','가치 창출 방식','측정 지표(예시)'],(S.roi||[]).map(r=>`<tr class="border-t border-slate-100">
           <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(r.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(r.v)}</td><td class="px-2.5 py-2 text-slate-500">${esc(r.m)}</td></tr>`).join(''))}
         <p class="text-[12px] text-brand-ink font-semibold mt-2">핵심 · ${esc(S.roiCore)}</p>`)}
 
-      ${sec('7','공동 추진체계 및 요청사항','',`
-        ${tbl(['구분','KOSID','아카라라이프','공동'],S.system.map(s=>`<tr class="border-t border-slate-100">
+      ${sec('semOv7','7','공동 추진체계 및 요청사항','',`
+        ${tbl(['구분','KOSID','아카라라이프','공동'],(S.system||[]).map(s=>`<tr class="border-t border-slate-100">
           <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(s.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(s.kosid)}</td>
           <td class="px-2.5 py-2 text-slate-600">${esc(s.aqara)}</td><td class="px-2.5 py-2 text-slate-600">${esc(s.both)}</td></tr>`).join(''))}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
@@ -3574,9 +4026,9 @@
           <div class="rounded-xl border-l-4 border-ink border border-[#E6E6E3] p-4"><p class="font-bold text-ink mb-1 text-[13px]">아카라라이프의 실행 책임</p>${ul(S.doAqara)}</div>
         </div>`)}
 
-      ${sec('8','기대효과','',`
+      ${sec('semOv8','8','기대효과','',`
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          ${S.effect.map(e=>`<div class="rounded-xl border border-[#E6E6E3] p-4">
+          ${(S.effect||[]).map(e=>`<div class="rounded-xl border border-[#E6E6E3] p-4">
             <p class="font-extrabold text-ink mb-1.5 text-[13px]">${esc(e.who)}</p>${ul(e.items)}</div>`).join('')}
         </div>
         <div class="mt-3 rounded-xl bg-[#FAFAF9] border border-[#E6E6E3] p-4">
@@ -3584,95 +4036,22 @@
           <p class="text-[14px] font-semibold text-ink leading-relaxed">${esc(S.conclusion)}</p>
         </div>`)}
 
-      ${sec('9','협의 요청 · 다음 단계','',`<p class="text-[13px] text-slate-700 leading-relaxed">${esc(S.nextStep)}</p>`)}
+      ${sec('semOv9','9','협의 요청 · 다음 단계','',`<p class="text-[13px] text-slate-700 leading-relaxed">${esc(S.nextStep)}</p>`)}
         </div>
-      </details>
+      </details>`;
 
-
-      ${S.tasks?sec('10','준비 타임라인',(S.note?esc(S.note):''),`
-        ${tbl(['','구분','항목','담당','기간','일정 흐름','비고'],S.tasks.map((t,i)=>`<tr class="border-t border-slate-100 ${semChecked(i)?'bg-[#F7FBF5]':''}">
-          <td class="px-2 py-2"><input type="checkbox" ${semChecked(i)?'checked':''} onchange="semToggle(${i})" class="accent-[#5E7350]" /></td>
-          <td class="px-2.5 py-2 whitespace-nowrap">${catSel(i,V('task.'+i+'.cat',t.cat))}</td>
-          <td class="px-2.5 py-2 font-semibold ${semChecked(i)?'text-slate-400 line-through':'text-ink'}">${se('task.'+i+'.item',t.item)}${t.form?`<span class="block text-[11px] font-normal text-slate-400">${se('task.'+i+'.form',t.form)}</span>`:''}</td>
-          <td class="px-2.5 py-2 whitespace-nowrap text-ink font-semibold">${se('task.'+i+'.owner',t.owner||'미정')}</td>
-          <td class="px-2.5 py-2 num whitespace-nowrap text-slate-500"><button onclick="semDate(${i},'start')" class="hover:text-brand-ink underline">${esc(V('task.'+i+'.start',t.start).slice(5))}</button> ~ <button onclick="semDate(${i},'end')" class="hover:text-brand-ink underline">${esc(V('task.'+i+'.end',t.end).slice(5))}</button></td>
-          <td class="px-2.5 py-2 text-slate-600">${se('task.'+i+'.sched',t.sched||'')}</td>
-          <td class="px-2.5 py-2 text-slate-400">${se('task.'+i+'.action',t.action||'')}</td></tr>`).join(''))}
-        <p class="text-[11px] text-slate-400 mt-2">체크·담당·일정 수정은 접속한 모두에게 실시간 공유됩니다.</p>`):''}
-
-      ${S.tasks?sec('10-1','간트 차트','8월 ~ 행사 당일(11/19) · 주 단위',`
-        <div class="overflow-auto">
-          <div class="min-w-[860px]">
-            <div class="grid" style="grid-template-columns:220px repeat(${GW.length},minmax(30px,1fr));">
-              <div class="text-[11px] font-bold text-slate-500 px-1 py-1">항목 · 담당</div>
-              ${GW.map(w=>`<div class="text-[10px] text-center ${w.m?'font-bold text-ink':'text-slate-400'} py-1 border-l border-[#F1EFE9]">${w.label}</div>`).join('')}
-              ${S.tasks.map((t,i)=>{ const ts=V('task.'+i+'.start',t.start), te=V('task.'+i+'.end',t.end);
-                const s=GIDX(ts), e=GIDX(te);
-                const done=semChecked(i);
-                return `<div class="text-[11px] px-1 py-1.5 border-t border-[#F1EFE9] truncate ${done?'text-slate-400 line-through':'text-slate-700'}" title="${esc(t.item)}">${esc(t.item)}
-                  <button onclick="semDate(${i},'start')" class="text-[10px] text-slate-400 hover:text-brand-ink underline" title="시작일 수정">${esc((ts||'').slice(5))}</button>~<button onclick="semDate(${i},'end')" class="text-[10px] text-slate-400 hover:text-brand-ink underline" title="종료일 수정">${esc((te||'').slice(5))}</button></div>`
-                  + (s>0?`<div class="border-t border-l border-[#F1EFE9]" style="grid-column:span ${s}"></div>`:'')
-                  + `<div class="border-t border-l border-[#F1EFE9] py-1 px-0.5" style="grid-column:span ${Math.max(1,e-s+1)}">
-                       <div onmousedown="semBarDown(event,${i})" title="드래그해서 일정 이동 · ${esc(V('task.'+i+'.sched',t.sched||''))}"
-                         style="background:${done?'#5E735099':catColor(V('task.'+i+'.cat',t.cat))}"
-                       class="gbar h-4 rounded text-[9px] leading-4 px-1 text-white truncate cursor-grab select-none">${esc((V('task.'+i+'.sched',t.sched||'')||t.item).slice(0,40))}</div></div>`
-                  + (e<GW.length-1?`<div class="border-t border-l border-[#F1EFE9]" style="grid-column:span ${GW.length-1-e}"></div>`:''); }).join('')}
-            </div>
-          </div>
-        </div>
-        <p class="text-[11px] text-slate-400 mt-2">막대는 준비 타임라인의 시작~종료 주간입니다. 체크한 항목은 초록으로 표시됩니다.</p>`):''}
-
-      ${S.owners?sec('10-2','담당자별 R&R · AI 도우미','내 업무만 모아보기',`
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          ${S.owners.map((o,oi)=>{ const mine=S.tasks.filter(t=>(t.owner||'').indexOf(o.name)>=0);
-            const doneN=S.tasks.filter((t,i)=>(t.owner||'').indexOf(o.name)>=0&&semChecked(i)).length;
-            return `<div class="rounded-xl border border-[#E6E6E3] p-4">
-              <div class="flex items-center justify-between gap-2 mb-1">
-                <p class="text-[14px] font-extrabold text-ink">${esc(o.name)} <span class="text-[11px] font-normal text-slate-400">${doneN}/${mine.length} 완료</span></p>
-                <button onclick="semAi(${oi})" class="text-[11px] font-bold text-white bg-[#7C5CFF] hover:brightness-110 px-2.5 py-1 rounded-lg">✨ AI 도우미</button>
-              </div>
-              <p class="text-[12px] text-slate-500 leading-relaxed mb-2">${se('owner.'+oi+'.rr',o.rr)}</p>
-              <ul class="space-y-1">${mine.length?mine.map(t=>`<li class="text-[12px] text-slate-600">· ${esc(t.item)} <span class="text-slate-400 num">(${esc((t.end||'').slice(5))} 마감)</span></li>`).join(''):'<li class="text-[12px] text-slate-300">담당 업무 없음</li>'}</ul>
-              <div id="semAi${oi}" class="mt-2"></div>
-            </div>`; }).join('')}
-        </div>`):''}
-
-      ${S.budget?sec('11','예산','총 '+(S.budget.total||0).toLocaleString()+'원',`
-        ${tbl(['분류','항목','단가','수량','비용','소계','지급 대상','일정·주체'],S.budget.items.map(b=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${esc(b.cat)}</span></td>
-          <td class="px-2.5 py-2 text-slate-700">${esc(b.item)}</td>
-          <td class="px-2.5 py-2 num text-right text-slate-500">${b.unit!=null?b.unit.toLocaleString():'-'}</td>
-          <td class="px-2.5 py-2 num text-right text-slate-500">${b.qty!=null?b.qty.toLocaleString():'-'}</td>
-          <td class="px-2.5 py-2 num text-right font-semibold text-ink">${b.cost!=null?b.cost.toLocaleString()+'원':'<span class="text-slate-300">미정</span>'}</td>
-          <td class="px-2.5 py-2 num text-right text-brand-ink font-bold">${b.sub!=null?b.sub.toLocaleString()+'원':''}</td>
-          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(b.payee||'')}</td>
-          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(b.when||'')}</td></tr>`).join('')
-          +`<tr class="border-t-2 border-slate-200 font-bold"><td class="px-2.5 py-2" colspan="5">Total</td>
-            <td class="px-2.5 py-2 num text-right text-ink">${(S.budget.total||0).toLocaleString()}원</td><td colspan="2"></td></tr>`)}`):''}
-
-      ${sec('12','준비 체크리스트',done+'/'+S.checklist.length+' 완료',`
-        <div class="flex items-center gap-3 mb-3">
-          <div class="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden"><div class="h-2.5 rounded-full bg-brand transition-all" style="width:${Math.round(done/S.checklist.length*100)}%"></div></div>
-          <span class="num text-[13px] font-extrabold text-ink">${Math.round(done/S.checklist.length*100)}%</span>
-        </div>
-        ${[{n:'협의·확정',r:[0,1]},{n:'장소·프로그램',r:[2,5]},{n:'초청·홍보',r:[6,8]},{n:'제작·현장',r:[9,12]},{n:'사후',r:[13,13]}].map(g=>{
-          const idxs=S.checklist.map((_,i)=>i).filter(i=>i>=g.r[0]&&i<=g.r[1]);
-          const gd=idxs.filter(i=>semChecked(100+i)).length;
-          return `<div class="mb-3">
-            <p class="text-[12px] font-extrabold text-ink mb-1">${esc(g.n)} <span class="num font-normal text-slate-400">${gd}/${idxs.length}</span></p>
-            <div class="rounded-xl border border-[#E6E6E3] divide-y divide-[#F1EFE9]">
-              ${idxs.map(i=>`<div class="flex items-center gap-2 px-3 py-2 hover:bg-[#FAFAF9] ${semChecked(100+i)?'bg-[#F7FBF5]':''}">
-                <input type="checkbox" ${semChecked(100+i)?'checked':''} onchange="semToggle(${100+i})" class="w-4 h-4 accent-[#FBC400] shrink-0" />
-                <span class="flex-1 text-[13px] ${semChecked(100+i)?'text-slate-400 line-through':'text-slate-700'}">${se('cl.'+i+'.t',S.checklist[i])}</span>
-                <span class="text-[11px] text-slate-400 shrink-0">담당 ${se('cl.'+i+'.owner','미정')}</span></div>`).join('')}
-            </div></div>`; }).join('')}
-        <p class="text-[11px] text-slate-400 mt-2">체크 상태는 접속한 모두에게 실시간 공유됩니다.</p>`)}`;
+      semPaintSave(); semCmtPaint();
+      // 간트 가로 스크롤 위치 유지(없으면 오늘 근처로)
+      const g2=document.getElementById('semGant');
+      if(g2){ if(SEM_GSCROLL!=null) g2.scrollLeft=SEM_GSCROLL;
+        else { const R=semRange(semTasks()), ti=semDiff(R.s,semToday());
+          g2.scrollLeft=Math.max(0,ti*SEM_DW-260); SEM_GSCROLL=g2.scrollLeft; } }
     }
     // 담당자별 AI 도우미 — 그 사람의 R&R·업무·마감으로 실행안을 뽑아준다
     function semAi(oi){
       const S=SEMINAR; if(!S) return;
       const o=S.owners[oi], box=document.getElementById('semAi'+oi);
-      const mine=S.tasks.filter(t=>(t.owner||'').indexOf(o.name)>=0);
+      const mine=semTasks().filter(t=>(t.owner||'').indexOf(o.name)>=0);
       box.innerHTML='<p class="text-[12px] text-slate-400 py-3 text-center">AI가 실행안을 정리하는 중…</p>';
       const prompt=[
         '아래는 2026-11-19 개최 예정인 세미나의 담당자 정보다. 이 담당자가 오늘부터 무엇을 해야 하는지 실무 실행안을 만들어라.',
