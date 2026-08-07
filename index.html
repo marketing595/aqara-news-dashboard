@@ -3539,6 +3539,11 @@
         out.push(semTaskAt(i,null)); }
       return out;
     }
+    // 인덱스로 업무 하나 찾기 — 체크리스트에서 흡수한 항목(100+)도 기본값이 채워진 상태로 돌려준다
+    function semTaskById(i){
+      const a=semTasks().filter(x=>x.i===i);
+      return a.length?a[0]:semTaskAt(i,((SEMINAR||{}).tasks||[])[i]);
+    }
     function semState(t){
       const td=semToday();
       if(t.done) return {k:'done',lbl:'완료',c:'#5E7350'};
@@ -3581,7 +3586,7 @@
       renderSeminar();
     }
     function semDelTask(i){
-      const t=semTaskAt(i,((SEMINAR||{}).tasks||[])[i]);
+      const t=semTaskById(i);
       if(!confirm('"'+t.item+'" 업무를 목록에서 삭제할까요?')) return;
       semSave(semKey('del.'+i),'1'); renderSeminar();
     }
@@ -3640,15 +3645,76 @@
       arr.forEach((t,n)=>semSave(semKey('task.'+t.i+'.ord'),String((n+1)*10)));
       renderSeminar();
     }
-    function semDate(i,which){
-      const t=semTaskAt(i,((SEMINAR||{}).tasks||[])[i]);
-      const cur=(which==='start'?t.start:t.end);
-      const v=prompt(t.item+' — '+(which==='start'?'시작':'종료')+'일 (YYYY-MM-DD)', cur);
-      if(v===null) return;
-      const s=v.trim();
-      if(s && !/^\d{4}-\d{2}-\d{2}$/.test(s)){ alert('YYYY-MM-DD 형식으로 입력해주세요.'); return; }
-      semSave(semKey('task.'+i+'.'+which), s); renderSeminar();
+    /* --- 기간 설정 미니 캘린더 (시작·종료를 한 번에) --- */
+    let SEM_DATE_I=null;
+    function semDatePop(){
+      let p=document.getElementById('semDatePop');
+      if(p) return p;
+      p=document.createElement('div'); p.id='semDatePop';
+      p.className='hidden fixed z-[80] bg-white border border-[#E6E6E3] rounded-xl shadow-xl p-3';
+      p.style.width='236px';
+      p.innerHTML=
+        '<p id="semDateTitle" class="text-[11px] font-extrabold text-ink mb-2 truncate"></p>'
+       +'<label class="block text-[11px] text-slate-500 mb-0.5">시작일</label>'
+       +'<input id="semDateS" type="date" onchange="semDateSync()" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2 py-1.5 mb-2" />'
+       +'<label class="block text-[11px] text-slate-500 mb-0.5">종료일</label>'
+       +'<input id="semDateE" type="date" onchange="semDateSync()" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2 py-1.5" />'
+       +'<p id="semDateLen" class="text-[11px] text-slate-400 mt-1.5"></p>'
+       +'<div class="flex items-center gap-1.5 mt-2.5">'
+       +'<button onclick="semDateClear()" class="text-[11px] text-slate-400 hover:text-ared px-1">기간 비우기</button>'
+       +'<button onclick="semDateClose()" class="ml-auto text-[12px] border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">취소</button>'
+       +'<button onclick="semDateApply()" class="text-[12px] font-bold bg-ink text-white rounded-lg px-3 py-1">적용</button></div>';
+      document.body.appendChild(p);
+      document.addEventListener('mousedown',function(e){
+        const q=document.getElementById('semDatePop');
+        if(q&&!q.classList.contains('hidden')&&!q.contains(e.target)) semDateClose();
+      });
+      document.addEventListener('keydown',function(e){
+        const q=document.getElementById('semDatePop');
+        if(!q||q.classList.contains('hidden')) return;
+        if(e.key==='Escape') semDateClose();
+        if(e.key==='Enter'){ e.preventDefault(); semDateApply(); }
+      });
+      return p;
     }
+    function semDate(i,which,ev){
+      if(ev){ try{ ev.preventDefault(); ev.stopPropagation(); }catch(e){} }
+      const t=semTaskById(i);
+      SEM_DATE_I=i;
+      const p=semDatePop(); p.classList.remove('hidden');
+      document.getElementById('semDateTitle').textContent=t.item;
+      const S1=document.getElementById('semDateS'), E1=document.getElementById('semDateE');
+      S1.value=t.start||semToday(); E1.value=t.end||t.start||semToday();
+      semDateSync();
+      const r=(ev&&ev.currentTarget&&ev.currentTarget.getBoundingClientRect)?ev.currentTarget.getBoundingClientRect():null;
+      const L=r?Math.min(window.innerWidth-248, Math.max(8,r.left)):(window.innerWidth/2-118);
+      const T=r?(r.bottom+240>window.innerHeight?Math.max(8,r.top-236):r.bottom+6):120;
+      p.style.left=L+'px'; p.style.top=T+'px';
+      const tgt=(which==='end')?E1:S1;
+      setTimeout(function(){ tgt.focus(); try{ tgt.showPicker(); }catch(e){} },0);
+    }
+    function semDateSync(){
+      const s=document.getElementById('semDateS').value, e=document.getElementById('semDateE').value;
+      const el=document.getElementById('semDateLen');
+      if(s&&e){ const n=semDiff(s,e)+1;
+        el.innerHTML=n>0?('총 <b class="num text-ink">'+n+'일</b>'):'<span style="color:#BF5332">종료일이 시작일보다 빠릅니다</span>'; }
+      else el.textContent='시작일과 종료일을 모두 선택하면 막대가 생깁니다.';
+    }
+    function semDateApply(){
+      if(SEM_DATE_I==null) return;
+      let s=document.getElementById('semDateS').value, e=document.getElementById('semDateE').value;
+      if(s&&e&&semDiff(s,e)<0){ const t=s; s=e; e=t; }         // 거꾸로 고르면 자동으로 바꿔준다
+      semSave(semKey('task.'+SEM_DATE_I+'.start'), s||'');
+      semSave(semKey('task.'+SEM_DATE_I+'.end'), e||s||'');
+      semDateClose(); renderSeminar();
+    }
+    function semDateClear(){
+      if(SEM_DATE_I==null) return;
+      semSave(semKey('task.'+SEM_DATE_I+'.start'),'');
+      semSave(semKey('task.'+SEM_DATE_I+'.end'),'');
+      semDateClose(); renderSeminar();
+    }
+    function semDateClose(){ const p=document.getElementById('semDatePop'); if(p) p.classList.add('hidden'); SEM_DATE_I=null; }
 
     /* --- 업무별 댓글 (Firebase seminar/comments/<i>) --- */
     function semCmtList(i){ const o=SEM_CMT[i]||{};
@@ -3721,7 +3787,7 @@
       const d=semDrag; semDrag=null;
       d.bar.style.cursor='grab'; d.bar.style.opacity=''; d.bar.style.transform=''; d.bar.style.zIndex='';
       if(!d.moved) return;
-      const t=semTaskAt(d.i,((SEMINAR||{}).tasks||[])[d.i]);
+      const t=semTaskById(d.i);
       if(!t.start||!t.end) return;
       semSave(semKey('task.'+d.i+'.start'), semAddDays(t.start,d.moved));
       semSave(semKey('task.'+d.i+'.end'),   semAddDays(t.end,d.moved));
@@ -3799,7 +3865,7 @@
           const lbl=(t.sched||t.item||'');
           const inside=bw>=76;
           const bg=t.done?'#5E735099':(st.k==='late'?'#BF5332':catColor(t.cat));
-          const bar=!has?`<button onclick="semDate(${t.i},'start')" title="시작일을 넣으면 막대가 생깁니다"
+          const bar=!has?`<button onclick="semDate(${t.i},'start',event)" title="시작일을 넣으면 막대가 생깁니다"
                  style="position:absolute;left:${Math.max(0,tIdx)*SEM_DW+2}px;top:9px"
                  class="text-[10px] leading-[18px] px-1.5 rounded border border-dashed border-slate-300 text-slate-400 hover:text-ink hover:border-ink bg-white/70">＋ 기간 지정</button>`
             :`<div onmousedown="semBarDown(event,${t.i})" title="${esc(t.item+' · '+t.start+' ~ '+t.end+(t.sched?' · '+t.sched:''))}"
@@ -3825,13 +3891,20 @@
           // 펼침 — 상세 편집 + 댓글 (같은 행 아래로 열린다)
           h+=`<div data-cmt="${t.i}" class="${open?'':'hidden'} flex" style="width:${SEM_LW+W}px">
             <div style="position:sticky;left:0;z-index:3;flex:0 0 ${SEM_LW}px;width:${SEM_LW}px;background:#FBFAFF;border-right:1px solid #E6E6E3;box-shadow:2px 0 4px -3px rgba(0,0,0,.25)" class="p-2.5">
-              <div class="text-[11px] text-slate-500 mb-1">항목 ${se('task.'+t.i+'.item',t.src.item||'')}</div>
-              <div class="text-[11px] text-slate-500 mb-1">담당 ${se('task.'+t.i+'.owner',t.src.owner||'미정')} · 구분 ${catSel(t.i,t.cat)}</div>
-              <div class="text-[11px] text-slate-500 mb-1">기간 <button onclick="semDate(${t.i},'start')" class="num underline hover:text-brand-ink">${esc(semMD(t.start)||'--')}</button> ~ <button onclick="semDate(${t.i},'end')" class="num underline hover:text-brand-ink">${esc(semMD(t.end)||'--')}</button></div>
-              <div class="text-[11px] text-slate-500 mb-1">일정 흐름 ${se('task.'+t.i+'.sched',t.src.sched||'')}</div>
-              <div class="text-[11px] text-slate-500 mb-1">비고 ${se('task.'+t.i+'.action',t.src.action||'')}</div>
-              <div class="text-[11px] text-slate-500">형식 ${se('task.'+t.i+'.form',t.src.form||'')}
-                <button onclick="semDelTask(${t.i})" class="float-right text-[11px] text-slate-300 hover:text-ared" title="이 업무 삭제">✕ 삭제</button></div>
+              <div class="mb-2"><p class="text-[10px] font-extrabold text-slate-400 tracking-wide mb-0.5">항목</p>
+                <p class="text-[12px] text-slate-700">${se('task.'+t.i+'.item',t.src.item||'')}</p></div>
+              <div class="mb-2"><p class="text-[10px] font-extrabold text-slate-400 tracking-wide mb-0.5">담당 · 구분</p>
+                <p class="text-[12px] text-slate-700">${se('task.'+t.i+'.owner',t.src.owner||'미정')} ${catSel(t.i,t.cat)}</p></div>
+              <div class="mb-2"><p class="text-[10px] font-extrabold text-slate-400 tracking-wide mb-0.5">기간</p>
+                <p class="text-[12px]"><button onclick="semDate(${t.i},'start',event)" class="num underline text-slate-700 hover:text-brand-ink">${esc(semMD(t.start)||'--')}</button> ~ <button onclick="semDate(${t.i},'end',event)" class="num underline text-slate-700 hover:text-brand-ink">${esc(semMD(t.end)||'--')}</button>
+                <button onclick="semDate(${t.i},'start',event)" class="ml-1 text-[11px] border border-[#E6E6E3] rounded px-1.5 hover:bg-white">📅 달력</button></p></div>
+              <div class="mb-2"><p class="text-[10px] font-extrabold text-slate-400 tracking-wide mb-0.5">일정 흐름</p>
+                <p class="text-[12px] text-slate-700">${se('task.'+t.i+'.sched',t.src.sched||'')}</p></div>
+              <div class="mb-2"><p class="text-[10px] font-extrabold text-slate-400 tracking-wide mb-0.5">비고</p>
+                <p class="text-[12px] text-slate-700">${se('task.'+t.i+'.action',t.src.action||'')}</p></div>
+              <div><p class="text-[10px] font-extrabold text-slate-400 tracking-wide mb-0.5">형식</p>
+                <p class="text-[12px] text-slate-700">${se('task.'+t.i+'.form',t.src.form||'')}</p></div>
+              <button onclick="semDelTask(${t.i})" class="mt-2 text-[11px] text-slate-400 hover:text-ared border border-[#E6E6E3] rounded-lg px-2 py-1" title="이 업무 삭제">✕ 이 항목 삭제</button>
             </div>
             <div style="flex:0 0 ${W}px;width:${W}px;background:#FBFAFF;border-top:1px solid #EDE9FF" class="p-2.5">
               <p class="text-[11px] font-bold text-[#5B44C7] mb-1">💬 ${esc(t.item)} — 업무 댓글</p>
@@ -3921,7 +3994,7 @@
           </td>
           <td class="px-2.5 py-2 whitespace-nowrap text-[12px] text-ink font-semibold">${se('task.'+t.i+'.owner',t.src.owner||'미정')}</td>
           <td class="px-2.5 py-2 whitespace-nowrap">
-            <div class="num text-[12px] text-slate-600"><button onclick="semDate(${t.i},'start')" class="underline hover:text-brand-ink">${esc(semMD(t.start)||'--')}</button> ~ <button onclick="semDate(${t.i},'end')" class="underline hover:text-brand-ink">${esc(semMD(t.end)||'--')}</button></div>
+            <div class="num text-[12px] text-slate-600"><button onclick="semDate(${t.i},'start',event)" class="underline hover:text-brand-ink">${esc(semMD(t.start)||'--')}</button> ~ <button onclick="semDate(${t.i},'end',event)" class="underline hover:text-brand-ink">${esc(semMD(t.end)||'--')}</button></div>
             ${st.lbl?`<div class="text-[10px] font-bold mt-0.5" style="color:${st.c}">${esc(st.lbl)}</div>`:''}
           </td>
           <td class="px-2.5 py-2 text-[12px] text-slate-600">${se('task.'+t.i+'.sched',t.src.sched||'')}</td>
@@ -4033,16 +4106,30 @@
       </div>
 
       <!-- 할 일 · 타임라인 통합 -->
-      ${sec('semSecGant','📋','체크리스트 / 타임라인','왼쪽 표와 오른쪽 간트가 한 몸 · 체크·수정하면 막대에 바로 반영 · 항목을 누르면 상세·댓글이 열립니다',`
-        <div class="flex items-center justify-between mb-2">
-          <p class="text-[11px] text-slate-400">⠿ 를 끌어 순서 이동(다른 구분에 놓으면 구분도 변경) · 막대를 끌면 일정이 하루 단위로 이동 · 행의 ✕ 로 삭제</p>
+      ${sec('semSecGant','📋','체크리스트 / 타임라인','',`
+        <div class="flex items-center justify-end mb-2">
           <button onclick="semAddTask('기타')" class="text-[12px] font-bold bg-ink text-white hover:brightness-125 rounded-lg px-3 py-1.5">＋ 업무 추가</button>
         </div>
         <div id="semGantWrap">${semGanttHTML(groups)}</div>
-        <div class="flex flex-wrap items-center gap-3 mt-2">
-          <span class="text-[11px] text-slate-400">회색 영역 = 지난 날짜 · <span style="color:#BF5332">빨간 선</span> 오늘 · <span style="color:#8A6A00">노란 선</span> 행사일(${esc(semMD(S.date))})</span>
-          <span class="text-[11px] text-slate-400 ml-auto">${SEM_CATS.map(c=>`<span class="inline-flex items-center gap-1 mr-2"><span class="inline-block w-2 h-2 rounded-sm" style="background:${catColor(c)}"></span>${esc(c)}</span>`).join('')}</span>
-        </div>`)}
+        <details class="mt-3 rounded-xl border border-[#E6E6E3] bg-[#FAFAF9]" ${V('helpOpen','')?'open':''}
+                 ontoggle="semSave(semKey('helpOpen'),this.open?'1':'')">
+          <summary class="cursor-pointer list-none px-3.5 py-2 text-[12px] font-extrabold text-slate-500 hover:text-ink select-none">💡 사용 방법 <span class="font-normal text-slate-400">· 펼치기</span></summary>
+          <div class="px-3.5 pb-3 pt-1 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1.5">
+            ${[['항목 이름을 클릭','상세 편집 + 업무 댓글이 아래로 열립니다'],
+               ['체크박스','완료 처리 · 막대도 초록으로 바뀝니다'],
+               ['⠿ 를 끌기','순서 이동 · 다른 구분 그룹에 놓으면 구분도 함께 변경'],
+               ['막대를 끌기','일정 전체가 하루 단위로 이동'],
+               ['날짜(8/17~8/23) 클릭','시작일·종료일 수정 · 기간 미정이면 ＋기간 지정'],
+               ['행 오른쪽 ✕','그 항목 삭제 · ＋업무 추가로 새 항목'],
+               ['구분 이름 옆 ▾','그 구분 전체 접기 / 펼치기'],
+               ['모든 수정','접속한 모두에게 실시간 공유(✓ 저장됨 표시 확인)']]
+              .map(x=>`<p class="text-[12px] text-slate-600 flex gap-2"><b class="text-ink shrink-0 w-[128px]">${esc(x[0])}</b><span class="text-slate-500">${esc(x[1])}</span></p>`).join('')}
+            <div class="md:col-span-2 mt-1.5 pt-2 border-t border-[#ECE9E1] flex flex-wrap items-center gap-x-4 gap-y-1">
+              <span class="text-[11px] text-slate-400">회색 영역 = 지난 날짜 · <b style="color:#BF5332">빨간 선</b> 오늘 · <b style="color:#8A6A00">노란 선</b> 행사일(${esc(semMD(S.date))})</span>
+              <span class="text-[11px] text-slate-400">${SEM_CATS.map(c=>`<span class="inline-flex items-center gap-1 mr-2"><span class="inline-block w-2 h-2 rounded-sm" style="background:${catColor(c)}"></span>${esc(c)}</span>`).join('')}</span>
+            </div>
+          </div>
+        </details>`)}
 
       <!-- 담당자 -->
       ${S.owners?sec('semSecOwner','🙋','담당자별 R&R · AI 도우미','내 업무만 모아보기',`
