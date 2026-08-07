@@ -3812,12 +3812,13 @@
                 <span class="cursor-grab select-none text-slate-300 hover:text-slate-500 text-[12px] leading-none" title="드래그해서 순서 이동" onmousedown="semDragOn(this)" onmouseup="semDragOff(this)">⠿</span>
                 <input type="checkbox" ${t.done?'checked':''} onchange="semToggle(${t.i})" class="w-3.5 h-3.5 accent-[#5E7350] shrink-0" title="완료 체크" />
                 <button onclick="semCmtToggle(${t.i})" class="flex-1 min-w-0 text-left" title="클릭하면 상세·댓글이 열립니다">
-                  <span class="block text-[12px] leading-tight truncate ${t.done?'text-slate-400 line-through':'text-ink font-semibold'}">${t.src.cl?'<span class="text-[9px] font-bold text-slate-400 border border-slate-200 rounded px-0.5 mr-1 align-middle">체크</span>':''}${esc(t.item)}</span>
+                  <span class="block text-[12px] leading-tight truncate ${t.done?'text-slate-400 line-through':'text-ink font-semibold'}">${esc(t.item)}</span>
                   <span class="block text-[10px] leading-tight text-slate-400 truncate">${esc(semMD(t.start)||'--')}~${esc(semMD(t.end)||'--')}${t.sched?' · '+esc(t.sched):''}</span>
                 </button>
                 <span class="text-[10px] text-slate-500 w-[52px] shrink-0 truncate text-right">${esc(t.owner||'미정')}</span>
                 <span class="text-[9px] font-bold rounded px-1 py-0.5 shrink-0 w-[54px] text-center" style="background:${st.c}1A;color:${st.c}">${esc(st.lbl||'-')}</span>
                 <span class="shrink-0 text-[10px] ${cn?'text-[#5B44C7] font-bold':'text-slate-300'}" data-cn="${t.i}">💬${cn?' '+cn:''}</span>
+                <button onclick="event.stopPropagation();semDelTask(${t.i})" title="이 항목 삭제" class="shrink-0 text-[11px] text-slate-300 hover:text-ared px-0.5">✕</button>
                 <span class="shrink-0 text-[10px] text-slate-300 w-2.5 text-center">${open?'▾':'▸'}</span>
               </div>`,'',36)}
             <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:36px;border-top:1px solid #F5F3EE;${trackBg}">${marks}${bar}</div></div>`;
@@ -3960,7 +3961,7 @@
         </div>
         <div id="semPresence" class="flex flex-wrap items-center gap-1.5 mt-3"></div>
         <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-[#ECE9E1]">
-          ${[['semSecNow','⚡ 이번 주'],['semSecGant','📋 할 일·타임라인'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecOv','📄 제안서']]
+          ${[['semSecNow','⚡ 이번 주'],['semSecGant','📋 체크리스트/타임라인'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecOv','📄 제안서']]
             .map(x=>`<button onclick="semGo('${x[0]}')" class="text-[11px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">${x[1]}</button>`).join('')}
         </div>
       </div>
@@ -4032,12 +4033,12 @@
       </div>
 
       <!-- 할 일 · 타임라인 통합 -->
-      ${sec('semSecGant','📋','할 일 · 타임라인','왼쪽 표와 오른쪽 간트가 한 몸 · 체크·수정하면 막대에 바로 반영 · 항목을 누르면 상세·댓글이 열립니다',`
-        <div id="semGantWrap">${semGanttHTML(groups)}</div>
-        <div class="flex items-center justify-between mt-2">
-          <p class="text-[11px] text-slate-400">⠿ 를 끌어 순서 이동(다른 구분에 놓으면 구분도 변경) · 막대를 끌면 일정이 하루 단위로 이동합니다.</p>
-          <button onclick="semAddTask('기타')" class="text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 업무 추가</button>
+      ${sec('semSecGant','📋','체크리스트 / 타임라인','왼쪽 표와 오른쪽 간트가 한 몸 · 체크·수정하면 막대에 바로 반영 · 항목을 누르면 상세·댓글이 열립니다',`
+        <div class="flex items-center justify-between mb-2">
+          <p class="text-[11px] text-slate-400">⠿ 를 끌어 순서 이동(다른 구분에 놓으면 구분도 변경) · 막대를 끌면 일정이 하루 단위로 이동 · 행의 ✕ 로 삭제</p>
+          <button onclick="semAddTask('기타')" class="text-[12px] font-bold bg-ink text-white hover:brightness-125 rounded-lg px-3 py-1.5">＋ 업무 추가</button>
         </div>
+        <div id="semGantWrap">${semGanttHTML(groups)}</div>
         <div class="flex flex-wrap items-center gap-3 mt-2">
           <span class="text-[11px] text-slate-400">회색 영역 = 지난 날짜 · <span style="color:#BF5332">빨간 선</span> 오늘 · <span style="color:#8A6A00">노란 선</span> 행사일(${esc(semMD(S.date))})</span>
           <span class="text-[11px] text-slate-400 ml-auto">${SEM_CATS.map(c=>`<span class="inline-flex items-center gap-1 mr-2"><span class="inline-block w-2 h-2 rounded-sm" style="background:${catColor(c)}"></span>${esc(c)}</span>`).join('')}</span>
