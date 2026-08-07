@@ -1252,29 +1252,28 @@
      </div>
      <div id="mktInner" class="hidden">
        <div class="bg-[#F4F1FF] border-b border-[#E1DBFF] -mt-5 mb-5">
-         <div class="max-w-[1400px] mx-auto px-1 flex flex-wrap items-center gap-x-2 gap-y-1 py-2">
-           <button id="mktBtn-weekly" onclick="mktSub('weekly')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">주간보고</button>
-           <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
-           <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">세미나</button>
-
-           <span class="inline-flex items-center gap-1.5 pl-3 ml-1 border-l border-[#D9D0FF]">
-             <span class="text-[11px] font-extrabold text-[#7C5CFF]/70 tracking-wide whitespace-nowrap">언론홍보</span>
-             <button id="mktBtn-medialist" onclick="mktSub('medialist')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">미디어리스트</button>
-             <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
-           </span>
-
-           <span class="inline-flex items-center gap-1.5 pl-3 ml-1 border-l border-[#D9D0FF]">
-             <span class="text-[11px] font-extrabold text-[#7C5CFF]/70 tracking-wide whitespace-nowrap">온드미디어 관리</span>
-             <button id="mktBtn-insta" onclick="mktSub('insta')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
-             <button id="mktBtn-blog" onclick="mktSub('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
-           </span>
-
-           <span class="inline-flex items-center gap-1.5 pl-3 ml-1 border-l border-[#D9D0FF]">
-             <span class="text-[11px] font-extrabold text-[#7C5CFF]/70 tracking-wide whitespace-nowrap">광고·리포트</span>
-             <button id="mktBtn-ad" onclick="mktSub('ad')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">파워링크/브랜드검색</button>
-             <button id="mktBtn-report" onclick="mktSub('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">종합 리포트</button>
-           </span>
-
+         <div class="max-w-[1400px] mx-auto px-1 flex items-start gap-x-8 gap-y-3 py-3 flex-wrap">
+           <div class="flex flex-col gap-0.5 min-w-[110px]">
+             <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">업무</p>
+             <button id="mktBtn-weekly" onclick="mktSub('weekly')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">주간보고</button>
+             <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
+             <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">세미나</button>
+           </div>
+           <div class="flex flex-col gap-0.5 min-w-[130px]">
+             <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">언론홍보</p>
+             <button id="mktBtn-medialist" onclick="mktSub('medialist')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">미디어리스트</button>
+             <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
+           </div>
+           <div class="flex flex-col gap-0.5 min-w-[150px]">
+             <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">온드미디어 관리</p>
+             <button id="mktBtn-insta" onclick="mktSub('insta')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
+             <button id="mktBtn-blog" onclick="mktSub('blog')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
+           </div>
+           <div class="flex flex-col gap-0.5 min-w-[150px]">
+             <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">광고 · 리포트</p>
+             <button id="mktBtn-ad" onclick="mktSub('ad')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">파워링크/브랜드검색</button>
+             <button id="mktBtn-report" onclick="mktSub('report')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">종합 리포트</button>
+           </div>
            <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
          </div>
        </div>
@@ -3412,10 +3411,15 @@
       if(semRefOn) return; const ref=semRef();
       if(!ref){ SEM_OVER=Object.assign(semLocalLoad(),SEM_OVER); SEM_CMT=semCmtLocalLoad(); return; }
       semRefOn=true;
-      ref.on('value',s=>{ SEM_OVER=s.val()||{};
-        const a=document.activeElement;
-        if(a&&a.dataset&&a.dataset.sk) return;      // 누가 입력 중이면 화면 갱신 보류(커서 튐 방지)
-        if(SEMINAR) renderSeminar(); });
+      ref.on('value',s=>{
+        SEM_OVER=s.val()||{};
+        if(!SEMINAR) return;
+        const a=document.activeElement, k=(a&&a.dataset)?(a.dataset.sk||''):'';
+        const busy=!!(a&&a.dataset&&(a.dataset.sk||a.dataset.nk));
+        // 내가 입력 중이어도 남이 고친 내용은 바로 반영한다(내가 잡고 있는 칸만 건드리지 않음)
+        if(busy) semApplyRemote(k); else renderSeminar();
+      });
+      semEditStart();
       const cr=semCmtRef();
       if(cr&&!semCmtOn){ semCmtOn=true; cr.on('value',s=>{ SEM_CMT=s.val()||{}; semCmtPaint(); }); }
     }
@@ -3450,14 +3454,64 @@
       el.innerHTML='<span class="font-semibold" style="color:#16A34A">✓ 저장됨</span> <span class="num text-slate-400">'
         +d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+'</span>';
     }
+    /* --- 실시간 공동 작업 (주간보고와 같은 방식 + 누가 어디를 고치는 중인지 표시) --- */
+    // 남이 고친 내용만 화면에 밀어넣기 — 내가 입력 중인 칸(skip)은 건드리지 않는다
+    function semApplyRemote(skip){
+      const els=document.querySelectorAll('[data-sk]');
+      for(let i=0;i<els.length;i++){
+        const el=els[i], k=el.dataset.sk;
+        if(!k||k===skip) continue;
+        const v=SEM_OVER[k];
+        if(v==null) continue;
+        if(el.innerText.trim()!==String(v)) el.innerText=v;
+      }
+      semPaintSave();
+    }
+    let semEditRef=null, SEM_EDITING={}, semEditOn=false;
+    function semEditStart(){
+      if(semEditOn||!(typeof wkUseFB==='function'&&wkUseFB())) return;
+      semEditOn=true;
+      const key=((typeof wkPresRef!=='undefined'&&wkPresRef&&wkPresRef.key)||('x'+Math.random().toString(36).slice(2,8)));
+      semEditRef=WK_DB.ref('seminar/editing/'+key);
+      try{ semEditRef.onDisconnect().remove(); }catch(e){}
+      WK_DB.ref('seminar/editing').on('value',function(s){ SEM_EDITING=s.val()||{}; semPaintEditing(); },function(){});
+      window.addEventListener('beforeunload',function(){ try{ semEditRef.remove(); }catch(e){} });
+    }
+    function semEditSet(k){
+      semEditStart();
+      if(!semEditRef) return;
+      semEditRef.set({k:k, n:(typeof wkDeviceName==='function'?wkDeviceName():'익명'), at:Date.now()}).catch(function(){});
+    }
+    function semEditClear(){ if(semEditRef) semEditRef.remove().catch(function(){}); }
+    function semPaintEditing(){
+      const mine=semEditRef&&semEditRef.key;
+      const els=document.querySelectorAll('[data-sk]');
+      for(let i=0;i<els.length;i++){ const el=els[i];
+        if(el.getAttribute('data-eby')){ el.style.outline=''; el.style.background=''; el.removeAttribute('data-eby'); el.removeAttribute('title'); } }
+      const keys=Object.keys(SEM_EDITING||{});
+      for(let i=0;i<keys.length;i++){
+        if(keys[i]===mine) continue;
+        const o=SEM_EDITING[keys[i]]; if(!o||!o.k) continue;
+        if(o.at && Date.now()-o.at > 5*60000) continue;             // 5분 넘은 흔적은 무시
+        const el=document.querySelector('[data-sk="'+o.k+'"]'); if(!el) continue;
+        const c=(typeof wkAvatarColor==='function')?wkAvatarColor(o.n||''):'#7C5CFF';
+        el.style.outline='2px solid '+c; el.style.background=c+'12'; el.style.borderRadius='3px';
+        el.setAttribute('data-eby','1');
+        el.setAttribute('title',(o.n||'다른 사용자')+' 님이 입력 중');
+      }
+      // 상단에 지금 편집 중인 사람 안내
+      const bar=document.getElementById('semEditingBar');
+      if(bar){ const list=keys.filter(k=>k!==mine&&SEM_EDITING[k]&&SEM_EDITING[k].k).map(k=>SEM_EDITING[k].n||'익명');
+        bar.innerHTML=list.length?('<span class="text-[11px] px-2 py-0.5 rounded-full bg-[#EDE9FF] text-[#5B44C7] font-semibold">✏️ '+esc(list.join(', '))+' 님이 지금 입력 중</span>'):''; }
+    }
     function semKey(k){ return k.replace(/[.#$/\[\]]/g,'_'); }
     function V(k,def){ const v=SEM_OVER[semKey(k)]; return (v==null||v==='')?(def==null?'':def):v; }
-    function se(k,def,cls){ return `<span class="sem-edit ${cls||''}" data-sk="${semKey(k)}" contenteditable="true" spellcheck="false" oninput="semInput(this)" onblur="semInput(this,1)">${esc(V(k,def))}</span>`; }
+    function se(k,def,cls){ return `<span class="sem-edit ${cls||''}" data-sk="${semKey(k)}" contenteditable="true" spellcheck="false" oninput="semInput(this)" onfocus="semEditSet(this.dataset.sk)" onblur="semInput(this,1);semEditClear()">${esc(V(k,def))}</span>`; }
     function semInput(el,now){
       const k=el.dataset.sk, v=el.innerText.trim();
       clearTimeout(semTimer); semTimer=null;
       if(now){ semSave(k,v); return; }
-      semTimer=setTimeout(()=>{ semTimer=null; semSave(k,v); },500);
+      semTimer=setTimeout(()=>{ semTimer=null; semSave(k,v); },200);   // 타이핑 중 0.2초마다 공유(주간보고와 동일 감각)
       semPaintSave();
     }
     function semNum(k,def){ const raw=V(k,(def==null||def==='')?'':String(def));
@@ -3472,6 +3526,7 @@
     function semSoloMode(){
       const q=location.search||'', h=location.hash||'';
       if(!/[?&]view=seminar(\b|&|$)/.test(q) && h!=='#seminar') return false;
+      document.title='11월 세미나 공동작업 포털';
       const hd=document.querySelector('header'); if(hd) hd.style.display='none';
       ['gnb','subnav-pr','subnav-owned','subnav-report'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display='none'; });
       const mn=document.querySelector('main');
@@ -3575,15 +3630,46 @@
     function semSetF(k,v){ SEM_F[k]=v; renderSeminar(); }
     function semOwnerFocus(n){ SEM_F.owner=(SEM_F.owner===n?'':n); renderSeminar(); setTimeout(()=>semGo('semSecGant'),60); }
     function semOnly(v){ SEM_F.only=(SEM_F.only===v?'':v); renderSeminar(); }
-    function semAddTask(cat){
-      const n=parseInt(V('extraN','0'),10)||0, i=500+n, td=semToday();
-      semSave(semKey('extraN'),String(n+1));
-      semSave(semKey('task.'+i+'.cat'),cat||'기타');
-      semSave(semKey('task.'+i+'.item'),'새 업무');
-      semSave(semKey('task.'+i+'.start'),td);
-      semSave(semKey('task.'+i+'.end'),semAddDays(td,6));
-      semSave(semKey('task.'+i+'.ord'),'9999');
+    /* --- 새 업무 추가: 상단 입력 폼에서 내용을 다 적고 '반영' --- */
+    let SEM_NEW=null, SEM_FLASH=null;
+    function semAddTask(cat){ semNewOpen(cat); }
+    function semNewOpen(cat){
+      const td=semToday();
+      SEM_NEW={cat:cat||'기타',item:'',owner:'',start:td,end:semAddDays(td,6),sched:'',action:''};
       renderSeminar();
+      setTimeout(function(){ const el=document.getElementById('semNewItem');
+        if(el){ el.scrollIntoView({behavior:'smooth',block:'center'}); el.focus(); } },40);
+    }
+    function semNewSet(k,v){ if(!SEM_NEW) return; SEM_NEW[k]=v; if(k==='start'||k==='end') semNewLen(); }
+    function semNewLen(){
+      const el=document.getElementById('semNewLen'); if(!el||!SEM_NEW) return;
+      const s=SEM_NEW.start, e=SEM_NEW.end;
+      if(!s||!e){ el.innerHTML='<span class="text-slate-400">기간 미정으로 추가됩니다</span>'; return; }
+      const n=semDiff(s,e)+1;
+      el.innerHTML=n>0?('총 <b class="num text-ink">'+n+'일</b> ('+semMD(s)+' ~ '+semMD(e)+')')
+        :'<span style="color:#BF5332">종료일이 시작일보다 빠릅니다 · 반영 시 자동으로 바뀝니다</span>';
+    }
+    function semNewCancel(){ SEM_NEW=null; renderSeminar(); }
+    function semNewApply(){
+      if(!SEM_NEW) return;
+      const it=(SEM_NEW.item||'').trim();
+      if(!it){ alert('업무명을 입력해주세요.'); const el=document.getElementById('semNewItem'); if(el) el.focus(); return; }
+      let s=SEM_NEW.start||'', e=SEM_NEW.end||'';
+      if(s&&e&&semDiff(s,e)<0){ const tmp=s; s=e; e=tmp; }
+      const n=parseInt(V('extraN','0'),10)||0, i=500+n;
+      semSave(semKey('extraN'),String(n+1));
+      semSave(semKey('task.'+i+'.cat'),SEM_NEW.cat||'기타');
+      semSave(semKey('task.'+i+'.item'),it);
+      semSave(semKey('task.'+i+'.owner'),(SEM_NEW.owner||'').trim());
+      semSave(semKey('task.'+i+'.start'),s);
+      semSave(semKey('task.'+i+'.end'),e);
+      semSave(semKey('task.'+i+'.sched'),(SEM_NEW.sched||'').trim());
+      semSave(semKey('task.'+i+'.action'),(SEM_NEW.action||'').trim());
+      semSave(semKey('task.'+i+'.ord'),'9999');
+      SEM_NEW=null; SEM_FLASH=i; renderSeminar();
+      setTimeout(function(){ const r=document.querySelector('[data-row="'+i+'"]');
+        if(r) r.scrollIntoView({behavior:'smooth',block:'center'}); },50);
+      setTimeout(function(){ SEM_FLASH=null; semPaintGantt(); },2800);
     }
     function semDelTask(i){
       const t=semTaskById(i);
@@ -3873,7 +3959,7 @@
                  class="gbar text-[10px] leading-[18px] px-1.5 text-white truncate cursor-grab select-none">${inside?esc(lbl):''}</div>`
             +(inside?'':`<div style="position:absolute;left:${off*SEM_DW+bw+7}px;top:9px;white-space:nowrap;pointer-events:none" class="text-[10px] leading-[18px] text-slate-500">${esc(lbl.slice(0,34))}</div>`);
           const open=(SEM_CMT_OPEN===t.i), cn=semCmtN(t.i);
-          h+=`<div class="flex" data-row="${t.i}" draggable="false" ondragstart="semRowStart(event,${t.i})" ondragover="semRowOver(event)" ondragleave="semRowOut(event)" ondrop="semRowDrop(event,${t.i})" ondragend="semRowEnd(event)" style="width:${SEM_LW+W}px">
+          h+=`<div class="flex" data-row="${t.i}" draggable="false" ondragstart="semRowStart(event,${t.i})" ondragover="semRowOver(event)" ondragleave="semRowOut(event)" ondrop="semRowDrop(event,${t.i})" ondragend="semRowEnd(event)" style="width:${SEM_LW+W}px;${SEM_FLASH===t.i?'outline:2px solid #FBC400;outline-offset:-2px;':''}">
             ${leftCell(`<div class="flex items-center gap-1 px-1.5 h-full ${t.done?'bg-[#F7FBF5]':''}">
                 <span class="cursor-grab select-none text-slate-300 hover:text-slate-500 text-[12px] leading-none" title="드래그해서 순서 이동" onmousedown="semDragOn(this)" onmouseup="semDragOff(this)">⠿</span>
                 <input type="checkbox" ${t.done?'checked':''} onchange="semToggle(${t.i})" class="w-3.5 h-3.5 accent-[#5E7350] shrink-0" title="완료 체크" />
@@ -4032,7 +4118,10 @@
             <button onclick="semShare()" class="text-[11px] border border-slate-300 hover:bg-slate-50 px-2 py-1 rounded-lg font-semibold mt-1">🔗 공유 링크</button>
           </div>
         </div>
-        <div id="semPresence" class="flex flex-wrap items-center gap-1.5 mt-3"></div>
+        <div class="flex flex-wrap items-center gap-2 mt-3">
+          <div id="semPresence" class="flex flex-wrap items-center gap-1.5"></div>
+          <div id="semEditingBar"></div>
+        </div>
         <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-[#ECE9E1]">
           ${[['semSecNow','⚡ 이번 주'],['semSecGant','📋 체크리스트/타임라인'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecOv','📄 제안서']]
             .map(x=>`<button onclick="semGo('${x[0]}')" class="text-[11px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">${x[1]}</button>`).join('')}
@@ -4107,11 +4196,7 @@
 
       <!-- 할 일 · 타임라인 통합 -->
       ${sec('semSecGant','📋','체크리스트 / 타임라인','',`
-        <div class="flex items-center justify-end mb-2">
-          <button onclick="semAddTask('기타')" class="text-[12px] font-bold bg-ink text-white hover:brightness-125 rounded-lg px-3 py-1.5">＋ 업무 추가</button>
-        </div>
-        <div id="semGantWrap">${semGanttHTML(groups)}</div>
-        <details class="mt-3 rounded-xl border border-[#E6E6E3] bg-[#FAFAF9]" ${V('helpOpen','')?'open':''}
+        <details class="mb-3 rounded-xl border border-[#E6E6E3] bg-[#FAFAF9]" ${V('helpOpen','')?'open':''}
                  ontoggle="semSave(semKey('helpOpen'),this.open?'1':'')">
           <summary class="cursor-pointer list-none px-3.5 py-2 text-[12px] font-extrabold text-slate-500 hover:text-ink select-none">💡 사용 방법 <span class="font-normal text-slate-400">· 펼치기</span></summary>
           <div class="px-3.5 pb-3 pt-1 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1.5">
@@ -4129,7 +4214,46 @@
               <span class="text-[11px] text-slate-400">${SEM_CATS.map(c=>`<span class="inline-flex items-center gap-1 mr-2"><span class="inline-block w-2 h-2 rounded-sm" style="background:${catColor(c)}"></span>${esc(c)}</span>`).join('')}</span>
             </div>
           </div>
-        </details>`)}
+        </details>
+
+        ${SEM_NEW?`<div class="rounded-xl border-2 border-ink bg-white p-4 mb-3">
+          <p class="text-[13px] font-extrabold text-ink mb-2.5">＋ 새 업무 추가 <span class="text-[11px] font-normal text-slate-400">내용을 채우고 아래 [반영하기]를 누르면 목록·간트에 함께 들어갑니다</span></p>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5">
+            <div class="md:col-span-2">
+              <label class="block text-[10px] font-extrabold text-slate-400 mb-0.5">업무명 <span class="text-ared">*</span></label>
+              <input id="semNewItem" data-nk="1" value="${esc(SEM_NEW.item)}" oninput="semNewSet('item',this.value)"
+                onkeydown="if(event.key==='Enter'){event.preventDefault();semNewApply();}"
+                placeholder="예: 초대장 발송 리스트 정리" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" /></div>
+            <div><label class="block text-[10px] font-extrabold text-slate-400 mb-0.5">구분</label>
+              <select data-nk="1" onchange="semNewSet('cat',this.value)" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2 py-1.5">
+                ${SEM_CATS.map(c=>`<option ${c===SEM_NEW.cat?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+            <div><label class="block text-[10px] font-extrabold text-slate-400 mb-0.5">담당</label>
+              <input data-nk="1" list="semOwnerList" value="${esc(SEM_NEW.owner)}" oninput="semNewSet('owner',this.value)"
+                placeholder="예: MKT" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" />
+              <datalist id="semOwnerList">${owners.map(o=>`<option value="${esc(o)}"></option>`).join('')}</datalist></div>
+            <div><label class="block text-[10px] font-extrabold text-slate-400 mb-0.5">시작일</label>
+              <input type="date" data-nk="1" value="${esc(SEM_NEW.start)}" oninput="semNewSet('start',this.value)" onchange="semNewSet('start',this.value)"
+                class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2 py-1.5" /></div>
+            <div><label class="block text-[10px] font-extrabold text-slate-400 mb-0.5">종료일</label>
+              <input type="date" data-nk="1" value="${esc(SEM_NEW.end)}" oninput="semNewSet('end',this.value)" onchange="semNewSet('end',this.value)"
+                class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2 py-1.5" /></div>
+            <div class="md:col-span-2"><label class="block text-[10px] font-extrabold text-slate-400 mb-0.5">일정 흐름 <span class="font-normal">(막대에 표시될 문구)</span></label>
+              <input data-nk="1" value="${esc(SEM_NEW.sched)}" oninput="semNewSet('sched',this.value)"
+                placeholder="예: 9/1 리스트 정리 → 9/7 발송" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" /></div>
+            <div class="md:col-span-4"><label class="block text-[10px] font-extrabold text-slate-400 mb-0.5">비고</label>
+              <input data-nk="1" value="${esc(SEM_NEW.action)}" oninput="semNewSet('action',this.value)"
+                placeholder="협의 필요 사항 등" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" /></div>
+          </div>
+          <div class="flex items-center gap-2 mt-3">
+            <span id="semNewLen" class="text-[11px] text-slate-500"></span>
+            <button onclick="semNewCancel()" class="ml-auto text-[12px] border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-3 py-1.5">취소</button>
+            <button onclick="semNewApply()" class="text-[12px] font-bold bg-ink text-white hover:brightness-125 rounded-lg px-4 py-1.5">＋ 반영하기</button>
+          </div></div>`
+        :`<div class="flex items-center justify-end mb-2">
+            <button onclick="semNewOpen('기타')" class="text-[12px] font-bold bg-ink text-white hover:brightness-125 rounded-lg px-3 py-1.5">＋ 업무 추가</button>
+          </div>`}
+
+        <div id="semGantWrap">${semGanttHTML(groups)}</div>`)}
 
       <!-- 담당자 -->
       ${S.owners?sec('semSecOwner','🙋','담당자별 R&R · AI 도우미','내 업무만 모아보기',`
@@ -4272,7 +4396,7 @@
       // 제안서 원문(접힘)을 헤로 바로 아래로 올린다
       const ovEl=document.getElementById('semSecOv'), heroEl=document.getElementById('semHero');
       if(ovEl&&heroEl&&heroEl.parentNode) heroEl.parentNode.insertBefore(ovEl, heroEl.nextSibling);
-      semPaintSave(); semCmtPaint();
+      semPaintSave(); semCmtPaint(); semPaintEditing();
       // 간트 가로 스크롤 위치 유지(없으면 오늘 근처로)
       const g2=document.getElementById('semGant');
       if(g2){ if(SEM_GSCROLL!=null) g2.scrollLeft=SEM_GSCROLL;
@@ -4782,7 +4906,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','insta','blog','prpitch','ad','seminar','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] hover:bg-[#7C5CFF]/10'); } });
+      ['weekly','medialist','calendar','insta','blog','prpitch','ad','seminar','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
