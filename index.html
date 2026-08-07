@@ -1252,17 +1252,29 @@
      </div>
      <div id="mktInner" class="hidden">
        <div class="bg-[#F4F1FF] border-b border-[#E1DBFF] -mt-5 mb-5">
-         <div class="max-w-[1400px] mx-auto px-1 flex gap-2 py-2 overflow-x-auto">
+         <div class="max-w-[1400px] mx-auto px-1 flex flex-wrap items-center gap-x-2 gap-y-1 py-2">
            <button id="mktBtn-weekly" onclick="mktSub('weekly')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">주간보고</button>
-           <button id="mktBtn-medialist" onclick="mktSub('medialist')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">미디어리스트</button>
            <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
-           <button id="mktBtn-insta" onclick="mktSub('insta')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
-           <button id="mktBtn-blog" onclick="mktSub('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
-           <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
-           <span class="w-px self-stretch my-1 bg-[#D9D0FF]"></span>
-           <button id="mktBtn-ad" onclick="mktSub('ad')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">파워링크/브랜드검색</button>
            <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">세미나</button>
-           <button id="mktBtn-report" onclick="mktSub('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">종합 리포트</button>
+
+           <span class="inline-flex items-center gap-1.5 pl-3 ml-1 border-l border-[#D9D0FF]">
+             <span class="text-[11px] font-extrabold text-[#7C5CFF]/70 tracking-wide whitespace-nowrap">언론홍보</span>
+             <button id="mktBtn-medialist" onclick="mktSub('medialist')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">미디어리스트</button>
+             <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
+           </span>
+
+           <span class="inline-flex items-center gap-1.5 pl-3 ml-1 border-l border-[#D9D0FF]">
+             <span class="text-[11px] font-extrabold text-[#7C5CFF]/70 tracking-wide whitespace-nowrap">온드미디어 관리</span>
+             <button id="mktBtn-insta" onclick="mktSub('insta')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
+             <button id="mktBtn-blog" onclick="mktSub('blog')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
+           </span>
+
+           <span class="inline-flex items-center gap-1.5 pl-3 ml-1 border-l border-[#D9D0FF]">
+             <span class="text-[11px] font-extrabold text-[#7C5CFF]/70 tracking-wide whitespace-nowrap">광고·리포트</span>
+             <button id="mktBtn-ad" onclick="mktSub('ad')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">파워링크/브랜드검색</button>
+             <button id="mktBtn-report" onclick="mktSub('report')" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">종합 리포트</button>
+           </span>
+
            <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
          </div>
        </div>
@@ -3388,7 +3400,8 @@
     let SEM_INFLIGHT=0, SEM_ERR=false;
     let SEM_CMT={}, semCmtOn=false, SEM_CMT_OPEN=null, SEM_GSCROLL=null;
     const SEM_F={cat:'',owner:'',hideDone:false,only:''};
-    const SEM_DW=26, SEM_LW=252;                 // 간트: 하루 폭 / 좌측 라벨 폭(px)
+    const SEM_DW=26, SEM_LW=440;                 // 통합 뷰: 하루 폭 / 좌측 표 폭(px)
+    const SEM_FOLD={};                           // 구분 그룹 접힘 상태
     const SEM_DOW=['일','월','화','수','목','금','토'];
 
     function semRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('seminar/data'):null; }
@@ -3417,6 +3430,8 @@
     // 간트만 다시 그리기 — 전체 재렌더 없이(편집 중 커서·스크롤 유지)
     function semPaintGantt(){
       const w=document.getElementById('semGantWrap'); if(!w||!SEMINAR) return;
+      const a=document.activeElement;                       // 입력 중이면 보류(커서 튐 방지) — blur 때 반영
+      if(a&&a.dataset&&(a.dataset.sk||a.id&&a.id.indexOf('semCmtIn')===0)) return;
       const g0=document.getElementById('semGant'); const sc=g0?g0.scrollLeft:SEM_GSCROLL;
       w.innerHTML=semGanttHTML(semGroups(semFiltered()));
       const g1=document.getElementById('semGant'); if(g1&&sc!=null){ g1.scrollLeft=sc; SEM_GSCROLL=sc; }
@@ -3530,6 +3545,7 @@
       if(t.end&&t.end<td) return {k:'late',lbl:'지연 +'+semDiff(t.end,td)+'일',c:'#BF5332'};
       if(t.start&&t.end&&t.start<=td&&t.end>=td) return {k:'now',lbl:'진행 중',c:'#8A6A00'};
       if(t.start&&t.start>td) return {k:'wait',lbl:'D-'+semDiff(td,t.start),c:'#9A9169'};
+      if(!t.start||!t.end) return {k:'nodate',lbl:'기간 미정',c:'#B9B2A1'};
       return {k:'',lbl:'',c:'#9A9169'};
     }
     function semWeek(){ const td=semToday(), mon=semMonday(td); return {mon:mon,sun:semAddDays(mon,6)}; }
@@ -3640,11 +3656,12 @@
     function semCmtN(i){ return semCmtList(i).length; }
     function semCmtToggle(i){
       SEM_CMT_OPEN=(SEM_CMT_OPEN===i?null:i);
-      const rows=document.querySelectorAll('tr[data-cmt]');
+      const rows=document.querySelectorAll('[data-cmt]');
       for(let k=0;k<rows.length;k++) rows[k].classList.toggle('hidden', String(SEM_CMT_OPEN)!==rows[k].getAttribute('data-cmt'));
-      semCmtPaint();
+      semPaintGantt();
       if(SEM_CMT_OPEN===i){ const ta=document.getElementById('semCmtIn'+i); if(ta) ta.focus(); }
     }
+    function semFold(cat){ SEM_FOLD[cat]=!SEM_FOLD[cat]; semPaintGantt(); }
     function semCmtAdd(i){
       const ta=document.getElementById('semCmtIn'+i); if(!ta) return;
       const v=(ta.value||'').trim(); if(!v) return;
@@ -3668,8 +3685,8 @@
       // 개수 배지 + 열려 있는 스레드만 다시 그린다(전체 재렌더 없이 → 입력 중 커서 유지)
       const badges=document.querySelectorAll('[data-cn]');
       for(let k=0;k<badges.length;k++){ const i=badges[k].getAttribute('data-cn'), n=semCmtN(i);
-        badges[k].innerHTML='💬'+(n?' <b class="num">'+n+'</b>':'');
-        badges[k].className='text-[11px] px-1.5 py-0.5 rounded border '+(n?'border-[#EDE9FF] bg-[#FBFAFF] text-[#5B44C7] font-semibold':'border-slate-200 text-slate-400 hover:text-ink'); }
+        badges[k].innerHTML='💬'+(n?' '+n:'');
+        badges[k].className='shrink-0 text-[10px] '+(n?'text-[#5B44C7] font-bold':'text-slate-300'); }
       if(SEM_CMT_OPEN==null) return;
       const box=document.getElementById('semCmtBox'+SEM_CMT_OPEN); if(!box) return;
       const list=semCmtList(SEM_CMT_OPEN);
@@ -3752,7 +3769,7 @@
           ${months.map(m=>`<div style="flex:0 0 ${m.n*SEM_DW}px;width:${m.n*SEM_DW}px;border-left:1px solid #E6E6E3" class="text-[11px] font-extrabold text-ink px-1.5 leading-6 bg-[#FAFAF9]">${m.label}</div>`).join('')}
         </div></div>`;
       h+=`<div class="flex" style="width:${SEM_LW+W}px">
-        ${leftCell('<div class="px-2 text-[11px] font-extrabold text-slate-500 leading-[22px]">날짜</div>','',22)}
+        ${leftCell('<div class="px-1.5 flex items-center gap-1 text-[10px] font-bold text-slate-400 leading-[22px]"><span class="w-[26px]"></span><span class="flex-1">업무</span><span class="w-[52px] text-right">담당</span><span class="w-[54px] text-center">상태</span><span class="w-[26px]"></span></div>','',22)}
         <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:22px;display:flex">
           ${weeks.map(w=>`<div style="flex:0 0 ${w.n*SEM_DW}px;width:${w.n*SEM_DW}px;border-left:1px solid #EFEDE7" class="text-[10px] num text-center leading-[22px] ${w.past?'text-slate-300':'text-slate-500'}">${w.label}</div>`).join('')}
         </div></div>`;
@@ -3763,10 +3780,16 @@
         </div></div>`;
       // 그룹 · 행
       groups.forEach(g=>{
-        const c=catColor(g.cat), dn=g.items.filter(t=>t.done).length;
-        h+=`<div class="flex" style="width:${SEM_LW+W}px">
-          ${leftCell(`<div class="px-2 leading-[26px] text-[11px] font-extrabold truncate" style="color:${c}">■ ${esc(g.cat)} <span class="num font-normal text-slate-400">${dn}/${g.items.length}</span></div>`,'',26)}
-          <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:26px;background:#FAFAF9;border-top:1px solid #F1EFE9">${marks}</div></div>`;
+        const c=catColor(g.cat), dn=g.items.filter(t=>t.done).length, fold=!!SEM_FOLD[g.cat];
+        h+=`<div class="flex" data-drop="1" ondragover="semGroupOver(event)" ondragleave="semRowOut(event)" ondrop="semGroupDrop(event,'${esc(g.cat)}')" style="width:${SEM_LW+W}px">
+          ${leftCell(`<div class="px-2 leading-[28px] text-[11px] font-extrabold truncate flex items-center gap-1.5" style="color:${c}">
+              <button onclick="semFold('${esc(g.cat)}')" class="text-slate-400 hover:text-ink w-3.5 text-left" title="${fold?'펼치기':'접기'}">${fold?'▸':'▾'}</button>
+              <span class="inline-block w-2 h-2 rounded-sm" style="background:${c}"></span>${esc(g.cat)}
+              <span class="num font-normal text-slate-400">${dn}/${g.items.length}</span>
+              <button onclick="semAddTask('${esc(g.cat)}')" class="ml-auto mr-1 text-[10px] font-normal text-slate-400 hover:text-ink border border-dashed border-slate-300 rounded px-1" title="이 구분에 업무 추가">＋</button>
+            </div>`,'',28)}
+          <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:28px;background:#FAFAF9;border-top:1px solid #F1EFE9">${marks}</div></div>`;
+        if(fold) return;
         g.items.forEach(t=>{
           const st=semState(t);
           const has=!!(t.start&&t.end);
@@ -3783,14 +3806,42 @@
                  style="position:absolute;left:${off*SEM_DW+1}px;top:9px;width:${bw}px;height:18px;background:${bg};border-radius:5px"
                  class="gbar text-[10px] leading-[18px] px-1.5 text-white truncate cursor-grab select-none">${inside?esc(lbl):''}</div>`
             +(inside?'':`<div style="position:absolute;left:${off*SEM_DW+bw+7}px;top:9px;white-space:nowrap;pointer-events:none" class="text-[10px] leading-[18px] text-slate-500">${esc(lbl.slice(0,34))}</div>`);
-          h+=`<div class="flex" style="width:${SEM_LW+W}px">
-            ${leftCell(`<div class="px-2 py-1 border-top">
-                <div class="text-[12px] leading-tight truncate ${t.done?'text-slate-400 line-through':'text-ink font-semibold'}" title="${esc(t.item)}">${esc(t.item)}</div>
-                <div class="text-[10px] leading-tight text-slate-400 truncate">
-                  <button onclick="semDate(${t.i},'start')" class="num underline hover:text-brand-ink" title="시작일 수정">${esc(semMD(t.start)||'--')}</button>~<button onclick="semDate(${t.i},'end')" class="num underline hover:text-brand-ink" title="종료일 수정">${esc(semMD(t.end)||'--')}</button>
-                  <span class="mx-1 text-slate-200">|</span><span class="text-slate-500">${esc(t.owner||'미정')}</span>
-                </div></div>`,'',36)}
+          const open=(SEM_CMT_OPEN===t.i), cn=semCmtN(t.i);
+          h+=`<div class="flex" data-row="${t.i}" draggable="false" ondragstart="semRowStart(event,${t.i})" ondragover="semRowOver(event)" ondragleave="semRowOut(event)" ondrop="semRowDrop(event,${t.i})" ondragend="semRowEnd(event)" style="width:${SEM_LW+W}px">
+            ${leftCell(`<div class="flex items-center gap-1 px-1.5 h-full ${t.done?'bg-[#F7FBF5]':''}">
+                <span class="cursor-grab select-none text-slate-300 hover:text-slate-500 text-[12px] leading-none" title="드래그해서 순서 이동" onmousedown="semDragOn(this)" onmouseup="semDragOff(this)">⠿</span>
+                <input type="checkbox" ${t.done?'checked':''} onchange="semToggle(${t.i})" class="w-3.5 h-3.5 accent-[#5E7350] shrink-0" title="완료 체크" />
+                <button onclick="semCmtToggle(${t.i})" class="flex-1 min-w-0 text-left" title="클릭하면 상세·댓글이 열립니다">
+                  <span class="block text-[12px] leading-tight truncate ${t.done?'text-slate-400 line-through':'text-ink font-semibold'}">${t.src.cl?'<span class="text-[9px] font-bold text-slate-400 border border-slate-200 rounded px-0.5 mr-1 align-middle">체크</span>':''}${esc(t.item)}</span>
+                  <span class="block text-[10px] leading-tight text-slate-400 truncate">${esc(semMD(t.start)||'--')}~${esc(semMD(t.end)||'--')}${t.sched?' · '+esc(t.sched):''}</span>
+                </button>
+                <span class="text-[10px] text-slate-500 w-[52px] shrink-0 truncate text-right">${esc(t.owner||'미정')}</span>
+                <span class="text-[9px] font-bold rounded px-1 py-0.5 shrink-0 w-[54px] text-center" style="background:${st.c}1A;color:${st.c}">${esc(st.lbl||'-')}</span>
+                <span class="shrink-0 text-[10px] ${cn?'text-[#5B44C7] font-bold':'text-slate-300'}" data-cn="${t.i}">💬${cn?' '+cn:''}</span>
+                <span class="shrink-0 text-[10px] text-slate-300 w-2.5 text-center">${open?'▾':'▸'}</span>
+              </div>`,'',36)}
             <div style="position:relative;flex:0 0 ${W}px;width:${W}px;height:36px;border-top:1px solid #F5F3EE;${trackBg}">${marks}${bar}</div></div>`;
+          // 펼침 — 상세 편집 + 댓글 (같은 행 아래로 열린다)
+          h+=`<div data-cmt="${t.i}" class="${open?'':'hidden'} flex" style="width:${SEM_LW+W}px">
+            <div style="position:sticky;left:0;z-index:3;flex:0 0 ${SEM_LW}px;width:${SEM_LW}px;background:#FBFAFF;border-right:1px solid #E6E6E3;box-shadow:2px 0 4px -3px rgba(0,0,0,.25)" class="p-2.5">
+              <div class="text-[11px] text-slate-500 mb-1">항목 ${se('task.'+t.i+'.item',t.src.item||'')}</div>
+              <div class="text-[11px] text-slate-500 mb-1">담당 ${se('task.'+t.i+'.owner',t.src.owner||'미정')} · 구분 ${catSel(t.i,t.cat)}</div>
+              <div class="text-[11px] text-slate-500 mb-1">기간 <button onclick="semDate(${t.i},'start')" class="num underline hover:text-brand-ink">${esc(semMD(t.start)||'--')}</button> ~ <button onclick="semDate(${t.i},'end')" class="num underline hover:text-brand-ink">${esc(semMD(t.end)||'--')}</button></div>
+              <div class="text-[11px] text-slate-500 mb-1">일정 흐름 ${se('task.'+t.i+'.sched',t.src.sched||'')}</div>
+              <div class="text-[11px] text-slate-500 mb-1">비고 ${se('task.'+t.i+'.action',t.src.action||'')}</div>
+              <div class="text-[11px] text-slate-500">형식 ${se('task.'+t.i+'.form',t.src.form||'')}
+                <button onclick="semDelTask(${t.i})" class="float-right text-[11px] text-slate-300 hover:text-ared" title="이 업무 삭제">✕ 삭제</button></div>
+            </div>
+            <div style="flex:0 0 ${W}px;width:${W}px;background:#FBFAFF;border-top:1px solid #EDE9FF" class="p-2.5">
+              <p class="text-[11px] font-bold text-[#5B44C7] mb-1">💬 ${esc(t.item)} — 업무 댓글</p>
+              <div id="semCmtBox${t.i}" class="mb-2 max-w-[720px]"></div>
+              <div class="flex gap-2 max-w-[720px]">
+                <textarea id="semCmtIn${t.i}" rows="2" placeholder="진행 상황·결정사항·요청 사항 (Ctrl+Enter 등록)"
+                  onkeydown="if(event.key==='Enter'&&(event.ctrlKey||event.metaKey)){event.preventDefault();semCmtAdd(${t.i});}"
+                  class="flex-1 text-[12px] border border-[#E6E6E3] rounded-lg px-2.5 py-1.5"></textarea>
+                <button onclick="semCmtAdd(${t.i})" class="text-[12px] font-semibold bg-[#7C5CFF] text-white px-3 rounded-lg">등록</button>
+              </div>
+            </div></div>`;
         });
       });
       return `<div id="semGant" class="overflow-x-auto rounded-xl border border-[#E6E6E3]" style="overscroll-behavior-x:contain"><div style="width:${SEM_LW+W}px">${h}</div></div>`;
@@ -3909,7 +3960,7 @@
         </div>
         <div id="semPresence" class="flex flex-wrap items-center gap-1.5 mt-3"></div>
         <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-[#ECE9E1]">
-          ${[['semSecNow','⚡ 이번 주'],['semSecTl','📋 할 일 목록'],['semSecGant','📊 간트'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecOv','📄 제안서']]
+          ${[['semSecNow','⚡ 이번 주'],['semSecGant','📋 할 일·타임라인'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecOv','📄 제안서']]
             .map(x=>`<button onclick="semGo('${x[0]}')" class="text-[11px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">${x[1]}</button>`).join('')}
         </div>
       </div>
@@ -3919,7 +3970,7 @@
         ${tile('준비 진행', doneN+'<span class="text-[13px] text-slate-400">/'+all.length+'</span>', pct+'% 완료', '#26282A', false, '')}
         ${tile('이번 주 마감', week.length+'건', semMD(wk.mon)+' ~ '+semMD(wk.sun), '#8A6A00', SEM_F.only==='week', 'semOnly(\'week\')')}
         ${tile('지연', late.length+'건', late.length?'마감일 지남 · 클릭해 보기':'없음 👍', late.length?'#BF5332':'#5E7350', SEM_F.only==='late', 'semOnly(\'late\')')}
-        ${tile('기간 미정', nodate.length+'건', nodate.length?'시작·종료일 입력 필요':'모두 일정 있음 👍', nodate.length?'#8A6A00':'#5E7350', false, 'semGo(\'semSecTl\')')}
+        ${tile('기간 미정', nodate.length+'건', nodate.length?'시작·종료일 입력 필요':'모두 일정 있음 👍', nodate.length?'#8A6A00':'#5E7350', false, 'semGo(\'semSecGant\')')}
         ${tile('예산 합계', Math.round(budTotal/10000).toLocaleString()+'<span class="text-[13px] text-slate-400">만원</span>', budget.length+'개 항목', '#26282A', false, 'semGo(\'semSecBud\')')}
       </div>
 
@@ -3980,27 +4031,13 @@
         <span class="text-[11px] text-slate-400 ml-auto">${semFiltered().length} / ${all.length}건 표시</span>
       </div>
 
-      <!-- 할 일 목록(준비 업무 + 체크리스트 통합) -->
-      ${sec('semSecTl','📋','할 일 목록','준비 업무 · 체크리스트를 하나로 · 구분별 그룹'+(S.note?' · '+esc(S.note):''),`
-        ${groups.length?groups.map(g=>`
-          <div class="mb-4">
-            <div data-drop="1" ondragover="semGroupOver(event)" ondragleave="semRowOut(event)" ondrop="semGroupDrop(event,'${esc(g.cat)}')"
-                 class="flex items-center gap-2 mb-1.5 rounded px-1 py-0.5">
-              <span class="inline-block w-2.5 h-2.5 rounded-sm" style="background:${catColor(g.cat)}"></span>
-              <span class="text-[13px] font-extrabold text-ink">${esc(g.cat)}</span>
-              <span class="text-[11px] num text-slate-400">${g.items.filter(t=>t.done).length}/${g.items.length} 완료</span>
-              <button onclick="semAddTask('${esc(g.cat)}')" class="text-[11px] text-slate-400 hover:text-ink border border-dashed border-slate-300 rounded px-1.5">+ 업무</button>
-            </div>
-            ${tbl(['','','항목','담당','기간','일정 흐름','비고','도구'],g.items.map(taskRow).join(''))}
-          </div>`).join(''):'<p class="text-[13px] text-slate-400 py-6 text-center">조건에 맞는 업무가 없습니다.</p>'}
-        <div class="flex items-center justify-between mt-1">
-          <p class="text-[11px] text-slate-400">체크·담당·일정·댓글은 접속한 모두에게 실시간 공유됩니다. 밑줄 항목은 클릭해 바로 수정.</p>
-          <button onclick="semAddTask('기타')" class="text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 업무 추가</button>
-        </div>`)}
-
-      <!-- 간트 -->
-      ${sec('semSecGant','📊','간트 차트','위 할 일 목록을 수정하면 자동 반영됩니다 · 하루 단위 · 막대를 끌어 일정 이동',`
+      <!-- 할 일 · 타임라인 통합 -->
+      ${sec('semSecGant','📋','할 일 · 타임라인','왼쪽 표와 오른쪽 간트가 한 몸 · 체크·수정하면 막대에 바로 반영 · 항목을 누르면 상세·댓글이 열립니다',`
         <div id="semGantWrap">${semGanttHTML(groups)}</div>
+        <div class="flex items-center justify-between mt-2">
+          <p class="text-[11px] text-slate-400">⠿ 를 끌어 순서 이동(다른 구분에 놓으면 구분도 변경) · 막대를 끌면 일정이 하루 단위로 이동합니다.</p>
+          <button onclick="semAddTask('기타')" class="text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 업무 추가</button>
+        </div>
         <div class="flex flex-wrap items-center gap-3 mt-2">
           <span class="text-[11px] text-slate-400">회색 영역 = 지난 날짜 · <span style="color:#BF5332">빨간 선</span> 오늘 · <span style="color:#8A6A00">노란 선</span> 행사일(${esc(semMD(S.date))})</span>
           <span class="text-[11px] text-slate-400 ml-auto">${SEM_CATS.map(c=>`<span class="inline-flex items-center gap-1 mr-2"><span class="inline-block w-2 h-2 rounded-sm" style="background:${catColor(c)}"></span>${esc(c)}</span>`).join('')}</span>
