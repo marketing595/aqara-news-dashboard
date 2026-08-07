@@ -3854,7 +3854,7 @@
     function semCmtAdd(i){
       const ta=document.getElementById('semCmtIn'+i); if(!ta) return;
       const v=(ta.value||'').trim(); if(!v) return;
-      const c={n:(typeof wkDeviceName==='function'?wkDeviceName():'익명'), t:v, at:Date.now()};
+      const c={n:(typeof wkDeviceName==='function'?wkDeviceName():'익명'), t:v, at:Date.now(), m:semMentionsIn(v)};
       const r=semCmtRef();
       if(r) semTrack(r.child(String(i)).push(c));
       else { SEM_CMT[i]=SEM_CMT[i]||{}; SEM_CMT[i]['l'+Date.now()]=c;
@@ -3867,6 +3867,67 @@
       if(r) semTrack(r.child(String(i)).child(k).remove());
       else { if(SEM_CMT[i]) delete SEM_CMT[i][k]; try{ localStorage.setItem('aqaraSeminarCmt',JSON.stringify(SEM_CMT)); }catch(e){} }
       semCmtPaint();
+    }
+    /* --- 댓글 @멘션 --- */
+    let SEM_MEN=null;                                  // {i, list, idx}
+    function semMentionNames(){
+      const out=[];
+      (((SEMINAR||{}).owners)||[]).forEach(o=>{ if(o.name&&out.indexOf(o.name)<0) out.push(o.name); });
+      (((SEMINAR||{}).tasks)||[]).forEach(t=>{ const n=(t.owner||'').trim();
+        if(n&&n.length<=12&&out.indexOf(n)<0) out.push(n); });
+      Object.keys(SEM_CMT||{}).forEach(i=>{ const o=SEM_CMT[i]||{};
+        Object.keys(o).forEach(k=>{ const n=o[k]&&o[k].n; if(n&&out.indexOf(n)<0) out.push(n); }); });
+      return out.sort((a,b)=>b.length-a.length);        // 긴 이름 먼저(부분 일치 오작동 방지)
+    }
+    function semCmtType(el,i){
+      const pos=el.selectionStart||0, m=/(^|\s)@([^\s@]{0,20})$/.exec(el.value.slice(0,pos));
+      if(!m){ semMentionHide(i); return; }
+      const q=m[2].toLowerCase();
+      const list=semMentionNames().filter(n=>!q||n.toLowerCase().indexOf(q)>=0);
+      if(!list.length){ semMentionHide(i); return; }
+      SEM_MEN={i:i,list:list,idx:0,len:m[2].length};
+      semMentionPaint();
+    }
+    function semMentionPaint(){
+      if(!SEM_MEN) return;
+      const box=document.getElementById('semMenu'+SEM_MEN.i); if(!box) return;
+      box.classList.remove('hidden');
+      box.innerHTML=SEM_MEN.list.map((n,k)=>`<button onmousedown="event.preventDefault();semMentionPick(${SEM_MEN.i},${k})"
+        class="block w-full text-left text-[12px] px-2.5 py-1.5 ${k===SEM_MEN.idx?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'hover:bg-slate-50 text-slate-600'}">@${esc(n)}</button>`).join('');
+    }
+    function semMentionMove(d){ if(!SEM_MEN) return;
+      SEM_MEN.idx=(SEM_MEN.idx+d+SEM_MEN.list.length)%SEM_MEN.list.length; semMentionPaint(); }
+    function semMentionHide(i){ const box=document.getElementById('semMenu'+i); if(box){ box.classList.add('hidden'); box.innerHTML=''; } SEM_MEN=null; }
+    function semMentionPick(i,k){
+      if(!SEM_MEN) return;
+      const name=SEM_MEN.list[(k==null?SEM_MEN.idx:k)], len=SEM_MEN.len;
+      const ta=document.getElementById('semCmtIn'+i); if(!ta) return;
+      const pos=ta.selectionStart||0;
+      const before=ta.value.slice(0,pos-len), after=ta.value.slice(pos);
+      ta.value=before+name+' '+after;
+      const np=(before+name+' ').length;
+      semMentionHide(i);
+      ta.focus(); try{ ta.setSelectionRange(np,np); }catch(e){}
+    }
+    function semCmtKey(ev,i){
+      if(SEM_MEN&&SEM_MEN.i===i){
+        if(ev.key==='ArrowDown'){ ev.preventDefault(); semMentionMove(1); return; }
+        if(ev.key==='ArrowUp'){ ev.preventDefault(); semMentionMove(-1); return; }
+        if(ev.key==='Enter'||ev.key==='Tab'){ ev.preventDefault(); semMentionPick(i); return; }
+        if(ev.key==='Escape'){ ev.preventDefault(); semMentionHide(i); return; }
+      }
+      if(ev.key==='Enter'&&(ev.ctrlKey||ev.metaKey)){ ev.preventDefault(); semCmtAdd(i); }
+    }
+    function semMentionsIn(txt){
+      const names=semMentionNames(), out=[];
+      names.forEach(n=>{ if((txt||'').indexOf('@'+n)>=0&&out.indexOf(n)<0) out.push(n); });
+      return out;
+    }
+    function semCmtBody(txt){                          // @이름을 배지로
+      let h=esc(txt||'');
+      semMentionNames().forEach(n=>{ const e='@'+esc(n);
+        h=h.split(e).join('<b class="text-[#5B44C7] bg-[#EDE9FF] rounded px-1 font-semibold">'+e+'</b>'); });
+      return h;
     }
     function semCmtWhen(ts){ if(!ts) return '';
       const d=new Date(ts); return (d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+semP(d.getMinutes()); }
@@ -3881,7 +3942,7 @@
       const list=semCmtList(SEM_CMT_OPEN);
       box.innerHTML=(list.length?list.map(c=>`<div class="flex items-start gap-2 py-1.5 border-b border-[#F1EFE9] last:border-0">
             <span class="text-[11px] font-bold text-ink shrink-0">${esc(c.n||'익명')}</span>
-            <span class="flex-1 text-[12px] text-slate-700 whitespace-pre-wrap">${esc(c.t||'')}</span>
+            <span class="flex-1 text-[12px] text-slate-700 whitespace-pre-wrap">${semCmtBody(c.t||'')}</span>
             <span class="text-[10px] num text-slate-400 shrink-0">${semCmtWhen(c.at)}</span>
             <button onclick="semCmtDel(${SEM_CMT_OPEN},'${c.k}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="삭제">✕</button>
           </div>`).join('')
@@ -4032,12 +4093,16 @@
             <div style="flex:0 0 ${W}px;width:${W}px;background:#FBFAFF;border-top:1px solid #EDE9FF" class="p-2.5">
               <p class="text-[11px] font-bold text-[#5B44C7] mb-1">💬 ${esc(t.item)} — 업무 댓글</p>
               <div id="semCmtBox${t.i}" class="mb-2 max-w-[720px]"></div>
-              <div class="flex gap-2 max-w-[720px]">
-                <textarea id="semCmtIn${t.i}" rows="2" placeholder="진행 상황·결정사항·요청 사항 (Ctrl+Enter 등록)"
-                  onkeydown="if(event.key==='Enter'&&(event.ctrlKey||event.metaKey)){event.preventDefault();semCmtAdd(${t.i});}"
-                  class="flex-1 text-[12px] border border-[#E6E6E3] rounded-lg px-2.5 py-1.5"></textarea>
-                <button onclick="semCmtAdd(${t.i})" class="text-[12px] font-semibold bg-[#7C5CFF] text-white px-3 rounded-lg">등록</button>
+              <div class="flex gap-2 max-w-[720px] items-start">
+                <div class="relative flex-1">
+                  <textarea id="semCmtIn${t.i}" rows="2" placeholder="진행 상황·결정사항·요청 사항 · @로 담당자 언급 (Ctrl+Enter 등록)"
+                    oninput="semCmtType(this,${t.i})" onkeydown="semCmtKey(event,${t.i})" onblur="setTimeout(function(){semMentionHide(${t.i});},150)"
+                    class="w-full text-[12px] border border-[#E6E6E3] rounded-lg px-2.5 py-1.5"></textarea>
+                  <div id="semMenu${t.i}" class="hidden absolute left-2 top-full mt-0.5 z-[70] w-44 max-h-40 overflow-auto bg-white border border-[#E6E6E3] rounded-lg shadow-lg py-1"></div>
+                </div>
+                <button onclick="semCmtAdd(${t.i})" class="text-[12px] font-semibold bg-[#7C5CFF] text-white px-3 py-1.5 rounded-lg shrink-0">등록</button>
               </div>
+              <p class="text-[11px] text-slate-400 mt-1">@를 입력하면 담당자 목록이 뜹니다 · ↑↓ 로 고르고 Enter</p>
             </div></div>`;
         });
       });
