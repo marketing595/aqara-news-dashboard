@@ -3417,6 +3417,16 @@
         +'\n※ 대시보드 로그인(@aqara.kr) 후 ONLY MKT > 세미나 탭에서 함께 편집하실 수 있습니다.';
       bdCopy(txt);
     }
+    // 준비 업무 구분 — 드롭다운 선택 + 구분별 색상
+    const SEM_CATS=['정산','발표','초대','진행·제작','홍보','기타'];
+    const SEM_CATC={'정산':'#D68134','발표':'#8FB9D8','초대':'#FBC400','진행·제작':'#5E7350','홍보':'#BF5332','기타':'#9A9169'};
+    function catColor(c){ return SEM_CATC[c]||'#9A9169'; }
+    function catSel(i,cur){
+      const c=catColor(cur);
+      return `<select onchange="semSave(semKey('task.${i}.cat'),this.value);renderSeminar()"
+        class="text-[11px] font-bold rounded px-1.5 py-1 border-0 cursor-pointer"
+        style="background:${c}26;color:${c}">${SEM_CATS.map(x=>`<option ${x===cur?'selected':''}>${esc(x)}</option>`).join('')}</select>`;
+    }
     function semOvToggle(el){ try{ localStorage.setItem('aqaraSemOv', el.open?'1':''); }catch(e){} }
     // 간트 막대 드래그 — 좌우로 끌어 주(week) 단위로 일정 이동
     let semDrag=null;
@@ -3582,7 +3592,7 @@
       ${S.tasks?sec('10','준비 타임라인',(S.note?esc(S.note):''),`
         ${tbl(['','구분','항목','담당','기간','일정 흐름','비고'],S.tasks.map((t,i)=>`<tr class="border-t border-slate-100 ${semChecked(i)?'bg-[#F7FBF5]':''}">
           <td class="px-2 py-2"><input type="checkbox" ${semChecked(i)?'checked':''} onchange="semToggle(${i})" class="accent-[#5E7350]" /></td>
-          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${se('task.'+i+'.cat',t.cat)}</span></td>
+          <td class="px-2.5 py-2 whitespace-nowrap">${catSel(i,V('task.'+i+'.cat',t.cat))}</td>
           <td class="px-2.5 py-2 font-semibold ${semChecked(i)?'text-slate-400 line-through':'text-ink'}">${se('task.'+i+'.item',t.item)}${t.form?`<span class="block text-[11px] font-normal text-slate-400">${se('task.'+i+'.form',t.form)}</span>`:''}</td>
           <td class="px-2.5 py-2 whitespace-nowrap text-ink font-semibold">${se('task.'+i+'.owner',t.owner||'미정')}</td>
           <td class="px-2.5 py-2 num whitespace-nowrap text-slate-500"><button onclick="semDate(${i},'start')" class="hover:text-brand-ink underline">${esc(V('task.'+i+'.start',t.start).slice(5))}</button> ~ <button onclick="semDate(${i},'end')" class="hover:text-brand-ink underline">${esc(V('task.'+i+'.end',t.end).slice(5))}</button></td>
@@ -3604,7 +3614,8 @@
                   + (s>0?`<div class="border-t border-l border-[#F1EFE9]" style="grid-column:span ${s}"></div>`:'')
                   + `<div class="border-t border-l border-[#F1EFE9] py-1 px-0.5" style="grid-column:span ${Math.max(1,e-s+1)}">
                        <div onmousedown="semBarDown(event,${i})" title="드래그해서 일정 이동 · ${esc(V('task.'+i+'.sched',t.sched||''))}"
-                         class="gbar h-4 rounded ${done?'bg-agreen/60':'bg-brand'} text-[9px] leading-4 px-1 text-ink truncate cursor-grab select-none">${esc((V('task.'+i+'.sched',t.sched||'')||t.item).slice(0,40))}</div></div>`
+                         style="background:${done?'#5E735099':catColor(V('task.'+i+'.cat',t.cat))}"
+                       class="gbar h-4 rounded text-[9px] leading-4 px-1 text-white truncate cursor-grab select-none">${esc((V('task.'+i+'.sched',t.sched||'')||t.item).slice(0,40))}</div></div>`
                   + (e<GW.length-1?`<div class="border-t border-l border-[#F1EFE9]" style="grid-column:span ${GW.length-1-e}"></div>`:''); }).join('')}
             </div>
           </div>
