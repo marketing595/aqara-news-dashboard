@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-09 18:04",
+ "generatedAt": "2026-08-10 18:50",
  "brands": [
   {
    "name": "아카라",
@@ -127,9 +127,9 @@
     "아카라 스위치",
     "아카라 홈캠",
     "아카라치",
-    "아카라 l100",
     "아카라카",
-    "명조 아카라이브"
+    "아카라카초",
+    "아카라 l100"
    ],
    "recent": [
     {
@@ -352,7 +352,7 @@
     "헤이홈 공유",
     "헤이홈 오프라인",
     "헤이홈 카메라",
-    "헤이홈 프로"
+    "헤이홈 허브"
    ],
    "recent": [
     {
@@ -451,10 +451,10 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67408,
+   "total": 67410,
    "sentiment": {
-    "pos": 8,
-    "neu": 49,
+    "pos": 10,
+    "neu": 47,
     "neg": 3
    },
    "keywords": [
@@ -464,35 +464,35 @@
     ],
     [
      "AI",
-     39
+     40
     ],
     [
      "실외기",
-     39
+     38
     ],
     [
      "모터",
-     36
-    ],
-    [
-     "센서",
-     36
-    ],
-    [
-     "진단",
      35
     ],
     [
-     "상태",
+     "센서",
+     35
+    ],
+    [
+     "진단",
      34
     ],
     [
+     "상태",
+     33
+    ],
+    [
      "인공지능",
-     30
+     29
     ],
     [
      "AI가",
-     28
+     27
     ],
     [
      "여부",
@@ -537,11 +537,15 @@
      4
     ],
     [
+     "글로벌",
+     2
+    ],
+    [
      "강화",
      2
     ],
     [
-     "글로벌",
+     "협업",
      1
     ],
     [
@@ -566,14 +570,26 @@
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스",
-    "삼성 스마트싱스 연결",
     "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스 연결",
     "삼성 스마트싱스 오류",
-    "삼성 스마트싱스 연결 안됨",
     "아이폰 삼성 스마트싱스",
-    "삼성 스마트싱스 세탁기"
+    "삼성 스마트싱스 세탁기",
+    "삼성 스마트싱스 연결 안됨"
    ],
    "recent": [
+    {
+     "title": "자동차·전자 제품 생산을 넘어 '활용성 검증'으로 사업 확장",
+     "source": "metroseoul.co.kr",
+     "date": "2026-08-10",
+     "link": "http://www.metroseoul.co.kr/article/20260810500416"
+    },
+    {
+     "title": "‘유럽 검증’ 히트펌프 기술력, 제주 집결⋯ 삼성·LG, ‘난방 전기화...",
+     "source": "viva100.com",
+     "date": "2026-08-10",
+     "link": "https://www.viva100.com/article/20260809500300"
+    },
     {
      "title": "에어컨 냄새·전기료 줄이려면?…폭염 속 꼭 알아야 할 관리법 4가지",
      "source": "디지털타임스",
@@ -651,18 +667,6 @@
      "source": "view.asiae.co.kr",
      "date": "2026-08-06",
      "link": "https://n.news.naver.com/mnews/article/277/0005799454?sid=105"
-    },
-    {
-     "title": "\"0.5평 늘려드려요\" 이렇게 1.5억 이득?...요즘 가전은 '빌트인' 전쟁",
-     "source": "머니투데이",
-     "date": "2026-08-06",
-     "link": "https://n.news.naver.com/mnews/article/008/0005396265?sid=101"
-    },
-    {
-     "title": "삼성전자서비스, 폭염 속 에어컨 관리법 '청·정·확·인' 제안",
-     "source": "worktoday.co.kr",
-     "date": "2026-08-05",
-     "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=87592"
     }
    ]
   },
@@ -670,98 +674,98 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77015,
+   "total": 77024,
    "sentiment": {
-    "pos": 43,
-    "neu": 16,
+    "pos": 41,
+    "neu": 18,
     "neg": 1
    },
    "keywords": [
     [
      "히트펌프",
-     68
+     65
     ],
     [
      "LG전자",
-     60
+     59
     ],
     [
      "원격",
-     40
+     41
     ],
     [
      "R32",
-     39
+     40
     ],
     [
      "낮은",
-     38
+     39
     ],
     [
      "냉매를",
-     37
-    ],
-    [
-     "제주",
-     34
-    ],
-    [
-     "LG전자는",
-     32
-    ],
-    [
-     "지구온난화지수",
-     32
+     38
     ],
     [
      "GWP",
      32
     ],
     [
+     "지구온난화지수",
+     31
+    ],
+    [
      "앱을",
-     32
+     31
     ],
     [
      "제어",
      30
     ],
     [
-     "사업을",
-     27
+     "LG전자는",
+     30
     ],
     [
-     "난방",
-     26
+     "제주",
+     30
     ],
     [
      "ThinQ",
+     28
+    ],
+    [
+     "난방",
      25
     ],
     [
      "글로벌",
-     25
+     23
     ],
     [
      "전기화",
-     24
+     23
     ],
     [
-     "시장에서",
-     21
+     "적용해",
+     19
+    ],
+    [
+     "환경",
+     19
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     25
-    ],
-    [
-     "1위",
-     14
+     23
     ],
     [
      "강화",
-     11
+     14
+    ],
+    [
+     "1위",
+     12
     ],
     [
      "확대",
@@ -773,7 +777,7 @@
     ],
     [
      "선도",
-     4
+     3
     ],
     [
      "혁신",
@@ -789,14 +793,68 @@
     "lg 씽큐",
     "lg 씽큐 연결 안됨",
     "lg 씽큐 공유",
-    "lg 씽큐 에어컨 등록",
     "lg 씽큐앱",
-    "lg 씽큐 연결",
+    "lg 씽큐 에어컨 등록",
     "lg 씽큐 세탁기",
+    "lg 씽큐 연결",
     "lg 씽큐 허브",
     "lg 씽큐 냉장고"
    ],
    "recent": [
+    {
+     "title": "LG전자 다양한 히트펌프로 글로벌 공략, 유럽·국내·산업용 시장 동시...",
+     "source": "businesspost.co.kr",
+     "date": "2026-08-10",
+     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=444386"
+    },
+    {
+     "title": "'범LG' LG·GS·LS, 석유화학·AI·배터리 사업서 '동맹' 드라이브 건다",
+     "source": "insightkorea.co.kr",
+     "date": "2026-08-10",
+     "link": "https://www.insightkorea.co.kr/news/articleView.html?idxno=252070"
+    },
+    {
+     "title": "LG전자, 히트 펌프 풀 라인업 구축… “‘가정용부터 산업용까지’, 글...",
+     "source": "ceoscoredaily.com",
+     "date": "2026-08-10",
+     "link": "https://www.ceoscoredaily.com/page/view/2026081011144864679"
+    },
+    {
+     "title": "LG전자, 집안부터 산업시설까지 히트펌프 ‘풀 라인업’ 강화",
+     "source": "newstomato.com",
+     "date": "2026-08-10",
+     "link": "http://www.newstomato.com/ReadNews.aspx?no=1309636&inflow=N"
+    },
+    {
+     "title": "\"집·상가·공장 다 잡는다\"…LG전자, 히트펌프 풀라인업 구축",
+     "source": "ebn.co.kr",
+     "date": "2026-08-10",
+     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1719715"
+    },
+    {
+     "title": "LG전자, 주거부터 산업까지 히트펌프 풀라인업 … 글로벌 시장 공략 확...",
+     "source": "biz.newdaily.co.kr",
+     "date": "2026-08-10",
+     "link": "https://biz.newdaily.co.kr/site/data/html/2026/08/10/2026081000029.html"
+    },
+    {
+     "title": "LG전자, 유럽 넘어 국내·산업현장까지…히트펌프 영토 넓힌다",
+     "source": "news1.kr",
+     "date": "2026-08-10",
+     "link": "https://n.news.naver.com/mnews/article/421/0009104966?sid=101"
+    },
+    {
+     "title": "LG전자, 히트펌프 영토 넓힌다…가정용부터 118℃ 산업용까지",
+     "source": "newspim.com",
+     "date": "2026-08-10",
+     "link": "https://www.newspim.com/news/view/20260807001063"
+    },
+    {
+     "title": "‘유럽 검증’ 히트펌프 기술력, 제주 집결⋯ 삼성·LG, ‘난방 전기화...",
+     "source": "viva100.com",
+     "date": "2026-08-10",
+     "link": "https://www.viva100.com/article/20260809500300"
+    },
     {
      "title": "'AI 가전 오케스트라' 진화…LG전자, IFA 2026서 AI홈 영토 넓힌다",
      "source": "asiatime.co.kr",
@@ -832,60 +890,6 @@
      "source": "huffingtonpost.kr",
      "date": "2026-08-05",
      "link": "https://www.huffingtonpost.kr/article/259299"
-    },
-    {
-     "title": "“제습기 하나 들였을 뿐인데, 집안 공기가 달라졌어” [체험기]",
-     "source": "매일경제",
-     "date": "2026-08-05",
-     "link": "https://n.news.naver.com/mnews/article/009/0005716950?sid=101"
-    },
-    {
-     "title": "LG전자, 청소봇 AI 로니' 체험존 운영…\"집안 어디에나 잘 어울려\"",
-     "source": "news1.kr",
-     "date": "2026-08-05",
-     "link": "https://n.news.naver.com/mnews/article/421/0009097724?sid=101"
-    },
-    {
-     "title": "LG전자, AI홈 SoC 풀 라인업 국산화…프리미엄부터 엔트리까지",
-     "source": "전자신문",
-     "date": "2026-08-04",
-     "link": "https://n.news.naver.com/mnews/article/030/0003454155?sid=105"
-    },
-    {
-     "title": "삼성전자·LG전자가 만든 스마트 주거 플랫폼 '모듈러 주택'",
-     "source": "woman.chosun.com",
-     "date": "2026-08-04",
-     "link": "http://woman.chosun.com/news/articleView.html?idxno=126363"
-    },
-    {
-     "title": "LG전자, 냉난방공조 라인업 확대…중동·유럽 공략 가속도",
-     "source": "디지털타임스",
-     "date": "2026-08-04",
-     "link": "https://n.news.naver.com/mnews/article/029/0003040484?sid=101"
-    },
-    {
-     "title": "빌트인 가전의 반전, ‘AI홈’ 전쟁 시작됐다",
-     "source": "seoul.co.kr",
-     "date": "2026-08-04",
-     "link": "https://n.news.naver.com/mnews/article/081/0003667243?sid=101"
-    },
-    {
-     "title": "LG전자, 제주도 450가구에 히트펌프 설치 시작",
-     "source": "e2news.com",
-     "date": "2026-08-04",
-     "link": "http://www.e2news.com/news/articleView.html?idxno=332935"
-    },
-    {
-     "title": "'국내 히트펌프 시장 선도'…LG전자, 제주 공식 1호 현판식 개최",
-     "source": "ppss.kr",
-     "date": "2026-08-03",
-     "link": "https://www.ppss.kr/news/articleView.html?idxno=303972"
-    },
-    {
-     "title": "LG전자, 제주 히트펌프 450가구 설치 맡는다",
-     "source": "cnet.co.kr",
-     "date": "2026-08-03",
-     "link": "https://www.cnet.co.kr/view/?no=20260803134721"
     }
    ]
   },
@@ -893,90 +897,90 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75406,
+   "total": 75415,
    "sentiment": {
-    "pos": 17,
-    "neu": 32,
+    "pos": 15,
+    "neu": 34,
     "neg": 11
    },
    "keywords": [
     [
      "AI",
-     37
+     35
     ],
     [
      "위버스",
      35
     ],
     [
-     "제미나이",
-     17
+     "구글의",
+     16
     ],
     [
-     "구글의",
-     15
+     "제미나이",
+     14
     ],
     [
      "검색",
-     12
-    ],
-    [
-     "번역한",
-     11
-    ],
-    [
-     "기사의",
      11
     ],
     [
      "전문",
-     11
-    ],
-    [
-     "입니다",
-     11
-    ],
-    [
-     "Gemini",
-     10
-    ],
-    [
-     "아래는",
-     10
-    ],
-    [
-     "기사를",
-     10
-    ],
-    [
-     "번역",
-     10
+     9
     ],
     [
      "으로",
-     10
+     8
     ],
     [
-     "구글번역",
-     10
+     "번역한",
+     8
     ],
     [
-     "스파이더맨",
-     9
+     "기사의",
+     8
+    ],
+    [
+     "입니다",
+     8
+    ],
+    [
+     "Gemini",
+     8
     ],
     [
      "스피커",
      8
     ],
     [
-     "번역에",
+     "모델",
      8
+    ],
+    [
+     "버튼을",
+     8
+    ],
+    [
+     "아래는",
+     7
+    ],
+    [
+     "기사를",
+     7
+    ],
+    [
+     "번역",
+     7
+    ],
+    [
+     "구글번역",
+     7
     ]
    ],
    "posWords": [
     [
      "투자",
-     3
+     4
     ],
     [
      "강화",
@@ -987,44 +991,98 @@
      3
     ],
     [
-     "주목",
-     2
-    ],
-    [
      "프리미엄",
-     2
-    ],
-    [
-     "돌파",
-     2
-    ],
-    [
-     "1위",
      2
     ],
     [
      "확대",
      2
+    ],
+    [
+     "돌파",
+     1
+    ],
+    [
+     "1위",
+     1
+    ],
+    [
+     "인기",
+     1
     ]
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈 허브",
     "구글 홈",
+    "구글 홈 허브",
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 연결",
-    "구글 홈 미니 초기화",
     "구글 홈 초기화",
-    "구글 홈 미니 2세대",
-    "구글 홈 미니 스피커"
+    "구글 홈 미니 초기화",
+    "구글 홈 스피커 연결",
+    "구글 홈 미니 2세대"
    ],
    "recent": [
     {
-     "title": "에이피알 '메디큐브' 검색량 역대 최고",
-     "source": "한국경제",
-     "date": "2026-08-09",
-     "link": "https://n.news.naver.com/mnews/article/015/0005318871?sid=101"
+     "title": "버린 손가락이 돌아왔다, SF 1인극 '커밍홈' 29일 공연",
+     "source": "mediajeju.com",
+     "date": "2026-08-10",
+     "link": "https://www.mediajeju.com/news/articleView.html?idxno=365647"
+    },
+    {
+     "title": "옥천군보건소, 여름방학 맞아 취약계층·청소년 구강건강 증진 나선다",
+     "source": "breaknews.com",
+     "date": "2026-08-10",
+     "link": "http://www.breaknews.com/1227886"
+    },
+    {
+     "title": "[가전트렌드] 삼성전자, '갤럭시 Z 폴드8 울트라·폴드8·플립8', '갤럭시...",
+     "source": "ibabynews.com",
+     "date": "2026-08-10",
+     "link": "https://www.ibabynews.com/news/articleView.html?idxno=153592"
+    },
+    {
+     "title": "[최재용 GEO 칼럼] AI가 나를 '전문가'로 이해하게 하려면?",
+     "source": "fntoday.co.kr",
+     "date": "2026-08-10",
+     "link": "https://www.fntoday.co.kr/news/articleView.html?idxno=390091"
+    },
+    {
+     "title": "화면 없는 워치 나오나…애플, 애플워치 전면 개편 검토",
+     "source": "서울경제",
+     "date": "2026-08-10",
+     "link": "https://n.news.naver.com/mnews/article/011/0004650176?sid=104"
+    },
+    {
+     "title": "버크셔해서웨이, 버핏 퇴임 후 공격적 매수…에이블식 투자 시작",
+     "source": "view.asiae.co.kr",
+     "date": "2026-08-10",
+     "link": "https://n.news.naver.com/mnews/article/277/0005800883?sid=104"
+    },
+    {
+     "title": "애플 홈 자동화 실외 센서 '이브 웨더', 스마트한 활용법은?",
+     "source": "digitaltoday.co.kr",
+     "date": "2026-08-10",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=691306"
+    },
+    {
+     "title": "[외신 헤드라인] \"애플, 中 창신메모리 칩 테스트…공급 초기 논의\"",
+     "source": "biz.sbs.co.kr",
+     "date": "2026-08-10",
+     "link": "https://n.news.naver.com/mnews/article/374/0000526424?sid=104"
+    },
+    {
+     "title": "“유니폼만으로는 부족해”…‘패션’으로 번진 야구 응원, 업계도 가세...",
+     "source": "segye.com",
+     "date": "2026-08-10",
+     "link": "https://n.news.naver.com/mnews/article/022/0004149650?sid=101"
+    },
+    {
+     "title": "버핏 떠난 버크셔, 현금쌓기 끝났다… 3600억달러 실탄 풀리나",
+     "source": "머니투데이",
+     "date": "2026-08-10",
+     "link": "https://n.news.naver.com/mnews/article/008/0005397509?sid=104"
     },
     {
      "title": "[주간 유통 나침반] 물가 2%대로 내려왔지만 밥상은 더 비싸졌다…유통...",
@@ -1055,60 +1113,6 @@
      "source": "pennmike.com",
      "date": "2026-08-08",
      "link": "https://www.pennmike.com/news/articleView.html?idxno=125268"
-    },
-    {
-     "title": "‘스파이더맨: 브랜드 뉴 데이’, 개봉 11일쩨 500만 돌파..올해 최단 기...",
-     "source": "breaknews.com",
-     "date": "2026-08-08",
-     "link": "http://www.breaknews.com/1227627"
-    },
-    {
-     "title": "갤럭시 폴드8 시리즈 정식 출시…민팃 \"중고폰 팔면 최대 5만원 더\"",
-     "source": "econovill.com",
-     "date": "2026-08-08",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=747477"
-    },
-    {
-     "title": "'클로드'에 백업 맡겼더니 홈 디렉토리 전체 삭제...\"미안, 오타였다\"",
-     "source": "aitimes.com",
-     "date": "2026-08-08",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=213702"
-    },
-    {
-     "title": "3년 만에 글로벌 1위, 로봇판 화웨이의 탄생 :애지봇(AgiBot·智元机器人...",
-     "source": "fntimes.com",
-     "date": "2026-08-08",
-     "link": "https://www.fntimes.com/html/view.php?ud=202608071731245257c1c16452b0_18"
-    },
-    {
-     "title": "챗GPT 스피커 내년 출시 전망... 오픈AI “인간과 소통 가능”",
-     "source": "chosun.com",
-     "date": "2026-08-08",
-     "link": "https://n.news.naver.com/mnews/article/023/0003991902?sid=105"
-    },
-    {
-     "title": "대구 북구, 취약가구 '세이프-홈' 사업 본격화",
-     "source": "breaknews.com",
-     "date": "2026-08-07",
-     "link": "http://www.breaknews.com/1227594"
-    },
-    {
-     "title": "구글 '웨더넥스트' 기상 모델 오픈소스로 공개…태풍 예보 평균 하루 앞...",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-08-07",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=691201"
-    },
-    {
-     "title": "\"홈시네마부터 게임까지\"...뷰소닉 'VX 시리즈' 빔프로젝터 4종 기획전 ...",
-     "source": "betanews.net",
-     "date": "2026-08-07",
-     "link": "https://www.betanews.net/article/view/beta202608060069"
-    },
-    {
-     "title": "제천시민축구단, 지역 학교 찾아 재능기부...\"선수들에게 직접 배우는 ...",
-     "source": "breaknews.com",
-     "date": "2026-08-07",
-     "link": "http://www.breaknews.com/1227502"
     }
    ]
   }
