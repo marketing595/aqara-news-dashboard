@@ -3439,6 +3439,37 @@
       if(ref) semTrack(ref.child(k.replace(/[.#$/\[\]]/g,'_')).set(v));
       else { try{ localStorage.setItem('aqaraSeminarEdits',JSON.stringify(SEM_OVER)); }catch(e){} semPaintSave(); }
       semPaintGantt();                 // 목록에서 고친 내용을 간트에 즉시 반영(입력 포커스는 유지)
+      semPaintBudget();                // 예산은 엑셀처럼 즉시 재계산
+    }
+    // 단가나 수량을 고치면 비용 칸을 단가×수량으로 다시 채운다(엑셀 수식처럼)
+    function semBudSync(k){
+      const m=/^bud_(\d+)_(unit|qty)$/.exec(k||''); if(!m) return null;
+      const i=m[1];
+      const u=semNum('bud.'+i+'.unit',null), q=semNum('bud.'+i+'.qty',null);
+      if(u==null||q==null) return null;
+      const c=Math.round(u*q), ck=semKey('bud.'+i+'.cost');
+      SEM_OVER[ck]=String(c);
+      const el=document.querySelector('[data-sk="'+ck+'"]');
+      if(el&&document.activeElement!==el) el.innerText=c.toLocaleString();
+      return {k:ck, v:String(c)};
+    }
+    // 예산 — 단가×수량 → 비용·소계·합계를 다시 그리기 (칸 안의 커서는 건드리지 않는다)
+    function semPaintBudget(){
+      if(!SEMINAR||!document.querySelector('[data-btotal]')) return;
+      const rows=semBudget(); let total=0; const subs={};
+      rows.forEach(function(b){
+        const c=semBudCost(b)||0; total+=c;
+        subs[b.cat]=(subs[b.cat]||0)+c;
+        const hint=document.querySelector('[data-bcost="'+b.i+'"]');
+        if(hint) hint.textContent=(b.cost==null&&semBudCost(b)!=null)?(' ('+semBudCost(b).toLocaleString()+')'):'';
+      });
+      const subEls=document.querySelectorAll('[data-bsub]');
+      for(let i=0;i<subEls.length;i++){ const c=subEls[i].getAttribute('data-bsub');
+        subEls[i].textContent=(subs[c]||0).toLocaleString()+'원'; }
+      const t=document.querySelector('[data-btotal]'); if(t) t.textContent=total.toLocaleString()+'원';
+      const h=document.getElementById('semBudHead'); if(h) h.textContent='편집 반영 총 '+total.toLocaleString()+'원';
+      const k=document.getElementById('semKpiBud');
+      if(k) k.innerHTML=Math.round(total/10000).toLocaleString()+'<span class="text-[13px] text-slate-400">만원</span>';
     }
     // 간트만 다시 그리기 — 전체 재렌더 없이(편집 중 커서·스크롤 유지)
     function semPaintGantt(){
@@ -3635,10 +3666,50 @@
         el.setAttribute('data-eby','1');
         el.setAttribute('title',(o.n||'다른 사용자')+' 님이 입력 중');
       }
+      semPaintEditingRows(keys,mine);
       // 상단에 지금 편집 중인 사람 안내
       const bar=document.getElementById('semEditingBar');
       if(bar){ const list=keys.filter(k=>k!==mine&&SEM_EDITING[k]&&SEM_EDITING[k].k).map(k=>SEM_EDITING[k].n||'익명');
         bar.innerHTML=list.length?('<span class="text-[11px] px-2 py-0.5 rounded-full bg-[#EDE9FF] text-[#5B44C7] font-semibold">✏️ '+esc(list.join(', '))+' 님이 지금 입력 중</span>'):''; }
+    }
+    /* --- 간트·목록 행에도 '누가 이 업무를 고치는 중'을 표시 --- */
+    function semPaintEditingRows(keys,mine){
+      // 지난 표시 지우기
+      const old=document.querySelectorAll('.sem-ebadge');
+      for(let i=0;i<old.length;i++){ if(old[i].parentNode) old[i].parentNode.removeChild(old[i]); }
+      const marked=document.querySelectorAll('[data-eby-row]');
+      for(let i=0;i<marked.length;i++){ const r=marked[i];
+        r.style.outline=''; r.style.outlineOffset=''; r.style.boxShadow=''; r.removeAttribute('data-eby-row'); }
+      // 지금 누가 어떤 업무를 잡고 있나 (task_<i>_필드 / chk_<i>)
+      const busy={};
+      for(let i=0;i<keys.length;i++){
+        if(keys[i]===mine) continue;
+        const o=SEM_EDITING[keys[i]]; if(!o||!o.k) continue;
+        if(o.at && Date.now()-o.at > 5*60000) continue;
+        const m=/^(?:task|chk)_(\d+)/.exec(o.k);
+        if(m) busy[m[1]]=o.n||'다른 사용자';
+      }
+      Object.keys(busy).forEach(function(ti){
+        const nm=busy[ti], c=(typeof wkAvatarColor==='function')?wkAvatarColor(nm):'#7C5CFF';
+        const rows=document.querySelectorAll('[data-row="'+ti+'"]');
+        for(let i=0;i<rows.length;i++){ const r=rows[i];
+          r.style.outline='2px solid '+c; r.style.outlineOffset='-2px'; r.setAttribute('data-eby-row','1'); }
+        // 간트 막대는 흰 테두리를 한 겹 두고 색 링
+        const bars=document.querySelectorAll('[data-gbar="'+ti+'"]');
+        for(let i=0;i<bars.length;i++){ const b=bars[i];
+          b.style.boxShadow='0 0 0 2px #fff, 0 0 0 4px '+c; b.setAttribute('data-eby-row','1'); }
+        // 업무명 옆에 '✏️이름' 칩 (댓글 아이콘 자리를 기준으로 끼워넣는다)
+        const anchor=document.querySelector('[data-cn="'+ti+'"]');
+        if(anchor&&anchor.parentNode){
+          const chip=document.createElement('span');
+          chip.className='sem-ebadge shrink-0';
+          chip.style.cssText='background:'+c+';color:#fff;font-size:9px;font-weight:800;line-height:1.4;'
+            +'padding:1px 4px;border-radius:9999px;white-space:nowrap;max-width:70px;overflow:hidden;text-overflow:ellipsis';
+          chip.textContent='✏️'+nm;
+          chip.title=nm+' 님이 이 업무를 고치는 중입니다';
+          anchor.parentNode.insertBefore(chip,anchor);
+        }
+      });
     }
     function semKey(k){ return k.replace(/[.#$/\[\]]/g,'_'); }
     function V(k,def){ const v=SEM_OVER[semKey(k)]; return (v==null||v==='')?(def==null?'':def):v; }
@@ -3679,9 +3750,14 @@
             if(!keep){ el.innerText=String(remote); return; }
           }
         }
-        SEM_BASE=null; semSave(k,v); return;
+        SEM_BASE=null; semSave(k,v);
+        const s=semBudSync(k); if(s) semSave(s.k,s.v);
+        return;
       }
-      semTimer=setTimeout(()=>{ semTimer=null; semSave(k,v); },200);   // 타이핑 중 0.2초마다 공유(주간보고와 동일 감각)
+      SEM_OVER[k]=v;                       // 화면 계산은 즉시(저장은 0.2초 뒤) — 엑셀처럼 숫자가 바로 바뀌게
+      if(k.indexOf('bud_')===0){ semBudSync(k); semPaintBudget(); }
+      semTimer=setTimeout(()=>{ semTimer=null; semSave(k,v);
+        const s=semBudSync(k); if(s) semSave(s.k,s.v); },200);          // 타이핑 중 0.2초마다 공유(주간보고와 동일 감각)
       semPaintSave();
     }
     function semNum(k,def){ const raw=V(k,(def==null||def==='')?'':String(def));
@@ -4211,7 +4287,7 @@
           const bar=!has?`<button onclick="semDate(${t.i},'start',event)" title="시작일을 넣으면 막대가 생깁니다"
                  style="position:absolute;left:${Math.max(0,tIdx)*SEM_DW+2}px;top:9px"
                  class="text-[10px] leading-[18px] px-1.5 rounded border border-dashed border-slate-300 text-slate-400 hover:text-ink hover:border-ink bg-white/70">＋ 기간 지정</button>`
-            :`<div onmousedown="semBarDown(event,${t.i})" title="${esc(t.item+' · '+t.start+' ~ '+t.end+(t.sched?' · '+t.sched:''))}"
+            :`<div onmousedown="semBarDown(event,${t.i})" data-gbar="${t.i}" title="${esc(t.item+' · '+t.start+' ~ '+t.end+(t.sched?' · '+t.sched:''))}"
                  style="position:absolute;left:${off*SEM_DW+1}px;top:9px;width:${bw}px;height:18px;background:${bg};border-radius:5px"
                  class="gbar text-[10px] leading-[18px] px-1.5 text-white truncate cursor-grab select-none">${inside?esc(lbl):''}</div>`
             +(inside?'':`<div style="position:absolute;left:${off*SEM_DW+bw+7}px;top:9px;white-space:nowrap;pointer-events:none" class="text-[10px] leading-[18px] text-slate-500">${esc(lbl.slice(0,34))}</div>`);
@@ -4321,6 +4397,8 @@
           <h3 class="text-[16px] font-extrabold text-ink">${t}</h3>${s?`<span class="text-[11px] text-slate-400">${s}</span>`:''}</div>${b}</section>`;
       const kv=(k,v,sk)=>`<div class="flex gap-3 py-1.5 border-b border-[#F1EFE9] last:border-0"><span class="w-24 shrink-0 text-[12px] font-bold text-slate-500">${esc(k)}</span><span class="text-[13px] text-slate-700">${sk?se(sk,v):esc(v)}</span></div>`;
       const ul=a=>`<ul class="space-y-1.5">${(a||[]).map(x=>`<li class="text-[13px] text-slate-600 leading-relaxed">· ${esc(x)}</li>`).join('')}</ul>`;
+      // 제안서 원문용 — 항목 하나하나가 편집되는 목록
+      const ulE=(key,a)=>`<ul class="space-y-1.5">${(a||[]).map((x,i)=>`<li class="text-[13px] text-slate-600 leading-relaxed">· ${se(key+'.'+i,x)}</li>`).join('')}</ul>`;
       const th=a=>`<thead class="bg-slate-50 text-slate-500"><tr class="text-left">${a.map(x=>`<th class="px-2.5 py-2 font-semibold">${esc(x)}</th>`).join('')}</tr></thead>`;
       const tbl=(head,rows)=>`<div class="overflow-auto rounded-xl border border-[#E6E6E3]"><table class="w-full text-[12px]">${th(head)}<tbody>${rows}</tbody></table></div>`;
       const tile=(k,v,sub,color,on,click)=>`<button ${click?`onclick="${click}"`:''} class="text-left rounded-xl border p-3 transition ${on?'border-ink bg-[#FAFAF9]':'border-[#E6E6E3] hover:bg-[#FAFAF9]'}">
@@ -4392,7 +4470,7 @@
           </div>
         </div>
         <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-[#ECE9E1]">
-          ${[['semSecNow','⚡ 이번 주'],['semSecGant','📋 체크리스트/타임라인'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecOv','📄 제안서']]
+          ${[['semSecNow','⚡ 이번 주'],['semSecGant','📋 체크리스트/타임라인'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecTime','🕘 당일 진행표'],['semSecOv','📄 제안서']]
             .map(x=>`<button onclick="semGo('${x[0]}')" class="text-[11px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">${x[1]}</button>`).join('')}
         </div>
       </div>
@@ -4403,7 +4481,7 @@
         ${tile('이번 주 마감', week.length+'건', semMD(wk.mon)+' ~ '+semMD(wk.sun), '#8A6A00', SEM_F.only==='week', 'semOnly(\'week\')')}
         ${tile('지연', late.length+'건', late.length?'마감일 지남 · 클릭해 보기':'없음 👍', late.length?'#BF5332':'#5E7350', SEM_F.only==='late', 'semOnly(\'late\')')}
         ${tile('기간 미정', nodate.length+'건', nodate.length?'시작·종료일 입력 필요':'모두 일정 있음 👍', nodate.length?'#8A6A00':'#5E7350', false, 'semGo(\'semSecGant\')')}
-        ${tile('예산 합계', Math.round(budTotal/10000).toLocaleString()+'<span class="text-[13px] text-slate-400">만원</span>', budget.length+'개 항목', '#26282A', false, 'semGo(\'semSecBud\')')}
+        ${tile('예산 합계', '<span id="semKpiBud">'+Math.round(budTotal/10000).toLocaleString()+'<span class="text-[13px] text-slate-400">만원</span></span>', budget.length+'개 항목', '#26282A', false, 'semGo(\'semSecBud\')')}
       </div>
 
       <!-- 기간 대비 진행률 -->
@@ -4550,28 +4628,39 @@
         </div>`):''}
 
       <!-- 예산 -->
-      ${S.budget?sec('semSecBud','💰','예산','편집 반영 총 '+budTotal.toLocaleString()+'원',`
-        ${tbl(['분류','항목','단가','수량','비용','지급 대상','일정·주체',''],
+      ${S.budget?sec('semSecBud','💰','예산','<span id="semBudHead">편집 반영 총 '+budTotal.toLocaleString()+'원</span>',`
+        ${tbl(['분류','항목','단가','수량','비용(단가×수량)','지급 대상','일정·주체',''],
           (()=>{ const cats=[]; budget.forEach(b=>{ if(cats.indexOf(b.cat)<0) cats.push(b.cat); });
             return cats.map(c=>{ const rows=budget.filter(b=>b.cat===c), sub=rows.reduce((a,b)=>a+(semBudCost(b)||0),0);
-              return rows.map((b,ri)=>`<tr class="border-t border-slate-100">
+              return rows.map((b,ri)=>`<tr class="border-t border-slate-100" data-brow="${b.i}">
                   <td class="px-2.5 py-2 whitespace-nowrap">${ri===0?`<span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${esc(b.cat)}</span>`:''}</td>
                   <td class="px-2.5 py-2 text-slate-700">${se('bud.'+b.i+'.item',(b.src.item||''))}</td>
                   <td class="px-2.5 py-2 num text-right text-slate-500">${seNum('bud.'+b.i+'.unit',b.src.unit)}</td>
                   <td class="px-2.5 py-2 num text-right text-slate-500">${seNum('bud.'+b.i+'.qty',b.src.qty)}</td>
-                  <td class="px-2.5 py-2 num text-right font-semibold text-ink">${seNum('bud.'+b.i+'.cost',b.src.cost)}${(b.cost==null&&semBudCost(b)!=null)?`<span class="text-[10px] text-slate-400"> (${semBudCost(b).toLocaleString()})</span>`:''}</td>
+                  <td class="px-2.5 py-2 num text-right font-semibold text-ink">${seNum('bud.'+b.i+'.cost',b.src.cost)}<span class="text-[10px] text-slate-400" data-bcost="${b.i}">${(b.cost==null&&semBudCost(b)!=null)?' ('+semBudCost(b).toLocaleString()+')':''}</span></td>
                   <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${se('bud.'+b.i+'.payee',(b.src.payee||'-'))}</td>
                   <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${se('bud.'+b.i+'.when',(b.src.when||'-'))}</td>
                   <td class="px-1 py-2 text-right"><button onclick="semDelBudget(${b.i})" title="삭제" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join('')
                 +`<tr class="bg-[#FAFAF9]"><td class="px-2.5 py-1.5 text-[11px] text-slate-400" colspan="4">${esc(c)} 소계</td>
-                  <td class="px-2.5 py-1.5 num text-right text-brand-ink font-bold">${sub.toLocaleString()}원</td><td colspan="3"></td></tr>`;
+                  <td class="px-2.5 py-1.5 num text-right text-brand-ink font-bold" data-bsub="${esc(c)}">${sub.toLocaleString()}원</td><td colspan="3"></td></tr>`;
             }).join('')
-            +`<tr class="border-t-2 border-slate-200 font-bold"><td class="px-2.5 py-2" colspan="4">Total</td>
-              <td class="px-2.5 py-2 num text-right text-ink">${budTotal.toLocaleString()}원</td><td colspan="3"></td></tr>`; })())}
-        <div class="flex items-center justify-between mt-2">
-          <p class="text-[11px] text-slate-400">단가·수량·비용 모두 클릭해서 수정할 수 있습니다. 비용을 비워두면 단가×수량으로 자동 계산됩니다. (원안 총액 ${((S.budget||{}).total||0).toLocaleString()}원)</p>
-          <button onclick="semAddBudget()" class="text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 항목 추가</button>
+            +`<tr class="border-t-2 border-slate-300 font-bold bg-[#FBFAF7]"><td class="px-2.5 py-2.5 text-[13px]" colspan="4">합계 (Total)</td>
+              <td class="px-2.5 py-2.5 num text-right text-[15px] text-ink" data-btotal="1">${budTotal.toLocaleString()}원</td><td colspan="3"></td></tr>`; })())}
+        <div class="flex items-center justify-between mt-2 gap-3">
+          <p class="text-[11px] text-slate-400">모든 칸을 클릭해서 수정할 수 있습니다. <b class="text-agreen">단가·수량을 입력하면 비용·소계·합계가 즉시 계산</b>됩니다(비용을 직접 적으면 그 값이 우선). 원안 총액 ${((S.budget||{}).total||0).toLocaleString()}원</p>
+          <button onclick="semAddBudget()" class="text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1 shrink-0">+ 항목 추가</button>
         </div>`):''}
+
+      <!-- 당일 진행표 (제안서 밖으로 분리 · 예산 다음) -->
+      ${S.timetable?sec('semSecTime','🕘','당일 진행표',se('ov.dateLabel2',S.dateLabel||''),`
+        ${tbl(['시간','시간량','세션','내용','설명','담당'],S.timetable.map((x,i)=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 num whitespace-nowrap text-ink font-semibold">${se('ov.tt.'+i+'.time',x.time)}</td>
+          <td class="px-2.5 py-2 num whitespace-nowrap text-slate-400">${se('ov.tt.'+i+'.dur',x.dur||'')}</td>
+          <td class="px-2.5 py-2 whitespace-nowrap text-brand-ink font-semibold">${se('ov.tt.'+i+'.s',x.s||'')}</td>
+          <td class="px-2.5 py-2 text-slate-700">${se('ov.tt.'+i+'.t',x.t||'')}</td>
+          <td class="px-2.5 py-2 text-slate-500">${se('ov.tt.'+i+'.d',x.d||'')}</td>
+          <td class="px-2.5 py-2 whitespace-nowrap text-slate-500">${se('ov.tt.'+i+'.w',x.w||'')}</td></tr>`).join(''))}
+        <p class="text-[11px] text-slate-400 mt-2">칸을 클릭해 수정하면 모두에게 실시간 반영됩니다.</p>`):''}
 
       <!-- 제안서 원문(접힘) -->
       <details id="semSecOv" class="mb-6" ${V('ovOpen','')?'open':''} ontoggle="semOvToggle(this)" style="scroll-margin-top:80px">
@@ -4585,80 +4674,71 @@
           ${kv('주최·주관',S.host,'host')}${kv('일정',S.dateLabel,'dateLabel')}${kv('장소',S.place,'place')}${kv('목표 규모',S.scale,'scale')}
           ${kv('참석 대상',S.target,'target')}${kv('행사 형식',S.format,'format')}
         </div>
-        <p class="text-[11px] text-slate-400 mt-2">출처: ${esc(S.source)}</p>`)}
+        <p class="text-[11px] text-slate-400 mt-2">출처: ${se('ov.source',S.source)}</p>`)}
 
       ${sec('semOv1','1','제안 개요','핵심 제안과 추진 목표',`
-        <p class="text-[13px] text-slate-700 leading-relaxed mb-2">${esc(S.core)}</p>
-        <p class="text-[12px] text-slate-500 leading-relaxed mb-3">${esc(S.purpose)}</p>
-        ${tbl(['목표','세미나에서 만들 변화','중장기 성과'],(S.goals||[]).map(g=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(g.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(g.s)}</td><td class="px-2.5 py-2 text-slate-600">${esc(g.l)}</td></tr>`).join(''))}`)}
+        <p class="text-[13px] text-slate-700 leading-relaxed mb-2">${se('ov.core',S.core)}</p>
+        <p class="text-[12px] text-slate-500 leading-relaxed mb-3">${se('ov.purpose',S.purpose)}</p>
+        ${tbl(['목표','세미나에서 만들 변화','중장기 성과'],(S.goals||[]).map((g,i)=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${se('ov.goals.'+i+'.k',g.k)}</td><td class="px-2.5 py-2 text-slate-600">${se('ov.goals.'+i+'.s',g.s)}</td><td class="px-2.5 py-2 text-slate-600">${se('ov.goals.'+i+'.l',g.l)}</td></tr>`).join(''))}`)}
 
       ${S.agenda?sec('semOv1a','1-1','아젠다','A → D 흐름',`
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          ${S.agenda.map(a=>`<div class="rounded-xl border border-[#E6E6E3] p-4">
-            <p class="text-[13px] font-extrabold text-ink"><span class="inline-block w-5 h-5 leading-5 text-center rounded bg-ink text-white text-[11px] mr-1.5">${esc(a.k)}</span>${esc(a.t)}</p>
-            <p class="text-[12px] text-slate-600 leading-relaxed mt-1.5">${esc(a.d)}</p></div>`).join('')}
+          ${S.agenda.map((a,i)=>`<div class="rounded-xl border border-[#E6E6E3] p-4">
+            <p class="text-[13px] font-extrabold text-ink"><span class="inline-block w-5 h-5 leading-5 text-center rounded bg-ink text-white text-[11px] mr-1.5">${esc(a.k)}</span>${se('ov.agenda.'+i+'.t',a.t)}</p>
+            <p class="text-[12px] text-slate-600 leading-relaxed mt-1.5">${se('ov.agenda.'+i+'.d',a.d)}</p></div>`).join('')}
         </div>`):''}
 
-      ${S.timetable?sec('semOv1b','1-2','당일 진행표',esc(S.dateLabel||''),`
-        ${tbl(['시간','시간량','세션','내용','설명','담당'],S.timetable.map(x=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 num whitespace-nowrap text-ink font-semibold">${esc(x.time)}</td>
-          <td class="px-2.5 py-2 num whitespace-nowrap text-slate-400">${esc(x.dur||'')}</td>
-          <td class="px-2.5 py-2 whitespace-nowrap text-brand-ink font-semibold">${esc(x.s||'')}</td>
-          <td class="px-2.5 py-2 text-slate-700">${esc(x.t||'')}</td>
-          <td class="px-2.5 py-2 text-slate-500">${esc(x.d||'')}</td>
-          <td class="px-2.5 py-2 whitespace-nowrap text-slate-500">${esc(x.w||'')}</td></tr>`).join(''))}`):''}
-
       ${sec('semOv2','2','왜 지금 스마트홈 인테리어인가','',`
-        ${ul(S.why)}
+        ${ulE('ov.why',S.why)}
         <div class="mt-3 rounded-xl bg-[#FBFAFF] border border-[#EDE9FF] p-4">
           <p class="text-[11px] font-bold text-[#5B44C7] mb-1">정의</p>
-          <p class="text-[14px] font-semibold text-ink leading-relaxed">${esc(S.definition)}</p>
+          <p class="text-[14px] font-semibold text-ink leading-relaxed">${se('ov.definition',S.definition)}</p>
         </div>`)}
 
       ${sec('semOv3','3','KOSID와 함께해야 하는 이유','역할 분담',`
-        ${tbl(['KOSID의 역할','아카라라이프의 역할','공동으로 만드는 결과'],(S.roles||[]).map(r=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 text-slate-700">${esc(r.kosid)}</td><td class="px-2.5 py-2 text-slate-700">${esc(r.aqara)}</td><td class="px-2.5 py-2 font-semibold text-ink">${esc(r.both)}</td></tr>`).join(''))}
-        <p class="text-[12px] font-bold text-ink mt-4 mb-1">공동 추진의 방향성</p>${ul(S.direction)}`)}
+        ${tbl(['KOSID의 역할','아카라라이프의 역할','공동으로 만드는 결과'],(S.roles||[]).map((r,i)=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 text-slate-700">${se('ov.roles.'+i+'.kosid',r.kosid)}</td><td class="px-2.5 py-2 text-slate-700">${se('ov.roles.'+i+'.aqara',r.aqara)}</td><td class="px-2.5 py-2 font-semibold text-ink">${se('ov.roles.'+i+'.both',r.both)}</td></tr>`).join(''))}
+        <p class="text-[12px] font-bold text-ink mt-4 mb-1">공동 추진의 방향성</p>${ulE('ov.direction',S.direction)}`)}
 
       ${S.program?sec('semOv4','4','프로그램 구성','',`
-        ${tbl(['세션','주제','내용','발표'],S.program.map(p=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 whitespace-nowrap text-brand-ink font-semibold">${esc(p.s)}</td>
-          <td class="px-2.5 py-2 text-ink font-semibold">${esc(p.t)}</td>
-          <td class="px-2.5 py-2 text-slate-600">${esc(p.d)}</td>
-          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(p.w)}</td></tr>`).join(''))}
-        <p class="text-[12px] text-slate-500 mt-2">흐름 · ${esc(S.flow||'')}</p>
-        ${S.messages?`<p class="text-[12px] font-bold text-ink mt-3 mb-1">핵심 메시지</p>${ul(S.messages)}`:''}`):''}
+        ${tbl(['세션','주제','내용','발표'],S.program.map((p,i)=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 whitespace-nowrap text-brand-ink font-semibold">${se('ov.program.'+i+'.s',p.s)}</td>
+          <td class="px-2.5 py-2 text-ink font-semibold">${se('ov.program.'+i+'.t',p.t)}</td>
+          <td class="px-2.5 py-2 text-slate-600">${se('ov.program.'+i+'.d',p.d)}</td>
+          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${se('ov.program.'+i+'.w',p.w)}</td></tr>`).join(''))}
+        <p class="text-[12px] text-slate-500 mt-2">흐름 · ${se('ov.flow',S.flow||'')}</p>
+        ${S.messages?`<p class="text-[12px] font-bold text-ink mt-3 mb-1">핵심 메시지</p>${ulE('ov.messages',S.messages)}`:''}`):''}
 
       ${sec('semOv5','5','아카라라이프가 제공하는 가치','',`
-        ${tbl(['역량','제공 가치','인테리어 업계의 효과'],(S.value||[]).map(v=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(v.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(v.v)}</td><td class="px-2.5 py-2 text-slate-600">${esc(v.e)}</td></tr>`).join(''))}`)}
+        ${tbl(['역량','제공 가치','인테리어 업계의 효과'],(S.value||[]).map((v,i)=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${se('ov.value.'+i+'.k',v.k)}</td><td class="px-2.5 py-2 text-slate-600">${se('ov.value.'+i+'.v',v.v)}</td><td class="px-2.5 py-2 text-slate-600">${se('ov.value.'+i+'.e',v.e)}</td></tr>`).join(''))}`)}
 
       ${sec('semOv6','6','참여 인테리어 기업이 얻는 ROI','',`
-        ${tbl(['ROI 영역','가치 창출 방식','측정 지표(예시)'],(S.roi||[]).map(r=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(r.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(r.v)}</td><td class="px-2.5 py-2 text-slate-500">${esc(r.m)}</td></tr>`).join(''))}
-        <p class="text-[12px] text-brand-ink font-semibold mt-2">핵심 · ${esc(S.roiCore)}</p>`)}
+        ${tbl(['ROI 영역','가치 창출 방식','측정 지표(예시)'],(S.roi||[]).map((r,i)=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${se('ov.roi.'+i+'.k',r.k)}</td><td class="px-2.5 py-2 text-slate-600">${se('ov.roi.'+i+'.v',r.v)}</td><td class="px-2.5 py-2 text-slate-500">${se('ov.roi.'+i+'.m',r.m)}</td></tr>`).join(''))}
+        <p class="text-[12px] text-brand-ink font-semibold mt-2">핵심 · ${se('ov.roiCore',S.roiCore)}</p>`)}
 
       ${sec('semOv7','7','공동 추진체계 및 요청사항','',`
-        ${tbl(['구분','KOSID','아카라라이프','공동'],(S.system||[]).map(s=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${esc(s.k)}</td><td class="px-2.5 py-2 text-slate-600">${esc(s.kosid)}</td>
-          <td class="px-2.5 py-2 text-slate-600">${esc(s.aqara)}</td><td class="px-2.5 py-2 text-slate-600">${esc(s.both)}</td></tr>`).join(''))}
+        ${tbl(['구분','KOSID','아카라라이프','공동'],(S.system||[]).map((s,i)=>`<tr class="border-t border-slate-100">
+          <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${se('ov.system.'+i+'.k',s.k)}</td><td class="px-2.5 py-2 text-slate-600">${se('ov.system.'+i+'.kosid',s.kosid)}</td>
+          <td class="px-2.5 py-2 text-slate-600">${se('ov.system.'+i+'.aqara',s.aqara)}</td><td class="px-2.5 py-2 text-slate-600">${se('ov.system.'+i+'.both',s.both)}</td></tr>`).join(''))}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-          <div class="rounded-xl border-l-4 border-brand border border-[#E6E6E3] p-4"><p class="font-bold text-brand-ink mb-1 text-[13px]">KOSID에 제안드리는 사항</p>${ul(S.askKosid)}</div>
-          <div class="rounded-xl border-l-4 border-ink border border-[#E6E6E3] p-4"><p class="font-bold text-ink mb-1 text-[13px]">아카라라이프의 실행 책임</p>${ul(S.doAqara)}</div>
+          <div class="rounded-xl border-l-4 border-brand border border-[#E6E6E3] p-4"><p class="font-bold text-brand-ink mb-1 text-[13px]">KOSID에 제안드리는 사항</p>${ulE('ov.askKosid',S.askKosid)}</div>
+          <div class="rounded-xl border-l-4 border-ink border border-[#E6E6E3] p-4"><p class="font-bold text-ink mb-1 text-[13px]">아카라라이프의 실행 책임</p>${ulE('ov.doAqara',S.doAqara)}</div>
         </div>`)}
 
       ${sec('semOv8','8','기대효과','',`
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          ${(S.effect||[]).map(e=>`<div class="rounded-xl border border-[#E6E6E3] p-4">
-            <p class="font-extrabold text-ink mb-1.5 text-[13px]">${esc(e.who)}</p>${ul(e.items)}</div>`).join('')}
+          ${(S.effect||[]).map((e,i)=>`<div class="rounded-xl border border-[#E6E6E3] p-4">
+            <p class="font-extrabold text-ink mb-1.5 text-[13px]">${se('ov.effect.'+i+'.who',e.who)}</p>${ulE('ov.effect.'+i+'.items',e.items)}</div>`).join('')}
         </div>
         <div class="mt-3 rounded-xl bg-[#FAFAF9] border border-[#E6E6E3] p-4">
           <p class="text-[11px] font-bold text-slate-500 mb-1">제안의 결론</p>
-          <p class="text-[14px] font-semibold text-ink leading-relaxed">${esc(S.conclusion)}</p>
+          <p class="text-[14px] font-semibold text-ink leading-relaxed">${se('ov.conclusion',S.conclusion)}</p>
         </div>`)}
 
-      ${sec('semOv9','9','협의 요청 · 다음 단계','',`<p class="text-[13px] text-slate-700 leading-relaxed">${esc(S.nextStep)}</p>`)}
+      ${sec('semOv9','9','협의 요청 · 다음 단계','',`<p class="text-[13px] text-slate-700 leading-relaxed">${se('ov.nextStep',S.nextStep)}</p>`)}
         </div>
       </details>`;
 
