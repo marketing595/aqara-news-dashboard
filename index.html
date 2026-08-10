@@ -99,6 +99,10 @@
         <span class="text-[11px] text-white/35 tracking-wide hidden sm:inline">AqaraLife Marketing Portal</span>
       </div>
       <div class="flex items-center gap-3">
+        <button id="semBell" onclick="semActToggle(event)" title="세미나 알림" class="relative hidden text-white/70 hover:text-white px-1.5 py-1">
+          <span class="text-[17px] leading-none">🔔</span>
+          <span id="semBellDot" class="hidden absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-[#BF5332] text-white text-[10px] font-bold leading-4 text-center"></span>
+        </button>
         <div id="globalPresence" onclick="if(typeof wkRenamePresence==='function')wkRenamePresence()" title="지금 대시보드에 접속한 사람 · 클릭하면 내 표시 이름 변경" class="flex items-center cursor-pointer"></div>
         <span id="updated" class="text-[11px] text-white/35 hidden md:inline"></span>
         <button onclick="loadData()" class="text-[13px] bg-white/10 hover:bg-white/20 text-white transition px-3.5 py-2 rounded-lg font-medium border border-white/15">새로고침</button>
@@ -3423,6 +3427,7 @@
         if(busy) semApplyRemote(k); else renderSeminar();
       });
       semEditStart();
+      semActStart();
       const cr=semCmtRef();
       if(cr&&!semCmtOn){ semCmtOn=true; cr.on('value',s=>{ SEM_CMT=s.val()||{}; semCmtPaint(); }); }
     }
@@ -3457,6 +3462,220 @@
       el.innerHTML='<span class="font-semibold" style="color:#16A34A">✓ 저장됨</span> <span class="num text-slate-400">'
         +d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+'</span>';
     }
+    /* --- 알림: 세미나 활동 기록 (누가 무엇을 바꿨는지 + 나를 언급한 댓글) --- */
+    let SEM_ACT=[], semActOn=false;
+    const SEM_ACT_ICON={add:'➕',del:'🗑️',done:'✅',undone:'↩️',date:'📅',cat:'🏷️',owner:'🙋',text:'✏️',cmt:'💬'};
+    function semActRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('seminar/activity'):null; }
+    function semMe(){ return (typeof wkDeviceName==='function'?wkDeviceName():'익명'); }
+    function semActSeen(){ try{ return parseInt(localStorage.getItem('aqaraSemActSeen')||'0',10)||0; }catch(e){ return 0; } }
+    function semLog(type,i,text,mentions){
+      const c={t:type, i:(i==null?'':String(i)), x:String(text||'').slice(0,120), n:semMe(), at:Date.now()};
+      if(mentions&&mentions.length) c.m=mentions;
+      const r=semActRef();
+      if(r){ r.push(c).catch(function(){}); }
+      else { SEM_ACT.unshift(Object.assign({k:'l'+Date.now()+Math.random()},c)); if(SEM_ACT.length>80) SEM_ACT.pop(); semActPaint(); }
+    }
+    function semActStart(){
+      if(semActOn) return; const r=semActRef(); if(!r) return; semActOn=true;
+      r.limitToLast(80).on('value',function(s){
+        const v=s.val()||{};
+        SEM_ACT=Object.keys(v).map(function(k){ return Object.assign({k:k},v[k]); }).sort(function(a,b){ return (b.at||0)-(a.at||0); });
+        semActPaint();
+      },function(){});
+    }
+    function semActNew(){                                  // 안 본 알림(내가 한 건 제외)
+      const seen=semActSeen(), me=semMe();
+      return SEM_ACT.filter(function(a){ return (a.at||0)>seen && a.n!==me; });
+    }
+    function semActPaint(){
+      const bell=document.getElementById('semBell'); if(!bell) return;
+      bell.classList.remove('hidden');
+      const nw=semActNew(), me=semMe();
+      const mine=nw.filter(function(a){ return (a.m||[]).indexOf(me)>=0; }).length;
+      const dot=document.getElementById('semBellDot');
+      if(dot){ if(nw.length){ dot.classList.remove('hidden'); dot.textContent=nw.length>99?'99+':String(nw.length);
+          dot.style.background=mine?'#BF5332':'#7C5CFF'; } else dot.classList.add('hidden'); }
+      const box=document.getElementById('semActList');
+      if(box) box.innerHTML=semActListHTML();
+    }
+    function semActWhen(ts){
+      if(!ts) return '';
+      const d=Math.floor((Date.now()-ts)/1000);
+      if(d<60) return '방금';
+      if(d<3600) return Math.floor(d/60)+'분 전';
+      if(d<86400) return Math.floor(d/3600)+'시간 전';
+      const x=new Date(ts); return (x.getMonth()+1)+'/'+x.getDate()+' '+x.getHours()+':'+semP(x.getMinutes());
+    }
+    function semActListHTML(){
+      if(!SEM_ACT.length) return '<p class="text-[12px] text-slate-400 px-3 py-6 text-center">아직 활동이 없습니다.</p>';
+      const seen=semActSeen(), me=semMe();
+      return SEM_ACT.slice(0,60).map(function(a){
+        const isNew=(a.at||0)>seen&&a.n!==me, hitMe=(a.m||[]).indexOf(me)>=0;
+        return '<button onclick="semActGo(\''+esc(String(a.i||''))+'\')" class="block w-full text-left px-3 py-2 border-b border-[#F1EFE9] last:border-0 hover:bg-[#FAFAF9] '+(isNew?'bg-[#FFFBEC]':'')+'">'
+          +'<div class="flex items-start gap-2">'
+          +'<span class="text-[13px] leading-5 shrink-0">'+(SEM_ACT_ICON[a.t]||'•')+'</span>'
+          +'<div class="min-w-0 flex-1">'
+          +'<p class="text-[12px] text-slate-700 leading-snug">'+(hitMe?'<b class="text-[#BF5332]">@나 </b>':'')+esc(a.x||'')+'</p>'
+          +'<p class="text-[11px] text-slate-400 mt-0.5">'+esc(a.n||'')+' · '+semActWhen(a.at)+'</p>'
+          +'</div>'+(isNew?'<span class="w-1.5 h-1.5 rounded-full bg-[#7C5CFF] mt-1.5 shrink-0"></span>':'')
+          +'</div></button>';
+      }).join('');
+    }
+    function semActPanel(){
+      let p=document.getElementById('semActPanel');
+      if(p) return p;
+      p=document.createElement('div'); p.id='semActPanel';
+      p.className='hidden fixed z-[90] w-[340px] max-h-[70vh] bg-white border border-[#E6E6E3] rounded-xl shadow-2xl overflow-hidden';
+      p.innerHTML='<div class="flex items-center justify-between px-3 py-2 border-b border-[#ECE9E1] bg-[#FAFAF9]">'
+        +'<span class="text-[12px] font-extrabold text-ink">🔔 세미나 알림</span>'
+        +'<button onclick="semActReadAll()" class="text-[11px] text-slate-400 hover:text-ink">모두 읽음</button></div>'
+        +'<div id="semActList" class="overflow-auto" style="max-height:calc(70vh - 74px)"></div>'
+        +'<p class="text-[10px] text-slate-400 px-3 py-1.5 border-t border-[#F1EFE9]">내 표시 이름을 담당자 이름과 같게 해두면 @언급 알림을 받을 수 있습니다(우상단 이름 클릭).</p>';
+      document.body.appendChild(p);
+      document.addEventListener('mousedown',function(e){
+        const q=document.getElementById('semActPanel'), b=document.getElementById('semBell');
+        if(q&&!q.classList.contains('hidden')&&!q.contains(e.target)&&!(b&&b.contains(e.target))) q.classList.add('hidden');
+      });
+      return p;
+    }
+    function semActToggle(ev){
+      if(ev){ ev.preventDefault(); ev.stopPropagation(); }
+      const p=semActPanel(), bell=document.getElementById('semBell');
+      if(!p.classList.contains('hidden')){ p.classList.add('hidden'); return; }
+      const r=bell?bell.getBoundingClientRect():{bottom:56,right:window.innerWidth-16};
+      p.style.top=(r.bottom+8)+'px';
+      p.style.left=Math.max(8,Math.min(window.innerWidth-348, r.right-340))+'px';
+      p.classList.remove('hidden');
+      document.getElementById('semActList').innerHTML=semActListHTML();
+      semActReadAll(true);
+    }
+    function semActReadAll(keepOpen){
+      try{ localStorage.setItem('aqaraSemActSeen',String(Date.now())); }catch(e){}
+      semActPaint();
+      if(!keepOpen){ const p=document.getElementById('semActPanel'); if(p) p.classList.add('hidden'); }
+    }
+    function semActGo(i){
+      const p=document.getElementById('semActPanel'); if(p) p.classList.add('hidden');
+      try{ if(typeof mktSection!=='undefined'&&document.getElementById('view-mkt')&&!document.getElementById('view-mkt').classList.contains('hidden')) mktSub('seminar');
+           else if(typeof switchGroup==='function'&&document.getElementById('mktInner')&&!document.getElementById('mktInner').classList.contains('hidden')){ switchGroup('mkt'); mktSub('seminar'); } }catch(e){}
+      if(i===''||i==null){ semGo('semSecGant'); return; }
+      SEM_CMT_OPEN=parseInt(i,10);
+      renderSeminar();
+      setTimeout(function(){ const r=document.querySelector('[data-row="'+i+'"]');
+        if(r) r.scrollIntoView({behavior:'smooth',block:'center'}); else semGo('semSecGant'); },60);
+    }
+
+    /* --- 실시간 채팅 (오른쪽 패널 · Firebase seminar/chat) --- */
+    let SEM_CHAT=[], semChatOn=false, SEM_CHAT_OPEN=false;
+    function semChatRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('seminar/chat'):null; }
+    function semChatSeen(){ try{ return parseInt(localStorage.getItem('aqaraSemChatSeen')||'0',10)||0; }catch(e){ return 0; } }
+    function semChatMarkSeen(){ try{ localStorage.setItem('aqaraSemChatSeen',String(Date.now())); }catch(e){} }
+    function semChatUnread(){ const seen=semChatSeen(), me=semMe();
+      return SEM_CHAT.filter(function(m){ return (m.at||0)>seen && m.n!==me; }).length; }
+    function semChatBuild(){
+      let p=document.getElementById('semChatPanel'); if(p) return p;
+      // 열기 버튼(우측 하단 고정)
+      const b=document.createElement('button');
+      b.id='semChatBtn'; b.type='button'; b.title='세미나 실시간 채팅';
+      b.setAttribute('onclick','semChatToggle()');
+      b.className='hidden fixed right-4 bottom-4 z-[95] flex items-center gap-2 px-4 py-3 rounded-full bg-[#7C5CFF] text-white shadow-xl hover:brightness-110';
+      b.innerHTML='<span class="text-[16px] leading-none">💬</span><span class="text-[13px] font-bold">채팅</span>'
+        +'<span id="semChatDot" class="hidden min-w-[18px] h-[18px] px-1 rounded-full bg-[#BF5332] text-white text-[11px] font-bold leading-[18px] text-center"></span>';
+      document.body.appendChild(b);
+      // 패널
+      p=document.createElement('div'); p.id='semChatPanel';
+      p.className='hidden fixed z-[96] bg-white border border-[#E6E6E3] rounded-2xl shadow-2xl flex flex-col overflow-hidden';
+      p.style.cssText='right:16px;bottom:16px;top:auto;width:340px;max-width:calc(100vw - 32px);height:min(560px,calc(100vh - 100px));';
+      p.innerHTML='<div class="flex items-center justify-between px-3.5 py-2.5 border-b border-[#ECE9E1] bg-[#FAFAF9] shrink-0">'
+          +'<span class="text-[13px] font-extrabold text-ink">💬 세미나 채팅</span>'
+          +'<span class="flex items-center gap-2">'
+          +'<button onclick="wkRenamePresence()" class="text-[11px] text-slate-400 hover:text-ink underline">내 이름 변경</button>'
+          +'<button onclick="semChatToggle()" class="text-slate-400 hover:text-ink text-[15px] leading-none px-1">✕</button></span></div>'
+        +'<div id="semChatList" class="flex-1 overflow-auto px-3 py-3 space-y-2.5 bg-[#FCFCFB]"></div>'
+        +'<div class="border-t border-[#ECE9E1] p-2.5 shrink-0">'
+          +'<div class="flex items-end gap-2">'
+          +'<textarea id="semChatIn" rows="1" placeholder="메시지를 입력하고 Enter (줄바꿈은 Shift+Enter)" '
+            +'class="flex-1 resize-none text-[13px] border border-[#E6E6E3] rounded-xl px-3 py-2 leading-snug focus:outline-none focus:border-[#7C5CFF]" '
+            +'oninput="semChatGrow(this)" onkeydown="semChatKey(event)"></textarea>'
+          +'<button onclick="semChatSend()" class="text-[13px] font-bold text-white bg-[#7C5CFF] hover:brightness-110 px-3.5 py-2 rounded-xl shrink-0">전송</button></div>'
+          +'<p id="semChatHint" class="text-[10px] text-slate-400 mt-1.5">여기 대화는 접속한 모든 사람에게 실시간으로 보입니다.</p></div>';
+      document.body.appendChild(p);
+      return p;
+    }
+    function semChatVisible(on){
+      semChatBuild();
+      const b=document.getElementById('semChatBtn'), p=document.getElementById('semChatPanel');
+      if(on){ b.classList.remove('hidden'); semChatStart(); if(SEM_CHAT_OPEN&&p) p.classList.remove('hidden'); }
+      else { b.classList.add('hidden'); if(p) p.classList.add('hidden'); }
+    }
+    function semChatStart(){
+      if(semChatOn) return; const r=semChatRef();
+      if(!r){ semChatPaint(); return; }
+      semChatOn=true;
+      r.limitToLast(200).on('value',function(s){
+        const v=s.val()||{};
+        SEM_CHAT=Object.keys(v).map(function(k){ return Object.assign({k:k},v[k]); })
+                 .sort(function(a,b){ return (a.at||0)-(b.at||0); });
+        semChatPaint();
+      },function(e){ console.warn('채팅 읽기 오류(권한?):',e&&e.message); });
+    }
+    function semChatToggle(){
+      const p=semChatBuild();
+      SEM_CHAT_OPEN=p.classList.contains('hidden');
+      p.classList.toggle('hidden', !SEM_CHAT_OPEN);
+      if(SEM_CHAT_OPEN){ semChatStart(); semChatMarkSeen(); semChatPaint(); semChatBottom(true);
+        const i=document.getElementById('semChatIn'); if(i) i.focus(); }
+      else semChatPaint();
+    }
+    function semChatBottom(force){
+      const l=document.getElementById('semChatList'); if(!l) return;
+      if(force||l.scrollHeight-l.scrollTop-l.clientHeight<80) l.scrollTop=l.scrollHeight;
+    }
+    function semChatGrow(el){ el.style.height='auto'; el.style.height=Math.min(96,el.scrollHeight)+'px'; }
+    function semChatKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); semChatSend(); } }
+    function semChatSend(){
+      const i=document.getElementById('semChatIn'); if(!i) return;
+      const t=i.value.trim(); if(!t) return;
+      const r=semChatRef();
+      if(!r){ alert('로그인 상태가 아니어서 채팅을 보낼 수 없습니다. 페이지를 새로고침해 주세요.'); return; }
+      i.value=''; semChatGrow(i);
+      r.push({n:semMe(), t:t.slice(0,1000), at:Date.now()}).catch(function(e){
+        alert('채팅 전송 실패: '+((e&&e.message)||'')); });
+      semChatMarkSeen(); semChatBottom(true);
+    }
+    function semChatDel(k){
+      if(!confirm('이 메시지를 삭제할까요?')) return;
+      const r=semChatRef(); if(r) r.child(k).remove().catch(function(){});
+    }
+    function semChatTime(ts){ if(!ts) return ''; const d=new Date(ts);
+      return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0'); }
+    function semChatPaint(){
+      const dot=document.getElementById('semChatDot');
+      if(dot){ const n=SEM_CHAT_OPEN?0:semChatUnread();
+        if(n){ dot.classList.remove('hidden'); dot.textContent=n>99?'99+':String(n); } else dot.classList.add('hidden'); }
+      const l=document.getElementById('semChatList'); if(!l) return;
+      if(!semChatRef()){ l.innerHTML='<p class="text-[12px] text-slate-400 text-center py-8">채팅은 로그인 후 이용할 수 있습니다.</p>'; return; }
+      if(!SEM_CHAT.length){ l.innerHTML='<p class="text-[12px] text-slate-400 text-center py-8">첫 메시지를 남겨보세요.</p>'; return; }
+      const me=semMe(); let lastDay='';
+      l.innerHTML=SEM_CHAT.map(function(m){
+        const d=new Date(m.at||0), day=(d.getMonth()+1)+'월 '+d.getDate()+'일';
+        let sep='';
+        if(day!==lastDay){ lastDay=day;
+          sep='<p class="text-[10px] text-slate-400 text-center py-1">'+esc(day)+'</p>'; }
+        const mine=(m.n===me), c=(typeof wkAvatarColor==='function')?wkAvatarColor(m.n||''):'#7C5CFF';
+        return sep+'<div class="flex '+(mine?'justify-end':'justify-start')+'">'
+          +'<div class="max-w-[80%]">'
+          +(mine?'':'<p class="text-[11px] font-semibold mb-0.5" style="color:'+c+'">'+esc(m.n||'익명')+'</p>')
+          +'<div class="group inline-flex items-end gap-1 '+(mine?'flex-row-reverse':'')+'">'
+          +'<span class="inline-block text-[13px] leading-snug px-3 py-2 rounded-2xl whitespace-pre-wrap break-words '
+            +(mine?'bg-[#7C5CFF] text-white rounded-br-md':'bg-white border border-[#E6E6E3] text-slate-700 rounded-bl-md')+'">'+esc(m.t||'')+'</span>'
+          +'<span class="text-[10px] text-slate-400 shrink-0">'+semChatTime(m.at)+'</span>'
+          +(mine?'<button onclick="semChatDel(\''+esc(m.k)+'\')" title="삭제" class="opacity-0 group-hover:opacity-100 text-[11px] text-slate-300 hover:text-ared shrink-0">✕</button>':'')
+          +'</div></div></div>';
+      }).join('');
+      if(SEM_CHAT_OPEN){ semChatMarkSeen(); semChatBottom(); }
+    }
+
     /* --- 실시간 공동 작업 (주간보고와 같은 방식 + 누가 어디를 고치는 중인지 표시) --- */
     // 남이 고친 내용만 화면에 밀어넣기 — 내가 입력 중인 칸(skip)은 건드리지 않는다
     function semApplyRemote(skip){
@@ -3554,9 +3773,18 @@
     function semNum(k,def){ const raw=V(k,(def==null||def==='')?'':String(def));
       const n=parseFloat(String(raw).replace(/[^0-9.\-]/g,'')); return isNaN(n)?null:n; }
     function seNum(k,def){ const n=semNum(k,def);
-      return `<span class="sem-edit num" data-sk="${semKey(k)}" contenteditable="true" spellcheck="false" oninput="semInput(this)" onblur="semInput(this,1)">${n==null?'':n.toLocaleString()}</span>`; }
+      return `<span class="sem-edit num" data-sk="${semKey(k)}" contenteditable="true" spellcheck="false" oninput="semInput(this)" onfocus="semFocusIn(this)" onblur="semInput(this,1);semEditClear()">${n==null?'':n.toLocaleString()}</span>`; }
     function semChecked(i){ return !!V('chk.'+i,''); }
-    function semToggle(i){ const k='chk.'+i; semSave(semKey(k), V(k,'')?'':'1'); renderSeminar(); }
+    function semToggle(i){ const k='chk.'+i, on=!V(k,''); semSave(semKey(k), on?'1':''); const t=semTaskById(i);
+      semLog(on?'done':'undone', i, (on?'완료: ':'완료 해제: ')+(t.item||'')); renderSeminar(); }
+    // 새로고침: 입력 중이던 칸을 먼저 저장하고 원본 자료를 다시 불러온다(공동 편집 내용은 실시간 유지)
+    function semReload(){
+      const a=document.activeElement;
+      if(a&&a.dataset&&a.dataset.sk){ try{ semInput(a,1); a.blur(); }catch(e){} }
+      clearTimeout(semTimer); semTimer=null;
+      SEMINAR=null; SEM_LOADING=false;
+      renderSeminar();
+    }
     // 공유: 세미나만 열리는 전용 링크 '주소만' 복사
     function semShare(){ bdCopy(location.origin+'/seminar.html'); }
     /* --- 세미나 단독 모드 (/seminar.html · ?view=seminar · #seminar) --- */
@@ -3583,6 +3811,7 @@
       document.body.insertBefore(bar, document.body.firstChild);
       try{ renderSeminar(); }catch(e){ console.warn(e); }
       try{ if(typeof wkPresenceStart==='function') wkPresenceStart(); }catch(e){}
+      try{ semChatVisible(true); }catch(e){}
       return true;
     }
     function semGo(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
@@ -3703,6 +3932,7 @@
       semSave(semKey('task.'+i+'.sched'),(SEM_NEW.sched||'').trim());
       semSave(semKey('task.'+i+'.action'),(SEM_NEW.action||'').trim());
       semSave(semKey('task.'+i+'.ord'),'9999');
+      semLog('add',i,'새 업무: '+it+(s?' ('+semMD(s)+'~'+semMD(e)+')':''));
       SEM_NEW=null; SEM_FLASH=i; renderSeminar();
       setTimeout(function(){ const r=document.querySelector('[data-row="'+i+'"]');
         if(r) r.scrollIntoView({behavior:'smooth',block:'center'}); },50);
@@ -3711,7 +3941,7 @@
     function semDelTask(i){
       const t=semTaskById(i);
       if(!confirm('"'+t.item+'" 업무를 목록에서 삭제할까요?')) return;
-      semSave(semKey('del.'+i),'1'); renderSeminar();
+      semSave(semKey('del.'+i),'1'); semLog('del',null,'삭제: '+(t.item||'')); renderSeminar();
     }
     /* --- 할 일 행 드래그 정렬 (핸들 ⠿을 잡고 끌기 · 다른 구분으로 떨어뜨리면 구분도 변경) --- */
     let SEM_DRAGI=null, SEM_DROP_AFTER=false;
@@ -3827,8 +4057,10 @@
       if(SEM_DATE_I==null) return;
       let s=document.getElementById('semDateS').value, e=document.getElementById('semDateE').value;
       if(s&&e&&semDiff(s,e)<0){ const t=s; s=e; e=t; }         // 거꾸로 고르면 자동으로 바꿔준다
+      const dt=semTaskById(SEM_DATE_I);
       semSave(semKey('task.'+SEM_DATE_I+'.start'), s||'');
       semSave(semKey('task.'+SEM_DATE_I+'.end'), e||s||'');
+      semLog('date',SEM_DATE_I,'기간 변경: '+(dt.item||'')+' → '+(s?semMD(s)+'~'+semMD(e||s):'미정'));
       semDateClose(); renderSeminar();
     }
     function semDateClear(){
@@ -3973,8 +4205,10 @@
       if(!d.moved) return;
       const t=semTaskById(d.i);
       if(!t.start||!t.end) return;
-      semSave(semKey('task.'+d.i+'.start'), semAddDays(t.start,d.moved));
-      semSave(semKey('task.'+d.i+'.end'),   semAddDays(t.end,d.moved));
+      const ns=semAddDays(t.start,d.moved), ne=semAddDays(t.end,d.moved);
+      semSave(semKey('task.'+d.i+'.start'), ns);
+      semSave(semKey('task.'+d.i+'.end'),   ne);
+      semLog('date',d.i,'일정 이동: '+(t.item||'')+' → '+semMD(ns)+'~'+semMD(ne));
       renderSeminar();
     }
 
@@ -4217,10 +4451,14 @@
           <div class="text-right shrink-0">
             <span class="inline-block text-[15px] font-extrabold px-3.5 py-2 rounded-xl bg-ink text-white num">${dday}</span>
             <div class="text-[11px] mt-1.5" id="semSaveState"></div>
-            <button onclick="semShare()" class="text-[11px] border border-slate-300 hover:bg-slate-50 px-2 py-1 rounded-lg font-semibold mt-1">🔗 공유 링크</button>
+            <div class="flex flex-wrap justify-end items-center gap-1.5 mt-1.5">
+              <button onclick="semReload()" title="최신 내용을 다시 불러옵니다" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold">🔄 새로고침</button>
+              <button onclick="semShare()" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold">🔗 공유 링크</button>
+            </div>
           </div>
         </div>
-        <div class="flex flex-wrap items-center gap-2 mt-3">
+        <p class="text-[12px] text-slate-400 mt-3">각 칸을 클릭해 작성하세요. <b class="text-agreen">여러 명이 동시에 편집하면 실시간으로 서로 반영</b>됩니다.</p>
+        <div class="flex flex-wrap items-center gap-2 mt-2">
           <div id="semPresence" class="flex flex-wrap items-center gap-1.5"></div>
           <div id="semEditingBar"></div>
         </div>
@@ -4499,6 +4737,8 @@
       const ovEl=document.getElementById('semSecOv'), heroEl=document.getElementById('semHero');
       if(ovEl&&heroEl&&heroEl.parentNode) heroEl.parentNode.insertBefore(ovEl, heroEl.nextSibling);
       semPaintSave(); semCmtPaint(); semPaintEditing();
+      // 접속자 칩은 화면을 다시 그릴 때마다 사라지므로 마지막 접속 상태로 다시 칠한다
+      try{ if(typeof wkPresenceStart==='function') wkPresenceStart(); if(typeof wkRepaintPresence==='function') wkRepaintPresence(); }catch(e){}
       // 간트 가로 스크롤 위치 유지(없으면 오늘 근처로)
       const g2=document.getElementById('semGant');
       if(g2){ if(SEM_GSCROLL!=null) g2.scrollLeft=SEM_GSCROLL;
@@ -5018,6 +5258,7 @@
       if(s==='ad'){ loadAd(); }
       if(s==='seminar'){ renderSeminar(); }
       if(s==='report'){ mktReportSub(mktRptView); }
+      try{ semChatVisible(s==='seminar'); }catch(e){}
     }
     // 종합 리포트 하위 탭 (자사/경쟁사 분석 = cdj + competitor 통합)
     let mktRptView='report';
@@ -5382,7 +5623,9 @@
     function wkPresenceStop(){ if(wkPresConn){ try{ wkPresConn.off(); }catch(e){} wkPresConn=null; } if(wkPresRef){ try{ wkPresRef.onDisconnect().cancel(); wkPresRef.remove(); }catch(e){} wkPresRef=null; } const el=document.getElementById('wkPresence'); if(el) el.innerHTML=''; }
     function wkAvatarColor(name){ let h=0; const s=name||'?'; for(let i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))>>>0; } return WK_PALETTE[h%WK_PALETTE.length]; }
     function wkInitials(name){ const n=(name||'?').trim(); const parts=n.split(/[\s·]+/).filter(Boolean); if(parts.length>=2) return (parts[0][0]+parts[1][0]).toUpperCase(); return n.slice(0,2).toUpperCase(); }
-    function wkRenderPresence(map){ const mykey=wkPresRef&&wkPresRef.key; const keys=Object.keys(map||{}).filter(k=>map[k]&&map[k].name);
+    let WK_PRES_MAP={};                       // 마지막 접속 상태 — 화면을 다시 그려도 접속자 칩이 살아있게
+    function wkRepaintPresence(){ try{ wkRenderPresence(WK_PRES_MAP); }catch(e){} }
+    function wkRenderPresence(map){ WK_PRES_MAP=map||{}; const mykey=wkPresRef&&wkPresRef.key; const keys=Object.keys(map||{}).filter(k=>map[k]&&map[k].name);
       // 우상단 아바타 스택 (구글 스프레드시트 스타일)
       const g=document.getElementById('globalPresence');
       if(g){ if(!keys.length){ g.innerHTML=''; } else { const ordered=keys.slice().sort((a,b)=> a===mykey?-1:(b===mykey?1:0)); const show=ordered.slice(0,5);
@@ -5390,11 +5633,13 @@
         let av=show.map(function(k,idx){ const n=map[k].name, me=(k===mykey); return dot(wkAvatarColor(n), idx?'-8px':'0', esc(wkInitials(n)), esc(n)+(me?' (나)':'')); }).join('');
         if(keys.length>show.length){ av+=dot('#6E6E73','-8px','+'+(keys.length-show.length),''); }
         g.innerHTML='<span class="text-[11px] text-white/50 mr-2 hidden sm:inline">접속 '+keys.length+'</span>'+av; } }
-      // 주간보고 내부 상세 칩(있을 때만)
-      ['wkPresence','semPresence'].forEach(function(pid){ const pe=document.getElementById(pid); if(pe&&pid==='semPresence'){ pe.innerHTML=keys.length?('<span class="text-[12px] font-semibold text-slate-500 mr-1">🟢 접속 중 '+keys.length+'명</span> '+keys.map(function(k){ const n=map[k].name, me=(k===mykey); return '<span class="inline-flex items-center gap-1 text-[12px] px-2 py-0.5 rounded-full '+(me?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'bg-slate-100 text-slate-600')+'">'+esc(n)+(me?' (나)':'')+'</span>'; }).join(' ')):''; } });
-      const el=document.getElementById('wkPresence'); if(el){ if(!keys.length){ el.innerHTML=''; } else {
-        const chips=keys.map(k=>{ const n=map[k].name, me=(k===mykey); return '<span class="inline-flex items-center gap-1 text-[12px] px-2 py-0.5 rounded-full '+(me?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'bg-slate-100 text-slate-600')+'"><span style="width:6px;height:6px;border-radius:9999px;background:#22C55E;display:inline-block"></span>'+esc(n)+(me?' (나)':'')+'</span>'; }).join(' ');
-        el.innerHTML='<span class="text-[12px] font-semibold text-slate-500 mr-1">🟢 접속 중 '+keys.length+'명</span> '+chips+' <button onclick="wkRenamePresence()" class="text-[11px] text-slate-400 hover:text-ink underline ml-1">내 이름 변경</button>'; } } }
+      // 주간보고 · 세미나 내부 상세 칩 (같은 모양으로 표시)
+      const chipsHTML=keys.map(function(k){ const n=map[k].name, me=(k===mykey);
+        return '<span class="inline-flex items-center gap-1 text-[12px] px-2 py-0.5 rounded-full '+(me?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'bg-slate-100 text-slate-600')
+          +'"><span style="width:6px;height:6px;border-radius:9999px;background:#22C55E;display:inline-block"></span>'+esc(n)+(me?' (나)':'')+'</span>'; }).join(' ');
+      const barHTML=keys.length?('<span class="text-[12px] font-semibold text-slate-500 mr-1">🟢 접속 중 '+keys.length+'명</span> '+chipsHTML
+        +' <button onclick="wkRenamePresence()" class="text-[11px] text-slate-400 hover:text-ink underline ml-1">내 이름 변경</button>'):'';
+      ['wkPresence','semPresence'].forEach(function(pid){ const pe=document.getElementById(pid); if(pe) pe.innerHTML=barHTML; }); }
     function wkGroupItems(items,projs){ const groups=[]; if(projs&&projs.length){ projs.forEach(p=>{ const gi=items.filter(it=>it.project===p.id); if(gi.length) groups.push({p:p,items:gi}); }); const none=items.filter(it=>!it.project||!projs.some(p=>p.id===it.project)); if(none.length) groups.push({p:null,items:none}); } else if(items.length){ groups.push({p:null,items:items}); } return groups; }
     // 항목 조작
     function wkToggle(bk,id,checked){ const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/c']=!!checked; wkApply(u); }
