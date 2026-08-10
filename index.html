@@ -3428,6 +3428,7 @@
       });
       semEditStart();
       semActStart();
+      semPeopleStart();
       const cr=semCmtRef();
       if(cr&&!semCmtOn){ semCmtOn=true; cr.on('value',s=>{ SEM_CMT=s.val()||{}; semCmtPaint(); }); }
     }
@@ -3615,6 +3616,28 @@
       document.body.appendChild(p);
       return p;
     }
+    /* --- 이름 명단 (누가 설정한 이름을 모아둔다 · 접속 중이 아니어도 @로 부를 수 있게) --- */
+    let SEM_PEOPLE={}, semPeopleOn=false;
+    function semPeopleRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('seminar/people'):null; }
+    function semPeopleKey(n){ return String(n||'').trim().replace(/[.#$/\[\]]/g,'_'); }
+    function semPeopleStart(){
+      if(semPeopleOn) return; const r=semPeopleRef(); if(!r) return; semPeopleOn=true;
+      r.on('value',function(s){ SEM_PEOPLE=s.val()||{}; },function(){});
+      if(semNameOK()) semPeopleAdd(semMe());          // 이미 이름을 정해둔 사람도 명단에 올린다
+    }
+    function semPeopleAdd(name){
+      const n=String(name||'').trim(); if(n.length<2) return;
+      const r=semPeopleRef(); if(!r) return;
+      r.child(semPeopleKey(n)).set({n:n, at:Date.now()}).catch(function(){});
+    }
+    function semPeopleDrop(name){
+      const n=String(name||'').trim(); if(!n) return;
+      const r=semPeopleRef(); if(!r) return;
+      r.child(semPeopleKey(n)).remove().catch(function(){});
+    }
+    function semPeopleNames(){
+      return Object.keys(SEM_PEOPLE||{}).map(function(k){ return (SEM_PEOPLE[k]||{}).n; }).filter(Boolean);
+    }
     /* --- 이름 설정 (이름을 정해야 채팅 참여 가능) --- */
     function semNameOK(){
       try{
@@ -3637,7 +3660,10 @@
       const v=(el.value||'').trim().slice(0,12);
       if(v.length<2){ if(w) w.textContent='이름을 2자 이상 입력해 주세요.'; el.focus(); return; }
       if(w) w.textContent='';
+      const old=semNameOK()?semMe():'';
       try{ localStorage.setItem('wkDeviceName',v); localStorage.setItem('aqaraNameSet','1'); }catch(e){}
+      if(old&&old!==v) semPeopleDrop(old);        // 이름을 고치면 옛 이름은 명단에서 지운다(오타 정리)
+      semPeopleStart(); semPeopleAdd(v);
       if(typeof wkPresRef!=='undefined'&&wkPresRef){ try{ wkPresRef.update({name:v}); }catch(e){} }
       if(typeof wkRepaintPresence==='function') wkRepaintPresence();
       semChatGate();
@@ -4219,13 +4245,18 @@
       (((SEMINAR||{}).owners)||[]).forEach(o=>{ if(o.name&&out.indexOf(o.name)<0) out.push(o.name); });
       (((SEMINAR||{}).tasks)||[]).forEach(t=>{ const n=(t.owner||'').trim();
         if(n&&n.length<=12&&out.indexOf(n)<0) out.push(n); });
-      // 지금 접속해 있는 사람 (채팅에서 바로 부를 수 있게)
+      // 이름을 설정한 사람 전원 (접속 중이 아니어도 부를 수 있게)
+      semPeopleNames().forEach(n=>{ if(out.indexOf(n)<0) out.push(n); });
+      // 지금 접속해 있는 사람
       try{ Object.keys(WK_PRES_MAP||{}).forEach(k=>{ const n=(WK_PRES_MAP[k]||{}).name;
         if(n&&out.indexOf(n)<0) out.push(n); }); }catch(e){}
       Object.keys(SEM_CMT||{}).forEach(i=>{ const o=SEM_CMT[i]||{};
         Object.keys(o).forEach(k=>{ const n=o[k]&&o[k].n; if(n&&out.indexOf(n)<0) out.push(n); }); });
       (SEM_CHAT||[]).forEach(m=>{ if(m.n&&out.indexOf(m.n)<0) out.push(m.n); });
       return out.sort((a,b)=>b.length-a.length);        // 긴 이름 먼저(부분 일치 오작동 방지)
+    }
+    function semIsOnline(n){
+      try{ return Object.keys(WK_PRES_MAP||{}).some(function(k){ return (WK_PRES_MAP[k]||{}).name===n; }); }catch(e){ return false; }
     }
     // 멘션 입력창 찾기 — 댓글은 semCmtIn<i>, 채팅은 semChatIn
     function semMenTA(i){ return document.getElementById(String(i)==='chat'?'semChatIn':('semCmtIn'+i)); }
@@ -4243,7 +4274,8 @@
       const box=document.getElementById('semMenu'+SEM_MEN.i); if(!box) return;
       box.classList.remove('hidden');
       box.innerHTML=SEM_MEN.list.map((n,k)=>`<button onmousedown="event.preventDefault();semMentionPick(${JSON.stringify(String(SEM_MEN.i))},${k})"
-        class="block w-full text-left text-[12px] px-2.5 py-1.5 ${k===SEM_MEN.idx?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'hover:bg-slate-50 text-slate-600'}">@${esc(n)}</button>`).join('');
+        class="flex items-center gap-1.5 w-full text-left text-[12px] px-2.5 py-1.5 ${k===SEM_MEN.idx?'bg-[#EDE9FF] text-[#5B44C7] font-semibold':'hover:bg-slate-50 text-slate-600'}"
+        >${semIsOnline(n)?'<span style="width:6px;height:6px;border-radius:9999px;background:#22C55E;display:inline-block;flex:none"></span>':'<span style="width:6px;flex:none"></span>'}@${esc(n)}</button>`).join('');
     }
     function semMentionMove(d){ if(!SEM_MEN) return;
       SEM_MEN.idx=(SEM_MEN.idx+d+SEM_MEN.list.length)%SEM_MEN.list.length; semMentionPaint(); }
