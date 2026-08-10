@@ -4439,6 +4439,15 @@
       };
 
       box.innerHTML=`
+      <!-- 맨 위: 동시 편집 안내 + 지금 접속한 사람 -->
+      <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#7C5CFF">
+        <p class="text-[12.5px] text-slate-500">각 칸을 클릭해 작성하세요. <b class="text-agreen">여러 명이 동시에 편집하면 실시간으로 서로 반영</b>됩니다.</p>
+        <div class="flex flex-wrap items-center gap-2 mt-2">
+          <div id="semPresence" class="flex flex-wrap items-center gap-1.5"></div>
+          <div id="semEditingBar"></div>
+        </div>
+      </div>
+
       <!-- 헤로 -->
       <div id="semHero" class="card p-5 sm:p-6 mb-4">
         <div class="flex flex-wrap items-start justify-between gap-3">
@@ -4456,11 +4465,6 @@
               <button onclick="semShare()" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold">🔗 공유 링크</button>
             </div>
           </div>
-        </div>
-        <p class="text-[12px] text-slate-400 mt-3">각 칸을 클릭해 작성하세요. <b class="text-agreen">여러 명이 동시에 편집하면 실시간으로 서로 반영</b>됩니다.</p>
-        <div class="flex flex-wrap items-center gap-2 mt-2">
-          <div id="semPresence" class="flex flex-wrap items-center gap-1.5"></div>
-          <div id="semEditingBar"></div>
         </div>
         <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-[#ECE9E1]">
           ${[['semSecNow','⚡ 이번 주'],['semSecGant','📋 체크리스트/타임라인'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecOv','📄 제안서']]
