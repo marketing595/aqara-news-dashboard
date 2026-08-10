@@ -3591,7 +3591,15 @@
           +'<span class="text-[13px] font-extrabold text-ink">💬 세미나 채팅</span>'
           +'<span class="flex items-center gap-2">'
           +'<button id="semChatWho" onclick="semNameAsk()" title="이름 바꾸기" class="text-[11px] text-slate-400 hover:text-ink underline"></button>'
+          +'<button onclick="semChatSearchToggle()" title="대화 검색" class="text-slate-400 hover:text-ink text-[13px] leading-none px-1">🔍</button>'
           +'<button onclick="semChatToggle()" class="text-slate-400 hover:text-ink text-[15px] leading-none px-1">✕</button></span></div>'
+        +'<div id="semChatSearchRow" class="hidden px-2.5 py-2 border-b border-[#ECE9E1] bg-white shrink-0">'
+          +'<div class="flex items-center gap-1.5">'
+          +'<input id="semChatQ" placeholder="대화 검색 · 이름이나 내용" '
+            +'class="flex-1 text-[12px] border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#7C5CFF]" '
+            +'oninput="semChatSearch(this.value)" onkeydown="if(event.key===\'Escape\'){event.preventDefault();semChatSearchClose();}" />'
+          +'<button onclick="semChatSearchClose()" title="검색 닫기" class="text-slate-400 hover:text-ink text-[13px] px-1">✕</button></div>'
+          +'<p id="semChatQInfo" class="text-[11px] text-slate-400 mt-1"></p></div>'
         +'<div id="semChatName" class="hidden absolute inset-0 z-20 bg-white flex flex-col items-center justify-center px-7 text-center">'
           +'<p class="text-[30px] leading-none">👋</p>'
           +'<p class="text-[14px] font-extrabold text-ink mt-2">채팅에 참여하려면<br>이름을 입력해 주세요</p>'
@@ -3773,6 +3781,31 @@
     }
     function semChatTime(ts){ if(!ts) return ''; const d=new Date(ts);
       return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0'); }
+    /* --- 대화 검색 --- */
+    let SEM_CHAT_Q='';
+    function semChatSearchToggle(){
+      const row=document.getElementById('semChatSearchRow'); if(!row) return;
+      if(row.classList.contains('hidden')){
+        row.classList.remove('hidden');
+        const i=document.getElementById('semChatQ'); if(i){ i.focus(); i.select(); }
+      } else semChatSearchClose();
+    }
+    function semChatSearchClose(){
+      const row=document.getElementById('semChatSearchRow'); if(row) row.classList.add('hidden');
+      const i=document.getElementById('semChatQ'); if(i) i.value='';
+      SEM_CHAT_Q=''; semChatPaint(); semChatBottom(true);
+    }
+    function semChatSearch(v){ SEM_CHAT_Q=String(v||'').trim(); semChatPaint(); }
+    // 찾은 낱말에 형광펜 — 태그 안쪽은 건드리지 않는다(멘션 배지가 깨지지 않게)
+    function semChatHL(html,q){
+      if(!q) return html;
+      const eq=esc(q).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      if(!eq) return html;
+      const rx=new RegExp('('+eq+')','ig');
+      return html.split(/(<[^>]*>)/).map(function(s){
+        return (s&&s.charAt(0)==='<')?s:s.replace(rx,'<mark class="bg-[#FFE68A] text-ink rounded px-0.5">$1</mark>');
+      }).join('');
+    }
     function semChatBody(txt,mine){                     // @이름을 배지로 (내 말풍선은 보라 배경이라 밝게)
       let h=esc(txt||'');
       const cls=mine?'bg-white/25 text-white rounded px-1 font-semibold'
@@ -3791,8 +3824,14 @@
       const l=document.getElementById('semChatList'); if(!l) return;
       if(!semChatRef()){ l.innerHTML='<p class="text-[12px] text-slate-400 text-center py-8">채팅은 로그인 후 이용할 수 있습니다.</p>'; return; }
       if(!SEM_CHAT.length){ l.innerHTML='<p class="text-[12px] text-slate-400 text-center py-8">첫 메시지를 남겨보세요.</p>'; return; }
+      const q=SEM_CHAT_Q.toLowerCase();
+      const rows=q?SEM_CHAT.filter(function(m){
+        return ((m.t||'')+' '+(m.n||'')).toLowerCase().indexOf(q)>=0; }):SEM_CHAT;
+      const info=document.getElementById('semChatQInfo');
+      if(info) info.textContent=q?(rows.length?(rows.length+'건 찾음'):'검색 결과가 없습니다.'):'';
+      if(q&&!rows.length){ l.innerHTML='<p class="text-[12px] text-slate-400 text-center py-8">"'+esc(SEM_CHAT_Q)+'" 와(과) 일치하는 대화가 없습니다.</p>'; return; }
       const me=semMe(); let lastDay='';
-      l.innerHTML=SEM_CHAT.map(function(m){
+      l.innerHTML=rows.map(function(m){
         const d=new Date(m.at||0), day=(d.getMonth()+1)+'월 '+d.getDate()+'일';
         let sep='';
         if(day!==lastDay){ lastDay=day;
@@ -3801,17 +3840,17 @@
         const hitMe=(m.m||[]).indexOf(me)>=0;                  // 나를 언급한 메시지
         return sep+'<div class="flex '+(mine?'justify-end':'justify-start')+'">'
           +'<div class="max-w-[80%]">'
-          +(mine?'':'<p class="text-[11px] font-semibold mb-0.5" style="color:'+c+'">'+esc(m.n||'익명')+(hitMe?' <span class="text-[#BF5332]">→ 나를 언급</span>':'')+'</p>')
+          +(mine?'':'<p class="text-[11px] font-semibold mb-0.5" style="color:'+c+'">'+semChatHL(esc(m.n||'익명'),SEM_CHAT_Q)+(hitMe?' <span class="text-[#BF5332]">→ 나를 언급</span>':'')+'</p>')
           +'<div class="group inline-flex items-end gap-1 '+(mine?'flex-row-reverse':'')+'">'
           +'<span class="inline-block text-[13px] leading-snug px-3 py-2 rounded-2xl whitespace-pre-wrap break-words '
             +(mine?'bg-[#7C5CFF] text-white rounded-br-md'
                   :(hitMe?'bg-[#FFF6E8] border border-[#F0D9A8] text-slate-800 rounded-bl-md'
-                         :'bg-white border border-[#E6E6E3] text-slate-700 rounded-bl-md'))+'">'+semChatBody(m.t||'',mine)+'</span>'
+                         :'bg-white border border-[#E6E6E3] text-slate-700 rounded-bl-md'))+'">'+semChatHL(semChatBody(m.t||'',mine),SEM_CHAT_Q)+'</span>'
           +'<span class="text-[10px] text-slate-400 shrink-0">'+semChatTime(m.at)+'</span>'
           +(mine?'<button onclick="semChatDel(\''+esc(m.k)+'\')" title="삭제" class="opacity-0 group-hover:opacity-100 text-[11px] text-slate-300 hover:text-ared shrink-0">✕</button>':'')
           +'</div></div></div>';
       }).join('');
-      if(SEM_CHAT_OPEN){ semChatMarkSeen(); semChatBottom(); }
+      if(SEM_CHAT_OPEN){ semChatMarkSeen(); if(!q) semChatBottom(); else l.scrollTop=0; }
     }
 
     /* --- 실시간 공동 작업 (주간보고와 같은 방식 + 누가 어디를 고치는 중인지 표시) --- */
