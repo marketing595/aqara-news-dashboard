@@ -3800,10 +3800,21 @@
     }
     // 공유: 세미나만 열리는 전용 링크 '주소만' 복사
     function semShare(){ bdCopy(location.origin+'/seminar.html'); }
+    /* 단독(공유) 모드로 열렸는지 — '' | 'seminar' | 'brandbook' */
+    let SOLO_VIEW='';
+    /* 단독 모드에서는 GNB가 없으므로 탭 전환 대신 전용 페이지 주소로 이동한다 */
+    function mktGo(s){
+      if(SOLO_VIEW && SOLO_VIEW!==s){
+        if(s==='seminar'){ location.href='/seminar.html'; return; }
+        if(s==='brandbook'){ location.href='/brandbook.html'; return; }
+      }
+      mktSub(s);
+    }
     /* --- 세미나 단독 모드 (/seminar.html · ?view=seminar · #seminar) --- */
     function semSoloMode(){
       const q=location.search||'', h=location.hash||'';
       if(!/[?&]view=seminar(\b|&|$)/.test(q) && h!=='#seminar') return false;
+      SOLO_VIEW='seminar';
       document.title='11월 세미나 공동작업 포털';
       const hd=document.querySelector('header'); if(hd) hd.style.display='none';
       ['gnb','subnav-pr','subnav-owned','subnav-report'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display='none'; });
@@ -3823,14 +3834,53 @@
         +'<a href="/" class="text-[12px] bg-white/10 hover:bg-white/20 px-2.5 py-1.5 rounded-lg border border-white/15">마케팅 포털</a></span></div>';
       document.body.insertBefore(bar, document.body.firstChild);
       // 세미나 단독 페이지는 파비콘도 세미나 전용으로 (공유 링크가 index.html로 넘어오기 때문)
-      try{
-        const f1=document.getElementById('favIcon'), f2=document.getElementById('favIcon192');
-        if(f1) f1.href='/favicon-seminar.png?v=3';
-        if(f2) f2.href='/favicon-seminar-192.png?v=3';
-      }catch(e){}
+      setFavicon('/favicon-seminar.png?v=5','/favicon-seminar-192.png?v=5');
       try{ renderSeminar(); }catch(e){ console.warn(e); }
       try{ if(typeof wkPresenceStart==='function') wkPresenceStart(); }catch(e){}
 
+      return true;
+    }
+    /* 파비콘 교체 — href만 바꾸면 크롬이 다시 읽지 않는다. link 태그를 지우고 새로 만든다. */
+    function setFavicon(p32,p192){
+      try{
+        const old=document.querySelectorAll('link[rel~="icon"],link[rel="apple-touch-icon"]');
+        for(let i=0;i<old.length;i++){ if(old[i].parentNode) old[i].parentNode.removeChild(old[i]); }
+        const mk=function(rel,href,sizes,id){
+          const l=document.createElement('link');
+          l.rel=rel; l.type='image/png'; if(sizes) l.setAttribute('sizes',sizes); if(id) l.id=id;
+          l.href=href; document.head.appendChild(l);
+        };
+        mk('icon',p32,'32x32','favIcon');
+        mk('icon',p192,'192x192','favIcon192');
+        mk('apple-touch-icon',p192,null,null);
+      }catch(e){}
+    }
+    /* --- 브랜드북 단독 모드 (/brandbook.html · ?view=brandbook · #brandbook) --- */
+    function bbShare(){ bdCopy(location.origin+'/brandbook.html'); }
+    function bbSoloMode(){
+      const q=location.search||'', h=location.hash||'';
+      if(!/[?&]view=brandbook(\b|&|$)/.test(q) && h!=='#brandbook') return false;
+      SOLO_VIEW='brandbook';
+      document.title='브랜드북 공동작업 포털';
+      const hd=document.querySelector('header'); if(hd) hd.style.display='none';
+      ['gnb','subnav-pr','subnav-owned','subnav-report'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display='none'; });
+      const mn=document.querySelector('main');
+      if(mn){ const ch=mn.children;
+        for(let i=0;i<ch.length;i++){ ch[i].classList.add('hidden'); ch[i].style.display='none'; } }
+      const v=document.getElementById('view-brandbook');
+      if(v&&mn){ mn.appendChild(v); v.classList.remove('hidden'); v.style.display='block'; }
+      const gp=document.getElementById('globalPresence'); if(gp) gp.removeAttribute('id');
+      const bar=document.createElement('div');
+      bar.className='bg-ink text-white';
+      bar.innerHTML='<div class="max-w-[1400px] mx-auto px-5 sm:px-8 py-2.5 flex items-center justify-between gap-3">'
+        +'<span class="text-[13px] font-bold">아카라라이프 브랜드북 <span class="font-normal text-white/40 text-[11px] ml-1">공동 작업 페이지</span></span>'
+        +'<span class="flex items-center gap-3"><span id="globalPresence" class="flex items-center"></span>'
+        +'<a href="/" class="text-[12px] bg-white/10 hover:bg-white/20 px-2.5 py-1.5 rounded-lg border border-white/15">마케팅 포털</a></span></div>';
+      document.body.insertBefore(bar, document.body.firstChild);
+      // 브랜드북 단독 페이지도 파비콘을 전용 아이콘으로 (공유 링크가 index.html로 넘어오기 때문)
+      setFavicon('/favicon-book.png?v=5','/favicon-book-192.png?v=5');
+      try{ renderBrandbook(); }catch(e){ console.warn(e); }
+      try{ if(typeof wkPresenceStart==='function') wkPresenceStart(); }catch(e){}
       return true;
     }
     function semGo(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
@@ -4331,7 +4381,7 @@
                 </button>
                 <span class="text-[10px] text-slate-500 w-[52px] shrink-0 truncate text-right">${esc(t.owner||'미정')}</span>
                 <span class="text-[9px] font-bold rounded px-1 py-0.5 shrink-0 w-[54px] text-center" style="background:${st.c}1A;color:${st.c}">${esc(st.lbl||'-')}</span>
-                ${/북\s*제작|브랜드북/.test(t.item||'')?`<button onclick="event.stopPropagation();mktSub('brandbook')" title="브랜드북 작업실로 이동 — 페이지 단위 진행 관리" class="shrink-0 text-[10px] font-bold rounded px-1.5 py-0.5 bg-[#EDE9FF] text-[#5B44C7] hover:brightness-95 whitespace-nowrap">📕 <span id="semBookLink">${esc(typeof bbSummary==='function'?bbSummary():'')||'작업실'}</span> ↗</button>`:''}
+                ${/북\s*제작|브랜드북/.test(t.item||'')?`<button onclick="event.stopPropagation();mktGo('brandbook')" title="브랜드북 작업실로 이동 — 페이지 단위 진행 관리" class="shrink-0 text-[10px] font-bold rounded px-1.5 py-0.5 bg-[#EDE9FF] text-[#5B44C7] hover:brightness-95 whitespace-nowrap">📕 <span id="semBookLink">${esc(typeof bbSummary==='function'?bbSummary():'')||'작업실'}</span> ↗</button>`:''}
                 <span class="shrink-0 text-[10px] ${cn?'text-[#5B44C7] font-bold':'text-slate-300'}" data-cn="${t.i}">💬${cn?' '+cn:''}</span>
                 <button onclick="event.stopPropagation();semDelTask(${t.i})" title="이 항목 삭제" class="shrink-0 text-[11px] text-slate-300 hover:text-ared px-0.5">✕</button>
                 <span class="shrink-0 text-[10px] text-slate-300 w-2.5 text-center">${open?'▾':'▸'}</span>
@@ -5372,7 +5422,8 @@
             <div class="text-[11px]" id="bbSaveState"></div>
             <div class="flex flex-wrap justify-end gap-1.5 mt-1.5">
               <button onclick="bbReload()" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold">🔄 새로고침</button>
-              <button onclick="mktSub('seminar')" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold">← 11월 세미나</button>
+              <button onclick="bbShare()" title="브랜드북만 열리는 전용 링크 복사" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold">🔗 공유 링크</button>
+              <button onclick="mktGo('seminar')" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold">← 11월 세미나</button>
             </div>
           </div>
         </div>
@@ -6861,6 +6912,7 @@
     loadData();
     if(location.hash.indexOf('#wkreport=')===0){ try{ wkShowShared(); }catch(e){} }
     try{ semSoloMode(); }catch(e){ console.warn('세미나 단독 모드 실패:',e); }
+    try{ bbSoloMode(); }catch(e){ console.warn('브랜드북 단독 모드 실패:',e); }
   </script>
 </body>
 </html>
