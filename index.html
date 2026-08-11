@@ -1286,6 +1286,7 @@
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">프로젝트</p>
              <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">11월 세미나</button>
+             <button id="mktBtn-brandbook" onclick="mktSub('brandbook')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">📕 브랜드북</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">언론홍보</p>
@@ -1306,6 +1307,7 @@
          </div>
        </div>
        <div id="mktSeminarSlot"></div>
+       <div id="view-brandbook" class="hidden"><div id="bbBody"></div></div>
        <div id="mktKpiSlot"></div>
        <div id="mktAdSlot"></div>
        <div id="mktReportSlot"></div>
@@ -4323,6 +4325,7 @@
                 </button>
                 <span class="text-[10px] text-slate-500 w-[52px] shrink-0 truncate text-right">${esc(t.owner||'미정')}</span>
                 <span class="text-[9px] font-bold rounded px-1 py-0.5 shrink-0 w-[54px] text-center" style="background:${st.c}1A;color:${st.c}">${esc(st.lbl||'-')}</span>
+                ${/북\s*제작|브랜드북/.test(t.item||'')?`<button onclick="event.stopPropagation();mktSub('brandbook')" title="브랜드북 작업실로 이동 — 페이지 단위 진행 관리" class="shrink-0 text-[10px] font-bold rounded px-1.5 py-0.5 bg-[#EDE9FF] text-[#5B44C7] hover:brightness-95 whitespace-nowrap">📕 <span id="semBookLink">${esc(typeof bbSummary==='function'?bbSummary():'')||'작업실'}</span> ↗</button>`:''}
                 <span class="shrink-0 text-[10px] ${cn?'text-[#5B44C7] font-bold':'text-slate-300'}" data-cn="${t.i}">💬${cn?' '+cn:''}</span>
                 <button onclick="event.stopPropagation();semDelTask(${t.i})" title="이 항목 삭제" class="shrink-0 text-[11px] text-slate-300 hover:text-ared px-0.5">✕</button>
                 <span class="shrink-0 text-[10px] text-slate-300 w-2.5 text-center">${open?'▾':'▸'}</span>
@@ -4769,6 +4772,7 @@
       semPaintSave(); semCmtPaint(); semPaintEditing();
       // 접속자 칩은 화면을 다시 그릴 때마다 사라지므로 마지막 접속 상태로 다시 칠한다
       try{ if(typeof wkPresenceStart==='function') wkPresenceStart(); if(typeof wkRepaintPresence==='function') wkRepaintPresence(); }catch(e){}
+      try{ bbPreload(); }catch(e){}     // '북 제작' 줄에 브랜드북 진행률 표시
       // 간트 가로 스크롤 위치 유지(없으면 오늘 근처로)
       const g2=document.getElementById('semGant');
       if(g2){ if(SEM_GSCROLL!=null) g2.scrollLeft=SEM_GSCROLL;
@@ -5205,6 +5209,277 @@
       if(B.length){ const cc=['#5E85A6','#1D1D1F','#BF5332','#C77A34','#9A9169']; draw('mktSovChart',{type:'doughnut',data:{labels:B.map(b=>b.name),datasets:[{data:B.map(b=>b.total||0),backgroundColor:B.map((b,i)=>b.me?'#FBC400':cc[i%5]),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11}}}}}); }
     }
 
+    /* ===== 📕 브랜드북 (페이지 단위 관리 · Firebase brandbook/data 실시간 공동 편집) =====
+       원본 brandbook.json + 오버라이드 키(pg.<i>.<필드>, sc.<i>.<필드>, del.<i>, extraN) */
+    let BOOK=null, BB_LOADING=false, BB_OVER={}, bbRefOn=false, bbTimer=null, BB_INFLIGHT=0, BB_ERR=false;
+    const BB_OPEN={};                                     // 펼쳐진 페이지
+    let BB_F={sec:'',status:'',owner:''};
+    const BB_STCOL={'미착수':'#9AA0A6','원고 작성':'#D68134','원고 검토':'#8A6A00','시안':'#8FB9D8','감수':'#716A3C','확정':'#5E7350'};
+
+    function bbRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('brandbook/data'):null; }
+    function bbKey(k){ return k.replace(/[.#$/\[\]]/g,'_'); }
+    function bbV(k,def){ const v=BB_OVER[bbKey(k)]; return (v==null||v==='')?(def==null?'':def):v; }
+    function bbLocalLoad(){ try{ return JSON.parse(localStorage.getItem('aqaraBookEdits')||'{}'); }catch(e){ return {}; } }
+    function bbStart(){
+      if(bbRefOn) return; const ref=bbRef();
+      if(!ref){ BB_OVER=Object.assign(bbLocalLoad(),BB_OVER); return; }
+      bbRefOn=true;
+      ref.on('value',s=>{
+        BB_OVER=s.val()||{};
+        if(!BOOK) return;
+        const a=document.activeElement, k=(a&&a.dataset)?(a.dataset.bk||''):'';
+        if(a&&a.dataset&&a.dataset.bk) bbApplyRemote(k); else renderBrandbook();
+      });
+    }
+    function bbApplyRemote(skip){                          // 내가 잡은 칸만 빼고 남의 수정 반영
+      const els=document.querySelectorAll('[data-bk]');
+      for(let i=0;i<els.length;i++){ const el=els[i], k=el.dataset.bk;
+        if(!k||k===skip) continue;
+        const v=BB_OVER[k]; if(v==null) continue;
+        if(el.innerText.trim()!==String(v)) el.innerText=v; }
+      bbPaintSave(); bbPaintProgress();
+    }
+    function bbSave(k,v){
+      BB_OVER[k]=v;
+      const ref=bbRef();
+      if(ref) bbTrack(ref.child(k.replace(/[.#$/\[\]]/g,'_')).set(v));
+      else { try{ localStorage.setItem('aqaraBookEdits',JSON.stringify(BB_OVER)); }catch(e){} bbPaintSave(); }
+      bbPaintProgress();
+    }
+    function bbTrack(p){
+      BB_INFLIGHT++; bbPaintSave();
+      const done=()=>{ BB_INFLIGHT=Math.max(0,BB_INFLIGHT-1); bbPaintSave(); };
+      if(p&&p.then) p.then(()=>{ BB_ERR=false; done(); },e=>{ BB_ERR=true; console.warn('브랜드북 저장 실패:',e&&e.message); done(); });
+      else done();
+    }
+    function bbPaintSave(){
+      const el=document.getElementById('bbSaveState'); if(!el) return;
+      if(BB_ERR){ el.innerHTML='<span class="font-semibold" style="color:#B91C1C">⚠ 저장 실패</span>'; return; }
+      if(BB_INFLIGHT>0||bbTimer){ el.innerHTML='<span class="font-semibold" style="color:#D97706">● 저장 중…</span>'; return; }
+      const d=new Date();
+      el.innerHTML='<span class="font-semibold" style="color:#16A34A">✓ 저장됨</span> <span class="num text-slate-400">'
+        +d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')+'</span>';
+    }
+    function bbInput(el,now){
+      const k=el.dataset.bk, v=el.innerText.trim();
+      clearTimeout(bbTimer); bbTimer=null;
+      if(now){ bbSave(k,v); return; }
+      BB_OVER[k]=v;
+      bbTimer=setTimeout(()=>{ bbTimer=null; bbSave(k,v); },200);
+      bbPaintSave();
+    }
+    function bbe(k,def,cls){ return `<span class="sem-edit ${cls||''}" data-bk="${bbKey(k)}" contenteditable="true" spellcheck="false"
+      oninput="bbInput(this)" onblur="bbInput(this,1)">${esc(bbV(k,def))}</span>`; }
+
+    // 페이지 목록 (원본 + 추가분, 삭제 반영)
+    function bbPages(){
+      const out=[]; const B=BOOK||{};
+      (B.sections||[]).forEach((s,si)=>{
+        (s.pages||[]).forEach((p,pi)=>{
+          const i=si*100+pi;                                // 원본 인덱스
+          if(bbV('del.'+i,'')) return;
+          out.push({ i:i, sec:bbV('pg.'+i+'.sec',s.name), p:bbV('pg.'+i+'.p',p.p),
+            title:bbV('pg.'+i+'.title',p.title), owner:bbV('pg.'+i+'.owner',p.owner||''),
+            status:bbV('pg.'+i+'.status',p.status||'미착수'), due:bbV('pg.'+i+'.due',p.due||''),
+            memo:bbV('pg.'+i+'.memo',p.memo||''), link:bbV('pg.'+i+'.link',''), note:bbV('pg.'+i+'.note',''), src:p });
+        });
+      });
+      for(let i=9000;i<9060;i++){                           // 추가 페이지
+        if(bbV('del.'+i,'')) continue;
+        if(!bbV('pg.'+i+'.title','')) continue;
+        out.push({ i:i, sec:bbV('pg.'+i+'.sec','기타'), p:bbV('pg.'+i+'.p',''), title:bbV('pg.'+i+'.title',''),
+          owner:bbV('pg.'+i+'.owner',''), status:bbV('pg.'+i+'.status','미착수'), due:bbV('pg.'+i+'.due',''),
+          memo:bbV('pg.'+i+'.memo',''), link:bbV('pg.'+i+'.link',''), note:bbV('pg.'+i+'.note',''), src:{} });
+      }
+      return out;
+    }
+    function bbDone(p){ return p.status==='확정'; }
+    function bbStats(){
+      const all=bbPages(), done=all.filter(bbDone).length;
+      return { all:all, n:all.length, done:done, pct:all.length?Math.round(done/all.length*100):0 };
+    }
+    // 세미나 탭에서 쓸 한 줄 요약 (브랜드북 진행률)
+    function bbSummary(){ const s=bbStats(); return s.n?(s.done+'/'+s.n+'p 확정 · '+s.pct+'%'):''; }
+    function bbPaintProgress(){
+      const s=bbStats();
+      const bar=document.getElementById('bbBar'); if(bar) bar.style.width=s.pct+'%';
+      const t=document.getElementById('bbPct'); if(t) t.textContent=s.pct+'%';
+      const c=document.getElementById('bbCnt'); if(c) c.textContent=s.done+' / '+s.n+'p 확정';
+      const semi=document.getElementById('semBookLink'); if(semi) semi.textContent=bbSummary();
+    }
+    function bbSetF(k,v){ BB_F[k]=(BB_F[k]===v?'':v); renderBrandbook(); }
+    function bbToggle(i){ BB_OPEN[i]=!BB_OPEN[i]; renderBrandbook(); }
+    function bbSetStatus(i,v){ bbSave(bbKey('pg.'+i+'.status'),v); renderBrandbook(); }
+    function bbAddPage(sec){
+      let i=9000; while(bbV('pg.'+i+'.title','')||bbV('del.'+i,'')) i++;
+      bbSave(bbKey('pg.'+i+'.sec'),sec||'기타');
+      bbSave(bbKey('pg.'+i+'.title'),'새 페이지');
+      bbSave(bbKey('pg.'+i+'.status'),'미착수');
+      BB_OPEN[i]=true; renderBrandbook();
+    }
+    function bbDelPage(i,title){ if(!confirm('"'+title+'" 페이지를 목록에서 삭제할까요?')) return; bbSave(bbKey('del.'+i),'1'); renderBrandbook(); }
+    function bbReload(){ BOOK=null; BB_LOADING=false; renderBrandbook(); }
+    // 세미나 탭의 '북 제작' 줄에 진행률을 띄우기 위해 조용히 한 번 읽어둔다
+    function bbPreload(){
+      if(BOOK||BB_LOADING) { bbPaintProgress(); return; }
+      BB_LOADING=true;
+      fetch('brandbook.json?_='+Date.now()).then(r=>r.json()).then(d=>{ BOOK=d; BB_LOADING=false; bbStart(); bbPaintProgress(); })
+        .catch(()=>{ BB_LOADING=false; });
+    }
+    function bbToday(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+    function bbMD(s){ return s?(parseInt(s.slice(5,7),10)+'/'+parseInt(s.slice(8,10),10)):''; }
+
+    function renderBrandbook(){
+      const box=document.getElementById('bbBody'); if(!box) return;
+      if(!BOOK){
+        box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">브랜드북 자료를 불러오는 중…</p>';
+        if(BB_LOADING) return; BB_LOADING=true;
+        fetch('brandbook.json?_='+Date.now()).then(r=>r.json()).then(d=>{ BOOK=d; BB_LOADING=false; renderBrandbook(); })
+          .catch(()=>{ BB_LOADING=false; box.innerHTML='<p class="text-sm text-ared py-16 text-center">브랜드북 자료를 불러오지 못했습니다.</p>'; });
+        return;
+      }
+      bbStart();
+      const B=BOOK, st=bbStats(), td=bbToday();
+      const STS=B.statuses||['미착수','확정'];
+      const pages=st.all.filter(p=>(!BB_F.sec||p.sec===BB_F.sec)&&(!BB_F.status||p.status===BB_F.status)&&(!BB_F.owner||p.owner===BB_F.owner));
+      const secs=[]; st.all.forEach(p=>{ if(secs.indexOf(p.sec)<0) secs.push(p.sec); });
+      const owners=[]; st.all.forEach(p=>{ if(p.owner&&owners.indexOf(p.owner)<0) owners.push(p.owner); });
+      const secMeta={}; (B.sections||[]).forEach(s=>{ secMeta[s.name]={range:s.range||'',for:s.for||''}; });
+      const stN={}; st.all.forEach(p=>{ stN[p.status]=(stN[p.status]||0)+1; });
+
+      const chip=(s)=>`<span class="text-[10px] font-bold rounded px-1.5 py-0.5 whitespace-nowrap" style="background:${BB_STCOL[s]||'#9AA0A6'}1A;color:${BB_STCOL[s]||'#9AA0A6'}">${esc(s)}</span>`;
+
+      box.innerHTML=`
+      <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#7C5CFF">
+        <p class="text-[12.5px] text-slate-500">각 칸을 클릭해 작성하세요. <b class="text-agreen">여러 명이 동시에 편집하면 실시간으로 서로 반영</b>됩니다.</p>
+        <div class="flex flex-wrap items-center gap-2 mt-2"><div id="bbPresence" class="flex flex-wrap items-center gap-1.5"></div></div>
+      </div>
+
+      <div class="card p-5 sm:p-6 mb-4">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0">
+            <p class="text-[11px] font-extrabold tracking-wider text-brand-ink">KOSID × AQARA LIFE · 실무 가이드북</p>
+            <h2 class="text-[21px] sm:text-[25px] font-extrabold text-ink leading-tight mt-0.5">${bbe('title',B.title)}</h2>
+            <p class="text-[13px] text-slate-500 mt-1">${bbe('subtitle',B.subtitle)}</p>
+          </div>
+          <div class="text-right shrink-0">
+            <div class="text-[11px]" id="bbSaveState"></div>
+            <div class="flex flex-wrap justify-end gap-1.5 mt-1.5">
+              <button onclick="bbReload()" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold">🔄 새로고침</button>
+              <button onclick="mktSub('seminar')" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold">← 11월 세미나</button>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-xl bg-[#FBFAFF] border border-[#EDE9FF] p-3.5 mt-3">
+          <p class="text-[11px] font-bold text-[#5B44C7] mb-1">포지셔닝</p>
+          <p class="text-[12.5px] text-slate-700 leading-relaxed">${bbe('positioning',B.positioning)}</p>
+        </div>
+        <div class="mt-3">
+          <div class="flex items-baseline justify-between mb-1.5">
+            <p class="text-[12px] font-extrabold text-ink">페이지 진행률 <span class="text-[11px] font-normal text-slate-400" id="bbCnt">${st.done} / ${st.n}p 확정</span></p>
+            <p class="text-[13px] font-extrabold num text-ink" id="bbPct">${st.pct}%</p>
+          </div>
+          <div class="h-3 rounded-lg bg-slate-100 overflow-hidden"><div id="bbBar" class="h-full" style="width:${st.pct}%;background:#5E7350"></div></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-4">
+        ${STS.map(s=>`<button onclick="bbSetF('status','${esc(s)}')" class="card p-3 text-left ${BB_F.status===s?'ring-2 ring-[#7C5CFF]':''}">
+          <p class="text-[11px] text-slate-500">${esc(s)}</p>
+          <p class="num text-xl font-extrabold" style="color:${BB_STCOL[s]||'#26282A'}">${stN[s]||0}<span class="text-[11px] text-slate-400 font-normal">p</span></p></button>`).join('')}
+      </div>
+
+      <!-- 제작 스케줄 -->
+      <section class="card p-5 mb-4" id="bbSec-sched">
+        <h3 class="accent font-extrabold text-ink mb-3">🗓 제작 추진 스케줄</h3>
+        <div class="overflow-auto rounded-xl border border-[#E6E6E3]">
+          <table class="w-full text-[12px]">
+            <thead class="bg-[#FAFAF9] text-slate-500"><tr class="text-left">
+              <th class="px-2.5 py-2 font-semibold whitespace-nowrap">완료</th><th class="px-2.5 py-2 font-semibold whitespace-nowrap">일정</th>
+              <th class="px-2.5 py-2 font-semibold whitespace-nowrap">단계</th><th class="px-2.5 py-2 font-semibold">핵심 과제</th>
+              <th class="px-2.5 py-2 font-semibold whitespace-nowrap">담당</th></tr></thead>
+            <tbody>${(B.schedule||[]).map((s,i)=>{
+              const done=!!bbV('sc.'+i+'.done',''), d=bbV('sc.'+i+'.d',s.d), late=(!done&&d&&d<td);
+              return `<tr class="border-t border-slate-100 ${done?'bg-[#F7FBF5]':(late?'bg-[#FDF7F5]':'')}">
+                <td class="px-2.5 py-2"><input type="checkbox" ${done?'checked':''} onchange="bbSave(bbKey('sc.${i}.done'),this.checked?'1':'');renderBrandbook()" class="w-3.5 h-3.5 accent-[#5E7350]" /></td>
+                <td class="px-2.5 py-2 num whitespace-nowrap ${late?'text-ared font-bold':'text-ink font-semibold'}">${bbe('sc.'+i+'.d',s.d)}${late?' <span class="text-[10px]">지연</span>':''}</td>
+                <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${bbe('sc.'+i+'.step',s.step)}</td>
+                <td class="px-2.5 py-2 text-slate-600">${bbe('sc.'+i+'.task',s.task)}</td>
+                <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${bbe('sc.'+i+'.owner',s.owner||'-')}</td></tr>`;
+            }).join('')}</tbody></table>
+        </div>
+      </section>
+
+      <!-- 필터 -->
+      <div class="flex flex-wrap items-center gap-1.5 mb-3">
+        <button onclick="bbSetF('sec','')" class="text-[11px] font-bold rounded-full px-2.5 py-1 border ${BB_F.sec===''?'bg-ink text-white border-ink':'border-[#E6E6E3] text-slate-500 hover:bg-[#FAFAF9]'}">전체 ${st.n}p</button>
+        ${secs.map(s=>`<button onclick="bbSetF('sec','${esc(s).replace(/'/g,"\\'")}')" class="text-[11px] font-bold rounded-full px-2.5 py-1 border ${BB_F.sec===s?'bg-ink text-white border-ink':'border-[#E6E6E3] text-slate-500 hover:bg-[#FAFAF9]'}">${esc(s.replace(/^SECTION\s*/,'S'))}</button>`).join('')}
+        ${owners.length?`<select onchange="BB_F.owner=this.value;renderBrandbook()" class="text-[12px] border border-[#E6E6E3] rounded-lg px-2 py-1">
+          <option value="">담당 전체</option>${owners.map(o=>`<option ${BB_F.owner===o?'selected':''}>${esc(o)}</option>`).join('')}</select>`:''}
+        ${(BB_F.sec||BB_F.status||BB_F.owner)?`<button onclick="BB_F={sec:'',status:'',owner:''};renderBrandbook()" class="text-[11px] text-slate-400 hover:text-ink underline">필터 해제</button>`:''}
+      </div>
+
+      <!-- 페이지 목록 -->
+      ${secs.filter(s=>!BB_F.sec||s===BB_F.sec).map(sname=>{
+        const rows=pages.filter(p=>p.sec===sname); if(!rows.length) return '';
+        const m=secMeta[sname]||{}, dn=rows.filter(bbDone).length;
+        return `<section class="card p-4 sm:p-5 mb-3">
+          <div class="flex flex-wrap items-baseline justify-between gap-2 mb-2.5">
+            <h3 class="font-extrabold text-ink text-[14px]">${esc(sname)}
+              <span class="text-[11px] font-normal text-slate-400 ml-1">${esc(m.range||'')}${m.for?' · '+esc(m.for):''}</span></h3>
+            <span class="text-[11px] text-slate-400 num">${dn}/${rows.length}p 확정</span>
+          </div>
+          <div class="rounded-xl border border-[#E6E6E3] overflow-hidden">
+          ${rows.map(p=>`
+            <div class="border-b border-slate-100 last:border-0">
+              <div class="flex items-center gap-2 px-2.5 py-2 hover:bg-[#FAFAF9]">
+                <span class="num text-[11px] text-slate-400 w-[46px] shrink-0 text-right">${esc(p.p||'-')}</span>
+                <button onclick="bbToggle(${p.i})" class="flex-1 min-w-0 text-left">
+                  <span class="block text-[13px] leading-tight truncate ${bbDone(p)?'text-slate-400':'text-ink font-semibold'}">${esc(p.title)}</span>
+                  ${p.memo?`<span class="block text-[10.5px] leading-tight text-slate-400 truncate">${esc(p.memo)}</span>`:''}
+                </button>
+                <span class="text-[11px] text-slate-500 w-[56px] shrink-0 truncate text-right">${esc(p.owner||'미정')}</span>
+                <span class="num text-[10.5px] shrink-0 w-[44px] text-right ${(p.due&&!bbDone(p)&&p.due<td)?'text-ared font-bold':'text-slate-400'}">${esc(bbMD(p.due)||'')}</span>
+                <select onchange="bbSetStatus(${p.i},this.value)" class="text-[10px] font-bold rounded px-1 py-0.5 border-0 shrink-0"
+                  style="background:${BB_STCOL[p.status]||'#9AA0A6'}1A;color:${BB_STCOL[p.status]||'#9AA0A6'}">
+                  ${STS.map(s=>`<option ${p.status===s?'selected':''}>${esc(s)}</option>`).join('')}</select>
+                <button onclick="bbDelPage(${p.i},'${esc(p.title).replace(/'/g,"\\'")}')" title="삭제" class="shrink-0 text-[11px] text-slate-300 hover:text-ared px-0.5">✕</button>
+              </div>
+              ${BB_OPEN[p.i]?`<div class="px-3 pb-3 pt-1 bg-[#FCFCFB] border-t border-slate-100">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-[12px]">
+                  <p><span class="text-slate-400 mr-1.5">페이지</span>${bbe('pg.'+p.i+'.p',p.src.p||'')}</p>
+                  <p><span class="text-slate-400 mr-1.5">제목</span>${bbe('pg.'+p.i+'.title',p.src.title||'')}</p>
+                  <p><span class="text-slate-400 mr-1.5">담당</span>${bbe('pg.'+p.i+'.owner',p.src.owner||'')}</p>
+                  <p><span class="text-slate-400 mr-1.5">마감</span>${bbe('pg.'+p.i+'.due',p.src.due||'')} <span class="text-slate-300 text-[10px]">YYYY-MM-DD</span></p>
+                </div>
+                <p class="text-[12px] mt-2"><span class="text-slate-400 mr-1.5">내용 메모</span>${bbe('pg.'+p.i+'.memo',p.src.memo||'')}</p>
+                <p class="text-[12px] mt-1.5"><span class="text-slate-400 mr-1.5">시안·원고 링크</span>${bbe('pg.'+p.i+'.link','')}
+                  ${p.link&&/^https?:/.test(p.link)?`<a href="${esc(p.link)}" target="_blank" rel="noopener" class="lnk ml-1 text-[11px]">열기 ↗</a>`:''}</p>
+                <p class="text-[12px] mt-1.5"><span class="text-slate-400 mr-1.5">감수 의견</span>${bbe('pg.'+p.i+'.note','')}</p>
+              </div>`:''}
+            </div>`).join('')}
+          </div>
+          <button onclick="bbAddPage('${esc(sname).replace(/'/g,"\\'")}')" class="mt-2 text-[11px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 이 섹션에 페이지 추가</button>
+        </section>`;
+      }).join('')}
+
+      <!-- 사양 -->
+      <section class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-3">📐 제작 사양</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1.5">
+          ${(B.specs||[]).map((s,i)=>`<p class="text-[12.5px] flex gap-2 border-b border-[#F1EFE9] py-1.5">
+            <span class="text-slate-400 w-[110px] shrink-0">${esc(s.k)}</span>${bbe('sp.'+i+'.v',s.v||'')}</p>`).join('')}
+        </div>
+        <div class="mt-3 rounded-xl bg-[#FAFAF9] border border-[#E6E6E3] p-3.5">
+          <p class="text-[11px] font-bold text-slate-500 mb-1">한 줄 요약</p>
+          <p class="text-[13px] font-semibold text-ink leading-relaxed">${bbe('oneline',B.oneline)}</p>
+        </div>
+      </section>`;
+
+      bbPaintSave(); bbPaintProgress();
+      try{ if(typeof wkPresenceStart==='function') wkPresenceStart(); if(typeof wkRepaintPresence==='function') wkRepaintPresence(); }catch(e){}
+    }
+
     // ===== 미디어 라이브러리 (구글드라이브 연동 · 카테고리별) =====
     let LIBRARY={categories:[]};
     function loadLibrary(){ fetch('media.json?_='+Date.now()).then(r=>r.json()).then(d=>{ LIBRARY=d&&d.categories?d:{categories:[]}; renderLibrary(); }).catch(()=>{ LIBRARY={categories:[]}; renderLibrary(); }); }
@@ -5282,6 +5557,7 @@
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       const adv=document.getElementById('view-ad'); if(adv) adv.classList.toggle('hidden', s!=='ad');
       const sem=document.getElementById('view-seminar'); if(sem) sem.classList.toggle('hidden', s!=='seminar');
+      const bbv=document.getElementById('view-brandbook'); if(bbv) bbv.classList.toggle('hidden', s!=='brandbook');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
       document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
@@ -5289,7 +5565,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','insta','blog','prpitch','ad','seminar','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
+      ['weekly','medialist','calendar','insta','blog','prpitch','ad','seminar','brandbook','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -5298,6 +5574,7 @@
       if(s==='prpitch'){ renderMktPr(); }
       if(s==='ad'){ loadAd(); }
       if(s==='seminar'){ renderSeminar(); }
+      if(s==='brandbook'){ renderBrandbook(); }
       if(s==='report'){ mktReportSub(mktRptView); }
 
     }
@@ -5684,7 +5961,7 @@
           +'"><span style="width:6px;height:6px;border-radius:9999px;background:#22C55E;display:inline-block"></span>'+esc(n)+(me?' (나)':'')+'</span>'; }).join(' ');
       const barHTML=keys.length?('<span class="text-[12px] font-semibold text-slate-500 mr-1">🟢 접속 중 '+keys.length+'명</span> '+chipsHTML
         +' <button onclick="wkRenamePresence()" class="text-[11px] text-slate-400 hover:text-ink underline ml-1">내 이름 변경</button>'):'';
-      ['wkPresence','semPresence'].forEach(function(pid){ const pe=document.getElementById(pid); if(pe) pe.innerHTML=barHTML; }); }
+      ['wkPresence','semPresence','bbPresence'].forEach(function(pid){ const pe=document.getElementById(pid); if(pe) pe.innerHTML=barHTML; }); }
     function wkGroupItems(items,projs){ const groups=[]; if(projs&&projs.length){ projs.forEach(p=>{ const gi=items.filter(it=>it.project===p.id); if(gi.length) groups.push({p:p,items:gi}); }); const none=items.filter(it=>!it.project||!projs.some(p=>p.id===it.project)); if(none.length) groups.push({p:null,items:none}); } else if(items.length){ groups.push({p:null,items:items}); } return groups; }
     // 항목 조작
     function wkToggle(bk,id,checked){ const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/c']=!!checked; wkApply(u); }
