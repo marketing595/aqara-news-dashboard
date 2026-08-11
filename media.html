@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>아카라라이프 미디어 라이브러리</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta property="og:title" content="아카라라이프 미디어 라이브러리" />
+<meta property="og:description" content="로고·가이드·제품 이미지·카탈로그 등 아카라라이프 브랜드 자산" />
+<link rel="icon" href="favicon.svg" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: { colors: {
+    brand: { DEFAULT:'#FBC400', ink:'#8A6A00' },
+    ink:'#26282A', muted:'#5E625F'
+  } } } };
+</script>
+<style>
+  body{ font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif; background:#F5F3EE; color:#26282A; }
+  .card{ background:#fff; border-radius:18px; box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.04); }
+  .line-clamp-2{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+</style>
+</head>
+<body>
+
+<header class="bg-ink text-white">
+  <div class="max-w-[1200px] mx-auto px-5 sm:px-8 py-4 flex items-center justify-between gap-3">
+    <div class="min-w-0">
+      <p class="text-[11px] font-extrabold tracking-wider" style="color:#FBC400">AQARA LIFE</p>
+      <h1 class="text-[17px] sm:text-[19px] font-extrabold leading-tight">미디어 라이브러리</h1>
+    </div>
+    <span id="scope" class="text-[11px] text-white/45 text-right shrink-0"></span>
+  </div>
+</header>
+
+<main class="max-w-[1200px] mx-auto px-5 sm:px-8 py-6">
+
+  <div class="card p-4 sm:p-5 mb-5">
+    <p class="text-[13px] text-muted leading-relaxed">
+      아카라라이프의 로고·브랜드 가이드·제품 이미지·카탈로그 등 <b class="text-ink">배포용 자산</b>입니다.
+      항목을 누르면 구글 드라이브에서 열리며 내려받을 수 있습니다.
+    </p>
+    <div class="flex flex-wrap items-center gap-2 mt-3">
+      <select id="cat" onchange="paint()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 bg-white">
+        <option value="">전체 카테고리</option>
+      </select>
+      <input id="q" oninput="paint()" placeholder="자료 이름 검색" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 w-44" />
+      <span id="count" class="text-[12px] text-slate-400"></span>
+    </div>
+  </div>
+
+  <div id="grid"></div>
+
+  <p class="text-center text-[11px] text-slate-400 mt-8 leading-relaxed">
+    문의 · <a href="mailto:support@aqara.kr" class="underline hover:text-ink">support@aqara.kr</a><br>
+    본 자산의 저작권은 (주)아카라라이프에 있으며, 로고·서체는 브랜드 가이드에 따라 사용해 주세요.
+  </p>
+</main>
+
+<script>
+  var LIB={categories:[]};
+  var ONLY=new URLSearchParams(location.search).get('cat')||'';   // ?cat=카테고리명 → 그 카테고리만 공유
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function icon(k){ return k==='pdf'?'📄':k==='video'?'🎬':k==='image'?'🖼️':k==='ppt'?'📊':k==='folder'?'📁':'📎'; }
+  function itemUrl(it){ return it.kind==='folder'
+    ? 'https://drive.google.com/drive/folders/'+it.id
+    : 'https://drive.google.com/file/d/'+it.id+'/view'; }
+
+  function card(it){
+    var thumb = it.kind==='image'
+      ? '<img src="https://drive.google.com/thumbnail?id='+esc(it.id)+'&sz=w200" loading="lazy" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML=\'<span class=&quot;text-2xl&quot;>🖼️</span>\'"/>'
+      : '<span class="text-2xl">'+icon(it.kind)+'</span>';
+    return '<a href="'+itemUrl(it)+'" target="_blank" rel="noopener" title="'+esc(it.title)+(it.size?(' · '+esc(it.size)):'')+'"'
+      +' class="flex flex-col items-center text-center p-1.5 rounded-lg hover:bg-brand/10 transition">'
+      +'<div class="w-14 h-14 rounded-lg bg-[#F4F1EA] border border-[#ECE9E1] flex items-center justify-center overflow-hidden mb-1">'+thumb+'</div>'
+      +'<div class="text-[11px] text-ink leading-tight line-clamp-2 w-full">'+esc(it.title)+'</div></a>';
+  }
+
+  function paint(){
+    var cats=(LIB.categories||[]).filter(function(c){ return !ONLY || c.name===ONLY; });
+    var sel=document.getElementById('cat');
+    if(sel.options.length!==cats.length+1){
+      var cur=sel.value;
+      sel.innerHTML='<option value="">전체 카테고리</option>'+cats.map(function(c){ return '<option>'+esc(c.name)+'</option>'; }).join('');
+      if(cats.some(function(c){ return c.name===cur; })) sel.value=cur;
+    }
+    sel.classList.toggle('hidden', !!ONLY);
+    var cf=sel.value, q=(document.getElementById('q').value||'').toLowerCase().trim();
+    var list=cats.filter(function(c){ return !cf||c.name===cf; })
+                 .slice().sort(function(a,b){ return (b.pinned?1:0)-(a.pinned?1:0); });
+
+    var out='', buf=[], n=0;
+    var flush=function(){ if(buf.length){ out+='<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">'+buf.join('')+'</div>'; buf=[]; } };
+
+    list.forEach(function(c){
+      var items=(c.items||[]).filter(function(it){ return !q || (it.title||'').toLowerCase().indexOf(q)>-1; });
+      n+=items.length;
+      var folderUrl='https://drive.google.com/drive/folders/'+esc(c.folderId);
+      if(!items.length){
+        if(q) return;                       // 검색 중이면 빈 카테고리는 숨김
+        buf.push('<a href="'+folderUrl+'" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 rounded-xl border '
+          +(c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3] bg-white')+' p-4 hover:border-brand transition">'
+          +'<div><div class="font-extrabold text-ink">'+(c.pinned?'<span style="color:#E0A500">★ </span>':'')+esc(c.name)+'</div>'
+          +'<div class="text-[11px] text-slate-400 mt-0.5">'+esc(c.desc||'')+'</div>'
+          +'<div class="text-[11px] text-ink mt-1 font-medium">드라이브에서 다운로드 ↗</div></div>'
+          +'<span class="text-xl shrink-0">📁</span></a>');
+        return;
+      }
+      flush();
+      out+='<section class="mb-7 '+(c.pinned?'rounded-xl border border-[#F0E7C0] bg-[#FEFCF3] p-4':'')+'">'
+        +'<div class="flex items-center justify-between flex-wrap gap-2 mb-3">'
+        +'<h3 class="font-extrabold text-ink">'+(c.pinned?'<span style="color:#E0A500">★ </span>':'')+esc(c.name)
+        +' <span class="text-xs font-normal text-slate-400 ml-1">'+esc(c.desc||'')+'</span></h3>'
+        +'<a href="'+folderUrl+'" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium whitespace-nowrap">드라이브 폴더 열기 ↗</a></div>'
+        +'<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-1">'+items.map(card).join('')+'</div></section>';
+    });
+    flush();
+
+    document.getElementById('grid').innerHTML = out ||
+      '<div class="card text-center py-16 text-slate-400"><div class="text-4xl mb-2">📁</div>자료를 찾지 못했습니다.</div>';
+    document.getElementById('count').textContent = n ? (n.toLocaleString()+'개 자료') : '';
+    document.getElementById('scope').textContent = ONLY ? ONLY : '';
+  }
+
+  fetch('media.json?_='+Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(d){ LIB=(d&&d.categories)?d:{categories:[]}; paint(); })
+    .catch(function(){
+      document.getElementById('grid').innerHTML =
+        '<div class="card text-center py-16 text-slate-400">자료 목록을 불러오지 못했습니다.</div>';
+    });
+</script>
+</body>
+</html>

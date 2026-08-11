@@ -1201,15 +1201,28 @@
          <h2 class="text-xl font-extrabold text-ink">미디어 라이브러리 <span class="text-sm font-semibold text-agray">(다운로드용 자산)</span></h2>
          <p class="text-sm text-slate-500 mt-1">제품 이미지·로고·보도자료 등 <b>외부 배포용 자산</b>을 모아 다운로드합니다.</p>
        </div>
-       <div class="flex gap-2 items-center">
+       <div class="flex gap-2 items-center flex-wrap">
          <select id="libCat" onchange="renderLibrary()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 bg-white"><option value="">전체 카테고리</option></select>
          <input id="libSearch" oninput="renderLibrary()" placeholder="검색" class="text-sm border border-[#E6E6E3] rounded-lg px-3 py-1.5 w-36" />
+         <button onclick="libShare('')" title="로그인 없이 열리는 외부 공유 페이지 주소를 복사합니다" class="text-sm bg-ink text-white hover:brightness-110 px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap">🔗 외부 공유 링크</button>
+         <a href="media.html" target="_blank" rel="noopener" class="text-sm border border-[#E6E6E3] hover:bg-slate-50 px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap">미리보기 ↗</a>
        </div>
      </div>
      <div id="libGrid"></div>
      <div class="card p-4 mt-5 bg-[#FAFAF9] border-[#E6E6E3]">
        <p class="text-[12px] font-bold text-ink mb-1">이용 안내</p>
-       <p class="text-[12px] text-slate-500 leading-relaxed">자산은 구글드라이브에 보관되며 카테고리별로 연결됩니다(대용량 영상·최신본 관리에 유리). 카드를 누르면 드라이브에서 열려 <b>다운로드</b>할 수 있습니다. <b class="text-ink">외부 배포용으로 열려면</b> 해당 드라이브 폴더가 '링크가 있는 모든 사용자'로 공유돼 있어야 합니다. 카테고리·폴더 추가는 담당자가 링크 주시면 등록해 드립니다.</p>
+       <p class="text-[12px] text-slate-500 leading-relaxed">자산은 구글드라이브에 보관되며 카테고리별로 연결됩니다(대용량 영상·최신본 관리에 유리). 카드를 누르면 드라이브에서 열려 <b>다운로드</b>할 수 있습니다. 카테고리·폴더 추가는 담당자가 링크 주시면 등록해 드립니다.</p>
+       <p class="text-[12px] font-bold text-ink mt-3 mb-1">🔗 외부 공유 링크</p>
+       <p class="text-[12px] text-slate-500 leading-relaxed">
+         <b class="text-ink">🔗 외부 공유 링크</b> 버튼을 누르면 <code class="text-[11px] bg-white border border-[#E6E6E3] rounded px-1">/media.html</code> 주소가 복사됩니다.
+         이 페이지는 <b class="text-ink">구글 로그인 없이</b> 열리므로 대행사·기자·협력사에 그대로 보낼 수 있습니다(대시보드의 다른 탭은 계속 잠겨 있습니다).
+         카테고리별 <b>🔗 공유</b> 버튼을 쓰면 그 카테고리만 담긴 링크가 만들어집니다.
+       </p>
+       <p class="text-[12px] leading-relaxed mt-1.5 rounded-lg bg-[#FDF7F5] border border-[#F0D9D2] px-3 py-2">
+         <b class="text-ared">두 가지만 확인하세요.</b>
+         ① 링크를 받은 사람은 <b>누구나</b> 목록을 볼 수 있습니다(주소를 아는 사람만).
+         ② 실제 파일이 열리려면 해당 <b class="text-ink">드라이브 폴더가 '링크가 있는 모든 사용자'로 공유</b>돼 있어야 합니다 — 아니면 상대방 화면에 권한 요청이 뜹니다.
+       </p>
      </div>
    </div>
 
@@ -5202,6 +5215,11 @@
       const thumb = it.kind==='image' ? `<img src="https://drive.google.com/thumbnail?id=${esc(it.id)}&sz=w200" loading="lazy" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='<span class=\\'text-2xl\\'>🖼️</span>'"/>` : `<span class="text-2xl">${libIcon(it.kind)}</span>`;
       return `<a href="${url}" target="_blank" rel="noopener" title="${esc(it.title)}${it.size?(' · '+esc(it.size)):''}" class="flex flex-col items-center text-center p-1.5 rounded-lg hover:bg-brand/5 transition"><div class="w-14 h-14 rounded-lg bg-[#F4F1EA] border border-[#ECE9E1] flex items-center justify-center overflow-hidden mb-1">${thumb}</div><div class="text-[11px] text-ink leading-tight line-clamp-2 w-full">${esc(it.title)}</div></a>`;
     }
+    // 외부 공유 — 로그인 없이 열리는 /media.html 주소를 복사(카테고리명을 주면 그 카테고리만)
+    function libShare(cat){
+      const url=location.origin+'/media.html'+(cat?('?cat='+encodeURIComponent(cat)):'');
+      bdCopy(url);
+    }
     function renderLibrary(){
       const cats=(LIBRARY.categories||[]);
       const csel=document.getElementById('libCat');
@@ -5216,14 +5234,20 @@
         const folderUrl='https://drive.google.com/drive/folders/'+esc(c.folderId);
         if(!items.length){
           // 폴더 전용 카테고리 → 반폭 컴팩트 블록(두 개씩 한 줄)
-          buf.push(`<a href="${folderUrl}" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 rounded-xl border ${c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3]'} p-4 hover:border-brand transition"><div><div class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)}</div><div class="text-[11px] text-slate-400 mt-0.5">${esc(c.desc||'')}</div><div class="text-[11px] text-ink mt-1 font-medium">드라이브에서 다운로드 ↗</div></div><span class="text-xl shrink-0">📁</span></a>`);
+          buf.push(`<div class="relative rounded-xl border ${c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3] bg-white'} hover:border-brand transition">
+            <a href="${folderUrl}" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 p-4"><div><div class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)}</div><div class="text-[11px] text-slate-400 mt-0.5">${esc(c.desc||'')}</div><div class="text-[11px] text-ink mt-1 font-medium">드라이브에서 다운로드 ↗</div></div><span class="text-xl shrink-0">📁</span></a>
+            <button onclick="libShare('${esc(c.name).replace(/'/g,"\\'")}')" title="이 카테고리만 담긴 외부 공유 링크 복사" class="absolute top-2 right-2 text-[11px] border border-[#E6E6E3] bg-white/90 hover:bg-white rounded-lg px-1.5 py-0.5">🔗</button>
+          </div>`);
           return;
         }
         flush();
         out+=`<section class="mb-7 ${c.pinned?'rounded-xl border border-[#F0E7C0] bg-[#FEFCF3] p-4':''}">
           <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
             <h3 class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)} <span class="text-xs font-normal text-slate-400 ml-1">${esc(c.desc||'')}</span></h3>
-            <a href="${folderUrl}" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium whitespace-nowrap">드라이브 폴더 열기 ↗</a>
+            <span class="flex items-center gap-2 shrink-0">
+              <button onclick="libShare('${esc(c.name).replace(/'/g,"\\'")}')" title="이 카테고리만 담긴 외부 공유 링크 복사" class="text-[12px] border border-[#E6E6E3] bg-white hover:bg-slate-50 rounded-lg px-2 py-1 font-semibold whitespace-nowrap">🔗 공유</button>
+              <a href="${folderUrl}" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium whitespace-nowrap">드라이브 폴더 열기 ↗</a>
+            </span>
           </div>
           <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-1">${items.map(libCard).join('')}</div>
         </section>`;

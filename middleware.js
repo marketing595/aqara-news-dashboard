@@ -5,7 +5,10 @@
 export const config = {
   // /api/auth/* (로그인 처리) 와 내부 리소스는 제외하고 나머지 전부 보호
   // 파비콘 파일은 로그인 화면에서도 떠야 하므로 제외 대상에 포함
-  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml).*)'],
+  // media.html / media.json = 미디어 라이브러리 외부 공유 페이지(로그인 없이 열람 가능).
+  //   담긴 것은 배포용 브랜드 자산 목록(제목 + 구글드라이브 링크)뿐이며,
+  //   실제 파일 접근 권한은 드라이브 공유 설정이 따로 통제한다.
+  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json).*)'],
 };
 
 function fromB64url(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; return atob(s); }
