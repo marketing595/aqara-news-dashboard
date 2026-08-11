@@ -247,6 +247,8 @@
         .sem-edit{ border-bottom:1px dashed #D8D4C8; cursor:text; outline:none; display:inline-block; min-width:12px; }
         .sem-edit:hover{ background:#FFFBEC; border-bottom-color:#FBC400; }
         .sem-edit:focus{ background:#FFF8E1; border-bottom:1px solid #FBC400; border-radius:3px; padding:0 2px; }
+        /* 레퍼런스 대표이미지를 못 불러온 경우 대신 보여줄 아이콘 */
+        .bb-noimg::after{ content:'🔗'; font-size:22px; opacity:.35; }
         #mhBody details>summary{ list-style:none; } #mhBody details>summary::-webkit-details-marker{ display:none; }
         #mhBody .mhcaret{ display:inline-block; transition:transform .15s; } #mhBody details[open] .mhcaret{ transform:rotate(90deg); }
         #newsListSection .col-chk, #newsListSection .col-edit, #newsListSection #bulkEditBar{ display:none; }
@@ -5382,6 +5384,94 @@
       fetch('brandbook.json?_='+Date.now()).then(r=>r.json()).then(d=>{ BOOK=d; BB_LOADING=false; bbStart(); bbPaintProgress(); })
         .catch(()=>{ BB_LOADING=false; });
     }
+    /* ===== 챕터별 레퍼런스 — 링크를 붙이면 서버가 대표이미지·제목을 뽑아온다 ===== */
+    const BB_REF_MAX=60;                                  // 챕터당 레퍼런스 상한
+    function bbSecKey(sname){ return bbKey('s_'+sname); } // 챕터 이름을 키로 (Firebase 금지문자 제거)
+    function bbRfV(sk,n,f,def){ return bbV('rf.'+sk+'.'+n+'.'+f,def); }
+    function bbRfSet(sk,n,f,v){ bbSave(bbKey('rf.'+sk+'.'+n+'.'+f),v); }
+    function bbRefs(sname){
+      const sk=bbSecKey(sname), out=[];
+      for(let n=0;n<BB_REF_MAX;n++){
+        const url=bbRfV(sk,n,'url','');
+        if(!url||bbRfV(sk,n,'del','')) continue;
+        out.push({ n:n, sk:sk, url:url, title:bbRfV(sk,n,'title',''), img:bbRfV(sk,n,'img',''),
+          site:bbRfV(sk,n,'site',''), desc:bbRfV(sk,n,'desc',''), state:bbRfV(sk,n,'state','') });
+      }
+      return out;
+    }
+    function bbRefAdd(sname){
+      const sk=bbSecKey(sname), inp=document.getElementById('bbRefIn-'+sk);
+      let url=((inp&&inp.value)||'').trim();
+      if(!url) return;
+      if(!/^https?:\/\//i.test(url)) url='https://'+url;
+      let n=0; while(n<BB_REF_MAX && (bbRfV(sk,n,'url','')||bbRfV(sk,n,'del',''))) n++;
+      if(n>=BB_REF_MAX){ alert('이 챕터의 레퍼런스가 가득 찼습니다. 쓰지 않는 것을 지워 주세요.'); return; }
+      bbRfSet(sk,n,'url',url);
+      bbRfSet(sk,n,'state','loading');
+      if(inp) inp.value='';
+      renderBrandbook();
+      bbRefFetch(sk,n,url);
+    }
+    // 대표이미지 가져오기 — 남의 사이트는 브라우저가 직접 못 읽어서 서버(/api/og-preview)를 거친다
+    function bbRefFetch(sk,n,url){
+      fetch('/api/og-preview?url='+encodeURIComponent(url)).then(r=>r.json()).then(d=>{
+        if(d&&d.ok){
+          if(d.title) bbRfSet(sk,n,'title',d.title);
+          if(d.image) bbRfSet(sk,n,'img',d.image);
+          if(d.site)  bbRfSet(sk,n,'site',d.site);
+          if(d.desc)  bbRfSet(sk,n,'desc',d.desc);
+          bbRfSet(sk,n,'state','');
+        } else { bbRfSet(sk,n,'state','fail'); }
+        renderBrandbook();
+      }).catch(()=>{ bbRfSet(sk,n,'state','fail'); renderBrandbook(); });
+    }
+    function bbRefReload(sk,n,url){ bbRfSet(sk,n,'state','loading'); renderBrandbook(); bbRefFetch(sk,n,url); }
+    function bbRefDel(sk,n,title){
+      if(!confirm('"'+(title||'이 레퍼런스')+'"를 지울까요?')) return;
+      bbRfSet(sk,n,'del','1'); renderBrandbook();
+    }
+    function bbRefHost(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return ''; } }
+    function bbRefCard(r){
+      const host=r.site||bbRefHost(r.url), name=r.title||host||r.url;
+      const thumb = r.img
+        ? `<img src="${esc(r.img)}" alt="" loading="lazy" referrerpolicy="no-referrer"
+             class="w-full h-full object-cover" onerror="this.parentNode.classList.add('bb-noimg');this.remove();" />`
+        : (r.state==='loading' ? `<span class="text-[11px] text-slate-400">불러오는 중…</span>`
+                               : `<span class="text-2xl opacity-40">🔗</span>`);
+      return `<div class="rounded-xl border border-[#E6E6E3] bg-white overflow-hidden flex flex-col">
+        <a href="${esc(r.url)}" target="_blank" rel="noopener" title="${esc(name)}"
+           class="h-[92px] bg-[#F4F1EA] flex items-center justify-center overflow-hidden shrink-0">${thumb}</a>
+        <div class="p-2 flex flex-col gap-0.5 flex-1 min-w-0">
+          <a href="${esc(r.url)}" target="_blank" rel="noopener"
+             class="text-[12px] font-semibold text-ink leading-tight line-clamp-2 hover:underline">${esc(name)}</a>
+          <p class="text-[10px] text-slate-400 truncate">${esc(host)}${r.state==='fail'?' · <span class="text-ared">미리보기 실패</span>':''}</p>
+          <p class="text-[11px] leading-snug mt-0.5"><span class="text-slate-300 text-[10px] mr-1">메모</span>${bbe('rf.'+r.sk+'.'+r.n+'.memo','','text-slate-600')}</p>
+        </div>
+        <div class="flex items-center justify-end gap-1 px-1.5 pb-1.5">
+          <button onclick="bbRefReload('${r.sk}',${r.n},'${esc(r.url).replace(/'/g,"\\'")}')" title="미리보기 다시 가져오기"
+            class="text-[10px] text-slate-400 hover:text-ink px-1">🔄</button>
+          <button onclick="bbRefDel('${r.sk}',${r.n},'${esc(name).replace(/'/g,"\\'")}')" title="삭제"
+            class="text-[10px] text-slate-300 hover:text-ared px-1">✕</button>
+        </div>
+      </div>`;
+    }
+    function bbRefBlock(sname){
+      const sk=bbSecKey(sname), refs=bbRefs(sname);
+      return `<div class="mt-3 pt-3 border-t border-[#F1EFE9]">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <p class="text-[12px] font-bold text-slate-500">📎 레퍼런스 <span class="num text-slate-400 font-normal">${refs.length}</span></p>
+          <div class="flex items-center gap-1.5 flex-1 min-w-[220px] max-w-[420px]">
+            <input id="bbRefIn-${sk}" data-bk="rfin_${sk}" type="url" placeholder="참고 링크 붙여넣기 (기사·핀터레스트·드라이브…)"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();bbRefAdd('${esc(sname).replace(/'/g,"\\'")}');}"
+              class="flex-1 min-w-0 text-[12px] border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" />
+            <button onclick="bbRefAdd('${esc(sname).replace(/'/g,"\\'")}')"
+              class="text-[12px] font-semibold bg-ink text-white rounded-lg px-2.5 py-1.5 whitespace-nowrap">추가</button>
+          </div>
+        </div>
+        ${refs.length?`<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">${refs.map(bbRefCard).join('')}</div>`
+          :`<p class="text-[11.5px] text-slate-400">아직 없습니다. 링크를 붙여넣으면 대표이미지와 제목을 자동으로 가져옵니다.</p>`}
+      </div>`;
+    }
     function bbToday(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
     function bbMD(s){ return s?(parseInt(s.slice(5,7),10)+'/'+parseInt(s.slice(8,10),10)):''; }
 
@@ -5484,7 +5574,7 @@
           <div class="flex flex-wrap items-baseline justify-between gap-2 mb-2.5">
             <h3 class="font-extrabold text-ink text-[14px]">${esc(sname)}
               <span class="text-[11px] font-normal text-slate-400 ml-1">${esc(m.range||'')}${m.for?' · '+esc(m.for):''}</span></h3>
-            <span class="text-[11px] text-slate-400 num">${dn}/${rows.length}p 확정</span>
+            <span class="text-[11px] text-slate-400 num">${dn}/${rows.length}p 확정${bbRefs(sname).length?' · 📎'+bbRefs(sname).length:''}</span>
           </div>
           <div class="rounded-xl border border-[#E6E6E3] overflow-hidden">
           ${rows.map(p=>`
@@ -5517,6 +5607,7 @@
             </div>`).join('')}
           </div>
           <button onclick="bbAddPage('${esc(sname).replace(/'/g,"\\'")}')" class="mt-2 text-[11px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 이 섹션에 페이지 추가</button>
+          ${bbRefBlock(sname)}
         </section>`;
       }).join('')}
 
