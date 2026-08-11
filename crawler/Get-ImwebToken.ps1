@@ -10,7 +10,28 @@
   준비물 : 아임웹 개발자센터(https://developers.imweb.me)에서 만든 앱의 Client ID / Client Secret
            앱의 redirect URI에 아래 주소가 등록돼 있어야 한다.
            https://aqara-news-dashboard.vercel.app/imweb-auth.html
+
+  ── Client ID / Secret 을 넣는 방법 (셋 중 아무거나) ──────────────────────
+   A. 설정 파일 (권장 · 한 번만 해두면 끝)
+        crawler\imweb-config.txt 에 아래처럼 저장
+          CLIENT_ID=여기에_아이디
+          CLIENT_SECRET=여기에_시크릿
+          SITE_CODE=S202509250f66ad55637e1
+        파일이 없으면 이 스크립트가 서식을 만들어 메모장으로 열어준다.
+        (이 파일은 .gitignore 에 있어 GitHub에 올라가지 않는다)
+   B. 실행 인자
+        imweb-token.bat -ClientId "아이디" -ClientSecret "시크릿"
+   C. 환경변수  IMWEB_CLIENT_ID / IMWEB_CLIENT_SECRET
+
+  ※ 예전처럼 콘솔에 직접 붙여넣지 않는다 — 프롬프트가 뜨기 전에 붙여넣기가 먹혀
+     값이 잘리고 30098(클라이언트 정보 불일치) 오류가 나던 문제를 없앴다.
 #>
+param(
+  [string]$ClientId,
+  [string]$ClientSecret,
+  [string]$SiteCode,
+  [string]$Code                      # 인증 코드까지 미리 알고 있으면 여기에
+)
 
 $ErrorActionPreference = 'Stop'
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -22,19 +43,85 @@ $DEFAULT_SITE = 'S202509250f66ad55637e1'   # 아카라라이프 아임웹 사이
 $WEB_DIR     = Split-Path -Parent $PSScriptRoot
 $OUT_JSON    = Join-Path $WEB_DIR 'homepage.json'
 
+$CONF = Join-Path $PSScriptRoot 'imweb-config.txt'
+
+# 프롬프트가 뜨기 전에 눌린 키·붙여넣기를 버린다(입력이 윗줄로 튀는 문제 방지)
 function Ask($label, $default) {
+  try { $Host.UI.RawUI.FlushInputBuffer() } catch {}
+  Start-Sleep -Milliseconds 150
+  try { $Host.UI.RawUI.FlushInputBuffer() } catch {}
   if ($default) { $v = Read-Host "$label [$default]"; if ([string]::IsNullOrWhiteSpace($v)) { return $default }; return $v.Trim() }
   do { $v = Read-Host $label } while ([string]::IsNullOrWhiteSpace($v))
   return $v.Trim()
+}
+
+# imweb-config.txt 읽기 (KEY=VALUE · # 주석 허용)
+function Read-Conf($path) {
+  $h = @{}
+  if (-not (Test-Path $path)) { return $h }
+  foreach ($line in (Get-Content $path -Encoding UTF8)) {
+    $t = $line.Trim()
+    if (-not $t -or $t.StartsWith('#')) { continue }
+    $k = $t.IndexOf('=')
+    if ($k -lt 1) { continue }
+    $h[$t.Substring(0, $k).Trim().ToUpper()] = $t.Substring($k + 1).Trim().Trim('"').Trim("'")
+  }
+  return $h
 }
 
 Write-Host ''
 Write-Host '=== 아임웹 홈페이지 문의 연동 · 토큰 발급 ===' -ForegroundColor Yellow
 Write-Host ''
 
-$clientId     = Ask '1) Client ID' $null
-$clientSecret = Ask '2) Client Secret' $null
-$siteCode     = Ask '3) 사이트 코드' $DEFAULT_SITE
+$conf = Read-Conf $CONF
+
+# 우선순위: 실행 인자 > 설정 파일 > 환경변수
+if (-not $ClientId)     { $ClientId     = $conf['CLIENT_ID'] }
+if (-not $ClientId)     { $ClientId     = $env:IMWEB_CLIENT_ID }
+if (-not $ClientSecret) { $ClientSecret = $conf['CLIENT_SECRET'] }
+if (-not $ClientSecret) { $ClientSecret = $env:IMWEB_CLIENT_SECRET }
+if (-not $SiteCode)     { $SiteCode     = $conf['SITE_CODE'] }
+if (-not $SiteCode)     { $SiteCode     = $env:IMWEB_SITE_CODE }
+if (-not $SiteCode)     { $SiteCode     = $DEFAULT_SITE }
+
+# 값이 없으면 서식 파일을 만들어 메모장으로 열어주고 종료 (콘솔 입력을 아예 안 받는다)
+if ([string]::IsNullOrWhiteSpace($ClientId) -or [string]::IsNullOrWhiteSpace($ClientSecret)) {
+  if (-not (Test-Path $CONF)) {
+    $tpl = @"
+# 아임웹 개발자센터(https://developers.imweb.me)에서 만든 앱의 값을 = 뒤에 붙여넣고 저장하세요.
+# 저장한 뒤 imweb-token.bat 을 다시 실행하면 됩니다.
+# 이 파일은 GitHub에 올라가지 않습니다(.gitignore).
+
+CLIENT_ID=
+CLIENT_SECRET=
+SITE_CODE=$DEFAULT_SITE
+"@
+    [System.IO.File]::WriteAllText($CONF, $tpl, (New-Object System.Text.UTF8Encoding($true)))
+    Write-Host '설정 파일을 새로 만들었습니다:' -ForegroundColor Cyan
+  } else {
+    Write-Host '설정 파일에 Client ID / Secret 이 비어 있습니다:' -ForegroundColor Red
+  }
+  Write-Host ('  ' + $CONF) -ForegroundColor Yellow
+  Write-Host ''
+  Write-Host '메모장이 열리면 CLIENT_ID= 와 CLIENT_SECRET= 뒤에 값을 붙여넣고 저장(Ctrl+S)한 다음,' -ForegroundColor Cyan
+  Write-Host 'imweb-token.bat 을 다시 실행하세요.' -ForegroundColor Cyan
+  Start-Process notepad.exe $CONF
+  Write-Host ''
+  Read-Host '엔터로 종료'
+  exit 0
+}
+
+$clientId     = $ClientId.Trim()
+$clientSecret = $ClientSecret.Trim()
+$siteCode     = $SiteCode.Trim()
+
+# 붙여넣기 사고 조기 발견 — 값이 이상하면 여기서 잡는다
+Write-Host ('Client ID     : ' + $clientId.Substring(0, [Math]::Min(6, $clientId.Length)) + '…  (' + $clientId.Length + '자)') -ForegroundColor DarkGray
+Write-Host ('Client Secret : ' + $clientSecret.Substring(0, [Math]::Min(4, $clientSecret.Length)) + '…  (' + $clientSecret.Length + '자)') -ForegroundColor DarkGray
+Write-Host ('사이트 코드   : ' + $siteCode) -ForegroundColor DarkGray
+if ($clientId -match '\s' -or $clientSecret -match '\s') {
+  Write-Host '⚠ 값 안에 공백/줄바꿈이 섞여 있습니다. imweb-config.txt 를 다시 확인하세요.' -ForegroundColor Red
+}
 
 $state = [guid]::NewGuid().ToString('N').Substring(0, 12)
 $authUrl = "$BASE/oauth2/authorize?responseType=code" +
@@ -48,8 +135,10 @@ Write-Host '브라우저에서 아임웹 인증 페이지를 엽니다. 로그�
 Write-Host $authUrl -ForegroundColor DarkGray
 Start-Process $authUrl
 Write-Host ''
-Write-Host '허용하면 대시보드의 인증 코드 페이지로 이동합니다. 화면에 뜬 코드를 복사해 붙여넣으세요.'
-$code = Ask '4) 인증 코드(code)' $null
+Write-Host '허용하면 대시보드의 인증 코드 페이지로 이동합니다. 화면에 뜬 코드를 복사해'
+Write-Host '아래 프롬프트가 나타난 뒤에 붙여넣고 엔터를 누르세요.' -ForegroundColor Cyan
+if ($Code) { $code = $Code.Trim(); Write-Host ('4) 인증 코드(code): ' + $code) }
+else { $code = Ask '4) 인증 코드(code)' $null }
 
 Write-Host ''
 Write-Host '토큰 발급 중...' -ForegroundColor Cyan
