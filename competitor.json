@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-14 18:29",
+ "generatedAt": "2026-08-15 17:47",
  "brands": [
   {
    "name": "아카라",
@@ -351,8 +351,8 @@
     "헤이홈 중국",
     "헤이홈 공유",
     "헤이홈 오프라인",
-    "헤이홈 카메라",
-    "헤이홈 프로"
+    "헤이홈 오류",
+    "헤이홈 카메라"
    ],
    "recent": [
     {
@@ -451,16 +451,16 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67448,
+   "total": 67449,
    "sentiment": {
     "pos": 18,
-    "neu": 39,
-    "neg": 3
+    "neu": 40,
+    "neg": 2
    },
    "keywords": [
     [
      "AI",
-     45
+     46
     ],
     [
      "히트펌프",
@@ -469,6 +469,10 @@
     [
      "난방",
      15
+    ],
+    [
+     "삼성전자는",
+     12
     ],
     [
      "삼성전자의",
@@ -483,10 +487,6 @@
      12
     ],
     [
-     "삼성전자는",
-     11
-    ],
-    [
      "실외기",
      11
     ],
@@ -497,6 +497,10 @@
     [
      "르포",
      10
+    ],
+    [
+     "에너지",
+     9
     ],
     [
      "비브레스트",
@@ -525,10 +529,6 @@
     [
      "제주서",
      9
-    ],
-    [
-     "비브레스트는",
-     8
     ]
    ],
    "posWords": [
@@ -569,15 +569,21 @@
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 오류",
+    "삼성 스마트싱스",
     "삼성 스마트싱스 연결",
+    "삼성 스마트싱스 오류",
+    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
-    "아이폰 삼성 스마트싱스",
-    "삼성 스마트싱스 공유"
+    "아이폰 삼성 스마트싱스"
    ],
    "recent": [
+    {
+     "title": "[가전 대전환①] 생각하는 냉장고, 판단하는 세탁기",
+     "source": "the-biz.co.kr",
+     "date": "2026-08-15",
+     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=726077"
+    },
     {
      "title": "현대차-삼성, ‘생존 동맹’ 영역 확장…“배터리·자율주행칩·IoT·로봇...",
      "source": "서울경제",
@@ -661,12 +667,6 @@
      "source": "kmib.co.kr",
      "date": "2026-08-12",
      "link": "https://n.news.naver.com/mnews/article/005/0001866317?sid=101"
-    },
-    {
-     "title": "삼성 '300조 히트펌프' 공략…\"제주, 전초기지로 변신\"",
-     "source": "한국경제",
-     "date": "2026-08-11",
-     "link": "https://n.news.naver.com/mnews/article/015/0005319775?sid=101"
     }
    ]
   },
@@ -674,32 +674,32 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77033,
+   "total": 77034,
    "sentiment": {
-    "pos": 35,
-    "neu": 24,
+    "pos": 34,
+    "neu": 25,
     "neg": 1
    },
    "keywords": [
     [
      "히트펌프",
-     56
-    ],
-    [
-     "LG전자",
      55
     ],
     [
+     "LG전자",
+     53
+    ],
+    [
      "R32",
-     34
+     33
     ],
     [
      "원격",
-     34
+     33
     ],
     [
      "낮은",
-     33
+     32
     ],
     [
      "냉매를",
@@ -710,11 +710,11 @@
      28
     ],
     [
-     "앱을",
-     26
+     "GWP",
+     25
     ],
     [
-     "GWP",
+     "앱을",
      25
     ],
     [
@@ -727,11 +727,11 @@
     ],
     [
      "제주",
-     24
+     23
     ],
     [
      "제어",
-     23
+     22
     ],
     [
      "난방",
@@ -742,22 +742,22 @@
      18
     ],
     [
-     "글로벌",
-     17
-    ],
-    [
      "적용해",
      16
     ],
     [
      "환경",
      16
+    ],
+    [
+     "글로벌",
+     16
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     17
+     16
     ],
     [
      "강화",
@@ -791,16 +791,22 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐 연결 안됨",
     "lg 씽큐앱",
+    "lg 씽큐 연결 안됨",
     "lg 씽큐 세탁기",
     "lg 씽큐 냉장고",
     "lg 씽큐 연결",
     "lg 씽큐 가족 공유",
     "lg 씽큐 앱 에어컨",
-    "LG 씽큐앱 오류"
+    "lg 씽큐 티비연결"
    ],
    "recent": [
+    {
+     "title": "[가전 대전환①] 생각하는 냉장고, 판단하는 세탁기",
+     "source": "the-biz.co.kr",
+     "date": "2026-08-15",
+     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=726077"
+    },
     {
      "title": "[PLAY IT] 얼룩? 100℃ 스팀걸레가 ‘싹싹’…LG ‘로니’와 함께한 일주...",
      "source": "ddaily.co.kr",
@@ -884,12 +890,6 @@
      "source": "ebn.co.kr",
      "date": "2026-08-10",
      "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1719715"
-    },
-    {
-     "title": "LG전자, 주거부터 산업까지 히트펌프 풀라인업 … 글로벌 시장 공략 확...",
-     "source": "biz.newdaily.co.kr",
-     "date": "2026-08-10",
-     "link": "https://biz.newdaily.co.kr/site/data/html/2026/08/10/2026081000029.html"
     }
    ]
   },
@@ -897,16 +897,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75466,
+   "total": 75470,
    "sentiment": {
-    "pos": 8,
-    "neu": 36,
-    "neg": 16
+    "pos": 7,
+    "neu": 35,
+    "neg": 18
    },
    "keywords": [
     [
      "AI",
-     18
+     19
     ],
     [
      "샤오미",
@@ -918,73 +918,73 @@
     ],
     [
      "전문",
+     16
+    ],
+    [
+     "청소",
      15
     ],
     [
      "아래는",
-     14
+     15
     ],
     [
      "기사를",
-     14
+     15
     ],
     [
      "번역",
-     14
+     15
     ],
     [
      "번역한",
-     14
+     15
     ],
     [
      "기사의",
-     14
-    ],
-    [
-     "청소",
-     14
+     15
     ],
     [
      "입니다",
-     13
+     14
     ],
     [
      "구글번역",
-     13
+     14
     ],
     [
      "있습니다",
-     12
+     13
     ],
     [
      "높이기를",
-     11
+     12
     ],
     [
      "노력하고",
-     11
-    ],
-    [
-     "로봇청소기",
-     11
+     12
     ],
     [
      "이해도",
-     10
+     11
     ],
     [
      "번역에",
-     10
+     11
+    ],
+    [
+     "오류가",
+     11
     ]
    ],
    "posWords": [
     [
-     "투자",
-     3
+     "확대",
+     4
     ],
     [
-     "확대",
-     3
+     "투자",
+     2
     ],
     [
      "기대",
@@ -1009,17 +1009,41 @@
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈 허브",
     "구글 홈",
+    "구글 홈 허브",
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 연결",
     "구글 홈 미니 초기화",
+    "구글 홈 스피커 연결",
     "구글 홈버튼",
-    "구글 홈 미니 2세대",
-    "구글 홈 자동화"
+    "구글 홈 미니 2세대"
    ],
    "recent": [
+    {
+     "title": "홈플러스 이어 오스템임플란트도?…MBK 인수 후 정규직 1년 새 368명 줄었...",
+     "source": "joongangenews.com",
+     "date": "2026-08-15",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=540343"
+    },
+    {
+     "title": "[위클립] 8월 2주",
+     "source": "laborplus.co.kr",
+     "date": "2026-08-15",
+     "link": "https://www.laborplus.co.kr/news/articleView.html?idxno=41307"
+    },
+    {
+     "title": "[가전 대전환①] 생각하는 냉장고, 판단하는 세탁기",
+     "source": "the-biz.co.kr",
+     "date": "2026-08-15",
+     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=726077"
+    },
+    {
+     "title": "국민의힘 장동혁·정점식, “이재명 정부 개헌론·부동산 맹비판”",
+     "source": "breaknews.com",
+     "date": "2026-08-15",
+     "link": "http://www.breaknews.com/1229245"
+    },
     {
      "title": "셔플 댄스 기억하시나요⋯2010년대가 벌써 '레트로'? [솔드아웃]",
      "source": "etoday.co.kr",
@@ -1085,30 +1109,6 @@
      "source": "todayenergy.kr",
      "date": "2026-08-13",
      "link": "https://www.todayenergy.kr/news/articleView.html?idxno=301517"
-    },
-    {
-     "title": "힘펠, 환기가전 통합 관리 앱 'AiroT' 출시…스마트 환기 시장 공략",
-     "source": "magazine.hankyung.com",
-     "date": "2026-08-13",
-     "link": "https://n.news.naver.com/mnews/article/050/0000109598?sid=101"
-    },
-    {
-     "title": "애플도 MS도 아니다…빅테크 주저앉을 때 홀로 솟구친 '이곳'",
-     "source": "wikitree.co.kr",
-     "date": "2026-08-13",
-     "link": "https://www.wikitree.co.kr/articles/1152135"
-    },
-    {
-     "title": "미국증시 다우지수 '약보합'...엔비디아 '급등' vs SW주 '뚝'",
-     "source": "choicenews.co.kr",
-     "date": "2026-08-13",
-     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=169756"
-    },
-    {
-     "title": "샤오미코리아, '로봇청소기 6 시리즈' 사전 예약…문턱·모서리 청소 한...",
-     "source": "thedailypost.kr",
-     "date": "2026-08-12",
-     "link": "https://www.thedailypost.kr/news/articleView.html?idxno=114988"
     }
    ]
   }
