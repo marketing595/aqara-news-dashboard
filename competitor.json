@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-15 17:47",
+ "generatedAt": "2026-08-16 17:49",
  "brands": [
   {
    "name": "아카라",
@@ -129,7 +129,7 @@
     "아카라치",
     "아카라카",
     "아카라 l100",
-    "아카라카초"
+    "명조 아카라이브"
    ],
    "recent": [
     {
@@ -451,16 +451,16 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67449,
+   "total": 67452,
    "sentiment": {
-    "pos": 18,
-    "neu": 40,
+    "pos": 19,
+    "neu": 39,
     "neg": 2
    },
    "keywords": [
     [
      "AI",
-     46
+     48
     ],
     [
      "히트펌프",
@@ -471,12 +471,8 @@
      15
     ],
     [
-     "삼성전자는",
-     12
-    ],
-    [
      "삼성전자의",
-     12
+     13
     ],
     [
      "지난해",
@@ -487,12 +483,16 @@
      12
     ],
     [
+     "에어컨",
+     11
+    ],
+    [
      "실외기",
      11
     ],
     [
-     "에어컨",
-     11
+     "삼성전자는",
+     10
     ],
     [
      "르포",
@@ -523,12 +523,12 @@
      9
     ],
     [
-     "실내",
+     "제주서",
      9
     ],
     [
-     "제주서",
-     9
+     "비브레스트는",
+     8
     ]
    ],
    "posWords": [
@@ -538,7 +538,7 @@
     ],
     [
      "강화",
-     3
+     4
     ],
     [
      "공략",
@@ -553,12 +553,12 @@
      2
     ],
     [
-     "개선",
+     "혁신",
      2
     ],
     [
-     "혁신",
-     2
+     "개선",
+     1
     ],
     [
      "만족",
@@ -570,14 +570,32 @@
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스",
-    "삼성 스마트싱스 연결",
     "삼성 스마트싱스 오류",
+    "삼성 스마트싱스 연결",
+    "삼성 스마트싱스",
+    "아이폰 삼성 스마트싱스",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 세탁기",
-    "아이폰 삼성 스마트싱스"
+    "삼성 스마트싱스 세탁기"
    ],
    "recent": [
+    {
+     "title": "\"6㎝ 턱 넘고, 180도 스팀 분사\"…'中 로청' 공세에 삼성·LG전자, 안방 ...",
+     "source": "뉴시스",
+     "date": "2026-08-16",
+     "link": "https://n.news.naver.com/mnews/article/003/0014130267?sid=101"
+    },
+    {
+     "title": "'고양이 모래도 쓱싹' 삶의 질이 달라졌다…삼성 'AI 로청' 사용해보니",
+     "source": "news1.kr",
+     "date": "2026-08-16",
+     "link": "https://n.news.naver.com/mnews/article/421/0009116073?sid=101"
+    },
+    {
+     "title": "[삼성 갤럭시 생존법] 판매 넘어 구독으로…MX 체질 바꾼다",
+     "source": "news.dealsitetv.com",
+     "date": "2026-08-16",
+     "link": "https://news.dealsitetv.com/articles/174290"
+    },
     {
      "title": "[가전 대전환①] 생각하는 냉장고, 판단하는 세탁기",
      "source": "the-biz.co.kr",
@@ -649,24 +667,6 @@
      "source": "biotimes.co.kr",
      "date": "2026-08-12",
      "link": "https://www.biotimes.co.kr/news/articleView.html?idxno=33746"
-    },
-    {
-     "title": "피플멀티, '비브레스트'로 사명 변경…AI 슬립테크 전환",
-     "source": "beyondpost.co.kr",
-     "date": "2026-08-12",
-     "link": "http://www.beyondpost.co.kr/view.php?ud=20260812081859994946a9e4dd7f_30"
-    },
-    {
-     "title": "비브레스트, AI 중심 경영진 재편…슬립테크 스타트업 도약 본격화",
-     "source": "public25.com",
-     "date": "2026-08-12",
-     "link": "https://www.public25.com/news/articleView.html?idxno=52539"
-    },
-    {
-     "title": "“전기 1 넣어 에너지 5 얻는다”… 삼성 히트펌프, 국내 출시 준비",
-     "source": "kmib.co.kr",
-     "date": "2026-08-12",
-     "link": "https://n.news.naver.com/mnews/article/005/0001866317?sid=101"
     }
    ]
   },
@@ -674,98 +674,94 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77034,
+   "total": 77038,
    "sentiment": {
-    "pos": 34,
-    "neu": 25,
+    "pos": 31,
+    "neu": 28,
     "neg": 1
    },
    "keywords": [
     [
-     "히트펌프",
-     55
+     "LG전자",
+     51
     ],
     [
-     "LG전자",
-     53
+     "히트펌프",
+     48
     ],
     [
      "R32",
-     33
+     29
     ],
     [
      "원격",
-     33
-    ],
-    [
-     "낮은",
-     32
-    ],
-    [
-     "냉매를",
-     31
+     29
     ],
     [
      "ThinQ",
      28
     ],
     [
-     "GWP",
-     25
+     "낮은",
+     28
+    ],
+    [
+     "냉매를",
+     27
     ],
     [
      "앱을",
-     25
-    ],
-    [
-     "LG전자는",
-     25
-    ],
-    [
-     "지구온난화지수",
-     24
-    ],
-    [
-     "제주",
      23
     ],
     [
-     "제어",
+     "LG전자는",
+     23
+    ],
+    [
+     "GWP",
      22
     ],
     [
-     "난방",
+     "지구온난화지수",
      21
     ],
     [
-     "전기화",
+     "제어",
+     19
+    ],
+    [
+     "제주",
+     19
+    ],
+    [
+     "난방",
      18
     ],
     [
+     "AI",
+     17
+    ],
+    [
+     "전기화",
+     15
+    ],
+    [
      "적용해",
-     16
+     14
     ],
     [
      "환경",
-     16
-    ],
-    [
-     "글로벌",
-     16
+     14
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     16
+     14
     ],
     [
      "강화",
-     13
-    ],
-    [
-     "1위",
-     9
+     12
     ],
     [
      "확대",
@@ -773,7 +769,15 @@
     ],
     [
      "공략",
+     7
+    ],
+    [
+     "1위",
      6
+    ],
+    [
+     "성장",
+     1
     ],
     [
      "만족",
@@ -782,10 +786,6 @@
     [
      "혁신",
      1
-    ],
-    [
-     "개선",
-     1
     ]
    ],
    "related": [
@@ -793,14 +793,38 @@
     "lg 씽큐온",
     "lg 씽큐앱",
     "lg 씽큐 연결 안됨",
+    "lg 씽큐 가족 공유",
+    "lg 씽큐 연결",
     "lg 씽큐 세탁기",
     "lg 씽큐 냉장고",
-    "lg 씽큐 연결",
-    "lg 씽큐 가족 공유",
-    "lg 씽큐 앱 에어컨",
+    "lg 씽큐 에어컨 연결",
     "lg 씽큐 티비연결"
    ],
    "recent": [
+    {
+     "title": "\"6㎝ 턱 넘고, 180도 스팀 분사\"…'中 로청' 공세에 삼성·LG전자, 안방 ...",
+     "source": "뉴시스",
+     "date": "2026-08-16",
+     "link": "https://n.news.naver.com/mnews/article/003/0014130267?sid=101"
+    },
+    {
+     "title": "LG전자, 브라질 파라나 신공장 가동…중남미 가전 공략 속도",
+     "source": "4th.kr",
+     "date": "2026-08-16",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2116442"
+    },
+    {
+     "title": "100도 스팀 걸레질 덕분에... 꿉꿉한 날씨에도 종일 방바닥 보송보송",
+     "source": "hankookilbo.com",
+     "date": "2026-08-16",
+     "link": "https://n.news.naver.com/mnews/article/469/0000948252?sid=105"
+    },
+    {
+     "title": "[삼성-LG 음향 전쟁② ] 하만 인수에 홀로선 LG전자···오디오 시장 승...",
+     "source": "seoulfn.com",
+     "date": "2026-08-15",
+     "link": "https://www.seoulfn.com/news/articleView.html?idxno=635690"
+    },
     {
      "title": "[가전 대전환①] 생각하는 냉장고, 판단하는 세탁기",
      "source": "the-biz.co.kr",
@@ -866,30 +890,6 @@
      "source": "businesspost.co.kr",
      "date": "2026-08-10",
      "link": "https://www.businesspost.co.kr/BP?command=article_view&num=444386"
-    },
-    {
-     "title": "'범LG' LG·GS·LS, 석유화학·AI·배터리 사업서 '동맹' 드라이브 건다",
-     "source": "insightkorea.co.kr",
-     "date": "2026-08-10",
-     "link": "https://www.insightkorea.co.kr/news/articleView.html?idxno=252070"
-    },
-    {
-     "title": "LG전자, 히트 펌프 풀 라인업 구축… “‘가정용부터 산업용까지’, 글...",
-     "source": "ceoscoredaily.com",
-     "date": "2026-08-10",
-     "link": "https://www.ceoscoredaily.com/page/view/2026081011144864679"
-    },
-    {
-     "title": "LG전자, 집안부터 산업시설까지 히트펌프 ‘풀 라인업’ 강화",
-     "source": "newstomato.com",
-     "date": "2026-08-10",
-     "link": "http://www.newstomato.com/ReadNews.aspx?no=1309636&inflow=N"
-    },
-    {
-     "title": "\"집·상가·공장 다 잡는다\"…LG전자, 히트펌프 풀라인업 구축",
-     "source": "ebn.co.kr",
-     "date": "2026-08-10",
-     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1719715"
     }
    ]
   },
@@ -897,16 +897,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75470,
+   "total": 75480,
    "sentiment": {
-    "pos": 7,
-    "neu": 35,
-    "neg": 18
+    "pos": 9,
+    "neu": 34,
+    "neg": 17
    },
    "keywords": [
     [
      "AI",
-     19
+     21
     ],
     [
      "샤오미",
@@ -914,11 +914,7 @@
     ],
     [
      "으로",
-     16
-    ],
-    [
-     "전문",
-     16
+     15
     ],
     [
      "청소",
@@ -926,61 +922,69 @@
     ],
     [
      "아래는",
-     15
+     14
     ],
     [
      "기사를",
-     15
+     14
     ],
     [
      "번역",
-     15
+     14
     ],
     [
      "번역한",
-     15
+     14
     ],
     [
      "기사의",
-     15
+     14
+    ],
+    [
+     "전문",
+     14
     ],
     [
      "입니다",
-     14
-    ],
-    [
-     "구글번역",
-     14
-    ],
-    [
-     "있습니다",
      13
     ],
     [
-     "높이기를",
-     12
+     "구글번역",
+     13
     ],
     [
-     "노력하고",
-     12
+     "있습니다",
+     11
+    ],
+    [
+     "로봇청소기",
+     11
+    ],
+    [
+     "제미나이",
+     10
     ],
     [
      "이해도",
-     11
+     10
     ],
     [
-     "번역에",
-     11
+     "높이기를",
+     10
     ],
     [
-     "오류가",
-     11
+     "노력하고",
+     10
     ]
    ],
    "posWords": [
     [
      "확대",
      4
+    ],
+    [
+     "글로벌",
+     2
     ],
     [
      "투자",
@@ -991,11 +995,11 @@
      2
     ],
     [
-     "성장",
-     2
+     "돌파",
+     1
     ],
     [
-     "글로벌",
+     "혁신",
      1
     ],
     [
@@ -1003,14 +1007,14 @@
      1
     ],
     [
-     "인기",
+     "성장",
      1
     ]
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈",
     "구글 홈 허브",
+    "구글 홈",
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 연결",
@@ -1020,6 +1024,66 @@
     "구글 홈 미니 2세대"
    ],
    "recent": [
+    {
+     "title": "바에스, MLB 데뷔 3타석서 3연타석 홈런",
+     "source": "chosun.com",
+     "date": "2026-08-16",
+     "link": "https://m.sports.naver.com/wbaseball/article/023/0003993261"
+    },
+    {
+     "title": "‘스파이더맨: 브랜드 뉴 데이’, 올해 최단기간 700만 돌파..거침없는...",
+     "source": "breaknews.com",
+     "date": "2026-08-16",
+     "link": "http://www.breaknews.com/1229311"
+    },
+    {
+     "title": "3년 전 세상 떠난 아버지의 꿈을 이뤘다...세인트루이스 신인 바에스, M...",
+     "source": "chosun.com",
+     "date": "2026-08-16",
+     "link": "https://m.sports.naver.com/wbaseball/article/023/0003993242"
+    },
+    {
+     "title": "[주간 유통 나침반] 홈플러스 점포 재개장·백화점 상반기 매출 20%↑·유...",
+     "source": "joongangenews.com",
+     "date": "2026-08-16",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=540371"
+    },
+    {
+     "title": "[SW키트] 다쏘시스템 '버추얼 트윈', 미래 모빌리티 설계·생산 잇다",
+     "source": "지디넷",
+     "date": "2026-08-16",
+     "link": "https://n.news.naver.com/mnews/article/092/0002434117?sid=105"
+    },
+    {
+     "title": "하이브, 차세대 IP 전략과 위버스 AI 혁신 분석 [머니카운터-기업분석]",
+     "source": "news.ifm.kr",
+     "date": "2026-08-16",
+     "link": "https://news.ifm.kr/news/articleView.html?idxno=477288"
+    },
+    {
+     "title": "앱의 종말, 화웨이는 스마트폰을 AI폰으로",
+     "source": "ohmynews.com",
+     "date": "2026-08-16",
+     "link": "https://n.news.naver.com/mnews/article/047/0002525705?sid=101"
+    },
+    {
+     "title": "[인터뷰] \"포털에 넘긴 편집권, AI시대엔 되찾아야\"",
+     "source": "mediaus.co.kr",
+     "date": "2026-08-16",
+     "link": "https://www.mediaus.co.kr/news/articleView.html?idxno=317834"
+    },
+    {
+     "title": "\"구글이 네이버 제쳤다?\"…'국민 포털' 정말 무너졌나[사이다IT]",
+     "source": "뉴시스",
+     "date": "2026-08-16",
+     "link": "https://n.news.naver.com/mnews/article/003/0014129983?sid=105"
+    },
+    {
+     "title": "신동빈 승부수 1조 '오카도'…쿠팡 1시간 퀵배송 따라잡을까?",
+     "source": "economist.co.kr",
+     "date": "2026-08-16",
+     "link": "https://n.news.naver.com/mnews/article/243/0000101733?sid=101"
+    },
     {
      "title": "홈플러스 이어 오스템임플란트도?…MBK 인수 후 정규직 1년 새 368명 줄었...",
      "source": "joongangenews.com",
@@ -1049,66 +1113,6 @@
      "source": "etoday.co.kr",
      "date": "2026-08-14",
      "link": "https://www.etoday.co.kr/news/view/2614860"
-    },
-    {
-     "title": "매출·인력·협력사까지 '첩첩산중'…홈플러스, 회생 앞에 놓인 3대 과제...",
-     "source": "joongangenews.com",
-     "date": "2026-08-14",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=540197"
-    },
-    {
-     "title": "국민의힘 장동혁·정점식, “세제·대출·안보 등 국정전반 총력 비판”",
-     "source": "breaknews.com",
-     "date": "2026-08-14",
-     "link": "http://www.breaknews.com/1228997"
-    },
-    {
-     "title": "춘천시, 강원FC 김병지 대표 사과 수용… “관계 정상화 기대”",
-     "source": "breaknews.com",
-     "date": "2026-08-13",
-     "link": "http://www.breaknews.com/1228864"
-    },
-    {
-     "title": "깊이가 다른 글로벌 투자 정보 GAM - 맛보기편 (8/13)",
-     "source": "newspim.com",
-     "date": "2026-08-13",
-     "link": "https://www.newspim.com/news/view/20260813001017"
-    },
-    {
-     "title": "현대백화점, 역대 최다 상품 구성 ‘2026년 추석 선물세트 예약 판매’...",
-     "source": "breaknews.com",
-     "date": "2026-08-13",
-     "link": "http://www.breaknews.com/1228847"
-    },
-    {
-     "title": "폰끼리 톡 대면 공유 끝…구글 탭 투 쉐어, 갤럭시Z 폴드8·플립8 지원",
-     "source": "kbench.com",
-     "date": "2026-08-13",
-     "link": "https://kbench.com/?q=node/281149"
-    },
-    {
-     "title": "한병도 민주당 원내대표 \"국힘, 113건 민생법안 처리 동참해야\"…",
-     "source": "breaknews.com",
-     "date": "2026-08-13",
-     "link": "http://www.breaknews.com/1228824"
-    },
-    {
-     "title": "힘펠, 환기가전도 스마트홈으로...통합 앱 'AiroT' 선봬",
-     "source": "dailian.co.kr",
-     "date": "2026-08-13",
-     "link": "https://n.news.naver.com/mnews/article/119/0003121343?sid=101"
-    },
-    {
-     "title": "질문만 받던 AI가 예약까지…구글 '제미나이' 활동 반경 넓힌다",
-     "source": "widedaily.com",
-     "date": "2026-08-13",
-     "link": "https://www.widedaily.com/news/articleView.html?idxno=299337"
-    },
-    {
-     "title": "힘펠, 스마트 환기 통합 앱 'AiroT' 출시",
-     "source": "todayenergy.kr",
-     "date": "2026-08-13",
-     "link": "https://www.todayenergy.kr/news/articleView.html?idxno=301517"
     }
    ]
   }
