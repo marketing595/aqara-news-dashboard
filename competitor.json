@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-17 18:03",
+ "generatedAt": "2026-08-18 17:55",
  "brands": [
   {
    "name": "아카라",
@@ -127,9 +127,9 @@
     "아카라 스위치",
     "아카라 홈캠",
     "아카라치",
-    "명조 아카라이브",
+    "아카라 l100",
     "아카라카",
-    "아카라 l100"
+    "명조 아카라이브"
    ],
    "recent": [
     {
@@ -351,8 +351,8 @@
     "헤이홈 중국",
     "헤이홈 공유",
     "헤이홈 오프라인",
-    "헤이홈 오류",
-    "헤이홈 카메라"
+    "헤이홈 먹통",
+    "헤이홈 오류"
    ],
    "recent": [
     {
@@ -451,7 +451,7 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67459,
+   "total": 67460,
    "sentiment": {
     "pos": 19,
     "neu": 39,
@@ -467,12 +467,12 @@
      24
     ],
     [
-     "난방",
+     "삼성전자의",
      15
     ],
     [
-     "삼성전자의",
-     14
+     "난방",
+     15
     ],
     [
      "삼성전자는",
@@ -487,16 +487,24 @@
      12
     ],
     [
-     "에너지",
-     10
+     "SmartThings",
+     11
     ],
     [
-     "SmartThings",
+     "에너지",
      10
     ],
     [
      "르포",
      10
+    ],
+    [
+     "가전",
+     9
+    ],
+    [
+     "플랫폼",
+     9
     ],
     [
      "비브레스트",
@@ -509,14 +517,6 @@
     [
      "제주서",
      9
-    ],
-    [
-     "가전",
-     8
-    ],
-    [
-     "플랫폼",
-     8
     ],
     [
      "에어컨",
@@ -567,19 +567,25 @@
    ],
    "related": [
     "삼성 스마트싱스 오류",
-    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 에어컨",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 연결",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 세탁기",
+    "삼성 스마트싱스",
+    "삼성 스마트싱스 공유",
     "아이폰 삼성 스마트싱스",
-    "삼성 스마트싱스 공유"
+    "삼성 스마트싱스 세탁기"
    ],
    "recent": [
     {
-     "title": "'짓는 집'서 '제조하는 집'으로…삼성·LG 모듈러주택 열풍",
+     "title": "삼성 이재용·현대차 정의선, 전장부터 5G 특화망까지…미래 모빌리티 ...",
+     "source": "opinionnews.co.kr",
+     "date": "2026-08-18",
+     "link": "http://www.opinionnews.co.kr/news/articleView.html?idxno=143173"
+    },
+    {
+     "title": "집도 레고처럼 조립한다…삼성·LG 모듈러 주택 열풍",
      "source": "이데일리",
      "date": "2026-08-17",
      "link": "https://n.news.naver.com/mnews/article/018/0006352914?sid=101"
@@ -661,12 +667,6 @@
      "source": "서울경제",
      "date": "2026-08-13",
      "link": "https://n.news.naver.com/mnews/article/011/0004651523?sid=101"
-    },
-    {
-     "title": "삼성, 인도에 AI 데이터센터 냉각기지…연 6500대 HVAC 생산",
-     "source": "joseilbo.com",
-     "date": "2026-08-13",
-     "link": "https://n.news.naver.com/mnews/article/123/0002388363?sid=101"
     }
    ]
   },
@@ -792,13 +792,13 @@
     "lg 씽큐",
     "lg 씽큐온",
     "lg 씽큐앱",
-    "lg 씽큐 연결 안됨",
     "lg 씽큐 가족 공유",
-    "lg 씽큐 연결",
     "lg 씽큐 세탁기",
+    "lg 씽큐 연결",
     "lg 씽큐 냉장고",
     "lg 씽큐 에어컨 연결",
-    "lg 씽큐 청소기"
+    "lg 씽큐 청소기",
+    "lg 씽큐 앱 에어컨"
    ],
    "recent": [
     {
@@ -897,16 +897,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75482,
+   "total": 75488,
    "sentiment": {
-    "pos": 8,
-    "neu": 36,
+    "pos": 9,
+    "neu": 35,
     "neg": 16
    },
    "keywords": [
     [
      "AI",
-     21
+     17
     ],
     [
      "샤오미",
@@ -918,51 +918,47 @@
     ],
     [
      "으로",
-     14
+     13
     ],
     [
      "아래는",
-     13
+     12
     ],
     [
      "기사를",
-     13
+     12
     ],
     [
      "번역",
-     13
+     12
     ],
     [
      "번역한",
-     13
+     12
     ],
     [
      "기사의",
-     13
+     12
     ],
     [
      "전문",
-     13
+     12
+    ],
+    [
+     "있습니다",
+     11
     ],
     [
      "입니다",
-     12
+     11
     ],
     [
      "구글번역",
-     12
+     11
     ],
     [
      "로봇청소기",
      11
-    ],
-    [
-     "제미나이",
-     10
-    ],
-    [
-     "있습니다",
-     10
     ],
     [
      "AiroT",
@@ -975,6 +971,10 @@
     [
      "높이기를",
      9
+    ],
+    [
+     "노력하고",
+     9
     ]
    ],
    "posWords": [
@@ -983,31 +983,31 @@
      4
     ],
     [
+     "투자",
+     3
+    ],
+    [
+     "혁신",
+     2
+    ],
+    [
      "글로벌",
      2
     ],
     [
-     "투자",
-     2
-    ],
-    [
-     "기대",
-     2
+     "강화",
+     1
     ],
     [
      "돌파",
      1
     ],
     [
-     "혁신",
+     "기대",
      1
     ],
     [
      "공략",
-     1
-    ],
-    [
-     "성장",
      1
     ]
    ],
@@ -1020,10 +1020,46 @@
     "구글 홈 미니 연결",
     "구글 홈 미니 초기화",
     "구글 홈 스피커 연결",
-    "구글 홈버튼",
-    "구글 홈 미니 2세대"
+    "구글 홈 미니 2세대",
+    "구글 홈 어시스턴트"
    ],
    "recent": [
+    {
+     "title": "[뉴욕증시 전략] 연장은 없었다…美 30년물 국채수익률 5.3",
+     "source": "biz.sbs.co.kr",
+     "date": "2026-08-18",
+     "link": "https://n.news.naver.com/mnews/article/374/0000528007?sid=101"
+    },
+    {
+     "title": "RGB 레이저로 더욱 생생한 컬러...뷰소닉 홈시네마 빔프로젝터 ‘LX720-4...",
+     "source": "betanews.net",
+     "date": "2026-08-18",
+     "link": "https://www.betanews.net/article/view/beta202608140048"
+    },
+    {
+     "title": "[단독] 사람인, 건설 현장 인력관리 시장 노크…'굿빌더' 오픈",
+     "source": "ddaily.co.kr",
+     "date": "2026-08-18",
+     "link": "https://n.news.naver.com/mnews/article/138/0002238059?sid=105"
+    },
+    {
+     "title": "미국 뉴욕증시 혼조세...S&P500 사상 최고치 부근 횡보",
+     "source": "thefairnews.co.kr",
+     "date": "2026-08-18",
+     "link": "https://www.thefairnews.co.kr/news/articleView.html?idxno=85268"
+    },
+    {
+     "title": "가전양판점 공식 깨야 산다…롯데하이마트 김종윤의 첫 승부",
+     "source": "fntimes.com",
+     "date": "2026-08-18",
+     "link": "https://www.fntimes.com/html/view.php?ud=202608142223163641dd55077bc2_18"
+    },
+    {
+     "title": "[게임이모저모] 게임과학연구원, 9월 '2026 게임과학포럼' 개최…AI·게임...",
+     "source": "worktoday.co.kr",
+     "date": "2026-08-17",
+     "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=88044"
+    },
     {
      "title": "일본 교토 사람들이 해마다 8월 16일에 하는 일",
      "source": "ohmynews.com",
@@ -1077,42 +1113,6 @@
      "source": "ohmynews.com",
      "date": "2026-08-16",
      "link": "https://n.news.naver.com/mnews/article/047/0002525705?sid=101"
-    },
-    {
-     "title": "[인터뷰] \"포털에 넘긴 편집권, AI시대엔 되찾아야\"",
-     "source": "mediaus.co.kr",
-     "date": "2026-08-16",
-     "link": "https://www.mediaus.co.kr/news/articleView.html?idxno=317834"
-    },
-    {
-     "title": "\"구글이 네이버 제쳤다?\"…'국민 포털' 정말 무너졌나[사이다IT]",
-     "source": "뉴시스",
-     "date": "2026-08-16",
-     "link": "https://n.news.naver.com/mnews/article/003/0014129983?sid=105"
-    },
-    {
-     "title": "신동빈 승부수 1조 '오카도'…쿠팡 1시간 퀵배송 따라잡을까?",
-     "source": "economist.co.kr",
-     "date": "2026-08-16",
-     "link": "https://n.news.naver.com/mnews/article/243/0000101733?sid=101"
-    },
-    {
-     "title": "홈플러스 이어 오스템임플란트도?…MBK 인수 후 정규직 1년 새 368명 줄었...",
-     "source": "joongangenews.com",
-     "date": "2026-08-15",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=540343"
-    },
-    {
-     "title": "[위클립] 8월 2주",
-     "source": "laborplus.co.kr",
-     "date": "2026-08-15",
-     "link": "https://www.laborplus.co.kr/news/articleView.html?idxno=41307"
-    },
-    {
-     "title": "[가전 대전환①] 생각하는 냉장고, 판단하는 세탁기",
-     "source": "the-biz.co.kr",
-     "date": "2026-08-15",
-     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=726077"
     }
    ]
   }
