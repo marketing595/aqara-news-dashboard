@@ -5714,17 +5714,36 @@
       if(!ref){ LN_OVER=Object.assign(lnLocalLoad(),LN_OVER); return; }   // Firebase 없으면 이 브라우저에만 저장
       lnRefOn=true;
       ref.on('value',s=>{ LN_OVER=s.val()||{};
-        const a=document.activeElement;
-        if(a&&a.dataset&&a.dataset.lk) return;      // 내가 입력 중인 칸이 있으면 다시 그리지 않는다
-        if(LN&&mktSection==='lanseon') renderLanseon(); });
+        if(!LN||mktSection!=='lanseon') return;
+        const a=document.activeElement, k=(a&&a.dataset)?(a.dataset.lk||''):'';
+        // 내가 어떤 칸을 잡고 있어도 남이 고친 칸은 바로 반영한다(내가 잡은 칸만 건드리지 않음)
+        if(k) lnApplyRemote(k); else renderLanseon(); });
     }
     function lnSaved(err){ const el=document.getElementById('lnSave'); if(!el) return;
       el.innerHTML=err?'<span class="text-ared font-semibold">저장 실패</span>':'<span class="text-agreen font-semibold">✓ 저장됨</span>';
       clearTimeout(window.__lnST); window.__lnST=setTimeout(()=>{ const e2=document.getElementById('lnSave'); if(e2) e2.innerHTML=''; },2200); }
+    /* 내가 입력 중일 때 — 내가 잡은 칸만 빼고 나머지 칸에 남의 수정을 그대로 얹는다 */
+    function lnApplyRemote(skip){
+      document.querySelectorAll('#lnBody [data-lk]').forEach(el=>{
+        const k=el.dataset.lk; if(!k||k===skip) return;
+        const v=LN_OVER[k]; if(v==null) return;              // 원본 기본값인 칸은 건드리지 않는다
+        if((el.innerText||'').trim()!==v) el.innerText=v;
+      });
+    }
+    let LN_FBERR='';
     function lnSave(k,v){ LN_OVER[lnKey(k)]=v;
       const ref=lnRef();
-      if(ref) ref.child(lnKey(k)).set(v).then(()=>lnSaved()).catch(()=>lnSaved(1));
+      if(ref) ref.child(lnKey(k)).set(v).then(()=>lnSaved()).catch(e=>{ LN_FBERR=(e&&e.message)||'쓰기 거부'; lnSaved(1); lnPaintConn(); });
       else { try{ localStorage.setItem('aqaraLanseon',JSON.stringify(LN_OVER)); }catch(e){} lnSaved(); }
+    }
+    /* 지금 진짜로 공유 저장 중인지 화면에 표시 — 조용히 내 브라우저에만 저장되는 상황을 막는다 */
+    function lnPaintConn(){ const el=document.getElementById('lnConn'); if(!el) return;
+      const on=(typeof wkUseFB==='function'&&wkUseFB());
+      if(on&&!LN_FBERR){ el.className='text-[11.5px] font-semibold text-agreen'; el.textContent='🟢 실시간 공동편집 중 — 고치는 즉시 팀원 화면에 반영됩니다'; return; }
+      el.className='text-[11.5px] font-semibold text-ared';
+      el.textContent=LN_FBERR
+        ? ('⚠️ 서버 저장이 거부됐습니다('+LN_FBERR+') — 지금 수정은 공유되지 않습니다. 관리자에게 알려주세요.')
+        : '⚠️ 서버에 연결되지 않아 이 브라우저에만 저장됩니다 — 지금 수정은 팀원에게 보이지 않습니다.';
     }
     function lnInput(el,blur){ const k=el.dataset.lk; if(!k) return;
       const v=(el.innerText||'').replace(/ /g,' ').trim();
@@ -5877,8 +5896,12 @@
 
       box.innerHTML=`
       <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#7C5CFF">
-        <p class="text-[12.5px] text-slate-500">각 칸을 클릭해 바로 고치세요. <b class="text-agreen">여러 명이 동시에 편집하면 실시간으로 서로 반영</b>됩니다.
-          AI와 나눈 논의는 <b>논의 축적 카드</b>에 남기고, <b>[프로젝트 지식 내보내기]</b>로 복사해 AI 프로젝트에 올려주세요.</p>
+        <p class="text-[12.5px] text-slate-500">각 칸을 클릭해 바로 고치세요. AI와 나눈 논의는 <b>논의 축적 카드</b>에 남기고,
+          <b>[프로젝트 지식 내보내기]</b>로 복사해 AI 프로젝트에 올려주세요.</p>
+        <p id="lnConn" class="mt-1"></p>
+        <div class="flex flex-wrap items-center gap-2 mt-2">
+          <div id="lnPresence" class="flex flex-wrap items-center gap-1.5"></div>
+        </div>
       </div>
 
       <div class="card p-5 sm:p-6 mb-4">
@@ -6168,6 +6191,8 @@
         </div>
         <pre id="lnMdBox" class="hidden mt-3 text-[11.5px] text-slate-600 bg-[#FAFAF9] border border-[#E6E6E3] rounded-xl p-4 overflow-auto whitespace-pre-wrap" style="max-height:420px"></pre>`)}
       <div class="h-8"></div>`;
+      lnPaintConn();
+      try{ if(typeof wkRepaintPresence==='function') wkRepaintPresence(); }catch(e){}
     }
     function lnAddLog(){ let n=0; while(LN_OVER[lnKey('logx.'+n)]) n++;
       const i=500+n, d=new Date().toISOString().slice(0,10);
@@ -6606,7 +6631,7 @@
           +'"><span style="width:6px;height:6px;border-radius:9999px;background:#22C55E;display:inline-block"></span>'+esc(n)+(me?' (나)':'')+'</span>'; }).join(' ');
       const barHTML=keys.length?('<span class="text-[12px] font-semibold text-slate-500 mr-1">🟢 접속 중 '+keys.length+'명</span> '+chipsHTML
         +' <button onclick="wkRenamePresence()" class="text-[11px] text-slate-400 hover:text-ink underline ml-1">내 이름 변경</button>'):'';
-      ['wkPresence','semPresence','bbPresence'].forEach(function(pid){ const pe=document.getElementById(pid); if(pe) pe.innerHTML=barHTML; }); }
+      ['wkPresence','semPresence','bbPresence','lnPresence'].forEach(function(pid){ const pe=document.getElementById(pid); if(pe) pe.innerHTML=barHTML; }); }
     function wkGroupItems(items,projs){ const groups=[]; if(projs&&projs.length){ projs.forEach(p=>{ const gi=items.filter(it=>it.project===p.id); if(gi.length) groups.push({p:p,items:gi}); }); const none=items.filter(it=>!it.project||!projs.some(p=>p.id===it.project)); if(none.length) groups.push({p:null,items:none}); } else if(items.length){ groups.push({p:null,items:items}); } return groups; }
     // 항목 조작
     function wkToggle(bk,id,checked){ const u={}; u['weekly/'+wkCur+'/'+bk+'/'+id+'/c']=!!checked; wkApply(u); }
