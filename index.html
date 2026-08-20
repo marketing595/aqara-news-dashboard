@@ -247,6 +247,10 @@
         .sem-edit{ border-bottom:1px dashed #D8D4C8; cursor:text; outline:none; display:inline-block; min-width:12px; }
         .sem-edit:hover{ background:#FFFBEC; border-bottom-color:#FBC400; }
         .sem-edit:focus{ background:#FFF8E1; border-bottom:1px solid #FBC400; border-radius:3px; padding:0 2px; }
+        .ln-edit{ border-bottom:1px dashed #D8D4C8; cursor:text; outline:none; display:inline-block; min-width:12px; }
+        .ln-edit:hover{ background:#F7F4FF; border-bottom-color:#7C5CFF; }
+        .ln-edit:focus{ background:#F7F4FF; border-bottom:1px solid #7C5CFF; border-radius:3px; padding:0 2px; }
+        div.ln-edit{ display:block; width:100%; min-height:1.4em; }
         /* 레퍼런스 대표이미지를 못 불러온 경우 대신 보여줄 아이콘 */
         .bb-noimg::after{ content:'🔗'; font-size:22px; opacity:.35; }
         #mhBody details>summary{ list-style:none; } #mhBody details>summary::-webkit-details-marker{ display:none; }
@@ -1289,6 +1293,7 @@
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">프로젝트</p>
              <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">11월 세미나</button>
              <button id="mktBtn-brandbook" onclick="mktSub('brandbook')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">📕 브랜드북</button>
+             <button id="mktBtn-lanseon" onclick="mktSub('lanseon')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🏠 랜선집들이</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">언론홍보</p>
@@ -1310,6 +1315,7 @@
        </div>
        <div id="mktSeminarSlot"></div>
        <div id="view-brandbook" class="hidden"><div id="bbBody"></div></div>
+       <div id="view-lanseon" class="hidden"><div id="lnBody"></div></div>
        <div id="mktKpiSlot"></div>
        <div id="mktAdSlot"></div>
        <div id="mktReportSlot"></div>
@@ -5693,6 +5699,305 @@
       grid.innerHTML=out||'<div class="text-center py-16 text-slate-400"><div class="text-4xl mb-2">📁</div>등록된 카테고리가 없습니다.</div>';
     }
 
+    /* ===================== 🏠 랜선집들이 · 팀 공동 콘텐츠 전략 =====================
+       원본 = lanseon.json / 편집 오버라이드 = Firebase `lanseon/data`(세미나 탭과 같은 방식).
+       목적: 팀원이 Claude·ChatGPT와 나눈 전략 논의의 '결론'을 여기에 축적하고,
+             [프로젝트 지식 내보내기]로 마크다운 한 장을 만들어 AI 프로젝트 지식에 올린다.        */
+    let LN=null, LN_LOADING=false, LN_OVER={}, lnRefOn=false;
+    function lnRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('lanseon/data'):null; }
+    function lnKey(k){ return k.replace(/[.#$/\[\]]/g,'_'); }
+    function LV(k,def){ const v=LN_OVER[lnKey(k)]; return (v==null||v==='')?(def==null?'':def):v; }
+    function lnMe(){ return (typeof wkDeviceName==='function'?wkDeviceName():'익명'); }
+    function lnLocalLoad(){ try{ return JSON.parse(localStorage.getItem('aqaraLanseon')||'{}'); }catch(e){ return {}; } }
+    function lnStart(){
+      if(lnRefOn) return; const ref=lnRef();
+      if(!ref){ LN_OVER=Object.assign(lnLocalLoad(),LN_OVER); return; }   // Firebase 없으면 이 브라우저에만 저장
+      lnRefOn=true;
+      ref.on('value',s=>{ LN_OVER=s.val()||{};
+        const a=document.activeElement;
+        if(a&&a.dataset&&a.dataset.lk) return;      // 내가 입력 중인 칸이 있으면 다시 그리지 않는다
+        if(LN&&mktSection==='lanseon') renderLanseon(); });
+    }
+    function lnSaved(err){ const el=document.getElementById('lnSave'); if(!el) return;
+      el.innerHTML=err?'<span class="text-ared font-semibold">저장 실패</span>':'<span class="text-agreen font-semibold">✓ 저장됨</span>';
+      clearTimeout(window.__lnST); window.__lnST=setTimeout(()=>{ const e2=document.getElementById('lnSave'); if(e2) e2.innerHTML=''; },2200); }
+    function lnSave(k,v){ LN_OVER[lnKey(k)]=v;
+      const ref=lnRef();
+      if(ref) ref.child(lnKey(k)).set(v).then(()=>lnSaved()).catch(()=>lnSaved(1));
+      else { try{ localStorage.setItem('aqaraLanseon',JSON.stringify(LN_OVER)); }catch(e){} lnSaved(); }
+    }
+    function lnInput(el,blur){ const k=el.dataset.lk; if(!k) return;
+      const v=(el.innerText||'').replace(/ /g,' ').trim();
+      if(v===LN_OVER[k]) return;
+      clearTimeout(window.__lnIT);
+      if(blur) lnSave(k,v); else window.__lnIT=setTimeout(()=>lnSave(k,v),700);
+    }
+    // 클릭해서 고치는 칸 (한 줄 / 여러 줄)
+    function lne(k,def,cls){ return `<span class="ln-edit ${cls||''}" data-lk="${lnKey(k)}" contenteditable="true" spellcheck="false"
+      oninput="lnInput(this)" onblur="lnInput(this,1)">${esc(LV(k,def))}</span>`; }
+    function lneM(k,def,cls){ return `<div class="ln-edit whitespace-pre-wrap leading-relaxed ${cls||''}" data-lk="${lnKey(k)}" contenteditable="true" spellcheck="false"
+      oninput="lnInput(this)" onblur="lnInput(this,1)">${esc(LV(k,def))}</div>`; }
+
+    /* 목록 공통 — 원본 배열 + 추가분(500번대) − 삭제분 */
+    function lnList(name, base){
+      const out=[];
+      (base||[]).forEach((s,i)=>{ if(!LV(name+'del.'+i,'')) out.push({i:i, src:s||{}}); });
+      Object.keys(LN_OVER).forEach(k=>{ const m=k.match(new RegExp('^'+name+'x_(\\d+)$')); if(!m) return;
+        const i=500+(+m[1]); if(!LV(name+'del.'+i,'')) out.push({i:i, src:{}}); });
+      out.sort((a,b)=>a.i-b.i); return out;
+    }
+    function lnAdd(name){ let n=0; while(LN_OVER[lnKey(name+'x.'+n)]) n++; lnSave(name+'x.'+n,'1'); renderLanseon(); }
+    function lnDel(name,i,msg){ if(!confirm(msg||'이 항목을 삭제할까요?')) return; lnSave(name+'del.'+i,'1'); renderLanseon(); }
+    function lnSetStatus(i,v){ lnSave('ep.'+i+'.status',v); renderLanseon(); }
+    function lnGo(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+    /* 아이디어 👍 — 사람당 1표(기기 이름 기준) */
+    function lnVotes(i){ const p='idv_'+i+'_'; return Object.keys(LN_OVER).filter(k=>k.indexOf(p)===0&&LN_OVER[k]).length; }
+    function lnVoted(i){ return !!LV('idv.'+i+'.'+lnMe(),''); }
+    function lnVote(i){ lnSave('idv.'+i+'.'+lnMe(), lnVoted(i)?'':'1'); renderLanseon(); }
+
+    const LN_STCOL={'섭외':'#8A6A00','사전답사':'#8A6A00','설치':'#5B44C7','촬영':'#5B44C7','편집':'#D68134','발행':'#5E7350','보류':'#9AA0A6'};
+
+    /* ── 프로젝트 지식 내보내기 (Claude / ChatGPT 프로젝트에 붙여넣을 마크다운 한 장) ── */
+    function lnMd(){
+      if(!LN) return '';
+      const C=LN.charter||{}, L=[];
+      const today=new Date().toISOString().slice(0,10);
+      L.push('# 랜선집들이 콘텐츠 전략 — 팀 공유 지식');
+      L.push('');
+      L.push('> 아카라라이프 마케팅팀 공동 편집 문서. 출처: ONLY MKT 대시보드 > 랜선집들이 탭');
+      L.push('> 내보낸 날짜: '+today+' · 이 문서가 최신입니다. 이전 버전은 무시하세요.');
+      L.push('');
+      L.push('## 0. 한 줄 정의');
+      L.push(LV('subtitle',LN.subtitle||''));
+      L.push('');
+      L.push('## 1. 세계관 · 포맷 헌장');
+      [['컨셉','concept'],['세계관','worldview'],['톤앤매너','tone'],['타깃','target'],['성공 기준(KPI)','kpi']]
+        .forEach(x=>{ L.push('- **'+x[0]+'**: '+LV('ch.'+x[1], C[x[1]]||'')); });
+      L.push('');
+      L.push('### 포맷 규격');
+      L.push('| 항목 | 규격 |'); L.push('| --- | --- |');
+      lnList('fmt',C.format).forEach(f=>{ L.push('| '+LV('fmt.'+f.i+'.k',f.src.k||'')+' | '+LV('fmt.'+f.i+'.v',f.src.v||'')+' |'); });
+      L.push('');
+      L.push('### 제작 원칙');
+      LV('ch.rules',(C.rules||[]).join('\n')).split('\n').filter(x=>x.trim()).forEach(x=>L.push('- '+x.trim()));
+      L.push('');
+      L.push('### 쓰지 않는 말');
+      L.push(LV('ch.banned',(C.banned||[]).join(', ')));
+      L.push('');
+      L.push('## 2. 에피소드 파이프라인');
+      L.push('| 코드 | 집 | 상태 | 담당 | 촬영 | 발행 | 훅 | 적용 솔루션 | 메모 |');
+      L.push('| --- | --- | --- | --- | --- | --- | --- | --- | --- |');
+      lnList('ep',LN.episodes).forEach(e=>{ const g=f=>String(LV('ep.'+e.i+'.'+f, e.src[f]||'')).replace(/\|/g,'/').replace(/\n/g,' ');
+        L.push('| '+[g('code'),g('house'),g('status'),g('owner'),g('shoot'),g('publish'),g('hook'),g('solution'),g('note')].join(' | ')+' |'); });
+      L.push('');
+      L.push('## 3. 아이디어 보드 (득표순)');
+      lnList('id',LN.ideas).map(x=>({x:x,v:lnVotes(x.i)})).sort((a,b)=>b.v-a.v).forEach(o=>{ const e=o.x;
+        L.push('- **'+LV('id.'+e.i+'.title',e.src.title||'')+'** (👍'+o.v+') — '+LV('id.'+e.i+'.why',e.src.why||'')
+          +(LV('id.'+e.i+'.by',e.src.by||'')?' _제안: '+LV('id.'+e.i+'.by',e.src.by||'')+'_':'')); });
+      L.push('');
+      L.push('## 4. 논의 축적 카드');
+      const logs=lnList('log',LN.log);
+      if(!logs.length) L.push('_아직 등록된 논의 카드가 없습니다._');
+      logs.forEach(e=>{ L.push('### '+LV('log.'+e.i+'.date',e.src.date||'')+' · '+LV('log.'+e.i+'.by',e.src.by||''));
+        L.push(LV('log.'+e.i+'.body',e.src.body||'')); L.push(''); });
+      L.push('');
+      L.push('---');
+      L.push('AI에게: 이 문서의 헌장(1장)을 어기는 제안은 하지 마세요. 새 제안은 3장 아이디어 보드와 중복되는지 먼저 확인하세요.');
+      return L.join('\n');
+    }
+    function lnCopy(){
+      const md=lnMd(), st=document.getElementById('lnExpMsg');
+      const done=()=>{ if(st){ st.textContent='✓ 복사했습니다 — Claude 프로젝트의 [프로젝트 지식]에 붙여넣으세요 ('+md.length.toLocaleString()+'자)'; setTimeout(()=>{ if(st) st.textContent=''; },6000); } };
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(md).then(done).catch(()=>lnCopyFallback(md,done)); }
+      else lnCopyFallback(md,done);
+    }
+    function lnCopyFallback(md,done){ const ta=document.createElement('textarea'); ta.value=md; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); done(); }catch(e){ alert('복사에 실패했습니다. 아래 미리보기에서 직접 복사해 주세요.'); }
+      document.body.removeChild(ta); }
+    function lnDownload(){ const md=lnMd(), b=new Blob([md],{type:'text/markdown;charset=utf-8'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(b);
+      a.download='랜선집들이_전략_'+new Date().toISOString().slice(0,10)+'.md';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(a.href),3000); }
+    function lnPreview(){ const el=document.getElementById('lnMdBox'); if(!el) return;
+      const on=el.classList.toggle('hidden'); if(!on) el.textContent=lnMd(); }
+
+    function renderLanseon(){
+      const box=document.getElementById('lnBody'); if(!box) return;
+      if(!LN){
+        box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">랜선집들이 자료를 불러오는 중…</p>';
+        if(LN_LOADING) return; LN_LOADING=true;
+        fetch('lanseon.json?_='+Date.now()).then(r=>r.json()).then(d=>{ LN=d; LN_LOADING=false; renderLanseon(); })
+          .catch(()=>{ LN_LOADING=false; box.innerHTML='<p class="text-sm text-ared py-16 text-center">랜선집들이 자료를 불러오지 못했습니다.</p>'; });
+        return;
+      }
+      lnStart();
+      const C=LN.charter||{}, ST=LN.statuses||['섭외','촬영','편집','발행'];
+      const eps=lnList('ep',LN.episodes), ideas=lnList('id',LN.ideas), logs=lnList('log',LN.log);
+      const sec=(id,n,t,s,b)=>`<section id="${id}" class="card p-5 sm:p-6 mb-4" style="scroll-margin-top:80px">
+        <div class="flex items-baseline gap-2 mb-3"><span class="text-[12px] font-extrabold text-white bg-ink rounded px-1.5 py-0.5">${n}</span>
+          <h3 class="text-[16px] font-extrabold text-ink">${t}</h3>${s?`<span class="text-[11px] text-slate-400">${s}</span>`:''}</div>${b}</section>`;
+      const kv=(label,key,def)=>`<div class="flex gap-3 py-2 border-b border-[#F1EFE9] last:border-0">
+        <span class="w-24 shrink-0 text-[12px] font-bold text-slate-500 pt-0.5">${esc(label)}</span>
+        <span class="text-[13px] text-slate-700 leading-relaxed flex-1">${lne(key,def)}</span></div>`;
+      const cnt=s=>eps.filter(e=>LV('ep.'+e.i+'.status',e.src.status||'섭외')===s).length;
+
+      box.innerHTML=`
+      <!-- 안내 -->
+      <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#7C5CFF">
+        <p class="text-[12.5px] text-slate-500">각 칸을 클릭해 바로 고치세요. <b class="text-agreen">여러 명이 동시에 편집하면 실시간으로 서로 반영</b>됩니다.
+          AI와 나눈 논의는 <b>4번 '논의 축적 카드'</b>에 남기고, 마지막에 <b>[프로젝트 지식 내보내기]</b>로 복사해 AI 프로젝트에 올려주세요.</p>
+      </div>
+
+      <!-- 헤더 -->
+      <div class="card p-5 sm:p-6 mb-4">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0">
+            <p class="text-[11px] font-extrabold tracking-wider text-brand-ink">AQARA LIFE · 장기 콘텐츠 시리즈</p>
+            <h2 class="text-[22px] sm:text-[26px] font-extrabold text-ink leading-tight mt-0.5">🏠 ${lne('title',LN.title)}</h2>
+            <p class="text-[13px] text-slate-500 mt-1 max-w-[720px]">${lne('subtitle',LN.subtitle)}</p>
+          </div>
+          <div class="text-right shrink-0">
+            <div class="text-[11px] h-4" id="lnSave"></div>
+            <button onclick="lnCopy()" class="mt-1.5 text-[12px] font-bold bg-ink text-white hover:brightness-125 px-3 py-2 rounded-lg">📋 프로젝트 지식 내보내기</button>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-[#ECE9E1]">
+          ${[['lnSec1','📜 세계관·포맷 헌장'],['lnSec2','🎬 에피소드 파이프라인'],['lnSec3','💡 아이디어 보드'],['lnSec4','🧠 논의 축적 카드'],['lnSec5','📋 AI 프로젝트 연동']]
+            .map(x=>`<button onclick="lnGo('${x[0]}')" class="text-[11px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">${x[1]}</button>`).join('')}
+        </div>
+      </div>
+
+      <!-- 상태 요약 -->
+      <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 mb-4">
+        ${ST.map(s=>`<div class="rounded-xl border border-[#E6E6E3] p-3">
+          <p class="text-[11px] font-bold" style="color:${LN_STCOL[s]||'#26282A'}">${esc(s)}</p>
+          <p class="text-[19px] font-extrabold num leading-tight mt-0.5 text-ink">${cnt(s)}<span class="text-[12px] text-slate-400 font-normal">편</span></p>
+        </div>`).join('')}
+      </div>
+
+      ${sec('lnSec1','📜','세계관 · 포맷 헌장','여기서 벗어나는 기획은 반려합니다',`
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+          <div>
+            ${kv('컨셉','ch.concept',C.concept)}
+            ${kv('세계관','ch.worldview',C.worldview)}
+            ${kv('톤앤매너','ch.tone',C.tone)}
+          </div>
+          <div>
+            ${kv('타깃','ch.target',C.target)}
+            ${kv('성공 기준','ch.kpi',C.kpi)}
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+          <div>
+            <p class="text-[12px] font-extrabold text-ink mb-1.5">포맷 규격</p>
+            <div class="overflow-auto rounded-xl border border-[#E6E6E3]"><table class="w-full text-[12px]">
+              <thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-2.5 py-2 font-semibold w-24">항목</th><th class="px-2.5 py-2 font-semibold">규격</th><th></th></tr></thead>
+              <tbody>${lnList('fmt',C.format).map(f=>`<tr class="border-t border-slate-100">
+                <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${lne('fmt.'+f.i+'.k',f.src.k||'')}</td>
+                <td class="px-2.5 py-2 text-slate-600">${lne('fmt.'+f.i+'.v',f.src.v||'')}</td>
+                <td class="px-1 py-2 text-right"><button onclick="lnDel('fmt',${f.i},'이 포맷 항목을 삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join('')}</tbody></table></div>
+            <button onclick="lnAdd('fmt')" class="mt-2 text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 규격 추가</button>
+          </div>
+          <div>
+            <p class="text-[12px] font-extrabold text-ink mb-1.5">제작 원칙 <span class="text-[11px] font-normal text-slate-400">· 한 줄에 하나씩</span></p>
+            <div class="rounded-xl border border-[#E6E6E3] p-3 text-[12.5px] text-slate-600">${lneM('ch.rules',(C.rules||[]).join('\n'))}</div>
+            <p class="text-[12px] font-extrabold text-ink mt-3 mb-1.5">쓰지 않는 말 <span class="text-[11px] font-normal text-slate-400">· 쉼표로 구분</span></p>
+            <div class="rounded-xl border border-[#F0D9D2] bg-[#FDF7F5] p-3 text-[12.5px] text-ared">${lne('ch.banned',(C.banned||[]).join(', '))}</div>
+          </div>
+        </div>`)}
+
+      ${sec('lnSec2','🎬','에피소드 파이프라인',eps.length+'편',`
+        <div class="overflow-auto rounded-xl border border-[#E6E6E3]"><table class="w-full text-[12px]">
+          <thead class="bg-slate-50 text-slate-500"><tr class="text-left">
+            ${['코드','집(익명 표기)','상태','담당','촬영','발행','훅 한 줄','적용 솔루션','메모',''].map(h=>`<th class="px-2.5 py-2 font-semibold whitespace-nowrap">${esc(h)}</th>`).join('')}
+          </tr></thead>
+          <tbody>${eps.length?eps.map(e=>{ const st=LV('ep.'+e.i+'.status',e.src.status||'섭외');
+            return `<tr class="border-t border-slate-100 align-top hover:bg-[#FAFAF9]">
+            <td class="px-2.5 py-2 font-extrabold text-ink whitespace-nowrap">${lne('ep.'+e.i+'.code',e.src.code||'EP--')}</td>
+            <td class="px-2.5 py-2 text-slate-700 min-w-[130px]">${lne('ep.'+e.i+'.house',e.src.house||'')}</td>
+            <td class="px-2.5 py-2 whitespace-nowrap"><select onchange="lnSetStatus(${e.i},this.value)"
+                class="text-[11px] font-bold border rounded-lg px-1.5 py-1" style="color:${LN_STCOL[st]||'#26282A'};border-color:${(LN_STCOL[st]||'#26282A')}40">
+                ${ST.map(s=>`<option ${s===st?'selected':''}>${esc(s)}</option>`).join('')}</select></td>
+            <td class="px-2.5 py-2 whitespace-nowrap text-ink font-semibold">${lne('ep.'+e.i+'.owner',e.src.owner||'미정')}</td>
+            <td class="px-2.5 py-2 num whitespace-nowrap text-slate-500">${lne('ep.'+e.i+'.shoot',e.src.shoot||'--')}</td>
+            <td class="px-2.5 py-2 num whitespace-nowrap text-slate-500">${lne('ep.'+e.i+'.publish',e.src.publish||'--')}</td>
+            <td class="px-2.5 py-2 text-slate-600 min-w-[150px]">${lne('ep.'+e.i+'.hook',e.src.hook||'')}</td>
+            <td class="px-2.5 py-2 text-slate-600 min-w-[150px]">${lne('ep.'+e.i+'.solution',e.src.solution||'')}</td>
+            <td class="px-2.5 py-2 text-slate-400 min-w-[150px]">${lne('ep.'+e.i+'.note',e.src.note||'')}</td>
+            <td class="px-1 py-2 text-right"><button onclick="lnDel('ep',${e.i},'이 에피소드를 삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`; }).join('')
+            :'<tr><td colspan="10" class="px-3 py-6 text-center text-[12px] text-slate-300">에피소드가 없습니다. 아래 버튼으로 추가하세요.</td></tr>'}</tbody></table></div>
+        <div class="flex items-center justify-between mt-2 gap-3">
+          <p class="text-[11px] text-ared">⚠️ 거주자 실명·동호수·주소는 넣지 마세요. <span class="text-slate-400">지역 + 평수 + 가구 형태까지만 (예: 마포 34평 · 신혼 2인)</span></p>
+          <button onclick="lnAdd('ep')" class="text-[12px] font-bold bg-ink text-white hover:brightness-125 rounded-lg px-3 py-1.5 shrink-0">＋ 에피소드 추가</button>
+        </div>`)}
+
+      ${sec('lnSec3','💡','아이디어 보드','👍 눌러 우선순위를 정하세요',`
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+          ${ideas.map(e=>{ const v=lnVotes(e.i), mine=lnVoted(e.i);
+            return `<div class="rounded-xl border border-[#E6E6E3] p-4 flex flex-col">
+              <div class="flex items-start justify-between gap-2">
+                <p class="text-[13.5px] font-extrabold text-ink flex-1">${lne('id.'+e.i+'.title',e.src.title||'새 아이디어')}</p>
+                <button onclick="lnDel('id',${e.i},'이 아이디어를 삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared shrink-0">✕</button>
+              </div>
+              <p class="text-[12px] text-slate-500 leading-relaxed mt-1.5 flex-1">${lne('id.'+e.i+'.why',e.src.why||'왜 필요한지 한 줄로 적어주세요')}</p>
+              <div class="flex items-center justify-between gap-2 mt-3 pt-2 border-t border-[#F1EFE9]">
+                <span class="text-[11px] text-slate-400">제안 ${lne('id.'+e.i+'.by',e.src.by||'-')}</span>
+                <button onclick="lnVote(${e.i})" class="text-[12px] font-bold rounded-lg px-2.5 py-1 border ${mine?'bg-[#EDE9FF] border-[#7C5CFF] text-[#5B44C7]':'border-[#E6E6E3] text-slate-400 hover:bg-[#FAFAF9]'}">👍 <span class="num">${v}</span></button>
+              </div></div>`; }).join('')}
+          <button onclick="lnAdd('id')" class="rounded-xl border-2 border-dashed border-[#E6E6E3] hover:border-ink hover:bg-[#FAFAF9] p-4 text-[13px] font-semibold text-slate-400 min-h-[120px]">＋ 아이디어 추가</button>
+        </div>`)}
+
+      ${sec('lnSec4','🧠','논의 축적 카드','AI와 나눈 전략 논의의 결론만 여기에',`
+        <div class="rounded-xl bg-[#FBFAFF] border border-[#EDE9FF] p-4 mb-3">
+          <p class="text-[12px] text-[#5B44C7] leading-relaxed"><b>이렇게 쓰세요.</b> Claude/ChatGPT와 논의가 끝나면 대화 마지막에
+            <b>"오늘 논의를 ① 결정사항 ② 남은 질문 ③ 다음 액션 으로 3~5줄 정리해줘"</b> 라고 요청하고, 그 답을 카드로 붙여넣으세요.
+            대화 전체를 옮길 필요는 없습니다 — <b>결론만</b> 쌓여야 다음 사람이 읽습니다.</p>
+        </div>
+        <div class="space-y-3">
+          ${logs.length?logs.map(e=>`<div class="rounded-xl border border-[#E6E6E3] p-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <p class="text-[12px] font-extrabold text-ink">📅 ${lne('log.'+e.i+'.date',e.src.date||'')}
+                <span class="text-slate-300 mx-1">·</span><span class="text-brand-ink">${lne('log.'+e.i+'.by',e.src.by||lnMe())}</span></p>
+              <button onclick="lnDel('log',${e.i},'이 논의 카드를 삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared">✕</button>
+            </div>
+            <div class="text-[12.5px] text-slate-600">${lneM('log.'+e.i+'.body',e.src.body||'① 결정사항\n② 남은 질문\n③ 다음 액션')}</div>
+          </div>`).join('')
+          :'<p class="text-[12px] text-slate-300 py-6 text-center">아직 논의 카드가 없습니다.</p>'}
+        </div>
+        <button onclick="lnAddLog()" class="mt-3 text-[12px] font-bold bg-[#7C5CFF] text-white hover:brightness-110 rounded-lg px-3 py-1.5">＋ 논의 카드 추가</button>`)}
+
+      ${sec('lnSec5','📋','AI 프로젝트 연동','이 탭 전체를 마크다운 한 장으로',`
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <p class="text-[12.5px] text-slate-600 leading-relaxed mb-3">아래 버튼을 누르면 <b>헌장 · 파이프라인 · 아이디어 · 논의 카드</b>가
+              마크다운 한 장으로 합쳐집니다. 그 내용을 Claude(또는 ChatGPT) 공유 프로젝트의 <b>[프로젝트 지식]</b>에 올려두면,
+              팀원 누구가 새 대화를 시작해도 <b>같은 최신 전략 위에서</b> 답이 나옵니다.</p>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="lnCopy()" class="text-[12.5px] font-bold bg-ink text-white hover:brightness-125 rounded-lg px-3.5 py-2">📋 복사하기</button>
+              <button onclick="lnDownload()" class="text-[12.5px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-3.5 py-2">⬇ .md 파일로 저장</button>
+              <button onclick="lnPreview()" class="text-[12.5px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-3.5 py-2">👁 미리보기</button>
+            </div>
+            <p id="lnExpMsg" class="text-[11.5px] text-agreen font-semibold mt-2 h-4"></p>
+          </div>
+          <div class="rounded-xl border border-[#E6E6E3] bg-[#FAFAF9] p-4">
+            <p class="text-[12px] font-extrabold text-ink mb-2">운영 규칙 (팀 합의사항)</p>
+            <ol class="space-y-1.5 text-[12px] text-slate-600 leading-relaxed list-decimal pl-4">
+              <li>깊은 전략 논의는 <b>AI 공유 프로젝트</b>에서 한다.</li>
+              <li>결론은 <b>이 탭</b>에 남긴다 (대화 원문은 옮기지 않는다).</li>
+              <li>주 1회, 담당자가 <b>내보내기 → 프로젝트 지식 갱신</b>을 한다.</li>
+              <li>프로젝트 지식은 <b>항상 최신 1개만</b> 둔다(구버전 삭제).</li>
+            </ol>
+          </div>
+        </div>
+        <pre id="lnMdBox" class="hidden mt-3 text-[11.5px] text-slate-600 bg-[#FAFAF9] border border-[#E6E6E3] rounded-xl p-4 overflow-auto whitespace-pre-wrap" style="max-height:420px"></pre>`)}
+      <div class="h-8"></div>`;
+    }
+    function lnAddLog(){ let n=0; while(LN_OVER[lnKey('logx.'+n)]) n++;
+      const i=500+n, d=new Date().toISOString().slice(0,10);
+      lnSave('logx.'+n,'1'); lnSave('log.'+i+'.date',d); lnSave('log.'+i+'.by',lnMe());
+      renderLanseon(); setTimeout(()=>lnGo('lnSec4'),80); }
+
     // ===== ONLY MKT (팀 전용) =====
     const MKT_PW='aqara2026';   // 팀 공유 비밀번호(정적 사이트=화면 가림 수준). 변경 시 이 값 수정.
     let mktSection='weekly';   // ONLY MKT 첫 화면 = 주간보고
@@ -5720,6 +6025,7 @@
       const adv=document.getElementById('view-ad'); if(adv) adv.classList.toggle('hidden', s!=='ad');
       const sem=document.getElementById('view-seminar'); if(sem) sem.classList.toggle('hidden', s!=='seminar');
       const bbv=document.getElementById('view-brandbook'); if(bbv) bbv.classList.toggle('hidden', s!=='brandbook');
+      const lnv=document.getElementById('view-lanseon'); if(lnv) lnv.classList.toggle('hidden', s!=='lanseon');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
       document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
@@ -5727,7 +6033,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','insta','blog','prpitch','ad','seminar','brandbook','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
+      ['weekly','medialist','calendar','insta','blog','prpitch','ad','seminar','brandbook','lanseon','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -5737,6 +6043,7 @@
       if(s==='ad'){ loadAd(); }
       if(s==='seminar'){ renderSeminar(); }
       if(s==='brandbook'){ renderBrandbook(); }
+      if(s==='lanseon'){ renderLanseon(); }
       if(s==='report'){ mktReportSub(mktRptView); }
 
     }
