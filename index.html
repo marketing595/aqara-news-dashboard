@@ -3431,6 +3431,8 @@
     let SEM_INFLIGHT=0, SEM_ERR=false;
     let SEM_CMT={}, semCmtOn=false, SEM_CMT_OPEN=null, SEM_GSCROLL=null;
     const SEM_F={cat:'',owner:'',hideDone:false,only:''};
+    // 11월 세미나 모객현황 시트(아웃링크)
+    const SEM_REG_URL='https://docs.google.com/spreadsheets/d/1HO_6L-8N3sBQizQkU7dJzMLCOvWV401j/edit?gid=433080992#gid=433080992';
     const SEM_DW=26, SEM_LW=440;                 // 통합 뷰: 하루 폭 / 좌측 표 폭(px)
     const SEM_FOLD={};                           // 구분 그룹 접힘 상태
     const SEM_DOW=['일','월','화','수','목','금','토'];
@@ -4552,7 +4554,7 @@
           </div>
         </div>
         <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-[#ECE9E1]">
-          ${[['semSecNow','⚡ 이번 주'],['semSecGant','📋 체크리스트/타임라인'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecTime','🕘 당일 진행표'],['semSecOv','📄 제안서']]
+          ${[['semSecNow','⚡ 이번 주'],['semSecReg','🎟 모객현황'],['semSecGant','📋 체크리스트/타임라인'],['semSecOwner','🙋 담당자'],['semSecBud','💰 예산'],['semSecTime','🕘 당일 진행표'],['semSecOv','📄 제안서']]
             .map(x=>`<button onclick="semGo('${x[0]}')" class="text-[11px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">${x[1]}</button>`).join('')}
         </div>
       </div>
@@ -4606,6 +4608,18 @@
               :'<p class="text-[12px] text-slate-400">이번 주 마감 업무가 없습니다.</p>'}
           </div>
         </div>`)}
+
+      <!-- 11월 세미나 모객현황 (구글시트 아웃링크) -->
+      ${sec('semSecReg','🎟','11월 세미나 모객현황','신청자 명단·집계는 구글시트에서 관리합니다',`
+        <a href="${SEM_REG_URL}" target="_blank" rel="noopener"
+           class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E6E6E3] hover:border-ink hover:bg-[#FAFAF9] transition p-4">
+          <div class="min-w-0">
+            <p class="text-[14px] font-extrabold text-ink">📊 모객현황 시트 열기 <span class="text-[12px] font-normal text-slate-400">· 새 탭</span></p>
+            <p class="text-[12px] text-slate-500 mt-1">참석 신청자 명단, 채널별 유입, 목표 대비 모객률을 시트에서 바로 확인·입력하세요.</p>
+          </div>
+          <span class="shrink-0 text-[12px] font-bold bg-ink text-white rounded-lg px-3.5 py-2">시트 바로가기 ↗</span>
+        </a>
+        <p class="text-[11px] text-slate-400 mt-2 break-all">${esc(SEM_REG_URL)}</p>`)}
 
       <!-- 필터 -->
       <div class="card p-3 mb-4 flex flex-wrap items-center gap-2">
