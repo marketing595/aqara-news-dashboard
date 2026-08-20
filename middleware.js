@@ -8,7 +8,11 @@ export const config = {
   // media.html / media.json = 미디어 라이브러리 외부 공유 페이지(로그인 없이 열람 가능).
   //   담긴 것은 배포용 브랜드 자산 목록(제목 + 구글드라이브 링크)뿐이며,
   //   실제 파일 접근 권한은 드라이브 공유 설정이 따로 통제한다.
-  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json).*)'],
+  // campaign-l100.html = L100 캠페인 효과 분석 외부 공유(보고용) 페이지.
+  //   index.html의 캠페인 리포트를 정적으로 굳힌 사본이라 이 파일 하나만 열리고,
+  //   다른 데이터(json)는 계속 로그인 뒤에 있다. 단, 매출·이익률 등 내부 수치를 담고 있으므로
+  //   페이지 자체에 noindex와 대외비 경고를 넣어두었다. 갱신: tools/build-campaign-share.sh
+  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json|campaign-l100.html).*)'],
 };
 
 function fromB64url(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; return atob(s); }
