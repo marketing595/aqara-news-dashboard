@@ -5756,148 +5756,211 @@
     function lnVoted(i){ return !!LV('idv.'+i+'.'+lnMe(),''); }
     function lnVote(i){ lnSave('idv.'+i+'.'+lnMe(), lnVoted(i)?'':'1'); renderLanseon(); }
 
-    const LN_STCOL={'섭외':'#8A6A00','사전답사':'#8A6A00','설치':'#5B44C7','촬영':'#5B44C7','편집':'#D68134','발행':'#5E7350','보류':'#9AA0A6'};
+    const LN_STCOL={'기획':'#9AA0A6','섭외':'#8A6A00','사전답사':'#8A6A00','촬영':'#5B44C7','편집':'#D68134','발행':'#5E7350','보류':'#9AA0A6'};
+    const LN_DSTCOL={'결정 대기':'#BF5332','진행 중':'#D68134','확정':'#5E7350','보류':'#9AA0A6'};
+    const LN_WCOL=['#5B44C7','#BF5332','#5E7350','#D68134'];
+    const LN_DST=['결정 대기','진행 중','확정','보류'];
+    function lnSetDec(i,v){ lnSave('dec.'+i+'.st',v); renderLanseon(); }
 
     /* ── 프로젝트 지식 내보내기 (Claude / ChatGPT 프로젝트에 붙여넣을 마크다운 한 장) ── */
     function lnMd(){
       if(!LN) return '';
-      const C=LN.charter||{}, L=[];
+      const P=LN.positioning||{}, C=LN.charter||{}, A=LN.angle||{}, L=[];
       const today=new Date().toISOString().slice(0,10);
-      L.push('# 랜선집들이 콘텐츠 전략 — 팀 공유 지식');
+      const g=(k,d)=>LV(k,d||'');
+      L.push('# 아카라라이프 집 콘텐츠 장기 전략 — 팀 공유 지식');
       L.push('');
       L.push('> 아카라라이프 마케팅팀 공동 편집 문서. 출처: ONLY MKT 대시보드 > 랜선집들이 탭');
       L.push('> 내보낸 날짜: '+today+' · 이 문서가 최신입니다. 이전 버전은 무시하세요.');
       L.push('');
       L.push('## 0. 한 줄 정의');
-      L.push(LV('subtitle',LN.subtitle||''));
+      L.push(g('subtitle',LN.subtitle));
       L.push('');
-      L.push('## 1. 세계관 · 포맷 헌장');
-      [['컨셉','concept'],['세계관','worldview'],['톤앤매너','tone'],['타깃','target'],['성공 기준(KPI)','kpi']]
-        .forEach(x=>{ L.push('- **'+x[0]+'**: '+LV('ch.'+x[1], C[x[1]]||'')); });
+      L.push('## 1. 포지셔닝');
+      L.push('- **아니다**: '+g('pos.not',P.not));
+      L.push('- **이다**: '+g('pos.is',P.is));
+      L.push('- **경쟁 구도**: '+g('pos.vs',P.vs));
+      L.push('- **최종 목표**: '+g('pos.goal',P.goal));
+      L.push('- **재정의**: '+g('pos.reframe',P.reframe));
       L.push('');
-      L.push('### 포맷 규격');
-      L.push('| 항목 | 규격 |'); L.push('| --- | --- |');
-      lnList('fmt',C.format).forEach(f=>{ L.push('| '+LV('fmt.'+f.i+'.k',f.src.k||'')+' | '+LV('fmt.'+f.i+'.v',f.src.v||'')+' |'); });
+      L.push('### 관점 전환');
+      L.push('- 기존: '+g('pos.flowOld',P.flowOld));
+      L.push('- 앞으로: '+g('pos.flowNew',P.flowNew));
       L.push('');
-      L.push('### 제작 원칙');
-      LV('ch.rules',(C.rules||[]).join('\n')).split('\n').filter(x=>x.trim()).forEach(x=>L.push('- '+x.trim()));
+      L.push('### 왜 바꾸는가 (현재 랜선집들이의 한계)');
+      lnList('is',LN.issues).forEach(e=>{ L.push('- **'+g('is.'+e.i+'.t',e.src.t)+'** — '+g('is.'+e.i+'.d',e.src.d)); });
       L.push('');
-      L.push('### 쓰지 않는 말');
-      L.push(LV('ch.banned',(C.banned||[]).join(', ')));
+      L.push('### 제작 규칙');
+      L.push('- 톤앤매너: '+g('ch.tone',C.tone));
+      L.push('- 성과 기준: '+g('ch.kpi',C.kpi));
+      lnList('fmt',C.format).forEach(f=>{ L.push('- '+g('fmt.'+f.i+'.k',f.src.k)+': '+g('fmt.'+f.i+'.v',f.src.v)); });
+      g('ch.rules',(C.rules||[]).join('\n')).split('\n').filter(x=>x.trim()).forEach(x=>L.push('- '+x.trim()));
+      L.push('- 쓰지 않는 말: '+g('ch.banned',(C.banned||[]).join(', ')));
       L.push('');
-      L.push('## 2. 에피소드 파이프라인');
-      L.push('| 코드 | 집 | 상태 | 담당 | 촬영 | 발행 | 훅 | 적용 솔루션 | 메모 |');
-      L.push('| --- | --- | --- | --- | --- | --- | --- | --- | --- |');
-      lnList('ep',LN.episodes).forEach(e=>{ const g=f=>String(LV('ep.'+e.i+'.'+f, e.src[f]||'')).replace(/\|/g,'/').replace(/\n/g,' ');
-        L.push('| '+[g('code'),g('house'),g('status'),g('owner'),g('shoot'),g('publish'),g('hook'),g('solution'),g('note')].join(' | ')+' |'); });
+      L.push('## 2. 콘텐츠 월드 (한 포맷에 의존하지 않는다)');
+      lnList('wd',LN.worlds).forEach(w=>{
+        L.push('');
+        L.push('### '+(w.src.no||'')+' '+g('wd.'+w.i+'.en',w.src.en)+' — '+g('wd.'+w.i+'.kr',w.src.kr));
+        L.push('- 역할: '+g('wd.'+w.i+'.role',w.src.role)+' / 타깃: '+g('wd.'+w.i+'.target',w.src.target));
+        L.push('- '+g('wd.'+w.i+'.note',w.src.note));
+        L.push('- 콘텐츠 예시:');
+        lnList('w'+w.i+'i',w.src.ideas).forEach(t=>{ const v=g('w'+w.i+'i.'+t.i,(typeof t.src==='string'?t.src:'')); if(v) L.push('  - '+v); });
+      });
       L.push('');
-      L.push('## 3. 아이디어 보드 (득표순)');
-      lnList('id',LN.ideas).map(x=>({x:x,v:lnVotes(x.i)})).sort((a,b)=>b.v-a.v).forEach(o=>{ const e=o.x;
-        L.push('- **'+LV('id.'+e.i+'.title',e.src.title||'')+'** (👍'+o.v+') — '+LV('id.'+e.i+'.why',e.src.why||'')
-          +(LV('id.'+e.i+'.by',e.src.by||'')?' _제안: '+LV('id.'+e.i+'.by',e.src.by||'')+'_':'')); });
+      L.push('## 3. 관점 확장기 — 같은 기능, 다른 질문');
+      L.push(g('ang.intro',A.intro));
       L.push('');
-      L.push('## 4. 논의 축적 카드');
+      L.push('사례: **'+g('ang.case',A.case)+'**');
+      lnList('ang',A.list).forEach(x=>{ L.push('- ('+g('ang.'+x.i+'.k',x.src.k)+') '+g('ang.'+x.i+'.v',x.src.v)+' _['+g('ang.'+x.i+'.w',x.src.w)+']_'); });
+      L.push('');
+      L.push('## 4. 에피소드 파이프라인');
+      L.push('| 코드 | 월드 | 집 | 상태 | 담당 | 촬영 | 발행 | 훅 | 적용 솔루션 | 메모 |');
+      L.push('| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |');
+      lnList('ep',LN.episodes).forEach(e=>{ const f=k=>String(g('ep.'+e.i+'.'+k,e.src[k])).replace(/\|/g,'/').replace(/\n/g,' ');
+        L.push('| '+['code','world','house','status','owner','shoot','publish','hook','solution','note'].map(f).join(' | ')+' |'); });
+      L.push('');
+      L.push('## 5. 콘텐츠 포트폴리오');
+      L.push('| 콘텐츠 | 역할 | 타깃 |'); L.push('| --- | --- | --- |');
+      lnList('pf',LN.portfolio).forEach(x=>{ L.push('| '+g('pf.'+x.i+'.n',x.src.n)+' | '+g('pf.'+x.i+'.r',x.src.r)+' | '+g('pf.'+x.i+'.t',x.src.t)+' |'); });
+      L.push('');
+      L.push('## 6. 고객 여정');
+      lnList('jr',LN.journey).forEach(x=>{ L.push('- '+(x.src.s||'')+' '+g('jr.'+x.i+'.who',x.src.who)+' → "'+g('jr.'+x.i+'.q',x.src.q)+'" → '+g('jr.'+x.i+'.n',x.src.n)); });
+      L.push('');
+      L.push('## 7. 장기 로드맵');
+      lnList('rm',LN.roadmap).forEach(x=>{ L.push('- **'+(x.src.s||'')+' '+g('rm.'+x.i+'.t',x.src.t)+'** — '+g('rm.'+x.i+'.d',x.src.d)); });
+      L.push('');
+      L.push('## 8. 결정 · 액션');
+      lnList('dec',LN.decisions).forEach(x=>{ L.push('- **['+g('dec.'+x.i+'.st',x.src.st)+'] '+g('dec.'+x.i+'.q',x.src.q)+'**'
+        +(g('dec.'+x.i+'.own',x.src.own)?' (담당 '+g('dec.'+x.i+'.own',x.src.own)+')':'')
+        +' — 선택지: '+g('dec.'+x.i+'.opt',x.src.opt)+' / 메모: '+g('dec.'+x.i+'.note',x.src.note)); });
+      L.push('');
+      L.push('### 미팅에서 답해야 할 질문');
+      lnList('agd',LN.agenda).forEach(x=>{ L.push('- '+g('agd.'+x.i+'.q',x.src.q));
+        const a=g('agd.'+x.i+'.a',x.src.a); if(a) L.push('  - 결론: '+a); });
+      L.push('');
+      L.push('## 9. 아이디어 보드 (득표순)');
+      const ids=lnList('id',LN.ideas).map(x=>({x:x,v:lnVotes(x.i)})).sort((a,b)=>b.v-a.v);
+      if(!ids.length) L.push('_아직 등록된 아이디어가 없습니다._');
+      ids.forEach(o=>{ const e=o.x; L.push('- **'+g('id.'+e.i+'.title',e.src.title)+'** (👍'+o.v+') — '+g('id.'+e.i+'.why',e.src.why)
+        +(g('id.'+e.i+'.by',e.src.by)?' _제안: '+g('id.'+e.i+'.by',e.src.by)+'_':'')); });
+      L.push('');
+      L.push('## 10. 논의 축적 카드');
       const logs=lnList('log',LN.log);
       if(!logs.length) L.push('_아직 등록된 논의 카드가 없습니다._');
-      logs.forEach(e=>{ L.push('### '+LV('log.'+e.i+'.date',e.src.date||'')+' · '+LV('log.'+e.i+'.by',e.src.by||''));
-        L.push(LV('log.'+e.i+'.body',e.src.body||'')); L.push(''); });
+      logs.forEach(e=>{ L.push('### '+g('log.'+e.i+'.date',e.src.date)+' · '+g('log.'+e.i+'.by',e.src.by));
+        L.push(g('log.'+e.i+'.body',e.src.body)); L.push(''); });
       L.push('');
       L.push('---');
-      L.push('AI에게: 이 문서의 헌장(1장)을 어기는 제안은 하지 마세요. 새 제안은 3장 아이디어 보드와 중복되는지 먼저 확인하세요.');
+      L.push('AI에게: 이 문서의 1장 포지셔닝과 제작 규칙을 어기는 제안은 하지 마세요.');
+      L.push('새 콘텐츠를 제안할 때는 (1) 어느 콘텐츠 월드인지 (2) 고객 여정 어느 단계를 노리는지 (3) 기존 아이디어와 중복되지 않는지를 먼저 밝히세요.');
+      L.push('"기능 설명"이 아니라 "상황과 질문"으로 제안하세요.');
       return L.join('\n');
     }
-    function lnCopy(){
-      const md=lnMd(), st=document.getElementById('lnExpMsg');
-      const done=()=>{ if(st){ st.textContent='✓ 복사했습니다 — Claude 프로젝트의 [프로젝트 지식]에 붙여넣으세요 ('+md.length.toLocaleString()+'자)'; setTimeout(()=>{ if(st) st.textContent=''; },6000); } };
-      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(md).then(done).catch(()=>lnCopyFallback(md,done)); }
-      else lnCopyFallback(md,done);
-    }
-    function lnCopyFallback(md,done){ const ta=document.createElement('textarea'); ta.value=md; ta.style.position='fixed'; ta.style.opacity='0';
-      document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); done(); }catch(e){ alert('복사에 실패했습니다. 아래 미리보기에서 직접 복사해 주세요.'); }
-      document.body.removeChild(ta); }
-    function lnDownload(){ const md=lnMd(), b=new Blob([md],{type:'text/markdown;charset=utf-8'});
-      const a=document.createElement('a'); a.href=URL.createObjectURL(b);
-      a.download='랜선집들이_전략_'+new Date().toISOString().slice(0,10)+'.md';
-      document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(a.href),3000); }
-    function lnPreview(){ const el=document.getElementById('lnMdBox'); if(!el) return;
-      const on=el.classList.toggle('hidden'); if(!on) el.textContent=lnMd(); }
 
     function renderLanseon(){
       const box=document.getElementById('lnBody'); if(!box) return;
       if(!LN){
-        box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">랜선집들이 자료를 불러오는 중…</p>';
+        box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">집 콘텐츠 전략을 불러오는 중…</p>';
         if(LN_LOADING) return; LN_LOADING=true;
         fetch('lanseon.json?_='+Date.now()).then(r=>r.json()).then(d=>{ LN=d; LN_LOADING=false; renderLanseon(); })
-          .catch(()=>{ LN_LOADING=false; box.innerHTML='<p class="text-sm text-ared py-16 text-center">랜선집들이 자료를 불러오지 못했습니다.</p>'; });
+          .catch(()=>{ LN_LOADING=false; box.innerHTML='<p class="text-sm text-ared py-16 text-center">자료를 불러오지 못했습니다.</p>'; });
         return;
       }
       lnStart();
-      const C=LN.charter||{}, ST=LN.statuses||['섭외','촬영','편집','발행'];
-      const eps=lnList('ep',LN.episodes), ideas=lnList('id',LN.ideas), logs=lnList('log',LN.log);
+      const P=LN.positioning||{}, C=LN.charter||{}, A=LN.angle||{}, ST=LN.statuses||['기획','촬영','편집','발행'];
+      const worlds=lnList('wd',LN.worlds), eps=lnList('ep',LN.episodes), ideas=lnList('id',LN.ideas), logs=lnList('log',LN.log);
+      const decs=lnList('dec',LN.decisions), waiting=decs.filter(d=>LV('dec.'+d.i+'.st',d.src.st||'결정 대기')==='결정 대기').length;
       const sec=(id,n,t,s,b)=>`<section id="${id}" class="card p-5 sm:p-6 mb-4" style="scroll-margin-top:80px">
         <div class="flex items-baseline gap-2 mb-3"><span class="text-[12px] font-extrabold text-white bg-ink rounded px-1.5 py-0.5">${n}</span>
           <h3 class="text-[16px] font-extrabold text-ink">${t}</h3>${s?`<span class="text-[11px] text-slate-400">${s}</span>`:''}</div>${b}</section>`;
-      const kv=(label,key,def)=>`<div class="flex gap-3 py-2 border-b border-[#F1EFE9] last:border-0">
-        <span class="w-24 shrink-0 text-[12px] font-bold text-slate-500 pt-0.5">${esc(label)}</span>
-        <span class="text-[13px] text-slate-700 leading-relaxed flex-1">${lne(key,def)}</span></div>`;
-      const cnt=s=>eps.filter(e=>LV('ep.'+e.i+'.status',e.src.status||'섭외')===s).length;
+      const cnt=s=>eps.filter(e=>LV('ep.'+e.i+'.status',e.src.status||'기획')===s).length;
 
       box.innerHTML=`
-      <!-- 안내 -->
       <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#7C5CFF">
         <p class="text-[12.5px] text-slate-500">각 칸을 클릭해 바로 고치세요. <b class="text-agreen">여러 명이 동시에 편집하면 실시간으로 서로 반영</b>됩니다.
-          AI와 나눈 논의는 <b>4번 '논의 축적 카드'</b>에 남기고, 마지막에 <b>[프로젝트 지식 내보내기]</b>로 복사해 AI 프로젝트에 올려주세요.</p>
+          AI와 나눈 논의는 <b>논의 축적 카드</b>에 남기고, <b>[프로젝트 지식 내보내기]</b>로 복사해 AI 프로젝트에 올려주세요.</p>
       </div>
 
-      <!-- 헤더 -->
       <div class="card p-5 sm:p-6 mb-4">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div class="min-w-0">
-            <p class="text-[11px] font-extrabold tracking-wider text-brand-ink">AQARA LIFE · 장기 콘텐츠 시리즈</p>
+            <p class="text-[11px] font-extrabold tracking-wider text-brand-ink">AQARA LIFE · 집 콘텐츠 장기 전략</p>
             <h2 class="text-[22px] sm:text-[26px] font-extrabold text-ink leading-tight mt-0.5">🏠 ${lne('title',LN.title)}</h2>
-            <p class="text-[13px] text-slate-500 mt-1 max-w-[720px]">${lne('subtitle',LN.subtitle)}</p>
+            <p class="text-[13px] text-slate-500 mt-1 max-w-[760px]">${lne('subtitle',LN.subtitle)}</p>
           </div>
           <div class="text-right shrink-0">
             <div class="text-[11px] h-4" id="lnSave"></div>
             <button onclick="lnCopy()" class="mt-1.5 text-[12px] font-bold bg-ink text-white hover:brightness-125 px-3 py-2 rounded-lg">📋 프로젝트 지식 내보내기</button>
           </div>
         </div>
+        <div class="rounded-xl bg-[#FBFAFF] border border-[#EDE9FF] p-4 mt-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="rounded-lg bg-white border border-[#F0D9D2] p-3">
+              <p class="text-[11px] font-extrabold text-ared mb-1">✕ 이게 아니다</p>
+              <p class="text-[13px] text-slate-600">${lne('pos.not',P.not)}</p></div>
+            <div class="rounded-lg bg-white border border-[#D8E3D0] p-3">
+              <p class="text-[11px] font-extrabold text-agreen mb-1">✓ 이것이다</p>
+              <p class="text-[13.5px] font-semibold text-ink">${lne('pos.is',P.is)}</p></div>
+          </div>
+        </div>
         <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-[#ECE9E1]">
-          ${[['lnSec1','📜 세계관·포맷 헌장'],['lnSec2','🎬 에피소드 파이프라인'],['lnSec3','💡 아이디어 보드'],['lnSec4','🧠 논의 축적 카드'],['lnSec5','📋 AI 프로젝트 연동']]
+          ${[['lnSec1','📍 포지셔닝·원칙'],['lnSec2','🌏 콘텐츠 월드'],['lnSec3','🎬 파이프라인'],['lnSec4','🔁 관점 확장기'],['lnSec5','🛣 퍼널·로드맵'],['lnSec6','✅ 결정·액션'+(waiting?' '+waiting:'')],['lnSec7','💡 아이디어'],['lnSec8','🧠 논의 카드'],['lnSec9','📋 AI 연동']]
             .map(x=>`<button onclick="lnGo('${x[0]}')" class="text-[11px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">${x[1]}</button>`).join('')}
         </div>
       </div>
 
-      <!-- 상태 요약 -->
-      <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 mb-4">
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 mb-4">
         ${ST.map(s=>`<div class="rounded-xl border border-[#E6E6E3] p-3">
           <p class="text-[11px] font-bold" style="color:${LN_STCOL[s]||'#26282A'}">${esc(s)}</p>
           <p class="text-[19px] font-extrabold num leading-tight mt-0.5 text-ink">${cnt(s)}<span class="text-[12px] text-slate-400 font-normal">편</span></p>
         </div>`).join('')}
       </div>
 
-      ${sec('lnSec1','📜','세계관 · 포맷 헌장','여기서 벗어나는 기획은 반려합니다',`
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+      ${sec('lnSec1','📍','포지셔닝 · 제작 원칙','여기서 벗어나는 기획은 반려합니다',`
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-2">
           <div>
-            ${kv('컨셉','ch.concept',C.concept)}
-            ${kv('세계관','ch.worldview',C.worldview)}
-            ${kv('톤앤매너','ch.tone',C.tone)}
+            <p class="text-[12px] font-bold text-slate-500 mb-1">경쟁 구도</p>
+            <p class="text-[13px] text-slate-700 leading-relaxed mb-3">${lne('pos.vs',P.vs)}</p>
+            <p class="text-[12px] font-bold text-slate-500 mb-1">최종 목표</p>
+            <p class="text-[13px] text-slate-700 leading-relaxed mb-3">${lne('pos.goal',P.goal)}</p>
+            <p class="text-[12px] font-bold text-slate-500 mb-1">스마트홈 재정의</p>
+            <p class="text-[13px] text-slate-700 leading-relaxed">${lne('pos.reframe',P.reframe)}</p>
           </div>
           <div>
-            ${kv('타깃','ch.target',C.target)}
-            ${kv('성공 기준','ch.kpi',C.kpi)}
+            <p class="text-[12px] font-bold text-slate-500 mb-1.5">관점 전환</p>
+            <div class="rounded-xl border border-[#E6E6E3] p-3 mb-2">
+              <p class="text-[10.5px] font-extrabold text-slate-400 mb-1">기존</p>
+              <p class="text-[12.5px] text-slate-500 line-through">${lne('pos.flowOld',P.flowOld)}</p>
+            </div>
+            <div class="rounded-xl border-2 border-[#7C5CFF] bg-[#FBFAFF] p-3">
+              <p class="text-[10.5px] font-extrabold text-[#5B44C7] mb-1">앞으로</p>
+              <p class="text-[13px] font-semibold text-ink">${lne('pos.flowNew',P.flowNew)}</p>
+            </div>
           </div>
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+
+        <details class="mt-4 rounded-xl border border-[#E6E6E3] bg-[#FAFAF9]">
+          <summary class="cursor-pointer list-none px-3.5 py-2 text-[12px] font-extrabold text-slate-500 hover:text-ink select-none">⚠️ 왜 바꾸는가 — 현재 랜선집들이의 한계 3가지 <span class="font-normal text-slate-400">· 펼치기</span></summary>
+          <div class="px-3.5 pb-3 pt-1 space-y-2">
+            ${lnList('is',LN.issues).map(e=>`<div>
+              <p class="text-[12.5px] font-bold text-ink">${lne('is.'+e.i+'.t',e.src.t||'')}</p>
+              <p class="text-[12px] text-slate-500 leading-relaxed mt-0.5">${lne('is.'+e.i+'.d',e.src.d||'')}</p></div>`).join('')}
+          </div>
+        </details>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 pt-4 border-t border-[#F1EFE9]">
           <div>
             <p class="text-[12px] font-extrabold text-ink mb-1.5">포맷 규격</p>
             <div class="overflow-auto rounded-xl border border-[#E6E6E3]"><table class="w-full text-[12px]">
-              <thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-2.5 py-2 font-semibold w-24">항목</th><th class="px-2.5 py-2 font-semibold">규격</th><th></th></tr></thead>
-              <tbody>${lnList('fmt',C.format).map(f=>`<tr class="border-t border-slate-100">
-                <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${lne('fmt.'+f.i+'.k',f.src.k||'')}</td>
+              <tbody>${lnList('fmt',C.format).map(f=>`<tr class="border-b border-slate-100 last:border-0">
+                <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap w-20">${lne('fmt.'+f.i+'.k',f.src.k||'')}</td>
                 <td class="px-2.5 py-2 text-slate-600">${lne('fmt.'+f.i+'.v',f.src.v||'')}</td>
-                <td class="px-1 py-2 text-right"><button onclick="lnDel('fmt',${f.i},'이 포맷 항목을 삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join('')}</tbody></table></div>
+                <td class="px-1 py-2 text-right"><button onclick="lnDel('fmt',${f.i},'삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join('')}</tbody></table></div>
             <button onclick="lnAdd('fmt')" class="mt-2 text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 규격 추가</button>
+            <p class="text-[12px] font-bold text-slate-500 mt-3 mb-1">톤앤매너</p>
+            <p class="text-[12.5px] text-slate-600">${lne('ch.tone',C.tone)}</p>
+            <p class="text-[12px] font-bold text-slate-500 mt-2 mb-1">성과 기준</p>
+            <p class="text-[12.5px] text-slate-600">${lne('ch.kpi',C.kpi)}</p>
           </div>
           <div>
             <p class="text-[12px] font-extrabold text-ink mb-1.5">제작 원칙 <span class="text-[11px] font-normal text-slate-400">· 한 줄에 하나씩</span></p>
@@ -5907,14 +5970,41 @@
           </div>
         </div>`)}
 
-      ${sec('lnSec2','🎬','에피소드 파이프라인',eps.length+'편',`
+      ${sec('lnSec2','🌏','콘텐츠 월드','랜선집들이 하나의 포맷에 의존하지 않는다',`
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-3">
+          ${worlds.map((w,wx)=>{ const col=LN_WCOL[wx%4], list=lnList('w'+w.i+'i',w.src.ideas);
+            return `<div class="rounded-xl border-t-4 border border-[#E6E6E3] p-4" style="border-top-color:${col}">
+              <div class="flex items-start justify-between gap-2">
+                <div class="min-w-0">
+                  <p class="text-[15px] font-extrabold text-ink">${esc(w.src.no||'')} ${lne('wd.'+w.i+'.en',w.src.en||'')}</p>
+                  <p class="text-[12.5px] font-semibold mt-0.5" style="color:${col}">${lne('wd.'+w.i+'.kr',w.src.kr||'')}</p>
+                </div>
+                <button onclick="lnDel('wd',${w.i},'이 콘텐츠 월드를 삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared shrink-0">✕</button>
+              </div>
+              <div class="flex flex-wrap gap-1.5 mt-2">
+                <span class="text-[11px] font-bold rounded-full px-2 py-0.5" style="background:${col}18;color:${col}">역할 ${lne('wd.'+w.i+'.role',w.src.role||'')}</span>
+                <span class="text-[11px] font-bold rounded-full px-2 py-0.5 bg-slate-100 text-slate-500">타깃 ${lne('wd.'+w.i+'.target',w.src.target||'')}</span>
+              </div>
+              <p class="text-[12px] text-slate-500 leading-relaxed mt-2">${lne('wd.'+w.i+'.note',w.src.note||'')}</p>
+              <p class="text-[11px] font-extrabold text-slate-400 mt-3 mb-1">콘텐츠 예시</p>
+              <ul class="space-y-1">${list.map(t=>`<li class="text-[12.5px] text-slate-700 flex gap-1.5 group">
+                <span class="text-slate-300 shrink-0">·</span>
+                <span class="flex-1">${lne('w'+w.i+'i.'+t.i,(typeof t.src==='string'?t.src:''))}</span>
+                <button onclick="lnDel('w${w.i}i',${t.i},'이 제목을 삭제할까요?')" class="text-[10px] text-slate-200 hover:text-ared shrink-0">✕</button></li>`).join('')}</ul>
+              <button onclick="lnAdd('w${w.i}i')" class="mt-2 text-[11.5px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2 py-1">＋ 제목 추가</button>
+            </div>`; }).join('')}
+        </div>
+        <button onclick="lnAdd('wd')" class="mt-3 text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">＋ 콘텐츠 월드 추가</button>`)}
+
+      ${sec('lnSec3','🎬','에피소드 파이프라인',eps.length+'편 · 한 집에서 3개 이상 뽑는 것이 목표',`
         <div class="overflow-auto rounded-xl border border-[#E6E6E3]"><table class="w-full text-[12px]">
           <thead class="bg-slate-50 text-slate-500"><tr class="text-left">
-            ${['코드','집(익명 표기)','상태','담당','촬영','발행','훅 한 줄','적용 솔루션','메모',''].map(h=>`<th class="px-2.5 py-2 font-semibold whitespace-nowrap">${esc(h)}</th>`).join('')}
+            ${['코드','월드','집(익명 표기)','상태','담당','촬영','발행','훅 한 줄','적용 솔루션','메모',''].map(h=>`<th class="px-2.5 py-2 font-semibold whitespace-nowrap">${esc(h)}</th>`).join('')}
           </tr></thead>
-          <tbody>${eps.length?eps.map(e=>{ const st=LV('ep.'+e.i+'.status',e.src.status||'섭외');
+          <tbody>${eps.length?eps.map(e=>{ const st=LV('ep.'+e.i+'.status',e.src.status||'기획');
             return `<tr class="border-t border-slate-100 align-top hover:bg-[#FAFAF9]">
             <td class="px-2.5 py-2 font-extrabold text-ink whitespace-nowrap">${lne('ep.'+e.i+'.code',e.src.code||'EP--')}</td>
+            <td class="px-2.5 py-2 text-[11px] text-brand-ink font-semibold min-w-[110px]">${lne('ep.'+e.i+'.world',e.src.world||'')}</td>
             <td class="px-2.5 py-2 text-slate-700 min-w-[130px]">${lne('ep.'+e.i+'.house',e.src.house||'')}</td>
             <td class="px-2.5 py-2 whitespace-nowrap"><select onchange="lnSetStatus(${e.i},this.value)"
                 class="text-[11px] font-bold border rounded-lg px-1.5 py-1" style="color:${LN_STCOL[st]||'#26282A'};border-color:${(LN_STCOL[st]||'#26282A')}40">
@@ -5926,13 +6016,99 @@
             <td class="px-2.5 py-2 text-slate-600 min-w-[150px]">${lne('ep.'+e.i+'.solution',e.src.solution||'')}</td>
             <td class="px-2.5 py-2 text-slate-400 min-w-[150px]">${lne('ep.'+e.i+'.note',e.src.note||'')}</td>
             <td class="px-1 py-2 text-right"><button onclick="lnDel('ep',${e.i},'이 에피소드를 삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`; }).join('')
-            :'<tr><td colspan="10" class="px-3 py-6 text-center text-[12px] text-slate-300">에피소드가 없습니다. 아래 버튼으로 추가하세요.</td></tr>'}</tbody></table></div>
+            :'<tr><td colspan="11" class="px-3 py-6 text-center text-[12px] text-slate-300">에피소드가 없습니다.</td></tr>'}</tbody></table></div>
         <div class="flex items-center justify-between mt-2 gap-3">
           <p class="text-[11px] text-ared">⚠️ 거주자 실명·동호수·주소는 넣지 마세요. <span class="text-slate-400">지역 + 평수 + 가구 형태까지만 (예: 마포 34평 · 신혼 2인)</span></p>
           <button onclick="lnAdd('ep')" class="text-[12px] font-bold bg-ink text-white hover:brightness-125 rounded-lg px-3 py-1.5 shrink-0">＋ 에피소드 추가</button>
         </div>`)}
 
-      ${sec('lnSec3','💡','아이디어 보드','👍 눌러 우선순위를 정하세요',`
+      ${sec('lnSec4','🔁','관점 확장기','소재의 한계를 기능 개수가 아니라 관점의 다양성으로 푼다',`
+        <p class="text-[12.5px] text-slate-600 leading-relaxed mb-3">${lne('ang.intro',A.intro)}</p>
+        <div class="rounded-xl border border-[#E6E6E3] overflow-hidden">
+          <div class="bg-[#FBFAFF] px-4 py-2.5 border-b border-[#EDE9FF]">
+            <p class="text-[12px] font-extrabold text-[#5B44C7]">사례: ${lne('ang.case',A.case)} <span class="font-normal text-slate-400">— 기능은 같지만 질문과 소비 이유가 다르다</span></p>
+          </div>
+          <table class="w-full text-[12px]"><tbody>
+            ${lnList('ang',A.list).map(x=>`<tr class="border-b border-slate-100 last:border-0">
+              <td class="px-3 py-2 w-8 text-center"><span class="inline-block w-5 h-5 leading-5 rounded bg-ink text-white text-[10px] font-bold">${lne('ang.'+x.i+'.k',x.src.k||'')}</span></td>
+              <td class="px-2 py-2 text-slate-700">${lne('ang.'+x.i+'.v',x.src.v||'')}</td>
+              <td class="px-2 py-2 text-[11px] text-slate-400 whitespace-nowrap">${lne('ang.'+x.i+'.w',x.src.w||'')}</td>
+              <td class="px-1 py-2 text-right"><button onclick="lnDel('ang',${x.i},'삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join('')}
+          </tbody></table>
+        </div>
+        <button onclick="lnAdd('ang')" class="mt-2 text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">＋ 관점 추가</button>`)}
+
+      ${sec('lnSec5','🛣','포트폴리오 · 고객 여정 · 로드맵','각 콘텐츠가 서로 다른 역할로 하나의 퍼널을 만든다',`
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+          <div>
+            <p class="text-[12px] font-extrabold text-ink mb-1.5">콘텐츠 포트폴리오</p>
+            <div class="overflow-auto rounded-xl border border-[#E6E6E3]"><table class="w-full text-[12px]">
+              <thead class="bg-slate-50 text-slate-500"><tr class="text-left"><th class="px-2.5 py-2 font-semibold">콘텐츠</th><th class="px-2.5 py-2 font-semibold">역할</th><th class="px-2.5 py-2 font-semibold">타깃</th><th></th></tr></thead>
+              <tbody>${lnList('pf',LN.portfolio).map(x=>`<tr class="border-t border-slate-100">
+                <td class="px-2.5 py-2 font-bold text-ink whitespace-nowrap">${lne('pf.'+x.i+'.n',x.src.n||'')}</td>
+                <td class="px-2.5 py-2 text-slate-600">${lne('pf.'+x.i+'.r',x.src.r||'')}</td>
+                <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${lne('pf.'+x.i+'.t',x.src.t||'')}</td>
+                <td class="px-1 py-2 text-right"><button onclick="lnDel('pf',${x.i},'삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join('')}</tbody></table></div>
+            <button onclick="lnAdd('pf')" class="mt-2 text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 콘텐츠 추가</button>
+
+            <p class="text-[12px] font-extrabold text-ink mt-5 mb-1.5">장기 로드맵</p>
+            <div class="space-y-2">
+              ${lnList('rm',LN.roadmap).map((x,ri)=>`<div class="flex gap-3">
+                <div class="shrink-0 w-16 text-[11px] font-extrabold text-brand-ink pt-0.5">${esc(x.src.s||'')}</div>
+                <div class="flex-1 pb-2 ${ri<LN.roadmap.length-1?'border-b border-[#F1EFE9]':''}">
+                  <p class="text-[12.5px] font-bold text-ink">${lne('rm.'+x.i+'.t',x.src.t||'')}</p>
+                  <p class="text-[12px] text-slate-500 leading-relaxed">${lne('rm.'+x.i+'.d',x.src.d||'')}</p></div></div>`).join('')}
+            </div>
+          </div>
+          <div>
+            <p class="text-[12px] font-extrabold text-ink mb-1.5">콘텐츠가 만들어야 하는 고객 여정</p>
+            <div class="space-y-1.5">
+              ${lnList('jr',LN.journey).map((x,ji)=>{ const op=0.15+ji*0.18;
+                return `<div class="rounded-xl border border-[#E6E6E3] p-3" style="background:rgba(124,92,255,${op*0.10})">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[13px] font-extrabold text-[#5B44C7]">${esc(x.src.s||'')}</span>
+                    <span class="text-[12.5px] font-bold text-ink flex-1">${lne('jr.'+x.i+'.who',x.src.who||'')}</span>
+                  </div>
+                  <p class="text-[13px] text-slate-700 mt-1">“${lne('jr.'+x.i+'.q',x.src.q||'')}”</p>
+                  <p class="text-[11px] font-semibold text-slate-400 mt-1">↓ ${lne('jr.'+x.i+'.n',x.src.n||'')}</p>
+                </div>`; }).join('')}
+            </div>
+          </div>
+        </div>`)}
+
+      ${sec('lnSec6','✅','결정 · 액션',waiting?('결정 대기 '+waiting+'건'):'모두 정리됨',`
+        <div class="space-y-3">
+          ${decs.map(d=>{ const st=LV('dec.'+d.i+'.st',d.src.st||'결정 대기'), col=LN_DSTCOL[st]||'#26282A';
+            return `<div class="rounded-xl border p-4" style="border-color:${col}40;background:${col}08">
+              <div class="flex flex-wrap items-start justify-between gap-2">
+                <p class="text-[13.5px] font-extrabold text-ink flex-1 min-w-[200px]">${lne('dec.'+d.i+'.q',d.src.q||'')}</p>
+                <div class="flex items-center gap-2 shrink-0">
+                  <select onchange="lnSetDec(${d.i},this.value)" class="text-[11px] font-bold border rounded-lg px-1.5 py-1" style="color:${col};border-color:${col}40">
+                    ${LN_DST.map(s=>`<option ${s===st?'selected':''}>${esc(s)}</option>`).join('')}</select>
+                  <button onclick="lnDel('dec',${d.i},'이 항목을 삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared">✕</button>
+                </div>
+              </div>
+              <p class="text-[12.5px] text-slate-600 leading-relaxed mt-1.5">${lne('dec.'+d.i+'.opt',d.src.opt||'')}</p>
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 pt-2 border-t border-black/5">
+                <span class="text-[11px] text-slate-400">담당 <b class="text-ink">${lne('dec.'+d.i+'.own',d.src.own||'미정')}</b></span>
+                <span class="text-[11px] text-slate-400 flex-1 min-w-[200px]">${lne('dec.'+d.i+'.note',d.src.note||'')}</span>
+              </div></div>`; }).join('')}
+        </div>
+        <button onclick="lnAdd('dec')" class="mt-3 text-[12px] font-bold bg-ink text-white hover:brightness-125 rounded-lg px-3 py-1.5">＋ 결정 항목 추가</button>
+
+        <p class="text-[12px] font-extrabold text-ink mt-5 mb-2">미팅에서 답해야 할 질문 <span class="text-[11px] font-normal text-slate-400">· "다음 편에 어떤 시나리오를 넣을까"가 아니다</span></p>
+        <div class="space-y-2">
+          ${lnList('agd',LN.agenda).map(x=>`<div class="rounded-xl border border-[#E6E6E3] p-3">
+            <p class="text-[12.5px] font-semibold text-ink">${lne('agd.'+x.i+'.q',x.src.q||'')}</p>
+            <div class="flex gap-2 mt-1.5">
+              <span class="text-[11px] font-bold text-agreen shrink-0 pt-0.5">결론</span>
+              <span class="text-[12px] text-slate-600 flex-1">${lne('agd.'+x.i+'.a',x.src.a||'여기에 미팅 결론을 적어주세요')}</span>
+              <button onclick="lnDel('agd',${x.i},'삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared shrink-0">✕</button>
+            </div></div>`).join('')}
+        </div>
+        <button onclick="lnAdd('agd')" class="mt-2 text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1">+ 질문 추가</button>`)}
+
+      ${sec('lnSec7','💡','아이디어 보드','👍 눌러 우선순위를 정하세요',`
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
           ${ideas.map(e=>{ const v=lnVotes(e.i), mine=lnVoted(e.i);
             return `<div class="rounded-xl border border-[#E6E6E3] p-4 flex flex-col">
@@ -5940,7 +6116,7 @@
                 <p class="text-[13.5px] font-extrabold text-ink flex-1">${lne('id.'+e.i+'.title',e.src.title||'새 아이디어')}</p>
                 <button onclick="lnDel('id',${e.i},'이 아이디어를 삭제할까요?')" class="text-[11px] text-slate-300 hover:text-ared shrink-0">✕</button>
               </div>
-              <p class="text-[12px] text-slate-500 leading-relaxed mt-1.5 flex-1">${lne('id.'+e.i+'.why',e.src.why||'왜 필요한지 한 줄로 적어주세요')}</p>
+              <p class="text-[12px] text-slate-500 leading-relaxed mt-1.5 flex-1">${lne('id.'+e.i+'.why',e.src.why||'어느 콘텐츠 월드인지, 왜 필요한지 한 줄로')}</p>
               <div class="flex items-center justify-between gap-2 mt-3 pt-2 border-t border-[#F1EFE9]">
                 <span class="text-[11px] text-slate-400">제안 ${lne('id.'+e.i+'.by',e.src.by||'-')}</span>
                 <button onclick="lnVote(${e.i})" class="text-[12px] font-bold rounded-lg px-2.5 py-1 border ${mine?'bg-[#EDE9FF] border-[#7C5CFF] text-[#5B44C7]':'border-[#E6E6E3] text-slate-400 hover:bg-[#FAFAF9]'}">👍 <span class="num">${v}</span></button>
@@ -5948,10 +6124,10 @@
           <button onclick="lnAdd('id')" class="rounded-xl border-2 border-dashed border-[#E6E6E3] hover:border-ink hover:bg-[#FAFAF9] p-4 text-[13px] font-semibold text-slate-400 min-h-[120px]">＋ 아이디어 추가</button>
         </div>`)}
 
-      ${sec('lnSec4','🧠','논의 축적 카드','AI와 나눈 전략 논의의 결론만 여기에',`
+      ${sec('lnSec8','🧠','논의 축적 카드','AI와 나눈 전략 논의의 결론만 여기에',`
         <div class="rounded-xl bg-[#FBFAFF] border border-[#EDE9FF] p-4 mb-3">
-          <p class="text-[12px] text-[#5B44C7] leading-relaxed"><b>이렇게 쓰세요.</b> Claude/ChatGPT와 논의가 끝나면 대화 마지막에
-            <b>"오늘 논의를 ① 결정사항 ② 남은 질문 ③ 다음 액션 으로 3~5줄 정리해줘"</b> 라고 요청하고, 그 답을 카드로 붙여넣으세요.
+          <p class="text-[12px] text-[#5B44C7] leading-relaxed"><b>이렇게 쓰세요.</b> Claude/ChatGPT와 논의가 끝나면
+            <b>"오늘 논의를 ① 결정사항 ② 남은 질문 ③ 다음 액션 으로 3~5줄 정리해줘"</b> 라고 요청하고 그 답을 카드로 붙여넣으세요.
             대화 전체를 옮길 필요는 없습니다 — <b>결론만</b> 쌓여야 다음 사람이 읽습니다.</p>
         </div>
         <div class="space-y-3">
@@ -5967,11 +6143,11 @@
         </div>
         <button onclick="lnAddLog()" class="mt-3 text-[12px] font-bold bg-[#7C5CFF] text-white hover:brightness-110 rounded-lg px-3 py-1.5">＋ 논의 카드 추가</button>`)}
 
-      ${sec('lnSec5','📋','AI 프로젝트 연동','이 탭 전체를 마크다운 한 장으로',`
+      ${sec('lnSec9','📋','AI 프로젝트 연동','이 탭 전체를 마크다운 한 장으로',`
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
-            <p class="text-[12.5px] text-slate-600 leading-relaxed mb-3">아래 버튼을 누르면 <b>헌장 · 파이프라인 · 아이디어 · 논의 카드</b>가
-              마크다운 한 장으로 합쳐집니다. 그 내용을 Claude(또는 ChatGPT) 공유 프로젝트의 <b>[프로젝트 지식]</b>에 올려두면,
+            <p class="text-[12.5px] text-slate-600 leading-relaxed mb-3">아래 버튼을 누르면 <b>포지셔닝 · 콘텐츠 월드 · 파이프라인 · 관점 확장기 · 퍼널 · 결정사항 · 논의 카드</b>가
+              마크다운 한 장으로 합쳐집니다. Claude(또는 ChatGPT) 공유 프로젝트의 <b>[프로젝트 지식]</b>에 올려두면,
               팀원 누구가 새 대화를 시작해도 <b>같은 최신 전략 위에서</b> 답이 나옵니다.</p>
             <div class="flex flex-wrap gap-2">
               <button onclick="lnCopy()" class="text-[12.5px] font-bold bg-ink text-white hover:brightness-125 rounded-lg px-3.5 py-2">📋 복사하기</button>
@@ -5996,7 +6172,7 @@
     function lnAddLog(){ let n=0; while(LN_OVER[lnKey('logx.'+n)]) n++;
       const i=500+n, d=new Date().toISOString().slice(0,10);
       lnSave('logx.'+n,'1'); lnSave('log.'+i+'.date',d); lnSave('log.'+i+'.by',lnMe());
-      renderLanseon(); setTimeout(()=>lnGo('lnSec4'),80); }
+      renderLanseon(); setTimeout(()=>lnGo('lnSec8'),80); }
 
     // ===== ONLY MKT (팀 전용) =====
     const MKT_PW='aqara2026';   // 팀 공유 비밀번호(정적 사이트=화면 가림 수준). 변경 시 이 값 수정.
