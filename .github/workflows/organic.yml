@@ -1,9 +1,10 @@
 name: Organic News
 
-# 주 2회(월·목 한국 07시경) + 수동 + 크롤러 변경 시 → organic_news.json
+# 매일(한국 07시경) + 수동 + 크롤러 변경 시 → organic_news.json
+# 2026-08-21: 주 2회(월·목)였으나 최대 3일까지 지연돼 뉴스 목록이 밀려 보였다 → 매일로 변경
 on:
   schedule:
-    - cron: '0 22 * * 0,3'
+    - cron: '0 22 * * *'
   workflow_dispatch: {}
   push:
     paths:

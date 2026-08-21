@@ -1491,7 +1491,15 @@
       let s='업데이트: '+DATA_GEN+' · 시트 '+(ALL.length-ORG_ADDED-BRF_ADDED)+'건';
       if(ORG_ADDED) s+=' + 네이버 오가닉 '+ORG_ADDED+'건';
       if(BRF_ADDED) s+=' + 브리핑 최신 '+BRF_ADDED+'건';
-      u.textContent=s+' = 총 '+ALL.length+'건';
+      s+=' = 총 '+ALL.length+'건';
+      // '수집 시각'과 '가장 최근 기사 날짜'는 다르다. 둘을 같이 보여주지 않으면
+      // 보도가 없어서 최신 날짜가 안 움직이는 상황을 '데이터가 안 들어왔다'로 오해하게 된다.
+      const ds=ALL.map(r=>(r['게재일']||'').toString().slice(0,10)).filter(Boolean).sort();
+      const last=ds[ds.length-1]||'';
+      if(last){ const td=new Date().toISOString().slice(0,10);
+        const gap=Math.round((Date.parse(td)-Date.parse(last))/86400000);
+        s+=' · 최근 기사 '+last.slice(5).replace('-','/')+(gap>=2?(' (신규 보도 '+gap+'일째 없음)'):''); }
+      u.textContent=s;
     }
     function mergeOrganic(){
       fetch('organic_news.json?_='+Date.now()).then(r=>r.json()).then(d=>{
