@@ -3153,21 +3153,19 @@
         </details>
 
         <p class="text-[13px] font-extrabold text-[#4B32C3] mt-7 pb-1 border-b-2 border-[#EDE9FF]">Ⅲ. 마무리</p>
-        ${h('1','비용')}
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          ${box('검색광고 집행비',nf(cost)+'원','API 자동 · '+esc(adPeriod))}
-          ${box('총 광고비',ed('costAd')+'원','SA+DA 합계')}
-          ${box('콘텐츠·KOL',ed('costKol')+'원','')}
-          ${box('총 캠페인 비용',ed('costTotal')+'원','')}
-        </div>
-        ${h('2','LESSONS &amp; LEARN')}
+        ${/* 2026-08-21 '1. 비용' 4칸 제거(사용자 요청).
+              검색광고 집행비는 캠페인명에 '도어락|L100'이 들어간 SA 캠페인을 합산하는데,
+              searchad.json의 어떤 기간에도 그런 캠페인명이 없어 항상 0원으로 표시됐다.
+              나머지 3칸은 수기 입력([ ])이라 계속 비어 있었고,
+              실제 집행비는 Ⅱ-3 디지털 광고의 DA 매체별 표 + SA 합산에 이미 나온다. */''}
+        ${h('1','LESSONS &amp; LEARN')}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div class="rounded-xl border-l-4 border-agreen border border-[#E6E6E3] p-4"><p class="font-bold text-agreen mb-1">GOOD</p>
             <ul class="text-[13px] text-slate-600 leading-relaxed space-y-1.5">${GOOD_D.map((t,i)=>`<li>· ${ed('good'+(i+1),t)}</li>`).join('')}</ul></div>
           <div class="rounded-xl border-l-4 border-ared border border-[#E6E6E3] p-4"><p class="font-bold text-ared mb-1">BAD</p>
             <ul class="text-[13px] text-slate-600 leading-relaxed space-y-1.5">${BAD_D.map((t,i)=>`<li>· ${ed('bad'+(i+1),t)}</li>`).join('')}</ul></div>
         </div>
-        ${h('3','NEXT','채널 확대 · 후속 프로모션 · 개선 과제')}
+        ${h('2','NEXT','채널 확대 · 후속 프로모션 · 개선 과제')}
         <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">
           <ul class="space-y-1.5">${NEXT_D.map((t,i)=>`<li>· ${ed('next'+(i+1),t)}</li>`).join('')}</ul>
         </div>
