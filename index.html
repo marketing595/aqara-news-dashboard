@@ -443,7 +443,8 @@
      <div id="campContentCard" class="card p-5 mb-5 hidden">
        <h2 id="campContentTitle" class="accent font-extrabold text-ink mb-3">인플루언서 콘텐츠 성과</h2>
        <div id="campContentKpis" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-3"></div>
-       <div id="campSentiment" class="mb-4"></div>
+       <div id="campSentiment" class="mb-3"></div>
+       <div id="campInsight" class="mb-4"></div>
        <div class="flex flex-wrap items-center gap-2 mb-2">
          <span class="text-xs font-semibold text-slate-500">비교 지표</span>
          <select id="campMetric" onchange="renderCampChart()" class="text-sm border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 bg-white">
@@ -2461,6 +2462,53 @@
           '<span class="px-2 py-0.5 rounded-lg bg-agreen/15 text-agreen text-xs font-semibold">긍정 '+Math.round(sp/st*100)+'%</span> '+
           '<span class="px-2 py-0.5 rounded-lg bg-agray/15 text-agray text-xs font-semibold">중립 '+Math.round(sn/st*100)+'%</span> '+
           '<span class="px-2 py-0.5 rounded-lg bg-ared/15 text-ared text-xs font-semibold">부정 '+Math.round(sg/st*100)+'%</span>';
+        /* ── 수치 뒤에 '그래서 뭘 잘했나'를 붙인다 — 전부 위 실측값에서 계산 ── */
+        (function(){
+          const box=document.getElementById('campInsight'); if(!box) return;
+          const eng=v=>v.views?((v.likes||0)+(v.comments||0))/v.views*100:0;
+          const nfx=n=>Math.round(n).toLocaleString();
+          const man=n=>(n/10000).toFixed(1)+'만';
+          const top=yt[0]||{}, engSorted=yt.filter(v=>v.views>=1000).slice().sort((a,b)=>eng(b)-eng(a));
+          const engTop=engSorted[0]||{};
+          const mega=yt.filter(v=>v.t==='메가'), norm=yt.filter(v=>v.t!=='메가');
+          const avg=a=>a.length?a.reduce((s,x)=>s+(x.views||0),0)/a.length:0;
+          const megaAvg=avg(mega), normAvg=avg(norm);
+          const allV=ytV+igV, allE=allV?((ytL+igL)+(ytC+igC))/allV*100:0;
+          const posPct=Math.round(sp/st*100);
+          const pill=(t,v,c)=>`<div class="rounded-lg bg-white border border-[#E6E6E3] px-3 py-2">
+              <p class="text-[10.5px] font-bold text-slate-400">${t}</p>
+              <p class="text-[13px] font-extrabold mt-0.5" style="color:${c||'#26282A'}">${v}</p></div>`;
+          const li=(t,b)=>`<li class="flex gap-2.5"><span class="shrink-0 text-agreen font-bold">✓</span>
+              <span class="text-[12.5px] text-slate-700 leading-relaxed"><b class="text-ink">${t}</b> — ${b}</span></li>`;
+          const pts=[];
+          if(top.n) pts.push(li('도달은 메가 KOL이 견인',
+            `<b>${esc(top.n)}</b> 한 편이 <b class="num">${nfx(top.views)}회</b>로 유튜브 전체 조회수의
+             <b class="num">${Math.round(top.views/(ytV||1)*100)}%</b>를 만들었습니다.
+             ${mega.length&&norm.length?`메가 평균 <b class="num">${nfx(megaAvg)}회</b> vs 일반 평균 <b class="num">${nfx(normAvg)}회</b>로
+             <b class="text-agreen num">${(megaAvg/(normAvg||1)).toFixed(1)}배</b> 차이 — 도달을 사는 데는 메가가 확실히 효율적이었습니다.`:''}`));
+          if(engTop.n&&engTop.n!==top.n) pts.push(li('반응은 다른 채널에서 터졌다',
+            `조회수 1위는 ${esc(top.n)}이지만, 참여율 1위는 <b>${esc(engTop.n)}</b>(<b class="num">${eng(engTop).toFixed(2)}%</b>,
+             전체 평균 ${allE.toFixed(2)}%)입니다. <b>도달과 관심은 다른 채널이 만든다</b>는 뜻이라,
+             다음 캠페인은 메가로 도달을 깔고 참여율 높은 채널로 설득을 붙이는 조합이 유리합니다.`));
+          pts.push(li('반응의 결이 좋다',
+            `유튜브 댓글 감성 <b class="text-agreen num">긍정 ${posPct}%</b>(표본 ${st}) ·
+             부정 <b class="num">${Math.round(sg/st*100)}%</b>. 제품 신뢰를 깎는 부정 여론 없이
+             ${(yt.length+ig.length)}편 <b class="num">${man(allV)}회</b> 도달을 확보했습니다.`));
+          if(ig.length) pts.push(li('인스타가 조용히 받쳐줬다',
+            `인스타 ${ig.length}건이 <b class="num">${man(igV)}회</b> — 전체 도달의
+             <b class="num">${Math.round(igV/(allV||1)*100)}%</b>를 담당했습니다.
+             유튜브가 설명을, 인스타가 반복 노출을 맡는 구조가 만들어졌습니다.`));
+          box.innerHTML=`<div class="rounded-xl border border-[#E6E6E3] bg-[#FBFAF7] p-4">
+            <p class="text-[13px] font-extrabold text-ink mb-2">📌 성과 해석 <span class="text-[11px] font-normal text-slate-400">· 위 수치가 의미하는 것</span></p>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-3">
+              ${pill('전체 도달',man(allV)+'회')}
+              ${pill('평균 참여율',allE.toFixed(2)+'%','#5E7350')}
+              ${pill('댓글 긍정',posPct+'%','#5E7350')}
+              ${pill('최고 도달 채널',esc(top.n||'-'))}
+            </div>
+            <ul class="space-y-1.5">${pts.join('')}</ul>
+          </div>`;
+        })();
         CAMP_CONTENT=yt.map(v=>({n:v.n,views:v.views||0,likes:v.likes||0,comments:v.comments||0,p:'YT'}))
           .concat(ig.map(v=>({n:v.n,views:v.views||0,likes:v.likes||0,comments:v.comments||0,p:'IG'})));
         CAMP_PICK=CAMP_CONTENT.map(()=>true);
@@ -2510,7 +2558,7 @@
       const el=document.getElementById('campContentCard'), slot=document.getElementById('kolSlot');
       if(el&&slot&&!el.classList.contains('hidden')){ el.classList.remove('mb-5'); slot.appendChild(el); }
     }
-    // 캠페인 최종 보고 그래프 — 주차별 매출·ROAS / 매체별 집행비 / 모델·국면별 판매
+    // 캠페인 최종 보고 그래프 — 주차별 매출·ROAS / 매체별 집행비 / 모델·단계별 판매
     // 블로그 상위노출 검색결과 캡처 — 파일 선택 → 이 브라우저에 저장(localStorage)
     // 블로그 상위노출 검색결과 캡처 이미지 모음(구글 드라이브) — L100 도어락 캠페인
     const RV_SEO_DRIVE='https://drive.google.com/drive/folders/1v6TPaMPylZ8WTBdGU2TfP5UHK3yGMGJw';
@@ -2679,8 +2727,11 @@
         data:{labels:F.roi.models.map(m=>m.n.split(' ')[0]),datasets:[{label:'판매량(대)',data:F.roi.models.map(m=>m.u),backgroundColor:['#5E7350','#FBC400'],borderRadius:4}]},
         options:opt({plugins:{legend:{display:false},title:{display:true,text:'모델별 판매량(대)',font:{size:11}}},scales:{y:{beginAtZero:true,ticks:{font:{size:10}}}}}) });
       if(document.getElementById('rptRoiPhaseChart')) draw('rptRoiPhaseChart',{ type:'bar',
-        data:{labels:F.roi.phase.map(p=>p.n.split(' ')[0]),datasets:[{label:'판매량(대)',data:F.roi.phase.map(p=>p.u),backgroundColor:'#8FB9D8',borderRadius:4}]},
-        options:opt({plugins:{legend:{display:false},title:{display:true,text:'국면별 판매량(대)',font:{size:11}}},scales:{y:{beginAtZero:true,ticks:{font:{size:10}}}}}) });
+        // 축 라벨을 '1단계'만 덜렁 두면 무슨 기준인지 알 수 없다 → 기간·채널 전략을 3줄로 함께 표기
+        data:{labels:F.roi.phase.map(p=>{ const s=p.n.split('·'), head=(s[0]||'').trim();
+                return [head.split(' ')[0], head.split(' ').slice(1).join(' ').replace(/\(.*\)/,'').trim(), (s[1]||'').trim()]; }),
+              datasets:[{label:'판매량(대)',data:F.roi.phase.map(p=>p.u),backgroundColor:'#8FB9D8',borderRadius:4}]},
+        options:opt({plugins:{legend:{display:false},title:{display:true,text:'단계별 판매량(대)',font:{size:11}}},scales:{y:{beginAtZero:true,ticks:{font:{size:10}}}}}) });
     }
     // LESSONS & LEARN / NEXT 기본 문안 — 확정 실적에서 도출한 초안(편집 가능)
     const GOOD_D=[
@@ -2718,8 +2769,9 @@
     function campFullReport(c){
       if(!c) return '';
       const K=k=>curCampaign+':'+k;
-      const ed=(k,d)=>`<span class="ir-edit" data-k="${K(k)}">${d||'[ ]'}</span>`;
-      const edb=(k,d)=>`<b class="ir-edit text-ink" data-k="${K(k)}">${d||'[ ]'}</b>`;
+      // 값이 없으면 편집 모드에서만 [ ]를 보여준다. 보고서 화면에는 빈칸이 남지 않는다.
+      const ed=(k,d)=>`<span class="ir-edit" data-k="${K(k)}">${d||(irEditMode?'[ ]':'')}</span>`;
+      const edb=(k,d)=>`<b class="ir-edit text-ink" data-k="${K(k)}">${d||(irEditMode?'[ ]':'')}</b>`;
       const nf=n=>(+n||0).toLocaleString();
       const box=(t,v,s)=>`<div class="rounded-xl border border-[#E6E6E3] bg-white p-4"><p class="text-[11px] text-slate-500">${t}</p><p class="num text-2xl font-extrabold text-ink mt-0.5">${v}</p>${s?`<p class="text-[11px] text-slate-400 mt-0.5">${s}</p>`:''}</div>`;
       const h=(n,t,s)=>`<div class="flex items-baseline gap-2 mt-6 mb-2"><span class="text-[12px] font-extrabold text-white bg-[#7C5CFF] rounded px-1.5 py-0.5">${n}</span><h3 class="text-[15px] font-extrabold text-ink">${t}</h3>${s?`<span class="text-[11px] text-slate-400">${s}</span>`:''}</div>`;
@@ -2780,7 +2832,7 @@
         <div class="flex items-center justify-between flex-wrap gap-2">
           <div>
             <h2 class="text-lg font-extrabold text-ink">캠페인 최종 보고 <span class="text-xs font-normal text-slate-400">(사내 리포트 양식 · ${esc(c.name||'')})</span></h2>
-            <p class="text-[12px] text-slate-500 mt-0.5">캠페인 기간 <b class="text-ink">${esc(period)}</b> · 대시보드 데이터는 자동 반영, <b class="text-brand-ink">[ ]</b>는 직접 입력</p>
+            <p class="text-[12px] text-slate-500 mt-0.5">캠페인 기간 <b class="text-ink">${esc(period)}</b> · 대시보드 데이터는 자동 반영</p>
           </div>
           <button id="irEditBtn2" onclick="toggleIrEdit()" class="text-sm border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg font-semibold">수치·문구 편집</button>
         </div>
@@ -2807,6 +2859,104 @@
         ${h('2','캠페인 활동 전략','고객여정 커버를 위한 360º 노출')}
         <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">${ed('strategy','채널 간 상호보완 구조: 콘텐츠 기반 바이럴로 인지 형성 → 미디어 채널로 메시지 강화 → 구매 의사 형성 &amp; 전환 유도')}</div>
         ${h('3','캠페인 활동 결과','매출·광고·온드채널')}
+        ${F?(()=>{
+          const R=F.roi, A=F.ad, G=A.goal||{}, P=R.proof||{};
+          const num=s=>parseFloat(String(s).replace(/[^0-9.]/g,''))||0;
+          const uNow=R.units, uBase=Math.round(uNow/(R.unitsX||1));
+          const rNow=num(R.rev),  rBase=+(rNow/(R.revX||1)).toFixed(2);
+          const pNow=num(R.profit), pBase=num(R.profitBase);
+          // 비캠페인 기간(동일 66일) 대비 — 회색 막대가 캠페인 전, 색 막대가 캠페인
+          const grow=(t,base,now,x,unit,sub)=>{
+            // 표시는 받은 문자열 그대로(콤마 포함), 막대 길이는 숫자로 계산
+            const bn=+String(base).replace(/,/g,''), nn=+String(now).replace(/,/g,'')||1;
+            const w=Math.max(6,Math.round(bn/nn*100));
+            return `<div class="rounded-xl bg-white border border-[#E6E6E3] p-3.5">
+              <p class="text-[11px] font-bold text-slate-500">${esc(t)}</p>
+              <p class="text-[26px] font-extrabold num leading-none mt-1 text-ink">${esc(String(now))}<span class="text-[13px] font-bold text-slate-400 ml-0.5">${esc(unit)}</span>
+                <span class="text-[15px] font-extrabold text-agreen ml-1.5">▲${esc(String(x))}배</span></p>
+              <div class="mt-2.5 space-y-1">
+                <div class="flex items-center gap-2"><span class="text-[10px] text-slate-400 w-12 shrink-0">캠페인 전</span>
+                  <div class="flex-1 h-2.5 rounded bg-slate-100"><div class="h-2.5 rounded bg-slate-300" style="width:${w}%"></div></div>
+                  <span class="text-[10.5px] num text-slate-400 w-16 text-right shrink-0">${esc(String(base))}${esc(unit)}</span></div>
+                <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-ink w-12 shrink-0">캠페인</span>
+                  <div class="flex-1 h-2.5 rounded bg-slate-100"><div class="h-2.5 rounded bg-agreen" style="width:100%"></div></div>
+                  <span class="text-[10.5px] num font-bold text-ink w-16 text-right shrink-0">${esc(String(now))}${esc(unit)}</span></div>
+              </div>
+              ${sub?`<p class="text-[10.5px] text-slate-400 mt-1.5">${sub}</p>`:''}</div>`; };
+          // 목표 대비 달성률 — 100% 기준선을 넘긴 만큼이 초과 달성
+          const goals=[['광고 노출',A.imp,G.imp,'회'],['광고 클릭',A.clk,G.clk,'회'],['구매 전환',A.buy,G.buy,'건'],
+                       ['광고 매출',A.rev,G.rev,'원'],['ROAS',A.roas,G.roas,'%']];
+          const gmax=Math.max(...goals.map(g=>g[2]?g[1]/g[2]*100:0),120);
+          const gbar=g=>{ const pct=g[2]?Math.round(g[1]/g[2]*100):0, w=Math.min(100,pct/gmax*100), base=Math.min(100,100/gmax*100);
+            return `<div class="flex items-center gap-2.5">
+              <span class="text-[11px] font-semibold text-slate-500 w-[62px] shrink-0">${esc(g[0])}</span>
+              <div class="relative flex-1 h-6 rounded-lg bg-slate-100 overflow-hidden">
+                <div class="absolute inset-y-0 left-0 rounded-lg" style="width:${w}%;background:${pct>=100?'#5E7350':'#D68134'}"></div>
+                <div class="absolute inset-y-0" style="left:${base}%;width:2px;background:#26282A"></div>
+                <span class="absolute inset-y-0 left-2 flex items-center text-[11px] font-extrabold text-white num">${pct}%</span>
+              </div>
+              <span class="text-[10.5px] num text-slate-400 w-[124px] text-right shrink-0">${nf(g[1])}${esc(g[3])} / 목표 ${nf(g[2])}${esc(g[3])}</span></div>`; };
+          const cpaPct=G.cpa?Math.round(A.cpa/G.cpa*100):0;
+          return `<div class="rounded-2xl border-2 border-ink bg-[#FBFAF7] p-5 mb-4">
+            <div class="flex items-baseline justify-between flex-wrap gap-2 mb-1">
+              <p class="text-[16px] font-extrabold text-ink">🏆 이번 캠페인이 만든 변화</p>
+              <p class="text-[11px] text-slate-400">${esc(F.period)} · 비캠페인 동일 66일(02/24~04/30) 대비</p>
+            </div>
+            <p class="text-[12.5px] text-slate-600 mb-3.5">광고 5개 핵심 지표를 <b class="text-agreen">모두 목표 초과 달성</b>했고, 판매·매출·이익이 <b class="text-agreen">2배 이상</b>으로 뛰었습니다.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              ${grow('판매 수량',nf(uBase),nf(uNow),R.unitsX,'대','온라인 '+nf(R.unitsOn)+'대 · 오프라인 '+nf(R.unitsOff)+'대')}
+              ${grow('총 매출액',rBase,rNow,R.revX,'억','VAT 제외 · ASP '+nf(R.asp)+'원')}
+              ${grow('실매출이익',pBase,pNow,R.profitX,'억','이익률 '+esc(R.margin)+' ('+esc(R.marginDelta)+') · 증분 <b class="text-agreen">'+esc(R.incProfit)+'</b>')}
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+              <div class="rounded-xl bg-white border border-[#E6E6E3] p-4">
+                <p class="text-[12.5px] font-extrabold text-ink mb-0.5">광고 목표 대비 달성률</p>
+                <p class="text-[10.5px] text-slate-400 mb-2.5">검은 선이 목표(100%) · 넘어선 만큼이 초과 달성</p>
+                <div class="space-y-1.5">${goals.map(gbar).join('')}</div>
+                <p class="text-[11px] text-slate-500 mt-2.5 pt-2.5 border-t border-[#F1EFE9]">
+                  고객 1명 확보 비용(CPA) <b class="num text-ink">${nf(A.cpa)}원</b> — 목표 ${nf(G.cpa)}원의
+                  <b class="text-agreen num">${cpaPct}%</b>로, 예상보다 <b class="text-agreen">절반 값에</b> 고객을 데려왔습니다.</p>
+              </div>
+              <div class="rounded-xl bg-white border border-[#E6E6E3] p-4">
+                <p class="text-[12.5px] font-extrabold text-ink mb-0.5">시장이 좋아서가 아니라, 마케팅이 만든 수요</p>
+                <p class="text-[10.5px] text-slate-400 mb-2.5">같은 기간 · 마케팅이 닿은 온라인만 뛰고 총판은 그대로</p>
+                <div class="space-y-2.5">
+                  <div>
+                    <div class="flex items-baseline justify-between"><span class="text-[11.5px] font-bold text-ink">온라인 (마케팅 집행)</span>
+                      <span class="text-[12px] font-extrabold text-agreen num">▲${P.onX}배</span></div>
+                    <div class="flex items-center gap-2 mt-1">
+                      <div class="flex-1 h-3 rounded bg-slate-100"><div class="h-3 rounded bg-slate-300" style="width:${Math.round(P.onBase/P.onNow*100)}%"></div></div>
+                      <span class="text-[10.5px] num text-slate-400 w-24 text-right">${nf(P.onBase)} → <b class="text-ink">${nf(P.onNow)}대</b></span></div>
+                    <div class="flex items-center gap-2 mt-1">
+                      <div class="flex-1 h-3 rounded bg-agreen"></div>
+                      <span class="text-[10.5px] num font-bold text-agreen w-24 text-right">캠페인 후</span></div>
+                  </div>
+                  <div class="pt-1">
+                    <div class="flex items-baseline justify-between"><span class="text-[11.5px] font-bold text-slate-500">총판 (마케팅 미집행)</span>
+                      <span class="text-[12px] font-extrabold text-slate-400 num">${P.offX}배</span></div>
+                    <div class="flex items-center gap-2 mt-1">
+                      <div class="flex-1 h-3 rounded bg-slate-100"><div class="h-3 rounded bg-slate-300" style="width:${Math.round(P.offBase/P.offNow*100)}%"></div></div>
+                      <span class="text-[10.5px] num text-slate-400 w-24 text-right">${nf(P.offBase)} → <b class="text-slate-500">${nf(P.offNow)}대</b></span></div>
+                    <div class="flex items-center gap-2 mt-1">
+                      <div class="flex-1 h-3 rounded bg-slate-300"></div>
+                      <span class="text-[10.5px] num text-slate-400 w-24 text-right">캠페인 후</span></div>
+                  </div>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-3 pt-2.5 border-t border-[#F1EFE9]">
+                  캠페인이 끝난 뒤에도 공식몰 도어락 월 매출이 <b class="num text-ink">${esc(P.baseAfter)}</b>으로,
+                  캠페인 전 ${esc(P.baseBefore)} 대비 <b class="text-agreen">${esc(P.baseUp)}</b> 유지 — 일회성 스파이크가 아닙니다.</p>
+              </div>
+            </div>
+
+            <div class="rounded-xl bg-white border border-[#E6E6E3] p-4 mt-4">
+              <p class="text-[12.5px] font-extrabold text-ink mb-2">핵심 해석</p>
+              <ol class="space-y-2">${(R.keys||[]).map((k,i)=>`<li class="flex gap-2.5">
+                <span class="shrink-0 w-5 h-5 leading-5 text-center rounded-full bg-ink text-white text-[11px] font-bold num">${i+1}</span>
+                <span class="text-[12.5px] text-slate-700 leading-relaxed flex-1">${esc(k)}</span></li>`).join('')}</ol>
+            </div>
+          </div>`; })():''}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
           ${box('판매 수량',ed('sales',F?nf(F.roi.units):'')+'대',F?('온라인 '+nf(F.roi.unitsOn)+' · 오프라인 '+nf(F.roi.unitsOff)+' · 비캠 대비 '+F.roi.unitsX+'배'):'공식몰+제휴채널')}
           ${box('총 매출액',ed('revenue',F?F.roi.rev:'')+(F?'':'원'),F?('VAT 제외 · 비캠 대비 '+F.roi.revX+'배 · ASP '+nf(F.roi.asp)+'원'):'캠페인 기간 · VAT 별도')}
@@ -2825,7 +2975,14 @@
           </div>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div class="h-56"><canvas id="rptRoiModelChart"></canvas></div>
-            <div class="h-56"><canvas id="rptRoiPhaseChart"></canvas></div>
+            <div>
+              <div class="h-56"><canvas id="rptRoiPhaseChart"></canvas></div>
+              <div class="mt-1.5 space-y-0.5">
+                ${F.roi.phase.map(p=>{ const s=p.n.split('·'), head=(s[0]||'').trim();
+                  return `<p class="text-[10.5px] text-slate-400"><b class="text-slate-600">${esc(head.split(' ')[0])}</b>
+                    ${esc(head.split(' ').slice(1).join(' '))} — ${esc((s[1]||'').trim())}</p>`; }).join('')}
+              </div>
+            </div>
           </div>
           <div class="overflow-auto rounded-lg border border-[#E6E6E3] mt-3">
             <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
@@ -2841,13 +2998,12 @@
               <p class="text-[13px] text-slate-600 mt-1"><b class="num text-ink">${nf(p.u)}대</b> · 매출 ${esc(p.rev)} · 실이익 ${esc(p.profit)}</p>
               <p class="text-[11px] text-slate-400 mt-0.5">${esc(p.note)}</p></div>`).join('')}
           </div>
-          <p class="text-[12px] font-bold text-ink mt-4 mb-1">핵심 해석</p>
-          <ul class="space-y-1">${F.roi.keys.map((k,i)=>`<li class="text-[12px] text-slate-600 leading-relaxed flex gap-2"><span class="shrink-0 num font-bold text-brand-ink">${i+1}</span><span>${esc(k)}</span></li>`).join('')}</ul>
+          <p class="text-[11px] text-slate-400 mt-2">※ <b>단계</b>는 캠페인 기간을 <b>판매 채널 전략이 바뀐 시점</b>으로 나눈 구간입니다.
+            1단계는 공식몰(자사몰)에 집중해 정가·마진을 지키며 판매했고, 2단계는 오픈몰(외부몰)로 넓혀 판매량을 확산시켰습니다.</p>
         </div>`:''}
         ${h('4','네이버 검색량','캠페인 모멘텀')}
         <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed">
           <p>${searchLine}</p>
-          <p class="mt-1">경쟁사 대비 포지션: ${ed('searchPos')} · 검색 점유율: ${ed('searchShare')}</p>
         </div>
         ${h('5','캠페인 타임라인','PREP → MAIN → WRAP-UP')}
         <div class="rounded-xl border border-[#E6E6E3] p-4 text-[13px] text-slate-600 leading-relaxed space-y-1">
@@ -2944,7 +3100,6 @@
           <tbody>${adRows}</tbody>
           <tfoot><tr class="border-t-2 border-slate-200 font-bold"><td class="px-2 py-2">합계</td><td class="px-2 py-2 num text-right">${nf(imp)}</td><td class="px-2 py-2 num text-right">${nf(clk)}</td><td class="px-2 py-2 num text-right">${ctr.toFixed(2)}%</td><td class="px-2 py-2 num text-right">${nf(cost)}원</td><td class="px-2 py-2 num text-right">${nf(conv)}</td></tr></tfoot></table>
         </div>`:`<p class="text-[12px] text-slate-400 rounded-xl border border-[#E6E6E3] p-4">해당 키워드의 검색광고 데이터가 없습니다. 매체별 성과는 직접 입력하세요: ${ed('adManual')}</p>`}
-        <p class="text-[12px] text-slate-500 mt-2">소재·매체 인사이트: ${ed('adInsight')}</p>
         ${h('4','바이럴','블로그 · 인스타그램 체험단 · 커뮤니티')}
         <p class="text-[12px] font-bold text-ink mb-1.5">체험단 성과 <span class="font-normal text-slate-400">(레뷰 리포트 기준${RV?' · '+esc(RV.asOf)+' 확인':' · 직접 입력'})</span></p>
         ${RV?`
@@ -3059,8 +3214,8 @@
         </div>
         ${h('5','온드미디어','인스타 · 카카오채널 · 뉴스레터')}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          ${box('인스타 팔로워',(ig.followers!=null?nf(ig.followers)+'명':'[ ]'),(igD?((igD.d>=0?'+':'')+nf(igD.d)+'명 (기간)'):'기간 증감 없음'))}
-          ${box('유튜브 구독자',(ch.subs!=null?nf(ch.subs)+'명':'[ ]'),(ytD?((ytD.d>=0?'+':'')+nf(ytD.d)+'명 (기간)'):''))}
+          ${box('인스타 팔로워',(ig.followers!=null?nf(ig.followers)+'명':'집계 예정'),(igD?((igD.d>=0?'+':'')+nf(igD.d)+'명 (기간)'):'기간 증감 없음'))}
+          ${box('유튜브 구독자',(ch.subs!=null?nf(ch.subs)+'명':'집계 예정'),(ytD?((ytD.d>=0?'+':'')+nf(ytD.d)+'명 (기간)'):''))}
           ${box('카카오채널 친구',ed('kakao')+'명','증감 '+ed('kakaoD'))}
           ${box('뉴스레터 구독자',nf(nlSubs)+'명','오픈율 '+ed('nlOpen'))}
         </div>
@@ -3100,17 +3255,54 @@
         else if(/신제품|제품|서비스|출시|컨설팅|앱/.test(s)) nPr++;
         else if(/트렌드|인테리어|시공/.test(s)) nInt++; });
       const pct=n=>tot?(Math.round(n/tot*1000)/10):0;
-      const A={ repTotal:tot||'[ ]', repInterior:nInt, repInteriorPct:pct(nInt), repCompany:nCo, repCompanyPct:pct(nCo), repProduct:nPr, repProductPct:pct(nPr) };
+      const A={ repTotal:tot||'-', repInterior:nInt, repInteriorPct:pct(nInt), repCompany:nCo, repCompanyPct:pct(nCo), repProduct:nPr, repProductPct:pct(nPr) };
       document.querySelectorAll('#campReport .ir-auto').forEach(el=>{ const a=el.dataset.a; if(A[a]!=null && tot) el.textContent=A[a]; });
       // 보도 실적(Overview): 캠페인 기간(4/13~6/30)
       const campN=ALL.filter(r=>{const d=r['게재일'];return d&&d>=ci.start&&d<=ci.end;}).length;
-      const auto={ kpiReport: campN?campN.toLocaleString()+'건':'[ ]건', kpiExposure:'2,799,004', kpiLead:'36,227', cvr:'3.33' };
+      const auto={ kpiReport: campN?campN.toLocaleString()+'건':'-', kpiExposure:'2,799,004', kpiLead:'36,227', cvr:'3.33' };
       document.querySelectorAll('#campReport .ir-edit').forEach(el=>{ const k=el.dataset.k;
         if(irEdits[k]!=null && irEdits[k]!=='') el.textContent=irEdits[k];
         else if(auto[k]!=null) el.textContent=auto[k];
         el.contentEditable=irEditMode;
         el.classList.toggle('bg-brand/10',irEditMode); el.classList.toggle('ring-1',irEditMode); el.classList.toggle('ring-brand/40',irEditMode); el.classList.toggle('rounded',irEditMode); el.classList.toggle('px-1',irEditMode); });
       ['irEditBtn','irEditBtn2'].forEach(id=>{ const b=document.getElementById(id); if(b) b.textContent=irEditMode?'저장':'수치·문구 편집'; });
+      irHideEmpty();
+    }
+    /* 보고서에 '빈 데이터'가 남지 않게 — 값이 없는 줄·행·열을 통째로 숨긴다.
+       편집 모드에서는 다시 보여야 채워 넣을 수 있으므로 원상복구한다. */
+    function irHideEmpty(){
+      const root=document.getElementById('campReport'); if(!root) return;
+      const txt=el=>(el.textContent||'').replace(/[\s·\-–—/]/g,'').replace(/\[\s*\]/g,'');
+      // 0) 편집 모드면 전부 되살린다
+      root.querySelectorAll('[data-irhid]').forEach(el=>{ el.style.display=''; el.removeAttribute('data-irhid'); });
+      if(irEditMode) return;
+      const hide=el=>{ el.style.display='none'; el.setAttribute('data-irhid','1'); };
+      // 1) 편집칸만 있고 전부 비어 있는 문장 줄(링크가 있으면 정보가 남아 있으므로 유지)
+      root.querySelectorAll('p').forEach(p=>{
+        const eds=p.querySelectorAll('.ir-edit'); if(!eds.length) return;
+        if(p.querySelector('a')) return;
+        if([...eds].some(e=>txt(e))) return;
+        if(txt(p)===[...eds].map(e=>txt(e)).join('')) hide(p);   // 라벨만 남는 줄
+        else if(!txt(p).replace(/[가-힣A-Za-z]+[:：]/g,'')) hide(p);
+      });
+      // 2) 표: 값이 하나도 없는 행 → 숨김
+      root.querySelectorAll('table').forEach(tb=>{
+        tb.querySelectorAll('tbody tr, tfoot tr').forEach(tr=>{
+          const tds=[...tr.children]; if(tds.length<2) return;
+          const vals=tds.slice(1);
+          if(vals.length&&vals.every(td=>!txt(td))) hide(tr);
+        });
+        // 3) 표: 본문 전체가 비어 있는 열 → 머리글까지 숨김
+        const head=tb.querySelector('thead tr'); if(!head) return;
+        const rows=[...tb.querySelectorAll('tbody tr')].filter(r=>r.style.display!=='none');
+        if(!rows.length) return;
+        [...head.children].forEach((th,i)=>{
+          if(i===0) return;
+          const cells=rows.map(r=>r.children[i]).filter(Boolean);
+          if(cells.length&&cells.every(td=>!txt(td))){ hide(th); cells.forEach(hide);
+            [...tb.querySelectorAll('tfoot tr')].forEach(r=>{ if(r.children[i]) hide(r.children[i]); }); }
+        });
+      });
     }
     function toggleIrEdit(){
       if(irEditMode){ document.querySelectorAll('#campReport .ir-edit').forEach(el=>{ irEdits[el.dataset.k]=el.textContent.trim(); }); localStorage.setItem('aqaraIrEdits',JSON.stringify(irEdits)); }
