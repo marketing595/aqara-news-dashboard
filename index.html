@@ -2532,66 +2532,6 @@
     function rvSeoClear(){ if(!confirm('넣은 캡처 이미지를 지울까요?')) return;
       try{ localStorage.removeItem('aqaraRvSeoCap'); }catch(e){} rvSeoRender(); }
 
-    /* ── 공식몰 대배너 이미지 (POS·프로모션) ─────────────────────────────────
-       Firebase `campaign/<캠페인>/banners`에 저장 → 팀 전체가 같은 이미지를 본다.
-       (rvSeoCap은 이 브라우저에만 저장되지만, 배너는 보고서에 실려야 하므로 공유 저장) */
-    let CAMP_BAN={}, campBanOn='';
-    function campBanRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('campaign/'+curCampaign+'/banners'):null; }
-    function campBanLocalKey(){ return 'aqaraCampBan_'+curCampaign; }
-    function campBanLocal(){ try{ return JSON.parse(localStorage.getItem(campBanLocalKey())||'{}'); }catch(e){ return {}; } }
-    function campBanStart(){
-      const ref=campBanRef(); if(!ref||campBanOn===curCampaign) return;
-      campBanOn=curCampaign;
-      ref.on('value',s=>{ CAMP_BAN=s.val()||{}; campBanRender(); },
-             e=>console.warn('배너 읽기 오류(권한?):', e&&e.message));
-    }
-    function campBanMap(){ return campBanRef()?CAMP_BAN:campBanLocal(); }
-    function campBanRender(){
-      const w=document.getElementById('campBanWrap'); if(!w) return;
-      const map=campBanMap()||{};
-      const keys=Object.keys(map).filter(k=>map[k]&&map[k].img).sort((a,b)=>((map[a].ts||0)-(map[b].ts||0)));
-      if(!keys.length){
-        w.innerHTML='<p class="text-[11.5px] text-slate-300 py-4 text-center border border-dashed border-[#E6E6E3] rounded-lg">아직 등록된 배너 이미지가 없습니다. [🖼 이미지 넣기]로 올려주세요.</p>';
-        return; }
-      const shared=!!campBanRef();
-      w.innerHTML='<div class="grid grid-cols-1 md:grid-cols-2 gap-2">'+keys.map(k=>`
-        <figure class="rounded-lg border border-[#ECE9E1] overflow-hidden bg-[#FAFAF9]">
-          <img src="${map[k].img}" class="w-full object-contain" alt="공식몰 대배너" loading="lazy" />
-          <figcaption class="flex items-center gap-2 text-[11px] text-slate-500 px-2 py-1.5 border-t border-[#F1EFE9]">
-            <span class="flex-1 truncate">${esc(map[k].name||'공식몰 대배너')}</span>
-            <span class="text-slate-300">${shared?'팀 공유':'이 브라우저'}</span>
-            <button onclick="campBanDel('${esc(k)}')" title="삭제" class="text-slate-300 hover:text-ared">✕</button>
-          </figcaption></figure>`).join('')+'</div>';
-    }
-    function campBanUpload(el){
-      const fs=el.files||[]; if(!fs.length) return;
-      const ref=campBanRef();
-      Array.prototype.forEach.call(fs,function(f){
-        if(!/^image\//.test(f.type)) return;
-        const rd=new FileReader();
-        rd.onload=function(){
-          const im=new Image();
-          im.onload=function(){
-            // 원본 그대로 올리면 용량이 커서 저장이 거부된다 → 가로 1400px로 줄여 JPEG로 압축
-            const max=1400, sc=Math.min(1,max/(im.width||max));
-            const cv=document.createElement('canvas');
-            cv.width=Math.round((im.width||max)*sc); cv.height=Math.round((im.height||max)*sc);
-            cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
-            let url=''; try{ url=cv.toDataURL('image/jpeg',0.82); }catch(e){ url=rd.result; }
-            const rec={img:url, name:(f.name||'공식몰 대배너'), ts:Date.now()};
-            if(ref) ref.push(rec).catch(function(e){ alert('배너 저장에 실패했습니다: '+((e&&e.message)||'권한 확인 필요')); });
-            else { const m=campBanLocal(); m['l'+Date.now()+Math.floor(Math.random()*100)]=rec;
-              try{ localStorage.setItem(campBanLocalKey(),JSON.stringify(m)); }
-              catch(e){ alert('브라우저 저장 공간이 부족합니다. 더 작은 이미지로 시도해주세요.'); }
-              campBanRender(); }
-          };
-          im.onerror=function(){ alert('이미지를 읽지 못했습니다.'); };
-          im.src=rd.result;
-        };
-        rd.readAsDataURL(f);
-      });
-      el.value='';
-    }
     /* ── 제작 이미지 폴더 (구글 드라이브 아웃링크) ────────────────────────────
        원본 이미지는 드라이브에 두고, 여기에는 폴더 바로가기만 모아둔다.
        Firebase `campaign/<캠페인>/folders`에 저장 → 팀이 함께 이름·주소를 고친다.
@@ -2683,14 +2623,6 @@
         try{ localStorage.setItem(campFolLocalKey(),JSON.stringify(m)); }catch(e){} campFolRender(); }
     }
 
-    function campBanDel(k){
-      if(!confirm('이 배너 이미지를 지울까요?')) return;
-      const ref=campBanRef();
-      if(ref) ref.child(k).remove().catch(function(e){ alert('삭제 실패: '+((e&&e.message)||'')); });
-      else { const m=campBanLocal(); delete m[k];
-        try{ localStorage.setItem(campBanLocalKey(),JSON.stringify(m)); }catch(e){}
-        campBanRender(); }
-    }
     // 캠페인 리포트의 SA(파워링크·브랜드검색) 표는 searchad.json이 필요하다.
     // 광고 탭을 아직 안 열었으면 여기서 한 번 불러오고, 도착하면 리포트를 다시 그린다.
     let AD_FOR_CAMP=false;
@@ -2720,7 +2652,6 @@
     function campReportCharts(){
       rvSeoRender();
       campShareSync();
-      campBanStart(); campBanRender();   // 공식몰 대배너 — 리포트를 다시 그려도 이미지가 살아있게
       campFolStart(); campFolRender();   // 제작 이미지 폴더 바로가기
       const F=CAMP_FINAL[curCampaign]; if(!F||typeof draw!=='function') return;
       const opt=(extra)=>Object.assign({responsive:true,maintainAspectRatio:false},extra||{});
@@ -3136,29 +3067,6 @@
         <p class="text-[12px] text-slate-500 mt-2">메시지 발송 성과: ${ed('msgPerf')}</p>
         ${h('6','제작 이미지','캠페인 크리에이티브 원본 · 구글 드라이브')}
         <div id="campFolderWrap" class="mb-3"></div>
-        <div class="rounded-xl border border-[#E6E6E3] p-3 mb-3">
-          <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
-            <p class="text-[12px] font-bold text-ink">공식몰 대배너 <span class="font-normal text-slate-400">· 리포트에 바로 싣는 이미지</span></p>
-            <div class="flex gap-1.5">
-              <input type="file" id="campBanFile" accept="image/*" multiple class="hidden" onchange="campBanUpload(this)" />
-              <button onclick="document.getElementById('campBanFile').click()" class="text-[11px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1 rounded-lg font-semibold">🖼 이미지 넣기</button>
-            </div>
-          </div>
-          <div id="campBanWrap" class="mb-2"></div>
-          <p class="text-[12px] text-slate-500">운영 메모: ${ed('posBanner')}</p>
-        </div>
-        <details class="rounded-xl border border-[#E6E6E3] bg-[#FAFAF9]">
-          <summary class="cursor-pointer list-none px-3.5 py-2 text-[12px] font-extrabold text-slate-500 hover:text-ink select-none">판매 차수별 구성 (프로모션) <span class="font-normal text-slate-400">· 펼치기</span></summary>
-          <div class="px-3.5 pb-3 pt-1">
-            <div class="overflow-auto rounded-xl border border-[#E6E6E3] bg-white">
-              <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
-                <th class="px-2 py-2">차수</th><th class="px-2 py-2">기간</th><th class="px-2 py-2">구성</th><th class="px-2 py-2 text-right">판매가</th><th class="px-2 py-2 text-right">할인율</th></tr></thead>
-              <tbody>${[1,2,3].map(i=>`<tr class="border-t border-slate-100">
-                <td class="px-2 py-1.5">${ed('pr'+i+'n')}</td><td class="px-2 py-1.5">${ed('pr'+i+'p')}</td><td class="px-2 py-1.5">${ed('pr'+i+'c')}</td>
-                <td class="px-2 py-1.5 text-right">${ed('pr'+i+'v')}</td><td class="px-2 py-1.5 text-right">${ed('pr'+i+'d')}</td></tr>`).join('')}</tbody></table>
-            </div>
-          </div>
-        </details>
 
         <p class="text-[13px] font-extrabold text-[#4B32C3] mt-7 pb-1 border-b-2 border-[#EDE9FF]">Ⅲ. 마무리</p>
         ${/* 2026-08-21 '1. 비용' 4칸 제거(사용자 요청).
