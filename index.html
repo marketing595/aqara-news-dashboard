@@ -1581,7 +1581,13 @@
     function applyAndRender(){ const f=document.getElementById('fromDate').value,t=document.getElementById('toDate').value;
       FILTERED=ALL.filter(r=>{const d=r['게재일']; if(!d)return false; if(f&&d<f)return false; if(t&&d>t)return false; return true;});
       document.getElementById('rangeInfo').textContent=f+' ~ '+t+' · '+FILTERED.length+'건';
-      renderKPIs(f,t); renderPerfHero(); renderTrend(); renderType(); renderMedia(); renderChannel(); renderTopic(); renderYearly(); renderMonthlyHeadlines(); renderTable();
+      // 한 곳에서 예외가 나면 그 뒤 화면(뉴스 목록·헤드라인 등)이 통째로 비어버리므로 개별로 감싼다.
+      // 2026-08-21: renderMonthlyHeadlines에 세미나 템플릿 조각이 섞여 들어가 'sec is not defined'가 나면서
+      //             뒤따르던 renderTable()이 실행되지 않아 뉴스 목록이 0건으로 보이던 사고가 있었음.
+      const safe=(n,fn)=>{ try{ fn(); }catch(e){ console.error('['+n+'] 렌더 오류:',e); } };
+      safe('KPI',()=>renderKPIs(f,t)); safe('성과',renderPerfHero); safe('추이',renderTrend); safe('성격',renderType);
+      safe('매체',renderMedia); safe('배포',renderChannel); safe('주제',renderTopic); safe('연도',renderYearly);
+      safe('헤드라인',renderMonthlyHeadlines); safe('뉴스목록',renderTable);
       if(typeof maybeRenderKpi==='function') maybeRenderKpi();
       const vi=document.getElementById('view-issue');   // 이슈 탭이 열려 있으면 새 데이터로 다시 묶는다
       if(vi&&!vi.classList.contains('hidden')&&typeof renderIssues==='function') renderIssues(); }
@@ -1619,20 +1625,6 @@
           <summary class="cursor-pointer select-none flex items-center gap-1.5 py-1"><span class="mhcaret text-slate-400 text-[11px]">▶</span><span class="font-extrabold text-ink text-sm">${(+m.slice(5))}월</span> <span class="text-xs font-normal text-slate-400">· 헤드라인 ${list.length}건</span></summary>
           <ul class="space-y-0.5 pl-4 pt-1">${items}</ul>
         </details>
-      ${sec('4','프로그램 · 타임테이블',(S.timetable?'13:30 ~ 17:30 (4시간) · 사전 등록 13:00':S.flow),`
-        ${(S.timetable&&S.timetable.length)?tbl(['시간','소요','세션 구분','발표 주제','상세','발표 주체'],S.timetable.map((p,i)=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 num whitespace-nowrap font-semibold text-ink">${esc(p.time)}</td>
-          <td class="px-2.5 py-2 num text-slate-400 whitespace-nowrap">${esc(p.dur)}</td>
-          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
-          <td class="px-2.5 py-2 font-semibold text-ink">${se('tt.'+i+'.t',p.t)}</td>
-          <td class="px-2.5 py-2 text-slate-600">${se('tt.'+i+'.d',p.d||'')}</td>
-          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${se('tt.'+i+'.w',p.w||'미정')}</td></tr>`).join(''))
-        :tbl(['세션','주제','핵심 내용','발표 주체(안)'],(S.program||[]).map(p=>`<tr class="border-t border-slate-100">
-          <td class="px-2.5 py-2 whitespace-nowrap"><span class="text-[11px] font-extrabold px-1.5 py-0.5 rounded bg-brand/20 text-brand-ink">${esc(p.s)}</span></td>
-          <td class="px-2.5 py-2 font-semibold text-ink">${esc(p.t)}</td><td class="px-2.5 py-2 text-slate-600">${esc(p.d)}</td>
-          <td class="px-2.5 py-2 text-slate-500 whitespace-nowrap">${esc(p.w)}</td></tr>`).join(''))}
-        <p class="text-[12px] font-bold text-ink mt-4 mb-1">핵심 세션 메시지</p>${ul(S.messages)}`)}
-
       `; }).join('');
       if(!mhCalYM || mhCalYM.slice(0,4)!==mhYear || months.indexOf(mhCalYM)<0) mhCalYM=months[0];
       renderMhCal(); }
