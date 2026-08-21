@@ -77,6 +77,9 @@ sed -E \
   -e '/id="seoCapFile"/d' \
   -e '/id="campBanFile"/d' \
   -e '/이미지 넣기</d' \
+  -e '/폴더 추가</d' \
+  -e '/placeholder="이 폴더의 드라이브 주소를/d' \
+  -e '/칸에 붙여넣으면/d' \
   -e '/rvSeoClear\(\)/d' \
   -e "/getElementById\('seoCapFile'\)/d" \
   -e '/campPickAll\(/d' \

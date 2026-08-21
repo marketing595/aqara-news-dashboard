@@ -2584,6 +2584,97 @@
       });
       el.value='';
     }
+    /* ── 제작 이미지 폴더 (구글 드라이브 아웃링크) ────────────────────────────
+       원본 이미지는 드라이브에 두고, 여기에는 폴더 바로가기만 모아둔다.
+       Firebase `campaign/<캠페인>/folders`에 저장 → 팀이 함께 이름·주소를 고친다.
+       처음 열릴 때 아래 시드로 한 번만 채워지고(`__seeded`), 이후에는 손대지 않는다. */
+    const CAMP_FOLDER_SEED={
+      l100:{ root:'https://drive.google.com/drive/folders/1umFdcSFAKWrmOMlhcuaY4HD1GchzLuqo',
+             rootName:'5월_이게집이지',
+             items:['01_패키지용_썸네일','01.1_상세_상단이미지','02_프로모션_상세페이지','03_DTC_대배너','04_CRM','05_INS'] }
+    };
+    let CAMP_FOL={}, campFolOn='';
+    function campFolRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('campaign/'+curCampaign+'/folders'):null; }
+    function campFolLocalKey(){ return 'aqaraCampFol_'+curCampaign; }
+    function campFolLocal(){ try{ return JSON.parse(localStorage.getItem(campFolLocalKey())||'{}'); }catch(e){ return {}; } }
+    function campFolStart(){
+      const ref=campFolRef(); if(!ref||campFolOn===curCampaign) return;
+      campFolOn=curCampaign;
+      ref.on('value',function(s){ CAMP_FOL=s.val()||{}; campFolSeed(); campFolRender(); },
+             function(e){ console.warn('제작 이미지 폴더 읽기 오류(권한?):', e&&e.message); });
+    }
+    function campFolSeed(){
+      const sd=CAMP_FOLDER_SEED[curCampaign], ref=campFolRef();
+      if(!sd||!ref) return;
+      if(CAMP_FOL&&CAMP_FOL.__seeded) return;                       // 이미 초기화됨
+      if(Object.keys(CAMP_FOL||{}).length) return;                  // 누가 이미 손댔으면 그대로 둔다
+      const u={__seeded:1};
+      sd.items.forEach(function(n,i){ u['f'+String(i).padStart(2,'0')]={n:n, u:sd.root}; });
+      ref.set(u).catch(function(e){ console.warn('폴더 목록 초기화 실패:', e&&e.message); });
+    }
+    function campFolRows(){
+      const sd=CAMP_FOLDER_SEED[curCampaign]||null;
+      const map=(campFolRef()?CAMP_FOL:campFolLocal())||{};
+      const rows=Object.keys(map).filter(k=>k!=='__seeded'&&map[k]&&map[k].n).sort()
+        .map(k=>({k:k, n:map[k].n, u:map[k].u||''}));
+      // 아직 저장 전(권한 없음·오프라인)이라도 목록은 보이게 한다
+      if(!rows.length&&sd) return sd.items.map(n=>({k:'', n:n, u:sd.root}));
+      return rows;
+    }
+    function campFolRender(){
+      const w=document.getElementById('campFolderWrap'); if(!w) return;
+      const sd=CAMP_FOLDER_SEED[curCampaign]||null, rows=campFolRows();
+      const cards=rows.map(function(r){
+        const has=!!r.u;
+        return `<div class="rounded-lg border border-[#ECE9E1] bg-[#FAFAF9] p-2.5">
+          <div class="flex items-start gap-2">
+            <span class="text-[15px] leading-none pt-0.5">📁</span>
+            <div class="min-w-0 flex-1">
+              <p class="text-[12.5px] font-bold text-ink truncate" title="${esc(r.n)}">${esc(r.n)}</p>
+              <input value="${esc(r.u)}" placeholder="이 폴더의 드라이브 주소를 붙여넣으세요"
+                ${r.k?`onchange="campFolSet('${esc(r.k)}','u',this.value)"`:'disabled'}
+                class="w-full mt-1 text-[10.5px] text-slate-500 bg-white border border-[#E6E6E3] rounded px-1.5 py-1" />
+            </div>
+            <div class="flex flex-col items-end gap-1 shrink-0">
+              ${has?`<a href="${esc(r.u)}" target="_blank" rel="noopener" class="text-[11px] font-bold text-white bg-ink hover:brightness-125 px-2 py-1 rounded">열기 ↗</a>`
+                   :'<span class="text-[10px] text-slate-300">주소 없음</span>'}
+              ${r.k?`<button onclick="campFolDel('${esc(r.k)}')" title="삭제" class="text-[11px] text-slate-300 hover:text-ared">✕</button>`:''}
+            </div>
+          </div></div>`; }).join('');
+      w.innerHTML=`<div class="rounded-xl border border-[#E6E6E3] p-3">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <p class="text-[12px] font-bold text-ink">제작 이미지 폴더 <span class="font-normal text-slate-400">· 원본은 구글 드라이브에서 관리${sd?' · 상위 폴더 '+esc(sd.rootName):''}</span></p>
+          <div class="flex gap-1.5">
+            ${sd?`<a href="${esc(sd.root)}" target="_blank" rel="noopener" class="text-[11px] font-bold text-white bg-ink hover:brightness-125 px-2.5 py-1 rounded-lg">📁 상위 폴더 열기 ↗</a>`:''}
+            <button onclick="campFolAdd()" class="text-[11px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1 rounded-lg font-semibold">+ 폴더 추가</button>
+          </div>
+        </div>
+        ${rows.length?`<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">${cards}</div>`
+          :'<p class="text-[11.5px] text-slate-300 py-4 text-center border border-dashed border-[#E6E6E3] rounded-lg">등록된 폴더가 없습니다.</p>'}
+        <p class="text-[11px] text-slate-400 mt-2">각 폴더의 드라이브 주소를 칸에 붙여넣으면 [열기]가 그 폴더로 바로 연결됩니다(팀 공유). 지금은 모두 상위 폴더로 연결돼 있습니다.</p>
+      </div>`;
+    }
+    function campFolSet(k,f,v){
+      const ref=campFolRef();
+      if(ref) ref.child(k).child(f).set((v||'').trim()).catch(function(e){ alert('저장 실패: '+((e&&e.message)||'')); });
+      else { const m=campFolLocal(); m[k]=m[k]||{}; m[k][f]=(v||'').trim();
+        try{ localStorage.setItem(campFolLocalKey(),JSON.stringify(m)); }catch(e){} campFolRender(); }
+    }
+    function campFolAdd(){
+      const k='z'+Date.now(), rec={n:'새 폴더', u:''};
+      const ref=campFolRef();
+      if(ref) ref.child(k).set(rec).catch(function(e){ alert('추가 실패: '+((e&&e.message)||'')); });
+      else { const m=campFolLocal(); m[k]=rec;
+        try{ localStorage.setItem(campFolLocalKey(),JSON.stringify(m)); }catch(e){} campFolRender(); }
+    }
+    function campFolDel(k){
+      if(!confirm('이 폴더 바로가기를 목록에서 지울까요? (드라이브의 실제 폴더는 지워지지 않습니다)')) return;
+      const ref=campFolRef();
+      if(ref) ref.child(k).remove().catch(function(e){ alert('삭제 실패: '+((e&&e.message)||'')); });
+      else { const m=campFolLocal(); delete m[k];
+        try{ localStorage.setItem(campFolLocalKey(),JSON.stringify(m)); }catch(e){} campFolRender(); }
+    }
+
     function campBanDel(k){
       if(!confirm('이 배너 이미지를 지울까요?')) return;
       const ref=campBanRef();
@@ -2622,6 +2713,7 @@
       rvSeoRender();
       campShareSync();
       campBanStart(); campBanRender();   // 공식몰 대배너 — 리포트를 다시 그려도 이미지가 살아있게
+      campFolStart(); campFolRender();   // 제작 이미지 폴더 바로가기
       const F=CAMP_FINAL[curCampaign]; if(!F||typeof draw!=='function') return;
       const opt=(extra)=>Object.assign({responsive:true,maintainAspectRatio:false},extra||{});
       // 막대·선 위에 수치를 직접 그려주는 인라인 플러그인(외부 라이브러리 불필요)
@@ -3034,17 +3126,11 @@
           ${box('뉴스레터 구독자',nf(nlSubs)+'명','오픈율 '+ed('nlOpen'))}
         </div>
         <p class="text-[12px] text-slate-500 mt-2">메시지 발송 성과: ${ed('msgPerf')}</p>
-        ${h('6','POS · 프로모션','판매 차수별 구성')}
-        <div class="overflow-auto rounded-xl border border-[#E6E6E3]">
-          <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
-            <th class="px-2 py-2">차수</th><th class="px-2 py-2">기간</th><th class="px-2 py-2">구성</th><th class="px-2 py-2 text-right">판매가</th><th class="px-2 py-2 text-right">할인율</th></tr></thead>
-          <tbody>${[1,2,3].map(i=>`<tr class="border-t border-slate-100">
-            <td class="px-2 py-1.5">${ed('pr'+i+'n')}</td><td class="px-2 py-1.5">${ed('pr'+i+'p')}</td><td class="px-2 py-1.5">${ed('pr'+i+'c')}</td>
-            <td class="px-2 py-1.5 text-right">${ed('pr'+i+'v')}</td><td class="px-2 py-1.5 text-right">${ed('pr'+i+'d')}</td></tr>`).join('')}</tbody></table>
-        </div>
-        <div class="rounded-xl border border-[#E6E6E3] p-3 mt-3">
+        ${h('6','제작 이미지','캠페인 크리에이티브 원본 · 구글 드라이브')}
+        <div id="campFolderWrap" class="mb-3"></div>
+        <div class="rounded-xl border border-[#E6E6E3] p-3 mb-3">
           <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
-            <p class="text-[12px] font-bold text-ink">공식몰 대배너 <span class="font-normal text-slate-400">· 차수별 배너 이미지</span></p>
+            <p class="text-[12px] font-bold text-ink">공식몰 대배너 <span class="font-normal text-slate-400">· 리포트에 바로 싣는 이미지</span></p>
             <div class="flex gap-1.5">
               <input type="file" id="campBanFile" accept="image/*" multiple class="hidden" onchange="campBanUpload(this)" />
               <button onclick="document.getElementById('campBanFile').click()" class="text-[11px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1 rounded-lg font-semibold">🖼 이미지 넣기</button>
@@ -3053,6 +3139,18 @@
           <div id="campBanWrap" class="mb-2"></div>
           <p class="text-[12px] text-slate-500">운영 메모: ${ed('posBanner')}</p>
         </div>
+        <details class="rounded-xl border border-[#E6E6E3] bg-[#FAFAF9]">
+          <summary class="cursor-pointer list-none px-3.5 py-2 text-[12px] font-extrabold text-slate-500 hover:text-ink select-none">판매 차수별 구성 (프로모션) <span class="font-normal text-slate-400">· 펼치기</span></summary>
+          <div class="px-3.5 pb-3 pt-1">
+            <div class="overflow-auto rounded-xl border border-[#E6E6E3] bg-white">
+              <table class="w-full text-[12px]"><thead class="bg-slate-50 text-slate-500"><tr class="text-left">
+                <th class="px-2 py-2">차수</th><th class="px-2 py-2">기간</th><th class="px-2 py-2">구성</th><th class="px-2 py-2 text-right">판매가</th><th class="px-2 py-2 text-right">할인율</th></tr></thead>
+              <tbody>${[1,2,3].map(i=>`<tr class="border-t border-slate-100">
+                <td class="px-2 py-1.5">${ed('pr'+i+'n')}</td><td class="px-2 py-1.5">${ed('pr'+i+'p')}</td><td class="px-2 py-1.5">${ed('pr'+i+'c')}</td>
+                <td class="px-2 py-1.5 text-right">${ed('pr'+i+'v')}</td><td class="px-2 py-1.5 text-right">${ed('pr'+i+'d')}</td></tr>`).join('')}</tbody></table>
+            </div>
+          </div>
+        </details>
 
         <p class="text-[13px] font-extrabold text-[#4B32C3] mt-7 pb-1 border-b-2 border-[#EDE9FF]">Ⅲ. 마무리</p>
         ${h('1','비용')}
