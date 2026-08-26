@@ -6613,20 +6613,23 @@
         <div>${x.tags.map(tg=>`<span class="inline-block text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7] mr-1 mb-1">#${esc(tg)}</span>`).join('')}</div>
       </div>`).join('');
     }
+    /* 4개 블로그 모두 결국 '아카라라이프를 띄우는' 채널이므로, 아래 키워드는 블로그와 무관하게 항상 깔고 간다.
+       다만 공식 블로그가 아닌 곳에서는 브랜드를 앞세우지 않고 사용자 경험 속에 자연스럽게 녹인다(voice로 구분). */
+    const BLOG_BASE_SEO=['아카라라이프','아카라','아카라 도어락','아카라 조명','스마트홈인테리어'];
     const BLOG_CONCEPTS=[
-      {id:'aqaralife',name:'아카라라이프 (공식)',concept:'제품·기능 중심 · 설치/연동 가이드 · 신뢰감 있는 전문 톤',
+      {id:'aqaralife',name:'아카라라이프 (공식)',voice:'brand',concept:'제품·기능 중심 · 설치/연동 가이드 · 신뢰감 있는 전문 톤',
        drafts:['[가이드] 아카라 L100 도어락 설치부터 앱 연동까지 A to Z','[비교] 매터(Matter) 허브 M100 vs M200, 우리 집엔 뭐가 맞을까','[꿀팁] 재실센서로 완성하는 자동 소등·대기전력 차단'],
        seo:['아카라 도어락','매터 허브','스마트홈 구축','스마트스위치 설치','재실센서'],
        img:'제품 단독컷(화이트 배경) + 설치 단계별 스크린샷 + 앱 UI 캡처'},
-      {id:'sooni',name:'수니집 일상기록',concept:'실사용 일상 브이로그 · 솔직 후기 · 공감형 스토리',
+      {id:'sooni',name:'수니집 일상기록',voice:'personal',concept:'실사용 일상 브이로그 · 솔직 후기 · 공감형 스토리',
        drafts:['스마트홈 3개월 써보니… 진짜 편해진 것 5가지','아이 키우는 집, 도어락 실종방지 기능이 이렇게 든든할 줄','퇴근하면 불이 켜져있는 집 (재실센서 실사용기)'],
        seo:['스마트홈 후기','아이 있는 집','스마트도어락 실사용','워킹맘 살림템'],
        img:'실제 집 공간 사진 + 사용 순간 스냅 + 손 디테일컷'},
-      {id:'minimal',name:'미니멀라이프',concept:'미니멀 인테리어 · 선 없는 깔끔함 · 공간 정돈',
+      {id:'minimal',name:'미니멀라이프',voice:'personal',concept:'미니멀 인테리어 · 선 없는 깔끔함 · 공간 정돈',
        drafts:['선 없는 집 만들기: 스마트 스위치로 벽을 비우다','미니멀 침실 완성하는 무드등·자동 커튼 세팅','가전 리모컨 없애기 프로젝트 (허브 하나로 통합)'],
        seo:['미니멀 인테리어','스마트조명','선정리','스마트커튼','홈스타일링'],
        img:'여백 많은 공간샷 + 제품이 인테리어에 녹아든 컷 + 톤온톤'},
-      {id:'hada',name:'하다 일상',concept:'라이프스타일 루틴 · 갓생 · 소소한 자동화',
+      {id:'hada',name:'하다 일상',voice:'personal',concept:'라이프스타일 루틴 · 갓생 · 소소한 자동화',
        drafts:['아침을 바꾼 스마트홈 루틴 (기상~출근 자동화)','집순이의 주말, 조명 씬 하나로 분위기 전환','작은 원룸도 스마트홈 되나요? (자취생 셋업)'],
        seo:['스마트홈 루틴','갓생','원룸 스마트홈','자취템','조명 씬'],
        img:'라이프스타일 무드 + 루틴 순간 + 아늑한 조명 분위기'}
@@ -6639,7 +6642,8 @@
             <div class="text-[12px] text-slate-500 mb-3" contenteditable="true" data-mk="blog-c-${bi}" oninput="mktSaveEdit(this)"><b class="text-ink">컨셉</b> · ${esc(mktEdits['blog-c-'+bi]||b.concept)}</div>
             <p class="text-[12px] font-bold text-ink mb-1">📝 글 초안 아이디어</p>
             <ul class="mb-3 space-y-1">${b.drafts.map((d,di)=>`<li class="text-[13px] text-slate-700 leading-snug" contenteditable="true" data-mk="blog-d-${bi}-${di}" oninput="mktSaveEdit(this)">· ${esc(mktEdits['blog-d-'+bi+'-'+di]||d)}</li>`).join('')}</ul>
-            <p class="text-[12px] font-bold text-ink mb-1">🔍 SEO 키워드</p>
+            <p class="text-[12px] font-bold text-ink mb-1">🔍 SEO 키워드 <span class="text-[10.5px] font-normal text-slate-400">· 브랜드 공통 + 블로그별</span></p>
+            <div class="mb-1">${BLOG_BASE_SEO.map(k=>`<span class="inline-block text-[11px] font-bold px-1.5 py-0.5 rounded bg-ink text-white mr-1 mb-1" title="4개 블로그에 항상 들어가는 브랜드 공통 키워드">${esc(k)}</span>`).join('')}</div>
             <div class="mb-3">${b.seo.map(k=>`<span class="inline-block text-[11px] px-1.5 py-0.5 rounded bg-[#EDE9FF] text-[#5B44C7] mr-1 mb-1">${esc(k)}</span>`).join('')}</div>
             <p class="text-[12px] font-bold text-ink mb-1">🖼️ 이미지 방향</p>
             <div class="text-[12px] text-slate-500 mb-3" contenteditable="true" data-mk="blog-i-${bi}" oninput="mktSaveEdit(this)">${esc(mktEdits['blog-i-'+bi]||b.img)}</div>
@@ -6672,8 +6676,15 @@
             </div>
             <div>
               <label class="block text-[11px] font-bold text-slate-500 mb-1">🔍 키워드 SEO <span class="font-normal">— 여기 넣은 키워드가 제목·본문에 반영됩니다 (쉼표로 구분)</span></label>
+              <div class="mb-1.5 rounded-lg bg-[#FAFAF9] border border-[#E6E6E3] px-2.5 py-1.5">
+                <p class="text-[10.5px] font-bold text-slate-500 mb-1">항상 반영되는 브랜드 공통 키워드 <span class="font-normal text-slate-400">· 지우지 않아도 자동으로 들어갑니다</span></p>
+                ${BLOG_BASE_SEO.map(k=>`<span class="inline-block text-[11px] font-bold px-1.5 py-0.5 rounded bg-ink text-white mr-1 mb-0.5">${esc(k)}</span>`).join('')}
+              </div>
               <input id="bdKw" type="text" value="${esc(b.seo.join(', '))}" placeholder="예: 스마트홈 인테리어, 무타공 스마트조명" class="w-full text-sm border border-[#7C5CFF]/50 rounded-lg px-3 py-2 bg-white" oninput="bdKwHint()" />
               <div id="bdKwChips" class="mt-1.5 flex flex-wrap gap-1"></div>
+              ${b.voice==='personal'?`<label class="flex items-start gap-1.5 mt-2 text-[11px] text-slate-500 cursor-pointer">
+                <input type="checkbox" id="bdDisc" checked class="mt-0.5 accent-[#7C5CFF]" />
+                <span>글 끝에 <b class="text-ink">협찬·제공 표기</b> 한 줄 넣기 <span class="text-slate-400">— 자사 운영 블로그에서 자사 제품을 다룰 때는 표시광고법상 경제적 이해관계를 밝혀야 합니다.</span></span></label>`:''}
             </div>
           </div>
           <div class="flex flex-wrap items-end gap-3 mt-3">
@@ -6703,8 +6714,12 @@
     function mktBlogGen(){
       if(MKT_BLOG_AI==null) return;
       const b=BLOG_CONCEPTS[MKT_BLOG_AI], out=document.getElementById('bdOut'), btn=document.getElementById('bdGoBtn');
+      const disc=document.getElementById('bdDisc');
       const payload={ blog:b.name, concept:(mktEdits['blog-c-'+MKT_BLOG_AI]||b.concept),
         topic:(document.getElementById('bdTopic').value||'').trim(), keywords:bdKwList(),
+        baseKeywords:BLOG_BASE_SEO,                 // 브랜드 공통 키워드 — 블로그와 무관하게 항상 반영
+        voice:b.voice||'brand',                     // brand=공식 화자 / personal=개인 블로거 화자
+        disclosure:!!(disc&&disc.checked),
         tone:document.getElementById('bdTone').value, length:document.getElementById('bdLen').value };
       btn.disabled=true; btn.textContent='작성 중…';
       out.innerHTML='<p class="text-sm text-slate-400 py-6 text-center">AI가 초안을 쓰는 중입니다… (10~20초)</p>';
