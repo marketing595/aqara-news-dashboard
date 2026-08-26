@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-25 18:02",
+ "generatedAt": "2026-08-26 18:05",
  "brands": [
   {
    "name": "아카라",
@@ -124,12 +124,12 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
+    "아카라 l100",
     "아카라 스위치",
     "아카라 홈캠",
     "아카라치",
-    "아카라 l100",
     "아카라카",
-    "명조 아카라이브"
+    "원신 아카라이브"
    ],
    "recent": [
     {
@@ -351,8 +351,8 @@
     "헤이홈 중국",
     "헤이홈 공유",
     "헤이홈 오프라인",
-    "헤이홈 카메라",
-    "헤이홈 공구"
+    "헤이홈 허브",
+    "헤이홈 프로"
    ],
    "recent": [
     {
@@ -451,20 +451,20 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67692,
+   "total": 67695,
    "sentiment": {
-    "pos": 21,
-    "neu": 37,
+    "pos": 22,
+    "neu": 36,
     "neg": 2
    },
    "keywords": [
     [
      "AI",
-     40
+     39
     ],
     [
      "삼성전자는",
-     26
+     23
     ],
     [
      "가전",
@@ -479,31 +479,11 @@
      18
     ],
     [
-     "프로",
-     17
-    ],
-    [
-     "HVAC",
-     17
-    ],
-    [
      "IoT",
-     16
-    ],
-    [
-     "중앙공조",
      15
     ],
     [
-     "빌딩",
-     15
-    ],
-    [
-     "솔루션",
-     14
-    ],
-    [
-     "연결",
+     "프로",
      14
     ],
     [
@@ -511,34 +491,54 @@
      13
     ],
     [
-     "솔루션을",
+     "중앙공조",
      13
     ],
     [
-     "결합해",
+     "솔루션",
      13
     ],
     [
-     "B2B",
-     13
+     "빌딩",
+     12
     ],
     [
-     "플랫폼인",
-     11
+     "HVAC",
+     12
     ],
     [
      "기기",
      11
+    ],
+    [
+     "솔루션을",
+     11
+    ],
+    [
+     "결합해",
+     11
+    ],
+    [
+     "삼성전자서비스",
+     11
+    ],
+    [
+     "B2B",
+     11
+    ],
+    [
+     "가전을",
+     10
     ]
    ],
    "posWords": [
     [
      "투자",
-     9
+     8
     ],
     [
      "강화",
-     6
+     7
     ],
     [
      "확대",
@@ -547,10 +547,6 @@
     [
      "글로벌",
      5
-    ],
-    [
-     "첨단",
-     3
     ],
     [
      "성장",
@@ -563,6 +559,10 @@
     [
      "선도",
      2
+    ],
+    [
+     "첨단",
+     2
     ]
    ],
    "related": [
@@ -572,12 +572,30 @@
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스",
-    "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 연결 안됨",
     "삼성 스마트싱스 아이폰"
    ],
    "recent": [
+    {
+     "title": "LG전자 ‘AI홈 초석’ 앳홈 장부가 줄어..\"IFA서 진화상 소개\"",
+     "source": "이데일리",
+     "date": "2026-08-26",
+     "link": "https://n.news.naver.com/mnews/article/018/0006358386?sid=101"
+    },
+    {
+     "title": "배터리부터 OLED까지…이재용·정의선 동맹 강화",
+     "source": "newstomato.com",
+     "date": "2026-08-26",
+     "link": "http://www.newstomato.com/ReadNews.aspx?no=1311439&inflow=N"
+    },
+    {
+     "title": "삼성전자 'EI-T5900' 국내 전파인증…3년 만의 스마트태그 신제품 유력",
+     "source": "pinpointnews.co.kr",
+     "date": "2026-08-26",
+     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=480334"
+    },
     {
      "title": "달아오른 '모듈러 주택'…2030년 4.4조 시장 열린다",
      "source": "한국경제",
@@ -639,34 +657,16 @@
      "link": "https://n.news.naver.com/mnews/article/015/0005324270?sid=101"
     },
     {
-     "title": "삼성 냉장고 14년 쓴 한가인...\"이젠 AI가 장보기 고민 덜어주길\"",
-     "source": "dailian.co.kr",
-     "date": "2026-08-25",
-     "link": "https://n.news.naver.com/mnews/article/119/0003124866?sid=101"
-    },
-    {
      "title": "한가인 “14년째 삼성 냉장고 사용…가족 역사 함께한 터줏대감”",
      "source": "etoday.co.kr",
      "date": "2026-08-25",
      "link": "https://www.etoday.co.kr/news/view/2617587"
     },
     {
-     "title": "한가인 “삼성 냉장고는 가족의 역사”…14년째 쓰는 이유",
-     "source": "dizzotv.com",
+     "title": "삼성 냉장고 14년 쓴 한가인...\"이젠 AI가 장보기 고민 덜어주길\"",
+     "source": "dailian.co.kr",
      "date": "2026-08-25",
-     "link": "https://www.dizzotv.com/site/data/html_dir/2026/08/24/2026082480149.html"
-    },
-    {
-     "title": "“14년째 그대로 써요”…한가인이 삼성 냉장고를 고집하는 이유는?",
-     "source": "디지털타임스",
-     "date": "2026-08-25",
-     "link": "https://n.news.naver.com/mnews/article/029/0003044064?sid=101"
-    },
-    {
-     "title": "한가인 \"14년째 삼성 냉장고 사용\"… 가족 추억 담긴 '살림 파트너'",
-     "source": "mediapen.com",
-     "date": "2026-08-25",
-     "link": "https://www.mediapen.com/news/view/1118540"
+     "link": "https://n.news.naver.com/mnews/article/119/0003124866?sid=101"
     }
    ]
   },
@@ -674,20 +674,16 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77053,
+   "total": 77055,
    "sentiment": {
-    "pos": 25,
-    "neu": 33,
+    "pos": 24,
+    "neu": 34,
     "neg": 2
    },
    "keywords": [
     [
      "LG전자",
-     39
-    ],
-    [
-     "히트펌프",
-     30
+     41
     ],
     [
      "AI",
@@ -698,47 +694,47 @@
      26
     ],
     [
-     "LG전자는",
+     "히트펌프",
      25
     ],
     [
+     "LG전자는",
+     23
+    ],
+    [
      "원격",
-     19
+     18
     ],
     [
      "R32",
-     16
+     15
+    ],
+    [
+     "AI홈",
+     14
     ],
     [
      "제어",
-     15
-    ],
-    [
-     "낮은",
-     15
+     14
     ],
     [
      "LG전자의",
      14
     ],
     [
-     "냉매를",
+     "낮은",
      14
     ],
     [
-     "AI홈",
+     "냉매를",
      13
     ],
     [
      "GWP",
-     13
+     12
     ],
     [
      "앱을",
-     13
-    ],
-    [
-     "지구온난화지수",
      12
     ],
     [
@@ -746,26 +742,30 @@
      11
     ],
     [
-     "난방",
+     "수산물",
      11
     ],
     [
-     "수산물",
+     "지구온난화지수",
      11
+    ],
+    [
+     "난방",
+     10
     ]
    ],
    "posWords": [
     [
      "강화",
-     9
-    ],
-    [
-     "글로벌",
      8
     ],
     [
-     "확대",
+     "글로벌",
      7
+    ],
+    [
+     "확대",
+     6
     ],
     [
      "공략",
@@ -780,11 +780,11 @@
      2
     ],
     [
-     "계약",
+     "투자",
      1
     ],
     [
-     "성장",
+     "최초",
      1
     ]
    ],
@@ -792,15 +792,27 @@
     "lg 씽큐온",
     "lg 씽큐 가족 공유",
     "lg 씽큐 세탁기",
-    "lg 씽큐 연결",
     "lg 씽큐 에어컨 연결",
+    "lg 씽큐 연결",
     "lg 씽큐 와이파이",
+    "lg 씽큐 티비연결",
     "lg 씽큐 앱 에어컨",
-    "lg 씽큐 제습기",
-    "lg 씽큐 청소기",
-    "lg 씽큐 뜻"
+    "lg 씽큐 뜻",
+    "lg 씽큐 청소기"
    ],
    "recent": [
+    {
+     "title": "LG전자 ‘AI홈 초석’ 앳홈 장부가 줄어..\"IFA서 진화상 소개\"",
+     "source": "이데일리",
+     "date": "2026-08-26",
+     "link": "https://n.news.naver.com/mnews/article/018/0006358386?sid=101"
+    },
+    {
+     "title": "[창간 12년 기획] 현대차그룹·삼성전자·LG전자, AI로 산업 대전환",
+     "source": "getnews.co.kr",
+     "date": "2026-08-26",
+     "link": "https://www.getnews.co.kr/news/articleView.html?idxno=878734"
+    },
     {
      "title": "달아오른 '모듈러 주택'…2030년 4.4조 시장 열린다",
      "source": "한국경제",
@@ -878,18 +890,6 @@
      "source": "hankookilbo.com",
      "date": "2026-08-19",
      "link": "https://n.news.naver.com/mnews/article/469/0000948776?sid=105"
-    },
-    {
-     "title": "\"22평 집이 2억\" 홈쇼핑 뜨자 관심 폭발...상담 수백 건 몰렸다",
-     "source": "머니투데이",
-     "date": "2026-08-17",
-     "link": "https://n.news.naver.com/mnews/article/008/0005400799?sid=101"
-    },
-    {
-     "title": "“아파트 앱 하나로 냉장고·세탁기까지”…‘스마트홈 전쟁’ 불붙었다",
-     "source": "segye.com",
-     "date": "2026-08-17",
-     "link": "https://n.news.naver.com/mnews/article/022/0004151434?sid=101"
     }
    ]
   },
@@ -897,11 +897,11 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75549,
+   "total": 75557,
    "sentiment": {
     "pos": 16,
-    "neu": 34,
-    "neg": 10
+    "neu": 35,
+    "neg": 9
    },
    "keywords": [
     [
@@ -921,24 +921,40 @@
      14
     ],
     [
+     "아래는",
+     13
+    ],
+    [
+     "기사를",
+     13
+    ],
+    [
+     "번역",
+     13
+    ],
+    [
+     "으로",
+     13
+    ],
+    [
      "입니다",
      13
     ],
     [
-     "아래는",
+     "구글번역",
      12
     ],
     [
-     "기사를",
-     12
+     "높이기를",
+     11
     ],
     [
-     "번역",
-     12
+     "노력하고",
+     11
     ],
     [
-     "으로",
-     12
+     "있습니다",
+     11
     ],
     [
      "번역에",
@@ -949,31 +965,15 @@
      11
     ],
     [
-     "구글번역",
-     11
-    ],
-    [
-     "높이기를",
-     10
-    ],
-    [
-     "노력하고",
-     10
-    ],
-    [
-     "있습니다",
-     10
-    ],
-    [
-     "제미나이",
-     9
-    ],
-    [
      "있을",
      9
     ],
     [
      "이해도",
+     9
+    ],
+    [
+     "제미나이",
      9
     ]
    ],
@@ -987,10 +987,6 @@
      4
     ],
     [
-     "1위",
-     4
-    ],
-    [
      "글로벌",
      4
     ],
@@ -999,15 +995,19 @@
      3
     ],
     [
+     "개선",
+     2
+    ],
+    [
+     "프리미엄",
+     2
+    ],
+    [
      "파트너십",
      2
     ],
     [
      "인기",
-     2
-    ],
-    [
-     "수출",
      2
     ]
    ],
@@ -1018,12 +1018,60 @@
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 연결",
-    "구글 홈버튼",
     "구글 홈 미니 초기화",
     "구글 홈 미니 2세대",
-    "구글 홈 스피커 연결"
+    "구글 홈 스피커 연결",
+    "구글 홈버튼"
    ],
    "recent": [
+    {
+     "title": "성남시, 일본 나고야시와 교류 협력 강화",
+     "source": "breaknews.com",
+     "date": "2026-08-26",
+     "link": "http://www.breaknews.com/1231620"
+    },
+    {
+     "title": "[if.interview] 'K-컬처 다음은 K-스포츠'...데이터로 미래를 그리는 '플...",
+     "source": "fourfourtwo.co.kr",
+     "date": "2026-08-26",
+     "link": "https://m.sports.naver.com/kfootball/article/411/0000086373"
+    },
+    {
+     "title": "이케아 코리아, 161개 제품 평균 15% 가격 인하",
+     "source": "breaknews.com",
+     "date": "2026-08-26",
+     "link": "http://www.breaknews.com/1231587"
+    },
+    {
+     "title": "국민의힘 장동혁·정점식, 검찰 보완수사권 폐지 강력 반대",
+     "source": "breaknews.com",
+     "date": "2026-08-26",
+     "link": "http://www.breaknews.com/1231579"
+    },
+    {
+     "title": "픽셀워치5, 가격만 최대 50달러 올랐지만 신기능은 픽셀워치4도 업데이...",
+     "source": "wikitree.co.kr",
+     "date": "2026-08-26",
+     "link": "https://www.wikitree.co.kr/articles/1154941"
+    },
+    {
+     "title": "[창간 12년 기획] 현대차그룹·삼성전자·LG전자, AI로 산업 대전환",
+     "source": "getnews.co.kr",
+     "date": "2026-08-26",
+     "link": "https://www.getnews.co.kr/news/articleView.html?idxno=878734"
+    },
+    {
+     "title": "Nothing OS 5.0, 안드로이드17 기반 대개편…폰1·폰2·CMF폰1은 제외됐다",
+     "source": "wikitree.co.kr",
+     "date": "2026-08-26",
+     "link": "https://www.wikitree.co.kr/articles/1154934"
+    },
+    {
+     "title": "[통신 풍향계] SKT '갤럭시 퀀텀7' 출시·KT '대졸 신입사원' 채용·LGU+ '...",
+     "source": "newsworks.co.kr",
+     "date": "2026-08-25",
+     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=851503"
+    },
     {
      "title": "[비즈톡톡] 존 터너스 취임 앞둔 애플… 감원·가격인상·현금정책 재정...",
      "source": "biz.chosun.com",
@@ -1065,54 +1113,6 @@
      "source": "newspim.com",
      "date": "2026-08-25",
      "link": "https://www.newspim.com/news/view/20260825000003"
-    },
-    {
-     "title": "MBK는 홈플러스 회생에 급한 불만 껐나?...전단채 피해자 덮친 '10년 무이...",
-     "source": "joongangenews.com",
-     "date": "2026-08-25",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=542346"
-    },
-    {
-     "title": "[게임뉴스] 카카오게임즈 및 그리프라인 소식 외",
-     "source": "gamevu.co.kr",
-     "date": "2026-08-24",
-     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=60248"
-    },
-    {
-     "title": "[게임 앤 플랫폼] 컴투스 형제 26일 신작 출격…‘제우스’·‘페이탈 클...",
-     "source": "seoultimes.news",
-     "date": "2026-08-24",
-     "link": "https://www.seoultimes.news/news/article.html?no=2000099097"
-    },
-    {
-     "title": "축구장에 '카트라이더' 떴다…넥슨, 제주SK FC와 이색 협업 진행",
-     "source": "financialpost.co.kr",
-     "date": "2026-08-24",
-     "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=271797"
-    },
-    {
-     "title": "'젤네일 금지'가 쏘아올린 공포…알고리즘이 키운 '독성 괴담'",
-     "source": "ktnews.com",
-     "date": "2026-08-24",
-     "link": "http://www.ktnews.com/news/articleView.html?idxno=147904"
-    },
-    {
-     "title": "한국한의약진흥원, 청년 창업 아이디어 발굴… 실질적 사업화 전방위 지...",
-     "source": "breaknews.com",
-     "date": "2026-08-24",
-     "link": "http://www.breaknews.com/1231046"
-    },
-    {
-     "title": "춘천시, 강원FC 홈경기 불가 통보에 강한 유감… “일방적 조건 수용 불...",
-     "source": "breaknews.com",
-     "date": "2026-08-24",
-     "link": "http://www.breaknews.com/1231043"
-    },
-    {
-     "title": "[커피talk]② 커피전문점 긴장시킨 편의점 '1000원 커피'…CU·GS25·세븐일...",
-     "source": "joongangenews.com",
-     "date": "2026-08-24",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=542277"
     }
    ]
   }
