@@ -11,6 +11,10 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <!-- 썸네일 메이커용 한글 서체(구글 폰트) — 캔버스에서 골라 쓴다 -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Nanum+Myeongjo:wght@400;700;800&family=Black+Han+Sans&family=Do+Hyeon&family=Gowun+Dodum&family=Jua&display=swap" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <!-- Firebase (주간보고 실시간 공유) -->
@@ -6783,10 +6787,43 @@
       {k:'side',   n:'좌우 분할',       d:'왼쪽 색 패널 + 오른쪽 사진'},
       {k:'top',    n:'상단 라벨',       d:'위에 라벨 + 큰 제목'}
     ];
+    /* 서체 — 캔버스에 그리려면 폰트가 실제로 로드돼 있어야 하므로 고를 때 document.fonts.load()로 기다린다 */
+    const TM_FONTS=[
+      {k:'pre',  n:'프리텐다드', d:'기본 · 깔끔한 고딕', f:'"Pretendard Variable",Pretendard,system-ui,sans-serif', w:['500','700','800','900']},
+      {k:'noto', n:'본고딕',     d:'네이버·블로그에 무난', f:'"Noto Sans KR",sans-serif',                          w:['400','700','900']},
+      {k:'myeon',n:'나눔명조',   d:'감성·인테리어 톤',    f:'"Nanum Myeongjo",serif',                              w:['400','700','800']},
+      {k:'black',n:'블랙한산스', d:'임팩트 · 아주 굵게',  f:'"Black Han Sans",sans-serif',                         w:['400']},
+      {k:'dohy', n:'도현',       d:'둥글고 친근한 제목',  f:'"Do Hyeon",sans-serif',                               w:['400']},
+      {k:'jua',  n:'주아',       d:'말랑한 손글씨 느낌',  f:'"Jua",sans-serif',                                    w:['400']},
+      {k:'gowun',n:'고운돋움',   d:'담백한 본문체',      f:'"Gowun Dodum",sans-serif',                            w:['400']}
+    ];
     let TM={ img:null, imgName:'', size:'sq', theme:'ink', layout:'bottom',
-             badge:'AQARA LIFE', title:'', sub:'', scale:100, dim:45, align:'left', shadow:true, round:false };
+             badge:'AQARA LIFE', title:'', sub:'', scale:100, dim:45, align:'left', shadow:true, round:false,
+             font:'pre', weight:'800', track:0, lead:122 };
+    function tmFont(){ return TM_FONTS.find(f=>f.k===TM.font)||TM_FONTS[0]; }
+    function tmWeight(){ const w=tmFont().w; return w.indexOf(TM.weight)>=0?TM.weight:w[w.length-1]; }
+    /* 구글 폰트 한글은 유니코드 구간별로 잘려서 배포된다.
+       load()에 '쓸 글자'를 같이 넘기지 않으면 그 글자가 든 조각을 안 받아와서
+       캔버스에 절반만 그 서체로 그려진다(나머지는 시스템 폰트로 폴백). */
+    function tmEnsureFont(){
+      if(typeof document.fonts==='undefined'||!document.fonts.load) return Promise.resolve();
+      const F=tmFont(), fam=F.f.split(',')[0];
+      const txt=(TM.badge||'')+(TM.title||'')+(TM.sub||'')+'여기에 제목을 입력하세요 가나다라마바사 ABC 0123';
+      return Promise.all(F.w.map(w=>document.fonts.load(w+' 80px '+fam, txt))).catch(()=>{});
+    }
+    function tmSetFont(k){
+      TM.font=k; const F=tmFont();
+      if(F.w.indexOf(TM.weight)<0) TM.weight=F.w[F.w.length-1];
+      tmDraw(); tmPaintChips();                       // 폴백으로라도 바로 보여주고
+      tmEnsureFont().then(()=>{ tmDraw(); tmPaintChips(); });   // 폰트가 도착하면 다시 그린다
+    }
 
-    function tmSet(k,v){ TM[k]=v; tmDraw(); if(k==='layout'||k==='size'||k==='theme') tmPaintChips(); }
+    function tmSet(k,v){ TM[k]=v; tmDraw();
+      if(k==='layout'||k==='size'||k==='theme'||k==='weight') tmPaintChips();
+      // 새로 입력한 글자가 웹폰트 조각에 없을 수 있으므로 받아온 뒤 다시 그린다
+      if(k==='title'||k==='sub'||k==='badge'){ clearTimeout(window.__tmFT);
+        window.__tmFT=setTimeout(()=>tmEnsureFont().then(tmDraw),350); }
+    }
     function tmCur(){ return TM_SIZES.find(s=>s.k===TM.size)||TM_SIZES[0]; }
     function tmTheme(){ return TM_THEMES.find(t=>t.k===TM.theme)||TM_THEMES[0]; }
 
@@ -6838,7 +6875,8 @@
       const S=tmCur(), T=tmTheme(), W=S.w, H=S.h;
       cv.width=W; cv.height=H;
       const ctx=cv.getContext('2d');
-      const FAM='"Pretendard Variable",Pretendard,system-ui,"Malgun Gothic",sans-serif';
+      const FAM=tmFont().f, WT=tmWeight(), LEAD=(TM.lead||122)/100;
+      ctx.letterSpacing=(TM.track||0)+'px';   // 자간 — 재기와 그리기에 같은 값이 걸려야 줄바꿈이 맞는다
       const pad=Math.round(W*0.075);
       ctx.clearRect(0,0,W,H);
       ctx.fillStyle=T.bg; ctx.fillRect(0,0,W,H);
@@ -6861,9 +6899,9 @@
       const sc0=TM.scale/100;
       const tSize0=Math.round(W*(S.k==='wide'||S.k==='yt'?0.088:0.098)*sc0);
       const sSize0=Math.round(tSize0*0.42), bSize0=Math.round(tSize0*0.30);
-      const m_tw=tmWrap(ctx,TM.title||'여기에 제목을 입력하세요',boxW0,3,tSize0,'800',FAM0);
+      const m_tw=tmWrap(ctx,TM.title||'여기에 제목을 입력하세요',boxW0,3,tSize0,WT,FAM0);
       const m_sw=TM.sub?tmWrap(ctx,TM.sub,boxW0,2,sSize0,'500',FAM0):{lines:[],fs:sSize0};
-      const m_lineH=Math.round(m_tw.fs*1.22), m_subH=Math.round(m_sw.fs*1.35);
+      const m_lineH=Math.round(m_tw.fs*LEAD), m_subH=Math.round(m_sw.fs*1.35);
       const m_badgeH=TM.badge?Math.round(bSize0*2.1):0;
       const m_blockH=m_badgeH+(m_badgeH?Math.round(m_tw.fs*0.42):0)+m_tw.lines.length*m_lineH
                     +(m_sw.lines.length?Math.round(m_tw.fs*0.30)+m_sw.lines.length*m_subH:0);
@@ -6898,9 +6936,9 @@
 
       if(TM.shadow&&onDark){ ctx.shadowColor='rgba(0,0,0,.45)'; ctx.shadowBlur=Math.round(W*0.012); ctx.shadowOffsetY=Math.round(W*0.004); }
 
-      const tw=tmWrap(ctx,TM.title||'여기에 제목을 입력하세요',boxW,3,titleSize,'800',FAM);
+      const tw=tmWrap(ctx,TM.title||'여기에 제목을 입력하세요',boxW,3,titleSize,WT,FAM);
       const sw=TM.sub?tmWrap(ctx,TM.sub,boxW,2,subSize,'500',FAM):{lines:[],fs:subSize};
-      const lineH=Math.round(tw.fs*1.22), subH=Math.round(sw.fs*1.35);
+      const lineH=Math.round(tw.fs*LEAD), subH=Math.round(sw.fs*1.35);
       const badgeH=TM.badge?Math.round(badgeSize*2.1):0;
       const blockH=badgeH+(badgeH?Math.round(tw.fs*0.42):0)+tw.lines.length*lineH+(sw.lines.length?Math.round(tw.fs*0.30)+sw.lines.length*subH:0);
 
@@ -6919,6 +6957,7 @@
       if(TM.badge){
         ctx.save(); ctx.shadowColor='transparent';
         ctx.font='800 '+badgeSize+'px '+FAM;
+        ctx.letterSpacing='0px';
         const bw=ctx.measureText(TM.badge).width+badgeSize*1.5, bh=badgeSize*2.0;
         const bx=al==='center'?ax-bw/2:ax;
         ctx.fillStyle=ac; tmRound(ctx,bx,y,bw,bh,bh/2); ctx.fill();
@@ -6928,7 +6967,7 @@
         ctx.restore(); ctx.textBaseline='top';
         y+=bh+Math.round(tw.fs*0.42);
       }
-      ctx.fillStyle=fg; ctx.font='800 '+tw.fs+'px '+FAM;
+      ctx.fillStyle=fg; ctx.font=WT+' '+tw.fs+'px '+FAM;
       tw.lines.forEach((l,i)=>ctx.fillText(l,ax,y+i*lineH));
       y+=tw.lines.length*lineH;
       if(sw.lines.length){
@@ -7002,6 +7041,15 @@
            <p class="text-[11px] text-slate-400 mt-0.5">${TM.img.width}×${TM.img.height}px · 다른 이미지를 끌어다 놓으면 교체됩니다</p>`
         : `<p class="text-[12.5px] font-semibold text-slate-500">레퍼런스 이미지를 여기에 끌어다 놓거나 클릭해서 선택</p>
            <p class="text-[11px] text-slate-400 mt-0.5">JPG · PNG · 이미지가 없어도 배경색으로 만들 수 있습니다</p>`;
+      // 서체 버튼 활성 표시 + 그 서체가 가진 굵기만 고르게
+      document.querySelectorAll('[data-tmf]').forEach(b=>{
+        const on=b.dataset.tmf===TM.font;
+        b.className='text-[12px] rounded-lg px-2.5 py-1.5 border transition '+(on?'bg-ink text-white border-ink':'border-[#E6E6E3] text-slate-500 hover:bg-[#FAFAF9]');
+      });
+      const ws=document.getElementById('tmWeightSel');
+      if(ws){ const F=tmFont(), LB={'400':'보통','500':'중간','700':'굵게','800':'더 굵게','900':'가장 굵게'};
+        ws.innerHTML=F.w.map(w=>`<option value="${w}" ${w===tmWeight()?'selected':''}>${LB[w]||w}</option>`).join('');
+        ws.disabled=F.w.length<2; ws.classList.toggle('opacity-50',F.w.length<2); }
       ['size','theme','layout'].forEach(g=>{
         document.querySelectorAll('[data-tmg="'+g+'"]').forEach(b=>{
           const on=b.dataset.tmv===TM[g];
@@ -7065,6 +7113,28 @@
           <div>
             <p class="text-[12px] font-extrabold text-ink mb-1.5">5. 색</p>
             <div class="flex flex-wrap gap-1.5">${TM_THEMES.map(t=>chip('theme',t.k,t.n)).join('')}</div>
+          </div>
+          <div>
+            <p class="text-[12px] font-extrabold text-ink mb-1.5">6. 글꼴</p>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              ${TM_FONTS.map(f=>`<button data-tmf="${f.k}" onclick="tmSetFont('${f.k}')"
+                class="text-[12px] rounded-lg px-2.5 py-1.5 border border-[#E6E6E3] text-slate-500" style="font-family:${f.f}">
+                ${esc(f.n)}<span class="block text-[10px] font-normal opacity-70" style="font-family:inherit">${esc(f.d)}</span></button>`).join('')}
+            </div>
+            <div class="flex flex-wrap items-end gap-3">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 mb-1">굵기</label>
+                <select id="tmWeightSel" onchange="tmSet('weight',this.value)" class="text-[12.5px] border border-[#E6E6E3] rounded-lg px-2 py-1.5 bg-white"></select>
+              </div>
+              <div class="flex-1 min-w-[120px]">
+                <label class="block text-[11px] font-bold text-slate-500 mb-1">자간</label>
+                <input type="range" min="-6" max="10" value="${TM.track}" oninput="tmSet('track',+this.value)" class="w-full accent-[#7C5CFF]" />
+              </div>
+              <div class="flex-1 min-w-[120px]">
+                <label class="block text-[11px] font-bold text-slate-500 mb-1">줄 간격</label>
+                <input type="range" min="100" max="170" value="${TM.lead}" oninput="tmSet('lead',+this.value)" class="w-full accent-[#7C5CFF]" />
+              </div>
+            </div>
           </div>
           <div class="grid grid-cols-2 gap-4 pt-1">
             <div>
