@@ -247,6 +247,9 @@
         .sem-edit{ border-bottom:1px dashed #D8D4C8; cursor:text; outline:none; display:inline-block; min-width:12px; }
         .sem-edit:hover{ background:#FFFBEC; border-bottom-color:#FBC400; }
         .sem-edit:focus{ background:#FFF8E1; border-bottom:1px solid #FBC400; border-radius:3px; padding:0 2px; }
+        .rr-rr{ outline:none; border-bottom:1px dashed transparent; cursor:text; }
+        .rr-rr:hover{ border-bottom-color:#D8D4C8; background:#FAFAF9; }
+        .rr-rr:focus{ background:#F7F4FF; border-bottom:1px solid #7C5CFF; }
         .ln-edit{ border-bottom:1px dashed #D8D4C8; cursor:text; outline:none; display:inline-block; min-width:12px; }
         .ln-edit:hover{ background:#F7F4FF; border-bottom-color:#7C5CFF; }
         .ln-edit:focus{ background:#F7F4FF; border-bottom:1px solid #7C5CFF; border-radius:3px; padding:0 2px; }
@@ -1291,6 +1294,7 @@
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">업무</p>
              <button id="mktBtn-weekly" onclick="mktSub('weekly')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">주간보고</button>
              <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
+             <button id="mktBtn-rnr" onclick="mktSub('rnr')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">R&R 체크리스트</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">프로젝트</p>
@@ -1319,6 +1323,7 @@
        <div id="mktSeminarSlot"></div>
        <div id="view-brandbook" class="hidden"><div id="bbBody"></div></div>
        <div id="view-lanseon" class="hidden"><div id="lnBody"></div></div>
+       <div id="view-rnr" class="hidden"><div id="rrBody"></div></div>
        <div id="mktKpiSlot"></div>
        <div id="mktAdSlot"></div>
        <div id="mktReportSlot"></div>
@@ -6530,6 +6535,227 @@
       lnSave('logx.'+n,'1'); lnSave('log.'+i+'.date',d); lnSave('log.'+i+'.by',lnMe());
       renderLanseon(); setTimeout(()=>lnGo('lnSec8'),80); }
 
+    /* ===================== 🧭 R&R 체크리스트 (업무 · 일별 일정관리) =====================
+       역할(R&R)을 사람별로 정의하고, 그 역할에서 나오는 업무를 '날짜별 체크리스트'로 관리한다.
+       Firebase `rnr/`에 저장 → 팀 전체 실시간 공유(세미나·랜선집들이와 같은 방식).
+         rnr/duties/<id>   = {who, title, cat, rep, date, memo, ord}   업무 정의
+         rnr/check/<날짜>/<id> = '1'                                    그 날짜에 완료
+         rnr/rr/<사람>      = 역할 한 줄
+       rep(반복): daily=매일 / wk0~wk6=매주 그 요일(0=일) / once=지정일 하루만 */
+    const RR_PEOPLE=[
+      {n:'강유선', role:'팀장', c:'#5B44C7'},
+      {n:'정여진', role:'마케터', c:'#D68134'},
+      {n:'홍수영', role:'디자이너', c:'#5E7350'}
+    ];
+    const RR_RR_DEF={
+      '강유선':'팀 전체 목표·우선순위 결정 · 대외 커뮤니케이션(대행사·매체·유관부서) · 예산 집행 승인 · 주간보고 취합과 리뷰',
+      '정여진':'언론홍보·콘텐츠 기획 운영 · 캠페인 실행과 성과 집계 · 온드미디어(블로그·인스타) 발행 · 레퍼런스 리서치',
+      '홍수영':'브랜드 비주얼 가이드 관리 · 제작물 디자인(상세·배너·SNS) · 영상 편집 관리 · 제작 원본 아카이빙'
+    };
+    const RR_CATS=['언론홍보','콘텐츠','캠페인','디자인','운영·정산','기타'];
+    const RR_CATC={'언론홍보':'#5B44C7','콘텐츠':'#D68134','캠페인':'#BF5332','디자인':'#5E7350','운영·정산':'#8A6A00','기타':'#6E6E73'};
+    const RR_DOW=['일','월','화','수','목','금','토'];
+    let RR_DUTY={}, RR_CHK={}, RR_RR={}, rrOn=false, RR_DATE='', RR_WHO='', RR_NEW=null;
+
+    function rrRef(p){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('rnr/'+p):null; }
+    function rrToday(){ const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
+    function rrLocal(k){ try{ return JSON.parse(localStorage.getItem('aqaraRnr_'+k)||'{}'); }catch(e){ return {}; } }
+    function rrSaveLocal(k,v){ try{ localStorage.setItem('aqaraRnr_'+k,JSON.stringify(v)); }catch(e){} }
+    function rrUse(){ return !!rrRef('duties'); }
+
+    function rrStart(){
+      if(rrOn) return;
+      if(!rrUse()){ RR_DUTY=rrLocal('duties'); RR_CHK=rrLocal('check'); RR_RR=rrLocal('rr'); return; }
+      rrOn=true;
+      const bind=(p,set)=>rrRef(p).on('value',s=>{ set(s.val()||{}); if(mktSection==='rnr') rrPaint(); },
+        e=>console.warn('R&R 읽기 오류(권한?):',e&&e.message));
+      bind('duties',v=>RR_DUTY=v); bind('check',v=>RR_CHK=v); bind('rr',v=>RR_RR=v);
+    }
+    function rrSave(p,k,v){
+      const ref=rrRef(p);
+      if(ref){ (v==null?ref.child(k).remove():ref.child(k).set(v)).catch(e=>alert('저장 실패: '+((e&&e.message)||''))); }
+      else { const m=(p==='duties'?RR_DUTY:p==='check'?RR_CHK:RR_RR); if(v==null) delete m[k]; else m[k]=v; rrSaveLocal(p,m); rrPaint(); }
+    }
+    function rrSaveDeep(p,path,v){          // check/<날짜>/<id> 처럼 두 단계
+      const ref=rrRef(p);
+      if(ref){ (v==null?ref.child(path).remove():ref.child(path).set(v)).catch(e=>alert('저장 실패: '+((e&&e.message)||''))); }
+      else { const a=path.split('/'), m=RR_CHK; m[a[0]]=m[a[0]]||{}; if(v==null) delete m[a[0]][a[1]]; else m[a[0]][a[1]]=v; rrSaveLocal('check',m); rrPaint(); }
+    }
+
+    /* 이 날짜에 해야 하는 업무인가 */
+    function rrDue(d,date){
+      const rep=d.rep||'once';
+      if(rep==='daily') return true;
+      if(rep.indexOf('wk')===0) return String(new Date(date+'T00:00:00').getDay())===rep.slice(2);
+      return (d.date||'')===date;
+    }
+    function rrList(date,who){
+      return Object.keys(RR_DUTY||{})
+        .map(id=>Object.assign({id:id},RR_DUTY[id]||{}))
+        .filter(d=>d.title&&rrDue(d,date)&&(!who||d.who===who))
+        .sort((a,b)=>(a.who===b.who?((a.ord||0)-(b.ord||0)):0)||((RR_CATS.indexOf(a.cat)+1)-(RR_CATS.indexOf(b.cat)+1)));
+    }
+    function rrDone(date,id){ return !!((RR_CHK||{})[date]||{})[id]; }
+    function rrToggle(date,id){ rrSaveDeep('check',date+'/'+id, rrDone(date,id)?null:'1'); }
+    function rrRepLabel(d){ const r=d.rep||'once';
+      return r==='daily'?'매일':(r.indexOf('wk')===0?('매주 '+RR_DOW[+r.slice(2)]):(d.date||'지정일')); }
+    function rrShift(n){ const d=new Date(RR_DATE+'T00:00:00'); d.setDate(d.getDate()+n);
+      RR_DATE=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); rrPaint(); }
+    function rrSetDate(v){ if(v) RR_DATE=v; rrPaint(); }
+    function rrFocus(w){ RR_WHO=(RR_WHO===w?'':w); rrPaint(); }
+    function rrNewOpen(who){ RR_NEW={who:who||RR_PEOPLE[0].n, title:'', cat:'기타', rep:'once', date:RR_DATE, memo:''}; rrPaint();
+      setTimeout(()=>{ const el=document.getElementById('rrNewTitle'); if(el) el.focus(); },40); }
+    function rrNewSet(k,v){ if(RR_NEW) RR_NEW[k]=v; if(k==='rep') rrPaint(); }
+    function rrNewCancel(){ RR_NEW=null; rrPaint(); }
+    function rrNewAdd(){
+      if(!RR_NEW) return;
+      const t=(document.getElementById('rrNewTitle')||{}).value||'';
+      if(!t.trim()){ alert('업무 이름을 입력해주세요.'); return; }
+      const memo=(document.getElementById('rrNewMemo')||{}).value||'';
+      const id='d'+Date.now()+Math.floor(Math.random()*100);
+      rrSave('duties',id,{who:RR_NEW.who,title:t.trim(),cat:RR_NEW.cat,rep:RR_NEW.rep,date:RR_NEW.date||RR_DATE,memo:memo.trim(),ord:Date.now()});
+      RR_NEW=null; rrPaint();
+    }
+    function rrDel(id){ const d=RR_DUTY[id]||{};
+      if(!confirm('“'+(d.title||'')+'” 업무를 삭제할까요?\n(지난 체크 기록도 함께 사라집니다)')) return;
+      rrSave('duties',id,null); rrPaint(); }
+    function rrEdit(id,f,v){ const d=Object.assign({},RR_DUTY[id]||{}); d[f]=v; rrSave('duties',id,d); }
+    function rrRrEdit(el){ const w=el.dataset.w; if(!w) return; const v=(el.innerText||'').trim();
+      if(v===(RR_RR[w]||RR_RR_DEF[w]||'')) return; rrSave('rr',w,v); }
+
+    /* 최근 7일 달성률 — 사람별 */
+    function rrWeek(who){
+      const out=[];
+      for(let i=6;i>=0;i--){ const d=new Date(RR_DATE+'T00:00:00'); d.setDate(d.getDate()-i);
+        const date=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        const li=rrList(date,who), done=li.filter(x=>rrDone(date,x.id)).length;
+        out.push({date:date, n:li.length, done:done, pct:li.length?Math.round(done/li.length*100):-1}); }
+      return out;
+    }
+
+    function renderRnr(){ if(!RR_DATE) RR_DATE=rrToday(); rrStart(); rrPaint(); }
+
+    function rrPaint(){
+      const box=document.getElementById('rrBody'); if(!box) return;
+      const date=RR_DATE||rrToday(), td=rrToday();
+      const dow=RR_DOW[new Date(date+'T00:00:00').getDay()];
+      const all=rrList(date,''), doneN=all.filter(d=>rrDone(date,d.id)).length;
+      const pct=all.length?Math.round(doneN/all.length*100):0;
+      const people=RR_PEOPLE;
+
+      const card=(p)=>{
+        const li=rrList(date,p.n), dn=li.filter(d=>rrDone(date,d.id)).length;
+        const pp=li.length?Math.round(dn/li.length*100):0;
+        const wk=rrWeek(p.n);
+        return `<div class="rounded-xl border border-[#E6E6E3] bg-white overflow-hidden ${RR_WHO&&RR_WHO!==p.n?'opacity-45':''}">
+          <div class="px-4 py-3 border-b border-[#F1EFE9]" style="border-top:3px solid ${p.c}">
+            <div class="flex items-baseline justify-between gap-2">
+              <p class="text-[14px] font-extrabold text-ink">${esc(p.n)}
+                <span class="text-[11px] font-semibold ml-1" style="color:${p.c}">${esc(p.role)}</span></p>
+              <p class="text-[12px] font-extrabold num" style="color:${pp===100&&li.length?'#5E7350':'#26282A'}">${dn}/${li.length}</p>
+            </div>
+            <div class="h-1.5 rounded bg-slate-100 mt-2 overflow-hidden"><div class="h-1.5 rounded" style="width:${pp}%;background:${p.c}"></div></div>
+            <p class="text-[11px] text-slate-500 leading-relaxed mt-2 rr-rr" data-w="${esc(p.n)}" contenteditable="true" spellcheck="false"
+               onblur="rrRrEdit(this)" title="클릭해서 R&R을 고칠 수 있습니다">${esc(RR_RR[p.n]||RR_RR_DEF[p.n]||'')}</p>
+          </div>
+          <div class="p-3 space-y-1.5">
+            ${li.length?li.map(d=>{ const on=rrDone(date,d.id), cc=RR_CATC[d.cat]||'#6E6E73';
+              return `<div class="group flex items-start gap-2 rounded-lg px-2 py-1.5 ${on?'bg-[#F7FBF5]':'hover:bg-[#FAFAF9]'}">
+                <input type="checkbox" ${on?'checked':''} onchange="rrToggle('${date}','${d.id}')" class="mt-0.5 w-4 h-4 accent-[#5E7350] shrink-0" />
+                <div class="min-w-0 flex-1">
+                  <p class="text-[13px] leading-snug ${on?'text-slate-400 line-through':'text-ink font-medium'}">${esc(d.title)}</p>
+                  <div class="flex flex-wrap items-center gap-1.5 mt-0.5">
+                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="background:${cc}18;color:${cc}">${esc(d.cat||'기타')}</span>
+                    <span class="text-[10px] text-slate-400">${esc(rrRepLabel(d))}</span>
+                    ${d.memo?`<span class="text-[10.5px] text-slate-400 truncate">· ${esc(d.memo)}</span>`:''}
+                  </div>
+                </div>
+                <button onclick="rrDel('${d.id}')" title="삭제" class="opacity-0 group-hover:opacity-100 text-[11px] text-slate-300 hover:text-ared shrink-0">✕</button>
+              </div>`; }).join('')
+              :'<p class="text-[12px] text-slate-300 text-center py-4">이 날짜에 배정된 업무가 없습니다.</p>'}
+            <button onclick="rrNewOpen('${esc(p.n)}')" class="w-full text-[12px] font-semibold text-slate-400 hover:text-ink border border-dashed border-[#E6E6E3] hover:border-ink rounded-lg py-1.5 mt-1">＋ ${esc(p.n)} 업무 추가</button>
+          </div>
+          <div class="px-3 pb-3">
+            <p class="text-[10px] font-bold text-slate-400 mb-1">최근 7일</p>
+            <div class="flex gap-1">${wk.map(w=>{
+              const col=w.pct<0?'#EDEDEA':(w.pct===100?'#5E7350':(w.pct>=50?'#D68134':'#BF5332'));
+              return `<div class="flex-1 text-center" title="${w.date} · ${w.n?w.done+'/'+w.n:'업무 없음'}">
+                <div class="h-6 rounded" style="background:${col};opacity:${w.pct<0?.5:(0.35+(w.pct/100)*0.65)}"></div>
+                <p class="text-[9px] text-slate-400 mt-0.5">${RR_DOW[new Date(w.date+'T00:00:00').getDay()]}</p></div>`; }).join('')}</div>
+          </div>
+        </div>`; };
+
+      box.innerHTML=`
+      <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#7C5CFF">
+        <p class="text-[12.5px] text-slate-500">사람별 <b class="text-ink">R&amp;R</b>과 그 역할에서 나오는 <b class="text-ink">일별 업무</b>를 함께 관리합니다.
+          체크와 수정은 <b class="text-agreen">팀원 모두에게 실시간 반영</b>됩니다. R&amp;R 문구는 클릭해서 바로 고칠 수 있습니다.</p>
+        <p id="rrConn" class="text-[11.5px] font-semibold mt-1 ${rrUse()?'text-agreen':'text-ared'}">${rrUse()?'🟢 실시간 공유 중':'⚠️ 서버에 연결되지 않아 이 브라우저에만 저장됩니다'}</p>
+      </div>
+
+      <div class="card p-4 sm:p-5 mb-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <button onclick="rrShift(-1)" class="text-[13px] border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg w-8 h-8 font-bold">◀</button>
+            <div class="text-center">
+              <input type="date" value="${date}" onchange="rrSetDate(this.value)" class="text-[15px] font-extrabold text-ink border border-[#E6E6E3] rounded-lg px-2.5 py-1.5" />
+              <p class="text-[11px] mt-0.5 ${date===td?'text-agreen font-bold':'text-slate-400'}">${dow}요일${date===td?' · 오늘':''}</p>
+            </div>
+            <button onclick="rrShift(1)" class="text-[13px] border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg w-8 h-8 font-bold">▶</button>
+            ${date!==td?`<button onclick="rrSetDate('${td}')" class="text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1.5">오늘로</button>`:''}
+          </div>
+          <div class="flex items-center gap-3 flex-wrap">
+            <div class="text-right">
+              <p class="text-[11px] font-bold text-slate-500">이 날짜 전체 진행</p>
+              <p class="text-[20px] font-extrabold num leading-none" style="color:${pct===100&&all.length?'#5E7350':'#26282A'}">${doneN}<span class="text-[13px] text-slate-400">/${all.length}</span>
+                <span class="text-[13px] ml-1" style="color:${pct===100&&all.length?'#5E7350':'#8A6A00'}">${pct}%</span></p>
+            </div>
+            <button onclick="rrNewOpen('')" class="text-[13px] font-bold bg-ink text-white hover:brightness-125 px-3.5 py-2 rounded-lg">＋ 업무 추가</button>
+          </div>
+        </div>
+        <div class="h-2 rounded bg-slate-100 mt-3 overflow-hidden"><div class="h-2 rounded bg-agreen" style="width:${pct}%"></div></div>
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          <button onclick="rrFocus('')" class="text-[11px] font-bold rounded-full px-2.5 py-1 border ${!RR_WHO?'bg-ink text-white border-ink':'border-[#E6E6E3] text-slate-500 hover:bg-[#FAFAF9]'}">전체 ${all.length}</button>
+          ${people.map(p=>{ const n=rrList(date,p.n).length, on=RR_WHO===p.n;
+            return `<button onclick="rrFocus('${esc(p.n)}')" class="text-[11px] font-bold rounded-full px-2.5 py-1 border"
+              style="${on?`background:${p.c};border-color:${p.c};color:#fff`:`background:${p.c}18;border-color:${p.c}40;color:${p.c}`}">${esc(p.n)} ${n}</button>`; }).join('')}
+        </div>
+      </div>
+
+      ${RR_NEW?`
+      <div class="card p-4 mb-4 border-2 border-ink">
+        <p class="text-[13px] font-extrabold text-ink mb-2.5">＋ 업무 추가</p>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5">
+          <div><label class="block text-[11px] font-bold text-slate-500 mb-1">담당</label>
+            <select onchange="rrNewSet('who',this.value)" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2 py-2">
+              ${people.map(p=>`<option ${RR_NEW.who===p.n?'selected':''}>${esc(p.n)}</option>`).join('')}</select></div>
+          <div class="md:col-span-2"><label class="block text-[11px] font-bold text-slate-500 mb-1">업무 이름</label>
+            <input id="rrNewTitle" value="${esc(RR_NEW.title)}" placeholder="예: 보도자료 배포 매체 리스트 점검"
+              onkeydown="if(event.key==='Enter')rrNewAdd()" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2.5 py-2" /></div>
+          <div><label class="block text-[11px] font-bold text-slate-500 mb-1">구분</label>
+            <select onchange="rrNewSet('cat',this.value)" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2 py-2">
+              ${RR_CATS.map(c=>`<option ${RR_NEW.cat===c?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 mt-2.5">
+          <div><label class="block text-[11px] font-bold text-slate-500 mb-1">반복</label>
+            <select onchange="rrNewSet('rep',this.value)" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2 py-2">
+              <option value="once" ${RR_NEW.rep==='once'?'selected':''}>이 날 하루만</option>
+              <option value="daily" ${RR_NEW.rep==='daily'?'selected':''}>매일</option>
+              ${RR_DOW.map((d,i)=>`<option value="wk${i}" ${RR_NEW.rep==='wk'+i?'selected':''}>매주 ${d}요일</option>`).join('')}
+            </select></div>
+          <div><label class="block text-[11px] font-bold text-slate-500 mb-1">${RR_NEW.rep==='once'?'날짜':'시작 기준일'}</label>
+            <input type="date" value="${esc(RR_NEW.date||date)}" onchange="rrNewSet('date',this.value)" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2 py-2" /></div>
+          <div class="md:col-span-2"><label class="block text-[11px] font-bold text-slate-500 mb-1">메모 <span class="font-normal text-slate-400">(선택)</span></label>
+            <input id="rrNewMemo" value="" placeholder="산출물·마감 조건 등" class="w-full text-[13px] border border-[#E6E6E3] rounded-lg px-2.5 py-2" /></div>
+        </div>
+        <div class="flex justify-end gap-2 mt-3">
+          <button onclick="rrNewCancel()" class="text-[13px] border border-[#E6E6E3] hover:bg-[#FAFAF9] px-3.5 py-2 rounded-lg">취소</button>
+          <button onclick="rrNewAdd()" class="text-[13px] font-bold bg-ink text-white hover:brightness-125 px-4 py-2 rounded-lg">추가</button>
+        </div>
+      </div>`:''}
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">${people.map(card).join('')}</div>
+      <div class="h-8"></div>`;
+    }
     // ===== ONLY MKT (팀 전용) =====
     const MKT_PW='aqara2026';   // 팀 공유 비밀번호(정적 사이트=화면 가림 수준). 변경 시 이 값 수정.
     let mktSection='weekly';   // ONLY MKT 첫 화면 = 주간보고
@@ -6558,6 +6784,7 @@
       const sem=document.getElementById('view-seminar'); if(sem) sem.classList.toggle('hidden', s!=='seminar');
       const bbv=document.getElementById('view-brandbook'); if(bbv) bbv.classList.toggle('hidden', s!=='brandbook');
       const lnv=document.getElementById('view-lanseon'); if(lnv) lnv.classList.toggle('hidden', s!=='lanseon');
+      const rrv=document.getElementById('view-rnr'); if(rrv) rrv.classList.toggle('hidden', s!=='rnr');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
       document.getElementById('mktSec-prpitch').classList.toggle('hidden', s!=='prpitch');
@@ -6565,7 +6792,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','insta','blog','prpitch','ad','seminar','brandbook','lanseon','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
+      ['weekly','medialist','calendar','rnr','insta','blog','prpitch','ad','seminar','brandbook','lanseon','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -6576,6 +6803,7 @@
       if(s==='seminar'){ renderSeminar(); }
       if(s==='brandbook'){ renderBrandbook(); }
       if(s==='lanseon'){ renderLanseon(); }
+      if(s==='rnr'){ renderRnr(); }
       if(s==='report'){ mktReportSub(mktRptView); }
 
     }
