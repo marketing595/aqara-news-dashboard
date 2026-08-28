@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-28 04:07",
+ "generatedAt": "2026-08-29 05:13",
  "brands": [
   {
    "name": "아카라",
@@ -124,12 +124,12 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
-    "아카라 홈캠",
     "아카라 스위치",
+    "아카라 홈캠",
     "아카라 l100",
     "아카라치",
-    "아카라카",
-    "아카라이브 핫딜"
+    "아카라이브 핫딜",
+    "메랜 아카라이브"
    ],
    "recent": [
     {
@@ -343,16 +343,16 @@
     ]
    ],
    "related": [
-    "헤이홈",
     "헤이홈 홈캠",
+    "헤이홈",
     "헤이홈 sd카드",
     "헤이홈 연결",
     "헤이홈 거치대",
     "헤이홈 중국",
     "헤이홈 공유",
     "헤이홈 오프라인",
-    "헤이홈 홈캠거치대",
-    "헤이홈 스위치"
+    "헤이홈카메라",
+    "헤이홈 홈캠거치대"
    ],
    "recent": [
     {
@@ -451,222 +451,218 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67713,
+   "total": 67801,
    "sentiment": {
-    "pos": 16,
-    "neu": 42,
-    "neg": 2
+    "pos": 59,
+    "neu": 1,
+    "neg": 0
    },
    "keywords": [
     [
      "AI",
-     28
+     45
     ],
     [
-     "가전",
+     "구매",
+     44
+    ],
+    [
+     "고객",
+     29
+    ],
+    [
+     "이보나",
      25
     ],
     [
-     "SmartThings",
-     23
+     "DA사업부",
+     25
     ],
     [
-     "에어컨",
+     "상무는",
+     25
+    ],
+    [
+     "1위",
+     25
+    ],
+    [
+     "결합해",
+     24
+    ],
+    [
+     "경험을",
+     24
+    ],
+    [
+     "기술력과",
+     22
+    ],
+    [
+     "탐색부터",
+     22
+    ],
+    [
+     "관리까지",
+     22
+    ],
+    [
+     "4년",
+     22
+    ],
+    [
+     "연속",
+     22
+    ],
+    [
+     "중심의",
      20
     ],
     [
-     "LG전자",
-     17
+     "앞으로도",
+     20
     ],
     [
-     "냉장고",
-     15
+     "디지털",
+     20
     ],
     [
-     "한전",
-     13
-    ],
-    [
-     "캐시백",
-     13
-    ],
-    [
-     "공휴일",
-     12
-    ],
-    [
-     "오전",
-     11
-    ],
-    [
-     "11시부터",
-     11
-    ],
-    [
-     "오후",
-     11
-    ],
-    [
-     "또는",
-     11
-    ],
-    [
-     "가전을",
-     11
-    ],
-    [
-     "세탁기",
-     11
-    ],
-    [
-     "삼성전자서비스",
-     11
-    ],
-    [
-     "주말과",
-     10
-    ],
-    [
-     "2시",
-     10
+     "여정에서",
+     19
     ]
    ],
    "posWords": [
     [
-     "확대",
-     6
+     "1위",
+     25
+    ],
+    [
+     "우수",
+     17
+    ],
+    [
+     "혁신",
+     7
     ],
     [
      "강화",
      5
     ],
     [
-     "1위",
+     "확대",
      3
     ],
     [
-     "글로벌",
-     2
-    ],
-    [
-     "성장",
-     2
-    ],
-    [
-     "프리미엄",
-     1
-    ],
-    [
-     "혁신",
-     1
-    ],
-    [
      "개선",
+     1
+    ],
+    [
+     "호평",
      1
     ]
    ],
    "related": [
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스 연결",
-    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스",
+    "삼성 스마트싱스 연결",
+    "삼성 스마트싱스 에어컨",
+    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 연결 안됨",
-    "삼성 스마트싱스 아이폰"
+    "삼성 스마트싱스 아이폰",
+    "삼성 스마트싱스 에어컨 등록"
    ],
    "recent": [
     {
-     "title": "한전, 삼성·LG전자와 '스마트가전 캐시백' 시범사업…재생에너지 활용...",
-     "source": "efnews.co.kr",
-     "date": "2026-08-27",
-     "link": "http://www.efnews.co.kr/news/articleView.html?idxno=131946"
+     "title": "[가전 트렌드] LG전자, 가전 구독 캠페인으로 '2026 에피어워드' 브론즈...",
+     "source": "ibabynews.com",
+     "date": "2026-08-28",
+     "link": "https://www.ibabynews.com/news/articleView.html?idxno=154083"
     },
     {
-     "title": "한전, 주말 낮 '스마트가전 캐시백 시범사업' 추진",
-     "source": "newspost.kr",
-     "date": "2026-08-27",
-     "link": "https://www.newspost.kr/news/articleView.html?idxno=225262"
+     "title": "삼성전자, 디지털고객경험지수 종합가전 4년 연속 1위",
+     "source": "webeconomy.co.kr",
+     "date": "2026-08-28",
+     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2281862"
     },
     {
-     "title": "\"휴일 낮 세탁기 돌리면 캐시백 드려요\"… 한전, 삼성·LG와 시범 사업",
-     "source": "hankookilbo.com",
-     "date": "2026-08-27",
-     "link": "https://n.news.naver.com/mnews/article/469/0000950489?sid=101"
+     "title": "[재계 투데이] SK하이닉스, 美 인디애나 HBM 공장 착공 外",
+     "source": "news.dealsitetv.com",
+     "date": "2026-08-28",
+     "link": "https://news.dealsitetv.com/articles/175354"
     },
     {
-     "title": "삼성전자가 적용한 매터 인증, 보안카메라까지 확대",
-     "source": "전자신문",
-     "date": "2026-08-27",
-     "link": "https://n.news.naver.com/mnews/article/030/0003460932?sid=105"
-    },
-    {
-     "title": "[에너지소식] 한전, 삼성·LG가을 ‘스마트가전 캐시백’ 추진…한수원...",
-     "source": "ekn.kr",
-     "date": "2026-08-27",
-     "link": "https://www.ekn.kr/web/view.php?key=20260827020267259"
-    },
-    {
-     "title": "한전, 삼성전자·LG전자와 스마트 가전 캐시백 시범 사업 시행",
-     "source": "daily.hankooki.com",
-     "date": "2026-08-27",
-     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1399879"
-    },
-    {
-     "title": "주말·공휴일 낮 스마트가전 쓰면 돈 돌려줘",
-     "source": "naeil.com",
-     "date": "2026-08-27",
-     "link": "https://www.naeil.com/news/read/600201?ref=naver"
-    },
-    {
-     "title": "한전, 삼성·LG와 '스마트가전 캐시백' 시범사업 추진",
-     "source": "m-i.kr",
-     "date": "2026-08-27",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1406756"
-    },
-    {
-     "title": "주말 낮에 세탁기·건조기 돌리면 캐시백…한전, kWh당 100원 지급",
-     "source": "newspim.com",
-     "date": "2026-08-27",
-     "link": "https://www.newspim.com/news/view/20260827000371"
-    },
-    {
-     "title": "\"주말 낮 스마트가전 쓰면 캐시백\"…한전·삼성·LG 시범사업 추진",
+     "title": "SK하이닉스, 美 인디애나 HBM 생산기지 착공…SKT, 전 국민 AI 비서 구축...",
      "source": "sisaon.co.kr",
-     "date": "2026-08-27",
-     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=203872"
+     "date": "2026-08-28",
+     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=203922"
     },
     {
-     "title": "주말 낮 세탁기 돌리면 ‘캐시백’…한전, 삼성·LG와 시범사업",
-     "source": "뉴시스",
-     "date": "2026-08-27",
-     "link": "https://n.news.naver.com/mnews/article/003/0014151402?sid=101"
+     "title": "삼성전자, AI 가전 경쟁력 '고객경험'으로 확장…DCXI 4년째 정상",
+     "source": "biztribune.co.kr",
+     "date": "2026-08-28",
+     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=358077"
     },
     {
-     "title": "주말 낮시간 가전쓰면 전기요금 환급 …한전·삼성·LG 뭉쳤다",
-     "source": "newstree.kr",
-     "date": "2026-08-27",
-     "link": "https://www.newstree.kr/newsView/ntr202608270003"
+     "title": "삼성전자, 디지털고객경험 4년 연속 1위",
+     "source": "todayenergy.kr",
+     "date": "2026-08-28",
+     "link": "https://www.todayenergy.kr/news/articleView.html?idxno=302141"
     },
     {
-     "title": "한전, 삼성·LG전자와 '스마트가전 캐시백' … 낮 시간 사용 땐 1kWh당 10...",
-     "source": "biz.newdaily.co.kr",
-     "date": "2026-08-27",
-     "link": "https://biz.newdaily.co.kr/site/data/html/2026/08/27/2026082700058.html"
+     "title": "삼성전자, ‘디지털고객경험지수’ 종합가전 4년 연속 1위…구매과정 전...",
+     "source": "swtvnews.com",
+     "date": "2026-08-28",
+     "link": "https://swtvnews.com/news/newsview.php?ncode=1065591499073554"
     },
     {
-     "title": "한전, 삼성·LG전자와 '스마트가전 캐시백' 시범사업 추진",
+     "title": "삼성전자, 가전 구매·설치·관리 디지털 서비스 고도화",
      "source": "ziksir.com",
-     "date": "2026-08-27",
-     "link": "https://www.ziksir.com/news/articleView.html?idxno=144453"
+     "date": "2026-08-28",
+     "link": "https://www.ziksir.com/news/articleView.html?idxno=144643"
     },
     {
-     "title": "삼성전자, 가전 생활 모든 순간을 AI로 연결하다",
-     "source": "한국경제",
-     "date": "2026-08-27",
-     "link": "https://n.news.naver.com/mnews/article/015/0005325303?sid=101"
+     "title": "가전 고르는 순간부터 관리까지… 삼성전자, 디지털 고객경험 4년째 정...",
+     "source": "mediapen.com",
+     "date": "2026-08-28",
+     "link": "https://www.mediapen.com/news/view/1119543"
+    },
+    {
+     "title": "삼성전자, DCXI 종합가전 4년 연속 1위…AI·비교하기·챗봇 등 전 과정...",
+     "source": "cbci.co.kr",
+     "date": "2026-08-28",
+     "link": "https://www.cbci.co.kr/news/articleView.html?idxno=601831"
+    },
+    {
+     "title": "한가인이 14년째 냉장고 안 바꾼 이유?…삼성 가전, 고객경험지수 4년째...",
+     "source": "segye.com",
+     "date": "2026-08-28",
+     "link": "https://n.news.naver.com/mnews/article/022/0004154484?sid=101"
+    },
+    {
+     "title": "삼성전자, 디지털 고객경험 종합가전 4년 연속 1위…AI·원격진단 서비...",
+     "source": "mediafine.co.kr",
+     "date": "2026-08-28",
+     "link": "https://www.mediafine.co.kr/news/articleView.html?idxno=88210"
+    },
+    {
+     "title": "삼성전자, AI 가전 구매·관리 경험 연결…디지털고객경험 4년 연속 1위",
+     "source": "e-science.co.kr",
+     "date": "2026-08-28",
+     "link": "https://www.e-science.co.kr/news/articleView.html?idxno=134298"
+    },
+    {
+     "title": "삼성전자, 디지털 고객경험 종합가전 4년 연속 1위…AI 가전 경쟁력 통...",
+     "source": "joongangenews.com",
+     "date": "2026-08-28",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=543519"
+    },
+    {
+     "title": "삼성전자, 디지털고객경험지수 4년 연속 1위…AI 가전 경험 강화",
+     "source": "newslock.co.kr",
+     "date": "2026-08-28",
+     "link": "http://www.newslock.co.kr/news/articleView.html?idxno=134980"
     }
    ]
   },
@@ -674,10 +670,10 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77157,
+   "total": 77159,
    "sentiment": {
-    "pos": 4,
-    "neu": 56,
+    "pos": 3,
+    "neu": 57,
     "neg": 0
    },
    "keywords": [
@@ -687,7 +683,7 @@
     ],
     [
      "스마트가전",
-     82
+     81
     ],
     [
      "LG전자",
@@ -695,11 +691,7 @@
     ],
     [
      "서비스를",
-     37
-    ],
-    [
-     "한국전력",
-     34
+     35
     ],
     [
      "ThinQ",
@@ -710,6 +702,10 @@
      34
     ],
     [
+     "한국전력",
+     33
+    ],
+    [
      "AI홈",
      32
     ],
@@ -718,28 +714,28 @@
      30
     ],
     [
+     "고객은",
+     27
+    ],
+    [
      "웹사이트에서",
-     29
+     27
     ],
     [
      "신청한",
-     29
-    ],
-    [
-     "고객은",
-     28
-    ],
-    [
-     "페이지에서",
-     24
-    ],
-    [
-     "LG전자는",
-     22
+     27
     ],
     [
      "전력",
-     20
+     22
+    ],
+    [
+     "페이지에서",
+     22
+    ],
+    [
+     "LG전자는",
+     21
     ],
     [
      "건조기",
@@ -747,11 +743,11 @@
     ],
     [
      "시범사업",
-     20
+     19
     ],
     [
-     "누르면",
-     19
+     "가전",
+     18
     ]
    ],
    "posWords": [
@@ -762,25 +758,33 @@
     [
      "투자",
      1
-    ],
-    [
-     "기대",
-     1
     ]
    ],
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐앱",
-    "lg 씽큐 에어컨 연결",
     "lg 씽큐 가족 공유",
-    "lg 씽큐 연결",
     "lg 씽큐 세탁기",
+    "lg 씽큐 연결",
     "lg 씽큐 와이파이",
     "lg 씽큐 앱 에어컨",
-    "lg 씽큐 냉장고"
+    "lg 씽큐 냉장고",
+    "lg 씽큐 티비연결",
+    "lg 씽큐 오류"
    ],
    "recent": [
+    {
+     "title": "'스마트가전 캐시백'…LG전자·한국전력, 에너지 절약 새 바람",
+     "source": "ppss.kr",
+     "date": "2026-08-28",
+     "link": "https://www.ppss.kr/news/articleView.html?idxno=307514"
+    },
+    {
+     "title": "\"전기 아끼면 요금 자동 환급\"…LG전자, 한국전력과 '스마트가전 캐시백...",
+     "source": "thepublic.kr",
+     "date": "2026-08-28",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=316452"
+    },
     {
      "title": "LG전자, 한국전력과 효율적인 에너지 사용 문화 확산 '맞손'",
      "source": "the-today.com",
@@ -854,22 +858,10 @@
      "link": "https://n.news.naver.com/mnews/article/366/0001188721?sid=105"
     },
     {
-     "title": "LG전자, 한전과 손잡고 '스마트가전 캐시백' 시범사업…전력수급 안정화...",
-     "source": "bizwnews.com",
-     "date": "2026-08-27",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=144485"
-    },
-    {
      "title": "LG전자, '전력 효율 향상·희토류 재활용' 본격화",
      "source": "techm.kr",
      "date": "2026-08-27",
      "link": "https://www.techm.kr/news/articleView.html?idxno=154661"
-    },
-    {
-     "title": "\"봄·가을 낮 시간대 요금 자동 차감 혜택\"…LG전자, 한전 연동 스마트가...",
-     "source": "m-i.kr",
-     "date": "2026-08-27",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1406812"
     }
    ]
   },
@@ -877,7 +869,7 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75566,
+   "total": 75573,
    "sentiment": {
     "pos": 16,
     "neu": 34,
@@ -886,92 +878,100 @@
    "keywords": [
     [
      "AI",
-     22
+     24
     ],
     [
      "전문",
-     17
+     16
     ],
     [
      "으로",
-     16
+     15
     ],
     [
      "번역한",
-     16
+     15
     ],
     [
      "기사의",
-     16
+     15
     ],
     [
      "아래는",
-     15
-    ],
-    [
-     "기사를",
-     15
-    ],
-    [
-     "번역",
-     15
-    ],
-    [
-     "입니다",
-     15
-    ],
-    [
-     "구글번역",
      14
     ],
     [
-     "높이기를",
+     "기사를",
+     14
+    ],
+    [
+     "번역",
+     14
+    ],
+    [
+     "입니다",
+     14
+    ],
+    [
+     "구글번역",
      13
+    ],
+    [
+     "높이기를",
+     12
     ],
     [
      "노력하고",
-     13
+     12
     ],
     [
      "있습니다",
-     13
+     12
     ],
     [
      "번역에",
-     13
+     12
     ],
     [
      "오류가",
-     13
-    ],
-    [
-     "이해도",
-     11
-    ],
-    [
-     "있을",
-     10
+     12
     ],
     [
      "제미나이",
+     11
+    ],
+    [
+     "Google",
+     10
+    ],
+    [
+     "이미지",
      10
     ]
    ],
    "posWords": [
     [
-     "글로벌",
+     "확대",
      5
     ],
     [
-     "확대",
+     "글로벌",
      4
     ],
     [
-     "기대",
+     "혁신",
+     4
+    ],
+    [
+     "인기",
      3
     ],
     [
-     "계약",
+     "강화",
+     3
+    ],
+    [
+     "기대",
      3
     ],
     [
@@ -981,29 +981,63 @@
     [
      "프리미엄",
      2
-    ],
-    [
-     "파트너십",
-     2
-    ],
-    [
-     "인기",
-     2
     ]
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈 허브",
     "구글 홈",
+    "구글 홈 허브",
     "구글 홈 미니",
     "구글 홈페이지",
-    "구글 홈 미니 연결",
     "구글 홈 미니 초기화",
+    "구글 홈 미니 연결",
     "구글 홈 미니 2세대",
-    "구글 홈 어시스턴트",
-    "구글 홈 스피커 연결"
+    "구글 홈버튼",
+    "구글 홈 제미나이"
    ],
    "recent": [
+    {
+     "title": "갤럭시S26, 베타7 돼서야 폴드8 인기 기능 받아…저가형 S26FE보다 늦어",
+     "source": "wikitree.co.kr",
+     "date": "2026-08-29",
+     "link": "https://www.wikitree.co.kr/articles/1155744"
+    },
+    {
+     "title": "안드로이드 17, 통신 프라이버시 강화…ECH·2G 사기 대응 도입",
+     "source": "digitaltoday.co.kr",
+     "date": "2026-08-28",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=696566"
+    },
+    {
+     "title": "홈플러스 부실에 3년 적자까지…MBK·영풍 연합, 106분기 흑자 고려아연...",
+     "source": "joongangenews.com",
+     "date": "2026-08-28",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=543657"
+    },
+    {
+     "title": "[시사브리핑] 2026년 8월호",
+     "source": "chiefexe.com",
+     "date": "2026-08-28",
+     "link": "https://www.chiefexe.com/news/ArticleView.asp?listId=NTAyMHx8bGltaXRfZmFsc2Ug"
+    },
+    {
+     "title": "[경제소식] KB금융, 중진공과 싱가포르서 K-스타트업 12개사 글로벌 진출...",
+     "source": "4th.kr",
+     "date": "2026-08-28",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2117042"
+    },
+    {
+     "title": "팀 쿡 후임은 25년차 ‘애플맨’…AI 격랑 속 혁신 이룰까",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-08-28",
+     "link": "https://n.news.naver.com/mnews/article/016/0002689723?sid=104"
+    },
+    {
+     "title": "\"은행 문자 맞나?\"…통신사 필터까지 뚫는 '가짜 기지국', 구글이 막는다",
+     "source": "뉴시스",
+     "date": "2026-08-28",
+     "link": "https://n.news.naver.com/mnews/article/003/0014154346?sid=105"
+    },
     {
      "title": "모토로라, 안드로이드17 50종 넘는 폰에 순차 배포…스택 위젯·테마 아...",
      "source": "wikitree.co.kr",
@@ -1051,48 +1085,6 @@
      "source": "biz.sbs.co.kr",
      "date": "2026-08-27",
      "link": "https://n.news.naver.com/mnews/article/374/0000529578?sid=104"
-    },
-    {
-     "title": "핏빗 창업자들, 화면 없는 가족 돌봄 웨어러블 ‘루푸 링크’ 249달러에...",
-     "source": "wikitree.co.kr",
-     "date": "2026-08-27",
-     "link": "https://www.wikitree.co.kr/articles/1155234"
-    },
-    {
-     "title": "성남시, 일본 나고야시와 교류 협력 강화",
-     "source": "breaknews.com",
-     "date": "2026-08-26",
-     "link": "http://www.breaknews.com/1231620"
-    },
-    {
-     "title": "[if.interview] 'K-컬처 다음은 K-스포츠'...데이터로 미래를 그리는 '플...",
-     "source": "fourfourtwo.co.kr",
-     "date": "2026-08-26",
-     "link": "https://m.sports.naver.com/kfootball/article/411/0000086373"
-    },
-    {
-     "title": "이케아 코리아, 161개 제품 평균 15% 가격 인하",
-     "source": "breaknews.com",
-     "date": "2026-08-26",
-     "link": "http://www.breaknews.com/1231587"
-    },
-    {
-     "title": "국민의힘 장동혁·정점식, 검찰 보완수사권 폐지 강력 반대",
-     "source": "breaknews.com",
-     "date": "2026-08-26",
-     "link": "http://www.breaknews.com/1231579"
-    },
-    {
-     "title": "픽셀워치5, 가격만 최대 50달러 올랐지만 신기능은 픽셀워치4도 업데이...",
-     "source": "wikitree.co.kr",
-     "date": "2026-08-26",
-     "link": "https://www.wikitree.co.kr/articles/1154941"
-    },
-    {
-     "title": "[창간 12년 기획] 현대차그룹·삼성전자·LG전자, AI로 산업 대전환",
-     "source": "getnews.co.kr",
-     "date": "2026-08-26",
-     "link": "https://www.getnews.co.kr/news/articleView.html?idxno=878734"
     }
    ]
   }
