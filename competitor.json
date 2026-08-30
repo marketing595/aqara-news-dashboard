@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-29 22:51",
+ "generatedAt": "2026-08-30 22:49",
  "brands": [
   {
    "name": "아카라",
@@ -127,9 +127,9 @@
     "아카라 홈캠",
     "아카라 l100",
     "아카라 스위치",
-    "아카라카",
+    "명조 아카라이브",
     "아카라치",
-    "원신 아카라이브"
+    "아카라카"
    ],
    "recent": [
     {
@@ -451,7 +451,7 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67806,
+   "total": 67809,
    "sentiment": {
     "pos": 57,
     "neu": 2,
@@ -460,11 +460,11 @@
    "keywords": [
     [
      "AI",
-     45
+     48
     ],
     [
      "구매",
-     45
+     46
     ],
     [
      "고객",
@@ -527,7 +527,7 @@
      20
     ],
     [
-     "삼성전자는",
+     "디지털고객경험지수",
      19
     ]
    ],
@@ -553,11 +553,15 @@
      3
     ],
     [
-     "개선",
+     "글로벌",
+     2
+    ],
+    [
+     "프리미엄",
      1
     ],
     [
-     "호평",
+     "개선",
      1
     ]
    ],
@@ -570,10 +574,28 @@
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 에어컨 등록",
-    "삼성 스마트싱스 아이폰"
+    "삼성 스마트싱스 아이폰",
+    "아이폰 삼성 스마트싱스"
    ],
    "recent": [
+    {
+     "title": "獨 프리미엄 매장서 만난 삼성 AI 생태계…게임스컴까지 '체험'으로 유럽...",
+     "source": "전자신문",
+     "date": "2026-08-30",
+     "link": "https://n.news.naver.com/mnews/article/030/0003461576?sid=105"
+    },
+    {
+     "title": "[가봤다] \"단순 전시 넘어 체험 콘텐츠로 승부\"...쾰른 최대 가전 매장에...",
+     "source": "techm.kr",
+     "date": "2026-08-30",
+     "link": "https://www.techm.kr/news/articleView.html?idxno=154753"
+    },
+    {
+     "title": "삼성전자, 구매 전·중·후 평가 '디지털고객경험지수'서 4년 연속 1위",
+     "source": "thepublic.kr",
+     "date": "2026-08-30",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=316726"
+    },
     {
      "title": "삼성전자, 디지털고객경험지수 종합가전 4년 연속 1위",
      "source": "econovill.com",
@@ -645,24 +667,6 @@
      "source": "ziksir.com",
      "date": "2026-08-28",
      "link": "https://www.ziksir.com/news/articleView.html?idxno=144643"
-    },
-    {
-     "title": "가전 고르는 순간부터 관리까지… 삼성전자, 디지털 고객경험 4년째 정...",
-     "source": "mediapen.com",
-     "date": "2026-08-28",
-     "link": "https://www.mediapen.com/news/view/1119543"
-    },
-    {
-     "title": "삼성전자, DCXI 종합가전 4년 연속 1위…AI·비교하기·챗봇 등 전 과정...",
-     "source": "cbci.co.kr",
-     "date": "2026-08-28",
-     "link": "https://www.cbci.co.kr/news/articleView.html?idxno=601831"
-    },
-    {
-     "title": "한가인이 14년째 냉장고 안 바꾼 이유?…삼성 가전, 고객경험지수 4년째...",
-     "source": "segye.com",
-     "date": "2026-08-28",
-     "link": "https://n.news.naver.com/mnews/article/022/0004154484?sid=101"
     }
    ]
   },
@@ -764,12 +768,12 @@
     "lg 씽큐",
     "lg 씽큐온",
     "lg 씽큐 가족 공유",
-    "lg 씽큐 세탁기",
     "lg 씽큐 연결",
+    "lg 씽큐 세탁기",
     "lg 씽큐 와이파이",
+    "lg 씽큐 냉장고",
     "lg 씽큐 앱 에어컨",
     "lg 씽큐 티비연결",
-    "lg 씽큐 에어컨 오류",
     "lg 씽큐 오류"
    ],
    "recent": [
@@ -869,75 +873,39 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75573,
+   "total": 75579,
    "sentiment": {
     "pos": 16,
-    "neu": 34,
-    "neg": 10
+    "neu": 35,
+    "neg": 9
    },
    "keywords": [
     [
      "AI",
-     24
-    ],
-    [
-     "전문",
-     16
-    ],
-    [
-     "으로",
-     15
-    ],
-    [
-     "번역한",
-     15
-    ],
-    [
-     "기사의",
-     15
-    ],
-    [
-     "아래는",
-     14
-    ],
-    [
-     "기사를",
-     14
-    ],
-    [
-     "번역",
-     14
-    ],
-    [
-     "입니다",
-     14
-    ],
-    [
-     "구글번역",
-     13
-    ],
-    [
-     "높이기를",
-     12
-    ],
-    [
-     "노력하고",
-     12
-    ],
-    [
-     "있습니다",
-     12
-    ],
-    [
-     "번역에",
-     12
-    ],
-    [
-     "오류가",
-     12
+     28
     ],
     [
      "제미나이",
+     15
+    ],
+    [
+     "으로",
+     12
+    ],
+    [
+     "전문",
+     12
+    ],
+    [
+     "번역한",
+     11
+    ],
+    [
+     "기사의",
+     11
+    ],
+    [
+     "입니다",
      11
     ],
     [
@@ -945,8 +913,44 @@
      10
     ],
     [
+     "Gemini",
+     10
+    ],
+    [
      "이미지",
      10
+    ],
+    [
+     "아래는",
+     10
+    ],
+    [
+     "기사를",
+     10
+    ],
+    [
+     "번역",
+     10
+    ],
+    [
+     "구글번역",
+     10
+    ],
+    [
+     "번역에",
+     10
+    ],
+    [
+     "오류가",
+     10
+    ],
+    [
+     "그래픽",
+     9
+    ],
+    [
+     "활용",
+     9
     ]
    ],
    "posWords": [
@@ -955,12 +959,12 @@
      5
     ],
     [
-     "글로벌",
+     "혁신",
      4
     ],
     [
-     "혁신",
-     4
+     "프리미엄",
+     3
     ],
     [
      "인기",
@@ -971,7 +975,7 @@
      3
     ],
     [
-     "기대",
+     "글로벌",
      3
     ],
     [
@@ -979,7 +983,7 @@
      2
     ],
     [
-     "프리미엄",
+     "파트너십",
      2
     ]
    ],
@@ -993,9 +997,45 @@
     "구글 홈 미니 연결",
     "구글 홈 미니 2세대",
     "구글 홈 어시스턴트",
-    "구글 홈버튼"
+    "구글 홈 제미나이"
    ],
    "recent": [
+    {
+     "title": "獨 프리미엄 매장서 만난 삼성 AI 생태계…게임스컴까지 '체험'으로 유럽...",
+     "source": "전자신문",
+     "date": "2026-08-30",
+     "link": "https://n.news.naver.com/mnews/article/030/0003461576?sid=105"
+    },
+    {
+     "title": "갤럭시S26 더 똑똑해진다... Z 폴드8 신기능 3종 추가",
+     "source": "betanews.net",
+     "date": "2026-08-30",
+     "link": "https://www.betanews.net/article/view/beta202608300026"
+    },
+    {
+     "title": "[주간 유통 나침반] 한 주 앞둔 홈플러스 운명의 날·쿠팡 vs 공정위·유...",
+     "source": "joongangenews.com",
+     "date": "2026-08-30",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=543888"
+    },
+    {
+     "title": "[가봤다] \"단순 전시 넘어 체험 콘텐츠로 승부\"...쾰른 최대 가전 매장에...",
+     "source": "techm.kr",
+     "date": "2026-08-30",
+     "link": "https://www.techm.kr/news/articleView.html?idxno=154753"
+    },
+    {
+     "title": "애플 iOS 27, 구글 제미나이 품은 “시리AI”로 9월 중순 전면 개편",
+     "source": "wikitree.co.kr",
+     "date": "2026-08-30",
+     "link": "https://www.wikitree.co.kr/articles/1155898"
+    },
+    {
+     "title": "소니 브라비아 9 II, RGB LED 최강 평가에도 OLED 못 넘었다는 CNET 결론",
+     "source": "wikitree.co.kr",
+     "date": "2026-08-29",
+     "link": "https://www.wikitree.co.kr/articles/1155876"
+    },
     {
      "title": "갤럭시S26, 베타7 돼서야 폴드8 인기 기능 받아…저가형 S26FE보다 늦어",
      "source": "wikitree.co.kr",
@@ -1049,42 +1089,6 @@
      "source": "it.donga.com",
      "date": "2026-08-27",
      "link": "https://it.donga.com/109426/"
-    },
-    {
-     "title": "넷플릭스, ‘들쥐’·‘포핸즈’·‘비서진’·‘어쩔수가없다 확장판’...",
-     "source": "breaknews.com",
-     "date": "2026-08-27",
-     "link": "http://www.breaknews.com/1232169"
-    },
-    {
-     "title": "고려아연 주총 앞두고 '안건설명자료' 공방…MBK·영풍은 왜 삭제 요구했...",
-     "source": "joongangenews.com",
-     "date": "2026-08-27",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=543428"
-    },
-    {
-     "title": "\"물가가 임금 상승률 추월\"...근로 실질임금 석 달 연속 감소",
-     "source": "joongangenews.com",
-     "date": "2026-08-27",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=543305"
-    },
-    {
-     "title": "현대백화점, 추석 선물세트 라이프스타일 상품 119종으로 확대",
-     "source": "breaknews.com",
-     "date": "2026-08-27",
-     "link": "http://www.breaknews.com/1231921"
-    },
-    {
-     "title": "삼성전자, 가전 생활 모든 순간을 AI로 연결하다",
-     "source": "한국경제",
-     "date": "2026-08-27",
-     "link": "https://n.news.naver.com/mnews/article/015/0005325303?sid=101"
-    },
-    {
-     "title": "[글로벌 비즈 브리핑] 오픈AI, 자체 칩 연내 투입…\"삼성 HBM4 탑재 추정...",
-     "source": "biz.sbs.co.kr",
-     "date": "2026-08-27",
-     "link": "https://n.news.naver.com/mnews/article/374/0000529578?sid=104"
     }
    ]
   }
