@@ -1298,7 +1298,7 @@
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">업무</p>
              <button id="mktBtn-weekly" onclick="mktSub('weekly')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">주간보고</button>
              <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
-             <button id="mktBtn-rnr" onclick="mktSub('rnr')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">R&R 체크리스트</button>
+             <button id="mktBtn-rnr" onclick="mktSub('rnr')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">TASKS</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">프로젝트</p>
@@ -6541,13 +6541,43 @@
       lnSave('logx.'+n,'1'); lnSave('log.'+i+'.date',d); lnSave('log.'+i+'.by',lnMe());
       renderLanseon(); setTimeout(()=>lnGo('lnSec8'),80); }
 
-    /* ===================== 🧭 R&R 체크리스트 (업무 · 일별 일정관리) =====================
+    /* ===================== 🧭 TASKS (개인 업무 · 일별 일정관리) =====================
        역할(R&R)을 사람별로 정의하고, 그 역할에서 나오는 업무를 '날짜별 체크리스트'로 관리한다.
        Firebase `rnr/`에 저장 → 팀 전체 실시간 공유(세미나·랜선집들이와 같은 방식).
          rnr/duties/<id>   = {who, title, cat, rep, date, memo, ord}   업무 정의
          rnr/check/<날짜>/<id> = '1'                                    그 날짜에 완료
          rnr/rr/<사람>      = 역할 한 줄
-       rep(반복): daily=매일 / wk0~wk6=매주 그 요일(0=일) / once=지정일 하루만 */
+       rep(반복): daily=매일 / wk0~wk6=매주 그 요일(0=일) / once=지정일 하루만
+
+       ▷ 개인화: 회사 구글 계정으로 로그인한 사람이 누구인지 /api/auth/me 로 확인해서
+         기본적으로 '내 업무'만 보여준다. 팀 상황을 봐야 할 때는 '팀 전체 보기'로 전환.
+         (데이터는 하나를 같이 쓰므로 화면만 걸러 주는 것이고, 로그인 정보가 없으면 전체를 보여준다) */
+    const RR_MAIL={
+      'yeojin@aqara.kr':'정여진',
+      'ykang@aqara.kr' :'강유선',
+      'syhong@aqara.kr':'홍수영'
+    };
+    let RR_ME='', RR_MEWHO='', RR_MEDONE=false, RR_ALL=false;
+
+    /* 로그인 이메일 확인 — 한 번만 물어보고 결과가 오면 다시 그린다 */
+    function rrWhoAmI(){
+      if(RR_MEDONE) return;
+      RR_MEDONE=true;
+      fetch('/api/auth/me',{credentials:'same-origin'})
+        .then(r=>r.ok?r.json():{})
+        .then(j=>{
+          RR_ME=String((j&&j.email)||'').toLowerCase();
+          RR_MEWHO=RR_MAIL[RR_ME]||'';
+          if(!RR_MEWHO) RR_ALL=true;              // 명단에 없는 계정이면 전체를 본다
+          if(mktSection==='rnr') rrPaint();
+        })
+        .catch(()=>{ RR_ALL=true; if(mktSection==='rnr') rrPaint(); });
+    }
+    function rrScope(){ return (RR_MEWHO&&!RR_ALL)?RR_PEOPLE.filter(p=>p.n===RR_MEWHO):RR_PEOPLE; }
+    function rrToggleAll(){ RR_ALL=!RR_ALL;
+      if(!RR_ALL){ RR_WHO=''; if(RR_NEW) RR_NEW.who=RR_MEWHO; }   // 내 화면으로 돌아오면 추가 폼도 내 것으로
+      rrPaint(); }
+
     const RR_PEOPLE=[
       {n:'강유선', role:'팀장', c:'#5B44C7'},
       {n:'정여진', role:'마케터', c:'#D68134'},
@@ -6609,7 +6639,7 @@
       RR_DATE=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); rrPaint(); }
     function rrSetDate(v){ if(v) RR_DATE=v; rrPaint(); }
     function rrFocus(w){ RR_WHO=(RR_WHO===w?'':w); rrPaint(); }
-    function rrNewOpen(who){ RR_NEW={who:who||RR_PEOPLE[0].n, title:'', cat:'기타', rep:'once', date:RR_DATE, memo:''}; rrPaint();
+    function rrNewOpen(who){ RR_NEW={who:who||RR_MEWHO||RR_PEOPLE[0].n, title:'', cat:'기타', rep:'once', date:RR_DATE, memo:''}; rrPaint();
       setTimeout(()=>{ const el=document.getElementById('rrNewTitle'); if(el) el.focus(); },40); }
     function rrNewSet(k,v){ if(RR_NEW) RR_NEW[k]=v; if(k==='rep') rrPaint(); }
     function rrNewCancel(){ RR_NEW=null; rrPaint(); }
@@ -6639,15 +6669,17 @@
       return out;
     }
 
-    function renderRnr(){ if(!RR_DATE) RR_DATE=rrToday(); rrStart(); rrPaint(); }
+    function renderRnr(){ if(!RR_DATE) RR_DATE=rrToday(); rrWhoAmI(); rrStart(); rrPaint(); }
 
     function rrPaint(){
       const box=document.getElementById('rrBody'); if(!box) return;
       const date=RR_DATE||rrToday(), td=rrToday();
       const dow=RR_DOW[new Date(date+'T00:00:00').getDay()];
-      const all=rrList(date,''), doneN=all.filter(d=>rrDone(date,d.id)).length;
+      const people=rrScope();                       // 로그인한 사람만 / 팀 전체
+      const mine=(people.length===1&&!!RR_MEWHO&&!RR_ALL);
+      const all=mine?rrList(date,RR_MEWHO):rrList(date,'');
+      const doneN=all.filter(d=>rrDone(date,d.id)).length;
       const pct=all.length?Math.round(doneN/all.length*100):0;
-      const people=RR_PEOPLE;
 
       const card=(p)=>{
         const li=rrList(date,p.n), dn=li.filter(d=>rrDone(date,d.id)).length;
@@ -6693,9 +6725,18 @@
 
       box.innerHTML=`
       <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#7C5CFF">
-        <p class="text-[12.5px] text-slate-500">사람별 <b class="text-ink">R&amp;R</b>과 그 역할에서 나오는 <b class="text-ink">일별 업무</b>를 함께 관리합니다.
-          체크와 수정은 <b class="text-agreen">팀원 모두에게 실시간 반영</b>됩니다. R&amp;R 문구는 클릭해서 바로 고칠 수 있습니다.</p>
-        <p id="rrConn" class="text-[11.5px] font-semibold mt-1 ${rrUse()?'text-agreen':'text-ared'}">${rrUse()?'🟢 실시간 공유 중':'⚠️ 서버에 연결되지 않아 이 브라우저에만 저장됩니다'}</p>
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <div class="min-w-0">
+            <p class="text-[15px] font-extrabold text-ink leading-tight">TASKS${RR_MEWHO?` <span class="text-[12.5px] font-bold" style="color:${(RR_PEOPLE.find(p=>p.n===RR_MEWHO)||{}).c||'#7C5CFF'}">· ${esc(RR_MEWHO)}님</span>`:''}</p>
+            <p class="text-[12.5px] text-slate-500 mt-1">${mine
+              ? `로그인한 계정(<b class="text-ink">${esc(RR_ME)}</b>) 기준으로 <b class="text-ink">내 업무만</b> 보여줍니다.`
+              : (RR_MEWHO?`지금은 <b class="text-ink">팀 전체</b>를 보고 있습니다.`
+                        :`로그인 정보를 확인할 수 없어 <b class="text-ink">팀 전체</b>를 보여줍니다.`)}
+              체크와 수정은 <b class="text-agreen">팀원 모두에게 실시간 반영</b>됩니다. R&amp;R 문구는 클릭해서 바로 고칠 수 있습니다.</p>
+          </div>
+          ${RR_MEWHO?`<button onclick="rrToggleAll()" class="shrink-0 text-[12px] font-bold rounded-lg px-3 py-1.5 border ${RR_ALL?'bg-ink text-white border-ink':'border-[#E6E6E3] text-slate-500 hover:bg-[#FAFAF9]'}">${RR_ALL?'👤 내 업무만 보기':'👥 팀 전체 보기'}</button>`:''}
+        </div>
+        <p id="rrConn" class="text-[11.5px] font-semibold mt-1.5 ${rrUse()?'text-agreen':'text-ared'}">${rrUse()?'🟢 실시간 공유 중':'⚠️ 서버에 연결되지 않아 이 브라우저에만 저장됩니다'}</p>
       </div>
 
       <div class="card p-4 sm:p-5 mb-4">
@@ -6711,7 +6752,7 @@
           </div>
           <div class="flex items-center gap-3 flex-wrap">
             <div class="text-right">
-              <p class="text-[11px] font-bold text-slate-500">이 날짜 전체 진행</p>
+              <p class="text-[11px] font-bold text-slate-500">${mine?'이 날짜 내 진행':'이 날짜 전체 진행'}</p>
               <p class="text-[20px] font-extrabold num leading-none" style="color:${pct===100&&all.length?'#5E7350':'#26282A'}">${doneN}<span class="text-[13px] text-slate-400">/${all.length}</span>
                 <span class="text-[13px] ml-1" style="color:${pct===100&&all.length?'#5E7350':'#8A6A00'}">${pct}%</span></p>
             </div>
@@ -6719,12 +6760,12 @@
           </div>
         </div>
         <div class="h-2 rounded bg-slate-100 mt-3 overflow-hidden"><div class="h-2 rounded bg-agreen" style="width:${pct}%"></div></div>
-        <div class="flex flex-wrap gap-1.5 mt-3">
+        ${mine?'':`<div class="flex flex-wrap gap-1.5 mt-3">
           <button onclick="rrFocus('')" class="text-[11px] font-bold rounded-full px-2.5 py-1 border ${!RR_WHO?'bg-ink text-white border-ink':'border-[#E6E6E3] text-slate-500 hover:bg-[#FAFAF9]'}">전체 ${all.length}</button>
           ${people.map(p=>{ const n=rrList(date,p.n).length, on=RR_WHO===p.n;
             return `<button onclick="rrFocus('${esc(p.n)}')" class="text-[11px] font-bold rounded-full px-2.5 py-1 border"
               style="${on?`background:${p.c};border-color:${p.c};color:#fff`:`background:${p.c}18;border-color:${p.c}40;color:${p.c}`}">${esc(p.n)} ${n}</button>`; }).join('')}
-        </div>
+        </div>`}
       </div>
 
       ${RR_NEW?`
@@ -6759,7 +6800,7 @@
         </div>
       </div>`:''}
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">${people.map(card).join('')}</div>
+      <div class="grid grid-cols-1 gap-3 ${mine?'max-w-[680px]':'lg:grid-cols-3'}">${people.map(card).join('')}</div>
       <div class="h-8"></div>`;
     }
     /* ===================== 🖼 블로그 썸네일 메이커 =====================
