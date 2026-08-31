@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-30 22:49",
+ "generatedAt": "2026-09-01 01:11",
  "brands": [
   {
    "name": "아카라",
@@ -125,11 +125,11 @@
     "아카라",
     "아카라 k100",
     "아카라 홈캠",
-    "아카라 l100",
     "아카라 스위치",
-    "명조 아카라이브",
+    "아카라 l100",
     "아카라치",
-    "아카라카"
+    "아카라카",
+    "명조 아카라이브"
    ],
    "recent": [
     {
@@ -451,7 +451,7 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67809,
+   "total": 67812,
    "sentiment": {
     "pos": 57,
     "neu": 2,
@@ -460,7 +460,7 @@
    "keywords": [
     [
      "AI",
-     48
+     52
     ],
     [
      "구매",
@@ -491,43 +491,43 @@
      24
     ],
     [
-     "관리까지",
-     24
-    ],
-    [
      "경험을",
      24
     ],
     [
-     "탐색부터",
+     "4년",
      23
     ],
     [
-     "4년",
-     22
+     "연속",
+     23
     ],
     [
-     "연속",
-     22
+     "관리까지",
+     23
     ],
     [
      "기술력과",
      22
     ],
     [
+     "탐색부터",
+     22
+    ],
+    [
+     "품질과",
+     21
+    ],
+    [
+     "디지털고객경험지수",
+     20
+    ],
+    [
      "여정에서",
      20
     ],
     [
-     "앞으로도",
-     20
-    ],
-    [
-     "품질과",
-     20
-    ],
-    [
-     "디지털고객경험지수",
+     "중심의",
      19
     ]
    ],
@@ -538,11 +538,11 @@
     ],
     [
      "우수",
-     17
+     18
     ],
     [
      "혁신",
-     5
+     4
     ],
     [
      "강화",
@@ -553,31 +553,49 @@
      3
     ],
     [
+     "공략",
+     2
+    ],
+    [
      "글로벌",
      2
     ],
     [
-     "프리미엄",
-     1
-    ],
-    [
-     "개선",
+     "계약",
      1
     ]
    ],
    "related": [
-    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 연결",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스 허브",
+    "삼성 스마트싱스",
+    "삼성 스마트싱스 연결",
     "삼성 스마트싱스 에어컨",
+    "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 아이폰",
-    "아이폰 삼성 스마트싱스"
+    "삼성 스마트싱스 조명"
    ],
    "recent": [
+    {
+     "title": "하반기 가전 분수령 IFA 2026...삼성·LG전자, AI 앞세워 유럽 시장 공략...",
+     "source": "asiaa.co.kr",
+     "date": "2026-08-31",
+     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=260457"
+    },
+    {
+     "title": "삼성전자, '디지털고객경험지수' 4년 연속 1위···구매 과정 디지털 경...",
+     "source": "globale.co.kr",
+     "date": "2026-08-31",
+     "link": "https://www.globale.co.kr/news/articleView.html?idxno=40117"
+    },
+    {
+     "title": "[기업家] 삼성전자 ⑲ㅣ 5억 주거대출부터 스마트공장 상생…실적·기업...",
+     "source": "cbci.co.kr",
+     "date": "2026-08-31",
+     "link": "https://www.cbci.co.kr/news/articleView.html?idxno=602286"
+    },
     {
      "title": "獨 프리미엄 매장서 만난 삼성 AI 생태계…게임스컴까지 '체험'으로 유럽...",
      "source": "전자신문",
@@ -649,24 +667,6 @@
      "source": "biztribune.co.kr",
      "date": "2026-08-28",
      "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=358077"
-    },
-    {
-     "title": "삼성전자, 디지털고객경험 4년 연속 1위",
-     "source": "todayenergy.kr",
-     "date": "2026-08-28",
-     "link": "https://www.todayenergy.kr/news/articleView.html?idxno=302141"
-    },
-    {
-     "title": "삼성전자, ‘디지털고객경험지수’ 종합가전 4년 연속 1위…구매과정 전...",
-     "source": "swtvnews.com",
-     "date": "2026-08-28",
-     "link": "https://swtvnews.com/news/newsview.php?ncode=1065591499073554"
-    },
-    {
-     "title": "삼성전자, 가전 구매·설치·관리 디지털 서비스 고도화",
-     "source": "ziksir.com",
-     "date": "2026-08-28",
-     "link": "https://www.ziksir.com/news/articleView.html?idxno=144643"
     }
    ]
   },
@@ -767,14 +767,14 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐 가족 공유",
     "lg 씽큐 연결",
-    "lg 씽큐 세탁기",
+    "lg 씽큐 가족 공유",
     "lg 씽큐 와이파이",
+    "lg 씽큐 세탁기",
     "lg 씽큐 냉장고",
     "lg 씽큐 앱 에어컨",
     "lg 씽큐 티비연결",
-    "lg 씽큐 오류"
+    "lg 씽큐 에어컨 오류"
    ],
    "recent": [
     {
@@ -873,84 +873,84 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75579,
+   "total": 75593,
    "sentiment": {
-    "pos": 16,
-    "neu": 35,
-    "neg": 9
+    "pos": 17,
+    "neu": 33,
+    "neg": 10
    },
    "keywords": [
     [
      "AI",
-     28
+     44
     ],
     [
      "제미나이",
-     15
+     17
     ],
     [
-     "으로",
-     12
-    ],
-    [
-     "전문",
-     12
-    ],
-    [
-     "번역한",
+     "Gemini",
      11
     ],
     [
-     "기사의",
+     "이미지",
      11
     ],
     [
-     "입니다",
-     11
+     "그래픽",
+     10
     ],
     [
      "Google",
      10
     ],
     [
-     "Gemini",
+     "활용",
      10
     ],
     [
-     "이미지",
+     "으로",
      10
     ],
     [
-     "아래는",
+     "전문",
      10
     ],
     [
-     "기사를",
-     10
+     "번역한",
+     9
     ],
     [
-     "번역",
-     10
+     "기사의",
+     9
     ],
     [
-     "구글번역",
-     10
+     "입니다",
+     9
     ],
     [
      "번역에",
-     10
+     9
     ],
     [
      "오류가",
-     10
-    ],
-    [
-     "그래픽",
      9
     ],
     [
-     "활용",
-     9
+     "아래는",
+     8
+    ],
+    [
+     "기사를",
+     8
+    ],
+    [
+     "번역",
+     8
+    ],
+    [
+     "구글번역",
+     8
     ]
    ],
    "posWords": [
@@ -959,8 +959,16 @@
      5
     ],
     [
+     "강화",
+     4
+    ],
+    [
      "혁신",
      4
+    ],
+    [
+     "글로벌",
+     3
     ],
     [
      "프리미엄",
@@ -971,19 +979,11 @@
      3
     ],
     [
-     "강화",
-     3
-    ],
-    [
-     "글로벌",
-     3
-    ],
-    [
-     "개선",
+     "최초",
      2
     ],
     [
-     "파트너십",
+     "개선",
      2
     ]
    ],
@@ -997,98 +997,98 @@
     "구글 홈 미니 연결",
     "구글 홈 미니 2세대",
     "구글 홈 어시스턴트",
-    "구글 홈 제미나이"
+    "구글 홈 미니 1세대"
    ],
    "recent": [
+    {
+     "title": "고려아연 때리는 MBK·영풍의 '대법원 카드'…정작 현 지배구조 가처분...",
+     "source": "joongangenews.com",
+     "date": "2026-09-01",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=544341"
+    },
+    {
+     "title": "애플 존 터너스 시대 개막…첫 폴더블 아이폰 '시험대'",
+     "source": "이데일리",
+     "date": "2026-09-01",
+     "link": "https://n.news.naver.com/mnews/article/018/0006361196?sid=105"
+    },
+    {
+     "title": "애플, 9월부터 ‘터너스 체제’…하드웨어·AI 경쟁력 집중할 듯",
+     "source": "khan.co.kr",
+     "date": "2026-08-31",
+     "link": "https://n.news.naver.com/mnews/article/032/0003467521?sid=101"
+    },
+    {
+     "title": "홈플러스 회생 D-4, 과제는 산더미…대주주 MBK는 고려아연 주총에 화력",
+     "source": "joongangenews.com",
+     "date": "2026-08-31",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=544275"
+    },
+    {
+     "title": "홈플러스, 8월 재개장 후 매출 1164억원 달성",
+     "source": "breaknews.com",
+     "date": "2026-08-31",
+     "link": "http://www.breaknews.com/1232876"
+    },
+    {
+     "title": "[AI 시대, 권력 대이동-네이버] 검색창에서 AI 에이전트로…'결정권' 노...",
+     "source": "pointdaily.co.kr",
+     "date": "2026-08-31",
+     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=317362"
+    },
+    {
+     "title": "[AI박스오피스] '오디세이' 880만·'스파이더맨' 850만…8월 극장가 평정",
+     "source": "newspim.com",
+     "date": "2026-08-31",
+     "link": "https://www.newspim.com/news/view/20260831000799"
+    },
+    {
+     "title": "애플 새 CEO 터너스…첫 시험대는 AI",
+     "source": "naeil.com",
+     "date": "2026-08-31",
+     "link": "https://www.naeil.com/news/read/600530?ref=naver"
+    },
+    {
+     "title": "애플 '터너스 시대' 9월 1일 개막…첫 시험대는 '시리 AI'",
+     "source": "view.asiae.co.kr",
+     "date": "2026-08-31",
+     "link": "https://n.news.naver.com/mnews/article/277/0005809463?sid=104"
+    },
+    {
+     "title": "AI 뒤처진 애플, ‘하드웨어 장인’ 존 터너스가 구원투수 될까… 반전...",
+     "source": "chosun.com",
+     "date": "2026-08-31",
+     "link": "https://n.news.naver.com/mnews/article/023/0003995811?sid=105"
+    },
+    {
+     "title": "쿡 떠나는 애플, 터너스의 시험대…AI 경쟁력부터 中노동문제까지",
+     "source": "ajunews.com",
+     "date": "2026-08-31",
+     "link": "https://www.ajunews.com/view/20260831095323090"
+    },
+    {
+     "title": "수천만원 빚더미 20대 부부의 반전... 블로그 하나로 30세에 100만장자 됐...",
+     "source": "insight.co.kr",
+     "date": "2026-08-31",
+     "link": "https://www.insight.co.kr/news/570989"
+    },
+    {
+     "title": "웹사이트 접속 정보부터 2G 문자 사기까지…구글, '안드로이드 17' 보안...",
+     "source": "kbench.com",
+     "date": "2026-08-31",
+     "link": "https://kbench.com/?q=node/281486"
+    },
+    {
+     "title": "에이수스 제피러스 M16, 공장 도포 리퀴드메탈이 방열판 부식시켜 재부...",
+     "source": "wikitree.co.kr",
+     "date": "2026-08-31",
+     "link": "https://www.wikitree.co.kr/articles/1156072"
+    },
     {
      "title": "獨 프리미엄 매장서 만난 삼성 AI 생태계…게임스컴까지 '체험'으로 유럽...",
      "source": "전자신문",
      "date": "2026-08-30",
      "link": "https://n.news.naver.com/mnews/article/030/0003461576?sid=105"
-    },
-    {
-     "title": "갤럭시S26 더 똑똑해진다... Z 폴드8 신기능 3종 추가",
-     "source": "betanews.net",
-     "date": "2026-08-30",
-     "link": "https://www.betanews.net/article/view/beta202608300026"
-    },
-    {
-     "title": "[주간 유통 나침반] 한 주 앞둔 홈플러스 운명의 날·쿠팡 vs 공정위·유...",
-     "source": "joongangenews.com",
-     "date": "2026-08-30",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=543888"
-    },
-    {
-     "title": "[가봤다] \"단순 전시 넘어 체험 콘텐츠로 승부\"...쾰른 최대 가전 매장에...",
-     "source": "techm.kr",
-     "date": "2026-08-30",
-     "link": "https://www.techm.kr/news/articleView.html?idxno=154753"
-    },
-    {
-     "title": "애플 iOS 27, 구글 제미나이 품은 “시리AI”로 9월 중순 전면 개편",
-     "source": "wikitree.co.kr",
-     "date": "2026-08-30",
-     "link": "https://www.wikitree.co.kr/articles/1155898"
-    },
-    {
-     "title": "소니 브라비아 9 II, RGB LED 최강 평가에도 OLED 못 넘었다는 CNET 결론",
-     "source": "wikitree.co.kr",
-     "date": "2026-08-29",
-     "link": "https://www.wikitree.co.kr/articles/1155876"
-    },
-    {
-     "title": "갤럭시S26, 베타7 돼서야 폴드8 인기 기능 받아…저가형 S26FE보다 늦어",
-     "source": "wikitree.co.kr",
-     "date": "2026-08-29",
-     "link": "https://www.wikitree.co.kr/articles/1155744"
-    },
-    {
-     "title": "안드로이드 17, 통신 프라이버시 강화…ECH·2G 사기 대응 도입",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-08-28",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=696566"
-    },
-    {
-     "title": "홈플러스 부실에 3년 적자까지…MBK·영풍 연합, 106분기 흑자 고려아연...",
-     "source": "joongangenews.com",
-     "date": "2026-08-28",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=543657"
-    },
-    {
-     "title": "[시사브리핑] 2026년 8월호",
-     "source": "chiefexe.com",
-     "date": "2026-08-28",
-     "link": "https://www.chiefexe.com/news/ArticleView.asp?listId=NTAyMHx8bGltaXRfZmFsc2Ug"
-    },
-    {
-     "title": "[경제소식] KB금융, 중진공과 싱가포르서 K-스타트업 12개사 글로벌 진출...",
-     "source": "4th.kr",
-     "date": "2026-08-28",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2117042"
-    },
-    {
-     "title": "팀 쿡 후임은 25년차 ‘애플맨’…AI 격랑 속 혁신 이룰까",
-     "source": "biz.heraldcorp.com",
-     "date": "2026-08-28",
-     "link": "https://n.news.naver.com/mnews/article/016/0002689723?sid=104"
-    },
-    {
-     "title": "\"은행 문자 맞나?\"…통신사 필터까지 뚫는 '가짜 기지국', 구글이 막는다",
-     "source": "뉴시스",
-     "date": "2026-08-28",
-     "link": "https://n.news.naver.com/mnews/article/003/0014154346?sid=105"
-    },
-    {
-     "title": "모토로라, 안드로이드17 50종 넘는 폰에 순차 배포…스택 위젯·테마 아...",
-     "source": "wikitree.co.kr",
-     "date": "2026-08-28",
-     "link": "https://www.wikitree.co.kr/articles/1155507"
-    },
-    {
-     "title": "[위클리_피지컬AI] 전 세계인의 영상 데이터로 로봇 학습 시도하는 피규...",
-     "source": "it.donga.com",
-     "date": "2026-08-27",
-     "link": "https://it.donga.com/109426/"
     }
    ]
   }
@@ -1137,7 +1137,8 @@
    "2026-04-01",
    "2026-05-01",
    "2026-06-01",
-   "2026-07-01"
+   "2026-07-01",
+   "2026-08-01"
   ],
   "series": {
    "아카라": [
@@ -1183,7 +1184,8 @@
     9.97,
     9.78,
     11.75,
-    10.99
+    10.99,
+    10.18
    ],
    "헤이홈": [
     44.57,
@@ -1228,7 +1230,8 @@
     45.13,
     49.0,
     53.28,
-    62.58
+    62.58,
+    55.36
    ],
    "삼성 스마트싱스": [
     15.63,
@@ -1273,7 +1276,8 @@
     8.58,
     14.34,
     16.6,
-    22.38
+    22.38,
+    22.13
    ],
    "LG 씽큐": [
     1.79,
@@ -1318,7 +1322,8 @@
     0.79,
     1.09,
     1.06,
-    5.82
+    5.82,
+    1.08
    ],
    "구글홈": [
     7.28,
@@ -1363,7 +1368,8 @@
     2.9,
     3.16,
     2.52,
-    3.03
+    3.03,
+    2.36
    ]
   }
  }
