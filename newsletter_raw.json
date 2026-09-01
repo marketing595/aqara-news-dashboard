@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-31 09:44",
+ "generatedAt": "2026-09-01 10:21",
  "workspaces": {
   "시절레터": {
    "auth": 200,
@@ -13,10 +13,10 @@
   "아카라": {
    "auth": 200,
    "emailsStatus": 200,
-   "emailsSnippet": "{\"total\": 61, \"offset\": 0, \"limit\": 5, \"items\": [{\"id\": 1669296, \"owner\": \"23017e8a-9d9e-42f0-9bf9-bf5ba54546f1\", \"status\": 3, \"statusName\": \"SENT\", \"type\": 1, \"typeName\": \"NORMAL\", \"listId\": 272115, \"subject\": \"(광고) 아카라코리아 뉴스레터를 만나보세요, 다양한 소식이 기다립니다!\", \"senderEmail\": \"inquiry@aqarakorea.com\", \"senderName\": \"아카라코리아\", \"permanentLink\": \"https://stib.ee/nqA8\", \"segmentIds\": null, \"groupIds\": null, \"s",
-   "total": 61,
-   "fetched": 61,
-   "sent": 61,
+   "emailsSnippet": "{\"total\": 64, \"offset\": 0, \"limit\": 5, \"items\": [{\"id\": 1669296, \"owner\": \"23017e8a-9d9e-42f0-9bf9-bf5ba54546f1\", \"status\": 3, \"statusName\": \"SENT\", \"type\": 1, \"typeName\": \"NORMAL\", \"listId\": 272115, \"subject\": \"(광고) 아카라코리아 뉴스레터를 만나보세요, 다양한 소식이 기다립니다!\", \"senderEmail\": \"inquiry@aqarakorea.com\", \"senderName\": \"아카라코리아\", \"permanentLink\": \"https://stib.ee/nqA8\", \"segmentIds\": null, \"groupIds\": null, \"s",
+   "total": 64,
+   "fetched": 64,
+   "sent": 64,
    "statEndpoint": null
   }
  },

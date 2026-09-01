@@ -1,8 +1,19 @@
 {
- "generatedAt": "2026-08-31 09:44",
+ "generatedAt": "2026-09-01 10:21",
  "source": "Stibee API v2 (자동)",
  "subscribers": 7262,
  "b2b": [
+  {
+   "id": 3571346,
+   "title": "(제목 없음)",
+   "date": "2026-08-31",
+   "link": "https://stib.ee/H4AO",
+   "listId": -1,
+   "sender": null,
+   "sent": null,
+   "openRate": null,
+   "clickRate": null
+  },
   {
    "id": 3467376,
    "title": "(광고) 더메종 스마트홈🏠 인테리어 자료 보내드려요. ",
@@ -97,17 +108,6 @@
    "date": "2026-03-24",
    "link": "https://stib.ee/CsrL",
    "listId": 480572,
-   "sender": "아카라라이프",
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 3299490,
-   "title": "(광고) 2026년 4월 아카라라이프 뉴스레터",
-   "date": "2026-03-24",
-   "link": "https://stib.ee/FpsL",
-   "listId": 272115,
    "sender": "아카라라이프",
    "sent": null,
    "openRate": null,
