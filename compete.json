@@ -6,13 +6,13 @@
   {
    "name": "아카라",
    "query": "아카라 스마트홈",
-   "ytd": 91,
+   "ytd": 92,
    "capped": false,
    "analyzed": 100,
    "topKw": [
     {
      "kw": "스마트",
-     "n": 87,
+     "n": 86,
      "title": "\"아이폰만 대면 척\"…애플 홈키 담고 가격 낮춘 스마트 도어락 출시",
      "link": "http://www.bizwnews.com/news/articleView.html?idxno=144607"
     },
@@ -41,22 +41,22 @@
      "link": "https://www.mt.co.kr/future/2026/07/31/2026073112362073342"
     },
     {
-     "kw": "도어락",
-     "n": 23,
-     "title": "\"아이폰만 대면 척\"…애플 홈키 담고 가격 낮춘 스마트 도어락 출시",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=144607"
-    },
-    {
      "kw": "매터",
      "n": 23,
-     "title": "삼성전자가 적용한 매터 인증, 보안카메라까지 확대",
-     "link": "https://www.etnews.com/20260827000234"
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
     },
     {
      "kw": "플랫폼",
      "n": 23,
-     "title": "아카라라이프, 임직원 전용 AI 포털 구축",
-     "link": "https://www.getnews.co.kr/news/articleView.html?idxno=876498"
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
+    },
+    {
+     "kw": "도어락",
+     "n": 23,
+     "title": "\"아이폰만 대면 척\"…애플 홈키 담고 가격 낮춘 스마트 도어락 출시",
+     "link": "http://www.bizwnews.com/news/articleView.html?idxno=144607"
     },
     {
      "kw": "인테리어",
@@ -65,40 +65,40 @@
      "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2447221"
     },
     {
-     "kw": "카메라",
-     "n": 22,
-     "title": "삼성전자가 적용한 매터 인증, 보안카메라까지 확대",
-     "link": "https://www.etnews.com/20260827000234"
-    },
-    {
      "kw": "기기",
      "n": 22,
      "title": "\"영화 즐기면 조명 10%로\"…아카라라이프, 도면·생활패턴 분석하는 'AI...",
      "link": "http://www.bizwnews.com/news/articleView.html?idxno=144007"
     },
     {
-     "kw": "삼성전자",
-     "n": 21,
+     "kw": "카메라",
+     "n": 20,
      "title": "삼성전자가 적용한 매터 인증, 보안카메라까지 확대",
      "link": "https://www.etnews.com/20260827000234"
     },
     {
      "kw": "스마트싱스",
-     "n": 21,
-     "title": "청담동 고급 빌라, 공간의 완성도 결정짓는 '이것'에 주목",
-     "link": "https://www.etnews.com/20260730000426"
+     "n": 19,
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
     },
     {
-     "kw": "표준",
+     "kw": "삼성전자",
      "n": 19,
-     "title": "아카라라이프, 대전·충청 스마트홈 세미나 성료…지역 전문가 네트워크...",
-     "link": "https://www.businesskorea.co.kr/news/articleView.html?idxno=269359"
+     "title": "삼성전자가 적용한 매터 인증, 보안카메라까지 확대",
+     "link": "https://www.etnews.com/20260827000234"
     },
     {
      "kw": "자동화",
      "n": 18,
      "title": "아카라라이프, 부담 없는 스마트 도어락 입문형 'L100 SE' 출시",
      "link": "https://www.abcn.kr/news/articleView.html?idxno=90997"
+    },
+    {
+     "kw": "표준",
+     "n": 17,
+     "title": "아카라라이프, 대전·충청 스마트홈 세미나 성료…지역 전문가 네트워크...",
+     "link": "https://www.businesskorea.co.kr/news/articleView.html?idxno=269359"
     },
     {
      "kw": "이상헌",
@@ -113,10 +113,10 @@
      "link": "http://www.bizwnews.com/news/articleView.html?idxno=144007"
     },
     {
-     "kw": "다양한",
+     "kw": "애플",
      "n": 15,
-     "title": "아카라라이프, 부담 없는 스마트 도어락 입문형 'L100 SE' 출시",
-     "link": "https://www.abcn.kr/news/articleView.html?idxno=90997"
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
     }
    ],
    "me": true
@@ -130,81 +130,63 @@
    "topKw": [
     {
      "kw": "AI",
-     "n": 308,
-     "title": "하반기 가전 분수령 IFA 2026...삼성·LG전자, AI 앞세워 유럽 시장 공략...",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=260457"
+     "n": 273,
+     "title": "'AI 초연결' 무장한 삼성 스마트싱스… DX 생태계 영토 넓힌다",
+     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20260902010000527"
     },
     {
      "kw": "솔루션",
-     "n": 265,
-     "title": "하반기 가전 분수령 IFA 2026...삼성·LG전자, AI 앞세워 유럽 시장 공략...",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=260457"
+     "n": 204,
+     "title": "주말 낮시간 가전사용 전기료 환급...삼성전자, 1일부터 시범사업",
+     "link": "https://www.newstree.kr/newsView/ntr202609010007"
     },
     {
      "kw": "HVAC",
-     "n": 243,
+     "n": 176,
      "title": "HVAC·로보틱스에 3조… 삼성 미래 좌우 핵심은 결국 DX",
      "link": "https://www.asiatoday.co.kr/kn/view.php?key=20260827010009062"
     },
     {
-     "kw": "플랙트그룹",
-     "n": 196,
-     "title": "\"AI 데이터센터 발열 잡아라\" 삼성·LG전자, '액체냉각·공조' 미래 먹거...",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=259660"
-    },
-    {
      "kw": "결합해",
-     "n": 192,
+     "n": 162,
      "title": "삼성전자, '디지털고객경험지수' 4년 연속 1위···구매 과정 디지털 경...",
      "link": "https://www.globale.co.kr/news/articleView.html?idxno=40117"
     },
     {
+     "kw": "가전",
+     "n": 154,
+     "title": "[삼성전자] 디자인 마이애미 참가 / 갤럭시 북6 신모델 / 스마트가전 캐...",
+     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2286340"
+    },
+    {
+     "kw": "캐시백",
+     "n": 149,
+     "title": "[삼성전자] 디자인 마이애미 참가 / 갤럭시 북6 신모델 / 스마트가전 캐...",
+     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2286340"
+    },
+    {
+     "kw": "플랙트그룹",
+     "n": 146,
+     "title": "\"AI 데이터센터 발열 잡아라\" 삼성·LG전자, '액체냉각·공조' 미래 먹거...",
+     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=259660"
+    },
+    {
      "kw": "프로",
-     "n": 184,
+     "n": 141,
      "title": "\"AI 데이터센터 발열 잡아라\" 삼성·LG전자, '액체냉각·공조' 미래 먹거...",
      "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=259660"
     },
     {
      "kw": "중앙공조",
-     "n": 181,
+     "n": 139,
      "title": "\"AI 데이터센터 발열 잡아라\" 삼성·LG전자, '액체냉각·공조' 미래 먹거...",
      "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=259660"
-    },
-    {
-     "kw": "빌딩",
-     "n": 172,
-     "title": "\"AI 데이터센터 발열 잡아라\" 삼성·LG전자, '액체냉각·공조' 미래 먹거...",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=259660"
-    },
-    {
-     "kw": "제어",
-     "n": 161,
-     "title": "[A 주간 서머리] 경제·산업계 \"삼성전자, 광주사업장에 2400억원 투입.....",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=259453"
     },
     {
      "kw": "연결",
-     "n": 160,
-     "title": "삼성전자, AI 가전 구매·관리 경험 연결…디지털고객경험 4년 연속 1위",
-     "link": "https://www.e-science.co.kr/news/articleView.html?idxno=134298"
-    },
-    {
-     "kw": "B2B",
-     "n": 154,
-     "title": "\"AI 데이터센터 발열 잡아라\" 삼성·LG전자, '액체냉각·공조' 미래 먹거...",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=259660"
-    },
-    {
-     "kw": "IoT",
-     "n": 147,
-     "title": "한가인 \"14년간 '이것' 받은 적 없어\"…8년 간의 삼전 인연, 왜?",
-     "link": "https://economist.co.kr/article/view/ecn202608250030"
-    },
-    {
-     "kw": "기술력",
      "n": 136,
-     "title": "삼성전자, '디지털고객경험지수' 4년 연속 1위···구매 과정 디지털 경...",
-     "link": "https://www.globale.co.kr/news/articleView.html?idxno=40117"
+     "title": "삼성전자, 한전과 '스마트가전 캐시백' 시범 사업",
+     "link": "https://www.thelec.kr/news/articleView.html?idxno=61608"
     },
     {
      "kw": "구매",
@@ -213,28 +195,46 @@
      "link": "https://www.globale.co.kr/news/articleView.html?idxno=40117"
     },
     {
-     "kw": "기술",
-     "n": 125,
-     "title": "하반기 가전 분수령 IFA 2026...삼성·LG전자, AI 앞세워 유럽 시장 공략...",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=260457"
+     "kw": "빌딩",
+     "n": 132,
+     "title": "\"AI 데이터센터 발열 잡아라\" 삼성·LG전자, '액체냉각·공조' 미래 먹거...",
+     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=259660"
+    },
+    {
+     "kw": "스마트가전",
+     "n": 123,
+     "title": "[삼성전자] 디자인 마이애미 참가 / 갤럭시 북6 신모델 / 스마트가전 캐...",
+     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2286340"
+    },
+    {
+     "kw": "제어",
+     "n": 122,
+     "title": "\"낮 시간대 가전 쓰면 전기요금 차감\" 삼성전자, 한전과 에너지 절감 사...",
+     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=260631"
+    },
+    {
+     "kw": "기술력",
+     "n": 117,
+     "title": "삼성전자, '디지털고객경험지수' 4년 연속 1위···구매 과정 디지털 경...",
+     "link": "https://www.globale.co.kr/news/articleView.html?idxno=40117"
+    },
+    {
+     "kw": "B2B",
+     "n": 116,
+     "title": "\"AI 데이터센터 발열 잡아라\" 삼성·LG전자, '액체냉각·공조' 미래 먹거...",
+     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=259660"
+    },
+    {
+     "kw": "에너지",
+     "n": 115,
+     "title": "휴일 낮 세탁기 돌리면 캐시백…한전, 삼전·LG와 시범사업",
+     "link": "https://www.cstimes.com/news/articleView.html?idxno=718926"
     },
     {
      "kw": "관리",
-     "n": 118,
-     "title": "삼성전자, 디지털고객경험지수 종합가전 4년 연속 1위",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=749272"
-    },
-    {
-     "kw": "가전",
-     "n": 114,
-     "title": "하반기 가전 분수령 IFA 2026...삼성·LG전자, AI 앞세워 유럽 시장 공략...",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=260457"
-    },
-    {
-     "kw": "광주",
-     "n": 111,
-     "title": "[더벨]DC 공략 강화 삼성, 광주에 플랙트 신규라인 구축",
-     "link": "https://www.thebell.co.kr/free/content/ArticleView.asp?key=202608190921029200105952"
+     "n": 110,
+     "title": "삼성전자, 한전과 '스마트가전 캐시백' 시범사업 … 스마트싱스로 혜택...",
+     "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=88684"
     }
    ]
   },
@@ -247,45 +247,45 @@
    "topKw": [
     {
      "kw": "LG전자",
-     "n": 599,
-     "title": "LG전자, 한국전력공사와 '스마트가전 캐시백 시범사업' 추진 업무협약",
-     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=443524"
+     "n": 600,
+     "title": "한전, 스마트가전 캐시백 시범사업 시행",
+     "link": "http://www.lawissue.co.kr/view.php?ud=202609011751543262f4ab64559d_12"
     },
     {
      "kw": "가전",
-     "n": 289,
-     "title": "\"전기 아끼면 요금 자동 환급\"…LG전자, 한국전력과 '스마트가전 캐시백...",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=316452"
+     "n": 268,
+     "title": "한전, 10월 말까지 '스마트 가전 캐시백' 시범 사업 시행",
+     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1401575"
     },
     {
      "kw": "캐시백",
-     "n": 196,
-     "title": "LG전자, 한국전력공사와 '스마트가전 캐시백 시범사업' 추진 업무협약",
-     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=443524"
-    },
-    {
-     "kw": "AI홈",
-     "n": 180,
-     "title": "LG전자, 한국전력공사와 '스마트가전 캐시백 시범사업' 추진 업무협약",
-     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=443524"
+     "n": 219,
+     "title": "한전, 스마트가전 캐시백 시범사업 시행",
+     "link": "http://www.lawissue.co.kr/view.php?ud=202609011751543262f4ab64559d_12"
     },
     {
      "kw": "스마트가전",
-     "n": 170,
-     "title": "LG전자, 한국전력공사와 '스마트가전 캐시백 시범사업' 추진 업무협약",
-     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=443524"
+     "n": 189,
+     "title": "한전, 스마트가전 캐시백 시범사업 시행",
+     "link": "http://www.lawissue.co.kr/view.php?ud=202609011751543262f4ab64559d_12"
+    },
+    {
+     "kw": "AI홈",
+     "n": 167,
+     "title": "[메가이슈토픽] 삼성·LG, 'IFA 2026'서 AI 홈 격돌…\"진화된 AI 전략 공개...",
+     "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065576347881498"
     },
     {
      "kw": "AI",
-     "n": 169,
-     "title": "LG전자·한전, 봄가을 고효율 가전제품 사용시 전기료 캐시백",
-     "link": "https://www.slist.kr/news/articleView.html?idxno=762235"
+     "n": 153,
+     "title": "LG전자, 유럽 가전전시회 'IFA 2026'서 채팅 기반 'AI 홈 에이전트' 공개",
+     "link": "https://www.newsis.com/view/NISX20260901_0003771016"
     },
     {
      "kw": "세대",
-     "n": 136,
-     "title": "건설업계, 아파트 앱 경쟁 강화…분양 정보부터 관리비·주차까지",
-     "link": "https://www.polinews.co.kr/news/articleView.html?idxno=740711"
+     "n": 137,
+     "title": "한전, 10월 말까지 '스마트 가전 캐시백' 시범 사업 시행",
+     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1401575"
     },
     {
      "kw": "단지",
@@ -295,15 +295,9 @@
     },
     {
      "kw": "제어",
-     "n": 118,
+     "n": 108,
      "title": "LG 얼음정수기 판매 비중 30% 넘어…AI 신제품 출시",
      "link": "http://www.nongaek.com/news/articleView.html?idxno=96518"
-    },
-    {
-     "kw": "플랫폼",
-     "n": 115,
-     "title": "LG전자, 한국전력공사와 '스마트가전 캐시백 시범사업' 추진 업무협약",
-     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=443524"
     },
     {
      "kw": "히트펌프",
@@ -312,16 +306,22 @@
      "link": "https://www.kpinews.kr/newsView/1065596711783714"
     },
     {
+     "kw": "플랫폼",
+     "n": 106,
+     "title": "LG전자, 유럽 가전전시회 'IFA 2026'서 채팅 기반 'AI 홈 에이전트' 공개",
+     "link": "https://www.newsis.com/view/NISX20260901_0003771016"
+    },
+    {
      "kw": "구독",
-     "n": 105,
+     "n": 104,
      "title": "롯데하이마트 체질 개선 한계 보여준 2분기 실적 : 플랫폼의 쿠팡, 브랜...",
      "link": "https://www.huffingtonpost.kr/article/259299"
     },
     {
-     "kw": "세탁기",
-     "n": 100,
-     "title": "[재계 투데이] 삼성전자, 게임스컴서 오디세이 신제품 공개 外",
-     "link": "https://news.dealsitetv.com/articles/175299"
+     "kw": "한전",
+     "n": 102,
+     "title": "한전, 스마트가전 캐시백 시범사업 시행",
+     "link": "http://www.lawissue.co.kr/view.php?ud=202609011751543262f4ab64559d_12"
     },
     {
      "kw": "앱을",
@@ -336,16 +336,16 @@
      "link": "https://www.news1.kr/industry/general-industry/6264809"
     },
     {
-     "kw": "음성",
+     "kw": "세탁기",
      "n": 86,
-     "title": "EU 'AI 법' 발효…삼성·LG, 유럽향 AI 가전 '투명성 표기' 선제 대응",
-     "link": "https://www.ajunews.com/view/20260802145635368"
+     "title": "\"세탁기 주말 낮에 돌리세요\"…전기요금 아끼는 '짠테크 3시간'",
+     "link": "https://www.hankyung.com/article/202609017039v"
     },
     {
      "kw": "한국전력",
-     "n": 82,
-     "title": "LG전자, 한국전력공사와 '스마트가전 캐시백 시범사업' 추진 업무협약",
-     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=443524"
+     "n": 81,
+     "title": "한국전력, '스마트가전 캐시백' 시범사업 시행",
+     "link": "https://www.mt.co.kr/policy/2026/09/01/2026090113312769587"
     },
     {
      "kw": "압구정",
@@ -358,81 +358,81 @@
   {
    "name": "샤오미 스마트홈",
    "query": "샤오미 스마트홈",
-   "ytd": 315,
+   "ytd": 333,
    "capped": false,
    "analyzed": 400,
    "topKw": [
     {
      "kw": "AI",
-     "n": 252,
-     "title": "35년 만에 메세 떠난 삼성전자, 안방 지킨 LG전자…베를린 IFA 2026서 갈라...",
-     "link": "https://www.newsquest.co.kr/news/articleView.html?idxno=272603"
+     "n": 260,
+     "title": "세계 가전전시회 장악한 로봇…삼성·LG, 중국 추격 속 AI홈 경쟁",
+     "link": "https://www.hani.co.kr/arti/economy/marketing/1275735.html"
     },
     {
      "kw": "스마트",
-     "n": 221,
-     "title": "‘몰라톤부터 핫IT슈까지’⋯ 브랜드 친밀도 빌드업 나선 中 로봇청소기",
-     "link": "https://www.viva100.com/article/20260826500663"
+     "n": 232,
+     "title": "먼지 비우고 물걸레 씻는다…샤오미, 로봇청소기 H50 시리즈 출시",
+     "link": "https://www.cnet.co.kr/view/?no=20260901161834"
     },
     {
      "kw": "스마트폰",
-     "n": 178,
-     "title": "獨 IFA, '가전쇼' 벗고 AI·로봇 전장으로…유럽 주도권 경쟁 달군다",
-     "link": "http://www.seouleconews.com/news/articleView.html?idxno=93408"
+     "n": 176,
+     "title": "IFA 2026 관전포인트, 350조원 유럽 가전시장 놓고 한중 격돌",
+     "link": "http://www.dailypop.kr/news/articleView.html?idxno=102108"
     },
     {
      "kw": "중국",
-     "n": 151,
-     "title": "35년 만에 메세 떠난 삼성전자, 안방 지킨 LG전자…베를린 IFA 2026서 갈라...",
-     "link": "https://www.newsquest.co.kr/news/articleView.html?idxno=272603"
+     "n": 148,
+     "title": "세계 가전전시회 장악한 로봇…삼성·LG, 중국 추격 속 AI홈 경쟁",
+     "link": "https://www.hani.co.kr/arti/economy/marketing/1275735.html"
     },
     {
      "kw": "가전",
-     "n": 142,
-     "title": "하반기 가전 분수령 IFA 2026...삼성·LG전자, AI 앞세워 유럽 시장 공략...",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=260457"
+     "n": 143,
+     "title": "세계 가전전시회 장악한 로봇…삼성·LG, 중국 추격 속 AI홈 경쟁",
+     "link": "https://www.hani.co.kr/arti/economy/marketing/1275735.html"
     },
     {
      "kw": "생태계",
-     "n": 111,
-     "title": "IFA 2026 9월4일 개막…삼성 'B2B 중심' VS LG 'B2C 정면돌파' 중국은 '물...",
-     "link": "https://www.industrynews.co.kr/news/articleView.html?idxno=85256"
+     "n": 113,
+     "title": "유럽 최대 가전 전시회 'IFA' 4일 개막…'AI홈·피지컬 AI' 핵심 주제 부...",
+     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=852206"
     },
     {
      "kw": "로봇청소기",
-     "n": 87,
-     "title": "IFA 2026 9월4일 개막…삼성 'B2B 중심' VS LG 'B2C 정면돌파' 중국은 '물...",
-     "link": "https://www.industrynews.co.kr/news/articleView.html?idxno=85256"
+     "n": 107,
+     "title": "먼지 비우고 물걸레 씻는다…샤오미, 로봇청소기 H50 시리즈 출시",
+     "link": "https://www.cnet.co.kr/view/?no=20260901161834"
     },
     {
      "kw": "샤오미코리아",
-     "n": 81,
-     "title": "샤오미코리아, 로봇청소기 2종 판매… 사전예약하면 30만원 할인된 89만...",
-     "link": "https://biz.chosun.com/it-science/ict/2026/08/19/PM3NGZN4DFAWJBODA5BRWQXYNY/?utm_source=naver&utm_medium=original&utm_campaign=biz"
+     "n": 92,
+     "title": "먼지 비우고 물걸레 씻는다…샤오미, 로봇청소기 H50 시리즈 출시",
+     "link": "https://www.cnet.co.kr/view/?no=20260901161834"
     },
     {
      "kw": "삼성",
-     "n": 79,
-     "title": "IFA 2026 9월4일 개막…삼성 'B2B 중심' VS LG 'B2C 정면돌파' 중국은 '물...",
-     "link": "https://www.industrynews.co.kr/news/articleView.html?idxno=85256"
+     "n": 78,
+     "title": "세계 가전전시회 장악한 로봇…삼성·LG, 중국 추격 속 AI홈 경쟁",
+     "link": "https://www.hani.co.kr/arti/economy/marketing/1275735.html"
     },
     {
      "kw": "카메라",
-     "n": 74,
+     "n": 73,
      "title": "손목 위 스마트워치부터 거실 카메라까지… 샤오미, 신제품 5종 한국도...",
      "link": "https://www.donga.com/news/Economy/article/all/20260727/134372320/1"
     },
     {
-     "kw": "기기",
-     "n": 71,
-     "title": "중국 900개사 맹추격에…삼성·LG '피지컬 AI·로봇'으로 베를린 출전",
-     "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=364163"
+     "kw": "IFA",
+     "n": 72,
+     "title": "유럽 최대 가전 전시회 'IFA' 4일 개막…'AI홈·피지컬 AI' 핵심 주제 부...",
+     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=852206"
     },
     {
-     "kw": "IFA",
-     "n": 55,
-     "title": "35년 만에 메세 떠난 삼성전자, 안방 지킨 LG전자…베를린 IFA 2026서 갈라...",
-     "link": "https://www.newsquest.co.kr/news/articleView.html?idxno=272603"
+     "kw": "기기",
+     "n": 71,
+     "title": "[더벨][IFA 2026 프리뷰] 삼성·LG부터 중국까지, 유럽서 맞붙는 AI 홈",
+     "link": "https://www.thebell.co.kr/free/content/ArticleView.asp?key=202608311143001760106363"
     },
     {
      "kw": "AIoT",
@@ -441,55 +441,55 @@
      "link": "https://www.sentv.co.kr/article/view/sentv202608120061"
     },
     {
+     "kw": "최대",
+     "n": 49,
+     "title": "세계 가전전시회 장악한 로봇…삼성·LG, 중국 추격 속 AI홈 경쟁",
+     "link": "https://www.hani.co.kr/arti/economy/marketing/1275735.html"
+    },
+    {
      "kw": "삼성전자",
      "n": 48,
-     "title": "35년 만에 메세 떠난 삼성전자, 안방 지킨 LG전자…베를린 IFA 2026서 갈라...",
-     "link": "https://www.newsquest.co.kr/news/articleView.html?idxno=272603"
+     "title": "IFA 2026 관전포인트, 350조원 유럽 가전시장 놓고 한중 격돌",
+     "link": "http://www.dailypop.kr/news/articleView.html?idxno=102108"
+    },
+    {
+     "kw": "로봇",
+     "n": 45,
+     "title": "세계 가전전시회 장악한 로봇…삼성·LG, 중국 추격 속 AI홈 경쟁",
+     "link": "https://www.hani.co.kr/arti/economy/marketing/1275735.html"
     },
     {
      "kw": "LG",
-     "n": 48,
-     "title": "IFA 2026 9월4일 개막…삼성 'B2B 중심' VS LG 'B2C 정면돌파' 중국은 '물...",
-     "link": "https://www.industrynews.co.kr/news/articleView.html?idxno=85256"
+     "n": 45,
+     "title": "세계 가전전시회 장악한 로봇…삼성·LG, 중국 추격 속 AI홈 경쟁",
+     "link": "https://www.hani.co.kr/arti/economy/marketing/1275735.html"
     },
     {
      "kw": "기술",
-     "n": 48,
-     "title": "IFA 2026 9월4일 개막…삼성 'B2B 중심' VS LG 'B2C 정면돌파' 중국은 '물...",
-     "link": "https://www.industrynews.co.kr/news/articleView.html?idxno=85256"
-    },
-    {
-     "kw": "최대",
-     "n": 43,
-     "title": "IFA 2026, AI·로봇 품고 새판 짠다…中 기업 932곳 ‘역대 최대’",
-     "link": "https://www.dt.co.kr/article/12081100?ref=naver"
-    },
-    {
-     "kw": "TV",
-     "n": 42,
-     "title": "IFA 2026 9월4일 개막…삼성 'B2B 중심' VS LG 'B2C 정면돌파' 중국은 '물...",
-     "link": "https://www.industrynews.co.kr/news/articleView.html?idxno=85256"
+     "n": 44,
+     "title": "유럽 최대 가전 전시회 'IFA' 4일 개막…'AI홈·피지컬 AI' 핵심 주제 부...",
+     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=852206"
     }
    ]
   },
   {
    "name": "애플 홈킷",
    "query": "애플 홈킷",
-   "ytd": 36,
+   "ytd": 37,
    "capped": false,
    "analyzed": 100,
    "topKw": [
+    {
+     "kw": "구글",
+     "n": 44,
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
+    },
     {
      "kw": "AI",
      "n": 43,
      "title": "[현장] 애플 \"AI가 코딩해도 판단은 개발자 몫\"",
      "link": "https://www.itdaily.kr/news/articleView.html?idxno=240689"
-    },
-    {
-     "kw": "구글",
-     "n": 43,
-     "title": "영화 애호가 위한 RGB 레이저 빔프로젝터... 발레리온 프로2 [연중기획-...",
-     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=59804"
     },
     {
      "kw": "스마트",
@@ -505,9 +505,15 @@
     },
     {
      "kw": "매터",
-     "n": 26,
-     "title": "LG전자, 마이크로 RGB 에보 TV 미국 가격 공개...삼성전자와 경쟁 가열",
-     "link": "http://www.press9.kr/news/articleView.html?idxno=75541"
+     "n": 27,
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
+    },
+    {
+     "kw": "스마트싱스",
+     "n": 24,
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
     },
     {
      "kw": "보안",
@@ -516,16 +522,22 @@
      "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=696617"
     },
     {
+     "kw": "삼성",
+     "n": 23,
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
+    },
+    {
+     "kw": "기기",
+     "n": 23,
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
+    },
+    {
      "kw": "제어",
      "n": 23,
      "title": "애플 홈팟 미니2, 6년 만에 나온다…출시일·가격·기능 총정리",
      "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=693233"
-    },
-    {
-     "kw": "스마트싱스",
-     "n": 23,
-     "title": "솔리티, 도어락 중앙 통합 관리 시스템 출시",
-     "link": "https://www.joongang.co.kr/article/25390793"
     },
     {
      "kw": "타포",
@@ -534,16 +546,10 @@
      "link": "http://www.boannews.com/media/view.asp?idx=139527&kind="
     },
     {
-     "kw": "삼성",
+     "kw": "플랫폼",
      "n": 22,
-     "title": "스마트폰 그냥 쓰지 말고 숨겨진 '이 설정' 꾹 눌러 보세요…삶의 질이...",
-     "link": "https://www.wikitree.co.kr/articles/1133766"
-    },
-    {
-     "kw": "기기",
-     "n": 21,
-     "title": "애플 ‘집안 기기’ 키우나…홈패드·보안카메라 준비 정황[모닝폰]",
-     "link": "https://www.edaily.co.kr/news/newspath.asp?newsid=02374726645548960"
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
     },
     {
      "kw": "알렉사",
@@ -558,12 +564,6 @@
      "link": "https://www.dt.co.kr/article/12028552?ref=naver"
     },
     {
-     "kw": "플랫폼",
-     "n": 20,
-     "title": "영화 애호가 위한 RGB 레이저 빔프로젝터... 발레리온 프로2 [연중기획-...",
-     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=59804"
-    },
-    {
      "kw": "카메라",
      "n": 19,
      "title": "애플, 올가을 대규모 신제품 공개 전망…아이폰 울트라·새 맥 포함",
@@ -571,7 +571,7 @@
     },
     {
      "kw": "현지시간",
-     "n": 19,
+     "n": 18,
      "title": "애플, iOS 27 성능 대폭 개선…앱 실행 최대 30% 빨라진다",
      "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=676115"
     },
@@ -582,10 +582,10 @@
      "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=696617"
     },
     {
-     "kw": "시리",
+     "kw": "생태계",
      "n": 16,
-     "title": "애플, 올가을 대규모 신제품 공개 전망…아이폰 울트라·새 맥 포함",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=696617"
+     "title": "구독자 2000만명 유튜버가 꼽은 애플 차기 제품 10종…폴더블·스마트글...",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=672214"
     }
    ]
   },
@@ -598,31 +598,31 @@
    "topKw": [
     {
      "kw": "AI",
-     "n": 441,
-     "title": "애플 존 터너스 시대 개막…첫 폴더블 아이폰 '시험대'",
-     "link": "https://www.edaily.co.kr/News/Read?newsId=01115206645575856&mediaCodeNo=257&utm_source=naver&utm_medium=referral&utm_campaign=news_syndication&utm_content=original_article"
+     "n": 445,
+     "title": "피지컬 AI 로봇 상용화 성큼...삼성·현대차·LG, 미중 패권 속 전략 행...",
+     "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=105817"
     },
     {
      "kw": "스마트폰",
-     "n": 189,
-     "title": "AI 뒤처진 애플, ‘하드웨어 장인’ 존 터너스가 구원투수 될까… 반전...",
-     "link": "https://www.chosun.com/economy/tech_it/2026/08/31/J2ALZBCS4RA6XD32NSKDFLCNVE/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news"
+     "n": 191,
+     "title": "AI 뒤처진 애플, 15년 만에 수장 바꿨다…‘하드웨어맨’ 터너스의 승부",
+     "link": "https://www.ekn.kr/web/view.php?key=20260901020439004"
     },
     {
      "kw": "스마트",
-     "n": 152,
-     "title": "애플 존 터너스 시대 개막…첫 폴더블 아이폰 '시험대'",
-     "link": "https://www.edaily.co.kr/News/Read?newsId=01115206645575856&mediaCodeNo=257&utm_source=naver&utm_medium=referral&utm_campaign=news_syndication&utm_content=original_article"
+     "n": 148,
+     "title": "[산업 뉴스브리핑] LG전자, '칩플레이션' 부담 줄인다…실속형 그램 출...",
+     "link": "https://www.asiatime.co.kr/article/20260901500319"
     },
     {
      "kw": "애플",
-     "n": 124,
-     "title": "애플 존 터너스 시대 개막…첫 폴더블 아이폰 '시험대'",
-     "link": "https://www.edaily.co.kr/News/Read?newsId=01115206645575856&mediaCodeNo=257&utm_source=naver&utm_medium=referral&utm_campaign=news_syndication&utm_content=original_article"
+     "n": 133,
+     "title": "AI 뒤처진 애플, 15년 만에 수장 바꿨다…‘하드웨어맨’ 터너스의 승부",
+     "link": "https://www.ekn.kr/web/view.php?key=20260901020439004"
     },
     {
      "kw": "화면",
-     "n": 103,
+     "n": 102,
      "title": "갤럭시S26 더 똑똑해진다... Z 폴드8 신기능 3종 추가",
      "link": "https://www.betanews.net/article/view/beta202608300026"
     },
@@ -634,7 +634,7 @@
     },
     {
      "kw": "기기",
-     "n": 94,
+     "n": 93,
      "title": "애플, 9월부터 ‘터너스 체제’…하드웨어·AI 경쟁력 집중할 듯",
      "link": "https://www.khan.co.kr/article/202608311639001"
     },
@@ -646,21 +646,15 @@
     },
     {
      "kw": "아마존",
-     "n": 74,
-     "title": "'넷플릭스가 찍은 K-셋톱박스' 매물로…이노피아테크 새 주인 찾는다 [f...",
-     "link": "http://www.fnnews.com/news/202608200929242487"
+     "n": 70,
+     "title": "[산업 뉴스브리핑] LG전자, '칩플레이션' 부담 줄인다…실속형 그램 출...",
+     "link": "https://www.asiatime.co.kr/article/20260901500319"
     },
     {
      "kw": "오픈AI",
-     "n": 68,
-     "title": "AI 뒤처진 애플, ‘하드웨어 장인’ 존 터너스가 구원투수 될까… 반전...",
-     "link": "https://www.chosun.com/economy/tech_it/2026/08/31/J2ALZBCS4RA6XD32NSKDFLCNVE/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news"
-    },
-    {
-     "kw": "삼성전자",
-     "n": 65,
-     "title": "삼성전자, 가전 생활 모든 순간을 AI로 연결하다",
-     "link": "https://www.hankyung.com/article/2026082631791"
+     "n": 70,
+     "title": "피지컬 AI 로봇 상용화 성큼...삼성·현대차·LG, 미중 패권 속 전략 행...",
+     "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=105817"
     },
     {
      "kw": "문자",
@@ -670,21 +664,27 @@
     },
     {
      "kw": "제미나",
-     "n": 60,
-     "title": "애플 존 터너스 시대 개막…첫 폴더블 아이폰 '시험대'",
-     "link": "https://www.edaily.co.kr/News/Read?newsId=01115206645575856&mediaCodeNo=257&utm_source=naver&utm_medium=referral&utm_campaign=news_syndication&utm_content=original_article"
+     "n": 61,
+     "title": "AI 뒤처진 애플, 15년 만에 수장 바꿨다…‘하드웨어맨’ 터너스의 승부",
+     "link": "https://www.ekn.kr/web/view.php?key=20260901020439004"
+    },
+    {
+     "kw": "삼성전자",
+     "n": 61,
+     "title": "삼성전자, 가전 생활 모든 순간을 AI로 연결하다",
+     "link": "https://www.hankyung.com/article/2026082631791"
     },
     {
      "kw": "모델",
-     "n": 57,
-     "title": "애플 '터너스 시대' 9월 1일 개막…첫 시험대는 '시리 AI'",
-     "link": "https://view.asiae.co.kr/article/2026083110025142317"
+     "n": 58,
+     "title": "“팀 쿡 시대 끝났다” 애플 새 선장 존 터너스, 9일 첫 이벤트로 신고...",
+     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202608311407046000986"
     },
     {
      "kw": "스피커",
-     "n": 55,
-     "title": "챗GPT 스피커 내년 출시 전망... 오픈AI “인간과 소통 가능”",
-     "link": "https://www.chosun.com/economy/tech_it/2026/08/08/2N4WMWBG2FAO3MJVNVUFPBDVJM/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news"
+     "n": 56,
+     "title": "애플 CEO 15년 만에 물러나는 팀 쿡...'시총 4.5조'에도 중국 의존·AI 낙...",
+     "link": "https://www.fnnews.com/news/202609010159399965"
     },
     {
      "kw": "할일",
@@ -694,7 +694,7 @@
     },
     {
      "kw": "갤럭시",
-     "n": 53,
+     "n": 52,
      "title": "獨 프리미엄 매장서 만난 삼성 AI 생태계…게임스컴까지 '체험'으로 유럽...",
      "link": "https://www.etnews.com/20260829000025"
     },
