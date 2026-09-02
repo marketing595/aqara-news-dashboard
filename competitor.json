@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-01 22:32",
+ "generatedAt": "2026-09-02 21:48",
  "brands": [
   {
    "name": "아카라",
@@ -127,9 +127,9 @@
     "아카라 홈캠",
     "아카라 스위치",
     "아카라 l100",
-    "아카라이브 핫딜",
-    "아카라치",
-    "아카라카"
+    "명조 아카라이브",
+    "아카라카",
+    "아카라치"
    ],
    "recent": [
     {
@@ -343,16 +343,16 @@
     ]
    ],
    "related": [
-    "헤이홈",
     "헤이홈 홈캠",
+    "헤이홈",
     "헤이홈 sd카드",
+    "헤이홈 거치대",
     "헤이홈 연결",
     "헤이홈 중국",
-    "헤이홈 거치대",
     "헤이홈 공유",
     "헤이홈 오프라인",
-    "헤이홈 러그",
-    "헤이홈 as"
+    "헤이홈 as",
+    "헤이홈 홈캠거치대"
    ],
    "recent": [
     {
@@ -451,121 +451,181 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67902,
+   "total": 67912,
    "sentiment": {
-    "pos": 9,
-    "neu": 51,
+    "pos": 7,
+    "neu": 53,
     "neg": 0
    },
    "keywords": [
     [
      "캐시백",
-     74
+     66
     ],
     [
      "스마트가전",
-     71
+     63
     ],
     [
      "앱에서",
-     32
-    ],
-    [
-     "에너지",
-     30
-    ],
-    [
-     "시범사업",
-     26
-    ],
-    [
-     "주말",
-     24
-    ],
-    [
-     "삼성전자는",
-     24
+     37
     ],
     [
      "한전",
-     22
+     27
     ],
     [
-     "전력",
-     20
+     "시범사업",
+     24
+    ],
+    [
+     "주말",
+     23
     ],
     [
      "신청을",
-     17
+     20
     ],
     [
-     "전기요금",
-     16
-    ],
-    [
-     "사용량",
-     16
-    ],
-    [
-     "참여",
-     16
-    ],
-    [
-     "가전",
-     15
-    ],
-    [
-     "따라",
-     15
+     "삼성전자는",
+     20
     ],
     [
      "LG전자",
-     15
+     19
+    ],
+    [
+     "에너지",
+     19
+    ],
+    [
+     "따라",
+     18
+    ],
+    [
+     "참여",
+     18
     ],
     [
      "AI",
-     14
+     17
+    ],
+    [
+     "제품에",
+     16
+    ],
+    [
+     "보유한",
+     16
+    ],
+    [
+     "제품을",
+     16
     ],
     [
      "모두",
-     14
+     16
+    ],
+    [
+     "전력",
+     15
     ]
    ],
    "posWords": [
     [
-     "확대",
-     6
-    ],
-    [
-     "글로벌",
-     2
-    ],
-    [
      "강화",
-     2
+     3
     ],
     [
-     "파트너십",
-     2
+     "확대",
+     3
     ],
     [
      "기대",
      1
+    ],
+    [
+     "글로벌",
+     1
+    ],
+    [
+     "파트너십",
+     1
     ]
    ],
    "related": [
-    "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스",
-    "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 에어컨",
+    "삼성 스마트싱스 스테이션",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 연결",
+    "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스",
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 오프라인"
+    "삼성 스마트싱스 아이폰"
    ],
    "recent": [
+    {
+     "title": "주말 낮 세탁기 돌리면 캐시백… 한전 '스마트가전 캐시백' 진행",
+     "source": "newscj.com",
+     "date": "2026-09-02",
+     "link": "https://www.newscj.com/news/articleView.html?idxno=3429674"
+    },
+    {
+     "title": "한전 \"세탁·건조 낮에 하면 전기료 할인\"",
+     "source": "jndn.com",
+     "date": "2026-09-02",
+     "link": "http://www.jndn.com/article.php?aid=1788338853438923099"
+    },
+    {
+     "title": "한전, 낮 시간대 전력 사용 유도 ‘스마트가전 캐시백’ 시범사업 실시",
+     "source": "g-enews.com",
+     "date": "2026-09-02",
+     "link": "https://www.g-enews.com/view.php?ud=202609021602056527a9fc143920_1"
+    },
+    {
+     "title": "'TV·냉장고 자랑?' 달라진 IFA…삼성·LG 'AI 생태계' 판다",
+     "source": "머니투데이",
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/008/0005408483?sid=101"
+    },
+    {
+     "title": "“전기 아끼면 환급”⋯ 삼성·LG, ‘AI 홈’ 활용 스마트가전 캐시백 경...",
+     "source": "viva100.com",
+     "date": "2026-09-02",
+     "link": "https://www.viva100.com/article/20260902500752"
+    },
+    {
+     "title": "가전쇼에 로봇이 걷는다…IFA 2026, 미래 생활 경쟁 막 오른다",
+     "source": "dailian.co.kr",
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/119/0003128213?sid=101"
+    },
+    {
+     "title": "\"주말 낮 세탁기 돌리면 요금 깎아준다\"…한전, '스마트가전 캐시백' 시...",
+     "source": "metroseoul.co.kr",
+     "date": "2026-09-02",
+     "link": "http://www.metroseoul.co.kr/article/20260902500138"
+    },
+    {
+     "title": "스마트가전으로 전기요금 아끼고 캐시백도 받는다···삼성전자, 한전...",
+     "source": "globale.co.kr",
+     "date": "2026-09-02",
+     "link": "https://www.globale.co.kr/news/articleView.html?idxno=40167"
+    },
+    {
+     "title": "삼성·LG, AI 데이터센터 냉각시장 선점 맞대결",
+     "source": "sidae.com",
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/417/0001157067?sid=101"
+    },
+    {
+     "title": "유럽 안방 치고 들어온 中가전…삼성·LG, '기술·AS 격차'로 맞불",
+     "source": "ziksir.com",
+     "date": "2026-09-02",
+     "link": "https://www.ziksir.com/news/articleView.html?idxno=144962"
+    },
     {
      "title": "[삼성전자] 디자인 마이애미 참가 / 갤럭시 북6 신모델 / 스마트가전 캐...",
      "source": "webeconomy.co.kr",
@@ -595,66 +655,6 @@
      "source": "asiatoday.co.kr",
      "date": "2026-09-01",
      "link": "https://www.asiatoday.co.kr/kn/view.php?key=20260902010000527"
-    },
-    {
-     "title": "한전, 스마트가전 캐시백 시범사업 시행",
-     "source": "lawissue.co.kr",
-     "date": "2026-09-01",
-     "link": "http://www.lawissue.co.kr/view.php?ud=202609011751543262f4ab64559d_12"
-    },
-    {
-     "title": "한전, 주말 낮 '스마트가전 사용량'에 '1㎾h당 100원' 캐시백",
-     "source": "weekly.hankooki.com",
-     "date": "2026-09-01",
-     "link": "https://weekly.hankooki.com/news/articleView.html?idxno=7181865"
-    },
-    {
-     "title": "한전, 10월 말까지 '스마트 가전 캐시백' 시범 사업 시행",
-     "source": "daily.hankooki.com",
-     "date": "2026-09-01",
-     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1401575"
-    },
-    {
-     "title": "삼성전자, 한국전력과 ‘스마트가전 캐시백’ 시범사업 개시… 스마트싱...",
-     "source": "livesnews.com",
-     "date": "2026-09-01",
-     "link": "https://www.livesnews.com/news/article.html?no=63766"
-    },
-    {
-     "title": "“주말 낮에 스마트가전 사용하면 전기요금 혜택” 한전, ‘스마트가전...",
-     "source": "siminilbo.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.siminilbo.co.kr/news/newsview.php?ncode=1160290006873245"
-    },
-    {
-     "title": "한전, 스마트가전 캐시백 시범사업 시행…1kWh당 100원 지급",
-     "source": "m-i.kr",
-     "date": "2026-09-01",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1408731"
-    },
-    {
-     "title": "\"세탁기 주말 낮에 돌리세요\"…전기요금 아끼는 '짠테크 3시간'",
-     "source": "한국경제",
-     "date": "2026-09-01",
-     "link": "https://n.news.naver.com/mnews/article/015/0005327266?sid=103"
-    },
-    {
-     "title": "한전, '스마트가전 캐시백 시범사업' 본격 가동",
-     "source": "e-platform.net",
-     "date": "2026-09-01",
-     "link": "http://www.e-platform.net/news/articleView.html?idxno=104970"
-    },
-    {
-     "title": "삼성전자, 한전과 '스마트가전 캐시백' 시범 운영",
-     "source": "e-science.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.e-science.co.kr/news/articleView.html?idxno=134493"
-    },
-    {
-     "title": "한전, 주말 낮 스마트가전 사용 캐시백...1kWh당 100원 환급",
-     "source": "pinpointnews.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=482676"
     }
    ]
   },
@@ -662,63 +662,63 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77187,
+   "total": 77205,
    "sentiment": {
-    "pos": 4,
-    "neu": 56,
+    "pos": 6,
+    "neu": 54,
     "neg": 0
    },
    "keywords": [
     [
-     "캐시백",
-     63
+     "스마트가전",
+     46
     ],
     [
-     "스마트가전",
-     61
+     "캐시백",
+     45
     ],
     [
      "LG전자",
-     56
-    ],
-    [
-     "한전",
-     34
-    ],
-    [
-     "ThinQ",
-     34
-    ],
-    [
-     "앱에서",
-     27
-    ],
-    [
-     "시범사업",
-     23
-    ],
-    [
-     "가전",
-     18
+     44
     ],
     [
      "AI",
-     18
+     44
     ],
     [
-     "고객은",
-     17
+     "ThinQ",
+     33
+    ],
+    [
+     "앱에서",
+     31
+    ],
+    [
+     "한전",
+     24
+    ],
+    [
+     "가전",
+     22
     ],
     [
      "신청을",
-     17
+     20
     ],
     [
-     "한국전력",
+     "시범사업",
+     20
+    ],
+    [
+     "따라",
      17
     ],
     [
      "참여",
+     17
+    ],
+    [
+     "제품에",
      16
     ],
     [
@@ -726,23 +726,35 @@
      16
     ],
     [
-     "SmartThings",
+     "보유한",
      16
     ],
     [
-     "플랫폼",
+     "모두",
      16
     ],
     [
-     "건조기",
+     "IFA",
      16
     ],
     [
-     "서비스를",
-     16
+     "제품을",
+     15
     ]
    ],
    "posWords": [
+    [
+     "강화",
+     1
+    ],
+    [
+     "확대",
+     1
+    ],
+    [
+     "최초",
+     1
+    ],
     [
      "공략",
      1
@@ -754,114 +766,110 @@
     [
      "투자",
      1
-    ],
-    [
-     "확대",
-     1
     ]
    ],
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐 연결",
     "lg 씽큐 가족 공유",
+    "lg 씽큐 연결",
     "lg 씽큐 와이파이",
     "lg 씽큐 세탁기",
     "lg 씽큐 앱 에어컨",
     "lg 씽큐 냉장고",
-    "lg 씽큐 가족 초대",
-    "lg 씽큐 티비연결"
+    "lg 씽큐 티비연결",
+    "lg 씽큐 오류"
    ],
    "recent": [
     {
-     "title": "한전, 스마트가전 캐시백 시범사업 시행",
-     "source": "lawissue.co.kr",
-     "date": "2026-09-01",
-     "link": "http://www.lawissue.co.kr/view.php?ud=202609011751543262f4ab64559d_12"
+     "title": "주말 낮 세탁기 돌리면 캐시백… 한전 '스마트가전 캐시백' 진행",
+     "source": "newscj.com",
+     "date": "2026-09-02",
+     "link": "https://www.newscj.com/news/articleView.html?idxno=3429674"
     },
     {
-     "title": "한전, 주말 낮 '스마트가전 사용량'에 '1㎾h당 100원' 캐시백",
-     "source": "weekly.hankooki.com",
-     "date": "2026-09-01",
-     "link": "https://weekly.hankooki.com/news/articleView.html?idxno=7181865"
+     "title": "한전 \"세탁·건조 낮에 하면 전기료 할인\"",
+     "source": "jndn.com",
+     "date": "2026-09-02",
+     "link": "http://www.jndn.com/article.php?aid=1788338853438923099"
     },
     {
-     "title": "한전, 10월 말까지 '스마트 가전 캐시백' 시범 사업 시행",
-     "source": "daily.hankooki.com",
-     "date": "2026-09-01",
-     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1401575"
+     "title": "[IFA 2026 미리보기] '가전쇼' 넘어 AI·로봇 전쟁터로…中 900곳 몰리는...",
+     "source": "ajunews.com",
+     "date": "2026-09-02",
+     "link": "https://www.ajunews.com/view/20260902143826644"
     },
     {
-     "title": "“주말 낮에 스마트가전 사용하면 전기요금 혜택” 한전, ‘스마트가전...",
-     "source": "siminilbo.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.siminilbo.co.kr/news/newsview.php?ncode=1160290006873245"
+     "title": "한전, 낮 시간대 전력 사용 유도 ‘스마트가전 캐시백’ 시범사업 실시",
+     "source": "g-enews.com",
+     "date": "2026-09-02",
+     "link": "https://www.g-enews.com/view.php?ud=202609021602056527a9fc143920_1"
     },
     {
-     "title": "한전, 스마트가전 캐시백 시범사업 시행…1kWh당 100원 지급",
-     "source": "m-i.kr",
-     "date": "2026-09-01",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1408731"
+     "title": "삼성·LG, AI 리빙 구현…가전 넘어 ‘로봇 경연장’ 진화",
+     "source": "서울경제",
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/011/0004657918?sid=101"
     },
     {
-     "title": "LG전자, 유럽 가전전시회 'IFA 2026'서 채팅 기반 'AI 홈 에이전트' 공개",
-     "source": "뉴시스",
-     "date": "2026-09-01",
-     "link": "https://n.news.naver.com/mnews/article/003/0014162285?sid=101"
+     "title": "삼성·LG, IFA 2026서 'AI 홈' 영토 넓힌다",
+     "source": "newsprime.co.kr",
+     "date": "2026-09-02",
+     "link": "http://www.newsprime.co.kr/news/article.html?no=746182"
     },
     {
-     "title": "\"세탁기 주말 낮에 돌리세요\"…전기요금 아끼는 '짠테크 3시간'",
-     "source": "한국경제",
-     "date": "2026-09-01",
-     "link": "https://n.news.naver.com/mnews/article/015/0005327266?sid=103"
+     "title": "[체험기] \"집에서 동전 떨어진 줄\"…LG 사운드 스위트 직접 들어보니",
+     "source": "metroseoul.co.kr",
+     "date": "2026-09-02",
+     "link": "http://www.metroseoul.co.kr/article/20260902500475"
     },
     {
-     "title": "한전, '스마트가전 캐시백 시범사업' 본격 가동",
-     "source": "e-platform.net",
-     "date": "2026-09-01",
-     "link": "http://www.e-platform.net/news/articleView.html?idxno=104970"
-    },
-    {
-     "title": "한전, 주말 낮 스마트가전 사용 캐시백...1kWh당 100원 환급",
-     "source": "pinpointnews.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=482676"
-    },
-    {
-     "title": "\"AI가 알잘딱깔센 가전제어\"...LG전자, IFA서 차세대 AI 홈 선보여",
-     "source": "aitimes.com",
-     "date": "2026-09-01",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=214699"
-    },
-    {
-     "title": "한전 \"스마트가전 사용시간 바꾸면 전기요금 할인… 1kWh당 100원\"",
-     "source": "biztribune.co.kr",
-     "date": "2026-09-01",
-     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=358256"
-    },
-    {
-     "title": "주말 낮에 삼성전자·LG전자 스마트가전 돌리면 전기료 '캐시백'",
-     "source": "widedaily.com",
-     "date": "2026-09-01",
-     "link": "https://www.widedaily.com/news/articleView.html?idxno=300435"
-    },
-    {
-     "title": "휴일 낮 세탁기 돌리면 캐시백…한전, 삼전·LG와 시범사업",
-     "source": "cstimes.com",
-     "date": "2026-09-01",
-     "link": "https://www.cstimes.com/news/articleView.html?idxno=718926"
-    },
-    {
-     "title": "주말·공휴일 낮에 스마트가전 쓰면 전기요금 차감…한전, 캐시백 시범...",
-     "source": "mediapen.com",
-     "date": "2026-09-01",
-     "link": "https://www.mediapen.com/news/view/1120385"
-    },
-    {
-     "title": "한국전력, '스마트가전 캐시백' 시범사업 시행",
+     "title": "'TV·냉장고 자랑?' 달라진 IFA…삼성·LG 'AI 생태계' 판다",
      "source": "머니투데이",
-     "date": "2026-09-01",
-     "link": "https://n.news.naver.com/mnews/article/008/0005407761?sid=102"
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/008/0005408483?sid=101"
+    },
+    {
+     "title": "“전기 아끼면 환급”⋯ 삼성·LG, ‘AI 홈’ 활용 스마트가전 캐시백 경...",
+     "source": "viva100.com",
+     "date": "2026-09-02",
+     "link": "https://www.viva100.com/article/20260902500752"
+    },
+    {
+     "title": "IFA 참가사 절반이 中…삼성·LG, 유럽 TV 수성전",
+     "source": "m-i.kr",
+     "date": "2026-09-02",
+     "link": "https://www.m-i.kr/news/articleView.html?idxno=1409111"
+    },
+    {
+     "title": "공장 닫는 유럽 가전...IFA서 맞붙는 한·중",
+     "source": "pointdaily.co.kr",
+     "date": "2026-09-02",
+     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=317632"
+    },
+    {
+     "title": "[IFA 2026] 4일 베를린서 개막…삼성·LG, 차세대 AI 라이프 선보인다",
+     "source": "newsian.co.kr",
+     "date": "2026-09-02",
+     "link": "http://www.newsian.co.kr/news/articleView.html?idxno=94657"
+    },
+    {
+     "title": "中휴머노이드 군단, IFA 2026 대공습…韓 AI·고효율 가전 맞불",
+     "source": "donga.com",
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/020/0003745184?sid=101"
+    },
+    {
+     "title": "IFA 2026 개막…中 휴머노이드 로봇 ‘대공습’",
+     "source": "chosun.com",
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/023/0003996279?sid=105"
+    },
+    {
+     "title": "\"주말 낮 세탁기 돌리면 요금 깎아준다\"…한전, '스마트가전 캐시백' 시...",
+     "source": "metroseoul.co.kr",
+     "date": "2026-09-02",
+     "link": "http://www.metroseoul.co.kr/article/20260902500138"
     }
    ]
   },
@@ -869,7 +877,7 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75613,
+   "total": 75626,
    "sentiment": {
     "pos": 17,
     "neu": 31,
@@ -878,89 +886,85 @@
    "keywords": [
     [
      "AI",
-     46
+     50
     ],
     [
      "제미나이",
-     19
+     20
     ],
     [
      "애플은",
      12
     ],
     [
-     "Gemini",
+     "구글의",
      10
     ],
     [
-     "으로",
-     9
+     "생성형",
+     10
     ],
     [
      "Google",
      9
     ],
     [
-     "이미지",
-     9
+     "제미나이를",
+     8
+    ],
+    [
+     "기반으로",
+     8
+    ],
+    [
+     "Gemini",
+     8
+    ],
+    [
+     "터너스",
+     7
     ],
     [
      "오픈AI",
-     8
+     7
     ],
     [
-     "생성형",
-     8
+     "홈플러스",
+     7
     ],
     [
-     "구글의",
-     8
-    ],
-    [
-     "있습니다",
-     8
-    ],
-    [
-     "그래픽",
-     8
-    ],
-    [
-     "활용",
-     8
-    ],
-    [
-     "글로벌",
+     "이미지",
      7
     ],
     [
      "아래는",
-     7
-    ],
-    [
-     "기사를",
-     7
-    ],
-    [
-     "번역",
-     7
+     6
     ],
     [
      "번역한",
-     7
+     6
+    ],
+    [
+     "으로",
+     6
+    ],
+    [
+     "다올투자증권",
+     6
+    ],
+    [
+     "글로벌",
+     6
     ]
    ],
    "posWords": [
-    [
-     "글로벌",
-     7
-    ],
     [
      "투자",
      6
     ],
     [
-     "확대",
-     5
+     "글로벌",
+     6
     ],
     [
      "강화",
@@ -971,15 +975,19 @@
      4
     ],
     [
+     "확대",
+     4
+    ],
+    [
+     "계약",
+     1
+    ],
+    [
+     "파트너십",
+     1
+    ],
+    [
      "개선",
-     2
-    ],
-    [
-     "최초",
-     2
-    ],
-    [
-     "만족",
      1
     ]
    ],
@@ -990,12 +998,90 @@
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 초기화",
-    "구글 홈 미니 연결",
     "구글 홈 미니 2세대",
     "구글 홈 어시스턴트",
+    "구글 홈 미니 1세대",
     "구글 홈 스피커 연결"
    ],
    "recent": [
+    {
+     "title": "애플, 다시 '잡스 DNA'로…터너스 \"상상 못한 제품 만든다\"",
+     "source": "wowtv.co.kr",
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/215/0001264618?sid=101"
+    },
+    {
+     "title": "남도한바퀴 가을 코스 ‘그림에서 풍경까지, 광양여행’ 운영",
+     "source": "breaknews.com",
+     "date": "2026-09-02",
+     "link": "http://www.breaknews.com/1233612"
+    },
+    {
+     "title": "평택시, KB손해보험 배구단 홈경기 유치",
+     "source": "breaknews.com",
+     "date": "2026-09-02",
+     "link": "http://www.breaknews.com/1233601"
+    },
+    {
+     "title": "캣츠아이 ‘WILD’, 美 ‘빌보드 200’ 6위 차지..2주 연속 톱10",
+     "source": "breaknews.com",
+     "date": "2026-09-02",
+     "link": "http://www.breaknews.com/1233588"
+    },
+    {
+     "title": "[증권 뉴스브리핑] 정은보 거래소 이사장, 미 공적 연기금 CalPERS 면담/금...",
+     "source": "asiatime.co.kr",
+     "date": "2026-09-02",
+     "link": "https://www.asiatime.co.kr/article/20260902500142"
+    },
+    {
+     "title": "대구 첫 이케아 매장 생긴다..17일 대구신세계 8층 입점",
+     "source": "breaknews.com",
+     "date": "2026-09-02",
+     "link": "http://www.breaknews.com/1233408"
+    },
+    {
+     "title": "알바천국, 홈 화면에서 바로 만나는 'AI 매칭 공고 서비스' 오픈",
+     "source": "edu.donga.com",
+     "date": "2026-09-02",
+     "link": "https://edu.donga.com/news/articleView.html?idxno=111506"
+    },
+    {
+     "title": "유튜브서 아마존 상품 바로 판다…\"구글, ‘영상 쇼핑’ 키워\"",
+     "source": "지디넷",
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/092/0002435890?sid=105"
+    },
+    {
+     "title": "삼성전자, AI가 식재료 관리…가전생활에 혁신을 더하다",
+     "source": "한국경제",
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/015/0005327726?sid=101"
+    },
+    {
+     "title": "[마켓 브리핑] 전 세계적 국채 매도세 확대…유가 상승에 인플레 우려",
+     "source": "biz.sbs.co.kr",
+     "date": "2026-09-02",
+     "link": "https://n.news.naver.com/mnews/article/374/0000530673?sid=104"
+    },
+    {
+     "title": "구글 TV 스트리머 가격, 99.99달러서 149.99달러로 50% 기습 인상",
+     "source": "wikitree.co.kr",
+     "date": "2026-09-02",
+     "link": "https://www.wikitree.co.kr/articles/1156622"
+    },
+    {
+     "title": "[미국 특징주] 유튜브, 아마존과 파트너십 체결…온라인 쇼핑 사업 강화...",
+     "source": "newspim.com",
+     "date": "2026-09-02",
+     "link": "https://www.newspim.com/news/view/20260902000004"
+    },
+    {
+     "title": "포코 F9 울트라, 배터리 24% 커진 8050mAh 담았지만 미국 출시는 없다",
+     "source": "wikitree.co.kr",
+     "date": "2026-09-01",
+     "link": "https://www.wikitree.co.kr/articles/1156613"
+    },
     {
      "title": "[산업 뉴스브리핑] LG전자, '칩플레이션' 부담 줄인다…실속형 그램 출...",
      "source": "asiatime.co.kr",
@@ -1007,84 +1093,6 @@
      "source": "womentimes.co.kr",
      "date": "2026-09-01",
      "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=105817"
-    },
-    {
-     "title": "AI 뒤처진 애플, 15년 만에 수장 바꿨다…‘하드웨어맨’ 터너스의 승부",
-     "source": "ekn.kr",
-     "date": "2026-09-01",
-     "link": "https://www.ekn.kr/web/view.php?key=20260901020439004"
-    },
-    {
-     "title": "[경제소식] 우리은행, 알뜰폰 요금제 2종 출시",
-     "source": "4th.kr",
-     "date": "2026-09-01",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2117238"
-    },
-    {
-     "title": "아이폰 31억대 판매 신화 쓴 팀 쿡, 15년 만에 애플 떠난다",
-     "source": "insight.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.insight.co.kr/news/571279"
-    },
-    {
-     "title": "中 샤오미, H50 로봇청소기·미지아 공기청정기 韓 출시",
-     "source": "biz.chosun.com",
-     "date": "2026-09-01",
-     "link": "https://n.news.naver.com/mnews/article/366/0001189566?sid=105"
-    },
-    {
-     "title": "다올투자증권, 주식입고·대여 이벤트 진행",
-     "source": "pointdaily.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=317457"
-    },
-    {
-     "title": "\"소문난 '가성비' 샤오미 가전, 이젠 직구 안해도 돼\"…스마트 홈케어 ...",
-     "source": "머니투데이",
-     "date": "2026-09-01",
-     "link": "https://n.news.naver.com/mnews/article/008/0005407524?sid=105"
-    },
-    {
-     "title": "이마트, 추석 전 ‘오더투홈·오더픽’ 사전예약..절임배추·모둠전 할...",
-     "source": "breaknews.com",
-     "date": "2026-09-01",
-     "link": "http://www.breaknews.com/1233062"
-    },
-    {
-     "title": "[영상] \"네이버지도에 일본이?\"…'세계지도' 여행 필수템 될까? 확인해보...",
-     "source": "ajunews.com",
-     "date": "2026-09-01",
-     "link": "https://www.ajunews.com/view/20260901082424960"
-    },
-    {
-     "title": "아이폰 31억대, 주가 2000%↑… 숫자로 보는 ‘굿바이 팀쿡’ [이사람@w...",
-     "source": "segye.com",
-     "date": "2026-09-01",
-     "link": "https://n.news.naver.com/mnews/article/022/0004155299?sid=104"
-    },
-    {
-     "title": "'제품 완벽주의자' 존 터너스 애플 신임 CEO…AI 시대 구원투수 될까",
-     "source": "news.einfomax.co.kr",
-     "date": "2026-09-01",
-     "link": "https://news.einfomax.co.kr/news/articleView.html?idxno=4432743"
-    },
-    {
-     "title": "[비즈 나우] 막내린 팀 쿡 시대…터너스의 애플은?",
-     "source": "biz.sbs.co.kr",
-     "date": "2026-09-01",
-     "link": "https://n.news.naver.com/mnews/article/374/0000530402?sid=104"
-    },
-    {
-     "title": "관계인집회 앞둔 홈플러스…전단채 피해자 \"MBK 책임 없는 회생 못 받아...",
-     "source": "joongangenews.com",
-     "date": "2026-09-01",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=544349"
-    },
-    {
-     "title": "[류재철의 로봇 전략] 가전전문가에서 로봇전문가로…LG 로봇사업 선봉...",
-     "source": "dealsite.co.kr",
-     "date": "2026-09-01",
-     "link": "https://dealsite.co.kr/articles/168066"
     }
    ]
   }
