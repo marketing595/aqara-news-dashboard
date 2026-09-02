@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-01 10:21",
+ "generatedAt": "2026-09-02 09:23",
  "source": "Stibee API v2 (자동)",
  "subscribers": 7262,
  "b2b": [
@@ -10,6 +10,17 @@
    "link": "https://stib.ee/H4AO",
    "listId": -1,
    "sender": null,
+   "sent": null,
+   "openRate": null,
+   "clickRate": null
+  },
+  {
+   "id": 3572170,
+   "title": "(초청) KOSID 공동 주최 세미나에 초대합니다.",
+   "date": "2026-08-31",
+   "link": "https://stib.ee/0VAO",
+   "listId": 272115,
+   "sender": "아카라라이프",
    "sent": null,
    "openRate": null,
    "clickRate": null
