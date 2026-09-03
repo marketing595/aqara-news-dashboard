@@ -1,14 +1,14 @@
 {
- "generatedAt": "2026-09-02 21:48",
+ "generatedAt": "2026-09-03 21:51",
  "brands": [
   {
    "name": "아카라",
    "me": true,
    "query": "아카라 스마트홈",
-   "total": 1517,
+   "total": 1518,
    "sentiment": {
-    "pos": 25,
-    "neu": 34,
+    "pos": 26,
+    "neu": 33,
     "neg": 1
    },
    "keywords": [
@@ -18,7 +18,7 @@
     ],
     [
      "IoT",
-     21
+     22
     ],
     [
      "AIoT",
@@ -26,11 +26,7 @@
     ],
     [
      "도어락",
-     16
-    ],
-    [
-     "공간",
-     15
+     18
     ],
     [
      "기업",
@@ -41,8 +37,16 @@
      15
     ],
     [
+     "공간",
+     14
+    ],
+    [
      "자동화",
      12
+    ],
+    [
+     "L100",
+     11
     ],
     [
      "공간디자인",
@@ -79,10 +83,6 @@
     [
      "김현철",
      8
-    ],
-    [
-     "제1회",
-     8
     ]
    ],
    "posWords": [
@@ -96,7 +96,7 @@
     ],
     [
      "프리미엄",
-     3
+     4
     ],
     [
      "확대",
@@ -127,11 +127,17 @@
     "아카라 홈캠",
     "아카라 스위치",
     "아카라 l100",
-    "명조 아카라이브",
+    "아카라치",
     "아카라카",
-    "아카라치"
+    "메랜 아카라이브"
    ],
    "recent": [
+    {
+     "title": "아카라라이프, 스마트홈 입문자 겨냥 ‘L100 SE’ 출시…가격 부담 낮춰",
+     "source": "asiatime.co.kr",
+     "date": "2026-09-03",
+     "link": "https://www.asiatime.co.kr/article/20260903500071"
+    },
     {
      "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
      "source": "전자신문",
@@ -215,12 +221,6 @@
      "source": "머니투데이",
      "date": "2026-07-31",
      "link": "https://n.news.naver.com/mnews/article/008/0005394035?sid=101"
-    },
-    {
-     "title": "아카라라이프, 임직원 전용 AI 포털 구축",
-     "source": "getnews.co.kr",
-     "date": "2026-07-30",
-     "link": "https://www.getnews.co.kr/news/articleView.html?idxno=876498"
     }
    ]
   },
@@ -343,16 +343,16 @@
     ]
    ],
    "related": [
-    "헤이홈 홈캠",
     "헤이홈",
+    "헤이홈 홈캠",
     "헤이홈 sd카드",
     "헤이홈 거치대",
     "헤이홈 연결",
     "헤이홈 중국",
     "헤이홈 공유",
     "헤이홈 오프라인",
-    "헤이홈 as",
-    "헤이홈 홈캠거치대"
+    "헤이홈 홈캠거치대",
+    "헤이홈 as"
    ],
    "recent": [
     {
@@ -451,20 +451,20 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 67912,
+   "total": 67917,
    "sentiment": {
-    "pos": 7,
-    "neu": 53,
+    "pos": 8,
+    "neu": 52,
     "neg": 0
    },
    "keywords": [
     [
      "캐시백",
-     66
+     60
     ],
     [
      "스마트가전",
-     63
+     59
     ],
     [
      "앱에서",
@@ -472,7 +472,7 @@
     ],
     [
      "한전",
-     27
+     26
     ],
     [
      "시범사업",
@@ -483,19 +483,19 @@
      23
     ],
     [
-     "신청을",
-     20
+     "AI",
+     21
     ],
     [
      "삼성전자는",
      20
     ],
     [
-     "LG전자",
-     19
+     "신청을",
+     20
     ],
     [
-     "에너지",
+     "LG전자",
      19
     ],
     [
@@ -507,7 +507,7 @@
      18
     ],
     [
-     "AI",
+     "제품을",
      17
     ],
     [
@@ -519,26 +519,30 @@
      16
     ],
     [
-     "제품을",
-     16
-    ],
-    [
      "모두",
      16
     ],
     [
-     "전력",
-     15
+     "에너지",
+     14
+    ],
+    [
+     "또는",
+     14
     ]
    ],
    "posWords": [
     [
-     "강화",
+     "확대",
      3
     ],
     [
-     "확대",
-     3
+     "강화",
+     2
+    ],
+    [
+     "공략",
+     1
     ],
     [
      "기대",
@@ -554,18 +558,48 @@
     ]
    ],
    "related": [
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 연결",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 스위치",
+    "삼성 스마트싱스",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 아이폰"
    ],
    "recent": [
+    {
+     "title": "“아직도 정수기·공청기만 하시나요?”…고가 가전 구독 시장 뜬다는데",
+     "source": "매일경제",
+     "date": "2026-09-03",
+     "link": "https://n.news.naver.com/mnews/article/009/0005729873?sid=101"
+    },
+    {
+     "title": "삼성전자, 가성비 '스마트폰·노트북' 공략...승부수는?",
+     "source": "techm.kr",
+     "date": "2026-09-03",
+     "link": "https://www.techm.kr/news/articleView.html?idxno=154881"
+    },
+    {
+     "title": "2억짜리 모듈러홈, 돈은 어디서 버나… 삼성·LG, 수익화 시험대 [집 파...",
+     "source": "it.chosun.com",
+     "date": "2026-09-03",
+     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092169354"
+    },
+    {
+     "title": "셸리, 49.99달러 보안카메라에 월 구독료 없이 SD카드 저장·자동화 다 ...",
+     "source": "wikitree.co.kr",
+     "date": "2026-09-03",
+     "link": "https://www.wikitree.co.kr/articles/1156913"
+    },
+    {
+     "title": "가전 성능 자랑 옛말… 'AI 생태계' 승부",
+     "source": "머니투데이",
+     "date": "2026-09-03",
+     "link": "https://n.news.naver.com/mnews/article/008/0005408698?sid=101"
+    },
     {
      "title": "주말 낮 세탁기 돌리면 캐시백… 한전 '스마트가전 캐시백' 진행",
      "source": "newscj.com",
@@ -625,36 +659,6 @@
      "source": "ziksir.com",
      "date": "2026-09-02",
      "link": "https://www.ziksir.com/news/articleView.html?idxno=144962"
-    },
-    {
-     "title": "[삼성전자] 디자인 마이애미 참가 / 갤럭시 북6 신모델 / 스마트가전 캐...",
-     "source": "webeconomy.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2286340"
-    },
-    {
-     "title": "삼성 ‘스마트가전 캐시백’ 시범사업",
-     "source": "segye.com",
-     "date": "2026-09-01",
-     "link": "https://n.news.naver.com/mnews/article/022/0004155508?sid=101"
-    },
-    {
-     "title": "삼성전자, 이달부터 '스마트가전 캐시백' 시범사업 운영…시간당 최대 ...",
-     "source": "thepublic.kr",
-     "date": "2026-09-01",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=317150"
-    },
-    {
-     "title": "삼성전자, 한전과 ‘스마트가전 캐시백’ 시범사업 시작",
-     "source": "donga.com",
-     "date": "2026-09-01",
-     "link": "https://n.news.naver.com/mnews/article/020/0003744963?sid=101"
-    },
-    {
-     "title": "'AI 초연결' 무장한 삼성 스마트싱스… DX 생태계 영토 넓힌다",
-     "source": "asiatoday.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20260902010000527"
     }
    ]
   },
@@ -662,109 +666,109 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77205,
+   "total": 77355,
    "sentiment": {
-    "pos": 6,
-    "neu": 54,
+    "pos": 17,
+    "neu": 43,
     "neg": 0
    },
    "keywords": [
     [
-     "스마트가전",
-     46
-    ],
-    [
-     "캐시백",
-     45
-    ],
-    [
-     "LG전자",
-     44
+     "AI홈",
+     117
     ],
     [
      "AI",
+     72
+    ],
+    [
+     "허브",
      44
     ],
     [
-     "ThinQ",
-     33
-    ],
-    [
-     "앱에서",
-     31
-    ],
-    [
-     "한전",
-     24
-    ],
-    [
-     "가전",
-     22
-    ],
-    [
-     "신청을",
-     20
-    ],
-    [
-     "시범사업",
-     20
-    ],
-    [
-     "따라",
-     17
-    ],
-    [
-     "참여",
-     17
-    ],
-    [
-     "제품에",
-     16
-    ],
-    [
-     "또는",
-     16
-    ],
-    [
-     "보유한",
-     16
-    ],
-    [
-     "모두",
-     16
+     "LG전자",
+     39
     ],
     [
      "IFA",
-     16
+     38
     ],
     [
-     "제품을",
-     15
+     "플랫폼",
+     35
+    ],
+    [
+     "가전",
+     32
+    ],
+    [
+     "ThinQ",
+     31
+    ],
+    [
+     "공간",
+     24
+    ],
+    [
+     "중심으로",
+     23
+    ],
+    [
+     "클로",
+     21
+    ],
+    [
+     "에이전트",
+     21
+    ],
+    [
+     "유럽",
+     19
+    ],
+    [
+     "생활",
+     19
+    ],
+    [
+     "기능을",
+     19
+    ],
+    [
+     "솔루션",
+     17
+    ],
+    [
+     "에너지",
+     17
+    ],
+    [
+     "2026서",
+     16
     ]
    ],
    "posWords": [
     [
      "강화",
-     1
+     8
+    ],
+    [
+     "공략",
+     5
+    ],
+    [
+     "프리미엄",
+     4
     ],
     [
      "확대",
      1
     ],
     [
-     "최초",
+     "혁신",
      1
     ],
     [
-     "공략",
-     1
-    ],
-    [
-     "개선",
-     1
-    ],
-    [
-     "투자",
+     "글로벌",
      1
     ]
    ],
@@ -775,101 +779,101 @@
     "lg 씽큐 연결",
     "lg 씽큐 와이파이",
     "lg 씽큐 세탁기",
-    "lg 씽큐 앱 에어컨",
     "lg 씽큐 냉장고",
-    "lg 씽큐 티비연결",
-    "lg 씽큐 오류"
+    "lg 씽큐 앱 에어컨",
+    "lg 씽큐 오류",
+    "lg 씽큐 에어컨 오류"
    ],
    "recent": [
     {
-     "title": "주말 낮 세탁기 돌리면 캐시백… 한전 '스마트가전 캐시백' 진행",
-     "source": "newscj.com",
-     "date": "2026-09-02",
-     "link": "https://www.newscj.com/news/articleView.html?idxno=3429674"
+     "title": "LG전자, AI 홈 솔루션 선봬",
+     "source": "segye.com",
+     "date": "2026-09-03",
+     "link": "https://n.news.naver.com/mnews/article/022/0004156218?sid=101"
     },
     {
-     "title": "한전 \"세탁·건조 낮에 하면 전기료 할인\"",
-     "source": "jndn.com",
-     "date": "2026-09-02",
-     "link": "http://www.jndn.com/article.php?aid=1788338853438923099"
-    },
-    {
-     "title": "[IFA 2026 미리보기] '가전쇼' 넘어 AI·로봇 전쟁터로…中 900곳 몰리는...",
+     "title": "[IFA 2026] 베를린서 막 오르는 AI 가전 향연…삼성·LG, 'AI 생활'로 맞...",
      "source": "ajunews.com",
-     "date": "2026-09-02",
-     "link": "https://www.ajunews.com/view/20260902143826644"
+     "date": "2026-09-03",
+     "link": "https://www.ajunews.com/view/20260903102802434"
     },
     {
-     "title": "한전, 낮 시간대 전력 사용 유도 ‘스마트가전 캐시백’ 시범사업 실시",
-     "source": "g-enews.com",
-     "date": "2026-09-02",
-     "link": "https://www.g-enews.com/view.php?ud=202609021602056527a9fc143920_1"
+     "title": "LG전자, 獨 IFA 2026서 더욱 진화되고 확장된 'AI홈 생태계' 공개",
+     "source": "efnews.co.kr",
+     "date": "2026-09-03",
+     "link": "http://www.efnews.co.kr/news/articleView.html?idxno=132121"
     },
     {
-     "title": "삼성·LG, AI 리빙 구현…가전 넘어 ‘로봇 경연장’ 진화",
-     "source": "서울경제",
-     "date": "2026-09-02",
-     "link": "https://n.news.naver.com/mnews/article/011/0004657918?sid=101"
+     "title": "中 기업 932곳 몰려온다… 'IFA 2026' 런웨이 점령한 中 휴머노이드",
+     "source": "thepublic.kr",
+     "date": "2026-09-03",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=317501"
     },
     {
-     "title": "삼성·LG, IFA 2026서 'AI 홈' 영토 넓힌다",
-     "source": "newsprime.co.kr",
-     "date": "2026-09-02",
-     "link": "http://www.newsprime.co.kr/news/article.html?no=746182"
+     "title": "[IFA 2026]삼성 AI영역 '확대', LG 알아서 제안·실행까지 고객은?",
+     "source": "finomy.com",
+     "date": "2026-09-03",
+     "link": "http://www.finomy.com/news/articleView.html?idxno=260712"
     },
     {
-     "title": "[체험기] \"집에서 동전 떨어진 줄\"…LG 사운드 스위트 직접 들어보니",
-     "source": "metroseoul.co.kr",
-     "date": "2026-09-02",
-     "link": "http://www.metroseoul.co.kr/article/20260902500475"
+     "title": "삼성·LG, '체감형 가사 해방' 가전으로 유럽시장 흔든다",
+     "source": "파이낸셜뉴스",
+     "date": "2026-09-03",
+     "link": "https://n.news.naver.com/mnews/article/014/0005570787?sid=101"
     },
     {
-     "title": "'TV·냉장고 자랑?' 달라진 IFA…삼성·LG 'AI 생태계' 판다",
+     "title": "LG전자, IFA 2026서 더 확장된 AI홈 생태계 선뵌다",
+     "source": "srtimes.kr",
+     "date": "2026-09-03",
+     "link": "http://www.srtimes.kr/news/articleView.html?idxno=211578"
+    },
+    {
+     "title": "\"AI 스마트홈 누가 더 똑똑할까\" 獨서 맞붙은 삼성·LG",
+     "source": "매일경제",
+     "date": "2026-09-03",
+     "link": "https://n.news.naver.com/mnews/article/009/0005730138?sid=101"
+    },
+    {
+     "title": "삼성·LG, IFA 2026서 격돌…‘AI 생태계’ 패권 경쟁",
+     "source": "sentv.co.kr",
+     "date": "2026-09-03",
+     "link": "https://www.sentv.co.kr/article/view/sentv202609030098"
+    },
+    {
+     "title": "삼성·LG, 유럽 가전 시장 공략 포인트 'AI와 친환경'",
+     "source": "sisaweek.com",
+     "date": "2026-09-03",
+     "link": "https://www.sisaweek.com/news/articleView.html?idxno=237695"
+    },
+    {
+     "title": "\"AI 집사가 집안 관리\"…삼성·LG 'AI 리빙' 공개",
+     "source": "한국경제",
+     "date": "2026-09-03",
+     "link": "https://n.news.naver.com/mnews/article/015/0005328447?sid=101"
+    },
+    {
+     "title": "유럽 가전 명가 주춤한 틈…2500억달러 시장 쟁탈전 [IFA 2026]",
+     "source": "파이낸셜뉴스",
+     "date": "2026-09-03",
+     "link": "https://n.news.naver.com/mnews/article/014/0005570769?sid=101"
+    },
+    {
+     "title": "\"TV 끌까요?\" 먼저 제안하는 AI홈…'IFA 2026'의 A·B·C",
      "source": "머니투데이",
-     "date": "2026-09-02",
-     "link": "https://n.news.naver.com/mnews/article/008/0005408483?sid=101"
+     "date": "2026-09-03",
+     "link": "https://n.news.naver.com/mnews/article/008/0005409204?sid=101"
     },
     {
-     "title": "“전기 아끼면 환급”⋯ 삼성·LG, ‘AI 홈’ 활용 스마트가전 캐시백 경...",
-     "source": "viva100.com",
-     "date": "2026-09-02",
-     "link": "https://www.viva100.com/article/20260902500752"
+     "title": "LG전자, 알아서 움직이는 'AI홈' 띄운다… IFA 2026서 삼성과 AI 경쟁",
+     "source": "biztribune.co.kr",
+     "date": "2026-09-03",
+     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=358425"
     },
     {
-     "title": "IFA 참가사 절반이 中…삼성·LG, 유럽 TV 수성전",
-     "source": "m-i.kr",
-     "date": "2026-09-02",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1409111"
-    },
-    {
-     "title": "공장 닫는 유럽 가전...IFA서 맞붙는 한·중",
-     "source": "pointdaily.co.kr",
-     "date": "2026-09-02",
-     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=317632"
-    },
-    {
-     "title": "[IFA 2026] 4일 베를린서 개막…삼성·LG, 차세대 AI 라이프 선보인다",
-     "source": "newsian.co.kr",
-     "date": "2026-09-02",
-     "link": "http://www.newsian.co.kr/news/articleView.html?idxno=94657"
-    },
-    {
-     "title": "中휴머노이드 군단, IFA 2026 대공습…韓 AI·고효율 가전 맞불",
-     "source": "donga.com",
-     "date": "2026-09-02",
-     "link": "https://n.news.naver.com/mnews/article/020/0003745184?sid=101"
-    },
-    {
-     "title": "IFA 2026 개막…中 휴머노이드 로봇 ‘대공습’",
-     "source": "chosun.com",
-     "date": "2026-09-02",
-     "link": "https://n.news.naver.com/mnews/article/023/0003996279?sid=105"
-    },
-    {
-     "title": "\"주말 낮 세탁기 돌리면 요금 깎아준다\"…한전, '스마트가전 캐시백' 시...",
-     "source": "metroseoul.co.kr",
-     "date": "2026-09-02",
-     "link": "http://www.metroseoul.co.kr/article/20260902500138"
+     "title": "삼성·LG, ‘AI 홈’ 앞세워 유럽 가전 ‘수성’…中 공세 속 AI 차별화로...",
+     "source": "ceoscoredaily.com",
+     "date": "2026-09-03",
+     "link": "https://www.ceoscoredaily.com/page/view/2026090317101806890"
     }
    ]
   },
@@ -877,106 +881,110 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75626,
+   "total": 75646,
    "sentiment": {
-    "pos": 17,
-    "neu": 31,
-    "neg": 12
+    "pos": 15,
+    "neu": 36,
+    "neg": 9
    },
    "keywords": [
     [
      "AI",
-     50
+     48
     ],
     [
      "제미나이",
-     20
+     16
     ],
     [
-     "애플은",
-     12
-    ],
-    [
-     "구글의",
+     "아래는",
      10
     ],
     [
-     "생성형",
+     "번역한",
      10
     ],
     [
      "Google",
+     10
+    ],
+    [
+     "구글의",
      9
     ],
     [
-     "제미나이를",
-     8
+     "기사를",
+     9
     ],
     [
-     "기반으로",
-     8
-    ],
-    [
-     "Gemini",
-     8
-    ],
-    [
-     "터너스",
-     7
-    ],
-    [
-     "오픈AI",
-     7
-    ],
-    [
-     "홈플러스",
-     7
-    ],
-    [
-     "이미지",
-     7
-    ],
-    [
-     "아래는",
-     6
-    ],
-    [
-     "번역한",
-     6
+     "번역",
+     9
     ],
     [
      "으로",
-     6
-    ],
-    [
-     "다올투자증권",
-     6
+     9
     ],
     [
      "글로벌",
-     6
+     7
+    ],
+    [
+     "기사의",
+     7
+    ],
+    [
+     "전문",
+     7
+    ],
+    [
+     "입니다",
+     7
+    ],
+    [
+     "구글번역",
+     7
+    ],
+    [
+     "있습니다",
+     7
+    ],
+    [
+     "오류가",
+     7
+    ],
+    [
+     "아마존",
+     7
+    ],
+    [
+     "생성형",
+     7
     ]
    ],
    "posWords": [
     [
-     "투자",
-     6
-    ],
-    [
      "글로벌",
-     6
+     7
     ],
     [
-     "강화",
-     5
-    ],
-    [
-     "혁신",
-     4
+     "투자",
+     7
     ],
     [
      "확대",
-     4
+     5
+    ],
+    [
+     "강화",
+     3
+    ],
+    [
+     "최초",
+     1
+    ],
+    [
+     "혁신",
+     1
     ],
     [
      "계약",
@@ -984,10 +992,6 @@
     ],
     [
      "파트너십",
-     1
-    ],
-    [
-     "개선",
      1
     ]
    ],
@@ -999,100 +1003,100 @@
     "구글 홈페이지",
     "구글 홈 미니 초기화",
     "구글 홈 미니 2세대",
-    "구글 홈 어시스턴트",
     "구글 홈 미니 1세대",
-    "구글 홈 스피커 연결"
+    "구글 홈 어시스턴트",
+    "구글 홈버튼"
    ],
    "recent": [
     {
-     "title": "애플, 다시 '잡스 DNA'로…터너스 \"상상 못한 제품 만든다\"",
-     "source": "wowtv.co.kr",
-     "date": "2026-09-02",
-     "link": "https://n.news.naver.com/mnews/article/215/0001264618?sid=101"
+     "title": "[미리보는 이데일리 신문] 법무·성평등부 세종 이전…발전 5개사 통합",
+     "source": "이데일리",
+     "date": "2026-09-03",
+     "link": "https://n.news.naver.com/mnews/article/018/0006363377?sid=101"
     },
     {
-     "title": "남도한바퀴 가을 코스 ‘그림에서 풍경까지, 광양여행’ 운영",
+     "title": "[9월4일자] 비즈니스포스트 아침의 주요기사",
+     "source": "businesspost.co.kr",
+     "date": "2026-09-03",
+     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=446384"
+    },
+    {
+     "title": "[AI 써봄] “내가 쓴 대화가 AI 학습에?” AI 학습 활용 설정하는 법",
+     "source": "it.donga.com",
+     "date": "2026-09-03",
+     "link": "https://it.donga.com/109461/"
+    },
+    {
+     "title": "삼성SDS, 미국서 'RX ART 2026' 개최… LG전자, IFA서 AI홈 생태계 공개[I...",
+     "source": "sisaon.co.kr",
+     "date": "2026-09-03",
+     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=204105"
+    },
+    {
+     "title": "창원특례시, LG세이커스 '늑장 공사·파행' 보도 조목조목 반박",
      "source": "breaknews.com",
-     "date": "2026-09-02",
-     "link": "http://www.breaknews.com/1233612"
+     "date": "2026-09-03",
+     "link": "http://www.breaknews.com/1233911"
     },
     {
-     "title": "평택시, KB손해보험 배구단 홈경기 유치",
+     "title": "홈플러스 청산 위기 넘겼지만…5000억 변제·점포 매각·영업 회복·M&A ...",
+     "source": "joongangenews.com",
+     "date": "2026-09-03",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=545313"
+    },
+    {
+     "title": "반도체 호황 타고 뜨는 '반세권'… '힐스테이트 고덕엘리스트' 9월 분양",
+     "source": "view.asiae.co.kr",
+     "date": "2026-09-03",
+     "link": "https://n.news.naver.com/mnews/article/277/0005811521?sid=101"
+    },
+    {
+     "title": "인천도시공사, 검암역 푸르지오 프라베뉴 1순위 최고 경쟁률 132대 1 기록",
      "source": "breaknews.com",
-     "date": "2026-09-02",
-     "link": "http://www.breaknews.com/1233601"
+     "date": "2026-09-03",
+     "link": "http://www.breaknews.com/1233775"
     },
     {
-     "title": "캣츠아이 ‘WILD’, 美 ‘빌보드 200’ 6위 차지..2주 연속 톱10",
+     "title": "벽에서 9.8㎝면 100형 영화관…LG전자, 4년 만에 '시네빔 AI' 출격",
+     "source": "job-post.co.kr",
+     "date": "2026-09-03",
+     "link": "https://www.job-post.co.kr/news/articleView.html?idxno=225986"
+    },
+    {
+     "title": "거실엔 대화면·손엔 플래그십… 삼성·LG, AI 실속형 제품 경쟁",
+     "source": "newscj.com",
+     "date": "2026-09-03",
+     "link": "https://www.newscj.com/news/articleView.html?idxno=3429757"
+    },
+    {
+     "title": "삼성전자, IFA 본행사장 벗어나 베를린 도심서 'AI 리빙' 펼친다",
+     "source": "knpnews.com",
+     "date": "2026-09-03",
+     "link": "http://www.knpnews.com/news/articleView.html?idxno=34396"
+    },
+    {
+     "title": "전남광주 서구, 호남 최초 중증돌봄 대상자 맞춤형 ‘돌봄로봇’ 시범 ...",
      "source": "breaknews.com",
-     "date": "2026-09-02",
-     "link": "http://www.breaknews.com/1233588"
+     "date": "2026-09-03",
+     "link": "http://www.breaknews.com/1233715"
     },
     {
-     "title": "[증권 뉴스브리핑] 정은보 거래소 이사장, 미 공적 연기금 CalPERS 면담/금...",
-     "source": "asiatime.co.kr",
-     "date": "2026-09-02",
-     "link": "https://www.asiatime.co.kr/article/20260902500142"
+     "title": "“좀 빠르게 처리할 수 있도록 부탁드립니다”, 법무부 장관 후보자의 ...",
+     "source": "slownews.kr",
+     "date": "2026-09-03",
+     "link": "https://slownews.kr/165853"
     },
     {
-     "title": "대구 첫 이케아 매장 생긴다..17일 대구신세계 8층 입점",
-     "source": "breaknews.com",
-     "date": "2026-09-02",
-     "link": "http://www.breaknews.com/1233408"
+     "title": "[Who Is ?] 이해진 네이버 이사회 의장",
+     "source": "businesspost.co.kr",
+     "date": "2026-09-03",
+     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=445906"
     },
     {
-     "title": "알바천국, 홈 화면에서 바로 만나는 'AI 매칭 공고 서비스' 오픈",
-     "source": "edu.donga.com",
-     "date": "2026-09-02",
-     "link": "https://edu.donga.com/news/articleView.html?idxno=111506"
-    },
-    {
-     "title": "유튜브서 아마존 상품 바로 판다…\"구글, ‘영상 쇼핑’ 키워\"",
-     "source": "지디넷",
-     "date": "2026-09-02",
-     "link": "https://n.news.naver.com/mnews/article/092/0002435890?sid=105"
-    },
-    {
-     "title": "삼성전자, AI가 식재료 관리…가전생활에 혁신을 더하다",
-     "source": "한국경제",
-     "date": "2026-09-02",
-     "link": "https://n.news.naver.com/mnews/article/015/0005327726?sid=101"
-    },
-    {
-     "title": "[마켓 브리핑] 전 세계적 국채 매도세 확대…유가 상승에 인플레 우려",
-     "source": "biz.sbs.co.kr",
-     "date": "2026-09-02",
-     "link": "https://n.news.naver.com/mnews/article/374/0000530673?sid=104"
-    },
-    {
-     "title": "구글 TV 스트리머 가격, 99.99달러서 149.99달러로 50% 기습 인상",
+     "title": "셸리, 49.99달러 보안카메라에 월 구독료 없이 SD카드 저장·자동화 다 ...",
      "source": "wikitree.co.kr",
-     "date": "2026-09-02",
-     "link": "https://www.wikitree.co.kr/articles/1156622"
-    },
-    {
-     "title": "[미국 특징주] 유튜브, 아마존과 파트너십 체결…온라인 쇼핑 사업 강화...",
-     "source": "newspim.com",
-     "date": "2026-09-02",
-     "link": "https://www.newspim.com/news/view/20260902000004"
-    },
-    {
-     "title": "포코 F9 울트라, 배터리 24% 커진 8050mAh 담았지만 미국 출시는 없다",
-     "source": "wikitree.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.wikitree.co.kr/articles/1156613"
-    },
-    {
-     "title": "[산업 뉴스브리핑] LG전자, '칩플레이션' 부담 줄인다…실속형 그램 출...",
-     "source": "asiatime.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.asiatime.co.kr/article/20260901500319"
-    },
-    {
-     "title": "피지컬 AI 로봇 상용화 성큼...삼성·현대차·LG, 미중 패권 속 전략 행...",
-     "source": "womentimes.co.kr",
-     "date": "2026-09-01",
-     "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=105817"
+     "date": "2026-09-03",
+     "link": "https://www.wikitree.co.kr/articles/1156913"
     }
    ]
   }
