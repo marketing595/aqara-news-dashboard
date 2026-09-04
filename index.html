@@ -770,7 +770,10 @@
            <span id="hpStamp" class="text-slate-400"></span>
          </p>
        </div>
-       <div id="hpSourceBadge" class="flex flex-wrap gap-1.5"></div>
+       <div class="flex flex-wrap items-center gap-2">
+         <div id="hpSourceBadge" class="flex flex-wrap gap-1.5"></div>
+         <button id="hpRefreshBtn" onclick="loadHome(1)" class="text-[12px] border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg font-semibold text-slate-600" title="아임웹에서 지금 다시 집계합니다">새로고침</button>
+       </div>
      </div>
      <div id="hpCatTabs" class="flex flex-wrap gap-2 mb-5"></div>
 
@@ -5245,11 +5248,23 @@
       if(t==='mkt'){ mktEnter(); }
     }
     // ===== 홈페이지 문의 인입 (아임웹 입력폼) =====
-    let HOME=null;
-    function loadHome(){
-      if(HOME) renderHome();   // 캐시 먼저 그리고, 최신본은 아래에서 갱신
-      fetch('homepage.json?_='+Date.now()).then(r=>r.json()).then(d=>{ HOME=d||{}; renderHome(); })
-        .catch(()=>{ if(!HOME){ HOME={source:'none',forms:[],submissions:[]}; renderHome(); } });
+    let HOME=null, HP_LIVE_ERR='';
+    function hpKst(iso){ const t=new Date(iso); if(isNaN(t.getTime())) return String(iso||'').slice(0,16).replace('T',' ');
+      return new Date(t.getTime()+9*3600*1000).toISOString().slice(0,16).replace('T',' '); }
+    // 아임웹에서 '지금' 집계를 받아온다 — /api/homepage-live 가 1순위.
+    // 토큰 만료 등으로 실패하면 매일 갱신되는 homepage.json(저장본)으로 자동 폴백하고 배지로 알린다.
+    function loadHome(force){
+      if(HOME && !force) renderHome();   // 캐시 먼저 그리고, 최신본은 아래에서 갱신
+      const btn=document.getElementById('hpRefreshBtn');
+      if(btn){ btn.disabled=true; btn.textContent='불러오는 중…'; }
+      const done=()=>{ if(btn){ btn.disabled=false; btn.textContent='새로고침'; } renderHome(); };
+      fetch('/api/homepage-live',{cache:'no-store'}).then(r=>r.json()).then(d=>{
+        if(!d||!d.ok||!(d.submissions||[]).length){ HP_LIVE_ERR=(d&&(d.hint||d.error))||'실시간 조회 실패'; throw new Error('live'); }
+        HP_LIVE_ERR=''; HOME=d; done();
+      }).catch(()=>{
+        fetch('homepage.json?_='+Date.now()).then(r=>r.json()).then(d=>{ HOME=Object.assign({},d||{},{live:false}); done(); })
+          .catch(()=>{ if(!HOME) HOME={source:'none',forms:[],submissions:[]}; done(); });
+      });
     }
     // 문의 '내용' 실시간 조회 — /api/imweb-inquiries 가 아임웹에서 바로 받아온다(어디에도 저장하지 않음)
     let HP_INQ_ON=false;
@@ -5306,9 +5321,17 @@
       const src=H.source||'none', hasData=subsAll.length>0||(H.monthly&&Object.keys(H.monthly).length>0);
       const badge=(t,c)=>`<span class="text-[11px] font-semibold px-2.5 py-1 rounded-full ${c}">${t}</span>`;
       document.getElementById('hpSourceBadge').innerHTML =
-        (src==='imweb-api'?badge('아임웹 API 자동수집','bg-agreen/15 text-agreen'):src==='excel'?badge('엑셀 수동 반영','bg-ablue/25 text-[#365b7a]'):badge('연동 대기','bg-slate-100 text-slate-500'))
-        + (hasData?badge('전체 입력폼 '+(H.totalCount!=null?H.totalCount:subsAll.length).toLocaleString()+'건','bg-brand/20 text-brand-ink'):'');
-      document.getElementById('hpStamp').textContent = H.generatedAt?' · 수집 '+H.generatedAt.slice(0,16).replace('T',' '):'';
+        (H.live?badge('아임웹 실시간 연동','bg-agreen/15 text-agreen')
+          :src==='imweb-api'?badge('아임웹 자동수집(저장본)','bg-ablue/25 text-[#365b7a]')
+          :src==='excel'?badge('엑셀 수동 반영','bg-ablue/25 text-[#365b7a]')
+          :badge('연동 대기','bg-slate-100 text-slate-500'))
+        + (hasData?badge('전체 입력폼 '+(H.totalCount!=null?H.totalCount:subsAll.length).toLocaleString()+'건','bg-brand/20 text-brand-ink'):'')
+        + (!H.live&&HP_LIVE_ERR?badge('실시간 조회 실패 · 저장본 표시','bg-ared/15 text-ared'):'');
+      // 실시간이면 '방금 조회', 폴백이면 저장본이 만들어진 시각(KST)
+      const hpSt=document.getElementById('hpStamp');
+      hpSt.textContent = H.generatedAt?(H.live?' · 방금 조회 '+hpKst(H.generatedAt):' · 저장본 '+hpKst(H.generatedAt))
+        : (H.live?' · 방금 조회':'');
+      hpSt.title = HP_LIVE_ERR||'';
       document.getElementById('hpSetup').classList.toggle('hidden', hasData);
       if(!hasData){
         document.getElementById('hpKpi').innerHTML=kc('이번 달 문의','–','연동 후 표시')+kc('전월 대비','–')+kc('최근 7일','–')+kc('오늘','–')+kc('누적','–');
