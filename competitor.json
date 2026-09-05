@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-04 21:45",
+ "generatedAt": "2026-09-05 20:51",
  "brands": [
   {
    "name": "아카라",
@@ -128,8 +128,8 @@
     "아카라 l100",
     "아카라 스위치",
     "아카라치",
-    "아카라이브 핫딜",
-    "아카라카"
+    "아카라카",
+    "명조 아카라이브"
    ],
    "recent": [
     {
@@ -351,8 +351,8 @@
     "헤이홈 중국",
     "헤이홈 공유",
     "헤이홈 오프라인",
-    "헤이홈 as",
-    "헤이홈 카메라"
+    "헤이홈 홈캠거치대",
+    "헤이홈 프로"
    ],
    "recent": [
     {
@@ -451,84 +451,84 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 68026,
+   "total": 68035,
    "sentiment": {
-    "pos": 15,
-    "neu": 45,
+    "pos": 16,
+    "neu": 44,
     "neg": 0
    },
    "keywords": [
     [
      "AI",
-     163
+     156
     ],
     [
      "방탈출",
-     72
+     65
     ],
     [
      "게임",
-     55
+     50
     ],
     [
      "자동화",
-     45
-    ],
-    [
-     "기술을",
-     40
+     43
     ],
     [
      "기기와",
-     37
+     36
+    ],
+    [
+     "기술을",
+     36
     ],
     [
      "크리에이터",
-     37
-    ],
-    [
-     "연결형",
-     34
-    ],
-    [
-     "갤럭시",
-     32
+     35
     ],
     [
      "IFA",
-     31
+     33
     ],
     [
-     "삼성전자의",
-     28
+     "연결형",
+     32
+    ],
+    [
+     "갤럭시",
+     30
     ],
     [
      "허브",
-     26
+     27
     ],
     [
-     "체험",
-     22
-    ],
-    [
-     "참가자들은",
-     22
+     "삼성전자의",
+     25
     ],
     [
      "디지털",
      22
     ],
     [
-     "형태로",
-     20
+     "체험",
+     22
     ],
     [
-     "선보인다",
+     "역할을",
+     21
+    ],
+    [
+     "참가자들은",
      19
     ],
     [
      "SmartThings",
-     19
+     18
+    ],
+    [
+     "선보인다",
+     18
     ]
    ],
    "posWords": [
@@ -545,11 +545,15 @@
      5
     ],
     [
+     "혁신",
+     2
+    ],
+    [
      "강화",
      2
     ],
     [
-     "혁신",
+     "투자",
      1
     ],
     [
@@ -563,13 +567,67 @@
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 연결",
-    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스",
+    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 조명",
-    "삼성 스마트싱스 세탁기"
+    "삼성 스마트싱스 세탁기",
+    "삼성 스마트싱스 조명"
    ],
    "recent": [
+    {
+     "title": "\"어떤 TV 찾으세요?\"…베를린서 만난 삼성 'AI 판매원'",
+     "source": "머니투데이",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/008/0005409829?sid=101"
+    },
+    {
+     "title": "삼성전자, IFA 2026서 '크리에이터 허브' 운영…AI 방탈출·콘텐츠 제작...",
+     "source": "lcnews.co.kr",
+     "date": "2026-09-05",
+     "link": "https://www.lcnews.co.kr/news/articleView.html?idxno=207793"
+    },
+    {
+     "title": "삼성전자, IFA서 'AI 리빙' 전면에…TV·냉장고·세탁기가 생활 맞춘다",
+     "source": "news1.kr",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/421/0009152720?sid=101"
+    },
+    {
+     "title": "B2B 고객 ‘모신’ 삼성전자, 도심 속 전시관서 ‘빌트인·에너지’ 강조...",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/016/0002693187?sid=101"
+    },
+    {
+     "title": "[IFA 2026] 메세 벗어난 삼성…미래 청사진 대신 '당장 쓰는 AI'",
+     "source": "dailian.co.kr",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/119/0003129385?sid=101"
+    },
+    {
+     "title": "[IFA 2026] LG전자, AI홈 ‘컨트롤타워’ 고도화… “카카오톡으로 집·가...",
+     "source": "biz.chosun.com",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/366/0001190542?sid=105"
+    },
+    {
+     "title": "[삼성전자] 크리에이터 허브 / 순환자원 확대 / IFA 혁신상 4개",
+     "source": "webeconomy.co.kr",
+     "date": "2026-09-05",
+     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2291744"
+    },
+    {
+     "title": "삼성·LG, 베를린서 ‘AI 일상’ 격돌…집을 넘어 삶 전체로",
+     "source": "mydaily.co.kr",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/117/0004102129?sid=105"
+    },
+    {
+     "title": "[IFA] 게임·방탈출로 '생활 속 AI'…삼성전자, '크리에이터 허브' 열었...",
+     "source": "apnews.kr",
+     "date": "2026-09-05",
+     "link": "https://www.apnews.kr/news/articleView.html?idxno=3051014"
+    },
     {
      "title": "[재계 투데이] LG, AI 혁신 기술 축제 스파크 2026 개최 外",
      "source": "news.dealsitetv.com",
@@ -605,60 +663,6 @@
      "source": "한국경제",
      "date": "2026-09-04",
      "link": "https://n.news.naver.com/mnews/article/015/0005328821?sid=101"
-    },
-    {
-     "title": "[비즈&] 삼성전자, 독일 IFA서 '크리에이트 허브' 운영 外",
-     "source": "yonhapnewstv.co.kr",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/422/0000902882?sid=101"
-    },
-    {
-     "title": "갤럭시·가전이 방탈출 속으로…삼성전자, IFA서 'AI 체험전' 승부",
-     "source": "biztribune.co.kr",
-     "date": "2026-09-04",
-     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=358488"
-    },
-    {
-     "title": "삼성전자, IFA 2026서 '삼성 크리에이터 허브' 운영…AI 생태계 체험 강...",
-     "source": "efnews.co.kr",
-     "date": "2026-09-04",
-     "link": "http://www.efnews.co.kr/news/articleView.html?idxno=132148"
-    },
-    {
-     "title": "삼성·LG, IFA서 유럽 공략 경쟁…AI·고효율 승부",
-     "source": "news2day.co.kr",
-     "date": "2026-09-04",
-     "link": "https://www.news2day.co.kr/article/20260904500164"
-    },
-    {
-     "title": "삼성전자, IFA 2026서 '크리에이터 허브' 운영",
-     "source": "thelec.kr",
-     "date": "2026-09-04",
-     "link": "https://www.thelec.kr/news/articleView.html?idxno=61832"
-    },
-    {
-     "title": "\"건물·호텔 '통'으로 관리한다\"… 삼성·LG, B2B 통합 솔루션 승부",
-     "source": "mediapen.com",
-     "date": "2026-09-04",
-     "link": "https://www.mediapen.com/news/view/1121374"
-    },
-    {
-     "title": "삼성전자, IFA 2026서 '삼성 크리에이터 허브' 연다",
-     "source": "thisisgame.com",
-     "date": "2026-09-04",
-     "link": "https://www.thisisgame.com/articles/429623"
-    },
-    {
-     "title": "삼성전자, IFA에 크리에이터 전용공간 만든다…AI 가전 ‘게임처럼’ 체...",
-     "source": "thepowernews.co.kr",
-     "date": "2026-09-04",
-     "link": "https://www.thepowernews.co.kr/view.php?ud=202609041445141989de3f0aa1be_7"
-    },
-    {
-     "title": "AI∙K푸드∙헬스케어로 유럽 공략…K가전, IFA 총출동",
-     "source": "kdfnews.com",
-     "date": "2026-09-04",
-     "link": "http://www.kdfnews.com/news/articleView.html?idxno=187541"
     }
    ]
   },
@@ -666,39 +670,35 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77421,
+   "total": 77454,
    "sentiment": {
-    "pos": 23,
-    "neu": 37,
+    "pos": 21,
+    "neu": 39,
     "neg": 0
    },
    "keywords": [
     [
      "AI",
-     80
+     68
     ],
     [
      "AI홈",
-     54
-    ],
-    [
-     "IFA",
-     35
-    ],
-    [
-     "클로",
-     34
-    ],
-    [
-     "허브",
-     29
+     59
     ],
     [
      "LG전자",
-     28
+     40
     ],
     [
-     "ThinQ",
+     "클로",
+     35
+    ],
+    [
+     "IFA",
+     32
+    ],
+    [
+     "LG전자는",
      27
     ],
     [
@@ -706,70 +706,78 @@
      23
     ],
     [
-     "가전",
+     "허브",
+     23
+    ],
+    [
+     "ThinQ",
      21
     ],
     [
+     "플랫폼",
+     20
+    ],
+    [
      "기능을",
-     19
-    ],
-    [
-     "LG전자는",
-     19
-    ],
-    [
-     "처음",
-     16
-    ],
-    [
-     "유럽",
-     15
+     14
     ],
     [
      "에너지",
-     15
-    ],
-    [
-     "플랫폼",
-     15
-    ],
-    [
-     "강화한",
-     14
+     13
     ],
     [
      "Claw",
-     14
+     12
+    ],
+    [
+     "유럽",
+     11
+    ],
+    [
+     "공간",
+     11
+    ],
+    [
+     "가전",
+     11
+    ],
+    [
+     "베를린",
+     10
     ],
     [
      "LG전자가",
-     14
+     10
     ]
    ],
    "posWords": [
     [
      "강화",
-     15
+     10
+    ],
+    [
+     "최초",
+     4
+    ],
+    [
+     "글로벌",
+     4
     ],
     [
      "프리미엄",
      3
     ],
     [
-     "공략",
-     3
-    ],
-    [
      "확대",
-     3
+     2
     ],
     [
-     "글로벌",
-     3
+     "파트너십",
+     2
     ],
     [
-     "최초",
-     3
+     "공략",
+     2
     ],
     [
      "혁신",
@@ -784,100 +792,100 @@
     "lg 씽큐 와이파이",
     "lg 씽큐 세탁기",
     "lg 씽큐 냉장고",
-    "lg 씽큐 티비연결",
     "lg 씽큐 앱 에어컨",
-    "lg 씽큐 에어컨 오류"
+    "lg 씽큐 에어컨 청소",
+    "lg 씽큐 티비연결"
    ],
    "recent": [
     {
-     "title": "[IFA 2026] LG전자 부스 찾은 베를린 시장… \"마지막 장식하기에 완벽\"",
-     "source": "asiatoday.co.kr",
-     "date": "2026-09-04",
-     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20260904010001872"
+     "title": "“집 밖서도 AI 홈과 대화”…LG전자 ‘씽큐 클로’ 공개",
+     "source": "newstomato.com",
+     "date": "2026-09-05",
+     "link": "http://www.newstomato.com/ReadNews.aspx?no=1312648&inflow=N"
     },
     {
-     "title": "베를린 시장, IFA 2026서 LG전자 전시관 방문…홈로봇 ‘클로이드’와 악...",
+     "title": "LG전자 \"집 밖에서도 나를 이해하는 AI홈\"…'씽큐 클로' 승부수 [IFA 2026...",
+     "source": "파이낸셜뉴스",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/014/0005571397?sid=101"
+    },
+    {
+     "title": "노범준 LG전자 상무 “빨리 시도하고 치고 나가는 게 경쟁력”",
+     "source": "ddaily.co.kr",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/138/0002240334?sid=105"
+    },
+    {
+     "title": "[IFA] '플랫폼 파는' LG전자…'Homey'로 개방형 AI홈 판 키운다",
+     "source": "apnews.kr",
+     "date": "2026-09-05",
+     "link": "https://www.apnews.kr/news/articleView.html?idxno=3051018"
+    },
+    {
+     "title": "외출 중인데 에어컨을 먼저 켠다…LG전자, '실행형 AI'로 집을 바꾼다",
+     "source": "cwn.kr",
+     "date": "2026-09-05",
+     "link": "https://www.cwn.kr/news/articleView.html?idxno=55353"
+    },
+    {
+     "title": "[IFA 2026] 메세 벗어난 삼성…미래 청사진 대신 '당장 쓰는 AI'",
+     "source": "dailian.co.kr",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/119/0003129385?sid=101"
+    },
+    {
+     "title": "[IFA 2026] LG전자, AI홈 ‘컨트롤타워’ 고도화… “카카오톡으로 집·가...",
+     "source": "biz.chosun.com",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/366/0001190542?sid=105"
+    },
+    {
+     "title": "[IFA 현장] LG 'AI 집사' 씽큐 클로, 이달 한국 베타…연내 출시 목표",
+     "source": "kfenews.co.kr",
+     "date": "2026-09-05",
+     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=663926"
+    },
+    {
+     "title": "'AI 집사' 등장…LG전자 '씽큐 클로' 첫 공개 \"연내 출시\"",
+     "source": "yonhapnewstv.co.kr",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/422/0000903075?sid=101"
+    },
+    {
+     "title": "[IFA 2026] LG전자 \"AI 파도보단 고객 가치\"…'씽큐 클로'로 AI홈 진화",
+     "source": "asiatime.co.kr",
+     "date": "2026-09-05",
+     "link": "https://www.asiatime.co.kr/article/20260905500002"
+    },
+    {
+     "title": "LG전자 “AI홈 에이전트 ‘씽큐 클로’ 연내 출시”…커머스·구독도 검...",
+     "source": "이데일리",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/018/0006364078?sid=101"
+    },
+    {
+     "title": "[IFA 2026] “AI가 먼저 묻는다”… LG전자가 그리는 ‘나를 이해하는 집...",
+     "source": "dealsite.co.kr",
+     "date": "2026-09-05",
+     "link": "https://dealsite.co.kr/articles/168507"
+    },
+    {
+     "title": "“카톡으로 AI홈 제어”…LG전자, AI 에이전트 ‘씽큐클로’ 연내 출시...",
      "source": "biz.heraldcorp.com",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/016/0002693103?sid=101"
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/016/0002693157?sid=101"
     },
     {
-     "title": "LG전자, 첫 헤어드라이어 내놓는다…14조 시장 강자 다이슨에 도전장",
-     "source": "news1.kr",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/421/0009152253?sid=101"
+     "title": "카톡으로 집과 대화한다…LG전자 ‘씽큐 클로’ 공개 [IFA 2026]",
+     "source": "etoday.co.kr",
+     "date": "2026-09-05",
+     "link": "https://www.etoday.co.kr/news/view/2622161"
     },
     {
-     "title": "베를린 시장, IFA 2026서 LG전자 전시관 방문…클로이드와 악수",
+     "title": "\"나 이제 들어가\" 한마디에 에어컨이 '척'…LG전자의 'AI 집사'",
      "source": "연합뉴스",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/001/0016291198?sid=101"
-    },
-    {
-     "title": "냉장고가 식재료 인식하고 로봇이 집안 연결…IFA의 'AI 일상'",
-     "source": "news1.kr",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/421/0009152247?sid=101"
-    },
-    {
-     "title": "IFA서 유럽 홀린 삼성·LG 가전…중국도 ‘로봇’ 앞세워 총공세",
-     "source": "kukinews.com",
-     "date": "2026-09-04",
-     "link": "https://www.kukinews.com/article/view/kuk202609040158"
-    },
-    {
-     "title": "LG전자, IFA서 B2B 비중 46% 확대…'공간사업' 총력전",
-     "source": "polinews.co.kr",
-     "date": "2026-09-04",
-     "link": "https://www.polinews.co.kr/news/articleView.html?idxno=742156"
-    },
-    {
-     "title": "IFA 2026 개막…삼성·LG, ‘AI 홈’ 기술 경쟁",
-     "source": "news.mtn.co.kr",
-     "date": "2026-09-04",
-     "link": "https://news.mtn.co.kr/news-detail/2026090417195880774"
-    },
-    {
-     "title": "[A 주간 서머리] 경제·산업계 \"정부, 내년도 예산안 820.9조원 편성...홈...",
-     "source": "asiaa.co.kr",
-     "date": "2026-09-04",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=261017"
-    },
-    {
-     "title": "삼성·LG, IFA 2026 출격…'AI 일상' 넘어 에너지·공간 효율 경쟁",
-     "source": "newsway.co.kr",
-     "date": "2026-09-04",
-     "link": "https://www.newsway.co.kr/news/view?ud=2026090415324111413"
-    },
-    {
-     "title": "LG전자, IFA 2026서 '연결' 넘어선 AI홈 생태계 공개",
-     "source": "pointe.co.kr",
-     "date": "2026-09-04",
-     "link": "https://www.pointe.co.kr/news/articleView.html?idxno=84316"
-    },
-    {
-     "title": "삼성·LG, IFA서 유럽 공략 경쟁…AI·고효율 승부",
-     "source": "news2day.co.kr",
-     "date": "2026-09-04",
-     "link": "https://www.news2day.co.kr/article/20260904500164"
-    },
-    {
-     "title": "[IFA2026] LG전자 부스 키운 이유는...AI홈부터 빌트인까지 전방위 확장",
-     "source": "전자신문",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/030/0003463666?sid=101"
-    },
-    {
-     "title": "\"건물·호텔 '통'으로 관리한다\"… 삼성·LG, B2B 통합 솔루션 승부",
-     "source": "mediapen.com",
-     "date": "2026-09-04",
-     "link": "https://www.mediapen.com/news/view/1121374"
-    },
-    {
-     "title": "LG전자, IFA서 'AI홈 생태계' 확장 선보여",
-     "source": "seoulfn.com",
-     "date": "2026-09-04",
-     "link": "https://www.seoulfn.com/news/articleView.html?idxno=637293"
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/001/0016291514?sid=101"
     }
    ]
   },
@@ -885,102 +893,106 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75755,
+   "total": 75771,
    "sentiment": {
-    "pos": 42,
-    "neu": 16,
+    "pos": 37,
+    "neu": 21,
     "neg": 2
    },
    "keywords": [
     [
      "AI",
-     141
-    ],
-    [
-     "아마존",
-     59
+     130
     ],
     [
      "엔비디아",
-     58
+     48
     ],
     [
-     "글로벌",
-     52
+     "아마존",
+     45
     ],
     [
      "MS",
-     51
+     39
     ],
     [
-     "최신",
-     31
+     "글로벌",
+     37
     ],
     [
      "마이크로소프트",
-     30
-    ],
-    [
-     "스파크",
      24
     ],
     [
-     "빅테크",
-     21
-    ],
-    [
-     "참여해",
-     20
-    ],
-    [
-     "개최",
-     17
-    ],
-    [
-     "기술과",
-     16
-    ],
-    [
-     "축제",
-     15
-    ],
-    [
-     "임직원들과",
-     14
-    ],
-    [
-     "엔비디아와",
-     14
-    ],
-    [
-     "빅테크가",
-     13
-    ],
-    [
-     "실제",
-     13
+     "최신",
+     22
     ],
     [
      "IFA",
+     17
+    ],
+    [
+     "빅테크",
+     16
+    ],
+    [
+     "참여해",
+     16
+    ],
+    [
+     "스파크",
+     16
+    ],
+    [
+     "TV",
      12
+    ],
+    [
+     "기술과",
+     12
+    ],
+    [
+     "제미나이",
+     11
+    ],
+    [
+     "축제",
+     11
+    ],
+    [
+     "개최",
+     11
+    ],
+    [
+     "에는",
+     10
+    ],
+    [
+     "데브콘",
+     9
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     52
+     37
     ],
     [
      "혁신",
-     15
+     13
     ],
     [
      "확대",
-     7
+     8
     ],
     [
      "우수",
-     4
+     7
+    ],
+    [
+     "투자",
+     1
     ],
     [
      "주목",
@@ -996,99 +1008,99 @@
     "구글 홈 미니 초기화",
     "구글 홈 미니 2세대",
     "구글 홈 미니 1세대",
-    "구글 홈 어시스턴트",
-    "구글 홈 스피커 연결"
+    "구글 홈버튼",
+    "구글 홈 어시스턴트"
    ],
    "recent": [
     {
-     "title": "[IFA 2026] 삼성 'AI 에어컨' 2관왕·LG '최고 브랜드'…나란히 혁신상",
-     "source": "dailian.co.kr",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/119/0003129312?sid=101"
-    },
-    {
-     "title": "[IFA 2026] LG전자, IFA 최고 브랜드상…삼성도 AI가전 혁신상 4개",
-     "source": "dealsite.co.kr",
-     "date": "2026-09-04",
-     "link": "https://dealsite.co.kr/articles/168504"
-    },
-    {
-     "title": "삼성전자, 유럽 최대 가전 전시회 ‘IFA 2026’서 혁신상 4관왕",
-     "source": "donga.com",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/020/0003745887?sid=101"
-    },
-    {
-     "title": "[IFA2026] 삼성·LG, IFA 2026 혁신상 싹쓸이...'가전+AI' 문법 만들었다",
-     "source": "전자신문",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/030/0003463722?sid=101"
-    },
-    {
-     "title": "[IFA 2026] 삼성·LG, 이노베이션 어워드 휩쓸어..AI가전·TV 두각",
-     "source": "4th.kr",
-     "date": "2026-09-04",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2117508"
-    },
-    {
-     "title": "삼성 AI 가전, 베를린서 4관왕 날개 달다",
-     "source": "kfenews.co.kr",
-     "date": "2026-09-04",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=663875"
-    },
-    {
-     "title": "냉장고가 식재료 인식하고 로봇이 집안 연결…IFA의 'AI 일상'",
+     "title": "샤오미·TCL 전방위 공세…삼성·LG는 '연결·취향'으로 맞섰다",
      "source": "news1.kr",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/421/0009152247?sid=101"
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/421/0009152760?sid=101"
     },
     {
-     "title": "가전 밀어내고 로봇이 전면에…IFA 뒤덮은 中 ‘AI 인해전술’",
-     "source": "이데일리",
-     "date": "2026-09-04",
-     "link": "https://n.news.naver.com/mnews/article/018/0006363958?sid=101"
+     "title": "삼성전자, IFA 2026서 '크리에이터 허브' 운영…AI 방탈출·콘텐츠 제작...",
+     "source": "lcnews.co.kr",
+     "date": "2026-09-05",
+     "link": "https://www.lcnews.co.kr/news/articleView.html?idxno=207793"
     },
     {
-     "title": "LG, 글로벌 빅테크·AI 미래인재와 'AI 축제'...'LG SPARK 2026' 개최, 마...",
-     "source": "aitimes.kr",
-     "date": "2026-09-04",
-     "link": "https://www.aitimes.kr/news/articleView.html?idxno=41772"
+     "title": "삼성전자, IFA서 'AI 리빙' 전면에…TV·냉장고·세탁기가 생활 맞춘다",
+     "source": "news1.kr",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/421/0009152720?sid=101"
     },
     {
-     "title": "대전하나시티즌, ‘부천 천적’ 서진수 앞세워 원정 잔혹사 끊는다",
-     "source": "breaknews.com",
-     "date": "2026-09-04",
-     "link": "http://www.breaknews.com/1234331"
+     "title": "[산업 HOT 뉴스] \"피지컬AI부터 빅테크 연대까지\"…LG, 마곡서 역대 최대...",
+     "source": "bizwnews.com",
+     "date": "2026-09-05",
+     "link": "http://www.bizwnews.com/news/articleView.html?idxno=145376"
     },
     {
-     "title": "LG, 빅테크·미래 인재와 AI 혁신 축제…‘스파크 2026’ 개최",
-     "source": "todayeconomic.com",
-     "date": "2026-09-04",
-     "link": "https://www.todayeconomic.com/news/article.html?no=32008"
+     "title": "힐스테이트 고덕엘리스트, 삼성전자 평택캠퍼스 인근서 9월 공급 예정",
+     "source": "rcast.co.kr",
+     "date": "2026-09-05",
+     "link": "https://www.rcast.co.kr/news/articleView.html?idxno=31564"
     },
     {
-     "title": "삼성전자, IFA서 ‘AI 방탈출’ 선보인다…크리에이터 허브 운영",
-     "source": "todayeconomic.com",
-     "date": "2026-09-04",
-     "link": "https://www.todayeconomic.com/news/article.html?no=32006"
+     "title": "마곡에 엔비디아·MS 모인다…LG, 미래 기술 총집결",
+     "source": "news.bizwatch.co.kr",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/648/0000050504?sid=101"
     },
     {
-     "title": "[줌인] 구광모의 'AI 승부수', 속도 낸다…LG, 'SPARK 2026'서 미래기술 ...",
-     "source": "dailypop.kr",
-     "date": "2026-09-04",
-     "link": "http://www.dailypop.kr/news/articleView.html?idxno=102255"
+     "title": "LG, 마곡서 '스파크 2026' 진행...엔비디아·구글·아마존·MS 등 참여",
+     "source": "econonews.co.kr",
+     "date": "2026-09-05",
+     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=443925"
     },
     {
-     "title": "엔비디아·구글·아마존·MS 집결…'LG 스파크 2026'서 피지컬 AI·AIDC 한...",
-     "source": "epnc.co.kr",
-     "date": "2026-09-04",
-     "link": "https://www.epnc.co.kr/news/articleView.html?idxno=406557"
+     "title": "[IFA 현장] LG 'AI 집사' 씽큐 클로, 이달 한국 베타…연내 출시 목표",
+     "source": "kfenews.co.kr",
+     "date": "2026-09-05",
+     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=663926"
     },
     {
-     "title": "LG, AI 기술 총집결…엔비디아·구글·아마존·MS와 '스파크 2026' 개최",
-     "source": "megaeconomy.co.kr",
+     "title": "“카톡으로 AI홈 제어”…LG전자, AI 에이전트 ‘씽큐클로’ 연내 출시...",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/016/0002693157?sid=101"
+    },
+    {
+     "title": "[이 주의 전자수첩] 애플 15년 만의 수장 교체…'터너스호' 닻 올렸다",
+     "source": "the-biz.co.kr",
+     "date": "2026-09-05",
+     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=727377"
+    },
+    {
+     "title": "삼성·LG, 베를린서 ‘AI 일상’ 격돌…집을 넘어 삶 전체로",
+     "source": "mydaily.co.kr",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/117/0004102129?sid=105"
+    },
+    {
+     "title": "삼성·LG전자, IFA 혁신상 11개 휩쓸어…AI·디자인 기술력 인정",
+     "source": "segye.com",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/022/0004156517?sid=101"
+    },
+    {
+     "title": "[IFA 2026] LG전자 ‘최고 브랜드’·삼성전자 혁신상 4개… 韓 가전 나란...",
+     "source": "biz.chosun.com",
+     "date": "2026-09-05",
+     "link": "https://n.news.naver.com/mnews/article/366/0001190503?sid=105"
+    },
+    {
+     "title": "[현장]\"가전 연결 넘어 AI 집사 등장\"…글로벌 가전, AI 홈 총력전[IFA 20...",
+     "source": "뉴시스",
      "date": "2026-09-04",
-     "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065587920441759"
+     "link": "https://n.news.naver.com/mnews/article/003/0014170696?sid=101"
+    },
+    {
+     "title": "구광모의 'AI LG' 마곡 집결…엔비디아·구글·MS와 미래기술 맞댄다",
+     "source": "apnews.kr",
+     "date": "2026-09-04",
+     "link": "https://www.apnews.kr/news/articleView.html?idxno=3051001"
     }
    ]
   }
