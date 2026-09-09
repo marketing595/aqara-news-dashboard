@@ -1,122 +1,122 @@
 {
- "generatedAt": "2026-09-08",
+ "generatedAt": "2026-09-09",
  "year": 2026,
  "basis": "keywords",
  "items": [
   {
    "name": "아카라",
    "query": "아카라 스마트홈",
-   "ytd": 96,
+   "ytd": 100,
    "capped": false,
-   "analyzed": 100,
+   "analyzed": 200,
    "topKw": [
     {
+     "kw": "카메라",
+     "n": 246,
+     "title": "삼성전자가 적용한 매터 인증, 보안카메라까지 확대",
+     "link": "https://www.etnews.com/20260827000234"
+    },
+    {
+     "kw": "삼성전자",
+     "n": 211,
+     "title": "삼성전자가 적용한 매터 인증, 보안카메라까지 확대",
+     "link": "https://www.etnews.com/20260827000234"
+    },
+    {
+     "kw": "매터",
+     "n": 198,
+     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
+     "link": "https://www.etnews.com/20260831000269"
+    },
+    {
+     "kw": "표준",
+     "n": 183,
+     "title": "아카라라이프, 대전·충청 스마트홈 세미나 성료…지역 전문가 네트워크...",
+     "link": "https://www.businesskorea.co.kr/news/articleView.html?idxno=269359"
+    },
+    {
      "kw": "스마트",
-     "n": 85,
+     "n": 182,
      "title": "아카라라이프, 추석 맞이 '부모님 안심 도어락 패키지' 할인 프로모션",
      "link": "https://www.getnews.co.kr/news/articleView.html?idxno=879972"
     },
     {
-     "kw": "AI",
-     "n": 37,
-     "title": "\"영화 즐기면 조명 10%로\"…아카라라이프, 도면·생활패턴 분석하는 'AI...",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=144007"
-    },
-    {
-     "kw": "IoT",
-     "n": 32,
-     "title": "아카라라이프, 스마트홈 입문자 겨냥 ‘L100 SE’ 출시…가격 부담 낮춰",
-     "link": "https://www.asiatime.co.kr/article/20260903500071"
-    },
-    {
-     "kw": "도어락",
-     "n": 31,
-     "title": "아카라라이프, '부모님 안심 도어락 패키지' 프로모션",
-     "link": "https://www.mt.co.kr/future/2026/09/08/2026090815305374313"
-    },
-    {
-     "kw": "공간",
-     "n": 28,
-     "title": "\"영화 즐기면 조명 10%로\"…아카라라이프, 도면·생활패턴 분석하는 'AI...",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=144007"
-    },
-    {
-     "kw": "AIoT",
-     "n": 24,
-     "title": "아카라라이프, 임직원 전용 AI 포털 오픈... 'AI 전환 가속화'",
-     "link": "https://www.mt.co.kr/future/2026/07/31/2026073112362073342"
-    },
-    {
-     "kw": "인테리어",
-     "n": 23,
-     "title": "가톨릭대, 국내 첫 'AIoT 융합 공간디자인 실습실' 구축, \"스마트 공간디...",
-     "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2447221"
-    },
-    {
-     "kw": "플랫폼",
-     "n": 22,
+     "kw": "스마트싱스",
+     "n": 147,
      "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
      "link": "https://www.etnews.com/20260831000269"
     },
     {
-     "kw": "자동화",
-     "n": 18,
+     "kw": "협업해",
+     "n": 130,
+     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
+    },
+    {
+     "kw": "IoT",
+     "n": 101,
+     "title": "아카라라이프, 스마트홈 입문자 겨냥 ‘L100 SE’ 출시…가격 부담 낮춰",
+     "link": "https://www.asiatime.co.kr/article/20260903500071"
+    },
+    {
+     "kw": "이브",
+     "n": 86,
+     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
+    },
+    {
+     "kw": "기기",
+     "n": 84,
+     "title": "\"영화 즐기면 조명 10%로\"…아카라라이프, 도면·생활패턴 분석하는 'AI...",
+     "link": "http://www.bizwnews.com/news/articleView.html?idxno=144007"
+    },
+    {
+     "kw": "최초",
+     "n": 82,
+     "title": "가톨릭대, 국내 최초 AIoT 공간디자인 실습실 구축…산학협력 MOU 체결",
+     "link": "https://edu.donga.com/news/articleView.html?idxno=109801"
+    },
+    {
+     "kw": "울티캠",
+     "n": 81,
+     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
+    },
+    {
+     "kw": "등과",
+     "n": 80,
+     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
+    },
+    {
+     "kw": "다양한",
+     "n": 76,
      "title": "아카라라이프, 부담 없는 스마트 도어락 입문형 'L100 SE' 출시",
      "link": "https://www.abcn.kr/news/articleView.html?idxno=90997"
     },
     {
-     "kw": "이상헌",
-     "n": 17,
-     "title": "아카라라이프, '부모님 안심 도어락 패키지' 프로모션",
-     "link": "https://www.mt.co.kr/future/2026/09/08/2026090815305374313"
+     "kw": "알로",
+     "n": 75,
+     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
     },
     {
-     "kw": "기기",
-     "n": 17,
-     "title": "\"영화 즐기면 조명 10%로\"…아카라라이프, 도면·생활패턴 분석하는 'AI...",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=144007"
+     "kw": "업체들",
+     "n": 62,
+     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
     },
     {
-     "kw": "매터",
-     "n": 16,
-     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
-     "link": "https://www.etnews.com/20260831000269"
+     "kw": "등의",
+     "n": 54,
+     "title": "아카라라이프, '파트너 비즈니스 인사이트' 웨비나 개최",
+     "link": "https://www.mt.co.kr/future/2026/03/27/2026032714210122655"
     },
     {
-     "kw": "조명",
-     "n": 16,
-     "title": "\"영화 즐기면 조명 10%로\"…아카라라이프, 도면·생활패턴 분석하는 'AI...",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=144007"
-    },
-    {
-     "kw": "L100",
-     "n": 15,
-     "title": "아카라라이프, 스마트홈 입문자 겨냥 ‘L100 SE’ 출시…가격 부담 낮춰",
-     "link": "https://www.asiatime.co.kr/article/20260903500071"
-    },
-    {
-     "kw": "애플",
-     "n": 15,
-     "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
-     "link": "https://www.etnews.com/20260831000269"
-    },
-    {
-     "kw": "설치",
-     "n": 15,
-     "title": "“가전은 설치가 반”... 아카라라이프 ‘프로안심’, 원스톱 케어와 사...",
-     "link": "https://www.seoul.co.kr/news/economy/2026/08/11/20260811500184?wlog_tag3=naver"
-    },
-    {
-     "kw": "AX",
-     "n": 15,
-     "title": "아카라라이프, '제1회 AX 업무 혁신 사내 경진대회' 마무리…비개발자도...",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=142336"
-    },
-    {
-     "kw": "기술",
-     "n": 15,
-     "title": "아카라라이프, 임직원 전용 AI 포털 구축",
-     "link": "https://www.getnews.co.kr/news/articleView.html?idxno=876498"
+     "kw": "제공해왔다",
+     "n": 53,
+     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
     }
    ],
    "me": true
@@ -130,15 +130,15 @@
    "topKw": [
     {
      "kw": "AI",
-     "n": 579,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 560,
+     "title": "로봇청소기 시장서 커지는 ‘보안’ 존재감",
+     "link": "https://byline.network/?p=9004111222619150"
     },
     {
      "kw": "가전",
-     "n": 186,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 179,
+     "title": "AI는 기본값…IFA가 가리킨 가전 승부처 '전기와 사업성'",
+     "link": "https://www.itdaily.kr/news/articleView.html?idxno=241501"
     },
     {
      "kw": "방탈출",
@@ -160,9 +160,9 @@
     },
     {
      "kw": "기기",
-     "n": 134,
-     "title": "[가전 트렌드] 앳홈 미닉스, 라이프스타일 맞춤 '큐레이션 패키지' 첫 선...",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=154302"
+     "n": 142,
+     "title": "심박·혈압 측정 넘어 건강 분석으로… 삼성전자, 갤럭시 워치 헬스케어...",
+     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=358688"
     },
     {
      "kw": "스마트가전",
@@ -178,9 +178,15 @@
     },
     {
      "kw": "기술",
-     "n": 120,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 118,
+     "title": "워치로 심장 골든타임 지킨다… 삼성전자, 심장 관리 기술 고도화",
+     "link": "https://www.newscj.com/news/articleView.html?idxno=3431225"
+    },
+    {
+     "kw": "갤럭시",
+     "n": 110,
+     "title": "삼성, 갤럭시 워치 헬스케어 강화…가족 건강관리 기능 확대",
+     "link": "http://www.newstomato.com/ReadNews.aspx?no=1313121&inflow=N"
     },
     {
      "kw": "자동화",
@@ -196,15 +202,9 @@
     },
     {
      "kw": "IFA",
-     "n": 93,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
-    },
-    {
-     "kw": "갤럭시",
-     "n": 88,
-     "title": "[가전 트렌드] 앳홈 미닉스, 라이프스타일 맞춤 '큐레이션 패키지' 첫 선...",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=154302"
+     "n": 95,
+     "title": "AI는 기본값…IFA가 가리킨 가전 승부처 '전기와 사업성'",
+     "link": "https://www.itdaily.kr/news/articleView.html?idxno=241501"
     },
     {
      "kw": "크리에이터",
@@ -215,8 +215,14 @@
     {
      "kw": "에너지",
      "n": 82,
-     "title": "AI홈과 B2B…IFA서 재확인된 삼성·LG 차세대 전략",
-     "link": "http://www.newstomato.com/ReadNews.aspx?no=1312753&inflow=N"
+     "title": "AI는 기본값…IFA가 가리킨 가전 승부처 '전기와 사업성'",
+     "link": "https://www.itdaily.kr/news/articleView.html?idxno=241501"
+    },
+    {
+     "kw": "관리",
+     "n": 82,
+     "title": "삼성, 갤럭시 워치 헬스케어 강화…가족 건강관리 기능 확대",
+     "link": "http://www.newstomato.com/ReadNews.aspx?no=1313121&inflow=N"
     },
     {
      "kw": "1위",
@@ -225,16 +231,10 @@
      "link": "https://www.globale.co.kr/news/articleView.html?idxno=40117"
     },
     {
-     "kw": "관리",
+     "kw": "상무",
      "n": 80,
-     "title": "AI홈과 B2B…IFA서 재확인된 삼성·LG 차세대 전략",
-     "link": "http://www.newstomato.com/ReadNews.aspx?no=1312753&inflow=N"
-    },
-    {
-     "kw": "연결형",
-     "n": 76,
-     "title": "[가전 트렌드] 앳홈 미닉스, 라이프스타일 맞춤 '큐레이션 패키지' 첫 선...",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=154302"
+     "title": "삼성, 갤럭시 워치 헬스케어 강화…가족 건강관리 기능 확대",
+     "link": "http://www.newstomato.com/ReadNews.aspx?no=1313121&inflow=N"
     }
    ]
   },
@@ -247,33 +247,33 @@
    "topKw": [
     {
      "kw": "AI홈",
-     "n": 552,
-     "title": "[IFA 톺아보기] 삼성·LG, 가전 성능 대신 'AI홈'을 앞세웠다…참가 1900...",
-     "link": "http://www.dailypop.kr/news/articleView.html?idxno=102357"
+     "n": 553,
+     "title": "[IFA 2026-결산] 말귀 알아듣던 AI홈, 이제는 '눈치'까지",
+     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=318590"
     },
     {
      "kw": "LG전자",
      "n": 475,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "title": "\"가사노동 종말의 시대로\"…24만명 관람객 탄성 쏟아졌던 'IFA 2026'",
+     "link": "https://www.mt.co.kr/industry/2026/09/09/2026090915022552642"
     },
     {
      "kw": "AI",
-     "n": 468,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 470,
+     "title": "\"가사노동 종말의 시대로\"…24만명 관람객 탄성 쏟아졌던 'IFA 2026'",
+     "link": "https://www.mt.co.kr/industry/2026/09/09/2026090915022552642"
     },
     {
      "kw": "가전",
-     "n": 266,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 267,
+     "title": "\"가사노동 종말의 시대로\"…24만명 관람객 탄성 쏟아졌던 'IFA 2026'",
+     "link": "https://www.mt.co.kr/industry/2026/09/09/2026090915022552642"
     },
     {
      "kw": "IFA",
-     "n": 227,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 232,
+     "title": "\"가사노동 종말의 시대로\"…24만명 관람객 탄성 쏟아졌던 'IFA 2026'",
+     "link": "https://www.mt.co.kr/industry/2026/09/09/2026090915022552642"
     },
     {
      "kw": "공간",
@@ -283,43 +283,43 @@
     },
     {
      "kw": "플랫폼",
-     "n": 211,
+     "n": 209,
      "title": "AI 홈·로봇으로 확장된 IFA… 韓 '고효율' vs 中 '물량' 총력전",
      "link": "https://www.newscj.com/news/articleView.html?idxno=3430923"
     },
     {
-     "kw": "허브",
-     "n": 193,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "kw": "클로",
+     "n": 195,
+     "title": "\"가사노동 종말의 시대로\"…24만명 관람객 탄성 쏟아졌던 'IFA 2026'",
+     "link": "https://www.mt.co.kr/industry/2026/09/09/2026090915022552642"
     },
     {
-     "kw": "클로",
-     "n": 192,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "kw": "허브",
+     "n": 194,
+     "title": "카톡으로 전단지 보내면 요리 코스 ‘척척’…LG전자, 메신저 품은 AI홈...",
+     "link": "https://www.sportsseoul.com/news/read/1633400?ref=naver"
     },
     {
      "kw": "캐시백",
-     "n": 142,
+     "n": 136,
      "title": "주말 낮 세탁기 돌리면 캐시백… 한전 '스마트가전 캐시백' 진행",
      "link": "https://www.newscj.com/news/articleView.html?idxno=3429674"
     },
     {
      "kw": "에이전트",
-     "n": 114,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 116,
+     "title": "\"가사노동 종말의 시대로\"…24만명 관람객 탄성 쏟아졌던 'IFA 2026'",
+     "link": "https://www.mt.co.kr/industry/2026/09/09/2026090915022552642"
     },
     {
      "kw": "스마트가전",
-     "n": 111,
+     "n": 108,
      "title": "주말 낮 세탁기 돌리면 캐시백… 한전 '스마트가전 캐시백' 진행",
      "link": "https://www.newscj.com/news/articleView.html?idxno=3429674"
     },
     {
      "kw": "에너지",
-     "n": 94,
+     "n": 90,
      "title": "LG전자, 'IFA 2026' 참가 AI가전·AI홈 허브·AI홈 플랫폼 선보여",
      "link": "https://www.gnnews.co.kr/news/articleView.html?idxno=644954"
     },
@@ -336,20 +336,20 @@
      "link": "https://www.ajunews.com/view/20260908150808935"
     },
     {
+     "kw": "유럽",
+     "n": 87,
+     "title": "\"가사노동 종말의 시대로\"…24만명 관람객 탄성 쏟아졌던 'IFA 2026'",
+     "link": "https://www.mt.co.kr/industry/2026/09/09/2026090915022552642"
+    },
+    {
      "kw": "솔루션",
      "n": 87,
      "title": "LG전자, 'IFA 2026' 참가 AI가전·AI홈 허브·AI홈 플랫폼 선보여",
      "link": "https://www.gnnews.co.kr/news/articleView.html?idxno=644954"
     },
     {
-     "kw": "유럽",
-     "n": 85,
-     "title": "\"유럽 대표 가전전시회, 막내렸지만 …AI·로봇 청사진으로 새 100년 제시...",
-     "link": "https://www.newsis.com/view/NISX20260906_0003778061"
-    },
-    {
      "kw": "삼성",
-     "n": 78,
+     "n": 77,
      "title": "[IFA 톺아보기] 삼성·LG, 가전 성능 대신 'AI홈'을 앞세웠다…참가 1900...",
      "link": "http://www.dailypop.kr/news/articleView.html?idxno=102357"
     }
@@ -364,15 +364,15 @@
    "topKw": [
     {
      "kw": "AI",
-     "n": 370,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 369,
+     "title": "AI는 기본값…IFA가 가리킨 가전 승부처 '전기와 사업성'",
+     "link": "https://www.itdaily.kr/news/articleView.html?idxno=241501"
     },
     {
      "kw": "IFA",
-     "n": 244,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 246,
+     "title": "AI는 기본값…IFA가 가리킨 가전 승부처 '전기와 사업성'",
+     "link": "https://www.itdaily.kr/news/articleView.html?idxno=241501"
     },
     {
      "kw": "스마트",
@@ -382,57 +382,57 @@
     },
     {
      "kw": "가전",
-     "n": 211,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 213,
+     "title": "AI는 기본값…IFA가 가리킨 가전 승부처 '전기와 사업성'",
+     "link": "https://www.itdaily.kr/news/articleView.html?idxno=241501"
     },
     {
      "kw": "스마트폰",
-     "n": 207,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "n": 205,
+     "title": "[IFA 2026 결산 ①] AI는 ‘연결’ 넘어 ‘행동’으로…로봇·모빌리티가...",
+     "link": "https://www.ddaily.co.kr/page/view/2026090718222573434"
     },
     {
      "kw": "생태계",
-     "n": 152,
+     "n": 150,
      "title": "“테슬라 긴장해라”…샤오미, 2027년 유럽 전기차 공습 선언",
      "link": "https://www.g-enews.com/view.php?ud=2026090721010616232bd56fbc3c_1"
     },
     {
      "kw": "중국",
-     "n": 142,
-     "title": "'피지컬 AI'로 물든 IFA 2026…中 물량공세 속 휴머노이드는 '반쪽'",
-     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=852919"
+     "n": 139,
+     "title": "[신상품]애플 첫 '접는 아이폰' 베일 벗는다…삼성과 진검승부",
+     "link": "https://www.namdonews.com/news/articleView.html?idxno=922764"
     },
     {
      "kw": "로봇",
-     "n": 139,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
-    },
-    {
-     "kw": "로봇청소기",
-     "n": 92,
-     "title": "카메라 가리고 인터넷 끊고…IFA서 ‘보안 불신’ 지우기 안간힘 쓴 中...",
-     "link": "https://www.chosun.com/economy/tech_it/2026/09/08/CD2QRI2ICZEKVBOQ2BXHE25LMM/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news"
+     "n": 138,
+     "title": "[IFA 2026 결산 ①] AI는 ‘연결’ 넘어 ‘행동’으로…로봇·모빌리티가...",
+     "link": "https://www.ddaily.co.kr/page/view/2026090718222573434"
     },
     {
      "kw": "기기",
+     "n": 92,
+     "title": "AI는 기본값…IFA가 가리킨 가전 승부처 '전기와 사업성'",
+     "link": "https://www.itdaily.kr/news/articleView.html?idxno=241501"
+    },
+    {
+     "kw": "로봇청소기",
      "n": 91,
-     "title": "'피지컬 AI'로 물든 IFA 2026…中 물량공세 속 휴머노이드는 '반쪽'",
-     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=852919"
+     "title": "카메라 가리고… 수집 정보 현지 처리… 中 가전, 고객 ‘보안 불신’ ...",
+     "link": "https://www.chosun.com/economy/tech_it/2026/09/09/RCRBGALMNJAQDE5LFRF2WQQKEA/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news"
     },
     {
      "kw": "전기차",
      "n": 82,
-     "title": "[IFA 톺아보기] 삼성·LG, 가전 성능 대신 'AI홈'을 앞세웠다…참가 1900...",
-     "link": "http://www.dailypop.kr/news/articleView.html?idxno=102357"
+     "title": "[IFA 2026 결산 ①] AI는 ‘연결’ 넘어 ‘행동’으로…로봇·모빌리티가...",
+     "link": "https://www.ddaily.co.kr/page/view/2026090718222573434"
     },
     {
      "kw": "삼성",
-     "n": 80,
-     "title": "삼성 떠난 IFA에 샤오미 첫 부스… 프레스룸 아래 메인 자리에 1,900마력...",
-     "link": "https://kr.aving.net/news/articleView.html?idxno=1814221"
+     "n": 81,
+     "title": "[신상품]애플 첫 '접는 아이폰' 베일 벗는다…삼성과 진검승부",
+     "link": "https://www.namdonews.com/news/articleView.html?idxno=922764"
     },
     {
      "kw": "샤오미코리아",
@@ -441,34 +441,34 @@
      "link": "https://www.thedailypost.kr/news/articleView.html?idxno=115306"
     },
     {
+     "kw": "처음",
+     "n": 67,
+     "title": "[신상품]애플 첫 '접는 아이폰' 베일 벗는다…삼성과 진검승부",
+     "link": "https://www.namdonews.com/news/articleView.html?idxno=922764"
+    },
+    {
      "kw": "LG",
      "n": 65,
-     "title": "[IFA 톺아보기] 삼성·LG, 가전 성능 대신 'AI홈'을 앞세웠다…참가 1900...",
-     "link": "http://www.dailypop.kr/news/articleView.html?idxno=102357"
-    },
-    {
-     "kw": "처음",
-     "n": 65,
-     "title": "\"유럽 대표 가전전시회, 막내렸지만 …AI·로봇 청사진으로 새 100년 제시...",
-     "link": "https://www.newsis.com/view/NISX20260906_0003778061"
-    },
-    {
-     "kw": "자동차",
-     "n": 62,
-     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
-     "link": "https://www.ajunews.com/view/20260908150808935"
+     "title": "[IFA 2026 결산 ①] AI는 ‘연결’ 넘어 ‘행동’으로…로봇·모빌리티가...",
+     "link": "https://www.ddaily.co.kr/page/view/2026090718222573434"
     },
     {
      "kw": "카메라",
      "n": 62,
-     "title": "카메라 가리고 인터넷 끊고…IFA서 ‘보안 불신’ 지우기 안간힘 쓴 中...",
-     "link": "https://www.chosun.com/economy/tech_it/2026/09/08/CD2QRI2ICZEKVBOQ2BXHE25LMM/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news"
+     "title": "카메라 가리고… 수집 정보 현지 처리… 中 가전, 고객 ‘보안 불신’ ...",
+     "link": "https://www.chosun.com/economy/tech_it/2026/09/09/RCRBGALMNJAQDE5LFRF2WQQKEA/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news"
     },
     {
-     "kw": "기술",
+     "kw": "넘어",
      "n": 59,
-     "title": "샤오미, IFA 2026서 17.9mm 마이크로 RGB TV 공개… \"6,000니트에 BT.2020 1...",
-     "link": "https://kr.aving.net/news/articleView.html?idxno=1814222"
+     "title": "[IFA 2026 결산 ①] AI는 ‘연결’ 넘어 ‘행동’으로…로봇·모빌리티가...",
+     "link": "https://www.ddaily.co.kr/page/view/2026090718222573434"
+    },
+    {
+     "kw": "자동차",
+     "n": 59,
+     "title": "[IFA 2026 결산] '가전 그 이상'이 됐다…AI 집사·로봇·中 공세 한꺼번...",
+     "link": "https://www.ajunews.com/view/20260908150808935"
     }
    ]
   },
@@ -598,39 +598,39 @@
    "topKw": [
     {
      "kw": "AI",
-     "n": 492,
-     "title": "\"24시간 함께하는 개인비서 … AI 안경 확산으로 1인 기업 크게 늘 것\"",
-     "link": "https://www.mk.co.kr/article/12147396"
+     "n": 502,
+     "title": "메타, 이메일·예약·결제까지 맡는 'AI 개인비서' 출시",
+     "link": "https://www.thelec.kr/news/articleView.html?idxno=62024"
     },
     {
      "kw": "스마트폰",
-     "n": 187,
-     "title": "\"24시간 함께하는 개인비서 … AI 안경 확산으로 1인 기업 크게 늘 것\"",
-     "link": "https://www.mk.co.kr/article/12147396"
+     "n": 189,
+     "title": "[산업소식] '데이브 더 다이버' 1천만장 돌파…국내 싱글 패키지 최초",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2117722"
     },
     {
      "kw": "애플",
      "n": 129,
-     "title": "[산업소식] LH, 청약플러스에 전자점자 도입",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2117631"
+     "title": "[산업소식] '데이브 더 다이버' 1천만장 돌파…국내 싱글 패키지 최초",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2117722"
     },
     {
      "kw": "스마트",
-     "n": 119,
+     "n": 117,
      "title": "[가전 트렌드] 앳홈 미닉스, 라이프스타일 맞춤 '큐레이션 패키지' 첫 선...",
      "link": "https://www.ibabynews.com/news/articleView.html?idxno=154302"
     },
     {
      "kw": "화면",
-     "n": 102,
-     "title": "S26 FE 이렇게 써보세요... 놓치기 아까운 신기능 5가지",
-     "link": "https://www.betanews.net/article/view/beta202609070110"
+     "n": 104,
+     "title": "[산업소식] '데이브 더 다이버' 1천만장 돌파…국내 싱글 패키지 최초",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2117722"
     },
     {
      "kw": "기기",
-     "n": 98,
-     "title": "\"24시간 함께하는 개인비서 … AI 안경 확산으로 1인 기업 크게 늘 것\"",
-     "link": "https://www.mk.co.kr/article/12147396"
+     "n": 99,
+     "title": "\"로봇도 이제 B2C 시대\"...AI 반려로봇 1.5만대 돌파, 수백조 홈로봇 시...",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=546772"
     },
     {
      "kw": "에이닷",
@@ -646,15 +646,21 @@
     },
     {
      "kw": "삼성전자",
-     "n": 77,
-     "title": "[투데이온] 美 IT 전문 테크 채널, \"LG 스마트TV 대기모드 중 음성 수집...",
-     "link": "https://www.the-today.com/news/articleView.html?idxno=89683"
+     "n": 78,
+     "title": "\"로봇도 이제 B2C 시대\"...AI 반려로봇 1.5만대 돌파, 수백조 홈로봇 시...",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=546772"
     },
     {
      "kw": "오픈AI",
-     "n": 75,
+     "n": 73,
      "title": "삼성SDS, '다차원 AI 풀스택' 공개…LG유플러스, 입문형 '홈캠 Lite' 출시...",
      "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=204227"
+    },
+    {
+     "kw": "제미나",
+     "n": 69,
+     "title": "메타, 이메일·예약·결제까지 맡는 'AI 개인비서' 출시",
+     "link": "https://www.thelec.kr/news/articleView.html?idxno=62024"
     },
     {
      "kw": "갤럭시",
@@ -663,16 +669,10 @@
      "link": "https://www.ibabynews.com/news/articleView.html?idxno=154302"
     },
     {
-     "kw": "제미나",
-     "n": 66,
-     "title": "\"유럽 대표 가전전시회, 막내렸지만 …AI·로봇 청사진으로 새 100년 제시...",
-     "link": "https://www.newsis.com/view/NISX20260906_0003778061"
-    },
-    {
      "kw": "아마존",
      "n": 65,
-     "title": "AI의 종착지는 결국 하드웨어일까? 구글, 애플과 오픈AI의 서로 다른 '동...",
-     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=60649"
+     "title": "9월 2주 주요 제조업 전망",
+     "link": "https://www.laborplus.co.kr/news/articleView.html?idxno=41432"
     },
     {
      "kw": "문자",
@@ -689,8 +689,8 @@
     {
      "kw": "기술",
      "n": 54,
-     "title": "[투데이온] 美 IT 전문 테크 채널, \"LG 스마트TV 대기모드 중 음성 수집...",
-     "link": "https://www.the-today.com/news/articleView.html?idxno=89683"
+     "title": "서울시, AI가 바꾸는 미래 일상 한자리에… 'SLW 2026' 10월 개막",
+     "link": "https://www.newscj.com/news/articleView.html?idxno=3431329"
     },
     {
      "kw": "할일",
@@ -700,9 +700,9 @@
     },
     {
      "kw": "가전",
-     "n": 51,
-     "title": "[가전 트렌드] 앳홈 미닉스, 라이프스타일 맞춤 '큐레이션 패키지' 첫 선...",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=154302"
+     "n": 53,
+     "title": "냉장고 한 대에서 AI 허브까지…'비스포크'의 7년 궤적 [옛날신문보기]",
+     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=204205"
     }
    ]
   }
