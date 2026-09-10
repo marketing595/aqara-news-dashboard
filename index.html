@@ -6942,6 +6942,44 @@
     const TK_MAIL={'yeojin@aqara.kr':'정여진','ykang@aqara.kr':'강유선','syhong@aqara.kr':'홍수영'};
     let TK_ALL={}, TK_ME='', TK_MENAME='', TK_ASKED=false, TK_WEEK='', TK_MODE='board';
     let tkOn=false, tkDeb={}, tkInflight=0, tkErr=false, tkMigrated=false;
+    const TK_NEW=new Set();          // 방금 만든 항목 — 내용이 처음 채워질 때 구글챗으로 알린다
+    let TK_CHAT_MSG='';              // 구글챗 알림이 실패한 이유(설정 안내용)
+
+    /* --- 구글챗 알림 (마케팅팀 스페이스) ---
+       업무가 추가되면 '홍수영님의 업무가 추가됐습니다' 한 줄을 채팅방에 보낸다.
+       웹훅 URL은 서버(api/chat-notify.js)만 알고, 브라우저는 문구만 넘긴다.
+       끄고 켜기는 tasks/_chat 에 저장해 팀 전체가 같은 설정을 쓴다. */
+    function tkChatOn(){ return ((TK_ALL||{})._chat!=='0'); }
+    function tkChatToggle(){ const u={}; u['tasks/_chat']=tkChatOn()?'0':'1'; TK_CHAT_MSG=''; tkApply(u); }
+    function tkChatSend(text,thread){
+      if(!tkChatOn()||!text) return;
+      fetch('/api/chat-notify',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({text:text,thread:thread||''})})
+        .then(r=>r.json())
+        .then(d=>{ const msg=(d&&d.ok)?'':((d&&(d.hint||d.error))||'전송 실패');
+          if(msg!==TK_CHAT_MSG){ TK_CHAT_MSG=msg; if(!tkFocused()) tkPaint(); } })
+        .catch(()=>{});
+    }
+    function tkNameOf(pk){ return String(pk||'').replace(/^p_/,''); }
+    function tkFieldLabel(fk){ if(fk==='check') return '확인 필요 사항';
+      const f=TK_FIELDS.filter(x=>x.k===fk)[0]; return f?f.label:fk; }
+    /* 새로 만든 항목에 내용이 처음 들어왔을 때 한 번만 알린다(빈 줄은 보내지 않음) */
+    function tkChatMaybe(path,v){
+      const m=/^tasks\/(p_[^/]+)\/w\/([0-9-]+)\/(done|plan|issue|check)\/([^/]+)\/t$/.exec(path||'');
+      if(!m) return;
+      const id=m[4]; if(!TK_NEW.has(id)) return;
+      const t=String(v==null?'':v).trim(); if(!t) return;
+      TK_NEW.delete(id);
+      const who=tkNameOf(m[1]), by=TK_MENAME||'';
+      tkChatSend('🗒 *'+who+'님의 업무가 추가됐습니다*'
+        +'\n· '+tkFieldLabel(m[3])+' — '+t
+        +'\n· '+((by&&by!==who)?(by+'님이 등록 · '):'')+tkRange(m[2])
+        +'\n'+location.origin+'/', 'tasks-'+m[2]);
+    }
+    function tkChatTest(){
+      tkChatSend('🔔 *TASKS 알림 연결 테스트*\n대시보드에서 보낸 테스트 메시지입니다.\n'+location.origin+'/','tasks-test');
+      setTimeout(()=>{ alert(TK_CHAT_MSG?('아직 연결되지 않았습니다 — '+TK_CHAT_MSG):'보냈습니다. 구글챗 마케팅팀 방을 확인해 주세요.'); },1200);
+    }
 
     function tkUse(){ return (typeof wkUseFB==='function'&&wkUseFB()); }
     function tkSafe(s){ return String(s||'').replace(/[.#$@\/\[\]]/g,'_'); }
@@ -7026,7 +7064,8 @@
       tkLocalSet(path,(el.tagName==='INPUT'?el.value:el.innerText));
       clearTimeout(tkDeb[path]); tkDeb[path]=setTimeout(()=>tkFlush(path),300); tkSaveState(); }
     function tkFlush(path){ clearTimeout(tkDeb[path]); delete tkDeb[path]; const v=tkGet(path);
-      if(tkUse()){ const u={}; u[path]=(v==null?'':v); tkTrack(WK_DB.ref().update(u)); } else tkPersist(); tkSaveState(); }
+      if(tkUse()){ const u={}; u[path]=(v==null?'':v); tkTrack(WK_DB.ref().update(u)); } else tkPersist();
+      tkSaveState(); tkChatMaybe(path,v); }
     function tkSaveNow(){ Object.keys(tkDeb).forEach(tkFlush); tkSaveState();
       const b=document.getElementById('tkSaveBtn'); if(b){ const t=b.getAttribute('data-lbl')||b.textContent;
         b.setAttribute('data-lbl',t); b.textContent='저장됨 ✓'; setTimeout(()=>{ b.textContent=t; },1500); } }
@@ -7052,6 +7091,7 @@
 
     function tkAddRow(pk,fk){ const rows=tkRows(pk,fk), id=tkId(), u={};
       u[tkBase(pk)+'/'+fk+'/'+id]={t:'',w:'',c:false,project:'',order:rows.length?rows[rows.length-1].order+1:0};
+      TK_NEW.add(id);                       // 내용이 채워지면 구글챗으로 알린다
       tkApply(u); setTimeout(()=>{ const el=document.querySelector('[data-tpath="'+tkBase(pk)+'/'+fk+'/'+id+'/t"]'); if(el) el.focus(); },40); }
     function tkDelRow(pk,fk,id){ const u={}; u[tkBase(pk)+'/'+fk+'/'+id]=null; tkApply(u); }
     function tkToggle(pk,fk,id,on){ const u={}; u[tkBase(pk)+'/'+fk+'/'+id+'/c']=!!on; tkApply(u); }
@@ -7059,7 +7099,12 @@
       const src=(tkNode(pk)[fk]||{})[id]; if(!src) return;
       const u={}; u[tkBase(pk)+'/'+fk+'/'+id]=null;
       u[tkBase(tkPKey(to))+'/'+fk+'/'+tkId()]=Object.assign({},src,{order:Date.now()});
-      tkApply(u); }
+      tkApply(u);
+      if(String(src.t||'').trim())
+        tkChatSend('🔁 *'+to+'님에게 업무가 넘어왔습니다*'
+          +'\n· '+tkFieldLabel(fk)+' — '+String(src.t).trim()
+          +'\n· '+(TK_MENAME?(TK_MENAME+'님이 넘김 · '):'')+tkNameOf(pk)+' → '+to
+          +'\n'+location.origin+'/', 'tasks-'+TK_WEEK); }
     function tkSetProject(pk,fk,id,el){ const v=el.value, u={};
       if(v==='__new__'){ const nm=(prompt('새 프로젝트 이름을 입력하세요')||'').trim(); if(!nm){ tkPaint(); return; }
         const list=(typeof wkProjList==='function')?wkProjList():[], pid=tkId();
@@ -7249,6 +7294,14 @@
             <button onclick="tkCopy()" class="text-[13px] border border-[#E6E6E3] hover:bg-[#FAFAF9] px-3 py-1.5 rounded-lg font-semibold">텍스트 복사</button>
             <button onclick="tkToWeekly()" class="text-[13px] bg-[#7C5CFF] text-white px-3 py-1.5 rounded-lg font-semibold hover:brightness-110">주간보고로 보내기</button>
           </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-[#F2EFE9]">
+          <button onclick="tkChatToggle()" title="업무가 추가되면 구글챗 마케팅팀 방으로 한 줄 알립니다"
+            class="text-[12px] font-bold rounded-lg px-2.5 py-1.5 border ${tkChatOn()?'border-[#5E7350] text-[#5E7350] bg-[#F3F8F0]':'border-[#E6E6E3] text-slate-400'}">
+            ${tkChatOn()?'🔔 구글챗 알림 켜짐':'🔕 구글챗 알림 꺼짐'}</button>
+          ${tkChatOn()?`<button onclick="tkChatTest()" class="text-[11.5px] text-slate-400 hover:text-ink underline">테스트 전송</button>`:''}
+          <span class="text-[11.5px] text-slate-400">업무를 추가하면 마케팅팀 방에 <b class="text-slate-500">“○○님의 업무가 추가됐습니다”</b>로 올라갑니다(주차별 스레드).</span>
+          ${TK_CHAT_MSG?`<span class="text-[11.5px] font-semibold text-ared">⚠️ ${esc(TK_CHAT_MSG)}</span>`:''}
         </div>
       </div>
 
