@@ -6604,7 +6604,7 @@
     /* 개선 액션 기본안 — 아래 측정 결과에서 그대로 도출된 것들 (체크·수정·추가 가능) */
     const GEO_ACTIONS=[
       {t:'제품·랜딩 페이지마다 title 따로 지정', d:'도어락·센서·허브·스위치·파트너십 등이 전부 “아카라라이프 Aqaralife” 한 제목을 쓰고 있어 AI가 페이지 주제를 구분하지 못합니다.', w:'홈페이지'},
-      {t:'모든 페이지에 meta description 작성', d:'점검한 페이지 전부 description이 비어 있습니다. AI 답변에 인용될 요약문이 없는 상태입니다.', w:'홈페이지'},
+      {t:'페이지마다 meta description 따로 작성', d:'상당수 페이지가 홈과 똑같은 기본 요약문을 그대로 쓰고, 나머지는 3~15자로 사실상 비어 있습니다. AI가 인용할 요약문이 없는 상태입니다.', w:'홈페이지'},
       {t:'페이지마다 H1 1개 지정', d:'대부분 H1이 없고(0개) 스마트홈 페이지만 2개입니다. 제목 위계가 없으면 어떤 내용의 페이지인지 판단이 어렵습니다.', w:'홈페이지'},
       {t:'Organization·Product·FAQ 구조화 데이터 추가', d:'현재 JSON-LD는 쇼핑몰 배송·반품 스키마뿐입니다. 회사 정보·제품·FAQ 스키마를 넣으면 AI가 사실을 그대로 인용합니다.', w:'홈페이지'},
       {t:'/about · /Enterprise canonical 오설정 수정', d:'/about은 /aqaralife를, /Enterprise는 /company-platform을 정식 주소로 가리키고 있습니다(자기 페이지가 아님).', w:'홈페이지'},
@@ -6653,9 +6653,12 @@
     /* --- 점수 --- */
     function geGenericTitle(p){ const home=((GEO&&GEO.pages&&GEO.pages[0])||{}).title||'';
       return !!(p.title && home && p.path!=='/' && p.title===home); }
+    /* 홈과 똑같은 요약문을 그대로 쓰고 있으면 그 페이지 설명이 없는 것과 같다 */
+    function geGenericDesc(p){ const home=((GEO&&GEO.pages&&GEO.pages[0])||{}).desc||'';
+      return !!(p.desc && home && p.path!=='/' && p.desc===home); }
     function gePageScore(p){ if(!p||!p.ok) return 0; let s=0;
       if(p.title && !geGenericTitle(p)) s+=25;
-      if((p.descLen||0)>=50) s+=25;
+      if((p.descLen||0)>=50 && !geGenericDesc(p)) s+=25;
       if(p.h1===1) s+=25;
       if((p.contentLd||[]).length) s+=25;
       return s; }
@@ -6800,7 +6803,7 @@
             <span class="text-[10px] font-bold ml-1 px-1.5 py-0.5 rounded" style="background:${GEO_KINDC[p.kind]||'#6E6E73'}15;color:${GEO_KINDC[p.kind]||'#6E6E73'}">${esc(GEO_KIND[p.kind]||p.kind||'')}</span>
           </td>
           ${cell(!gen&&!!p.title, gen?'중복 제목':(p.title?esc(p.title.slice(0,26)):'없음'))}
-          ${cell((p.descLen||0)>=50, (p.descLen||0)?(p.descLen+'자'):'없음')}
+          ${cell((p.descLen||0)>=50 && !geGenericDesc(p), geGenericDesc(p)?'중복 요약문':((p.descLen||0)?(p.descLen+'자'):'없음'))}
           ${cell(p.h1===1, (p.h1||0)+'개')}
           ${cell((p.contentLd||[]).length>0, (p.contentLd||[]).length?esc((p.contentLd||[]).join(', ')):'없음')}
           ${cell(!canonBad, canonBad?'다른 주소':'정상')}
