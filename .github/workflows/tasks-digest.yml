@@ -1,0 +1,35 @@
+name: TASKS Digest
+
+# TASKS 변경사항을 구글챗 마케팅팀 방에 하루 두 번 알린다
+#   오전 8시 KST  = 23:00 UTC (전날)
+#   오후 12시 30분 KST = 03:30 UTC
+# 설정(tasks/_chat)이 off면 스크립트가 알아서 아무것도 보내지 않는다.
+on:
+  schedule:
+    - cron: '0 23 * * *'    # 08:00 KST
+    - cron: '30 3 * * *'    # 12:30 KST
+  workflow_dispatch: {}     # 손으로 한 번 돌려볼 때
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tasks-digest
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install (서비스 계정 방식일 때만 필요)
+        run: pip install google-auth || true
+      - name: Send digest
+        env:
+          CHAT_WEBHOOK: ${{ secrets.CHAT_WEBHOOK }}
+          FIREBASE_DB_SECRET: ${{ secrets.FIREBASE_DB_SECRET }}
+          FIREBASE_SA: ${{ secrets.FIREBASE_SA }}
+        run: python crawler/tasks_digest.py
