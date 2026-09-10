@@ -1,0 +1,38 @@
+name: GEO Status
+
+# GEO(생성형 엔진 최적화) 현황 점검 → geo.json
+# AI 크롤러 접근정책(robots.txt) + 홈페이지 페이지별 title·description·H1·구조화데이터
+# 매일 한국 08시 20분 + 수동 + 크롤러/워크플로 변경 시
+on:
+  schedule:
+    - cron: '20 23 * * *'   # 08:20 KST
+  workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/geo.yml'
+      - 'crawler/geo_fetch.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: geo-status
+  cancel-in-progress: false
+
+jobs:
+  geo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check GEO status
+        run: python crawler/geo_fetch.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add geo.json
+          git diff --staged --quiet || git commit -m "geo.json 자동 갱신"
+          git push

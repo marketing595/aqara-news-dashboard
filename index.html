@@ -121,6 +121,7 @@
       <button id="grpBtn-owned" onclick="switchGroup('owned')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">온드미디어</button>
       <button id="grpBtn-cafe" onclick="switchGroup('cafe')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">카페·커뮤니티</button>
       <button id="grpBtn-home" onclick="switchGroup('home')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">홈페이지</button>
+      <button id="grpBtn-geo" onclick="switchGroup('geo')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">GEO</button>
       <button id="grpBtn-library" onclick="switchGroup('library')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-muted hover:text-ink transition whitespace-nowrap">미디어 라이브러리</button>
       <button id="grpBtn-mkt" onclick="switchGroup('mkt')" class="px-1 py-3.5 text-[15px] font-bold border-b-2 border-transparent text-[#7C5CFF] hover:brightness-110 transition whitespace-nowrap">🔒 ONLY MKT</button>
     </div>
@@ -1212,6 +1213,9 @@
        <p class="text-[11px] text-slate-400 mt-3">※ 현재 게재 중인 광고 소재(제목·설명·연결 URL). 네이버 파워링크 미리보기 형태입니다.</p>
      </section>
    </div>
+
+   <!-- GEO (생성형 엔진 최적화 현황) -->
+   <div id="view-geo" class="hidden"><div id="geoBody"></div></div>
 
    <!-- 미디어 라이브러리 -->
    <div id="view-library" class="hidden">
@@ -3519,8 +3523,8 @@
     function kstToday(){ const d=new Date(Date.now()+9*36e5); return d.toISOString().slice(0,10); }
 
     // GNB: 상위 그룹 → 하위 뷰
-    const GROUPS={ pr:['analytics','briefing'], owned:['owned'], cafe:['cafe'], home:['home'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], mkt:['mkt'] };
-    const VIEW_GROUP={ analytics:'pr', issue:'pr', briefing:'pr', owned:'owned', cafe:'cafe', home:'home', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', mkt:'mkt', seminar:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
+    const GROUPS={ pr:['analytics','briefing'], geo:['geo'], owned:['owned'], cafe:['cafe'], home:['home'], report:['report','campaign','market','competitor','cdj','export'], ad:['ad'], library:['library'], mkt:['mkt'] };
+    const VIEW_GROUP={ geo:'geo', analytics:'pr', issue:'pr', briefing:'pr', owned:'owned', cafe:'cafe', home:'home', campaign:'report', competitor:'report', market:'report', report:'report', cdj:'report', export:'report', ad:'ad', library:'library', mkt:'mkt', seminar:'mkt', calendar:'mkt', medialist:'mkt', kpi:'mkt' };
     let prLastView='analytics';
     function grpClass(on){ return 'px-1 py-3.5 text-[15px] font-bold border-b-2 whitespace-nowrap '+(on?'border-brand text-ink':'border-transparent text-muted hover:text-ink transition'); }
     function subClass(on){ return 'px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition '+(on?'bg-ink text-white font-semibold':'text-muted hover:text-ink font-medium'); }
@@ -5232,11 +5236,11 @@
     }
     function switchTab(t){
       // 상위 뷰만 토글(카페·리포트 클러스터는 view-mkt 내부로 편입 → mktSub/mktReportSub가 관리)
-      ['analytics','issue','briefing','owned','cafe','home','library','mkt'].forEach(v=>{
+      ['analytics','issue','briefing','owned','cafe','home','geo','library','mkt'].forEach(v=>{
         const el=document.getElementById('view-'+v); if(el) el.classList.toggle('hidden', v!==t);
       });
       const g=VIEW_GROUP[t]; if(g==='pr') prLastView=t;
-      ['pr','owned','cafe','home','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
+      ['pr','owned','cafe','home','geo','library','mkt'].forEach(k=>{ const b=document.getElementById('grpBtn-'+k); if(b) b.className=grpClass(k===g)+(k==='mkt'?' text-[#7C5CFF]':''); });
       document.getElementById('subnav-pr').classList.toggle('hidden', g!=='pr');
       document.getElementById('subnav-owned').classList.toggle('hidden', g!=='owned');
       ['analytics','issue','briefing'].forEach(v=>{ const b=document.getElementById('tabBtn-'+v); if(b) b.className=subClass(v===t); });
@@ -5244,6 +5248,7 @@
       if(t==='owned'){ renderOwned(); loadOwned(); switchOwned(ownedSection); }
       if(t==='cafe'){ renderCafe(); loadCafe(); loadDcinside(); }
       if(t==='home'){ loadHome(); }
+      if(t==='geo'){ renderGeoTab(); }
       if(t==='library'){ loadLibrary(); }
       if(t==='mkt'){ mktEnter(); }
     }
@@ -6564,62 +6569,429 @@
       lnSave('logx.'+n,'1'); lnSave('log.'+i+'.date',d); lnSave('log.'+i+'.by',lnMe());
       renderLanseon(); setTimeout(()=>lnGo('lnSec8'),80); }
 
-    /* ===================== 🗒 TASKS (로그인 계정별 개인 노트 · 주간보고 양식) =====================
-       구글 계정으로 로그인한 사람마다 '자기 노트'를 쓴다. 양식은 주간보고와 똑같이
-       [이번 주 진행·성과 / 다음 주 계획 / 이슈·공유] + 자유 메모장 + 확인 필요 사항.
-       Firebase 저장 위치:
-         tasks/<계정키>/name·email             = 표시 이름 · 로그인 이메일
-         tasks/<계정키>/w/<월요일>/<칸>/<id>   = {t:내용, c:완료, project:프로젝트, order, cm:{댓글}}
-         tasks/<계정키>/w/<월요일>/memo        = 자유 메모장 본문
-       계정키 = 이메일에서 Firebase가 못 쓰는 문자(. @ # $ / [ ])를 _ 로 바꾼 것.
-       ▷ 편집은 내 노트만. 팀원 노트는 '팀원 노트'에서 읽기 전용으로 본다.
-       ▷ 로그인 정보가 없으면(로그인 잠금 미설정 등) 이름을 골라 쓰고 이 브라우저에 저장한다.
-       ▷ 다 쓴 노트는 [주간보고로 보내기]로 팀 주간보고 같은 주차에 그대로 옮길 수 있다. */
+    /* ===================== 🤖 GEO — 생성형 엔진 최적화 현황 =====================
+       'AI가 우리 콘텐츠를 읽을 수 있는가 / 읽고 인용할 만한 형태인가'를 우리가 손댈 수 있는
+       세 영역(홈페이지 · PR · 온드미디어) 기준으로 본다.
+
+       데이터 두 갈래
+         · web/geo.json      = 매일 자동 측정(크롤러 접근정책·페이지 점검·사이트 기본기). crawler/geo_fetch.py
+         · Firebase geo/data = 사람이 적는 것(AI 답변 점검 결과·개선 액션 체크·메모). 팀 실시간 공유.
+       함수 접두사 ge*, 편집 저장은 geSave/GV (랜선집들이·세미나와 같은 방식). */
+    let GEO=null, GEO_LOADING=false, GEO_ERR='', GE_OVER={}, geRefOn=false, GE_FBERR='';
+    let geBusy='';                                   // Gemini 확인 중인 질문 인덱스
+
+    const GEO_KIND={home:'대표',content:'콘텐츠',product:'제품',convert:'전환·문의'};
+    const GEO_KINDC={home:'#5B44C7',content:'#D68134',product:'#2563EB',convert:'#5E7350'};
+
+    /* AI 답변에 우리가 나오는지 확인할 질문 — 스마트홈 구매 여정에서 실제로 물어보는 말 */
+    const GEO_QUERIES=[
+      '스마트홈 도어락 추천',
+      '매터(Matter) 지원 스마트홈 브랜드 추천',
+      '아파트 스마트홈 인테리어 시공 업체',
+      '삼성 스마트싱스랑 같이 쓸 수 있는 센서 브랜드',
+      '애플 홈킷 지원 스마트 조명 추천',
+      '재실 감지 센서 추천',
+      '스마트홈 허브 뭘 사야 할까',
+      '신혼집 스마트홈 구성 추천',
+      '무타공 스마트 블라인드',
+      '아카라 스마트홈 어때?'
+    ];
+    const GEO_ENGINES=[{k:'gpt',n:'ChatGPT',u:'https://chatgpt.com/?q='},
+                       {k:'ppx',n:'Perplexity',u:'https://www.perplexity.ai/search?q='},
+                       {k:'gem',n:'Gemini',u:'https://gemini.google.com/app'},
+                       {k:'nav',n:'네이버 AI',u:'https://search.naver.com/search.naver?query='}];
+
+    /* 개선 액션 기본안 — 아래 측정 결과에서 그대로 도출된 것들 (체크·수정·추가 가능) */
+    const GEO_ACTIONS=[
+      {t:'제품·랜딩 페이지마다 title 따로 지정', d:'도어락·센서·허브·스위치·파트너십 등이 전부 “아카라라이프 Aqaralife” 한 제목을 쓰고 있어 AI가 페이지 주제를 구분하지 못합니다.', w:'홈페이지'},
+      {t:'모든 페이지에 meta description 작성', d:'점검한 페이지 전부 description이 비어 있습니다. AI 답변에 인용될 요약문이 없는 상태입니다.', w:'홈페이지'},
+      {t:'페이지마다 H1 1개 지정', d:'대부분 H1이 없고(0개) 스마트홈 페이지만 2개입니다. 제목 위계가 없으면 어떤 내용의 페이지인지 판단이 어렵습니다.', w:'홈페이지'},
+      {t:'Organization·Product·FAQ 구조화 데이터 추가', d:'현재 JSON-LD는 쇼핑몰 배송·반품 스키마뿐입니다. 회사 정보·제품·FAQ 스키마를 넣으면 AI가 사실을 그대로 인용합니다.', w:'홈페이지'},
+      {t:'/about · /Enterprise canonical 오설정 수정', d:'/about은 /aqaralife를, /Enterprise는 /company-platform을 정식 주소로 가리키고 있습니다(자기 페이지가 아님).', w:'홈페이지'},
+      {t:'llms.txt를 표준 형식으로 교체', d:'지금 파일은 robots 문법으로 적혀 있습니다. 표준은 “# 브랜드 소개 + 핵심 문서 링크 목록”의 마크다운입니다.', w:'홈페이지'},
+      {t:'sitemap에 블로그·뉴스룸 개별 글 포함 + https로', d:'sitemap 59건이 전부 메뉴 페이지이고 주소가 http로 적혀 있습니다. 개별 글이 없으면 AI 크롤러가 콘텐츠를 못 찾습니다.', w:'홈페이지'},
+      {t:'홈페이지 블로그 콘텐츠 채우기', d:'홈페이지 블로그 게시글이 1건뿐입니다. 네이버 블로그는 AI 크롤러를 전면 차단하므로, AI가 읽을 수 있는 글은 홈페이지에만 쌓입니다.', w:'온드미디어'},
+      {t:'네이버 블로그 글을 홈페이지에 요약 재게시', d:'같은 내용을 홈페이지에 옮기면 AI가 읽을 수 있는 자산이 됩니다(원문은 네이버 유지).', w:'온드미디어'},
+      {t:'보도자료 배포 시 매체 원문 URL 확보·기록', d:'네이버 뉴스는 AI 크롤러 차단이라 인용되지 않습니다. 매체 자체 사이트에 실린 원문이 GEO 자산입니다.', w:'PR'},
+      {t:'스마트홈 바이블에 질문형 FAQ 블록 추가', d:'“매터가 뭔가요?” 같은 질문을 H2로 두고 3~4문장으로 답하는 형태가 AI 인용률이 가장 높습니다.', w:'홈페이지'},
+      {t:'제품 스펙을 표로 정리해 공개', d:'호환 플랫폼·통신방식·설치조건을 표로 두면 비교 질문 답변에 그대로 인용됩니다.', w:'홈페이지'}
+    ];
+
+    /* --- 저장(팀 공유) --- */
+    function geRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('geo/data'):null; }
+    function geKey(k){ return String(k).replace(/[.#$/\[\]]/g,'_'); }
+    function GV(k,def){ const v=GE_OVER[geKey(k)]; return (v==null||v==='')?(def==null?'':def):v; }
+    function geLocalLoad(){ try{ return JSON.parse(localStorage.getItem('aqaraGeo')||'{}'); }catch(e){ return {}; } }
+    function geStart(){
+      if(geRefOn) return; const ref=geRef();
+      if(!ref){ GE_OVER=Object.assign(geLocalLoad(),GE_OVER); return; }
+      geRefOn=true;
+      ref.on('value',s=>{ GE_OVER=s.val()||{};
+        const a=document.activeElement;
+        if(a&&a.dataset&&a.dataset.gk) return;      // 내가 입력 중이면 다시 그리지 않는다
+        if(!document.getElementById('view-geo').classList.contains('hidden')) renderGeo(); },
+        e=>{ GE_FBERR=(e&&e.message)||'읽기 거부'; });
+    }
+    function geSave(k,v){ GE_OVER[geKey(k)]=v; const ref=geRef();
+      if(ref) ref.child(geKey(k)).set(v).catch(e=>{ GE_FBERR=(e&&e.message)||'쓰기 거부'; renderGeo(); });
+      else { try{ localStorage.setItem('aqaraGeo',JSON.stringify(GE_OVER)); }catch(e){} } }
+    function geEdit(el){ const k=el.dataset.gk; if(!k) return; geSave(k,(el.innerText||'').trim()); }
+    function geToggle(k){ geSave(k, GV(k,'')==='1'?'':'1'); renderGeo(); }
+
+    /* --- geo.json --- */
+    function loadGeo(force){
+      if(GEO&&!force) return;
+      if(GEO_LOADING) return; GEO_LOADING=true;
+      fetch('geo.json?_='+Date.now()).then(r=>r.ok?r.json():Promise.reject(new Error('geo.json '+r.status)))
+        .then(d=>{ GEO=d; GEO_ERR=''; })
+        .catch(e=>{ GEO_ERR=(e&&e.message)||'불러오기 실패'; })
+        .then(()=>{ GEO_LOADING=false; renderGeo(); });
+    }
+    function renderGeoTab(){ geStart(); loadGeo(); renderGeo();
+      if(typeof loadOwned==='function' && !(OWNED&&OWNED.generatedAt)){ try{ loadOwned(); }catch(e){} } }
+
+    /* --- 점수 --- */
+    function geGenericTitle(p){ const home=((GEO&&GEO.pages&&GEO.pages[0])||{}).title||'';
+      return !!(p.title && home && p.path!=='/' && p.title===home); }
+    function gePageScore(p){ if(!p||!p.ok) return 0; let s=0;
+      if(p.title && !geGenericTitle(p)) s+=25;
+      if((p.descLen||0)>=50) s+=25;
+      if(p.h1===1) s+=25;
+      if((p.contentLd||[]).length) s+=25;
+      return s; }
+    function gePagesAvg(){ const ps=((GEO||{}).pages||[]).filter(p=>p.ok);
+      return ps.length?Math.round(ps.reduce((a,p)=>a+gePageScore(p),0)/ps.length):0; }
+    function geSiteScore(){ const s=(GEO||{}).site||{}; let v=0;
+      if(s.robots) v+=20;
+      const home=(((GEO||{}).channels)||[]).filter(c=>c.key==='home')[0];
+      if(home&&!(home.blocked||[]).length) v+=20;
+      if(s.sitemap) v+=20;
+      if(s.sitemapHasPosts) v+=20;
+      if(s.llms==='markdown') v+=20;
+      return v; }
+    function geOwnBlocked(){ return (((GEO||{}).channels)||[]).filter(c=>c.own&&(c.blocked||[]).length).length; }
+    function geTotal(){ return Math.round(gePagesAvg()*0.6 + geSiteScore()*0.4); }
+    function geGrade(v){ return v>=80?{t:'좋음',c:'#5E7350'}:(v>=50?{t:'보통',c:'#D68134'}:{t:'미흡',c:'#BF5332'}); }
+
+    /* --- 인용 자산: AI가 실제로 읽을 수 있는 우리 콘텐츠 --- */
+    function geAssets(){
+      const out={prTotal:0,prOpen:0,prPortal:0,blog:0,youtube:0,homePosts:0};
+      try{
+        (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{
+          const u=r._href||r['링크']||r.link||''; if(!u) return;
+          out.prTotal++;
+          const h=(String(u).match(/^https?:\/\/([^/]+)/)||[])[1]||'';
+          if(/naver\.com|daum\.net|nate\.com|zum\.com/i.test(h)) out.prPortal++; else out.prOpen++;
+        });
+      }catch(e){}
+      try{ const bs=((OWNED||{}).blog||{}).blogs||[]; out.blog=bs.reduce((a,b)=>a+(b.total||(b.posts||[]).length||0),0); }catch(e){}
+      try{ out.youtube=(((OWNED||{}).youtube||{}).channel||{}).videos||0; }catch(e){}
+      const bd=(GEO||{}).boards||{}; out.homePosts=(bd.blogPosts||0)+(bd.newsroomPosts||0);
+      return out;
+    }
+
+    /* --- Gemini로 지금 확인 (웹검색 없이 '학습된 지식'에 우리가 있는지) --- */
+    function geAsk(i){
+      if(geBusy) return; geBusy=String(i); renderGeo();
+      const q=GEO_QUERIES[i];
+      fetch('/api/ai-assist',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({system:'너는 한국 소비자에게 조언하는 도우미다. 아래 질문에 실제 추천하듯 한국어 4~6문장으로 답해라. 브랜드·제품명을 반드시 구체적으로 언급해라.',prompt:q})})
+        .then(r=>r.json()).then(d=>{
+          if(!d||!d.ok){ alert('Gemini 확인 실패: '+((d&&(d.hint||d.error))||'')); return; }
+          const txt=String(d.text||'');
+          const hit=/아카라|aqara/i.test(txt);
+          geSave('q.'+i+'.gem', hit?'o':'x');
+          geSave('q.'+i+'.gemtxt', txt.replace(/\s+/g,' ').slice(0,400));
+          geSave('q.'+i+'.date', new Date().toISOString().slice(0,10));
+        })
+        .catch(e=>alert('Gemini 확인 실패: '+((e&&e.message)||'')))
+        .then(()=>{ geBusy=''; renderGeo(); });
+    }
+    function geMark(i,eng){ const k='q.'+i+'.'+eng, cur=GV(k,'');
+      geSave(k, cur==='o'?'x':(cur==='x'?'':'o'));
+      geSave('q.'+i+'.date', new Date().toISOString().slice(0,10)); renderGeo(); }
+    function geHitRate(){ let n=0,h=0;
+      GEO_QUERIES.forEach((q,i)=>{ GEO_ENGINES.forEach(e=>{ const v=GV('q.'+i+'.'+e.k,''); if(v){ n++; if(v==='o') h++; } }); });
+      return {n:n,h:h,pct:n?Math.round(h/n*100):-1}; }
+
+    function geBotBadge(list){ list=list||[];
+      return list.length
+        ? `<span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full" style="background:#FDECEA;color:#BF5332">AI 차단 ${list.length}종</span>`
+        : `<span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full" style="background:#EDF5E9;color:#5E7350">AI 접근 허용</span>`; }
+
+    function renderGeo(){
+      const box=document.getElementById('geoBody'); if(!box) return;
+      if(!GEO){ box.innerHTML=`<div class="card p-8 text-center text-slate-400 text-sm">
+        ${GEO_ERR?('⚠️ geo.json을 불러오지 못했습니다 — '+esc(GEO_ERR)):'GEO 현황을 불러오는 중…'}</div>`; return; }
+
+      const pages=(GEO.pages||[]).filter(p=>p.ok), site=GEO.site||{}, chs=GEO.channels||[], med=GEO.media||[];
+      const tot=geTotal(), g=geGrade(tot), pAvg=gePagesAvg(), sScore=geSiteScore(), as=geAssets(), hr=geHitRate();
+      const medBlocked=med.filter(m=>(m.blocked||[]).length);
+      const conn=(typeof wkUseFB==='function'&&wkUseFB())&&!GE_FBERR
+        ? '<span class="text-[11.5px] font-semibold text-agreen">🟢 점검 결과·액션은 팀과 실시간 공유됩니다</span>'
+        : '<span class="text-[11.5px] font-semibold text-ared">⚠️ 서버 미연결 — 지금 적는 내용은 이 브라우저에만 저장됩니다</span>';
+
+      const kpi=(label,val,sub,color)=>`<div class="rounded-xl border border-[#E6E6E3] bg-white p-4">
+        <p class="text-[11.5px] font-bold text-slate-400">${label}</p>
+        <p class="text-[26px] font-extrabold num leading-none mt-1" style="color:${color||'#26282A'}">${val}</p>
+        <p class="text-[11.5px] text-slate-500 mt-1.5 leading-snug">${sub}</p></div>`;
+
+      /* ① 요약 */
+      const sec1=`
+      <div class="card p-5 mb-4 border-l-4" style="border-left-color:#26282A">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0">
+            <h2 class="text-xl font-extrabold text-ink">🤖 GEO 현황 <span class="text-[13px] font-semibold text-slate-400">생성형 엔진 최적화 · 우리가 손댈 수 있는 것만</span></h2>
+            <p class="text-[13px] text-slate-500 mt-1.5 leading-relaxed">
+              사람이 검색 대신 <b class="text-ink">ChatGPT·Perplexity·Gemini·네이버 AI</b>에게 물어보는 흐름에 대비해,
+              <b class="text-ink">AI가 우리 콘텐츠를 읽을 수 있는지</b>와 <b class="text-ink">읽고 인용할 만한 형태인지</b>를 매일 점검합니다.
+              대상은 <b>홈페이지 · PR · 온드미디어</b> 세 영역입니다.</p>
+            <p class="text-[11.5px] text-slate-400 mt-1.5">측정 ${esc(String(GEO.generatedAt||'').slice(0,16).replace('T',' '))}${GEO.seed?' · 최초 측정본(이후 매일 자동 갱신)':''} · ${conn}</p>
+          </div>
+          <div class="text-center shrink-0 rounded-2xl px-5 py-3" style="background:${g.c}12;border:1px solid ${g.c}33">
+            <p class="text-[11px] font-bold" style="color:${g.c}">종합 GEO 점수</p>
+            <p class="text-[34px] font-extrabold num leading-none" style="color:${g.c}">${tot}<span class="text-[15px]">/100</span></p>
+            <p class="text-[12px] font-bold mt-0.5" style="color:${g.c}">${g.t}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+          ${kpi('페이지 품질 평균', pAvg+'점', '제목·요약문·H1·구조화데이터 4개 항목', geGrade(pAvg).c)}
+          ${kpi('사이트 기본기', sScore+'점', 'robots·sitemap·llms.txt·글 색인', geGrade(sScore).c)}
+          ${kpi('AI가 읽을 수 있는 우리 글', as.homePosts+'건', '홈페이지 블로그·뉴스룸 (네이버 블로그는 AI 차단)', as.homePosts<20?'#BF5332':'#5E7350')}
+          ${kpi('AI 답변 노출률', hr.pct<0?'미점검':hr.pct+'%', hr.pct<0?'아래에서 질문별로 확인해 주세요':(hr.h+'/'+hr.n+' 응답에서 아카라 언급'), hr.pct<0?'#8E8E93':geGrade(hr.pct).c)}
+        </div>
+        <div class="mt-4 rounded-xl p-4" style="background:#FFF8E7;border:1px solid #F2E3B8">
+          <p class="text-[13px] font-extrabold text-[#8A6A00] mb-1">한 줄 요약</p>
+          <p class="text-[13px] text-slate-700 leading-relaxed">
+            <b>네이버 블로그·네이버 뉴스는 AI 크롤러를 전면 차단</b>합니다. 거기 쌓은 글은 ChatGPT·Perplexity·Claude·Gemini 답변에 인용되지 않습니다.
+            반대로 <b>우리 홈페이지는 AI 접근이 열려 있는데</b> 제목·요약문·구조화 데이터가 비어 있어 읽혀도 인용되기 어려운 상태입니다.
+            → <b>홈페이지를 GEO 기지로 정비하고, 네이버에만 있는 콘텐츠를 홈페이지로 옮기는 것</b>이 1순위입니다.</p>
+        </div>
+      </div>`;
+
+      /* ② 채널별 AI 접근 */
+      const chCard=c=>{ const blocked=(c.blocked||[]).length;
+        return `<div class="rounded-xl border ${blocked?'border-[#F0C9C0]':'border-[#E6E6E3]'} bg-white p-4">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-[13.5px] font-extrabold text-ink">${esc(c.label)}
+              ${c.own?'<span class="text-[10px] font-bold px-1.5 py-0.5 rounded ml-1" style="background:#EDE9FF;color:#5B44C7">직접 관리</span>':''}</p>
+            ${geBotBadge(c.blocked)}
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">${esc(c.host)} · ${esc(c.area||'')}</p>
+          <p class="text-[12px] mt-2 leading-relaxed ${blocked?'text-[#BF5332]':'text-slate-500'}">
+            ${blocked
+              ? '차단: '+esc((c.blocked||[]).join(', '))+'<br/>→ 이 채널 콘텐츠는 외부 AI 답변에 <b>인용되지 않습니다</b>.'
+              : '주요 AI 크롤러를 막고 있지 않습니다 — 잘 쓰면 인용될 수 있는 채널입니다.'}</p>
+        </div>`; };
+      const sec2=`
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">① 채널별 AI 접근 현황 <span class="text-[11px] font-normal text-slate-400">(robots.txt 실측 · 매일 갱신)</span></h3>
+        <p class="text-[12px] text-slate-400 mb-3">AI가 그 사이트를 <b>읽어갈 수 있는지</b>부터가 GEO의 출발점입니다. 막혀 있으면 콘텐츠 품질과 무관하게 인용되지 않습니다.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">${chs.map(chCard).join('')}</div>
+      </div>`;
+
+      /* ③ 홈페이지 페이지 점검 */
+      const cell=(ok,txt)=>`<td class="px-2 py-2 text-[12px] ${ok?'text-slate-600':'text-[#BF5332] font-bold'}">${txt}</td>`;
+      const rows=pages.map(p=>{ const sc=gePageScore(p), gg=geGrade(sc), gen=geGenericTitle(p);
+        const canonBad=p.canonical && p.path!=='/' && !(p.canonical.replace(/^https?:\/\/[^/]+/,'')===p.path);
+        return `<tr class="border-b border-[#F2EFE9] hover:bg-[#FAFAF9]">
+          <td class="px-2 py-2 whitespace-nowrap">
+            <a href="${esc(p.url)}" target="_blank" rel="noopener" class="text-[12.5px] font-semibold text-ink hover:underline">${esc(p.label)}</a>
+            <span class="text-[10px] font-bold ml-1 px-1.5 py-0.5 rounded" style="background:${GEO_KINDC[p.kind]||'#6E6E73'}15;color:${GEO_KINDC[p.kind]||'#6E6E73'}">${esc(GEO_KIND[p.kind]||p.kind||'')}</span>
+          </td>
+          ${cell(!gen&&!!p.title, gen?'중복 제목':(p.title?esc(p.title.slice(0,26)):'없음'))}
+          ${cell((p.descLen||0)>=50, (p.descLen||0)?(p.descLen+'자'):'없음')}
+          ${cell(p.h1===1, (p.h1||0)+'개')}
+          ${cell((p.contentLd||[]).length>0, (p.contentLd||[]).length?esc((p.contentLd||[]).join(', ')):'없음')}
+          ${cell(!canonBad, canonBad?'다른 주소':'정상')}
+          <td class="px-2 py-2 text-right"><span class="text-[12.5px] font-extrabold num" style="color:${gg.c}">${sc}</span></td>
+        </tr>`; }).join('');
+      const sec3=`
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">② 홈페이지 페이지별 점검 <span class="text-[11px] font-normal text-slate-400">(${pages.length}개 페이지 · 매일 자동)</span></h3>
+        <p class="text-[12px] text-slate-400 mb-3">AI는 <b>제목·요약문(description)·H1·구조화 데이터</b>로 페이지가 무슨 내용인지 판단합니다. 각 25점씩입니다.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[720px]">
+            <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
+              <th class="px-2 py-2 text-left">페이지</th><th class="px-2 py-2 text-left">제목</th>
+              <th class="px-2 py-2 text-left">요약문</th><th class="px-2 py-2 text-left">H1</th>
+              <th class="px-2 py-2 text-left">구조화 데이터</th><th class="px-2 py-2 text-left">정식주소</th>
+              <th class="px-2 py-2 text-right">점수</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+          <div class="rounded-xl border border-[#E6E6E3] p-3">
+            <p class="text-[12px] font-extrabold text-ink mb-1">robots.txt</p>
+            <p class="text-[12px] ${site.robots?'text-agreen':'text-ared'}">${site.robots?'있음 · AI 크롤러 차단 없음':'없음'}</p>
+            ${site.robotsSitemapHttp?'<p class="text-[11px] text-[#BF5332] mt-1">sitemap 주소가 http로 적혀 있습니다</p>':''}
+          </div>
+          <div class="rounded-xl border border-[#E6E6E3] p-3">
+            <p class="text-[12px] font-extrabold text-ink mb-1">sitemap.xml</p>
+            <p class="text-[12px] ${site.sitemap?'text-agreen':'text-ared'}">${site.sitemap?(site.sitemapUrls+'건 등록'):'없음'}</p>
+            <p class="text-[11px] mt-1 ${site.sitemapHasPosts?'text-slate-400':'text-[#BF5332]'}">${site.sitemapHasPosts?'개별 글 포함':'블로그·뉴스룸 개별 글 미포함'}</p>
+          </div>
+          <div class="rounded-xl border border-[#E6E6E3] p-3">
+            <p class="text-[12px] font-extrabold text-ink mb-1">llms.txt</p>
+            <p class="text-[12px] ${site.llms==='markdown'?'text-agreen':(site.llms==='none'?'text-ared':'text-[#D68134]')}">
+              ${site.llms==='markdown'?'표준 형식':(site.llms==='none'?'없음':'있으나 규격 밖(robots 문법)')}</p>
+            <p class="text-[11px] text-slate-400 mt-1">AI에게 “우리 사이트의 핵심 문서는 이것”이라고 알려주는 파일</p>
+          </div>
+        </div>
+      </div>`;
+
+      /* ④ 인용 자산 */
+      const sec4=`
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">③ AI가 인용할 수 있는 자산 <span class="text-[11px] font-normal text-slate-400">(채널별 · 차단 여부 반영)</span></h3>
+        <p class="text-[12px] text-slate-400 mb-3">같은 콘텐츠라도 <b>어디에 있느냐</b>에 따라 AI가 쓸 수 있는지가 갈립니다.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+          ${kpi('홈페이지 글', as.homePosts+'건','블로그 '+((GEO.boards||{}).blogPosts||0)+' · 뉴스룸 '+((GEO.boards||{}).newsroomPosts||0)+' <b style="color:#5E7350">AI 읽기 가능</b>', as.homePosts<20?'#BF5332':'#5E7350')}
+          ${kpi('언론 기사(매체 원문)', (as.prOpen||'—')+(as.prOpen?'건':''),'매체 자체 사이트 기사 <b style="color:#5E7350">AI 읽기 가능</b>','#5E7350')}
+          ${kpi('포털 안에만 있는 기사', (as.prPortal||'—')+(as.prPortal?'건':''),'네이버·다음 뉴스 <b style="color:#BF5332">AI 차단</b>','#BF5332')}
+          ${kpi('네이버 블로그 글', (as.blog||'—')+(as.blog?'건':''),'공식·서브 블로그 합계 <b style="color:#BF5332">AI 차단</b>','#BF5332')}
+        </div>
+        ${medBlocked.length?`<div class="mt-4 rounded-xl p-3" style="background:#FDECEA;border:1px solid #F0C9C0">
+          <p class="text-[12.5px] font-extrabold text-[#BF5332] mb-1">AI 크롤러를 막는 매체 ${medBlocked.length}곳 — 배포 시 참고</p>
+          <p class="text-[12px] text-slate-600">${medBlocked.map(m=>esc(m.label)+'<span class="text-slate-400">('+esc((m.blocked||[]).join(',').slice(0,40))+')</span>').join(' · ')}</p>
+          <p class="text-[11.5px] text-slate-500 mt-1.5">이 매체에만 실리면 AI 답변에는 인용되지 않습니다. 같은 자료를 <b>홈페이지 뉴스룸에도 올려두면</b> 그 페이지가 인용 대상이 됩니다.</p>
+        </div>`:''}
+        <p class="text-[11px] text-slate-400 mt-3">※ 기사 수는 PR 탭 데이터, 블로그·유튜브는 온드미디어 데이터를 그대로 씁니다(탭을 한 번도 안 열었으면 —로 표시).</p>
+      </div>`;
+
+      /* ⑤ AI 답변 점검 */
+      const qRows=GEO_QUERIES.map((q,i)=>{
+        const memoK='q.'+i+'.memo', date=GV('q.'+i+'.date',''), gtxt=GV('q.'+i+'.gemtxt','');
+        const chips=GEO_ENGINES.map(e=>{ const v=GV('q.'+i+'.'+e.k,'');
+          const st=v==='o'?{bg:'#EDF5E9',fg:'#5E7350',t:'언급됨'}:(v==='x'?{bg:'#FDECEA',fg:'#BF5332',t:'없음'}:{bg:'#F2F2F0',fg:'#8E8E93',t:'미확인'});
+          return `<button onclick="geMark(${i},'${e.k}')" title="클릭할 때마다 언급됨 → 없음 → 미확인" class="text-[11px] font-bold px-2 py-1 rounded-lg" style="background:${st.bg};color:${st.fg}">${e.n} · ${st.t}</button>`; }).join(' ');
+        return `<div class="border-b border-[#F2EFE9] py-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <p class="text-[13px] font-bold text-ink">“${esc(q)}”</p>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              ${GEO_ENGINES.map(e=>e.u?`<a href="${e.u}${e.u.indexOf('?')>-1?encodeURIComponent(q):''}" target="_blank" rel="noopener" class="text-[11px] text-slate-400 hover:text-ink underline">${e.n}에서 열기</a>`:'').join('')}
+              <button onclick="geAsk(${i})" ${geBusy?'disabled':''} class="text-[11px] font-bold px-2.5 py-1 rounded-lg ${geBusy===String(i)?'bg-slate-200 text-slate-400':'bg-ink text-white hover:brightness-125'}">${geBusy===String(i)?'확인 중…':'Gemini로 지금 확인'}</button>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-1.5 mt-2">${chips}
+            ${date?`<span class="text-[10.5px] text-slate-400 ml-1">최근 확인 ${esc(date)}</span>`:''}</div>
+          ${gtxt?`<p class="text-[11.5px] text-slate-500 mt-2 bg-[#FAFAF9] border border-[#EFEFEC] rounded-lg px-2.5 py-1.5 leading-relaxed">🤖 ${esc(gtxt)}</p>`:''}
+          <div class="text-[12px] text-slate-600 mt-1.5 border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-ink" style="white-space:pre-wrap"
+               contenteditable="true" data-gk="${memoK}" onblur="geEdit(this)">${esc(GV(memoK,''))}</div>
+        </div>`; }).join('');
+      const sec5=`
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">④ AI 답변 점검 <span class="text-[11px] font-normal text-slate-400">(질문별로 우리가 언급되는지)</span></h3>
+        <p class="text-[12px] text-slate-400 mb-1">각 서비스에서 질문을 던져 보고 <b>아카라가 나오는지</b>를 눌러서 기록하세요(언급됨 → 없음 → 미확인 순환). 팀 전체가 같은 기록을 봅니다.</p>
+        <p class="text-[11.5px] text-slate-400 mb-2">[Gemini로 지금 확인]은 <b>웹검색 없이 모델이 학습한 지식</b>만으로 답하게 해 “AI가 아카라를 알고 있는지”를 보는 용도입니다. 실제 검색형 답변(ChatGPT·Perplexity)은 직접 열어 확인해 주세요.</p>
+        <div>${qRows}</div>
+      </div>`;
+
+      /* ⑥ 개선 액션 */
+      const areaC={'홈페이지':'#2563EB','PR':'#BF5332','온드미디어':'#D68134'};
+      const acts=GEO_ACTIONS.map((a,i)=>{ const done=GV('act.'+i,'')==='1';
+        return `<div class="flex items-start gap-2.5 border-b border-[#F2EFE9] py-2.5 ${done?'opacity-55':''}">
+          <input type="checkbox" ${done?'checked':''} onchange="geToggle('act.${i}')" class="mt-0.5 w-4 h-4 accent-[#5E7350] shrink-0" />
+          <div class="min-w-0 flex-1">
+            <p class="text-[13px] font-bold ${done?'text-slate-400 line-through':'text-ink'}">${esc(a.t)}</p>
+            <p class="text-[12px] text-slate-500 mt-0.5 leading-relaxed">${esc(a.d)}</p>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="background:${areaC[a.w]||'#6E6E73'}15;color:${areaC[a.w]||'#6E6E73'}">${esc(a.w)}</span>
+              <span class="text-[11px] text-slate-400">담당·메모:</span>
+              <span class="text-[11.5px] text-slate-600 border border-[#E6E6E3] rounded px-2 py-0.5 min-w-[120px] focus:outline-none focus:border-ink"
+                    contenteditable="true" data-gk="act.${i}.memo" onblur="geEdit(this)">${esc(GV('act.'+i+'.memo',''))}</span>
+            </div>
+          </div>
+        </div>`; }).join('');
+      const doneN=GEO_ACTIONS.filter((a,i)=>GV('act.'+i,'')==='1').length;
+      const sec6=`
+      <div class="card p-5 mb-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+          <h3 class="accent font-extrabold text-ink">⑤ 개선 액션 <span class="text-[11px] font-normal text-slate-400">(측정 결과에서 그대로 도출)</span></h3>
+          <span class="text-[12px] font-bold text-slate-500">${doneN}/${GEO_ACTIONS.length} 완료</span>
+        </div>
+        <p class="text-[12px] text-slate-400 mb-2">위에서 나온 문제를 해야 할 일로 옮겨 놨습니다. 체크와 메모는 팀에 실시간 공유됩니다.</p>
+        <div>${acts}</div>
+        <div class="mt-3 pt-3 border-t border-[#F2EFE9]">
+          <p class="text-[12px] font-bold text-slate-500 mb-1">추가 메모 <span class="font-normal text-slate-400">(GEO 전략·논의 내용)</span></p>
+          <div class="text-[13px] text-slate-700 leading-relaxed min-h-[80px] border border-[#E6E6E3] rounded-lg px-3 py-2 focus:outline-none focus:border-ink"
+               style="white-space:pre-wrap" contenteditable="true" data-gk="note" onblur="geEdit(this)">${esc(GV('note',''))}</div>
+        </div>
+      </div>`;
+
+      box.innerHTML=sec1+sec2+sec3+sec4+sec5+sec6+'<div class="h-8"></div>';
+      try{ if(typeof wkPresenceStart==='function') wkPresenceStart(); }catch(e){}
+    }
+    /* ===================== 🗒 TASKS (팀 보드 · 주간보고 양식) =====================
+       세 사람의 주간 노트를 한 화면에 나란히 놓고 본다. 누구 칸이든 할 일을 추가·수정할 수 있고
+       (팀장이 배정하거나 서로 요청하는 용도), 로그인한 사람의 칸만 색으로 강조한다.
+
+       Firebase 저장 위치 — 사람 기준(계정이 아니라 이름 기준이라 로그인 방식이 달라도 같은 칸을 본다)
+         tasks/p_<이름>/name                    = 표시 이름
+         tasks/p_<이름>/w/<월요일>/<칸>/<id>    = {t:내용, c:완료, project, order, cm:{메모}}
+         tasks/p_<이름>/w/<월요일>/memo         = 자유 메모장
+       칸(<칸>) = done(이번 주 진행·성과) / plan(다음 주 계획) / issue(이슈·공유) / check(확인 필요)
+
+       ▷ 로그인 계정 → 이름 매핑은 TK_MAIL. 명단에 없으면 헤더에서 직접 고른다(이 브라우저에 기억).
+       ▷ 예전에 계정별로 저장된 노트는 tkMigrate()가 같은 이름의 칸으로 한 번 옮겨준다. */
     const TK_FIELDS=[{k:'done',label:'이번 주 진행 · 성과'},{k:'plan',label:'다음 주 계획'},{k:'issue',label:'이슈 · 공유'}];
+    const TK_PEOPLE=[{n:'강유선',role:'팀장',c:'#5B44C7'},{n:'정여진',role:'마케터',c:'#D68134'},{n:'홍수영',role:'디자이너',c:'#5E7350'}];
     const TK_MAIL={'yeojin@aqara.kr':'정여진','ykang@aqara.kr':'강유선','syhong@aqara.kr':'홍수영'};
-    const TK_NAMES=['강유선','정여진','홍수영'];
-    const TK_COLOR={'강유선':'#5B44C7','정여진':'#D68134','홍수영':'#5E7350'};
-    let TK_ALL={}, TK_ME='', TK_NAME='', TK_KEY='', TK_ASKED=false, TK_WEEK='', TK_VIEW='';
-    let tkOn=false, tkDeb={}, tkInflight=0, tkErr=false;
+    let TK_ALL={}, TK_ME='', TK_MENAME='', TK_ASKED=false, TK_WEEK='', TK_MODE='board';
+    let tkOn=false, tkDeb={}, tkInflight=0, tkErr=false, tkMigrated=false;
 
     function tkUse(){ return (typeof wkUseFB==='function'&&wkUseFB()); }
     function tkSafe(s){ return String(s||'').replace(/[.#$@\/\[\]]/g,'_'); }
+    function tkPKey(n){ return 'p_'+tkSafe(n); }
     function tkMonday(){ return wkMondayOf(todayStr()); }
     function tkRange(w){ const mon=new Date(w), fri=new Date(w); fri.setDate(fri.getDate()+4);
       return (mon.getMonth()+1)+'/'+mon.getDate()+'('+WK_DOW[mon.getDay()]+') ~ '+(fri.getMonth()+1)+'/'+fri.getDate()+'('+WK_DOW[fri.getDay()]+')'; }
     function tkId(){ if(tkUse()){ try{ return WK_DB.ref().push().key; }catch(e){} } return 't'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
-    function tkColor(n){ return TK_COLOR[n]||'#7C5CFF'; }
+    function tkColor(n){ const p=TK_PEOPLE.filter(x=>x.n===n)[0]; return p?p.c:'#7C5CFF'; }
+    function tkMe(){ return TK_MENAME; }
 
-    /* --- 내가 누구인지 --- */
-    function tkGuessName(email){ return TK_MAIL[email]||(email?email.split('@')[0]:''); }
+    /* --- 내가 누구인지 (칸 강조·주간보고 보내기용) --- */
     function tkWhoAmI(){
       if(TK_ASKED) return; TK_ASKED=true;
-      tkLocalWho();                                   // 로그인 응답 전에도 일단 쓸 수 있게
+      try{ const n=localStorage.getItem('aqaraTasksWho')||''; if(n) TK_MENAME=n; }catch(e){}
       fetch('/api/auth/me',{credentials:'same-origin'})
         .then(r=>r.ok?r.json():{})
         .then(j=>{ const em=String((j&&j.email)||'').toLowerCase();
-          if(em){ TK_ME=em; TK_KEY=tkSafe(em); TK_NAME=tkGuessName(em); tkStamp(); }
+          if(em){ TK_ME=em; if(TK_MAIL[em]) TK_MENAME=TK_MAIL[em]; }
           if(mktSection==='rnr') tkPaint(); })
         .catch(()=>{ if(mktSection==='rnr') tkPaint(); });
     }
-    function tkLocalWho(){ let n=''; try{ n=localStorage.getItem('aqaraTasksWho')||''; }catch(e){}
-      if(n && !TK_ME){ TK_NAME=n; TK_KEY='n_'+tkSafe(n); tkStamp(); } }
-    function tkSetWho(n){ n=(n||'').trim(); if(!n) return; try{ localStorage.setItem('aqaraTasksWho',n); }catch(e){}
-      TK_NAME=n; TK_KEY='n_'+tkSafe(n); TK_VIEW=''; tkStamp(); tkPaint(); }
-    function tkPickWho(){ const v=prompt('이름을 입력하세요 (이 브라우저에 기억합니다)', TK_NAME||''); if(v!=null) tkSetWho(v); }
-    function tkStamp(){ if(!TK_KEY) return; const u={};
-      u['tasks/'+TK_KEY+'/name']=TK_NAME; if(TK_ME) u['tasks/'+TK_KEY+'/email']=TK_ME;
-      tkApply(u,true); }
+    function tkSetWho(n){ n=(n||'').trim(); if(!n) return;
+      try{ localStorage.setItem('aqaraTasksWho',n); }catch(e){}
+      TK_MENAME=n; tkPaint(); }
 
-    /* --- 저장소 (Firebase 실시간 · 없으면 이 브라우저) --- */
+    /* --- 저장소 --- */
     function tkPersist(){ try{ localStorage.setItem('aqaraTasks',JSON.stringify(TK_ALL)); }catch(e){} }
     function tkStart(){
       if(!tkUse()){ if(!tkOn){ try{ TK_ALL=JSON.parse(localStorage.getItem('aqaraTasks')||'{}'); }catch(e){ TK_ALL={}; } } return; }
       if(tkOn) return; tkOn=true;
-      WK_DB.ref('tasks').on('value', s=>{ tkErr=false; TK_ALL=s.val()||{}; tkAfterSnap(); },
+      WK_DB.ref('tasks').on('value', s=>{ tkErr=false; TK_ALL=s.val()||{}; tkMigrate(); tkAfterSnap(); },
         e=>{ tkErr=true; console.warn('TASKS 읽기 오류(권한?):', e&&e.message); });
     }
-    function tkProjBind(){ if(!tkUse()||wkProjRef) return;      // 프로젝트 목록은 주간보고와 같은 것을 쓴다
+    /* 계정별로 저장돼 있던 예전 노트를 같은 이름의 칸으로 한 번만 옮긴다(비어 있는 주차만 채움) */
+    function tkMigrate(){
+      if(tkMigrated||!tkUse()) return; tkMigrated=true;
+      const u={};
+      Object.keys(TK_ALL||{}).forEach(k=>{
+        if(k.indexOf('p_')===0) return;
+        const node=TK_ALL[k]||{}, nm=node.name||TK_MAIL[(node.email||'').toLowerCase()]||'';
+        if(!TK_PEOPLE.some(p=>p.n===nm)) return;
+        const tgt=tkPKey(nm), weeks=node.w||{};
+        Object.keys(weeks).forEach(w=>{
+          const cur=(((TK_ALL[tgt]||{}).w)||{})[w];
+          if(cur&&Object.keys(cur).length) return;
+          u['tasks/'+tgt+'/w/'+w]=weeks[w];
+        });
+        if(!((TK_ALL[tgt]||{}).name)) u['tasks/'+tgt+'/name']=nm;
+      });
+      if(Object.keys(u).length) WK_DB.ref().update(u).catch(()=>{});
+    }
+    function tkProjBind(){ if(!tkUse()||wkProjRef) return;
       wkProjRef=WK_DB.ref('projects');
       wkProjRef.on('value', s=>{ wkProjects=s.val()||{}; if(mktSection==='rnr'&&!tkFocused()) tkPaint(); }, ()=>{}); }
     function tkOnAuth(){ tkStart(); tkProjBind(); if(mktSection==='rnr') tkPaint(); }
@@ -6661,73 +7033,76 @@
       const d=new Date(); el.innerHTML='<span class="font-semibold" style="color:#16A34A">✓ 저장됨</span> <span class="text-slate-400">'
         +d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')+'</span>'; }
 
-    /* --- 노트 데이터 --- */
-    function tkBase(key,week){ return 'tasks/'+(key||TK_KEY)+'/w/'+(week||TK_WEEK); }
-    function tkNode(key,week){ const u=(TK_ALL||{})[key]||{}; return ((u.w||{})[week||TK_WEEK])||{}; }
-    function tkRows(key,week,fk){ const m=(tkNode(key,week)||{})[fk]||{};
+    /* --- 노트 데이터 (모두 '사람 키' 기준) --- */
+    function tkBase(pk,week){ return 'tasks/'+pk+'/w/'+(week||TK_WEEK); }
+    function tkNode(pk,week){ const u=(TK_ALL||{})[pk]||{}; return ((u.w||{})[week||TK_WEEK])||{}; }
+    function tkRows(pk,fk,week){ const m=(tkNode(pk,week)||{})[fk]||{};
       return Object.keys(m).map(id=>{ const it=m[id]||{};
         return {id:id, t:it.t||'', w:it.w||'', c:!!it.c, project:it.project||'', order:(typeof it.order==='number'?it.order:0), cm:it.cm||{}}; })
         .sort((a,b)=>(a.order-b.order)||(a.id<b.id?-1:1)); }
     function tkCmts(m){ m=m||{}; return Object.keys(m).map(id=>{ const c=m[id];
         return {id:id, t:(typeof c==='string'?c:(c&&c.t)||''), by:(c&&c.by)||'', order:(c&&typeof c.order==='number'?c.order:0)}; })
       .sort((a,b)=>(a.order-b.order)||(a.id<b.id?-1:1)); }
-    function tkAddRow(fk){ if(!tkMine()) return; const rows=tkRows(TK_KEY,TK_WEEK,fk), id=tkId(), u={};
-      u[tkBase()+'/'+fk+'/'+id]={t:'',w:'',c:false,project:'',order:rows.length?rows[rows.length-1].order+1:0};
-      tkApply(u); setTimeout(()=>{ const el=document.querySelector('[data-tpath="'+tkBase()+'/'+fk+'/'+id+'/t"]'); if(el) el.focus(); },40); }
-    function tkDelRow(fk,id){ const u={}; u[tkBase()+'/'+fk+'/'+id]=null; tkApply(u); }
-    function tkToggle(fk,id,on){ const u={}; u[tkBase()+'/'+fk+'/'+id+'/c']=!!on; tkApply(u); }
-    function tkSetProject(fk,id,el){ const v=el.value, u={};
+    function tkDone(pk,week){ let n=0,d=0;
+      TK_FIELDS.concat([{k:'check'}]).forEach(f=>tkRows(pk,f.k,week).forEach(r=>{ if(!r.t.trim()) return; n++; if(r.c) d++; }));
+      return {n:n,d:d,pct:n?Math.round(d/n*100):0}; }
+
+    function tkAddRow(pk,fk){ const rows=tkRows(pk,fk), id=tkId(), u={};
+      u[tkBase(pk)+'/'+fk+'/'+id]={t:'',w:'',c:false,project:'',order:rows.length?rows[rows.length-1].order+1:0};
+      tkApply(u); setTimeout(()=>{ const el=document.querySelector('[data-tpath="'+tkBase(pk)+'/'+fk+'/'+id+'/t"]'); if(el) el.focus(); },40); }
+    function tkDelRow(pk,fk,id){ const u={}; u[tkBase(pk)+'/'+fk+'/'+id]=null; tkApply(u); }
+    function tkToggle(pk,fk,id,on){ const u={}; u[tkBase(pk)+'/'+fk+'/'+id+'/c']=!!on; tkApply(u); }
+    function tkMove(pk,fk,id,to){    // 다른 사람 칸으로 넘기기(담당 변경)
+      const src=(tkNode(pk)[fk]||{})[id]; if(!src) return;
+      const u={}; u[tkBase(pk)+'/'+fk+'/'+id]=null;
+      u[tkBase(tkPKey(to))+'/'+fk+'/'+tkId()]=Object.assign({},src,{order:Date.now()});
+      tkApply(u); }
+    function tkSetProject(pk,fk,id,el){ const v=el.value, u={};
       if(v==='__new__'){ const nm=(prompt('새 프로젝트 이름을 입력하세요')||'').trim(); if(!nm){ tkPaint(); return; }
         const list=(typeof wkProjList==='function')?wkProjList():[], pid=tkId();
         u['projects/'+pid]={name:nm,color:WK_PALETTE[list.length%WK_PALETTE.length],order:(list.length?list[list.length-1].order+1:0)};
-        u[tkBase()+'/'+fk+'/'+id+'/project']=pid;
-      } else u[tkBase()+'/'+fk+'/'+id+'/project']=v;
+        u[tkBase(pk)+'/'+fk+'/'+id+'/project']=pid;
+      } else u[tkBase(pk)+'/'+fk+'/'+id+'/project']=v;
       tkApply(u); }
-    function tkAddCmt(key,fk,id){ const cur=tkCmts(((tkNode(key)[fk]||{})[id]||{}).cm), cid=tkId(), u={};
-      u[tkBase(key)+'/'+fk+'/'+id+'/cm/'+cid]={t:'',by:(TK_NAME||''),order:cur.length?cur[cur.length-1].order+1:0};
-      tkApply(u); setTimeout(()=>{ const el=document.querySelector('[data-tpath="'+tkBase(key)+'/'+fk+'/'+id+'/cm/'+cid+'/t"]'); if(el) el.focus(); },40); }
-    function tkDelCmt(key,fk,id,cid){ const u={}; u[tkBase(key)+'/'+fk+'/'+id+'/cm/'+cid]=null; tkApply(u); }
+    function tkAddCmt(pk,fk,id){ const cur=tkCmts(((tkNode(pk)[fk]||{})[id]||{}).cm), cid=tkId(), u={};
+      u[tkBase(pk)+'/'+fk+'/'+id+'/cm/'+cid]={t:'',by:(TK_MENAME||''),order:cur.length?cur[cur.length-1].order+1:0};
+      tkApply(u); setTimeout(()=>{ const el=document.querySelector('[data-tpath="'+tkBase(pk)+'/'+fk+'/'+id+'/cm/'+cid+'/t"]'); if(el) el.focus(); },40); }
+    function tkDelCmt(pk,fk,id,cid){ const u={}; u[tkBase(pk)+'/'+fk+'/'+id+'/cm/'+cid]=null; tkApply(u); }
 
-    /* --- 주 이동 --- */
+    /* --- 주 이동 · 보기 전환 --- */
     function tkShift(n){ if(!TK_WEEK) TK_WEEK=tkMonday(); const d=new Date(TK_WEEK); d.setDate(d.getDate()+n*7);
       TK_WEEK=d.toISOString().slice(0,10); tkPaint(); }
     function tkThisWeek(){ TK_WEEK=tkMonday(); tkPaint(); }
-    function tkViewUser(k){ TK_VIEW=(k===TK_KEY?'':k); tkPaint(); }
-    function tkMine(){ return !TK_VIEW || TK_VIEW===TK_KEY; }
-    function tkCurKey(){ return tkMine()?TK_KEY:TK_VIEW; }
-    function tkUsers(){ return Object.keys(TK_ALL||{})
-      .map(k=>({k:k, name:((TK_ALL[k]||{}).name)||k, email:((TK_ALL[k]||{}).email)||''}))
-      .sort((a,b)=>(a.name<b.name?-1:1)); }
-    function tkHasNote(k,week){ const n=tkNode(k,week);
-      return !!((n.memo&&String(n.memo).trim()) || ['done','plan','issue','check'].some(f=>n[f]&&Object.keys(n[f]).length)); }
+    function tkSetMode(m){ TK_MODE=m; tkPaint(); }
 
     /* --- 텍스트 복사 / 주간보고로 보내기 --- */
-    function tkPlain(key){ const projs=(typeof wkProjList==='function')?wkProjList():[];
-      const nm=((TK_ALL[key]||{}).name)||TK_NAME||'';
-      let t='['+nm+' TASKS] '+tkRange(TK_WEEK)+'\n\n';
-      TK_FIELDS.forEach(f=>{ const rows=tkRows(key,TK_WEEK,f.k).filter(r=>r.t.trim());
+    function tkPlain(name){ const pk=tkPKey(name), projs=(typeof wkProjList==='function')?wkProjList():[];
+      let t='['+name+'] '+tkRange(TK_WEEK)+'\n';
+      TK_FIELDS.forEach(f=>{ const rows=tkRows(pk,f.k).filter(r=>r.t.trim());
         t+='■ '+f.label+'\n'; if(!rows.length) t+='  -\n';
         rows.forEach(r=>{ const p=projs.filter(x=>x.id===r.project)[0];
           t+='  - '+(r.c?'[완료] ':'')+r.t+(p?(' ('+p.name+')'):'')+'\n';
-          tkCmts(r.cm).forEach(c=>{ if(c.t.trim()) t+='    💬 '+c.t+'\n'; }); });
-        t+='\n'; });
-      const chk=tkRows(key,TK_WEEK,'check').filter(r=>r.t.trim());
-      if(chk.length){ t+='■ 확인 필요 사항\n'; chk.forEach(r=>{ t+='  - '+r.t+(r.w?(' (확인: '+r.w+')'):'')+'\n'; }); t+='\n'; }
-      const memo=(tkNode(key)||{}).memo||''; if(memo.trim()) t+='■ 메모\n'+memo+'\n';
+          tkCmts(r.cm).forEach(c=>{ if(c.t.trim()) t+='    💬 '+c.t+'\n'; }); }); });
+      const chk=tkRows(pk,'check').filter(r=>r.t.trim());
+      if(chk.length){ t+='■ 확인 필요 사항\n'; chk.forEach(r=>{ t+='  - '+r.t+(r.w?(' (확인: '+r.w+')'):'')+'\n'; }); }
+      const memo=(tkNode(pk)||{}).memo||''; if(memo.trim()) t+='■ 메모\n'+memo+'\n';
       return t; }
-    function tkCopy(){ const t=tkPlain(tkCurKey());
-      if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(()=>alert('노트를 텍스트로 복사했습니다.'),()=>alert(t));
+    function tkCopy(){
+      const t=(TK_MODE==='board')
+        ? ('[마케팅팀 TASKS] '+tkRange(TK_WEEK)+'\n\n'+TK_PEOPLE.map(p=>tkPlain(p.n)).join('\n'))
+        : tkPlain(TK_MENAME||TK_PEOPLE[0].n);
+      if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(()=>alert('TASKS를 텍스트로 복사했습니다.'),()=>alert(t));
       else alert(t); }
     function tkToWeekly(){
-      if(!tkMine()){ alert('내 노트에서만 보낼 수 있습니다.'); return; }
+      if(!TK_MENAME){ alert('먼저 상단에서 내 이름을 골라 주세요.'); return; }
       if(!tkUse()){ alert('서버에 연결되지 않아 지금은 보낼 수 없습니다.'); return; }
-      const rows={}; let n=0;
-      TK_FIELDS.forEach(f=>{ rows[f.k]=tkRows(TK_KEY,TK_WEEK,f.k).filter(r=>r.t.trim()); n+=rows[f.k].length; });
-      const chk=tkRows(TK_KEY,TK_WEEK,'check').filter(r=>r.t.trim()); n+=chk.length;
+      const pk=tkPKey(TK_MENAME), rows={}; let n=0;
+      TK_FIELDS.forEach(f=>{ rows[f.k]=tkRows(pk,f.k).filter(r=>r.t.trim()); n+=rows[f.k].length; });
+      const chk=tkRows(pk,'check').filter(r=>r.t.trim()); n+=chk.length;
       if(!n){ alert('보낼 내용이 없습니다.'); return; }
-      if(!confirm('내 노트 '+n+'건을 팀 주간보고('+tkRange(TK_WEEK)+')에 추가할까요?\n담당자는 “'+(TK_NAME||'')+'”으로 들어갑니다.\n(주간보고에 이미 있는 내용은 지우지 않고 뒤에 덧붙입니다)')) return;
-      const u={}; let base=Date.now();
-      TK_FIELDS.forEach(f=>{ rows[f.k].forEach((r,i)=>{ u['weekly/'+TK_WEEK+'/'+f.k+'/'+tkId()]={t:r.t,w:(TK_NAME||''),c:!!r.c,project:r.project||'',order:base+i}; }); });
+      if(!confirm('내 칸('+TK_MENAME+') '+n+'건을 팀 주간보고('+tkRange(TK_WEEK)+')에 추가할까요?\n(주간보고에 이미 있는 내용은 지우지 않고 뒤에 덧붙입니다)')) return;
+      const u={}, base=Date.now();
+      TK_FIELDS.forEach(f=>{ rows[f.k].forEach((r,i)=>{ u['weekly/'+TK_WEEK+'/'+f.k+'/'+tkId()]={t:r.t,w:TK_MENAME,c:!!r.c,project:r.project||'',order:base+i}; }); });
       chk.forEach((r,i)=>{ u['weekly/'+TK_WEEK+'/check/'+tkId()]={t:r.t,w:r.w||'',c:!!r.c,order:base+i}; });
       WK_DB.ref().update(u).then(()=>alert('주간보고로 보냈습니다. 좌측 메뉴 [주간보고]에서 확인하세요.'),
         e=>alert('보내기 실패: '+((e&&e.message)||'')));
@@ -6744,109 +7119,102 @@
       o+=projs.map(p=>'<option value="'+p.id+'"'+(sel===p.id?' selected':'')+'>'+esc(p.name)+'</option>').join('');
       return o+'<option value="__new__">＋ 새 프로젝트…</option>'; }
 
-    function tkRowHtml(fk,it){
-      const wp=tkBase()+'/'+fk+'/'+it.id;
+    /* 한 줄 — compact=팀 보드(좁은 칸), 아니면 내 노트(프로젝트·담당 선택까지) */
+    function tkRowHtml(name,fk,it,compact){
+      const pk=tkPKey(name), wp=tkBase(pk)+'/'+fk+'/'+it.id;
       const projs=(typeof wkProjList==='function')?wkProjList():[];
       const cur=projs.filter(p=>p.id===it.project)[0];
       const dot=cur?('<span class="shrink-0" title="'+esc(cur.name)+'" style="width:8px;height:8px;border-radius:9999px;background:'+cur.color+';display:inline-block"></span>'):'';
       const cms=tkCmts(it.cm);
-      const cmHtml=cms.map(c=>`<div class="flex items-start gap-1.5 pl-[46px] py-0.5">
-            <span class="text-[#2563EB] text-[12px] leading-5 shrink-0">💬</span>
-            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${wp}/cm/${c.id}/t" oninput="tkText(this)">${esc(c.t)}</div>
-            <button onclick="tkDelCmt('${TK_KEY}','${fk}','${it.id}','${c.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="댓글 삭제">✕</button>
+      const cmHtml=cms.map(c=>`<div class="flex items-start gap-1.5 pl-[26px] py-0.5">
+            <span class="text-[#2563EB] text-[11px] leading-5 shrink-0">💬</span>
+            <div class="flex-1 text-[11.5px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${wp}/cm/${c.id}/t" oninput="tkText(this)">${esc(c.t)}</div>
+            <button onclick="tkDelCmt('${pk}','${fk}','${it.id}','${c.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="메모 삭제">✕</button>
           </div>`).join('');
-      return `<div class="border-b border-[#F2EFE9] py-0.5">
-          <div class="flex items-center gap-2 py-1">
-            <input type="checkbox" ${it.c?'checked':''} onchange="tkToggle('${fk}','${it.id}',this.checked)" class="w-3.5 h-3.5 accent-[#5E7350] shrink-0" title="완료 표시" />
-            <div class="flex-1 text-[13px] min-h-[20px] focus:outline-none ${it.c?'text-slate-400 line-through':'text-slate-700'}" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${wp}/t" oninput="tkText(this)">${esc(it.t)}</div>
+      const others=TK_PEOPLE.filter(p=>p.n!==name);
+      return `<div class="group border-b border-[#F2EFE9] py-0.5">
+          <div class="flex items-start gap-1.5 py-1">
+            <input type="checkbox" ${it.c?'checked':''} onchange="tkToggle('${pk}','${fk}','${it.id}',this.checked)" class="mt-1 w-3.5 h-3.5 accent-[#5E7350] shrink-0" title="완료 표시" />
+            <div class="flex-1 text-[12.5px] leading-snug min-h-[18px] focus:outline-none ${it.c?'text-slate-400 line-through':'text-slate-700'}" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${wp}/t" oninput="tkText(this)">${esc(it.t)}</div>
             ${dot}
-            <select onchange="tkSetProject('${fk}','${it.id}',this)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5 shrink-0 max-w-[100px]" title="프로젝트">${tkProjOpts(it.project)}</select>
-            <button onclick="tkDelRow('${fk}','${it.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="삭제">✕</button>
+            ${compact?'':`<select onchange="tkSetProject('${pk}','${fk}','${it.id}',this)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5 shrink-0 max-w-[100px]" title="프로젝트">${tkProjOpts(it.project)}</select>`}
+            <button onclick="tkDelRow('${pk}','${fk}','${it.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0 opacity-0 group-hover:opacity-100" title="삭제">✕</button>
           </div>
           ${cmHtml}
-          <div class="pl-[46px] ${cms.length?'pt-0.5':''}"><button onclick="tkAddCmt('${TK_KEY}','${fk}','${it.id}')" class="text-[11px] text-[#2563EB] hover:underline font-medium">💬 메모 달기</button></div>
+          <div class="pl-[26px] flex items-center gap-2 ${cms.length?'pt-0.5':''} opacity-0 group-hover:opacity-100">
+            <button onclick="tkAddCmt('${pk}','${fk}','${it.id}')" class="text-[11px] text-[#2563EB] hover:underline font-medium">💬 메모</button>
+            ${others.map(o=>`<button onclick="tkMove('${pk}','${fk}','${it.id}','${esc(o.n)}')" class="text-[11px] text-slate-400 hover:text-ink" title="${esc(o.n)}님 칸으로 옮기기">→${esc(o.n)}</button>`).join('')}
+          </div>
         </div>`; }
 
-    function tkCheckRowHtml(it){ const wp=tkBase()+'/check/'+it.id;
-      return `<div class="border-b border-[#F2EFE9] flex items-center gap-2 py-1.5">
-          <input type="checkbox" ${it.c?'checked':''} onchange="tkToggle('check','${it.id}',this.checked)" class="w-3.5 h-3.5 accent-[#5E7350] shrink-0" title="확인 완료" />
-          <div class="flex-1 text-[13px] min-h-[20px] focus:outline-none ${it.c?'text-slate-400 line-through':'text-slate-700'}" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${wp}/t" oninput="tkText(this)">${esc(it.t)}</div>
-          <input value="${esc(it.w)}" data-tpath="${wp}/w" oninput="tkText(this)" placeholder="확인자" class="w-16 text-[12px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0" title="확인해줄 사람" />
-          <button onclick="tkDelRow('check','${it.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="삭제">✕</button>
+    function tkCheckRowHtml(name,it,compact){ const pk=tkPKey(name), wp=tkBase(pk)+'/check/'+it.id;
+      return `<div class="group border-b border-[#F2EFE9] flex items-start gap-1.5 py-1.5">
+          <input type="checkbox" ${it.c?'checked':''} onchange="tkToggle('${pk}','check','${it.id}',this.checked)" class="mt-1 w-3.5 h-3.5 accent-[#5E7350] shrink-0" title="확인 완료" />
+          <div class="flex-1 text-[12.5px] leading-snug min-h-[18px] focus:outline-none ${it.c?'text-slate-400 line-through':'text-slate-700'}" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${wp}/t" oninput="tkText(this)">${esc(it.t)}</div>
+          <input value="${esc(it.w)}" data-tpath="${wp}/w" oninput="tkText(this)" placeholder="확인자" class="w-14 text-[11.5px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0" title="확인해줄 사람" />
+          <button onclick="tkDelRow('${pk}','check','${it.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0 opacity-0 group-hover:opacity-100" title="삭제">✕</button>
         </div>`; }
 
-    /* 팀원 노트 — 읽기 전용 */
-    function tkReadHtml(key){
-      const projs=(typeof wkProjList==='function')?wkProjList():[];
-      const nm=((TK_ALL[key]||{}).name)||key;
-      const blocks=TK_FIELDS.map(f=>{ const rows=tkRows(key,TK_WEEK,f.k).filter(r=>r.t.trim());
-        return `<div class="card p-4"><h4 class="font-bold text-ink mb-1">${esc(f.label)}</h4>
-          ${rows.length?rows.map(r=>{ const p=projs.filter(x=>x.id===r.project)[0];
-            return `<div class="text-[13px] py-0.5 ${r.c?'text-slate-400 line-through':'text-slate-700'}">· ${esc(r.t)}
-              ${p?`<span class="text-[11px] font-bold ml-1" style="color:${p.color}">${esc(p.name)}</span>`:''}</div>
-              ${tkCmts(r.cm).filter(c=>c.t.trim()).map(c=>`<div class="text-[12px] text-[#2563EB] pl-4">💬 ${esc(c.t)}</div>`).join('')}`; }).join('')
-            :'<p class="text-[12px] text-slate-300 py-1">작성 전</p>'}</div>`; }).join('');
-      const chk=tkRows(key,TK_WEEK,'check').filter(r=>r.t.trim());
-      const memo=(tkNode(key,TK_WEEK)||{}).memo||'';
-      return `<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-        <div class="space-y-4">${blocks}</div>
-        <div class="space-y-4">
-          <div class="card p-4"><h4 class="font-bold text-ink mb-1">🗒 메모장</h4>
-            <div class="text-[13px] text-slate-700 leading-relaxed min-h-[120px]" style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(memo)||'<span class="text-slate-300 text-[12px]">작성 전</span>'}</div></div>
-          <div class="card p-4"><h4 class="font-bold text-ink mb-1">💡 확인 필요 사항</h4>
-            ${chk.length?chk.map(r=>`<div class="text-[13px] py-0.5 ${r.c?'text-slate-400 line-through':'text-slate-700'}">· ${esc(r.t)}${r.w?`<span class="text-slate-400"> (확인: ${esc(r.w)})</span>`:''}</div>`).join('')
-              :'<p class="text-[12px] text-slate-300 py-1">작성 전</p>'}</div>
-        </div></div>
-        <p class="text-[12px] text-slate-400 mt-3">👀 ${esc(nm)}님의 노트를 읽고 있습니다 — 수정은 본인만 할 수 있습니다.</p>`; }
+    /* 한 사람 칸 */
+    function tkColumn(p,compact){
+      const pk=tkPKey(p.n), st=tkDone(pk), mine=(p.n===TK_MENAME);
+      const blocks=TK_FIELDS.map(f=>{ const rows=tkRows(pk,f.k);
+        return `<div class="px-3 pt-2.5">
+          <div class="flex items-center justify-between">
+            <p class="text-[11.5px] font-extrabold text-slate-500">${esc(f.label)}</p>
+            <button onclick="tkAddRow('${pk}','${f.k}')" class="text-[11.5px] font-bold text-[#7C5CFF] hover:underline">＋ 추가</button>
+          </div>
+          <div class="mt-0.5">${rows.length?rows.map(it=>tkRowHtml(p.n,f.k,it,compact)).join(''):'<p class="text-[11.5px] text-slate-300 py-1.5">＋ 추가로 적어 두세요</p>'}</div>
+        </div>`; }).join('');
+      const chk=tkRows(pk,'check');
+      const memo=(tkNode(pk)||{}).memo||'';
+      return `<div class="rounded-xl border ${mine?'border-2':'border'} bg-white overflow-hidden" style="border-color:${mine?p.c:'#E6E6E3'}">
+        <div class="px-3 py-2.5" style="border-top:3px solid ${p.c};background:${p.c}0A">
+          <div class="flex items-baseline justify-between gap-2">
+            <p class="text-[14px] font-extrabold text-ink">${esc(p.n)}
+              <span class="text-[11px] font-bold ml-1" style="color:${p.c}">${esc(p.role)}</span>
+              ${mine?'<span class="text-[10px] font-bold px-1.5 py-0.5 rounded ml-1" style="background:'+p.c+';color:#fff">나</span>':''}</p>
+            <p class="text-[12px] font-extrabold num" style="color:${st.pct===100&&st.n?'#5E7350':'#26282A'}">${st.d}/${st.n}</p>
+          </div>
+          <div class="h-1.5 rounded bg-white/70 mt-2 overflow-hidden"><div class="h-1.5 rounded" style="width:${st.pct}%;background:${p.c}"></div></div>
+        </div>
+        ${blocks}
+        <div class="px-3 pt-2.5">
+          <div class="flex items-center justify-between">
+            <p class="text-[11.5px] font-extrabold text-slate-500">💡 확인 필요 사항</p>
+            <button onclick="tkAddRow('${pk}','check')" class="text-[11.5px] font-bold text-[#7C5CFF] hover:underline">＋ 추가</button>
+          </div>
+          <div class="mt-0.5">${chk.length?chk.map(it=>tkCheckRowHtml(p.n,it,compact)).join(''):'<p class="text-[11.5px] text-slate-300 py-1.5">－</p>'}</div>
+        </div>
+        <div class="px-3 py-2.5">
+          <p class="text-[11.5px] font-extrabold text-slate-500 mb-1">🗒 메모장</p>
+          <div class="text-[12.5px] text-slate-700 leading-relaxed min-h-[70px] focus:outline-none border border-[#E6E6E3] rounded-lg px-2.5 py-1.5"
+               style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${tkBase(pk)}/memo" oninput="tkText(this)">${esc(memo)}</div>
+        </div>
+      </div>`; }
 
     function tkPaint(){
       const box=tkBody(); if(!box) return;
       if(!TK_WEEK) TK_WEEK=tkMonday();
-      const thisWeek=tkMonday(), users=tkUsers(), mine=tkMine();
-
-      /* 누구인지 모를 때 — 이름부터 고르게 한다 */
-      if(!TK_KEY){
-        box.innerHTML=`<div class="card p-8 max-w-lg mx-auto mt-6 text-center">
-          <div class="text-3xl mb-2">🗒</div>
-          <h3 class="text-lg font-extrabold text-ink mb-1">TASKS · 내 노트</h3>
-          <p class="text-[13px] text-slate-500 mb-4">회사 구글 계정으로 로그인하면 계정별로 자동 저장됩니다.<br/>지금은 로그인 정보를 확인할 수 없어, 이름을 골라 주세요.</p>
-          <div class="flex flex-wrap justify-center gap-2">
-            ${TK_NAMES.map(n=>`<button onclick="tkSetWho('${esc(n)}')" class="text-[13px] font-bold px-3.5 py-2 rounded-lg text-white" style="background:${tkColor(n)}">${esc(n)}</button>`).join('')}
-            <button onclick="tkPickWho()" class="text-[13px] font-bold px-3.5 py-2 rounded-lg border border-[#E6E6E3] hover:bg-[#FAFAF9]">직접 입력</button>
-          </div>
-          <p class="text-[11px] text-slate-400 mt-4">※ 이름은 이 브라우저에만 기억합니다(<b>내 노트 = 그 이름</b>).</p>
-        </div>`;
-        return;
-      }
-
-      const key=tkCurKey(), nm=mine?(TK_NAME||''):(((TK_ALL[key]||{}).name)||key);
-      const memo=(tkNode(key,TK_WEEK)||{}).memo||'';
+      const thisWeek=tkMonday(), board=(TK_MODE==='board');
+      const meP=TK_PEOPLE.filter(p=>p.n===TK_MENAME)[0]||null;
+      const team=TK_PEOPLE.reduce((a,p)=>{ const s=tkDone(tkPKey(p.n)); a.n+=s.n; a.d+=s.d; return a; },{n:0,d:0});
+      const teamPct=team.n?Math.round(team.d/team.n*100):0;
       const conn = tkErr
         ? '<span class="inline-flex items-center gap-1.5 text-[12px] font-bold px-2.5 py-1 rounded-full" style="color:#B91C1C;background:#FEE2E2">⚠ 공유 안 됨 — Firebase DB 규칙 확인</span>'
-        : (tkUse()? '<span class="inline-flex items-center gap-1.5 text-[12px] font-bold px-2.5 py-1 rounded-full" style="color:#15803D;background:#DCFCE7"><span style="width:7px;height:7px;border-radius:9999px;background:#22C55E;display:inline-block"></span>실시간 저장 중</span>'
+        : (tkUse()? '<span class="inline-flex items-center gap-1.5 text-[12px] font-bold px-2.5 py-1 rounded-full" style="color:#15803D;background:#DCFCE7"><span style="width:7px;height:7px;border-radius:9999px;background:#22C55E;display:inline-block"></span>실시간 공유 중</span>'
                   : '<span class="inline-flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1 rounded-full text-slate-500 bg-slate-100">○ 이 브라우저에만 저장</span>');
 
-      const blocks=TK_FIELDS.map(f=>{ const rows=tkRows(TK_KEY,TK_WEEK,f.k);
-        return `<div class="card p-4">
-          <div class="flex items-center justify-between mb-1">
-            <h4 class="font-bold text-ink">${esc(f.label)}</h4>
-            <button onclick="tkAddRow('${f.k}')" class="text-[12px] text-[#7C5CFF] font-semibold hover:underline">＋ 항목 추가</button>
-          </div>
-          <div>${rows.length?rows.map(it=>tkRowHtml(f.k,it)).join(''):'<p class="text-[12px] text-slate-400 py-2">＋ 항목 추가로 적어 두세요.</p>'}</div>
-        </div>`; }).join('');
-
-      const chk=tkRows(TK_KEY,TK_WEEK,'check');
-
       box.innerHTML=`
-      <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:${tkColor(nm)}">
+      <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:${meP?meP.c:'#7C5CFF'}">
         <div class="flex flex-wrap items-start justify-between gap-2">
           <div class="min-w-0">
             <p class="text-[15px] font-extrabold text-ink leading-tight">🗒 TASKS
-              <span class="text-[12.5px] font-bold" style="color:${tkColor(nm)}">· ${esc(nm)}님의 노트</span></p>
-            <p class="text-[12.5px] text-slate-500 mt-1">${TK_ME
-              ? `로그인 계정 <b class="text-ink">${esc(TK_ME)}</b> 기준으로 <b class="text-ink">나만의 노트</b>가 열립니다.`
-              : `이 브라우저에 저장된 이름(<b class="text-ink">${esc(TK_NAME)}</b>) 기준입니다. <button onclick="tkPickWho()" class="underline text-slate-400 hover:text-ink">이름 변경</button>`}
-              주간보고와 같은 양식이고, <b class="text-agreen">적는 즉시 저장</b>됩니다.</p>
+              <span class="text-[12.5px] font-bold text-slate-400">· 팀 3명 한 화면 · 주간보고와 같은 양식</span></p>
+            <p class="text-[12.5px] text-slate-500 mt-1">
+              ${TK_MENAME?`나는 <b class="text-ink" style="color:${meP?meP.c:''}">${esc(TK_MENAME)}</b>${TK_ME?` (${esc(TK_ME)})`:''} <button onclick="tkWhoPick()" class="underline text-slate-400 hover:text-ink ml-1">변경</button>`
+                          :`내 이름을 골라 주세요 → ${TK_PEOPLE.map(p=>`<button onclick="tkSetWho('${esc(p.n)}')" class="underline font-bold ml-1" style="color:${p.c}">${esc(p.n)}</button>`).join('')}`}
+              · <b class="text-agreen">누구 칸이든 할 일을 추가·수정</b>할 수 있습니다(서로 요청·배정용). 적는 즉시 저장됩니다.</p>
           </div>
           ${conn}
         </div>
@@ -6862,47 +7230,32 @@
             </div>
             <button onclick="tkShift(1)" class="text-[13px] border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg w-8 h-8 font-bold">▶</button>
             ${TK_WEEK!==thisWeek?`<button onclick="tkThisWeek()" class="text-[12px] font-semibold border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2.5 py-1.5">이번 주로</button>`:''}
+            <div class="ml-2 flex rounded-lg border border-[#E6E6E3] overflow-hidden">
+              <button onclick="tkSetMode('board')" class="text-[12px] font-bold px-3 py-1.5 ${board?'bg-ink text-white':'text-slate-500 hover:bg-[#FAFAF9]'}">👥 팀 보드</button>
+              <button onclick="tkSetMode('me')" class="text-[12px] font-bold px-3 py-1.5 ${board?'text-slate-500 hover:bg-[#FAFAF9]':'bg-ink text-white'}">👤 내 칸만</button>
+            </div>
           </div>
           <div class="flex items-center gap-2 flex-wrap">
+            <div class="text-right mr-1">
+              <p class="text-[11px] font-bold text-slate-500">팀 전체 진행</p>
+              <p class="text-[18px] font-extrabold num leading-none" style="color:${teamPct===100&&team.n?'#5E7350':'#26282A'}">${team.d}<span class="text-[12px] text-slate-400">/${team.n}</span>
+                <span class="text-[12px] ml-1" style="color:#8A6A00">${teamPct}%</span></p>
+            </div>
             <span id="tkSave" class="text-[12px] mr-1"></span>
-            ${mine?`<button id="tkSaveBtn" onclick="tkSaveNow()" class="text-[13px] text-white px-3 py-1.5 rounded-lg font-semibold" style="background:#16A34A">저장</button>`:''}
+            <button id="tkSaveBtn" onclick="tkSaveNow()" class="text-[13px] text-white px-3 py-1.5 rounded-lg font-semibold" style="background:#16A34A">저장</button>
             <button onclick="tkCopy()" class="text-[13px] border border-[#E6E6E3] hover:bg-[#FAFAF9] px-3 py-1.5 rounded-lg font-semibold">텍스트 복사</button>
-            ${mine?`<button onclick="tkToWeekly()" class="text-[13px] bg-[#7C5CFF] text-white px-3 py-1.5 rounded-lg font-semibold hover:brightness-110">주간보고로 보내기</button>`:''}
+            <button onclick="tkToWeekly()" class="text-[13px] bg-[#7C5CFF] text-white px-3 py-1.5 rounded-lg font-semibold hover:brightness-110">주간보고로 보내기</button>
           </div>
-        </div>
-        <div class="flex flex-wrap items-center gap-1.5 mt-3 pt-3 border-t border-[#F2EFE9]">
-          <span class="text-[11px] font-bold text-slate-400 mr-1">노트</span>
-          <button onclick="tkViewUser('${TK_KEY}')" class="text-[11.5px] font-bold rounded-full px-2.5 py-1 border ${mine?'bg-ink text-white border-ink':'border-[#E6E6E3] text-slate-500 hover:bg-[#FAFAF9]'}">👤 내 노트</button>
-          ${users.filter(u=>u.k!==TK_KEY).map(u=>`<button onclick="tkViewUser('${esc(u.k)}')" class="text-[11.5px] font-bold rounded-full px-2.5 py-1 border"
-            style="${TK_VIEW===u.k?`background:${tkColor(u.name)};border-color:${tkColor(u.name)};color:#fff`:`background:${tkColor(u.name)}18;border-color:${tkColor(u.name)}40;color:${tkColor(u.name)}`}">${esc(u.name)}${tkHasNote(u.k,TK_WEEK)?'':' <span class="font-normal opacity-60">·미작성</span>'}</button>`).join('')}
-          <span class="text-[11px] text-slate-300 ml-1">팀원 이름을 누르면 그 주의 노트를 읽을 수 있습니다(수정은 본인만).</span>
         </div>
       </div>
 
-      ${mine?`
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-        <div class="space-y-4">${blocks}</div>
-        <div class="space-y-4">
-          <div class="card p-4">
-            <div class="flex items-center justify-between mb-2">
-              <h4 class="font-bold text-ink">🗒 메모장 <span class="text-[11px] font-normal text-slate-400">(자유롭게 적는 칸)</span></h4>
-            </div>
-            <div class="text-[13px] text-slate-700 leading-relaxed min-h-[260px] focus:outline-none border border-[#E6E6E3] rounded-lg px-3 py-2"
-                 style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${tkBase()}/memo" oninput="tkText(this)">${esc(memo)}</div>
-            <p class="text-[11px] text-slate-400 mt-1.5">회의 메모·아이디어·해야 할 말 등 형식 없이 적어 두는 칸입니다. 주 단위로 남습니다.</p>
-          </div>
-          <div class="card p-4">
-            <div class="flex items-center justify-between mb-1">
-              <h4 class="font-bold text-ink">💡 확인 필요 사항 <span class="text-[11px] font-normal text-slate-400">(확인자 지정)</span></h4>
-              <button onclick="tkAddRow('check')" class="text-[12px] text-[#7C5CFF] font-semibold hover:underline">＋ 항목 추가</button>
-            </div>
-            <div>${chk.length?chk.map(tkCheckRowHtml).join(''):'<p class="text-[12px] text-slate-400 py-2">＋ 항목 추가로 물어볼 것을 적어 두세요.</p>'}</div>
-          </div>
-        </div>
-      </div>`:tkReadHtml(key)}
+      ${board
+        ? `<div class="grid grid-cols-1 lg:grid-cols-3 gap-3 items-start">${TK_PEOPLE.map(p=>tkColumn(p,true)).join('')}</div>`
+        : `<div class="max-w-[760px]">${tkColumn(meP||TK_PEOPLE[0],false)}</div>`}
       <div class="h-8"></div>`;
       tkSaveState();
     }
+    function tkWhoPick(){ const v=prompt('내 이름 (강유선 / 정여진 / 홍수영)', TK_MENAME||''); if(v!=null) tkSetWho(v); }
     /* ===================== 🖼 블로그 썸네일 메이커 =====================
        레퍼런스 이미지를 올리고 텍스트를 넣으면 캔버스로 썸네일을 합성해 PNG로 뽑는다.
        외부 API를 쓰지 않으므로 즉시 미리보기가 되고, 만든 이미지는 서버에 올라가지 않는다.
