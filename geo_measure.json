@@ -1,0 +1,181 @@
+{
+ "generatedAt": "2026-09-11T14:00:00+09:00",
+ "source": "claude-websearch",
+ "engine": "search",
+ "note": "웹 검색 근거 측정 — 각 질문을 실제로 검색해, AI가 답을 만들 때 근거로 쓸 후보 문서에 우리가 들어가는지 본 결과. 사람이 붙여넣지 않아도 되는 자동 측정이며, ChatGPT·Perplexity·네이버 AI 브리핑의 실제 답변과는 별개다.",
+ "runs": [
+  { "ym": "2026-09", "pid": "G01", "eng": "search", "q": "신축 아파트 입주 전 스마트홈 준비",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["삼성 스마트싱스", "홈닉", "자이홈", "애플 홈킷", "구글 홈"],
+    "cites": [
+     {"url": "https://r1.community.samsung.com/t5/smartthings/", "domain": "r1.community.samsung.com"},
+     {"url": "https://aicast.kr/entry/스마트홈-구축-완벽-가이드", "domain": "aicast.kr"},
+     {"url": "https://engineer-daddy.co.kr/entry/초보자도-쉽게-시작하는-스마트홈-구축-가이드", "domain": "engineer-daddy.co.kr"},
+     {"url": "https://www.dginclusion.com/news/articleView.html?idxno=909", "domain": "www.dginclusion.com"},
+     {"url": "https://wisvio.com/아파트에서도-가능한-스마트홈-자동화-구축-시나리오/", "domain": "wisvio.com"}]},
+
+  { "ym": "2026-09", "pid": "C02", "eng": "search", "q": "중성선 없는 집 스마트 스위치 설치",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["다원", "시하스", "Lutron"],
+    "cites": [
+     {"url": "https://m.ppomppu.co.kr/new/bbs_view.php?id=interior&no=17860", "domain": "m.ppomppu.co.kr"},
+     {"url": "https://www.clien.net/service/board/cm_iot/18532478", "domain": "www.clien.net"},
+     {"url": "https://www.clien.net/service/board/cm_iot/15544067", "domain": "www.clien.net"},
+     {"url": "https://www.eco-newleaf.com/ko/smart-switch/installing-lutron-smart-switch-without-a-neutral-wire", "domain": "www.eco-newleaf.com"},
+     {"url": "https://m.dcinside.com/board/smartthings/8693", "domain": "m.dcinside.com"}]},
+
+  { "ym": "2026-09", "pid": "G03", "eng": "search", "q": "전월세 원룸 무타공 스마트홈 구성 추천",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": [],
+    "cites": [
+     {"url": "https://challenger7.com/12", "domain": "challenger7.com"},
+     {"url": "https://www.interiorself.com/2025/08/2025-iot.html", "domain": "www.interiorself.com"},
+     {"url": "https://www.drcody.co.kr/78090", "domain": "www.drcody.co.kr"},
+     {"url": "https://www.facilitye.kr/2026/02/blog-post_27.html", "domain": "www.facilitye.kr"}]},
+
+  { "ym": "2026-09", "pid": "G04", "eng": "search", "q": "신혼집 스마트홈 입문 추천 30만원 구성",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["삼성 스마트싱스", "구글 홈"],
+    "cites": [
+     {"url": "https://ohou.se/advices/5541", "domain": "ohou.se"},
+     {"url": "https://dpg.danawa.com/news/view?boardSeq=63&listSeq=5929973", "domain": "dpg.danawa.com"},
+     {"url": "https://challenger7.com/8", "domain": "challenger7.com"},
+     {"url": "https://grokflows.net/스마트폰-가전-제어-2026-초보자-추천-5단계-세팅-가이드/", "domain": "grokflows.net"},
+     {"url": "https://resetii25.com/entry/스마트홈-과연-얼마나-비용이-들까", "domain": "resetii25.com"}]},
+
+  { "ym": "2026-09", "pid": "G05", "eng": "search", "q": "강아지 혼자 있을 때 반려동물 홈캠 자동 급식 스마트홈",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["펫위즈", "바램펫"],
+    "cites": [
+     {"url": "https://creators.mypetlife.co.kr/강아지-자동급식기-펫위즈-카메라일체형/", "domain": "creators.mypetlife.co.kr"},
+     {"url": "https://search.danawa.com/dsearch.php?query=반려견자동급식기", "domain": "search.danawa.com"},
+     {"url": "https://www.varram.co.kr/shop_view/?idx=40", "domain": "www.varram.co.kr"},
+     {"url": "https://perpika.kr/free/136", "domain": "perpika.kr"}]},
+
+  { "ym": "2026-09", "pid": "G06", "eng": "search", "q": "아이 안전 현관문 창문 열림 알림 센서 추천",
+    "mention": 1, "rank": 2, "err": 0, "senti": "pos", "comp": ["LG U+", "Tuya", "Shelly"],
+    "cites": [
+     {"url": "https://www.lguplus.com/smart-home/device/IOT1000019", "domain": "www.lguplus.com"},
+     {"url": "https://aqaralife.gitbook.io/manual/smartsensor/p2-1", "domain": "aqaralife.gitbook.io"},
+     {"url": "https://visrova.com/product/아카라-iot-문열림-감지-센서-p2/1601/", "domain": "visrova.com"},
+     {"url": "https://www.wiseparentinglife.com/2025/05/top-5.html", "domain": "www.wiseparentinglife.com"},
+     {"url": "https://moneyisthebest.com/entry/스마트-도어센서-추천", "domain": "moneyisthebest.com"}]},
+
+  { "ym": "2026-09", "pid": "G07", "eng": "search", "q": "부모님 독거 움직임 감지 원격 돌봄 센서 추천",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": [],
+    "cites": [
+     {"url": "https://www.junggi.co.kr/article/articleView.html?no=33865", "domain": "www.junggi.co.kr"},
+     {"url": "https://cms.eroum.co.kr/?p=8143", "domain": "cms.eroum.co.kr"},
+     {"url": "https://www.clien.net/service/board/kin/19239548", "domain": "www.clien.net"},
+     {"url": "https://www.aihub.or.kr/aihubdata/data/view.do?dataSetSn=71803", "domain": "www.aihub.or.kr"}]},
+
+  { "ym": "2026-09", "pid": "G08", "eng": "search", "q": "대기전력 차단 전력 측정 스마트 플러그 전기요금 절약",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["TP-Link Tapo"],
+    "cites": [
+     {"url": "https://www.tp-link.com/kr/support/faq/3490/", "domain": "www.tp-link.com"},
+     {"url": "https://plan.danawa.com/mobile/info/?nPlanSeq=1701", "domain": "plan.danawa.com"},
+     {"url": "https://www.clien.net/service/board/use/12447389", "domain": "www.clien.net"},
+     {"url": "https://honey-note.com/smart-home-vol5-smart-plug-energy-saving/", "domain": "honey-note.com"},
+     {"url": "https://moneyisthebest.com/entry/스마트-플러그-전력-사용량-측정기-추천-총정리", "domain": "moneyisthebest.com"}]},
+
+  { "ym": "2026-09", "pid": "G09", "eng": "search", "q": "온습도 센서로 에어컨 보일러 자동화 하는 방법",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["나비엔"],
+    "cites": [
+     {"url": "https://m.ppomppu.co.kr/new/bbs_view.php?id=diy&no=25840", "domain": "m.ppomppu.co.kr"},
+     {"url": "https://m.ppomppu.co.kr/new/bbs_view.php?id=review&no=37136", "domain": "m.ppomppu.co.kr"},
+     {"url": "https://patents.google.com/patent/KR20140004301A/ko", "domain": "patents.google.com"},
+     {"url": "https://1second.epictetus-bigguy.com/28", "domain": "1second.epictetus-bigguy.com"}]},
+
+  { "ym": "2026-09", "pid": "G10", "eng": "search", "q": "빈집 외출 모드 보안 스마트홈 도어센서 침입 알림 카메라",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["TP-Link"],
+    "cites": [
+     {"url": "https://www.tp-link.com/kr/blog/2249/가정용-cctv-카메라-추천-및-모델-선택-가이드/", "domain": "www.tp-link.com"},
+     {"url": "https://www.tp-link.com/kr/blog/2182/홈-보안-카메라가-집과-사무실을-안전하게-지키는-방법/", "domain": "www.tp-link.com"},
+     {"url": "https://hansem.com/ko/blog/스마트홈-보안-장비-매뉴얼/", "domain": "hansem.com"},
+     {"url": "https://www.wiseparentinglife.com/2025/05/top-5.html", "domain": "www.wiseparentinglife.com"}]},
+
+  { "ym": "2026-09", "pid": "G11", "eng": "search", "q": "아침 기상 자동화 스마트 커튼 조명 취침 모드 루틴",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["구글 홈", "삼성 스마트싱스", "네이버 클로바"],
+    "cites": [
+     {"url": "https://support.google.com/googlehome/answer/9304145?hl=ko", "domain": "support.google.com"},
+     {"url": "https://www.khan.co.kr/article/202504091048001", "domain": "www.khan.co.kr"},
+     {"url": "https://jinblog.kr/스마트홈-ai-스피커-자동화-루틴-5가지/", "domain": "jinblog.kr"},
+     {"url": "https://smart-life.kr/home-chore-automation-routine-smart-home-beginner/", "domain": "smart-life.kr"},
+     {"url": "https://heesuwave.co.kr/entry/스마트홈-자동화-시나리오-예시-TOP-5", "domain": "heesuwave.co.kr"}]},
+
+  { "ym": "2026-09", "pid": "G12", "eng": "search", "q": "애플 홈킷 HomeKit 지원 센서 커튼 추천",
+    "mention": 1, "rank": 1, "err": 0, "senti": "pos", "comp": ["샤오미 Yeelight", "필립스 휴", "이케아", "Belkin Wemo"],
+    "cites": [
+     {"url": "https://aqaralife.gitbook.io/manual/platform/apple-homekit", "domain": "aqaralife.gitbook.io"},
+     {"url": "https://www.apple.com/kr/shop/accessories/all/homekit", "domain": "www.apple.com"},
+     {"url": "https://brunch.co.kr/@forchoon/418", "domain": "brunch.co.kr"},
+     {"url": "https://namu.wiki/w/Apple%20Home", "domain": "namu.wiki"},
+     {"url": "https://www.belkin.com/kr/support-article/?articleNum=306794", "domain": "www.belkin.com"}]},
+
+  { "ym": "2026-09", "pid": "G13", "eng": "search", "q": "스마트싱스 연동 도어센서 추천 삼성 가전 자동화",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["삼성 스마트싱스", "솔리티", "게이트맨"],
+    "cites": [
+     {"url": "https://www.samsung.com/sec/smartthings/", "domain": "www.samsung.com"},
+     {"url": "https://r1.community.samsung.com/t5/smartthings/", "domain": "r1.community.samsung.com"},
+     {"url": "https://hoyafinancial.com/스마트싱스-스테이션-삼성-도어락-연동-방법-및-후기/", "domain": "hoyafinancial.com"},
+     {"url": "https://idlebread.com/솔리티-스마트-도어락-가이드-3-스마트싱스-연동/", "domain": "idlebread.com"}]},
+
+  { "ym": "2026-09", "pid": "G14", "eng": "search", "q": "매터 Matter 지원 스마트홈 허브 추천 Thread",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["삼성 스마트싱스", "구글 네스트", "이케아"],
+    "cites": [
+     {"url": "https://brunch.co.kr/@iotstlabs/311", "domain": "brunch.co.kr"},
+     {"url": "https://brunch.co.kr/@iotstlabs/226", "domain": "brunch.co.kr"},
+     {"url": "https://support.google.com/googlenest/answer/13127223?hl=ko", "domain": "support.google.com"},
+     {"url": "https://forum.digikey.com/t/matter/24851", "domain": "forum.digikey.com"},
+     {"url": "https://news.hada.io/topic?id=21905", "domain": "news.hada.io"}]},
+
+  { "ym": "2026-09", "pid": "G15", "eng": "search", "q": "에어비앤비 스테이 무인 운영 스마트 도어락 무인매장",
+    "mention": 0, "rank": 0, "err": 0, "senti": "neu", "comp": ["ADT캡스", "스테이바인더", "삼성"],
+    "cites": [
+     {"url": "https://www.adtcaps.co.kr/operation-services/smart-stay", "domain": "www.adtcaps.co.kr"},
+     {"url": "https://www.staybinder.com/", "domain": "www.staybinder.com"},
+     {"url": "https://www.clien.net/service/board/park/12286068", "domain": "www.clien.net"},
+     {"url": "https://ddable.com/airbnb/", "domain": "ddable.com"},
+     {"url": "https://www.news1.kr/industry/hotel-tourism/6237548", "domain": "www.news1.kr"}]},
+
+  { "ym": "2026-09", "pid": "B01", "eng": "search", "q": "아카라 허브 M3 기능 리뷰",
+    "mention": 1, "rank": 1, "err": 0, "senti": "pos", "comp": [],
+    "cites": [
+     {"url": "https://aqaralife.gitbook.io/manual", "domain": "aqaralife.gitbook.io"},
+     {"url": "https://aqaralife.shop/product/아카라-스마트-허브-m3/216/", "domain": "aqaralife.shop"},
+     {"url": "https://www.clien.net/service/board/cm_iphonien/18753646", "domain": "www.clien.net"},
+     {"url": "https://www.collectionb.cc/goods/goods_view.php?goodsNo=1000037032", "domain": "www.collectionb.cc"},
+     {"url": "https://landtosky.kr/887", "domain": "landtosky.kr"},
+     {"url": "https://www.newswire.co.kr/newsRead.php?no=990894", "domain": "www.newswire.co.kr"}]},
+
+  { "ym": "2026-09", "pid": "B02", "eng": "search", "q": "아카라 FP2 재실센서 사용 후기",
+    "mention": 1, "rank": 1, "err": 0, "senti": "pos", "comp": [],
+    "cites": [
+     {"url": "https://aqaralife.gitbook.io/manual/presencesensor/fp2", "domain": "aqaralife.gitbook.io"},
+     {"url": "https://aqaralife.shop/product/아카라-활동-모니터링-센서-fp2/35/", "domain": "aqaralife.shop"},
+     {"url": "https://www.aqara.com/kr/product/presense-sensor-fp2/", "domain": "www.aqara.com"},
+     {"url": "https://www.ilovepc.co.kr/news/articleView.html?idxno=51941", "domain": "www.ilovepc.co.kr"},
+     {"url": "https://smartliosen.com/product/아카라-aqara-재실-감지-센서-fp2/86/", "domain": "smartliosen.com"},
+     {"url": "https://visrova.com/product/아카라-iot-활동-모니터링-센서-fp2/1600/", "domain": "visrova.com"}]},
+
+  { "ym": "2026-09", "pid": "B03", "eng": "search", "q": "아카라 스마트 스위치 중성선 필요 여부",
+    "mention": 1, "rank": 1, "err": 0, "senti": "pos", "comp": ["삼성 스마트싱스"],
+    "cites": [
+     {"url": "https://www.samsung.com/sec/smartthings/Switch-WS-KRC01/WS-KRC01/", "domain": "www.samsung.com"},
+     {"url": "https://aqaralife.gitbook.io/manual/light_plug_relay/2", "domain": "aqaralife.gitbook.io"},
+     {"url": "https://aqaralife.gitbook.io/manual/light_plug_relay/lighting_1", "domain": "aqaralife.gitbook.io"},
+     {"url": "https://aqaralife.shop/product/아카라-스마트-조명-스위치2구-중성선-불필요/22/", "domain": "aqaralife.shop"},
+     {"url": "https://aqaralife.shop/product/아카라-스마트-조명-스위치-h1wh-1-3구-중성선-필요/80/", "domain": "aqaralife.shop"}]},
+
+  { "ym": "2026-09", "pid": "B04", "eng": "search", "q": "아카라 시공 서비스 신청 아카라라이프",
+    "mention": 1, "rank": 1, "err": 0, "senti": "pos", "comp": [],
+    "cites": [
+     {"url": "http://www.aqaralife.kr/", "domain": "www.aqaralife.kr"},
+     {"url": "https://aqaralife.gitbook.io/techhub/academy/iot_rudimentary/basic/02/3", "domain": "aqaralife.gitbook.io"},
+     {"url": "https://www.dailysecu.com/news/articleView.html?idxno=202979", "domain": "www.dailysecu.com"},
+     {"url": "https://thevc.kr/aqaralife", "domain": "thevc.kr"},
+     {"url": "https://aqaralife.shop/shopinfo/guide.html", "domain": "aqaralife.shop"}]},
+
+  { "ym": "2026-09", "pid": "B05", "eng": "search", "q": "아카라 정품 A/S 고객센터",
+    "mention": 1, "rank": 1, "err": 0, "senti": "neu", "comp": [],
+    "cites": [
+     {"url": "https://netfllix.co.kr/아카라-도어락-고객센터-as-서비스센터-전화번호-온라/", "domain": "netfllix.co.kr"},
+     {"url": "https://aqaralife.shop/board/faq/list.html?board_no=1", "domain": "aqaralife.shop"},
+     {"url": "https://aqaralife.shop/shopinfo/guide.html", "domain": "aqaralife.shop"}]}
+ ]
+}

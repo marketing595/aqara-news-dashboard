@@ -6585,7 +6585,7 @@
          geo/cal/<YYYY-MM>/<i>          콘텐츠 캘린더(채널·CEP·제목·주차) — 붙여넣으면 중복 생성 방지에 쓰인다
          geo/snap/<YYYY-MM>             월 스냅샷(점수·SoM·인용 점유·발행·액션 완료율)
          geo/data/*                     (구버전 메모·체크) 읽기만 유지                                        */
-    let GEO=null, GEOS=null, GE={}, GEO_ERR='', GEO_LOADING=false, geRefOn=false, GE_FBERR='';
+    let GEO=null, GEOS=null, GEOM=null, GE={}, GEO_ERR='', GEO_LOADING=false, geRefOn=false, GE_FBERR='';
     let geSec='overview', geYM='', geMForm=null, geActFilter={ch:'',cep:'',gap:'',st:''}, geScoreOpen=false;
 
     const GE_GAPS={
@@ -6599,7 +6599,8 @@
     };
     const GE_GAP_ORDER=['wrong','none','comp','other','nocite','ok','na'];
     const GE_COMPET=['삼성','스마트싱스','SmartThings','LG','씽큐','ThinQ','샤오미','Xiaomi','헤이홈','구글 홈','Google Home','애플 홈','HomeKit','필립스','휴','Hue','이케아','투야','Tuya'];
-    const GE_OURS=['aqaralife.kr','aqaralife.shop','catalogue.aqara.kr','aqara.kr'];
+    const GE_OURS=['aqaralife.kr','aqaralife.shop','catalogue.aqara.kr','aqara.kr','aqaralife.gitbook.io'];
+    const GE_RESELLER=['collectionb.cc','visrova.com','smartliosen.com','netfllix.co.kr'];
     const GE_NAVER_BLOGS={'sksmsehfehfdl':'수니집 일상기록','untorn':'미니멀라이프','gogetthat':'하다 일상','aqaralife':'네이버 공식'};
     const GE_TYPES=['기준 문서','비교','FAQ','시공 사례','설치 방법','호환표','실사용 기록','실험기'];
 
@@ -6629,10 +6630,12 @@
     function geYMNow(){ const d=new Date(); return new Date(d.getTime()+9*3600*1000).toISOString().slice(0,7); }
     function geLoad(force){
       if(GEO&&GEOS&&!force) return;
-      if(GEO_LOADING) return; GEO_LOADING=true; let pend=2;
+      if(GEO_LOADING) return; GEO_LOADING=true; let pend=3;
       const fin=()=>{ if(--pend<=0){ GEO_LOADING=false; renderGeo(); } };
       fetch('geo.json?_='+Date.now()).then(r=>r.json()).then(d=>{ GEO=d; }).catch(e=>{ GEO_ERR=(e&&e.message)||'geo.json 실패'; }).then(fin);
       fetch('geo_seed.json?_='+Date.now()).then(r=>r.json()).then(d=>{ GEOS=d; }).catch(e=>{ GEO_ERR=(e&&e.message)||'geo_seed.json 실패'; }).then(fin);
+      // 자동 측정 결과 — 사람이 붙여넣지 않아도 되는 몫(웹 검색 근거 · Gemini 검색)
+      fetch('geo_measure.json?_='+Date.now()).then(r=>r.ok?r.json():null).then(d=>{ GEOM=d||{runs:[]}; }).catch(()=>{ GEOM={runs:[]}; }).then(fin);
     }
     function renderGeoTab(){ if(!geYM) geYM=geYMNow(); geStart(); geLoad(); renderGeo();
       if(typeof loadOwned==='function' && !(OWNED&&OWNED.generatedAt)){ try{ loadOwned(); }catch(e){} } }
@@ -6649,8 +6652,12 @@
     function geW(){ return (((GEOS||{}).scoring||{}).weights)||{som:40,asset:20,page:20,site:10,ops:10}; }
 
     /* ---------- 측정 ---------- */
+    /* 측정 = 사람이 넣은 기록(Firebase) + 자동 측정(geo_measure.json) 합집합 */
+    function geAutoRuns(ym){ return (((GEOM||{}).runs)||[]).filter(r=>(r.ym||'')===(ym||geYM))
+      .map((r,i)=>Object.assign({id:'auto'+i, auto:1}, r)); }
     function geRuns(pid,eng,ym){ const m=GV2('m/'+(ym||geYM)+'/'+pid+'/'+eng,{});
-      return Object.keys(m||{}).map(id=>Object.assign({id:id},m[id]||{})); }
+      const manual=Object.keys(m||{}).map(id=>Object.assign({id:id},m[id]||{}));
+      return manual.concat(geAutoRuns(ym).filter(r=>r.pid===pid&&r.eng===eng)); }
     function geSom(pid,eng,ym){ const r=geRuns(pid,eng,ym), n=r.length;
       const men=r.filter(x=>+x.mention===1).length;
       const cited=r.filter(x=>(x.cites||[]).some(c=>geIsOurs(c.domain||c))).length;
@@ -6660,6 +6667,10 @@
     function geIsOurs(d){ d=String(d||'').toLowerCase();
       return GE_OURS.some(x=>d.indexOf(x)>-1) || Object.keys(GE_NAVER_BLOGS).some(b=>d.indexOf(b)>-1); }
     function geDomainBucket(u){ const d=String(u||'').toLowerCase();
+      if(d.indexOf('aqaralife.gitbook.io')>-1) return '제품 매뉴얼(gitbook)';
+      if(d.indexOf('aqaralife.shop')>-1) return '자사몰';
+      if(d.indexOf('aqara.com')>-1) return '본사(aqara.com)';
+      if(GE_RESELLER.some(x=>d.indexOf(x)>-1)) return '재판매점';
       if(GE_OURS.some(x=>d.indexOf(x)>-1)) return '자사 사이트';
       for(const b in GE_NAVER_BLOGS){ if(d.indexOf(b)>-1) return '네이버 블로그(자사)'; }
       if(d.indexOf('namu.wiki')>-1) return '나무위키';
@@ -6670,32 +6681,39 @@
       if(/smartstore|coupang|11st|gmarket|shop/.test(d)) return '쇼핑몰';
       return '기타'; }
     /* CEP 하나에 묶인 프롬프트 전체를 합친 측정 */
-    function geCepStat(cepId,eng,ym){
-      const ps=gePrompts().filter(p=>p.cep===+cepId);
-      let n=0,men=0,cited=0,err=0,comp=0,other=0;
+    /* 브랜드 질문("아카라 ○○ 어때?")은 당연히 우리가 나오므로 갭 판정에서 뺀다.
+       수요를 잡는 질문(일반·조건)에서 나오는지가 GEO의 본값이다. */
+    function geCepStat(cepId,eng,ym,withBranded){
+      const ps=gePrompts().filter(p=>p.cep===+cepId&&(withBranded||p.type!=='branded'));
+      let n=0,men=0,cited=0,err=0,comp=0,other=0,rankBad=0;
       ps.forEach(p=>{ geRuns(p.id,eng,ym).forEach(r=>{ n++;
-        if(+r.mention===1) men++;
+        const hit=(+r.mention===1);
+        if(hit) men++;
         const cs=(r.cites||[]);
         if(cs.some(c=>geIsOurs(c.domain||c))) cited++;
         else if(cs.length) other++;
         if(+r.err===1) err++;
-        if((r.comp||[]).length && +r.mention!==1) comp++;
+        if((r.comp||[]).length && !hit) comp++;                 // 우리는 없고 경쟁사만 나온 회차
+        if(hit && (+r.rank||0)>1) rankBad++;                    // 나오긴 하는데 경쟁사보다 뒤
       }); });
-      return {n:n,men:men,cited:cited,err:err,comp:comp,other:other,
+      return {n:n,men:men,cited:cited,err:err,comp:comp,other:other,rankBad:rankBad,
               som:n?Math.round(men/n*100):-1}; }
     /* 갭 판정 — 우선순위 오답 > 미언급 > 경쟁사 우위 > 타채널 인용 > 미인용 */
     function geGap(cepId,eng,ym){ const s=geCepStat(cepId,eng,ym);
       if(!s.n) return 'na';
       if(s.err>0) return 'wrong';
-      if(s.men===0) return s.comp>0?'comp':'none';
-      if(s.cited===0 && s.other>0) return 'other';
-      if(s.cited===0) return 'nocite';
-      if(s.comp>0 && s.men<s.n/2) return 'comp';
+      if(s.men===0) return 'none';                              // 아예 안 나옴이 최우선
+      if(s.cited===0) return s.other>0?'other':'nocite';         // 나오지만 우리 문서가 근거가 아님
+      if(s.men<s.n*0.5) return s.comp>0?'comp':'nocite';         // 절반도 안 나옴
+      if(s.rankBad>0) return 'comp';                             // 나오지만 경쟁사 뒤
       return 'ok'; }
 
     /* 엔진별 도달: 이 채널이 이 엔진 답변에 인용될 수 있는가 */
     function geReach(chKey,eng){ const c=geChan(chKey); if(!c) return 'check';
-      return ((c.reach||{})[eng])||'check'; }
+      const v=(c.reach||{})[eng]; if(v) return v;
+      // 웹 검색은 색인된 문서를 다 가져오므로 프로필류(플레이스·GBP)만 확인 필요로 둔다
+      if(eng==='search') return (c.kind==='profile')?'check':'yes';
+      return 'check'; }
     function geReachableChannels(cepId,eng){
       const cep=geCep(cepId); if(!cep) return [];
       return (cep.ch||[]).filter(k=>geReach(k,eng)!=='no'); }
@@ -6793,7 +6811,7 @@
     function geAllRuns(ym){ const m=GV2('m/'+(ym||geYM),{}); const out=[];
       Object.keys(m||{}).forEach(pid=>Object.keys(m[pid]||{}).forEach(eng=>
         Object.keys(m[pid][eng]||{}).forEach(rid=>out.push(Object.assign({pid:pid,eng:eng,id:rid},m[pid][eng][rid]||{})))));
-      return out; }
+      return out.concat(geAutoRuns(ym)); }
 
     /* ---------- 측정 입력 (개선 1) ---------- */
     function geMOpen(pid,eng){ geMForm={pid:pid||gePrompts()[0].id, eng:eng||geEngines()[0].k, raw:'', rank:'', err:0, errNote:'', senti:'neu'};
@@ -7071,9 +7089,9 @@
       return `
       <div class="card p-5 mb-4">
         <h3 class="accent font-extrabold text-ink mb-1">AI 답변 측정 <span class="text-[11px] font-normal text-slate-400">${geYM} · 프롬프트 35개 × 엔진 5개</span></h3>
-        <p class="text-[12.5px] text-slate-500 mb-1">각 엔진에서 질문을 던지고 <b>답변 전문을 붙여넣으면</b> 인용 URL·경쟁사 언급을 자동으로 뽑아 기록합니다.
-          질문당 <b>월 ${minRuns}회 이상</b> 반복해야 노출률로 씁니다(1회로 판정하지 않습니다).</p>
-        <p class="text-[11.5px] text-ared mb-3">※ 검색이 꺼진 모델은 측정하지 않습니다 — ChatGPT·Gemini는 <b>검색(그라운딩) 켠 상태</b>의 답변만 붙여넣어 주세요.</p>
+        <p class="text-[12.5px] text-slate-500 mb-1"><b class="text-agreen">검색근거 열은 자동으로 채워집니다</b> — 35개 질문을 실제로 웹 검색해 “AI가 근거로 쓸 후보 문서에 우리가 있는지”를 기록합니다(현재 ${geAutoRuns().length}건).
+          붙여넣기가 필요한 건 <b>자동이 안 되는 엔진</b>(ChatGPT·Perplexity·네이버 AI 브리핑)뿐이고, 그것도 전부 채울 필요는 없습니다.</p>
+        <p class="text-[11.5px] text-slate-400 mb-3">질문당 <b>월 ${minRuns}회 이상</b>이면 노출률로 씁니다. 손으로 넣을 때 ChatGPT·Gemini는 <b>검색(그라운딩) 켠 상태</b>의 답변만 써 주세요 — 검색이 꺼진 답변에는 근거 URL이 없어 측정에 쓸 수 없습니다.</p>
         ${f?`
         <div class="rounded-xl border-2 border-ink p-4 mb-4">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 mb-2.5">

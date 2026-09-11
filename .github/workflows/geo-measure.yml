@@ -1,0 +1,42 @@
+name: GEO Measure
+
+# 진단 프롬프트 35개를 AI·검색에 자동으로 돌려 노출률을 측정한다 → geo_measure.json
+# 매월 1일과 15일 한국시간 09:30 (한 달에 두 번 = 질문당 반복 회차를 쌓는다)
+# 손으로 더 돌리고 싶으면 Actions에서 Run workflow.
+on:
+  schedule:
+    - cron: '30 0 1,15 * *'   # 09:30 KST
+  workflow_dispatch: {}
+  push:
+    paths:
+      - '.github/workflows/geo-measure.yml'
+      - 'crawler/geo_measure.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: geo-measure
+  cancel-in-progress: false
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Measure
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NAVER_ID: ${{ secrets.NAVER_ID }}
+          NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+        run: python crawler/geo_measure.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add geo_measure.json
+          git diff --staged --quiet || git commit -m "geo_measure.json 자동 측정"
+          git push
