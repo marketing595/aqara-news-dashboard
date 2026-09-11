@@ -51,6 +51,7 @@ PAGES = [
     ('아카라라이프',     '/aqaralife',        'home'),
     ('스마트홈',        '/smarthome',        'home'),
     ('스마트홈 바이블',  '/smarthome-bible',  'content'),
+    ('가이드(기준 문서)', '/guide',          'content'),
     ('블로그',          '/blog',             'content'),
     ('뉴스룸',          '/newsroom',         'content'),
     ('뉴스레터',        '/newsletter',       'content'),
@@ -68,6 +69,13 @@ PAGES = [
 ]
 
 BASE = 'https://www.aqaralife.kr'
+
+# 상품 마스터 대조 — 같은 제품의 값이 세 곳에서 같은지 본다.
+# 운영자가 아래에 {제품명, own/shop/cat URL}을 채우면 그때부터 대조한다(빈 목록이면 '확인 필요'로 남긴다).
+PRODUCTS = [
+    # {'name': '허브 M3', 'own': '/hub-camera', 'shop': 'https://aqaralife.shop/...', 'cat': 'https://catalogue.aqara.kr/...'},
+]
+PRICE_RE = re.compile(r'([0-9][0-9,]{2,})\s*원')
 # 콘텐츠형 구조화 데이터 — AI가 '무슨 글인지' 이해하는 데 쓰인다(쇼핑몰 배송·반품 스키마는 제외)
 CONTENT_LD = {'Article', 'NewsArticle', 'BlogPosting', 'Product', 'FAQPage', 'HowTo',
               'Organization', 'BreadcrumbList', 'WebPage', 'ItemList', 'VideoObject'}
@@ -152,11 +160,71 @@ def audit_page(label, path, kind):
     body = TAG_RE.sub(' ', html)
     body = re.sub(r'<[^>]+>', ' ', body)
     body = re.sub(r'\s+', ' ', body).strip()
+    # 갱신일 — JSON-LD의 dateModified/datePublished가 1순위, 없으면 본문의 날짜 표기
+    upd = ''
+    m = re.search(r'"date(?:Modified|Published)"\s*:\s*"([0-9]{4}-[0-9]{2}-[0-9]{2})', html)
+    if m:
+        upd = m.group(1)
+    else:
+        m = re.search(r'(20[0-9]{2})[.\-/]\s?([01]?[0-9])[.\-/]\s?([0-3]?[0-9])', body)
+        if m:
+            upd = '%s-%02d-%02d' % (m.group(1), int(m.group(2)), int(m.group(3)))
     return {'label': label, 'path': path, 'kind': kind, 'url': url, 'status': st, 'ok': True,
             'title': title[:160], 'desc': desc[:300], 'descLen': len(desc),
             'h1': h1, 'h2': h2, 'ld': ld,
             'contentLd': sorted(set(ld) & CONTENT_LD), 'chars': len(body),
-            'canonical': canon}
+            'canonical': canon, 'updated': upd}
+
+
+def audit_guide():
+    """/guide 진행 — 기준 문서가 몇 편이고, 스펙표·FAQ·구조화 데이터를 갖췄는지."""
+    st, html = safe_get(BASE + '/guide')
+    out = {'exists': st == 200, 'posts': 0, 'specPosts': 0, 'ldPosts': 0, 'faqHub': False,
+           'note': '' if st == 200 else '/guide 페이지를 찾지 못했습니다(신설 중이면 확인 필요)'}
+    if st != 200:
+        return out
+    ids = sorted(set(re.findall(r'idx=(\d{4,})', html or '')))
+    out['posts'] = len(ids)
+    out['faqHub'] = bool(re.search(r'(FAQ|자주\s?묻는)', html or ''))
+    for i in ids[:12]:                      # 앞에서 12편만 열어 본다(크롤 부하 제한)
+        _s, h = safe_get('%s/guide/?idx=%s&bmode=view' % (BASE, i))
+        if not h:
+            continue
+        body = TAG_RE.sub(' ', h)
+        if '<table' in h.lower():
+            out['specPosts'] += 1
+        types = set(re.findall(r'"@type"\s*:\s*"([A-Za-z]+)"', h))
+        if types & {'Article', 'BlogPosting', 'FAQPage', 'HowTo', 'NewsArticle'}:
+            out['ldPosts'] += 1
+        time.sleep(0.3)
+    if len(ids) > 12:
+        out['note'] = '앞 12편만 확인(전체 %d편)' % len(ids)
+    return out
+
+
+def audit_products():
+    """홈페이지·자사몰·카탈로그의 같은 제품 값(가격)이 일치하는지. 목록이 비면 '확인 필요'."""
+    if not PRODUCTS:
+        return {'rows': [], 'note': '대조할 제품 목록(PRODUCTS)이 비어 있습니다 — 확인 필요'}
+    rows = []
+    for p in PRODUCTS:
+        vals = {}
+        for key in ('own', 'shop', 'cat'):
+            u = p.get(key) or ''
+            if not u:
+                continue
+            if u.startswith('/'):
+                u = BASE + u
+            _s, h = safe_get(u)
+            body = re.sub(r'<[^>]+>', ' ', TAG_RE.sub(' ', h or ''))
+            m = PRICE_RE.search(body)
+            vals[key] = m.group(1).replace(',', '') if m else ''
+            time.sleep(0.3)
+        got = [v for v in vals.values() if v]
+        rows.append({'name': p.get('name', ''), 'field': '가격',
+                     'own': vals.get('own', ''), 'shop': vals.get('shop', ''), 'cat': vals.get('cat', ''),
+                     'same': bool(got) and len(set(got)) == 1})
+    return {'rows': rows, 'note': '가격만 자동 대조합니다. 스펙·보증 문구는 확인 필요'}
 
 
 def main():
@@ -209,7 +277,15 @@ def main():
     data['boards'] = boards
     print('   블로그 %d · 뉴스룸 %d' % (boards['blogPosts'], boards['newsroomPosts']))
 
-    print('5) 페이지별 GEO 점검')
+    print('5) /guide 진행')
+    data['guide'] = audit_guide()
+    print('   %s' % data['guide'])
+
+    print('6) 상품 마스터 대조')
+    data['productMaster'] = audit_products()
+    print('   %s' % data['productMaster'].get('note'))
+
+    print('7) 페이지별 GEO 점검')
     for label, path, kind in PAGES:
         p = audit_page(label, path, kind)
         data['pages'].append(p)

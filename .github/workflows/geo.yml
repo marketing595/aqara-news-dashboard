@@ -5,7 +5,7 @@ name: GEO Status
 # 매일 한국 08시 20분 + 수동 + 크롤러/워크플로 변경 시
 on:
   schedule:
-    - cron: '20 23 * * *'   # 08:20 KST
+    - cron: '20 23 * * 0'   # 매주 월요일 08:20 KST (주 1회 크롤)
   workflow_dispatch: {}
   push:
     paths:

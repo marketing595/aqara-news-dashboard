@@ -6569,362 +6569,822 @@
       lnSave('logx.'+n,'1'); lnSave('log.'+i+'.date',d); lnSave('log.'+i+'.by',lnMe());
       renderLanseon(); setTimeout(()=>lnGo('lnSec8'),80); }
 
-    /* ===================== 🤖 GEO — 생성형 엔진 최적화 현황 =====================
-       'AI가 우리 콘텐츠를 읽을 수 있는가 / 읽고 인용할 만한 형태인가'를 우리가 손댈 수 있는
-       세 영역(홈페이지 · PR · 온드미디어) 기준으로 본다.
+    /* ===================== 🤖 GEO — 생성형 엔진 최적화 운영 대시보드 =====================
+       "우리가 AI 답변에 나오는가 → 안 나오면 무슨 글을 써야 하는가"를 굴리는 도구.
 
-       데이터 두 갈래
-         · web/geo.json      = 매일 자동 측정(크롤러 접근정책·페이지 점검·사이트 기본기). crawler/geo_fetch.py
-         · Firebase geo/data = 사람이 적는 것(AI 답변 점검 결과·개선 액션 체크·메모). 팀 실시간 공유.
-       함수 접두사 ge*, 편집 저장은 geSave/GV (랜선집들이·세미나와 같은 방식). */
-    let GEO=null, GEO_LOADING=false, GEO_ERR='', GE_OVER={}, geRefOn=false, GE_FBERR='';
-    let geBusy='';                                   // Gemini 확인 중인 질문 인덱스
+       데이터 세 갈래
+        · geo.json      매주 자동 크롤 — 페이지 점검·사이트 기본기·채널 robots·발행 수 (crawler/geo_fetch.py)
+        · geo_seed.json 기준 데이터 — CEP 15 / 진단 프롬프트 35 / 채널·엔진 도달 매트릭스 / 점수 가중치
+        · Firebase geo/ 사람이 넣는 것 — AI 답변 측정 기록, 콘텐츠·기술 액션, 키워드 수정, 월 스냅샷
 
-    const GEO_KIND={home:'대표',content:'콘텐츠',product:'제품',convert:'전환·문의'};
-    const GEO_KINDC={home:'#5B44C7',content:'#D68134',product:'#2563EB',convert:'#5E7350'};
+       Firebase 구조
+         geo/seed/cep/<id>/kw           운영자가 고친 키워드(쉼표 구분) — 시드보다 우선
+         geo/m/<YYYY-MM>/<pid>/<eng>/<runId>  측정 1회 = {ts,by,mention,rank,cites[],comp[],err,errNote,senti,raw}
+         geo/act/<id>                   콘텐츠 액션(생성·편집·상태)
+         geo/tech/<checkId>             기술 액션의 사람 입력분(담당·기한·메모) — 통과 여부는 크롤 결과로 자동 판정
+         geo/cal/<YYYY-MM>/<i>          콘텐츠 캘린더(채널·CEP·제목·주차) — 붙여넣으면 중복 생성 방지에 쓰인다
+         geo/snap/<YYYY-MM>             월 스냅샷(점수·SoM·인용 점유·발행·액션 완료율)
+         geo/data/*                     (구버전 메모·체크) 읽기만 유지                                        */
+    let GEO=null, GEOS=null, GE={}, GEO_ERR='', GEO_LOADING=false, geRefOn=false, GE_FBERR='';
+    let geSec='overview', geYM='', geMForm=null, geActFilter={ch:'',cep:'',gap:'',st:''}, geScoreOpen=false;
 
-    /* AI 답변에 우리가 나오는지 확인할 질문 — 스마트홈 구매 여정에서 실제로 물어보는 말 */
-    const GEO_QUERIES=[
-      '스마트홈 도어락 추천',
-      '매터(Matter) 지원 스마트홈 브랜드 추천',
-      '아파트 스마트홈 인테리어 시공 업체',
-      '삼성 스마트싱스랑 같이 쓸 수 있는 센서 브랜드',
-      '애플 홈킷 지원 스마트 조명 추천',
-      '재실 감지 센서 추천',
-      '스마트홈 허브 뭘 사야 할까',
-      '신혼집 스마트홈 구성 추천',
-      '무타공 스마트 블라인드',
-      '아카라 스마트홈 어때?'
-    ];
-    const GEO_ENGINES=[{k:'gpt',n:'ChatGPT',u:'https://chatgpt.com/?q='},
-                       {k:'ppx',n:'Perplexity',u:'https://www.perplexity.ai/search?q='},
-                       {k:'gem',n:'Gemini',u:'https://gemini.google.com/app'},
-                       {k:'nav',n:'네이버 AI',u:'https://search.naver.com/search.naver?query='}];
+    const GE_GAPS={
+      wrong:{n:'오답',      c:'#BF5332', d:'AI가 우리 제품을 틀리게 설명함 — 최우선'},
+      none: {n:'미언급',    c:'#8A6A00', d:'답변에 우리가 아예 안 나옴'},
+      comp: {n:'경쟁사 우위',c:'#D68134', d:'경쟁사만 나오거나 우리보다 먼저 나옴'},
+      other:{n:'타채널 인용',c:'#2563EB', d:'우리 얘기인데 언론·커뮤니티 글이 인용됨'},
+      nocite:{n:'미인용',   c:'#5E7350', d:'언급은 되는데 근거로 우리 문서가 안 쓰임'},
+      ok:   {n:'인용됨',    c:'#3E8E41', d:'언급 + 우리 문서가 근거로 인용됨'},
+      na:   {n:'미측정',    c:'#8E8E93', d:'아직 측정하지 않음'}
+    };
+    const GE_GAP_ORDER=['wrong','none','comp','other','nocite','ok','na'];
+    const GE_COMPET=['삼성','스마트싱스','SmartThings','LG','씽큐','ThinQ','샤오미','Xiaomi','헤이홈','구글 홈','Google Home','애플 홈','HomeKit','필립스','휴','Hue','이케아','투야','Tuya'];
+    const GE_OURS=['aqaralife.kr','aqaralife.shop','catalogue.aqara.kr','aqara.kr'];
+    const GE_NAVER_BLOGS={'sksmsehfehfdl':'수니집 일상기록','untorn':'미니멀라이프','gogetthat':'하다 일상','aqaralife':'네이버 공식'};
+    const GE_TYPES=['기준 문서','비교','FAQ','시공 사례','설치 방법','호환표','실사용 기록','실험기'];
 
-    /* 개선 액션 기본안 — 아래 측정 결과에서 그대로 도출된 것들 (체크·수정·추가 가능) */
-    const GEO_ACTIONS=[
-      {t:'제품·랜딩 페이지마다 title 따로 지정', d:'도어락·센서·허브·스위치·파트너십 등이 전부 “아카라라이프 Aqaralife” 한 제목을 쓰고 있어 AI가 페이지 주제를 구분하지 못합니다.', w:'홈페이지'},
-      {t:'페이지마다 meta description 따로 작성', d:'상당수 페이지가 홈과 똑같은 기본 요약문을 그대로 쓰고, 나머지는 3~15자로 사실상 비어 있습니다. AI가 인용할 요약문이 없는 상태입니다.', w:'홈페이지'},
-      {t:'페이지마다 H1 1개 지정', d:'대부분 H1이 없고(0개) 스마트홈 페이지만 2개입니다. 제목 위계가 없으면 어떤 내용의 페이지인지 판단이 어렵습니다.', w:'홈페이지'},
-      {t:'Organization·Product·FAQ 구조화 데이터 추가', d:'현재 JSON-LD는 쇼핑몰 배송·반품 스키마뿐입니다. 회사 정보·제품·FAQ 스키마를 넣으면 AI가 사실을 그대로 인용합니다.', w:'홈페이지'},
-      {t:'/about · /Enterprise canonical 오설정 수정', d:'/about은 /aqaralife를, /Enterprise는 /company-platform을 정식 주소로 가리키고 있습니다(자기 페이지가 아님).', w:'홈페이지'},
-      {t:'llms.txt를 표준 형식으로 교체', d:'지금 파일은 robots 문법으로 적혀 있습니다. 표준은 “# 브랜드 소개 + 핵심 문서 링크 목록”의 마크다운입니다.', w:'홈페이지'},
-      {t:'sitemap에 블로그·뉴스룸 개별 글 포함 + https로', d:'sitemap 59건이 전부 메뉴 페이지이고 주소가 http로 적혀 있습니다. 개별 글이 없으면 AI 크롤러가 콘텐츠를 못 찾습니다.', w:'홈페이지'},
-      {t:'홈페이지 블로그 콘텐츠 채우기', d:'홈페이지 블로그 게시글이 1건뿐입니다. 네이버 블로그는 AI 크롤러를 전면 차단하므로, AI가 읽을 수 있는 글은 홈페이지에만 쌓입니다.', w:'온드미디어'},
-      {t:'네이버 블로그 글을 홈페이지에 요약 재게시', d:'같은 내용을 홈페이지에 옮기면 AI가 읽을 수 있는 자산이 됩니다(원문은 네이버 유지).', w:'온드미디어'},
-      {t:'보도자료 배포 시 매체 원문 URL 확보·기록', d:'네이버 뉴스는 AI 크롤러 차단이라 인용되지 않습니다. 매체 자체 사이트에 실린 원문이 GEO 자산입니다.', w:'PR'},
-      {t:'스마트홈 바이블에 질문형 FAQ 블록 추가', d:'“매터가 뭔가요?” 같은 질문을 H2로 두고 3~4문장으로 답하는 형태가 AI 인용률이 가장 높습니다.', w:'홈페이지'},
-      {t:'제품 스펙을 표로 정리해 공개', d:'호환 플랫폼·통신방식·설치조건을 표로 두면 비교 질문 답변에 그대로 인용됩니다.', w:'홈페이지'}
-    ];
-
-    /* --- 저장(팀 공유) --- */
-    function geRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('geo/data'):null; }
-    function geKey(k){ return String(k).replace(/[.#$/\[\]]/g,'_'); }
-    function GV(k,def){ const v=GE_OVER[geKey(k)]; return (v==null||v==='')?(def==null?'':def):v; }
-    function geLocalLoad(){ try{ return JSON.parse(localStorage.getItem('aqaraGeo')||'{}'); }catch(e){ return {}; } }
+    /* ---------- 불러오기 ---------- */
+    function geRef(p){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('geo'+(p?('/'+p):'')):null; }
     function geStart(){
       if(geRefOn) return; const ref=geRef();
-      if(!ref){ GE_OVER=Object.assign(geLocalLoad(),GE_OVER); return; }
+      if(!ref){ try{ GE=JSON.parse(localStorage.getItem('aqaraGeo2')||'{}'); }catch(e){ GE={}; } return; }
       geRefOn=true;
-      ref.on('value',s=>{ GE_OVER=s.val()||{};
-        const a=document.activeElement;
-        if(a&&a.dataset&&a.dataset.gk) return;      // 내가 입력 중이면 다시 그리지 않는다
+      ref.on('value',s=>{ GE=s.val()||{};
+        const a=document.activeElement; if(a&&a.dataset&&a.dataset.gk) return;
         if(!document.getElementById('view-geo').classList.contains('hidden')) renderGeo(); },
         e=>{ GE_FBERR=(e&&e.message)||'읽기 거부'; });
     }
-    function geSave(k,v){ GE_OVER[geKey(k)]=v; const ref=geRef();
-      if(ref) ref.child(geKey(k)).set(v).catch(e=>{ GE_FBERR=(e&&e.message)||'쓰기 거부'; renderGeo(); });
-      else { try{ localStorage.setItem('aqaraGeo',JSON.stringify(GE_OVER)); }catch(e){} } }
-    function geEdit(el){ const k=el.dataset.gk; if(!k) return; geSave(k,(el.innerText||'').trim()); }
-    function geToggle(k){ geSave(k, GV(k,'')==='1'?'':'1'); renderGeo(); }
-
-    /* --- geo.json --- */
-    function loadGeo(force){
-      if(GEO&&!force) return;
-      if(GEO_LOADING) return; GEO_LOADING=true;
-      fetch('geo.json?_='+Date.now()).then(r=>r.ok?r.json():Promise.reject(new Error('geo.json '+r.status)))
-        .then(d=>{ GEO=d; GEO_ERR=''; })
-        .catch(e=>{ GEO_ERR=(e&&e.message)||'불러오기 실패'; })
-        .then(()=>{ GEO_LOADING=false; renderGeo(); });
+    function geSet(path,v){
+      const parts=('geo/'+path).split('/'); let o=GE;
+      for(let i=1;i<parts.length-1;i++){ if(!o[parts[i]]||typeof o[parts[i]]!=='object') o[parts[i]]={}; o=o[parts[i]]; }
+      const last=parts[parts.length-1]; if(v==null) delete o[last]; else o[last]=v;
+      const ref=geRef(path);
+      if(ref){ (v==null?ref.remove():ref.set(v)).catch(e=>{ GE_FBERR=(e&&e.message)||'쓰기 거부'; renderGeo(); }); }
+      else { try{ localStorage.setItem('aqaraGeo2',JSON.stringify(GE)); }catch(e){} }
     }
-    function renderGeoTab(){ geStart(); loadGeo(); renderGeo();
+    function GV2(path,def){ const parts=path.split('/'); let o=GE;
+      for(let i=0;i<parts.length;i++){ o=o&&o[parts[i]]; if(o==null) return def==null?'':def; }
+      return (o===''||o==null)?(def==null?'':def):o; }
+    function geEdit(el){ const k=el.dataset.gk; if(!k) return; geSet(k,(el.innerText||'').trim()); }
+    function geYMNow(){ const d=new Date(); return new Date(d.getTime()+9*3600*1000).toISOString().slice(0,7); }
+    function geLoad(force){
+      if(GEO&&GEOS&&!force) return;
+      if(GEO_LOADING) return; GEO_LOADING=true; let pend=2;
+      const fin=()=>{ if(--pend<=0){ GEO_LOADING=false; renderGeo(); } };
+      fetch('geo.json?_='+Date.now()).then(r=>r.json()).then(d=>{ GEO=d; }).catch(e=>{ GEO_ERR=(e&&e.message)||'geo.json 실패'; }).then(fin);
+      fetch('geo_seed.json?_='+Date.now()).then(r=>r.json()).then(d=>{ GEOS=d; }).catch(e=>{ GEO_ERR=(e&&e.message)||'geo_seed.json 실패'; }).then(fin);
+    }
+    function renderGeoTab(){ if(!geYM) geYM=geYMNow(); geStart(); geLoad(); renderGeo();
       if(typeof loadOwned==='function' && !(OWNED&&OWNED.generatedAt)){ try{ loadOwned(); }catch(e){} } }
 
-    /* --- 점수 --- */
-    function geGenericTitle(p){ const home=((GEO&&GEO.pages&&GEO.pages[0])||{}).title||'';
-      return !!(p.title && home && p.path!=='/' && p.title===home); }
-    /* 홈과 똑같은 요약문을 그대로 쓰고 있으면 그 페이지 설명이 없는 것과 같다 */
-    function geGenericDesc(p){ const home=((GEO&&GEO.pages&&GEO.pages[0])||{}).desc||'';
-      return !!(p.desc && home && p.path!=='/' && p.desc===home); }
-    function gePageScore(p){ if(!p||!p.ok) return 0; let s=0;
-      if(p.title && !geGenericTitle(p)) s+=25;
-      if((p.descLen||0)>=50 && !geGenericDesc(p)) s+=25;
-      if(p.h1===1) s+=25;
-      if((p.contentLd||[]).length) s+=25;
-      return s; }
-    function gePagesAvg(){ const ps=((GEO||{}).pages||[]).filter(p=>p.ok);
-      return ps.length?Math.round(ps.reduce((a,p)=>a+gePageScore(p),0)/ps.length):0; }
-    function geSiteScore(){ const s=(GEO||{}).site||{}; let v=0;
-      if(s.robots) v+=20;
-      const home=(((GEO||{}).channels)||[]).filter(c=>c.key==='home')[0];
-      if(home&&!(home.blocked||[]).length) v+=20;
-      if(s.sitemap) v+=20;
-      if(s.sitemapHasPosts) v+=20;
-      if(s.llms==='markdown') v+=20;
-      return v; }
-    function geOwnBlocked(){ return (((GEO||{}).channels)||[]).filter(c=>c.own&&(c.blocked||[]).length).length; }
-    function geTotal(){ return Math.round(gePagesAvg()*0.6 + geSiteScore()*0.4); }
-    function geGrade(v){ return v>=80?{t:'좋음',c:'#5E7350'}:(v>=50?{t:'보통',c:'#D68134'}:{t:'미흡',c:'#BF5332'}); }
+    /* ---------- 기준 데이터 접근(운영자 수정 반영) ---------- */
+    function geCeps(){ return ((GEOS||{}).ceps||[]).map(c=>{
+      const ov=GV2('seed/cep/'+c.id+'/kw','');
+      return Object.assign({},c,{kw: ov?ov.split(',').map(s=>s.trim()).filter(Boolean):c.kw}); }); }
+    function geCep(id){ return geCeps().filter(c=>c.id===+id)[0]||null; }
+    function gePrompts(){ return ((GEOS||{}).prompts||[]); }
+    function geEngines(){ return ((GEOS||{}).engines||[]); }
+    function geChannels(){ return ((GEOS||{}).channels||[]); }
+    function geChan(k){ return geChannels().filter(c=>c.k===k)[0]||null; }
+    function geW(){ return (((GEOS||{}).scoring||{}).weights)||{som:40,asset:20,page:20,site:10,ops:10}; }
 
-    /* --- 인용 자산: AI가 실제로 읽을 수 있는 우리 콘텐츠 --- */
-    function geAssets(){
-      const out={prTotal:0,prOpen:0,prPortal:0,blog:0,youtube:0,homePosts:0};
-      try{
-        (typeof ALL!=='undefined'?ALL:[]).forEach(r=>{
-          const u=r._href||r['링크']||r.link||''; if(!u) return;
-          out.prTotal++;
-          const h=(String(u).match(/^https?:\/\/([^/]+)/)||[])[1]||'';
-          if(/naver\.com|daum\.net|nate\.com|zum\.com/i.test(h)) out.prPortal++; else out.prOpen++;
+    /* ---------- 측정 ---------- */
+    function geRuns(pid,eng,ym){ const m=GV2('m/'+(ym||geYM)+'/'+pid+'/'+eng,{});
+      return Object.keys(m||{}).map(id=>Object.assign({id:id},m[id]||{})); }
+    function geSom(pid,eng,ym){ const r=geRuns(pid,eng,ym), n=r.length;
+      const men=r.filter(x=>+x.mention===1).length;
+      const cited=r.filter(x=>(x.cites||[]).some(c=>geIsOurs(c.domain||c))).length;
+      const err=r.filter(x=>+x.err===1).length;
+      return {n:n, men:men, cited:cited, err:err,
+              som:n?Math.round(men/n*100):-1, cite:n?Math.round(cited/n*100):-1}; }
+    function geIsOurs(d){ d=String(d||'').toLowerCase();
+      return GE_OURS.some(x=>d.indexOf(x)>-1) || Object.keys(GE_NAVER_BLOGS).some(b=>d.indexOf(b)>-1); }
+    function geDomainBucket(u){ const d=String(u||'').toLowerCase();
+      if(GE_OURS.some(x=>d.indexOf(x)>-1)) return '자사 사이트';
+      for(const b in GE_NAVER_BLOGS){ if(d.indexOf(b)>-1) return '네이버 블로그(자사)'; }
+      if(d.indexOf('namu.wiki')>-1) return '나무위키';
+      if(/cafe\.naver|clien|dcinside|ppomppu|ruliweb|bbs|community|quasarzone|coolenjoy/.test(d)) return '커뮤니티';
+      if(/youtube|youtu\.be/.test(d)) return 'YouTube';
+      if(/blog\.naver|tistory|brunch|velog|blogspot/.test(d)) return '블로그(타인)';
+      if(/news|press|etnews|mt\.co|mk\.co|hankyung|edaily|chosun|zdnet|dt\.co|newsis|yna/.test(d)) return '언론';
+      if(/smartstore|coupang|11st|gmarket|shop/.test(d)) return '쇼핑몰';
+      return '기타'; }
+    /* CEP 하나에 묶인 프롬프트 전체를 합친 측정 */
+    function geCepStat(cepId,eng,ym){
+      const ps=gePrompts().filter(p=>p.cep===+cepId);
+      let n=0,men=0,cited=0,err=0,comp=0,other=0;
+      ps.forEach(p=>{ geRuns(p.id,eng,ym).forEach(r=>{ n++;
+        if(+r.mention===1) men++;
+        const cs=(r.cites||[]);
+        if(cs.some(c=>geIsOurs(c.domain||c))) cited++;
+        else if(cs.length) other++;
+        if(+r.err===1) err++;
+        if((r.comp||[]).length && +r.mention!==1) comp++;
+      }); });
+      return {n:n,men:men,cited:cited,err:err,comp:comp,other:other,
+              som:n?Math.round(men/n*100):-1}; }
+    /* 갭 판정 — 우선순위 오답 > 미언급 > 경쟁사 우위 > 타채널 인용 > 미인용 */
+    function geGap(cepId,eng,ym){ const s=geCepStat(cepId,eng,ym);
+      if(!s.n) return 'na';
+      if(s.err>0) return 'wrong';
+      if(s.men===0) return s.comp>0?'comp':'none';
+      if(s.cited===0 && s.other>0) return 'other';
+      if(s.cited===0) return 'nocite';
+      if(s.comp>0 && s.men<s.n/2) return 'comp';
+      return 'ok'; }
+
+    /* 엔진별 도달: 이 채널이 이 엔진 답변에 인용될 수 있는가 */
+    function geReach(chKey,eng){ const c=geChan(chKey); if(!c) return 'check';
+      return ((c.reach||{})[eng])||'check'; }
+    function geReachableChannels(cepId,eng){
+      const cep=geCep(cepId); if(!cep) return [];
+      return (cep.ch||[]).filter(k=>geReach(k,eng)!=='no'); }
+
+    /* ---------- 페이지·사이트 점검 (개선 4) ---------- */
+    function gePages(){ return ((GEO||{}).pages||[]).filter(p=>p.ok); }
+    function geHomeTitle(){ return ((gePages()[0])||{}).title||''; }
+    function geHomeDesc(){ return ((gePages()[0])||{}).desc||''; }
+    function gePageChecks(p){
+      const path=p.path||'', can=String(p.canonical||'');
+      const canSelf = !can ? null : (can.replace(/^https?:\/\/[^/]+/,'').replace(/\/$/,'')||'/')===(path.replace(/\/$/,'')||'/');
+      return [
+        {k:'title', n:'제목 고유',     ok: !!p.title && !(p.title===geHomeTitle() && path!=='/'), got:p.title||'없음'},
+        {k:'desc',  n:'요약문 80~160자', ok: (p.descLen>=80&&p.descLen<=160) && !(p.desc&&p.desc===geHomeDesc()&&path!=='/'),
+         got:(p.desc&&p.desc===geHomeDesc()&&path!=='/')?'홈과 중복':((p.descLen||0)+'자')},
+        {k:'h1',    n:'H1 정확히 1개', ok: p.h1===1, got:(p.h1||0)+'개'},
+        {k:'ld',    n:'구조화 데이터',  ok: (p.contentLd||[]).length>0, got:(p.contentLd||[]).join(',')||'없음'},
+        {k:'canon', n:'정식주소 자기자신', ok: canSelf!==false, got: can?(canSelf?'정상':'다른 주소'):'없음'},
+        {k:'chars', n:'본문 500자 이상', ok: (p.chars||0)>=500, got:(p.chars||0).toLocaleString()+'자'},
+        {k:'upd',   n:'갱신일 표기',    ok: !!p.updated, got: p.updated||'확인 필요'}
+      ]; }
+    function gePageScore(p){ const c=gePageChecks(p), pass=c.filter(x=>x.ok).length; return Math.round(pass/c.length*100); }
+    function gePagesAvg(){ const ps=gePages(); return ps.length?Math.round(ps.reduce((a,p)=>a+gePageScore(p),0)/ps.length):-1; }
+    function geSiteChecks(){ const s=(GEO||{}).site||{}, ch=((GEO||{}).channels||[]).filter(c=>c.key==='home')[0]||{};
+      const bots=['GPTBot','ClaudeBot','PerplexityBot','Google-Extended'];
+      const blocked=(ch.blocked||[]).filter(b=>bots.indexOf(b)>-1);
+      return [
+        {k:'robots',  n:'robots에서 AI 봇 허용', ok: !!s.robots && blocked.length===0,
+         got: blocked.length?('차단 '+blocked.join(',')):'허용'},
+        {k:'sitemap', n:'sitemap https',        ok: !!s.sitemap && !s.sitemapHttp, got: s.sitemap?((s.sitemapUrls||0)+'건'+(s.sitemapHttp?(' · http '+s.sitemapHttp+'건'):'')):'없음'},
+        {k:'smposts', n:'sitemap에 /guide 개별 글', ok: !!s.sitemapHasPosts, got: s.sitemapHasPosts?'포함':'미포함'},
+        {k:'llms',    n:'llms.txt 표준 형식',   ok: s.llms==='markdown', got: s.llms==='markdown'?'정상':(s.llms==='none'?'없음':'규격 밖')},
+        {k:'guide',   n:'/guide 기준 문서 운영', ok: (((GEO||{}).guide||{}).posts||0)>0, got: (((GEO||{}).guide||{}).posts||0)+'편'}
+      ]; }
+    function geSiteScore(){ const c=geSiteChecks(); return Math.round(c.filter(x=>x.ok).length/c.length*100); }
+
+    /* ---------- 인용 가능 자산 (개선 5) ---------- */
+    function geAssetRows(){
+      const g=(GEO||{}).guide||{}, blogs=(((OWNED||{}).blog)||{}).blogs||[];
+      const citedDomains={}; geAllRuns().forEach(r=>(r.cites||[]).forEach(c=>{ const d=(c.domain||c||'').toLowerCase(); if(d) citedDomains[d]=(citedDomains[d]||0)+1; }));
+      const hits=(match)=>Object.keys(citedDomains).filter(d=>d.indexOf(match)>-1).reduce((a,d)=>a+citedDomains[d],0);
+      const rows=[];
+      rows.push({n:'자사 /guide 기준 문서', cnt:g.posts||0, crawl:true, ld:(g.ldPosts||0)>0, fresh:true, cited:hits('aqaralife.kr'),
+                 note:'AI 크롤 허용 · 값의 원본'});
+      rows.push({n:'자사 홈페이지 그 외', cnt:(GEO&&GEO.pages?GEO.pages.length:0), crawl:true,
+                 ld:gePages().some(p=>(p.contentLd||[]).length), fresh:true, cited:0, note:'구조화 데이터 보강 대상'});
+      rows.push({n:'뉴스룸 글', cnt:((GEO||{}).boards||{}).newsroomPosts||0, crawl:true, ld:true, fresh:true, cited:0, note:'NewsArticle 스키마 있음'});
+      blogs.forEach(b=>{ const id=(b.id||b.url||'').replace(/.*\//,'');
+        rows.push({n:'네이버 '+(GE_NAVER_BLOGS[id]||b.name||id), cnt:b.total||(b.posts||[]).length||0,
+                   crawl:false, ld:false, fresh:true, cited:hits(id),
+                   note:'Gemini·ChatGPT 도달 불가 / Google AI·Perplexity·네이버AI 가능'}); });
+      const med=((GEO||{}).media||[]), blockedMed=med.filter(m=>(m.blocked||[]).length);
+      rows.push({n:'언론 기사(AI 허용 매체)', cnt:-1, crawl:true, ld:true, fresh:true, cited:hits('news'), note:(med.length-blockedMed.length)+'개 매체'});
+      rows.push({n:'언론 기사(AI 차단 매체)', cnt:-1, crawl:false, ld:true, fresh:true, cited:0, note:blockedMed.map(m=>m.label).join(', ')||'없음'});
+      return rows; }
+    function geAssetScore(){ const rows=geAssetRows().filter(r=>r.cnt!==-1);
+      if(!rows.length) return -1;
+      const s=rows.reduce((a,r)=>{ let v=0; if(r.crawl) v+=25; if(r.ld) v+=25; if(r.fresh) v+=25; if(r.cited>0) v+=25; return a+v; },0);
+      return Math.round(s/rows.length); }
+
+    /* ---------- 채널 운영 ---------- */
+    function geOpsRows(){
+      const blogs=(((OWNED||{}).blog)||{}).blogs||[], target=(((GEOS||{}).ops)||{}).monthlyTargetPerBlog||50;
+      return geChannels().filter(c=>c.kind==='naver').map(c=>{
+        const id=(c.host||'').replace(/.*\//,'');
+        const b=blogs.filter(x=>((x.id||x.url||'').indexOf(id)>-1))[0]||null;
+        const recent=b?geRecentCount(b,30):-1;
+        return {k:c.k, n:c.n, host:c.host, total:b?(b.total||0):-1, recent:recent, last:b?(b.latest||''):'',
+                target:target, rate: recent>=0?Math.round(recent/target*100):-1}; }); }
+    function geRecentCount(b,days){ const arr=(b.posts||[]); if(!arr.length) return -1;
+      const lim=Date.now()-days*864e5;
+      return arr.filter(p=>{ const d=new Date((p.date||p.d||'').toString().replace(/\./g,'-')); return !isNaN(d)&&d.getTime()>=lim; }).length; }
+    function geOpsScore(){ const r=geOpsRows().filter(x=>x.rate>=0); if(!r.length) return -1;
+      return Math.min(100,Math.round(r.reduce((a,x)=>a+Math.min(100,x.rate),0)/r.length)); }
+
+    /* ---------- 점수 (개선 7) ---------- */
+    function geSomScore(){ const eng=geEngines(); let n=0,men=0;
+      gePrompts().filter(p=>p.type!=='branded').forEach(p=>eng.forEach(e=>{
+        const s=geSom(p.id,e.k); if(s.n>0){ n+=s.n; men+=s.men; } }));
+      return n?Math.round(men/n*100):-1; }
+    function geScoreParts(){ const w=geW();
+      return [
+        {k:'som',   label:'AI 답변 노출(SoM)', w:w.som,   v:geSomScore()},
+        {k:'asset', label:'인용 가능 자산',    w:w.asset, v:geAssetScore()},
+        {k:'page',  label:'페이지 품질',       w:w.page,  v:gePagesAvg()},
+        {k:'site',  label:'사이트 기본기',     w:w.site,  v:geSiteScore()},
+        {k:'ops',   label:'채널 운영',         w:w.ops,   v:geOpsScore()}
+      ]; }
+    function geTotal(){ const ps=geScoreParts().filter(p=>p.v>=0);
+      if(!ps.length) return -1;
+      const tw=ps.reduce((a,p)=>a+p.w,0);
+      return Math.round(ps.reduce((a,p)=>a+p.v*p.w,0)/tw); }
+    function geGrade(v){ return v<0?{t:'미측정',c:'#8E8E93'}:(v>=80?{t:'좋음',c:'#5E7350'}:(v>=50?{t:'보통',c:'#D68134'}:{t:'미흡',c:'#BF5332'})); }
+
+    function geAllRuns(ym){ const m=GV2('m/'+(ym||geYM),{}); const out=[];
+      Object.keys(m||{}).forEach(pid=>Object.keys(m[pid]||{}).forEach(eng=>
+        Object.keys(m[pid][eng]||{}).forEach(rid=>out.push(Object.assign({pid:pid,eng:eng,id:rid},m[pid][eng][rid]||{})))));
+      return out; }
+
+    /* ---------- 측정 입력 (개선 1) ---------- */
+    function geMOpen(pid,eng){ geMForm={pid:pid||gePrompts()[0].id, eng:eng||geEngines()[0].k, raw:'', rank:'', err:0, errNote:'', senti:'neu'};
+      geSec='measure'; renderGeo(); setTimeout(()=>{ const el=document.getElementById('geMRaw'); if(el) el.focus(); },60); }
+    function geMClose(){ geMForm=null; renderGeo(); }
+    function geMSet(k,v){ if(geMForm) geMForm[k]=v; if(k==='pid'||k==='eng') renderGeo(); }
+    function geMParse(raw){
+      const urls=(String(raw||'').match(/https?:\/\/[^\s<>")\]]+/g)||[]);
+      const cites=[]; const seen={};
+      urls.forEach(u=>{ const d=(u.match(/^https?:\/\/([^/]+)/)||[])[1]||''; if(!d||seen[d+u]) return; seen[d+u]=1;
+        cites.push({url:u.slice(0,300), domain:d}); });
+      const mention=/아카라|aqara/i.test(raw)?1:0;
+      const comp=GE_COMPET.filter(c=>new RegExp(c,'i').test(raw));
+      return {cites:cites, mention:mention, comp:comp}; }
+    function geMSave(){
+      if(!geMForm) return;
+      const raw=(document.getElementById('geMRaw')||{}).value||'';
+      if(!raw.trim()){ alert('AI 답변을 붙여넣어 주세요.'); return; }
+      const p=geMParse(raw);
+      const rid='r'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      const rec={ts:Date.now(), by:(typeof TK_MENAME!=='undefined'?TK_MENAME:'')||'',
+        mention:p.mention, rank:(geMForm.rank?+geMForm.rank:0), cites:p.cites, comp:p.comp,
+        err:+geMForm.err?1:0, errNote:(geMForm.errNote||'').slice(0,300), senti:geMForm.senti||'neu',
+        raw:raw.replace(/\s+/g,' ').slice(0,1200)};
+      geSet('m/'+geYM+'/'+geMForm.pid+'/'+geMForm.eng+'/'+rid, rec);
+      const keep={pid:geMForm.pid, eng:geMForm.eng};
+      geMForm={pid:keep.pid, eng:keep.eng, raw:'', rank:'', err:0, errNote:'', senti:'neu'};
+      geGenActions(true);                       // 측정 직후 액션 재생성
+      renderGeo();
+      const el=document.getElementById('geMRaw'); if(el){ el.value=''; el.focus(); }
+    }
+    function geMDel(pid,eng,rid){ if(!confirm('이 측정 기록을 지울까요?')) return; geSet('m/'+geYM+'/'+pid+'/'+eng+'/'+rid,null); renderGeo(); }
+
+    /* ---------- 콘텐츠 액션 자동 생성 (개선 6) ---------- */
+    function geActs(){ const m=GV2('act',{}); return Object.keys(m||{}).map(id=>Object.assign({id:id},m[id]||{})); }
+    function geCalMatch(cepId,chKey){            // 캘린더에 이미 잡힌 글인지
+      const cal=GV2('cal/'+geYM,{}); const rows=Object.keys(cal||{}).map(k=>cal[k]||{});
+      const hit=rows.filter(r=>+r.cep===+cepId && (r.ch===chKey||!r.ch))[0];
+      return hit?('예정('+(hit.week||'주차미정')+')'):''; }
+    function geGapPriority(gap,ptype){
+      if(gap==='wrong') return 1;
+      if(gap==='none')  return ptype==='generic'?1:2;
+      if(gap==='comp')  return 2;
+      if(gap==='other') return 2;
+      if(gap==='nocite')return 3;
+      return 3; }
+    /* 규칙: 갭 유형 × 엔진 도달 → 채널별 액션. 이미 있는 액션(같은 CEP·채널·갭)은 다시 만들지 않는다. */
+    function geGenActions(silent){
+      if(!GEOS) return 0;
+      const exist={}; geActs().forEach(a=>{ exist[[a.cep,a.ch,a.gap].join('|')]=1; });
+      let made=0; const now=Date.now();
+      geCeps().forEach(cep=>{
+        geEngines().forEach(e=>{
+          const gap=geGap(cep.id,e.k);
+          if(gap==='ok') return;
+          const measured=(gap!=='na');
+          const g=(gap==='na')?'none':gap;                    // 미측정이면 '미언급' 가정으로 초기 백로그
+          const chs=geReachableChannels(cep.id,e.k);
+          chs.forEach(chKey=>{
+            const ch=geChan(chKey); if(!ch) return;
+            const isOwn=(chKey==='own'||chKey==='ownsite');
+            if((g==='nocite'||g==='other') && !isOwn) return;  // 이 갭은 자사 기준 문서로만 해결
+            const key=[cep.id,chKey,g].join('|'); if(exist[key]) return;
+            const type=isOwn
+              ? (g==='comp'?'비교':(g==='wrong'?'기준 문서':(g==='nocite'?'FAQ':'기준 문서')))
+              : (cep.types||[]).slice(-1)[0]||'실사용 기록';
+            const title=geDraftTitle(cep,chKey,g,type);
+            const id='a'+now.toString(36)+Math.random().toString(36).slice(2,6)+made;
+            geSet('act/'+id,{kind:'content', ch:chKey, cep:cep.id, type:type, title:title,
+              kws:(cep.kw||[]).slice(0,4).join(', '), gap:g, eng:e.k,
+              why:(measured?('측정: '+geEngines().filter(x=>x.k===e.k)[0].n+' · '+GE_GAPS[g].n)
+                          :'첫 달 초기 백로그(측정 전, 미언급 가정)'),
+              owner:'', due:'', pri:'P'+geGapPriority(g,'generic'), st:'todo',
+              url:'', cal:geCalMatch(cep.id,chKey), auto:1, ts:now});
+            exist[key]=1; made++;
+          });
         });
-      }catch(e){}
-      try{ const bs=((OWNED||{}).blog||{}).blogs||[]; out.blog=bs.reduce((a,b)=>a+(b.total||(b.posts||[]).length||0),0); }catch(e){}
-      try{ out.youtube=(((OWNED||{}).youtube||{}).channel||{}).videos||0; }catch(e){}
-      const bd=(GEO||{}).boards||{}; out.homePosts=(bd.blogPosts||0)+(bd.newsroomPosts||0);
-      return out;
-    }
+      });
+      if(!silent) alert(made?(made+'건의 콘텐츠 액션을 만들었습니다.'):'새로 만들 액션이 없습니다(이미 모두 있음).');
+      return made; }
+    function geDraftTitle(cep,chKey,gap,type){
+      const kw=(cep.kw||[])[0]||cep.sit;
+      if(chKey==='own'||chKey==='ownsite'){
+        if(gap==='wrong')  return '['+kw+'] 정확한 스펙·조건 기준 문서(표+FAQ)';
+        if(gap==='comp')   return '['+kw+'] 조건별 선택 가이드 — 어떤 경우에 무엇을 고르나';
+        if(gap==='nocite') return '['+kw+'] 자주 묻는 질문 10개 + 한 줄 정의';
+        if(gap==='other')  return '['+kw+'] 기준 문서 — 언론·커뮤니티에 흩어진 답을 한 곳에';
+        return '['+kw+'] '+cep.sit+' 기준 가이드(스펙표·설치 조건·FAQ)';
+      }
+      if(chKey==='nofficial') return '['+kw+'] 시공 사례와 설치 방법 정리';
+      return '['+kw+'] '+(type==='실험기'?'직접 연동해 본 기록':'한 달 써 본 기록')+' (제품 제공 표기)'; }
+    function geActSet(id,f,v){ geSet('act/'+id+'/'+f,v); }
+    function geActDel(id){ if(!confirm('이 액션을 지울까요?')) return; geSet('act/'+id,null); renderGeo(); }
+    function geActAdd(){ const id='a'+Date.now().toString(36);
+      geSet('act/'+id,{kind:'content', ch:'own', cep:1, type:'기준 문서', title:'', kws:'', gap:'none',
+        why:'직접 추가', owner:'', due:'', pri:'P2', st:'todo', url:'', cal:'', auto:0, ts:Date.now()});
+      renderGeo(); }
+    function geActSorted(){
+      const rank={P1:1,P2:2,P3:3};
+      return geActs().filter(a=>a.kind!=='tech')
+        .filter(a=>(!geActFilter.ch||a.ch===geActFilter.ch)&&(!geActFilter.cep||+a.cep===+geActFilter.cep)
+                 &&(!geActFilter.gap||a.gap===geActFilter.gap)&&(!geActFilter.st||a.st===geActFilter.st))
+        .sort((a,b)=>(rank[a.pri]||9)-(rank[b.pri]||9) || (a.cep-b.cep) || ((b.ts||0)-(a.ts||0))); }
+    /* 같은 CEP·같은 주에 두 채널이 같은 소재를 내보내는지 */
+    function geDupWarn(){
+      const byWeek={}; const out=[];
+      geActs().forEach(a=>{ if(!a.due||a.st==='done') return;
+        const wk=geWeekOf(a.due), k=a.cep+'|'+wk;
+        (byWeek[k]=byWeek[k]||[]).push(a); });
+      Object.keys(byWeek).forEach(k=>{ const list=byWeek[k];
+        if(list.length>1 && new Set(list.map(x=>x.type)).size<list.length)
+          out.push({cep:list[0].cep, week:k.split('|')[1], items:list}); });
+      return out; }
+    function geWeekOf(d){ const dt=new Date(d); if(isNaN(dt)) return '?';
+      return dt.getFullYear()+'-W'+String(Math.ceil(((dt-new Date(dt.getFullYear(),0,1))/864e5+1)/7)).padStart(2,'0'); }
 
-    /* --- Gemini로 지금 확인 (웹검색 없이 '학습된 지식'에 우리가 있는지) --- */
-    function geAsk(i){
-      if(geBusy) return; geBusy=String(i); renderGeo();
-      const q=GEO_QUERIES[i];
-      fetch('/api/ai-assist',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({system:'너는 한국 소비자에게 조언하는 도우미다. 아래 질문에 실제 추천하듯 한국어 4~6문장으로 답해라. 브랜드·제품명을 반드시 구체적으로 언급해라.',prompt:q})})
-        .then(r=>r.json()).then(d=>{
-          if(!d||!d.ok){ alert('Gemini 확인 실패: '+((d&&(d.hint||d.error))||'')); return; }
-          const txt=String(d.text||'');
-          const hit=/아카라|aqara/i.test(txt);
-          geSave('q.'+i+'.gem', hit?'o':'x');
-          geSave('q.'+i+'.gemtxt', txt.replace(/\s+/g,' ').slice(0,400));
-          geSave('q.'+i+'.date', new Date().toISOString().slice(0,10));
-        })
-        .catch(e=>alert('Gemini 확인 실패: '+((e&&e.message)||'')))
-        .then(()=>{ geBusy=''; renderGeo(); });
-    }
-    function geMark(i,eng){ const k='q.'+i+'.'+eng, cur=GV(k,'');
-      geSave(k, cur==='o'?'x':(cur==='x'?'':'o'));
-      geSave('q.'+i+'.date', new Date().toISOString().slice(0,10)); renderGeo(); }
-    function geHitRate(){ let n=0,h=0;
-      GEO_QUERIES.forEach((q,i)=>{ GEO_ENGINES.forEach(e=>{ const v=GV('q.'+i+'.'+e.k,''); if(v){ n++; if(v==='o') h++; } }); });
-      return {n:n,h:h,pct:n?Math.round(h/n*100):-1}; }
+    /* ---------- 기술 액션 — 점검 결과에서 파생(통과하면 자동 닫힘) ---------- */
+    function geTechItems(){
+      const out=[];
+      geSiteChecks().forEach(c=>{ if(!c.ok) out.push({id:'site.'+c.k, area:'사이트', what:c.n, got:c.got,
+        fix:({robots:'robots.txt에서 해당 봇 허용', sitemap:'sitemap 주소를 https로',
+              smposts:'sitemap에 /guide 개별 글 포함', llms:'llms.txt를 마크다운 표준 형식으로 재작성',
+              guide:'/guide에 기준 문서 발행 시작'})[c.k]||'수정'}); });
+      gePages().forEach(p=>{ gePageChecks(p).forEach(c=>{ if(!c.ok) out.push({id:'page.'+p.path+'.'+c.k,
+        area:'페이지', what:p.label+' — '+c.n, got:c.got,
+        fix:({title:'페이지 제목 따로 지정', desc:'요약문 80~160자로 작성', h1:'H1 1개 지정',
+              ld:'JSON-LD(Organization·Product·FAQPage·Article) 추가', canon:'canonical을 자기 주소로',
+              chars:'본문 보강(500자 이상)', upd:'갱신일 표기 추가'})[c.k]||'수정'}); }); });
+      return out; }
+    function geTechRows(){ return geTechItems().map(t=>Object.assign({},t,{
+      owner:GV2('tech/'+geTechKey(t.id)+'/owner',''), due:GV2('tech/'+geTechKey(t.id)+'/due',''),
+      memo:GV2('tech/'+geTechKey(t.id)+'/memo','')})); }
+    function geTechKey(id){ return String(id).replace(/[.#$/\[\]]/g,'_'); }
+    function geTechSet(id,f,v){ geSet('tech/'+geTechKey(id)+'/'+f,v); }
 
-    function geBotBadge(list){ list=list||[];
-      return list.length
-        ? `<span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full" style="background:#FDECEA;color:#BF5332">AI 차단 ${list.length}종</span>`
-        : `<span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full" style="background:#EDF5E9;color:#5E7350">AI 접근 허용</span>`; }
+    /* ---------- 스냅샷 (개선 7) ---------- */
+    function geSnapNow(){
+      const parts=geScoreParts(), runs=geAllRuns(), acts=geActs();
+      const share={}; runs.forEach(r=>(r.cites||[]).forEach(c=>{ const b=geDomainBucket(c.domain||c); share[b]=(share[b]||0)+1; }));
+      const snap={ym:geYM, ts:Date.now(), total:geTotal(),
+        parts:parts.reduce((o,p)=>{ o[p.k]=p.v; return o; },{}),
+        runs:runs.length, share:share,
+        actDone:acts.filter(a=>a.st==='done').length, actAll:acts.length};
+      geSet('snap/'+geYM,snap); renderGeo();
+      alert(geYM+' 스냅샷을 저장했습니다.'); }
+    function geSnaps(){ const m=GV2('snap',{}); return Object.keys(m||{}).sort().map(k=>m[k]); }
+
+    /* ===================== GEO 화면 ===================== */
+    const GE_SECS=[{k:'overview',n:'요약·점수'},{k:'measure',n:'AI 답변 측정'},{k:'gap',n:'갭 진단'},
+                   {k:'action',n:'액션(무슨 글을 쓸까)'},{k:'channel',n:'채널·엔진 도달'},{k:'page',n:'페이지·사이트'}];
+    function geGo(s){ geSec=s; renderGeo(); window.scrollTo({top:0,behavior:'smooth'}); }
+    function geSetYM(v){ if(v) geYM=v; renderGeo(); }
+    function geBadge(v,unit){ return v<0?'<span class="text-slate-400">N/A</span>':(v+(unit||'')); }
+    function gePill(gap){ const g=GE_GAPS[gap]||GE_GAPS.na;
+      return '<span class="text-[10.5px] font-bold px-1.5 py-0.5 rounded" style="background:'+g.c+'18;color:'+g.c+'">'+g.n+'</span>'; }
 
     function renderGeo(){
       const box=document.getElementById('geoBody'); if(!box) return;
-      if(!GEO){ box.innerHTML=`<div class="card p-8 text-center text-slate-400 text-sm">
-        ${GEO_ERR?('⚠️ geo.json을 불러오지 못했습니다 — '+esc(GEO_ERR)):'GEO 현황을 불러오는 중…'}</div>`; return; }
-
-      const pages=(GEO.pages||[]).filter(p=>p.ok), site=GEO.site||{}, chs=GEO.channels||[], med=GEO.media||[];
-      const tot=geTotal(), g=geGrade(tot), pAvg=gePagesAvg(), sScore=geSiteScore(), as=geAssets(), hr=geHitRate();
-      const medBlocked=med.filter(m=>(m.blocked||[]).length);
+      if(!GEO||!GEOS){ box.innerHTML='<div class="card p-8 text-center text-slate-400 text-sm">'
+        +(GEO_ERR?('⚠️ 데이터를 불러오지 못했습니다 — '+esc(GEO_ERR)):'GEO 데이터를 불러오는 중…')+'</div>'; return; }
       const conn=(typeof wkUseFB==='function'&&wkUseFB())&&!GE_FBERR
-        ? '<span class="text-[11.5px] font-semibold text-agreen">🟢 점검 결과·액션은 팀과 실시간 공유됩니다</span>'
-        : '<span class="text-[11.5px] font-semibold text-ared">⚠️ 서버 미연결 — 지금 적는 내용은 이 브라우저에만 저장됩니다</span>';
+        ? '<span class="text-[11.5px] font-semibold text-agreen">🟢 측정·액션이 팀과 실시간 공유됩니다</span>'
+        : '<span class="text-[11.5px] font-semibold text-ared">⚠️ 서버 미연결 — 이 브라우저에만 저장됩니다</span>';
+      const nav=GE_SECS.map(s=>`<button onclick="geGo('${s.k}')" class="px-3 py-1.5 rounded-full text-[12.5px] whitespace-nowrap transition ${geSec===s.k?'bg-ink text-white font-semibold':'text-slate-500 hover:text-ink font-medium border border-[#E6E6E3]'}">${s.n}</button>`).join('');
 
-      const kpi=(label,val,sub,color)=>`<div class="rounded-xl border border-[#E6E6E3] bg-white p-4">
-        <p class="text-[11.5px] font-bold text-slate-400">${label}</p>
-        <p class="text-[26px] font-extrabold num leading-none mt-1" style="color:${color||'#26282A'}">${val}</p>
-        <p class="text-[11.5px] text-slate-500 mt-1.5 leading-snug">${sub}</p></div>`;
-
-      /* ① 요약 */
-      const sec1=`
-      <div class="card p-5 mb-4 border-l-4" style="border-left-color:#26282A">
+      box.innerHTML=`
+      <div class="card p-4 mb-3 border-l-4" style="border-left-color:#26282A">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div class="min-w-0">
-            <h2 class="text-xl font-extrabold text-ink">🤖 GEO 현황 <span class="text-[13px] font-semibold text-slate-400">생성형 엔진 최적화 · 우리가 손댈 수 있는 것만</span></h2>
-            <p class="text-[13px] text-slate-500 mt-1.5 leading-relaxed">
-              사람이 검색 대신 <b class="text-ink">ChatGPT·Perplexity·Gemini·네이버 AI</b>에게 물어보는 흐름에 대비해,
-              <b class="text-ink">AI가 우리 콘텐츠를 읽을 수 있는지</b>와 <b class="text-ink">읽고 인용할 만한 형태인지</b>를 매일 점검합니다.
-              대상은 <b>홈페이지 · PR · 온드미디어</b> 세 영역입니다.</p>
-            <p class="text-[11.5px] text-slate-400 mt-1.5">측정 ${esc(String(GEO.generatedAt||'').slice(0,16).replace('T',' '))}${GEO.seed?' · 최초 측정본(이후 매일 자동 갱신)':''} · ${conn}</p>
+            <h2 class="text-xl font-extrabold text-ink">🤖 GEO 운영 대시보드
+              <span class="text-[13px] font-semibold text-slate-400">AI 답변에 나오는가 → 안 나오면 무슨 글을 쓸까</span></h2>
+            <p class="text-[12px] text-slate-400 mt-1">크롤 ${esc(String(GEO.generatedAt||'').slice(0,16).replace('T',' '))} · 기준 데이터 ${esc((GEOS||{}).version||'')} · ${conn}</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-[11.5px] font-bold text-slate-500">측정 월</label>
+            <input type="month" value="${geYM}" onchange="geSetYM(this.value)" class="text-[12.5px] border border-[#E6E6E3] rounded-lg px-2 py-1" />
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3">${nav}</div>
+      </div>
+      ${geSec==='overview'?geSecOverview():''}
+      ${geSec==='measure' ?geSecMeasure():''}
+      ${geSec==='gap'     ?geSecGap():''}
+      ${geSec==='action'  ?geSecAction():''}
+      ${geSec==='channel' ?geSecChannel():''}
+      ${geSec==='page'    ?geSecPage():''}
+      <div class="h-10"></div>`;
+      try{ if(typeof wkPresenceStart==='function') wkPresenceStart(); }catch(e){}
+    }
+
+    /* ---------- ① 요약·점수 ---------- */
+    function geSecOverview(){
+      const tot=geTotal(), g=geGrade(tot), parts=geScoreParts(), na=parts.filter(p=>p.v<0);
+      const runs=geAllRuns().length, acts=geActs(), done=acts.filter(a=>a.st==='done').length;
+      const gaps={}; geCeps().forEach(c=>geEngines().forEach(e=>{ const k=geGap(c.id,e.k); gaps[k]=(gaps[k]||0)+1; }));
+      const snaps=geSnaps();
+      const kpi=(l,v,s,c)=>`<div class="rounded-xl border border-[#E6E6E3] bg-white p-4">
+        <p class="text-[11.5px] font-bold text-slate-400">${l}</p>
+        <p class="text-[24px] font-extrabold num leading-none mt-1" style="color:${c||'#26282A'}">${v}</p>
+        <p class="text-[11.5px] text-slate-500 mt-1.5 leading-snug">${s}</p></div>`;
+      return `
+      <div class="card p-5 mb-4">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0 flex-1">
+            <h3 class="accent font-extrabold text-ink mb-1">종합 GEO 점수</h3>
+            <p class="text-[12.5px] text-slate-500">항목별 점수와 가중치를 그대로 공개합니다. ${na.length?`<b class="text-ared">${na.map(p=>p.label).join('·')}는 미측정(N/A)이라 계산에서 빼고 나머지를 100으로 환산했습니다.</b>`:''}</p>
+            <button onclick="geScoreOpen=!geScoreOpen;renderGeo()" class="text-[12px] font-bold text-[#5B44C7] hover:underline mt-2">${geScoreOpen?'▲ 산식 접기':'▼ 산식 펼치기'}</button>
+            ${geScoreOpen?`<table class="w-full mt-2 text-[12.5px]">
+              <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
+                <th class="px-2 py-1.5 text-left">항목</th><th class="px-2 py-1.5 text-right">점수</th>
+                <th class="px-2 py-1.5 text-right">가중치</th><th class="px-2 py-1.5 text-right">반영</th>
+                <th class="px-2 py-1.5 text-left">산출 방법</th></tr></thead>
+              <tbody>${parts.map(p=>`<tr class="border-b border-[#F2EFE9]">
+                <td class="px-2 py-1.5 font-semibold text-ink">${p.label}</td>
+                <td class="px-2 py-1.5 text-right num">${geBadge(p.v,'점')}</td>
+                <td class="px-2 py-1.5 text-right num text-slate-400">${p.w}</td>
+                <td class="px-2 py-1.5 text-right num">${p.v<0?'<span class="text-ared font-bold">제외</span>':Math.round(p.v*p.w/100)+'점'}</td>
+                <td class="px-2 py-1.5 text-slate-500">${({som:'프롬프트 35개 × 엔진 5개 측정에서 우리 브랜드 언급 비율',
+                  asset:'자산별 (크롤 허용·구조화 데이터·최근 갱신·실제 인용) 4요소 평균',
+                  page:'페이지별 7개 통과 항목 비율의 평균',
+                  site:'robots·sitemap·/guide 색인·llms.txt·기준 문서 운영 5개',
+                  ops:'네이버 4블로그 월 목표(50편) 대비 최근 30일 발행'})[p.k]}</td></tr>`).join('')}</tbody></table>`:''}
           </div>
           <div class="text-center shrink-0 rounded-2xl px-5 py-3" style="background:${g.c}12;border:1px solid ${g.c}33">
-            <p class="text-[11px] font-bold" style="color:${g.c}">종합 GEO 점수</p>
-            <p class="text-[34px] font-extrabold num leading-none" style="color:${g.c}">${tot}<span class="text-[15px]">/100</span></p>
+            <p class="text-[11px] font-bold" style="color:${g.c}">종합</p>
+            <p class="text-[34px] font-extrabold num leading-none" style="color:${g.c}">${tot<0?'N/A':tot}${tot<0?'':'<span class="text-[15px]">/100</span>'}</p>
             <p class="text-[12px] font-bold mt-0.5" style="color:${g.c}">${g.t}</p>
           </div>
         </div>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
-          ${kpi('페이지 품질 평균', pAvg+'점', '제목·요약문·H1·구조화데이터 4개 항목', geGrade(pAvg).c)}
-          ${kpi('사이트 기본기', sScore+'점', 'robots·sitemap·llms.txt·글 색인', geGrade(sScore).c)}
-          ${kpi('AI가 읽을 수 있는 우리 글', as.homePosts+'건', '홈페이지 블로그·뉴스룸 (네이버 블로그는 AI 차단)', as.homePosts<20?'#BF5332':'#5E7350')}
-          ${kpi('AI 답변 노출률', hr.pct<0?'미점검':hr.pct+'%', hr.pct<0?'아래에서 질문별로 확인해 주세요':(hr.h+'/'+hr.n+' 응답에서 아카라 언급'), hr.pct<0?'#8E8E93':geGrade(hr.pct).c)}
-        </div>
-        <div class="mt-4 rounded-xl p-4" style="background:#FFF8E7;border:1px solid #F2E3B8">
-          <p class="text-[13px] font-extrabold text-[#8A6A00] mb-1">한 줄 요약</p>
-          <p class="text-[13px] text-slate-700 leading-relaxed">
-            <b>네이버 블로그·네이버 뉴스는 AI 크롤러를 전면 차단</b>합니다. 거기 쌓은 글은 ChatGPT·Perplexity·Claude·Gemini 답변에 인용되지 않습니다.
-            반대로 <b>우리 홈페이지는 AI 접근이 열려 있는데</b> 제목·요약문·구조화 데이터가 비어 있어 읽혀도 인용되기 어려운 상태입니다.
-            → <b>홈페이지를 GEO 기지로 정비하고, 네이버에만 있는 콘텐츠를 홈페이지로 옮기는 것</b>이 1순위입니다.</p>
-        </div>
-      </div>`;
+      </div>
 
-      /* ② 채널별 AI 접근 */
-      const chCard=c=>{ const blocked=(c.blocked||[]).length;
-        return `<div class="rounded-xl border ${blocked?'border-[#F0C9C0]':'border-[#E6E6E3]'} bg-white p-4">
-          <div class="flex items-center justify-between gap-2">
-            <p class="text-[13.5px] font-extrabold text-ink">${esc(c.label)}
-              ${c.own?'<span class="text-[10px] font-bold px-1.5 py-0.5 rounded ml-1" style="background:#EDE9FF;color:#5B44C7">직접 관리</span>':''}</p>
-            ${geBotBadge(c.blocked)}
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+        ${kpi('AI 답변 측정', runs?(runs+'회'):'미측정', runs?(geYM+' 기록 · SoM '+geBadge(geSomScore(),'%')):'아래 [AI 답변 측정]에서 기록을 시작하세요', runs?'#26282A':'#BF5332')}
+        ${kpi('갭이 있는 CEP×엔진', (75-(gaps.ok||0)-(gaps.na||0))+'건', '오답 '+(gaps.wrong||0)+' · 미언급 '+(gaps.none||0)+' · 경쟁사 '+(gaps.comp||0)+' · 미측정 '+(gaps.na||0), '#D68134')}
+        ${kpi('콘텐츠 액션', acts.length?(done+'/'+acts.length):'0', acts.length?'완료/전체':'[액션] 탭에서 생성하세요', '#5B44C7')}
+        ${kpi('AI가 읽을 수 있는 자사 글', (((GEO.guide||{}).posts||0)+(((GEO.boards||{})).newsroomPosts||0))+'건', '/guide '+((GEO.guide||{}).posts||0)+' · 뉴스룸 '+((GEO.boards||{}).newsroomPosts||0), '#5E7350')}
+      </div>
+
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-2">월별 추이 <span class="text-[11px] font-normal text-slate-400">(매월 마지막에 스냅샷 저장)</span></h3>
+        ${snaps.length?`<div class="overflow-x-auto"><table class="w-full min-w-[620px] text-[12.5px]">
+          <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
+            <th class="px-2 py-1.5 text-left">월</th><th class="px-2 py-1.5 text-right">종합</th><th class="px-2 py-1.5 text-right">SoM</th>
+            <th class="px-2 py-1.5 text-right">자산</th><th class="px-2 py-1.5 text-right">페이지</th><th class="px-2 py-1.5 text-right">기본기</th>
+            <th class="px-2 py-1.5 text-right">측정</th><th class="px-2 py-1.5 text-right">액션완료</th></tr></thead>
+          <tbody>${snaps.map(s=>`<tr class="border-b border-[#F2EFE9]">
+            <td class="px-2 py-1.5 font-semibold">${esc(s.ym||'')}</td>
+            <td class="px-2 py-1.5 text-right num font-bold">${geBadge(s.total)}</td>
+            <td class="px-2 py-1.5 text-right num">${geBadge((s.parts||{}).som,'%')}</td>
+            <td class="px-2 py-1.5 text-right num">${geBadge((s.parts||{}).asset)}</td>
+            <td class="px-2 py-1.5 text-right num">${geBadge((s.parts||{}).page)}</td>
+            <td class="px-2 py-1.5 text-right num">${geBadge((s.parts||{}).site)}</td>
+            <td class="px-2 py-1.5 text-right num">${s.runs||0}회</td>
+            <td class="px-2 py-1.5 text-right num">${s.actDone||0}/${s.actAll||0}</td></tr>`).join('')}</tbody></table></div>`
+          :'<p class="text-[12.5px] text-slate-400">아직 저장된 스냅샷이 없습니다.</p>'}
+        <button onclick="geSnapNow()" class="mt-3 text-[12.5px] font-bold border border-[#E6E6E3] hover:bg-[#FAFAF9] px-3 py-1.5 rounded-lg">${geYM} 스냅샷 저장</button>
+      </div>
+
+      <div class="card p-5 mb-4" style="background:#FFF8E7;border:1px solid #F2E3B8">
+        <h3 class="font-extrabold text-[#8A6A00] mb-1">확인 필요 <span class="text-[11px] font-normal">(추정으로 쓰지 않고 비워 둔 값)</span></h3>
+        <ul class="text-[12.5px] text-slate-600 leading-relaxed list-disc pl-5">
+          ${((GEOS||{}).unknowns||[]).map(u=>`<li>${esc(u)}</li>`).join('')}
+        </ul>
+      </div>`;
+    }
+
+    /* ---------- ② AI 답변 측정 ---------- */
+    function geSecMeasure(){
+      const eng=geEngines(), ps=gePrompts(), runs=geAllRuns();
+      const minRuns=(((GEOS||{}).ops)||{}).minRunsPerPrompt||5;
+      const share={}; runs.forEach(r=>(r.cites||[]).forEach(c=>{ const b=geDomainBucket(c.domain||c); share[b]=(share[b]||0)+1; }));
+      const shareTot=Object.keys(share).reduce((a,k)=>a+share[k],0);
+      const errs=runs.filter(r=>+r.err===1);
+      const f=geMForm;
+      return `
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">AI 답변 측정 <span class="text-[11px] font-normal text-slate-400">${geYM} · 프롬프트 35개 × 엔진 5개</span></h3>
+        <p class="text-[12.5px] text-slate-500 mb-1">각 엔진에서 질문을 던지고 <b>답변 전문을 붙여넣으면</b> 인용 URL·경쟁사 언급을 자동으로 뽑아 기록합니다.
+          질문당 <b>월 ${minRuns}회 이상</b> 반복해야 노출률로 씁니다(1회로 판정하지 않습니다).</p>
+        <p class="text-[11.5px] text-ared mb-3">※ 검색이 꺼진 모델은 측정하지 않습니다 — ChatGPT·Gemini는 <b>검색(그라운딩) 켠 상태</b>의 답변만 붙여넣어 주세요.</p>
+        ${f?`
+        <div class="rounded-xl border-2 border-ink p-4 mb-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 mb-2.5">
+            <div><label class="block text-[11px] font-bold text-slate-500 mb-1">질문</label>
+              <select onchange="geMSet('pid',this.value)" class="w-full text-[12.5px] border border-[#E6E6E3] rounded-lg px-2 py-2">
+                ${ps.map(p=>`<option value="${p.id}" ${f.pid===p.id?'selected':''}>${p.id} · ${esc(p.q.slice(0,40))}</option>`).join('')}</select></div>
+            <div><label class="block text-[11px] font-bold text-slate-500 mb-1">엔진</label>
+              <select onchange="geMSet('eng',this.value)" class="w-full text-[12.5px] border border-[#E6E6E3] rounded-lg px-2 py-2">
+                ${eng.map(e=>`<option value="${e.k}" ${f.eng===e.k?'selected':''}>${e.n}</option>`).join('')}</select></div>
+            <div><label class="block text-[11px] font-bold text-slate-500 mb-1">우리 브랜드 언급 순서 <span class="font-normal text-slate-400">(몇 번째, 모르면 0)</span></label>
+              <input value="${esc(f.rank||'')}" onchange="geMSet('rank',this.value)" placeholder="0" class="w-full text-[12.5px] border border-[#E6E6E3] rounded-lg px-2 py-2" /></div>
           </div>
-          <p class="text-[11px] text-slate-400 mt-1">${esc(c.host)} · ${esc(c.area||'')}</p>
-          <p class="text-[12px] mt-2 leading-relaxed ${blocked?'text-[#BF5332]':'text-slate-500'}">
-            ${blocked
-              ? '차단: '+esc((c.blocked||[]).join(', '))+'<br/>→ 이 채널 콘텐츠는 외부 AI 답변에 <b>인용되지 않습니다</b>.'
-              : '주요 AI 크롤러를 막고 있지 않습니다 — 잘 쓰면 인용될 수 있는 채널입니다.'}</p>
-        </div>`; };
-      const sec2=`
-      <div class="card p-5 mb-4">
-        <h3 class="accent font-extrabold text-ink mb-1">① 채널별 AI 접근 현황 <span class="text-[11px] font-normal text-slate-400">(robots.txt 실측 · 매일 갱신)</span></h3>
-        <p class="text-[12px] text-slate-400 mb-3">AI가 그 사이트를 <b>읽어갈 수 있는지</b>부터가 GEO의 출발점입니다. 막혀 있으면 콘텐츠 품질과 무관하게 인용되지 않습니다.</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">${chs.map(chCard).join('')}</div>
-      </div>`;
+          <p class="text-[11.5px] font-bold text-slate-500 mb-1">질문 전문 <span class="font-normal text-slate-400">— 이대로 복사해서 물어보세요</span></p>
+          <p class="text-[12.5px] text-ink bg-[#FAFAF9] border border-[#EFEFEC] rounded-lg px-3 py-2 mb-2.5">${esc((ps.filter(p=>p.id===f.pid)[0]||{}).q||'')}</p>
+          <label class="block text-[11px] font-bold text-slate-500 mb-1">AI 답변 붙여넣기 <span class="font-normal text-slate-400">(근거 링크까지 함께)</span></label>
+          <textarea id="geMRaw" rows="7" class="w-full text-[12.5px] border border-[#E6E6E3] rounded-lg px-3 py-2" placeholder="답변 전문과 출처 URL을 그대로 붙여넣으세요"></textarea>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 mt-2.5">
+            <div><label class="block text-[11px] font-bold text-slate-500 mb-1">설명 오류(스펙·가격·정책)</label>
+              <select onchange="geMSet('err',this.value)" class="w-full text-[12.5px] border border-[#E6E6E3] rounded-lg px-2 py-2">
+                <option value="0" ${!+f.err?'selected':''}>없음</option><option value="1" ${+f.err?'selected':''}>있음(오답)</option></select></div>
+            <div class="md:col-span-2"><label class="block text-[11px] font-bold text-slate-500 mb-1">오답 내용</label>
+              <input value="${esc(f.errNote||'')}" onchange="geMSet('errNote',this.value)" placeholder="예: M3가 Thread 미지원이라고 설명함" class="w-full text-[12.5px] border border-[#E6E6E3] rounded-lg px-2 py-2" /></div>
+          </div>
+          <div class="flex justify-end gap-2 mt-3">
+            <button onclick="geMClose()" class="text-[12.5px] border border-[#E6E6E3] hover:bg-[#FAFAF9] px-3.5 py-2 rounded-lg">닫기</button>
+            <button onclick="geMSave()" class="text-[12.5px] font-bold bg-ink text-white hover:brightness-125 px-4 py-2 rounded-lg">기록 저장(계속 입력)</button>
+          </div>
+        </div>`:`<button onclick="geMOpen()" class="text-[13px] font-bold bg-ink text-white hover:brightness-125 px-3.5 py-2 rounded-lg mb-4">＋ 측정 기록 추가</button>`}
 
-      /* ③ 홈페이지 페이지 점검 */
-      const cell=(ok,txt)=>`<td class="px-2 py-2 text-[12px] ${ok?'text-slate-600':'text-[#BF5332] font-bold'}">${txt}</td>`;
-      const rows=pages.map(p=>{ const sc=gePageScore(p), gg=geGrade(sc), gen=geGenericTitle(p);
-        const canonBad=p.canonical && p.path!=='/' && !(p.canonical.replace(/^https?:\/\/[^/]+/,'')===p.path);
-        return `<tr class="border-b border-[#F2EFE9] hover:bg-[#FAFAF9]">
-          <td class="px-2 py-2 whitespace-nowrap">
-            <a href="${esc(p.url)}" target="_blank" rel="noopener" class="text-[12.5px] font-semibold text-ink hover:underline">${esc(p.label)}</a>
-            <span class="text-[10px] font-bold ml-1 px-1.5 py-0.5 rounded" style="background:${GEO_KINDC[p.kind]||'#6E6E73'}15;color:${GEO_KINDC[p.kind]||'#6E6E73'}">${esc(GEO_KIND[p.kind]||p.kind||'')}</span>
-          </td>
-          ${cell(!gen&&!!p.title, gen?'중복 제목':(p.title?esc(p.title.slice(0,26)):'없음'))}
-          ${cell((p.descLen||0)>=50 && !geGenericDesc(p), geGenericDesc(p)?'중복 요약문':((p.descLen||0)?(p.descLen+'자'):'없음'))}
-          ${cell(p.h1===1, (p.h1||0)+'개')}
-          ${cell((p.contentLd||[]).length>0, (p.contentLd||[]).length?esc((p.contentLd||[]).join(', ')):'없음')}
-          ${cell(!canonBad, canonBad?'다른 주소':'정상')}
-          <td class="px-2 py-2 text-right"><span class="text-[12.5px] font-extrabold num" style="color:${gg.c}">${sc}</span></td>
-        </tr>`; }).join('');
-      const sec3=`
-      <div class="card p-5 mb-4">
-        <h3 class="accent font-extrabold text-ink mb-1">② 홈페이지 페이지별 점검 <span class="text-[11px] font-normal text-slate-400">(${pages.length}개 페이지 · 매일 자동)</span></h3>
-        <p class="text-[12px] text-slate-400 mb-3">AI는 <b>제목·요약문(description)·H1·구조화 데이터</b>로 페이지가 무슨 내용인지 판단합니다. 각 25점씩입니다.</p>
         <div class="overflow-x-auto">
-          <table class="w-full min-w-[720px]">
+          <table class="w-full min-w-[860px] text-[12px]">
             <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
-              <th class="px-2 py-2 text-left">페이지</th><th class="px-2 py-2 text-left">제목</th>
-              <th class="px-2 py-2 text-left">요약문</th><th class="px-2 py-2 text-left">H1</th>
-              <th class="px-2 py-2 text-left">구조화 데이터</th><th class="px-2 py-2 text-left">정식주소</th>
-              <th class="px-2 py-2 text-right">점수</th></tr></thead>
-            <tbody>${rows}</tbody>
+              <th class="px-2 py-2 text-left">질문</th><th class="px-2 py-2 text-left">유형</th><th class="px-2 py-2 text-center">CEP</th>
+              ${eng.map(e=>`<th class="px-2 py-2 text-center">${e.short}</th>`).join('')}
+              <th class="px-2 py-2 text-right">합계</th></tr></thead>
+            <tbody>${ps.map(p=>{
+              let tn=0,tm=0;
+              const cells=eng.map(e=>{ const s=geSom(p.id,e.k); tn+=s.n; tm+=s.men;
+                const col=s.n===0?'#8E8E93':(s.som>=50?'#5E7350':(s.som>0?'#D68134':'#BF5332'));
+                return `<td class="px-2 py-1.5 text-center">
+                  <button onclick="geMOpen('${p.id}','${e.k}')" class="hover:underline" title="${s.n}회 측정 · 언급 ${s.men} · 우리 문서 인용 ${s.cited}">
+                    <span class="font-bold num" style="color:${col}">${s.n===0?'—':(s.som+'%')}</span>
+                    <span class="text-[10px] text-slate-400 block">${s.n?('n='+s.n+(s.n<minRuns?' ⚠':'')):'미측정'}</span></button></td>`; }).join('');
+              return `<tr class="border-b border-[#F2EFE9] hover:bg-[#FAFAF9]">
+                <td class="px-2 py-1.5"><span class="font-mono text-[10.5px] text-slate-400">${p.id}</span> ${esc(p.q.slice(0,38))}${p.q.length>38?'…':''}</td>
+                <td class="px-2 py-1.5 text-slate-400">${p.type==='generic'?'일반':(p.type==='conditional'?'조건':'브랜드')}</td>
+                <td class="px-2 py-1.5 text-center text-slate-400">${p.cep}</td>
+                ${cells}
+                <td class="px-2 py-1.5 text-right font-bold num">${tn?Math.round(tm/tn*100)+'%':'—'}</td></tr>`; }).join('')}</tbody>
           </table>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
-          <div class="rounded-xl border border-[#E6E6E3] p-3">
-            <p class="text-[12px] font-extrabold text-ink mb-1">robots.txt</p>
-            <p class="text-[12px] ${site.robots?'text-agreen':'text-ared'}">${site.robots?'있음 · AI 크롤러 차단 없음':'없음'}</p>
-            ${site.robotsSitemapHttp?'<p class="text-[11px] text-[#BF5332] mt-1">sitemap 주소가 http로 적혀 있습니다</p>':''}
-          </div>
-          <div class="rounded-xl border border-[#E6E6E3] p-3">
-            <p class="text-[12px] font-extrabold text-ink mb-1">sitemap.xml</p>
-            <p class="text-[12px] ${site.sitemap?'text-agreen':'text-ared'}">${site.sitemap?(site.sitemapUrls+'건 등록'):'없음'}</p>
-            <p class="text-[11px] mt-1 ${site.sitemapHasPosts?'text-slate-400':'text-[#BF5332]'}">${site.sitemapHasPosts?'개별 글 포함':'블로그·뉴스룸 개별 글 미포함'}</p>
-          </div>
-          <div class="rounded-xl border border-[#E6E6E3] p-3">
-            <p class="text-[12px] font-extrabold text-ink mb-1">llms.txt</p>
-            <p class="text-[12px] ${site.llms==='markdown'?'text-agreen':(site.llms==='none'?'text-ared':'text-[#D68134]')}">
-              ${site.llms==='markdown'?'표준 형식':(site.llms==='none'?'없음':'있으나 규격 밖(robots 문법)')}</p>
-            <p class="text-[11px] text-slate-400 mt-1">AI에게 “우리 사이트의 핵심 문서는 이것”이라고 알려주는 파일</p>
-          </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+        <div class="card p-5">
+          <h3 class="accent font-extrabold text-ink mb-2">인용 도메인 점유 <span class="text-[11px] font-normal text-slate-400">(${shareTot}개 인용)</span></h3>
+          ${shareTot?Object.keys(share).sort((a,b)=>share[b]-share[a]).map(k=>{
+            const pct=Math.round(share[k]/shareTot*100), ours=(k.indexOf('자사')>-1||k.indexOf('(자사)')>-1);
+            return `<div class="mb-1.5"><div class="flex justify-between text-[12px]"><span class="${ours?'font-bold text-ink':'text-slate-500'}">${esc(k)}</span><span class="num">${share[k]}건 · ${pct}%</span></div>
+              <div class="h-2 rounded bg-slate-100 overflow-hidden"><div class="h-2 rounded" style="width:${pct}%;background:${ours?'#5E7350':'#C7C7C4'}"></div></div></div>`; }).join('')
+            :'<p class="text-[12.5px] text-slate-400">측정 기록이 쌓이면 여기에 누가 인용되는지 나옵니다.</p>'}
+        </div>
+        <div class="card p-5">
+          <h3 class="accent font-extrabold text-ink mb-2">오답 ${errs.length}건 <span class="text-[11px] font-normal text-slate-400">(P1 — 사실이 틀린 답변)</span></h3>
+          ${errs.length?errs.slice(0,8).map(r=>`<div class="border-b border-[#F2EFE9] py-1.5">
+            <p class="text-[12px] font-bold text-ared">${esc(r.pid)} · ${esc((geEngines().filter(e=>e.k===r.eng)[0]||{}).short||r.eng)}</p>
+            <p class="text-[12px] text-slate-600">${esc(r.errNote||'내용 미기재')}</p></div>`).join('')
+            :'<p class="text-[12.5px] text-slate-400">기록된 오답이 없습니다.</p>'}
         </div>
       </div>`;
+    }
 
-      /* ④ 인용 자산 */
-      const sec4=`
+    /* ---------- ③ 갭 진단 ---------- */
+    function geSecGap(){
+      const eng=geEngines(), ceps=geCeps();
+      return `
       <div class="card p-5 mb-4">
-        <h3 class="accent font-extrabold text-ink mb-1">③ AI가 인용할 수 있는 자산 <span class="text-[11px] font-normal text-slate-400">(채널별 · 차단 여부 반영)</span></h3>
-        <p class="text-[12px] text-slate-400 mb-3">같은 콘텐츠라도 <b>어디에 있느냐</b>에 따라 AI가 쓸 수 있는지가 갈립니다.</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-          ${kpi('홈페이지 글', as.homePosts+'건','블로그 '+((GEO.boards||{}).blogPosts||0)+' · 뉴스룸 '+((GEO.boards||{}).newsroomPosts||0)+' <b style="color:#5E7350">AI 읽기 가능</b>', as.homePosts<20?'#BF5332':'#5E7350')}
-          ${kpi('언론 기사(매체 원문)', (as.prOpen||'—')+(as.prOpen?'건':''),'매체 자체 사이트 기사 <b style="color:#5E7350">AI 읽기 가능</b>','#5E7350')}
-          ${kpi('포털 안에만 있는 기사', (as.prPortal||'—')+(as.prPortal?'건':''),'네이버·다음 뉴스 <b style="color:#BF5332">AI 차단</b>','#BF5332')}
-          ${kpi('네이버 블로그 글', (as.blog||'—')+(as.blog?'건':''),'공식·서브 블로그 합계 <b style="color:#BF5332">AI 차단</b>','#BF5332')}
+        <h3 class="accent font-extrabold text-ink mb-1">CEP × 엔진 갭 <span class="text-[11px] font-normal text-slate-400">(${geYM} 측정 기준)</span></h3>
+        <p class="text-[12.5px] text-slate-500 mb-3">${GE_GAP_ORDER.filter(k=>k!=='na').map(k=>gePill(k)+' <span class="text-[11px] text-slate-400 mr-2">'+GE_GAPS[k].d+'</span>').join('')}</p>
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[820px] text-[12px]">
+            <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
+              <th class="px-2 py-2 text-left">CEP</th><th class="px-2 py-2 text-left">담당 채널</th>
+              ${eng.map(e=>`<th class="px-2 py-2 text-center">${e.short}</th>`).join('')}
+              <th class="px-2 py-2 text-center">액션</th></tr></thead>
+            <tbody>${ceps.map(c=>{
+              const acts=geActs().filter(a=>+a.cep===c.id&&a.st!=='done').length;
+              return `<tr class="border-b border-[#F2EFE9] hover:bg-[#FAFAF9]">
+                <td class="px-2 py-2"><b class="text-ink">${c.id}. ${esc(c.sit)}</b>
+                  <span class="block text-[10.5px] text-slate-400">${esc((c.kw||[]).join(' · '))}</span></td>
+                <td class="px-2 py-2 text-slate-500">${(c.ch||[]).map(k=>esc((geChan(k)||{}).n||k)).join('<br/>')}</td>
+                ${eng.map(e=>{ const gap=geGap(c.id,e.k), reach=(c.ch||[]).some(k=>geReach(k,e.k)==='yes');
+                  return `<td class="px-2 py-2 text-center">${gePill(gap)}${reach?'':'<span class="block text-[10px] text-slate-300">도달 제한</span>'}</td>`; }).join('')}
+                <td class="px-2 py-2 text-center"><button onclick="geActFilter.cep=${c.id};geGo('action')" class="text-[11.5px] font-bold text-[#5B44C7] hover:underline">${acts}건 보기</button></td></tr>`; }).join('')}
+            </tbody>
+          </table>
         </div>
-        ${medBlocked.length?`<div class="mt-4 rounded-xl p-3" style="background:#FDECEA;border:1px solid #F0C9C0">
-          <p class="text-[12.5px] font-extrabold text-[#BF5332] mb-1">AI 크롤러를 막는 매체 ${medBlocked.length}곳 — 배포 시 참고</p>
-          <p class="text-[12px] text-slate-600">${medBlocked.map(m=>esc(m.label)+'<span class="text-slate-400">('+esc((m.blocked||[]).join(',').slice(0,40))+')</span>').join(' · ')}</p>
-          <p class="text-[11.5px] text-slate-500 mt-1.5">이 매체에만 실리면 AI 답변에는 인용되지 않습니다. 같은 자료를 <b>홈페이지 뉴스룸에도 올려두면</b> 그 페이지가 인용 대상이 됩니다.</p>
-        </div>`:''}
-        <p class="text-[11px] text-slate-400 mt-3">※ 기사 수는 PR 탭 데이터, 블로그·유튜브는 온드미디어 데이터를 그대로 씁니다(탭을 한 번도 안 열었으면 —로 표시).</p>
       </div>`;
+    }
 
-      /* ⑤ AI 답변 점검 */
-      const qRows=GEO_QUERIES.map((q,i)=>{
-        const memoK='q.'+i+'.memo', date=GV('q.'+i+'.date',''), gtxt=GV('q.'+i+'.gemtxt','');
-        const chips=GEO_ENGINES.map(e=>{ const v=GV('q.'+i+'.'+e.k,'');
-          const st=v==='o'?{bg:'#EDF5E9',fg:'#5E7350',t:'언급됨'}:(v==='x'?{bg:'#FDECEA',fg:'#BF5332',t:'없음'}:{bg:'#F2F2F0',fg:'#8E8E93',t:'미확인'});
-          return `<button onclick="geMark(${i},'${e.k}')" title="클릭할 때마다 언급됨 → 없음 → 미확인" class="text-[11px] font-bold px-2 py-1 rounded-lg" style="background:${st.bg};color:${st.fg}">${e.n} · ${st.t}</button>`; }).join(' ');
-        return `<div class="border-b border-[#F2EFE9] py-3">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <p class="text-[13px] font-bold text-ink">“${esc(q)}”</p>
-            <div class="flex items-center gap-1.5 flex-wrap">
-              ${GEO_ENGINES.map(e=>e.u?`<a href="${e.u}${e.u.indexOf('?')>-1?encodeURIComponent(q):''}" target="_blank" rel="noopener" class="text-[11px] text-slate-400 hover:text-ink underline">${e.n}에서 열기</a>`:'').join('')}
-              <button onclick="geAsk(${i})" ${geBusy?'disabled':''} class="text-[11px] font-bold px-2.5 py-1 rounded-lg ${geBusy===String(i)?'bg-slate-200 text-slate-400':'bg-ink text-white hover:brightness-125'}">${geBusy===String(i)?'확인 중…':'Gemini로 지금 확인'}</button>
-            </div>
-          </div>
-          <div class="flex flex-wrap items-center gap-1.5 mt-2">${chips}
-            ${date?`<span class="text-[10.5px] text-slate-400 ml-1">최근 확인 ${esc(date)}</span>`:''}</div>
-          ${gtxt?`<p class="text-[11.5px] text-slate-500 mt-2 bg-[#FAFAF9] border border-[#EFEFEC] rounded-lg px-2.5 py-1.5 leading-relaxed">🤖 ${esc(gtxt)}</p>`:''}
-          <div class="text-[12px] text-slate-600 mt-1.5 border border-[#E6E6E3] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-ink" style="white-space:pre-wrap"
-               contenteditable="true" data-gk="${memoK}" onblur="geEdit(this)">${esc(GV(memoK,''))}</div>
-        </div>`; }).join('');
-      const sec5=`
-      <div class="card p-5 mb-4">
-        <h3 class="accent font-extrabold text-ink mb-1">④ AI 답변 점검 <span class="text-[11px] font-normal text-slate-400">(질문별로 우리가 언급되는지)</span></h3>
-        <p class="text-[12px] text-slate-400 mb-1">각 서비스에서 질문을 던져 보고 <b>아카라가 나오는지</b>를 눌러서 기록하세요(언급됨 → 없음 → 미확인 순환). 팀 전체가 같은 기록을 봅니다.</p>
-        <p class="text-[11.5px] text-slate-400 mb-2">[Gemini로 지금 확인]은 <b>웹검색 없이 모델이 학습한 지식</b>만으로 답하게 해 “AI가 아카라를 알고 있는지”를 보는 용도입니다. 실제 검색형 답변(ChatGPT·Perplexity)은 직접 열어 확인해 주세요.</p>
-        <div>${qRows}</div>
-      </div>`;
-
-      /* ⑥ 개선 액션 */
-      const areaC={'홈페이지':'#2563EB','PR':'#BF5332','온드미디어':'#D68134'};
-      const acts=GEO_ACTIONS.map((a,i)=>{ const done=GV('act.'+i,'')==='1';
-        return `<div class="flex items-start gap-2.5 border-b border-[#F2EFE9] py-2.5 ${done?'opacity-55':''}">
-          <input type="checkbox" ${done?'checked':''} onchange="geToggle('act.${i}')" class="mt-0.5 w-4 h-4 accent-[#5E7350] shrink-0" />
-          <div class="min-w-0 flex-1">
-            <p class="text-[13px] font-bold ${done?'text-slate-400 line-through':'text-ink'}">${esc(a.t)}</p>
-            <p class="text-[12px] text-slate-500 mt-0.5 leading-relaxed">${esc(a.d)}</p>
-            <div class="flex items-center gap-2 mt-1">
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded" style="background:${areaC[a.w]||'#6E6E73'}15;color:${areaC[a.w]||'#6E6E73'}">${esc(a.w)}</span>
-              <span class="text-[11px] text-slate-400">담당·메모:</span>
-              <span class="text-[11.5px] text-slate-600 border border-[#E6E6E3] rounded px-2 py-0.5 min-w-[120px] focus:outline-none focus:border-ink"
-                    contenteditable="true" data-gk="act.${i}.memo" onblur="geEdit(this)">${esc(GV('act.'+i+'.memo',''))}</span>
-            </div>
-          </div>
-        </div>`; }).join('');
-      const doneN=GEO_ACTIONS.filter((a,i)=>GV('act.'+i,'')==='1').length;
-      const sec6=`
+    /* ---------- ④ 액션 ---------- */
+    function geSecAction(){
+      const acts=geActSorted(), dup=geDupWarn(), tech=geTechRows();
+      const chs=geChannels().filter(c=>c.own&&(c.k==='own'||c.kind==='naver'));
+      const week=chs.map(c=>{ const top=geActs().filter(a=>a.ch===c.k&&a.st!=='done')
+          .sort((a,b)=>((({P1:1,P2:2,P3:3})[a.pri]||9)-(({P1:1,P2:2,P3:3})[b.pri]||9))).slice(0,3);
+        return {c:c, top:top}; });
+      const cep=(id)=>geCep(id)||{sit:''};
+      return `
       <div class="card p-5 mb-4">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
-          <h3 class="accent font-extrabold text-ink">⑤ 개선 액션 <span class="text-[11px] font-normal text-slate-400">(측정 결과에서 그대로 도출)</span></h3>
-          <span class="text-[12px] font-bold text-slate-500">${doneN}/${GEO_ACTIONS.length} 완료</span>
+          <h3 class="accent font-extrabold text-ink">이번 주 써야 할 글 <span class="text-[11px] font-normal text-slate-400">채널별 상위 3건</span></h3>
+          <div class="flex gap-1.5">
+            <button onclick="geGenActions()" class="text-[12px] font-bold bg-ink text-white px-3 py-1.5 rounded-lg hover:brightness-125">측정 결과로 액션 생성</button>
+            <button onclick="geActAdd()" class="text-[12px] font-bold border border-[#E6E6E3] hover:bg-[#FAFAF9] px-3 py-1.5 rounded-lg">＋ 직접 추가</button>
+          </div>
         </div>
-        <p class="text-[12px] text-slate-400 mb-2">위에서 나온 문제를 해야 할 일로 옮겨 놨습니다. 체크와 메모는 팀에 실시간 공유됩니다.</p>
-        <div>${acts}</div>
-        <div class="mt-3 pt-3 border-t border-[#F2EFE9]">
-          <p class="text-[12px] font-bold text-slate-500 mb-1">추가 메모 <span class="font-normal text-slate-400">(GEO 전략·논의 내용)</span></p>
-          <div class="text-[13px] text-slate-700 leading-relaxed min-h-[80px] border border-[#E6E6E3] rounded-lg px-3 py-2 focus:outline-none focus:border-ink"
-               style="white-space:pre-wrap" contenteditable="true" data-gk="note" onblur="geEdit(this)">${esc(GV('note',''))}</div>
+        <p class="text-[12.5px] text-slate-400 mb-3">갭 유형과 담당 채널 규칙으로 자동 생성됩니다. 측정 전이면 '미언급' 가정으로 CEP당 자사 1편 + 담당 블로그 1편이 만들어집니다.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+          ${week.map(w=>`<div class="rounded-xl border border-[#E6E6E3] bg-white overflow-hidden">
+            <div class="px-3 py-2" style="background:#FAFAF9;border-bottom:1px solid #EFEFEC">
+              <p class="text-[12.5px] font-extrabold text-ink">${esc(w.c.n)}</p>
+              <p class="text-[10.5px] text-slate-400">${esc(w.c.role)}</p></div>
+            <div class="p-3 space-y-2">
+              ${w.top.length?w.top.map(a=>`<div class="border-b border-[#F2EFE9] pb-2">
+                <p class="text-[12.5px] font-semibold text-ink leading-snug">${esc(a.title||'(제목 미정)')}</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">🔑 ${esc(a.kws||'')}</p>
+                <p class="text-[11px] mt-0.5">${gePill(a.gap)} <span class="text-slate-400">${esc(a.why||'')}</span></p>
+                ${a.cal?`<p class="text-[11px] text-[#5B44C7] font-bold mt-0.5">캘린더 ${esc(a.cal)}</p>`:'<p class="text-[11px] text-slate-300 mt-0.5">캘린더에 없음 — 추가 제안</p>'}
+              </div>`).join(''):'<p class="text-[12px] text-slate-300 py-2">대기 중인 액션이 없습니다.</p>'}
+            </div></div>`).join('')}
+        </div>
+        ${dup.length?`<div class="mt-3 rounded-xl p-3" style="background:#FDECEA;border:1px solid #F0C9C0">
+          <p class="text-[12.5px] font-extrabold text-[#BF5332]">중복 주의 — 같은 CEP를 같은 주에 여러 채널이 발행합니다</p>
+          ${dup.map(d=>`<p class="text-[12px] text-slate-600">CEP ${d.cep} · ${esc(d.week)} — ${d.items.map(i=>esc((geChan(i.ch)||{}).n||i.ch)).join(' / ')}</p>`).join('')}
+        </div>`:''}
+      </div>
+
+      <div class="card p-5 mb-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <h3 class="accent font-extrabold text-ink">콘텐츠 액션 백로그 <span class="text-[11px] font-normal text-slate-400">${acts.length}건</span></h3>
+          <div class="flex flex-wrap gap-1.5 text-[11.5px]">
+            <select onchange="geActFilter.ch=this.value;renderGeo()" class="border border-[#E6E6E3] rounded px-1.5 py-1">
+              <option value="">채널 전체</option>${chs.map(c=>`<option value="${c.k}" ${geActFilter.ch===c.k?'selected':''}>${esc(c.n)}</option>`).join('')}</select>
+            <select onchange="geActFilter.gap=this.value;renderGeo()" class="border border-[#E6E6E3] rounded px-1.5 py-1">
+              <option value="">갭 전체</option>${GE_GAP_ORDER.filter(k=>k!=='ok'&&k!=='na').map(k=>`<option value="${k}" ${geActFilter.gap===k?'selected':''}>${GE_GAPS[k].n}</option>`).join('')}</select>
+            <select onchange="geActFilter.st=this.value;renderGeo()" class="border border-[#E6E6E3] rounded px-1.5 py-1">
+              <option value="">상태 전체</option><option value="todo" ${geActFilter.st==='todo'?'selected':''}>대기</option>
+              <option value="doing" ${geActFilter.st==='doing'?'selected':''}>작성 중</option><option value="done" ${geActFilter.st==='done'?'selected':''}>발행</option></select>
+            ${geActFilter.cep?`<button onclick="geActFilter.cep='';renderGeo()" class="border border-[#E6E6E3] rounded px-2 py-1">CEP ${geActFilter.cep} 해제</button>`:''}
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[1000px] text-[12px]">
+            <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
+              <th class="px-2 py-2 text-left">우선</th><th class="px-2 py-2 text-left">채널</th><th class="px-2 py-2 text-left">CEP</th>
+              <th class="px-2 py-2 text-left">소재</th><th class="px-2 py-2 text-left">제목 초안</th><th class="px-2 py-2 text-left">타깃 키워드</th>
+              <th class="px-2 py-2 text-left">갭·근거</th><th class="px-2 py-2 text-left">담당</th><th class="px-2 py-2 text-left">목표일</th>
+              <th class="px-2 py-2 text-left">상태</th><th class="px-2 py-2 text-left">발행 URL</th><th class="px-2 py-2"></th></tr></thead>
+            <tbody>${acts.length?acts.map(a=>`<tr class="border-b border-[#F2EFE9] hover:bg-[#FAFAF9]">
+              <td class="px-2 py-1.5"><select onchange="geActSet('${a.id}','pri',this.value)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5">
+                ${['P1','P2','P3'].map(p=>`<option ${a.pri===p?'selected':''}>${p}</option>`).join('')}</select></td>
+              <td class="px-2 py-1.5"><select onchange="geActSet('${a.id}','ch',this.value)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5 max-w-[110px]">
+                ${chs.map(c=>`<option value="${c.k}" ${a.ch===c.k?'selected':''}>${esc(c.n)}</option>`).join('')}</select></td>
+              <td class="px-2 py-1.5 text-slate-500">${a.cep}. ${esc(cep(a.cep).sit.slice(0,10))}</td>
+              <td class="px-2 py-1.5"><select onchange="geActSet('${a.id}','type',this.value)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5">
+                ${GE_TYPES.map(t=>`<option ${a.type===t?'selected':''}>${t}</option>`).join('')}</select></td>
+              <td class="px-2 py-1.5 min-w-[220px]"><div class="focus:outline-none focus:border-ink border border-transparent rounded px-1" contenteditable="true" data-gk="act/${a.id}/title" onblur="geEdit(this)">${esc(a.title||'')}</div></td>
+              <td class="px-2 py-1.5 min-w-[160px]"><div class="focus:outline-none focus:border-ink border border-transparent rounded px-1 text-slate-600" contenteditable="true" data-gk="act/${a.id}/kws" onblur="geEdit(this)">${esc(a.kws||'')}</div></td>
+              <td class="px-2 py-1.5">${gePill(a.gap)}<span class="block text-[10.5px] text-slate-400">${esc(a.why||'')}</span>${a.cal?`<span class="block text-[10.5px] text-[#5B44C7] font-bold">캘린더 ${esc(a.cal)}</span>`:''}</td>
+              <td class="px-2 py-1.5"><div class="focus:outline-none border border-transparent focus:border-ink rounded px-1 w-14" contenteditable="true" data-gk="act/${a.id}/owner" onblur="geEdit(this)">${esc(a.owner||'')}</div></td>
+              <td class="px-2 py-1.5"><input type="date" value="${esc(a.due||'')}" onchange="geActSet('${a.id}','due',this.value)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5" /></td>
+              <td class="px-2 py-1.5"><select onchange="geActSet('${a.id}','st',this.value)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5">
+                <option value="todo" ${a.st==='todo'?'selected':''}>대기</option><option value="doing" ${a.st==='doing'?'selected':''}>작성 중</option>
+                <option value="done" ${a.st==='done'?'selected':''}>발행</option></select></td>
+              <td class="px-2 py-1.5 min-w-[120px]"><div class="focus:outline-none border border-transparent focus:border-ink rounded px-1 text-[11px] text-slate-500" contenteditable="true" data-gk="act/${a.id}/url" onblur="geEdit(this)">${esc(a.url||'')}</div></td>
+              <td class="px-2 py-1.5"><button onclick="geActDel('${a.id}')" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join('')
+              :'<tr><td colspan="12" class="px-2 py-6 text-center text-slate-400 text-[12.5px]">아직 액션이 없습니다 — [측정 결과로 액션 생성]을 눌러 초기 백로그를 만드세요.</td></tr>'}</tbody>
+          </table>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2">※ 페르소나 블로그(수니집·미니멀·하다)는 <b>자사 가이드 문장 복사 금지 · 제품 제공 표기 필수</b>. 1인칭 실사용 기록으로만 씁니다.</p>
+      </div>
+
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">기술 수정 액션 <span class="text-[11px] font-normal text-slate-400">점검에서 자동 생성 · 다시 크롤해 통과하면 목록에서 사라집니다</span></h3>
+        <p class="text-[12.5px] text-slate-400 mb-2">남은 항목 ${tech.length}건</p>
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[780px] text-[12px]">
+            <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
+              <th class="px-2 py-2 text-left">구분</th><th class="px-2 py-2 text-left">문제</th><th class="px-2 py-2 text-left">현재 값</th>
+              <th class="px-2 py-2 text-left">할 일</th><th class="px-2 py-2 text-left">담당</th><th class="px-2 py-2 text-left">기한</th></tr></thead>
+            <tbody>${tech.length?tech.slice(0,60).map(t=>`<tr class="border-b border-[#F2EFE9]">
+              <td class="px-2 py-1.5 text-slate-400">${esc(t.area)}</td>
+              <td class="px-2 py-1.5 font-semibold text-ink">${esc(t.what)}</td>
+              <td class="px-2 py-1.5 text-ared">${esc(t.got)}</td>
+              <td class="px-2 py-1.5 text-slate-600">${esc(t.fix)}</td>
+              <td class="px-2 py-1.5"><div class="focus:outline-none border border-transparent focus:border-ink rounded px-1 w-14" contenteditable="true" data-gk="tech/${geTechKey(t.id)}/owner" onblur="geEdit(this)">${esc(t.owner)}</div></td>
+              <td class="px-2 py-1.5"><input type="date" value="${esc(t.due)}" onchange="geTechSet('${t.id}','due',this.value)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5" /></td></tr>`).join('')
+              :'<tr><td colspan="6" class="px-2 py-6 text-center text-agreen text-[12.5px] font-bold">기술 점검 항목을 모두 통과했습니다.</td></tr>'}</tbody>
+          </table>
         </div>
       </div>`;
-
-      box.innerHTML=sec1+sec2+sec3+sec4+sec5+sec6+'<div class="h-8"></div>';
-      try{ if(typeof wkPresenceStart==='function') wkPresenceStart(); }catch(e){}
     }
+
+    /* ---------- ⑤ 채널·엔진 도달 ---------- */
+    function geSecChannel(){
+      const eng=geEngines(), ops=geOpsRows();
+      const runs=geAllRuns(); const obs={};
+      runs.forEach(r=>(r.cites||[]).forEach(c=>{ const d=(c.domain||c||'').toLowerCase();
+        geChannels().forEach(ch=>{ const h=(ch.host||'').toLowerCase().replace(/^https?:\/\//,'').split('/')[0];
+          const seg=(ch.host||'').split('/')[1]||'';
+          if(h&&d.indexOf(h)>-1&&(!seg||(c.url||'').indexOf(seg)>-1)) obs[ch.k]=(obs[ch.k]||0)+1; }); }));
+      const mark=(v)=>v==='yes'?'<span class="text-agreen font-bold">가능</span>'
+                    :(v==='no'?'<span class="text-ared font-bold">불가</span>'
+                    :'<span class="text-[#8A6A00] font-bold">확인 필요</span>');
+      return `
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">채널 × 엔진 도달 매트릭스</h3>
+        <p class="text-[12.5px] text-slate-500 mb-3">네이버 블로그는 <b>"AI 차단"이 아니라</b> 엔진별로 갈립니다 — Gemini·ChatGPT는 도달 불가, Google AI 개요·Perplexity·네이버 AI 브리핑은 인용됩니다.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[900px] text-[12px]">
+            <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
+              <th class="px-2 py-2 text-left">채널</th><th class="px-2 py-2 text-left">역할</th>
+              ${eng.map(e=>`<th class="px-2 py-2 text-center">${e.short}</th>`).join('')}
+              <th class="px-2 py-2 text-right">인용 관측</th><th class="px-2 py-2 text-left">담당 CEP</th></tr></thead>
+            <tbody>${geChannels().map(c=>{
+              const ceps=geCeps().filter(x=>(x.ch||[]).indexOf(c.k)>-1).map(x=>x.id);
+              return `<tr class="border-b border-[#F2EFE9] hover:bg-[#FAFAF9]">
+                <td class="px-2 py-2"><b class="text-ink">${esc(c.n)}</b><span class="block text-[10.5px] text-slate-400">${esc(c.host)}</span></td>
+                <td class="px-2 py-2 text-slate-500 max-w-[220px]">${esc(c.role)}</td>
+                ${eng.map(e=>`<td class="px-2 py-2 text-center">${mark(geReach(c.k,e.k))}</td>`).join('')}
+                <td class="px-2 py-2 text-right num">${obs[c.k]||0}건</td>
+                <td class="px-2 py-2 text-slate-400">${ceps.join(', ')||'—'}</td></tr>`; }).join('')}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2">근거: ${esc((geChan('nofficial')||{}).reachBasis||'')}</p>
+      </div>
+
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">블로그 발행 현황 <span class="text-[11px] font-normal text-slate-400">월 목표 ${(((GEOS||{}).ops)||{}).monthlyTargetPerBlog||50}편</span></h3>
+        <div class="overflow-x-auto"><table class="w-full min-w-[620px] text-[12.5px]">
+          <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
+            <th class="px-2 py-2 text-left">블로그</th><th class="px-2 py-2 text-right">전체 글</th>
+            <th class="px-2 py-2 text-right">최근 30일</th><th class="px-2 py-2 text-right">목표 대비</th>
+            <th class="px-2 py-2 text-left">마지막 발행</th></tr></thead>
+          <tbody>${ops.map(o=>`<tr class="border-b border-[#F2EFE9]">
+            <td class="px-2 py-2 font-semibold text-ink">${esc(o.n)}<span class="block text-[10.5px] text-slate-400">${esc(o.host)}</span></td>
+            <td class="px-2 py-2 text-right num">${o.total<0?'—':o.total}</td>
+            <td class="px-2 py-2 text-right num">${o.recent<0?'<span class="text-slate-400">확인 필요</span>':o.recent}</td>
+            <td class="px-2 py-2 text-right num" style="color:${o.rate<0?'#8E8E93':(o.rate>=100?'#5E7350':(o.rate>=50?'#D68134':'#BF5332'))}">${o.rate<0?'—':(o.rate+'%')}</td>
+            <td class="px-2 py-2 text-slate-500">${esc(o.last||'—')}</td></tr>`).join('')}</tbody></table></div>
+        <p class="text-[11px] text-slate-400 mt-2">※ 발행 수는 온드미디어 데이터(owned.json)를 씁니다. 날짜가 없는 블로그는 '확인 필요'로 둡니다.</p>
+      </div>`;
+    }
+
+    /* ---------- ⑥ 페이지·사이트 ---------- */
+    function geSecPage(){
+      const pages=gePages(), site=geSiteChecks(), g=(GEO||{}).guide||null, pm=(GEO||{}).productMaster||null;
+      return `
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">사이트 기본기</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-3 mt-2">
+          ${site.map(c=>`<div class="rounded-xl border ${c.ok?'border-[#E6E6E3]':'border-[#F0C9C0]'} p-3">
+            <p class="text-[12px] font-extrabold text-ink mb-1">${esc(c.n)}</p>
+            <p class="text-[12px] ${c.ok?'text-agreen':'text-ared'}">${c.ok?'통과':'미통과'}</p>
+            <p class="text-[11px] text-slate-400 mt-1">${esc(c.got)}</p></div>`).join('')}
+        </div>
+      </div>
+
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">/guide 진행 <span class="text-[11px] font-normal text-slate-400">기준 문서(스펙표·비교·FAQ)</span></h3>
+        ${g?`<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+          ${[['발행 수',(g.posts||0)+'편'],['스펙표 있는 글',(g.specPosts||0)+'편'],['FAQ 허브',g.faqHub?'있음':'없음'],['JSON-LD 있는 글',(g.ldPosts||0)+'편']]
+            .map(x=>`<div class="rounded-xl border border-[#E6E6E3] p-3"><p class="text-[11.5px] font-bold text-slate-400">${x[0]}</p>
+              <p class="text-[20px] font-extrabold num text-ink">${x[1]}</p></div>`).join('')}
+        </div>`:'<p class="text-[12.5px] text-slate-400 mt-1">아직 /guide 데이터가 없습니다 — 크롤러가 다음 실행에서 채웁니다(페이지 신설 중이면 <b>확인 필요</b>).</p>'}
+      </div>
+
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">상품 마스터 일관성 <span class="text-[11px] font-normal text-slate-400">홈페이지 · 자사몰 · 카탈로그 값 대조</span></h3>
+        ${pm&&(pm.rows||[]).length?`<div class="overflow-x-auto"><table class="w-full min-w-[680px] text-[12px]">
+          <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
+            <th class="px-2 py-2 text-left">제품</th><th class="px-2 py-2 text-left">항목</th>
+            <th class="px-2 py-2 text-left">홈페이지</th><th class="px-2 py-2 text-left">자사몰</th><th class="px-2 py-2 text-left">카탈로그</th>
+            <th class="px-2 py-2 text-center">일치</th></tr></thead>
+          <tbody>${pm.rows.map(r=>`<tr class="border-b border-[#F2EFE9]">
+            <td class="px-2 py-1.5 font-semibold">${esc(r.name)}</td><td class="px-2 py-1.5 text-slate-500">${esc(r.field)}</td>
+            <td class="px-2 py-1.5">${esc(r.own||'—')}</td><td class="px-2 py-1.5">${esc(r.shop||'—')}</td><td class="px-2 py-1.5">${esc(r.cat||'—')}</td>
+            <td class="px-2 py-1.5 text-center">${r.same?'<span class="text-agreen font-bold">일치</span>':'<span class="text-ared font-bold">불일치</span>'}</td></tr>`).join('')}</tbody></table></div>`
+          :'<p class="text-[12.5px] text-slate-400 mt-1">대조할 제품 목록이 아직 없습니다 — 크롤러 설정(PRODUCTS)에 제품·URL을 넣으면 채워집니다. <b>확인 필요</b></p>'}
+      </div>
+
+      <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-1">페이지 점검 <span class="text-[11px] font-normal text-slate-400">${pages.length}개 · 7개 항목 통과 비율</span></h3>
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[880px] text-[12px]">
+            <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
+              <th class="px-2 py-2 text-left">페이지</th>
+              ${['제목 고유','요약문 80~160','H1 1개','구조화 데이터','정식주소','본문 500자','갱신일'].map(h=>`<th class="px-2 py-2 text-center">${h}</th>`).join('')}
+              <th class="px-2 py-2 text-right">점수</th></tr></thead>
+            <tbody>${pages.map(p=>{ const cs=gePageChecks(p), sc=gePageScore(p), gg=geGrade(sc);
+              return `<tr class="border-b border-[#F2EFE9] hover:bg-[#FAFAF9]">
+                <td class="px-2 py-1.5"><a href="${esc(p.url)}" target="_blank" rel="noopener" class="font-semibold text-ink hover:underline">${esc(p.label)}</a></td>
+                ${cs.map(c=>`<td class="px-2 py-1.5 text-center" title="${esc(c.got)}">${c.ok?'<span class="text-agreen font-bold">✓</span>':'<span class="text-ared font-bold">✕</span>'}</td>`).join('')}
+                <td class="px-2 py-1.5 text-right font-extrabold num" style="color:${gg.c}">${sc}</td></tr>`; }).join('')}</tbody>
+          </table>
+        </div>
+      </div>`;
+    }
+
     /* ===================== 🗒 TASKS (팀 보드 · 주간보고 양식) =====================
        세 사람의 주간 노트를 한 화면에 나란히 놓고 본다. 누구 칸이든 할 일을 추가·수정할 수 있고
        (팀장이 배정하거나 서로 요청하는 용도), 로그인한 사람의 칸만 색으로 강조한다.
