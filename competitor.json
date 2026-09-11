@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-10 21:57",
+ "generatedAt": "2026-09-11 21:51",
  "brands": [
   {
    "name": "아카라",
@@ -124,11 +124,11 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
-    "아카라치몰",
     "아카라 홈캠",
     "아카라치",
     "아카라카",
     "아카라 스위치",
+    "아카라치몰",
     "아카라 l100"
    ],
    "recent": [
@@ -451,16 +451,16 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 68075,
+   "total": 68077,
    "sentiment": {
-    "pos": 19,
-    "neu": 40,
+    "pos": 18,
+    "neu": 41,
     "neg": 1
    },
    "keywords": [
     [
      "AI",
-     82
+     78
     ],
     [
      "갤럭시",
@@ -471,36 +471,36 @@
      28
     ],
     [
-     "IFA",
-     21
-    ],
-    [
-     "게임",
+     "삼성전자는",
      20
     ],
     [
-     "삼성전자는",
+     "IFA",
+     20
+    ],
+    [
+     "게임",
      19
     ],
     [
      "기기와",
-     16
+     15
     ],
     [
-     "자동화",
-     13
-    ],
-    [
-     "기술을",
-     13
+     "가전",
+     12
     ],
     [
      "SmartThings",
      12
     ],
     [
-     "가전",
-     11
+     "자동화",
+     12
+    ],
+    [
+     "기술을",
+     12
     ],
     [
      "건강",
@@ -515,19 +515,19 @@
      11
     ],
     [
-     "삼성전자의",
-     10
-    ],
-    [
      "에너지",
      10
     ],
     [
-     "허브",
-     10
+     "삼성전자의",
+     9
     ],
     [
      "심장",
+     9
+    ],
+    [
+     "참가자들은",
      9
     ]
    ],
@@ -538,11 +538,11 @@
     ],
     [
      "강화",
-     5
+     4
     ],
     [
      "공략",
-     4
+     3
     ],
     [
      "글로벌",
@@ -568,9 +568,9 @@
    "related": [
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스 연결",
-    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스",
+    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 세탁기",
@@ -578,6 +578,18 @@
     "삼성 스마트싱스 조명"
    ],
    "recent": [
+    {
+     "title": "[기획] '삼성 vs LG' AI 홈 대격돌…가전, LLM 집사로 진화",
+     "source": "kfenews.co.kr",
+     "date": "2026-09-11",
+     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=664382"
+    },
+    {
+     "title": "[마켓+]삼성·LG전자, 히트펌프에 공들이는 이유는?",
+     "source": "businessplus.kr",
+     "date": "2026-09-11",
+     "link": "https://www.businessplus.kr/news/articleView.html?idxno=116729"
+    },
     {
      "title": "[Biz&Law] 삼성전자 美 전기레인지 집단소송 원고 자진취하",
      "source": "the-biz.co.kr",
@@ -655,18 +667,6 @@
      "source": "theguru.co.kr",
      "date": "2026-09-09",
      "link": "https://www.theguru.co.kr/news/article.html?no=106878"
-    },
-    {
-     "title": "손목에서 지키는 심장 건강…‘예방적’ 헬스케어 강화한 갤럭시 워치",
-     "source": "segyebiz.com",
-     "date": "2026-09-09",
-     "link": "http://www.segyebiz.com/newsView/20260909509541?OutUrl=naver"
-    },
-    {
-     "title": "[인더필드] 갤럭시 워치, 손목 위 ‘헬스기기’로…심장 질환까지 잡는...",
-     "source": "inthenews.co.kr",
-     "date": "2026-09-09",
-     "link": "https://www.inthenews.co.kr/news/article.html?no=91636"
     }
    ]
   },
@@ -674,7 +674,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77530,
+   "total": 77535,
    "sentiment": {
     "pos": 17,
     "neu": 43,
@@ -683,89 +683,89 @@
    "keywords": [
     [
      "AI",
-     53
+     51
     ],
     [
      "AI홈",
-     52
+     47
     ],
     [
      "LG전자",
-     38
+     42
+    ],
+    [
+     "ThinQ",
+     34
     ],
     [
      "플랫폼",
      34
     ],
     [
-     "ThinQ",
-     32
-    ],
-    [
      "IFA",
      30
     ],
     [
-     "클로",
-     25
+     "가전",
+     23
     ],
     [
      "허브",
      23
     ],
     [
-     "가전",
-     22
+     "클로",
+     23
     ],
     [
      "호미",
-     19
-    ],
-    [
-     "에이전트",
-     19
+     21
     ],
     [
      "유럽",
-     16
+     20
     ],
     [
      "Homey",
-     16
-    ],
-    [
-     "LG전자는",
-     16
+     18
     ],
     [
      "네덜란드",
-     15
+     17
     ],
     [
-     "생활",
-     14
+     "에이전트",
+     17
     ],
     [
      "공간",
-     11
+     13
     ],
     [
-     "기능을",
+     "LG전자는",
+     13
+    ],
+    [
+     "생활",
+     12
+    ],
+    [
+     "연동해",
      11
     ]
    ],
    "posWords": [
     [
+     "공략",
+     5
+    ],
+    [
      "강화",
      5
     ],
     [
-     "공략",
-     4
-    ],
-    [
      "혁신",
-     4
+     3
     ],
     [
      "확대",
@@ -776,31 +776,61 @@
      2
     ],
     [
-     "글로벌",
-     2
-    ],
-    [
      "호응",
      1
     ],
     [
      "성장",
      1
+    ],
+    [
+     "글로벌",
+     1
     ]
    ],
    "related": [
     "lg 씽큐",
-    "lg 씽큐 연결",
     "lg 씽큐온",
+    "lg 씽큐 연결",
     "lg 씽큐 와이파이",
-    "lg 씽큐 세탁기",
     "lg 씽큐 앱",
-    "lg 씽큐 티비연결",
+    "lg 씽큐 세탁기",
     "lg 씽큐 냉장고",
-    "lg 씽큐 오류",
-    "lg 씽큐 에어컨 청소"
+    "lg 씽큐 티비연결",
+    "lg 씽큐 공유",
+    "lg 씽큐 오류"
    ],
    "recent": [
+    {
+     "title": "[기획] '삼성 vs LG' AI 홈 대격돌…가전, LLM 집사로 진화",
+     "source": "kfenews.co.kr",
+     "date": "2026-09-11",
+     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=664382"
+    },
+    {
+     "title": "[Who Is ?] 류재철 LG전자 대표이사 사장",
+     "source": "businesspost.co.kr",
+     "date": "2026-09-11",
+     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=444632"
+    },
+    {
+     "title": "가전 넘어 공간으로… 유럽 주거시장 공략",
+     "source": "머니투데이",
+     "date": "2026-09-11",
+     "link": "https://n.news.naver.com/mnews/article/008/0005412295?sid=101"
+    },
+    {
+     "title": "LG전자, AI홈·냉난방공조로 유럽 공략",
+     "source": "chosun.com",
+     "date": "2026-09-11",
+     "link": "https://n.news.naver.com/mnews/article/023/0003997784?sid=105"
+    },
+    {
+     "title": "매장에 펼쳐진 우리집 거실…유럽 매출 20% 늘었다",
+     "source": "joongang.co.kr",
+     "date": "2026-09-11",
+     "link": "https://n.news.naver.com/mnews/article/025/0003550622?sid=101"
+    },
     {
      "title": "매장에 '작은 집' 들인 LG전자… 유럽 주거시장 판 흔들다 [르포]",
      "source": "파이낸셜뉴스",
@@ -850,46 +880,16 @@
      "link": "https://dealsite.co.kr/articles/168736"
     },
     {
-     "title": "[르포] 가전 덜 놓고 ‘집’을 채웠더니…LG전자 매출 20% 뛴 비결",
-     "source": "etoday.co.kr",
-     "date": "2026-09-10",
-     "link": "https://www.etoday.co.kr/news/view/2623757"
-    },
-    {
      "title": "네덜란드 가전매장에 ‘AI집’ 들인 LG…매장 매출 20%↑[르포]",
      "source": "이데일리",
      "date": "2026-09-10",
      "link": "https://n.news.naver.com/mnews/article/018/0006366670?sid=101"
     },
     {
-     "title": "[AT 현장] 유럽 매장에 '작은 집' 만든 LG전자…매출 20% 늘었다",
-     "source": "asiatime.co.kr",
+     "title": "[르포] 가전 덜 놓고 ‘집’을 채웠더니…LG전자 매출 20% 뛴 비결",
+     "source": "etoday.co.kr",
      "date": "2026-09-10",
-     "link": "https://www.asiatime.co.kr/article/20260908500298"
-    },
-    {
-     "title": "제품 대신 '집' 판다...AI 전면에 내세운 LG전자 로테르담 매장, 매출 20...",
-     "source": "전자신문",
-     "date": "2026-09-10",
-     "link": "https://n.news.naver.com/mnews/article/030/0003465437?sid=101"
-    },
-    {
-     "title": "아예 집을 통째로…LG전자, 유럽 가전 매장 혁신으로 실적 ‘날개’",
-     "source": "biz.heraldcorp.com",
-     "date": "2026-09-10",
-     "link": "https://n.news.naver.com/mnews/article/016/0002695312?sid=101"
-    },
-    {
-     "title": "네덜란드 가전 매장에 '집' 지은 LG전자…매출 20% 늘어난 이유는? [르포...",
-     "source": "파이낸셜뉴스",
-     "date": "2026-09-10",
-     "link": "https://n.news.naver.com/mnews/article/014/0005573768?sid=101"
-    },
-    {
-     "title": "\"전시 대신 체험\" LG전자 승부수 통했다…네덜란드 매장 매출 20%↑",
-     "source": "news1.kr",
-     "date": "2026-09-10",
-     "link": "https://n.news.naver.com/mnews/article/421/0009162157?sid=101"
+     "link": "https://www.etoday.co.kr/news/view/2623757"
     }
    ]
   },
@@ -897,39 +897,51 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75830,
+   "total": 75841,
    "sentiment": {
-    "pos": 16,
+    "pos": 15,
     "neu": 37,
-    "neg": 7
+    "neg": 8
    },
    "keywords": [
     [
      "AI",
-     60
+     54
     ],
     [
      "제미나이",
-     16
+     12
+    ],
+    [
+     "전문",
+     10
+    ],
+    [
+     "번역한",
+     9
+    ],
+    [
+     "기사의",
+     9
+    ],
+    [
+     "입니다",
+     9
     ],
     [
      "글로벌",
      9
     ],
     [
-     "전문",
-     9
-    ],
-    [
-     "번역한",
+     "아래는",
      8
     ],
     [
-     "기사의",
+     "기사를",
      8
     ],
     [
-     "입니다",
+     "번역",
      8
     ],
     [
@@ -937,43 +949,31 @@
      8
     ],
     [
-     "가전",
-     7
-    ],
-    [
-     "이미지",
-     7
-    ],
-    [
-     "생성형",
-     7
-    ],
-    [
-     "아래는",
-     7
-    ],
-    [
-     "기사를",
-     7
-    ],
-    [
-     "번역",
-     7
-    ],
-    [
      "구글번역",
+     8
+    ],
+    [
+     "있습니다",
      7
+    ],
+    [
+     "화면",
+     7
+    ],
+    [
+     "높이기를",
+     6
+    ],
+    [
+     "노력하고",
+     6
+    ],
+    [
+     "구글의",
+     6
     ],
     [
      "번역에",
-     6
-    ],
-    [
-     "오류가",
-     6
-    ],
-    [
-     "음성",
      6
     ]
    ],
@@ -981,10 +981,6 @@
     [
      "글로벌",
      9
-    ],
-    [
-     "확대",
-     4
     ],
     [
      "돌파",
@@ -995,20 +991,24 @@
      3
     ],
     [
+     "확대",
+     3
+    ],
+    [
      "수상",
-     2
-    ],
-    [
-     "투자",
-     2
-    ],
-    [
-     "개선",
      2
     ],
     [
      "인기",
      2
+    ],
+    [
+     "강화",
+     2
+    ],
+    [
+     "협업",
+     1
     ]
    ],
    "related": [
@@ -1024,6 +1024,72 @@
     "구글 홈 스피커 연결"
    ],
    "recent": [
+    {
+     "title": "아산시, 아산에서 ‘이터널리턴’ 전국 최강자 가린다…",
+     "source": "breaknews.com",
+     "date": "2026-09-11",
+     "link": "http://www.breaknews.com/1236084"
+    },
+    {
+     "title": "[금융픽] IBK기업은행, 키자니아에 '어린이 금융체험관' 개점 外",
+     "source": "newsian.co.kr",
+     "date": "2026-09-11",
+     "link": "http://www.newsian.co.kr/news/articleView.html?idxno=95231"
+    },
+    {
+     "title": "[기획] '삼성 vs LG' AI 홈 대격돌…가전, LLM 집사로 진화",
+     "source": "kfenews.co.kr",
+     "date": "2026-09-11",
+     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=664382"
+    },
+    {
+     "title": "KB국민카드, 추석 맞이 대규모 경품·할인 이벤트 실시",
+     "source": "breaknews.com",
+     "date": "2026-09-11",
+     "link": "http://www.breaknews.com/1235928"
+    },
+    {
+     "title": "갤럭시Z폴드8도 '화면 전환 애니메이션' 되네",
+     "source": "지디넷",
+     "date": "2026-09-11",
+     "link": "https://n.news.naver.com/mnews/article/092/0002437121?sid=105"
+    },
+    {
+     "title": "[신상브리핑] 교원투어, 롱테이크, 에이피알, 뉴발란스, 대교, 롯데웰푸...",
+     "source": "daily.hankooki.com",
+     "date": "2026-09-11",
+     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1405142"
+    },
+    {
+     "title": "파리바게뜨 웅진식품 CJ프레시웨이 外(유통家 이모저모)",
+     "source": "newsclaim.co.kr",
+     "date": "2026-09-11",
+     "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3075062"
+    },
+    {
+     "title": "\"축구 직관부터 명문대 탐방까지\"…여행사들, '취향 저격' 테마 패키지...",
+     "source": "tournews21.com",
+     "date": "2026-09-11",
+     "link": "https://www.tournews21.com/news/articleView.html?idxno=143251"
+    },
+    {
+     "title": "미국증시 다우지수 '또 하락'..애플 '뛰고', 엔비디아·제약주 '뚝'",
+     "source": "choicenews.co.kr",
+     "date": "2026-09-11",
+     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=171161"
+    },
+    {
+     "title": "윈도우11 인사이더 빌드서 다크모드 자동전환 코드 발견, 서드파티 의존...",
+     "source": "wikitree.co.kr",
+     "date": "2026-09-11",
+     "link": "https://www.wikitree.co.kr/articles/1158747"
+    },
+    {
+     "title": "아이폰 듀오 펼침 애니메이션, 갤럭시Z폴드8 힌지 센서로 하루 만에 재...",
+     "source": "wikitree.co.kr",
+     "date": "2026-09-11",
+     "link": "https://www.wikitree.co.kr/articles/1158746"
+    },
     {
      "title": "[게시판] 에너자이, 브로드컴과 온디바이스 AI 기술 공유 등 단신",
      "source": "aitimes.com",
@@ -1047,72 +1113,6 @@
      "source": "betanews.net",
      "date": "2026-09-10",
      "link": "https://www.betanews.net/article/view/beta202609100100"
-    },
-    {
-     "title": "與, 李 프랑스 순방 성과 엄호…한동훈엔 \"검찰자료 유출 수사해야\"",
-     "source": "m-i.kr",
-     "date": "2026-09-10",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1412288"
-    },
-    {
-     "title": "[패트롤]경주시-영남대-대구보건대-대구도시개발공사-대구대-계명대",
-     "source": "ekn.kr",
-     "date": "2026-09-10",
-     "link": "https://www.ekn.kr/web/view.php?key=20260910025172967"
-    },
-    {
-     "title": "미국 타임스퀘어에 등장한 햇반 광고…글로벌 캠페인 진행",
-     "source": "매일경제",
-     "date": "2026-09-10",
-     "link": "https://n.news.naver.com/mnews/article/009/0005733179?sid=103"
-    },
-    {
-     "title": "‘햇반’이 타임스퀘어에…CJ제일제당, 美서 K-푸드 확장 속도",
-     "source": "theviewers.co.kr",
-     "date": "2026-09-10",
-     "link": "https://theviewers.co.kr/View.aspx?No=4220841"
-    },
-    {
-     "title": "[경제인사이드] '가전' 넘은 'AI 홈·로봇'… 베를린 달군 IFA 2026",
-     "source": "newscj.com",
-     "date": "2026-09-10",
-     "link": "https://www.newscj.com/news/articleView.html?idxno=3431252"
-    },
-    {
-     "title": "메타, 이메일·예약·결제까지 맡는 'AI 개인비서' 출시",
-     "source": "thelec.kr",
-     "date": "2026-09-09",
-     "link": "https://www.thelec.kr/news/articleView.html?idxno=62024"
-    },
-    {
-     "title": "서울시, AI가 바꾸는 미래 일상 한자리에… 'SLW 2026' 10월 개막",
-     "source": "newscj.com",
-     "date": "2026-09-09",
-     "link": "https://www.newscj.com/news/articleView.html?idxno=3431329"
-    },
-    {
-     "title": "AI·커뮤니티·숏폼까지…증권사 MTS 새단장 경쟁 불붙었다",
-     "source": "joongangenews.com",
-     "date": "2026-09-09",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=546857"
-    },
-    {
-     "title": "\"로봇도 이제 B2C 시대\"...AI 반려로봇 1.5만대 돌파, 수백조 홈로봇 시...",
-     "source": "joongangenews.com",
-     "date": "2026-09-09",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=546772"
-    },
-    {
-     "title": "메타, 개인용 AI 에이전트 '뮤즈' 공개...실생활 자동화 시장 출사표",
-     "source": "aitimes.com",
-     "date": "2026-09-09",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=215022"
-    },
-    {
-     "title": "[산업소식] '데이브 더 다이버' 1천만장 돌파…국내 싱글 패키지 최초",
-     "source": "4th.kr",
-     "date": "2026-09-09",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2117722"
     }
    ]
   }
