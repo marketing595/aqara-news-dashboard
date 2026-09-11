@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-10T11:12:26+09:00",
+ "generatedAt": "2026-09-11T09:11:12+09:00",
  "bots": [
   "GPTBot",
   "OAI-SearchBot",
@@ -117,7 +117,7 @@
    "label": "전자신문",
    "blocked": [],
    "partial": [],
-   "robots": true
+   "robots": false
   },
   {
    "host": "www.mt.co.kr",
@@ -241,8 +241,9 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9922,
-   "canonical": "http://www.aqaralife.kr/"
+   "chars": 9857,
+   "canonical": "http://www.aqaralife.kr/",
+   "updated": ""
   },
   {
    "label": "회사소개",
@@ -268,7 +269,8 @@
    ],
    "contentLd": [],
    "chars": 10111,
-   "canonical": "http://www.aqaralife.kr/aqaralife"
+   "canonical": "http://www.aqaralife.kr/aqaralife",
+   "updated": ""
   },
   {
    "label": "아카라라이프",
@@ -294,7 +296,8 @@
    ],
    "contentLd": [],
    "chars": 10111,
-   "canonical": "http://www.aqaralife.kr/aqaralife"
+   "canonical": "http://www.aqaralife.kr/aqaralife",
+   "updated": ""
   },
   {
    "label": "스마트홈",
@@ -320,7 +323,8 @@
    ],
    "contentLd": [],
    "chars": 9215,
-   "canonical": "http://www.aqaralife.kr/smarthome"
+   "canonical": "http://www.aqaralife.kr/smarthome",
+   "updated": ""
   },
   {
    "label": "스마트홈 바이블",
@@ -346,7 +350,16 @@
    ],
    "contentLd": [],
    "chars": 9949,
-   "canonical": "http://www.aqaralife.kr/smarthome-bible"
+   "canonical": "http://www.aqaralife.kr/smarthome-bible",
+   "updated": ""
+  },
+  {
+   "label": "가이드(기준 문서)",
+   "path": "/guide",
+   "kind": "content",
+   "url": "https://www.aqaralife.kr/guide",
+   "status": 0,
+   "ok": false
   },
   {
    "label": "블로그",
@@ -372,7 +385,8 @@
    ],
    "contentLd": [],
    "chars": 7683,
-   "canonical": "http://www.aqaralife.kr/blog"
+   "canonical": "http://www.aqaralife.kr/blog",
+   "updated": ""
   },
   {
    "label": "뉴스룸",
@@ -397,8 +411,9 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9201,
-   "canonical": "http://www.aqaralife.kr/newsroom"
+   "chars": 9230,
+   "canonical": "http://www.aqaralife.kr/newsroom",
+   "updated": "2026-06-30"
   },
   {
    "label": "뉴스레터",
@@ -424,7 +439,8 @@
    ],
    "contentLd": [],
    "chars": 8189,
-   "canonical": "http://www.aqaralife.kr/newsletter"
+   "canonical": "http://www.aqaralife.kr/newsletter",
+   "updated": ""
   },
   {
    "label": "도어락",
@@ -450,7 +466,8 @@
    ],
    "contentLd": [],
    "chars": 7911,
-   "canonical": "http://www.aqaralife.kr/door-lock"
+   "canonical": "http://www.aqaralife.kr/door-lock",
+   "updated": ""
   },
   {
    "label": "센서",
@@ -476,7 +493,8 @@
    ],
    "contentLd": [],
    "chars": 8121,
-   "canonical": "http://www.aqaralife.kr/sensor"
+   "canonical": "http://www.aqaralife.kr/sensor",
+   "updated": ""
   },
   {
    "label": "허브·카메라",
@@ -502,7 +520,8 @@
    ],
    "contentLd": [],
    "chars": 8131,
-   "canonical": "http://www.aqaralife.kr/hub-camera"
+   "canonical": "http://www.aqaralife.kr/hub-camera",
+   "updated": ""
   },
   {
    "label": "조명",
@@ -528,7 +547,8 @@
    ],
    "contentLd": [],
    "chars": 8206,
-   "canonical": "http://www.aqaralife.kr/lightings"
+   "canonical": "http://www.aqaralife.kr/lightings",
+   "updated": ""
   },
   {
    "label": "스위치·패드",
@@ -554,7 +574,8 @@
    ],
    "contentLd": [],
    "chars": 8509,
-   "canonical": "http://www.aqaralife.kr/switch-pad"
+   "canonical": "http://www.aqaralife.kr/switch-pad",
+   "updated": ""
   },
   {
    "label": "블라인드",
@@ -580,7 +601,8 @@
    ],
    "contentLd": [],
    "chars": 7883,
-   "canonical": "http://www.aqaralife.kr/shadings"
+   "canonical": "http://www.aqaralife.kr/shadings",
+   "updated": ""
   },
   {
    "label": "시공 서비스",
@@ -606,7 +628,8 @@
    ],
    "contentLd": [],
    "chars": 10258,
-   "canonical": "http://www.aqaralife.kr/si_service"
+   "canonical": "http://www.aqaralife.kr/si_service",
+   "updated": ""
   },
   {
    "label": "도입 사례",
@@ -631,8 +654,9 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8016,
-   "canonical": "http://www.aqaralife.kr/case"
+   "chars": 8054,
+   "canonical": "http://www.aqaralife.kr/case",
+   "updated": ""
   },
   {
    "label": "기업(B2B)",
@@ -658,7 +682,8 @@
    ],
    "contentLd": [],
    "chars": 9846,
-   "canonical": "http://www.aqaralife.kr/company-platform"
+   "canonical": "http://www.aqaralife.kr/company-platform",
+   "updated": ""
   },
   {
    "label": "인테리어 문의",
@@ -684,7 +709,8 @@
    ],
    "contentLd": [],
    "chars": 13979,
-   "canonical": "http://www.aqaralife.kr/inrequest"
+   "canonical": "http://www.aqaralife.kr/inrequest",
+   "updated": ""
   },
   {
    "label": "파트너십",
@@ -710,7 +736,8 @@
    ],
    "contentLd": [],
    "chars": 8798,
-   "canonical": "http://www.aqaralife.kr/partnership"
+   "canonical": "http://www.aqaralife.kr/partnership",
+   "updated": ""
   }
  ],
  "site": {
@@ -727,5 +754,17 @@
   "blogPosts": 1,
   "newsroomPosts": 10,
   "note": "게시판 1페이지 기준 · 글 상세 링크(idx) 개수"
+ },
+ "guide": {
+  "exists": false,
+  "posts": 0,
+  "specPosts": 0,
+  "ldPosts": 0,
+  "faqHub": false,
+  "note": "/guide 페이지를 찾지 못했습니다(신설 중이면 확인 필요)"
+ },
+ "productMaster": {
+  "rows": [],
+  "note": "대조할 제품 목록(PRODUCTS)이 비어 있습니다 — 확인 필요"
  }
 }
