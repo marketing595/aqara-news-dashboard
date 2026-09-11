@@ -6646,7 +6646,9 @@
       return Object.assign({},c,{kw: ov?ov.split(',').map(s=>s.trim()).filter(Boolean):c.kw}); }); }
     function geCep(id){ return geCeps().filter(c=>c.id===+id)[0]||null; }
     function gePrompts(){ return ((GEOS||{}).prompts||[]); }
-    function geEngines(){ return ((GEOS||{}).engines||[]); }
+    /* 자동 측정되는 엔진을 앞에 둔다 — 값이 들어 있는 열이 화면 오른쪽 끝에 숨지 않도록 */
+    function geEngines(){ const es=((GEOS||{}).engines||[]).slice();
+      return es.sort((a,b)=>((b.auto?1:0)-(a.auto?1:0))); }
     function geChannels(){ return ((GEOS||{}).channels||[]); }
     function geChan(k){ return geChannels().filter(c=>c.k===k)[0]||null; }
     function geW(){ return (((GEOS||{}).scoring||{}).weights)||{som:40,asset:20,page:20,site:10,ops:10}; }
@@ -7089,8 +7091,18 @@
       return `
       <div class="card p-5 mb-4">
         <h3 class="accent font-extrabold text-ink mb-1">AI 답변 측정 <span class="text-[11px] font-normal text-slate-400">${geYM} · 프롬프트 35개 × 엔진 5개</span></h3>
-        <p class="text-[12.5px] text-slate-500 mb-1"><b class="text-agreen">검색근거 열은 자동으로 채워집니다</b> — 35개 질문을 실제로 웹 검색해 “AI가 근거로 쓸 후보 문서에 우리가 있는지”를 기록합니다(현재 ${geAutoRuns().length}건).
-          붙여넣기가 필요한 건 <b>자동이 안 되는 엔진</b>(ChatGPT·Perplexity·네이버 AI 브리핑)뿐이고, 그것도 전부 채울 필요는 없습니다.</p>
+        ${(()=>{ const a=geAutoRuns(), byEng={}; a.forEach(r=>{ byEng[r.eng]=(byEng[r.eng]||0)+1; });
+          const men=a.filter(r=>+r.mention===1).length, diag=((GEOM||{}).diag||{});
+          return `<div class="rounded-xl p-3 mb-3" style="background:${a.length?'#F3F8F0':'#FDECEA'};border:1px solid ${a.length?'#CFE3C4':'#F0C9C0'}">
+            <p class="text-[13px] font-extrabold" style="color:${a.length?'#4F6B3A':'#BF5332'}">
+              ${a.length?`✅ 이번 달 자동 측정 ${a.length}건 완료 — 아카라 언급 ${men}건 (${Math.round(men/a.length*100)}%)`
+                        :'⚠️ 이번 달 자동 측정 결과가 아직 없습니다'}</p>
+            <p class="text-[12px] text-slate-600 mt-1">
+              ${a.length?`<b>손으로 넣을 게 없습니다.</b> 매월 1일·15일에 35개 질문을 자동으로 돌립니다(${Object.keys(byEng).map(k=>((geEngines().filter(e=>e.k===k)[0]||{}).short||k)+' '+byEng[k]+'건').join(' · ')}).
+                 아래 표에서 <b class="text-agreen">초록 열이 자동</b>, 나머지는 <b>보고 싶을 때만</b> 손으로 넣는 칸입니다 — 비워 둬도 됩니다.`
+                        :'자동 측정 파일(geo_measure.json)을 읽지 못했거나 이번 달 기록이 없습니다.'}</p>
+            ${diag.gemini?`<p class="text-[11.5px] text-[#8A6A00] mt-1">⚠️ ${esc(diag.gemini)}</p>`:''}
+          </div>`; })()}
         <p class="text-[11.5px] text-slate-400 mb-3">질문당 <b>월 ${minRuns}회 이상</b>이면 노출률로 씁니다. 손으로 넣을 때 ChatGPT·Gemini는 <b>검색(그라운딩) 켠 상태</b>의 답변만 써 주세요 — 검색이 꺼진 답변에는 근거 URL이 없어 측정에 쓸 수 없습니다.</p>
         ${f?`
         <div class="rounded-xl border-2 border-ink p-4 mb-4">
@@ -7125,16 +7137,16 @@
           <table class="w-full min-w-[860px] text-[12px]">
             <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
               <th class="px-2 py-2 text-left">질문</th><th class="px-2 py-2 text-left">유형</th><th class="px-2 py-2 text-center">CEP</th>
-              ${eng.map(e=>`<th class="px-2 py-2 text-center">${e.short}</th>`).join('')}
+              ${eng.map(e=>`<th class="px-2 py-2 text-center ${e.auto?'bg-[#EDF5E9]':''}">${e.short}<span class="block text-[9.5px] font-normal ${e.auto?'text-agreen':'text-slate-400'}">${e.auto?'자동':'수동'}</span></th>`).join('')}
               <th class="px-2 py-2 text-right">합계</th></tr></thead>
             <tbody>${ps.map(p=>{
               let tn=0,tm=0;
               const cells=eng.map(e=>{ const s=geSom(p.id,e.k); tn+=s.n; tm+=s.men;
-                const col=s.n===0?'#8E8E93':(s.som>=50?'#5E7350':(s.som>0?'#D68134':'#BF5332'));
-                return `<td class="px-2 py-1.5 text-center">
+                const col=s.n===0?'#C7C7C4':(s.som>=50?'#5E7350':(s.som>0?'#D68134':'#BF5332'));
+                return `<td class="px-2 py-1.5 text-center ${e.auto?'bg-[#F7FAF5]':''}">
                   <button onclick="geMOpen('${p.id}','${e.k}')" class="hover:underline" title="${s.n}회 측정 · 언급 ${s.men} · 우리 문서 인용 ${s.cited}">
-                    <span class="font-bold num" style="color:${col}">${s.n===0?'—':(s.som+'%')}</span>
-                    <span class="text-[10px] text-slate-400 block">${s.n?('n='+s.n+(s.n<minRuns?' ⚠':'')):'미측정'}</span></button></td>`; }).join('');
+                    <span class="font-bold num" style="color:${col}">${s.n===0?'·':(s.som+'%')}</span>
+                    <span class="text-[10px] text-slate-400 block">${s.n?('n='+s.n+(s.n<minRuns?' ⚠':'')):(e.auto?'대기':'수동')}</span></button></td>`; }).join('');
               return `<tr class="border-b border-[#F2EFE9] hover:bg-[#FAFAF9]">
                 <td class="px-2 py-1.5"><span class="font-mono text-[10.5px] text-slate-400">${p.id}</span> ${esc(p.q.slice(0,38))}${p.q.length>38?'…':''}</td>
                 <td class="px-2 py-1.5 text-slate-400">${p.type==='generic'?'일반':(p.type==='conditional'?'조건':'브랜드')}</td>

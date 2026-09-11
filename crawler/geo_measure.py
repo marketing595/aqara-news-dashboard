@@ -77,20 +77,33 @@ def analyze(text, cites):
     return mention, comp, rank
 
 
+GEMINI_DIAG = []          # 왜 실패했는지 결과 파일에 남긴다(추정하지 않기 위해)
+
+
 def run_gemini(prompt, key):
-    """Gemini + 구글 검색 그라운딩. 근거 URL은 groundingMetadata에서 뽑는다."""
+    """Gemini + 구글 검색 그라운딩. 근거 URL은 groundingMetadata에서 뽑는다.
+       도구 이름이 모델 세대마다 달라서(google_search / google_search_retrieval) 둘 다 시도한다."""
     for model in MODELS:
+      for tool in ({'google_search': {}}, {'google_search_retrieval': {}}):
         url = ('https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s'
                % (model, key))
         payload = {
             'contents': [{'parts': [{'text': prompt}]}],
-            'tools': [{'google_search': {}}],
+            'tools': [tool],
             'generationConfig': {'temperature': 0.3, 'maxOutputTokens': 1200},
         }
         try:
             d = post_json(url, payload)
         except Exception as e:
-            print('   ! %s %s' % (model, e))
+            msg = '%s/%s %s' % (model, list(tool)[0], e)
+            body = ''
+            try:
+                body = e.read().decode('utf-8', 'ignore')[:200]      # HTTPError 본문에 이유가 들어 있다
+            except Exception:
+                pass
+            print('   ! %s %s' % (msg, body))
+            if len(GEMINI_DIAG) < 4:
+                GEMINI_DIAG.append(msg + ' ' + body)
             continue
         cand = (d.get('candidates') or [{}])[0]
         text = ''.join(p.get('text', '') for p in ((cand.get('content') or {}).get('parts') or []))
@@ -184,8 +197,12 @@ def main():
     keep = {(now - timedelta(days=31 * i)).strftime('%Y-%m') for i in range(KEEP_MONTHS)}
     runs = [r for r in runs if r.get('ym') in keep or r.get('ym') == ym]
 
+    gem_n = len([r for r in runs if r.get('ym') == ym and r.get('eng') == 'gemini'])
     out.update({'generatedAt': now.isoformat(timespec='seconds'),
                 'note': out.get('note') or '진단 프롬프트 자동 측정 결과',
+                'engines': sorted({r.get('eng') for r in runs if r.get('ym') == ym}),
+                'diag': ({'gemini': '이번 달 Gemini 측정 0건 — ' + ' / '.join(GEMINI_DIAG)}
+                         if (gkey and not gem_n) else {}),
                 'runs': runs})
     with open(OUT, 'w', encoding='utf-8') as f:
         json.dump(out, f, ensure_ascii=False, indent=1)
