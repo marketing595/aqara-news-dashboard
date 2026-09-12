@@ -1,8 +1,30 @@
 {
- "generatedAt": "2026-09-08 09:35",
+ "generatedAt": "2026-09-12 09:27",
  "source": "Stibee API v2 (자동)",
  "subscribers": 7262,
  "b2b": [
+  {
+   "id": 3589383,
+   "title": "[초청] KOSIDx아카라라이프 : 공간디자인의 새로운 패러다임, 스마트홈 인테리어 2026",
+   "date": "2026-09-09",
+   "link": "https://stib.ee/LSJO",
+   "listId": 516778,
+   "sender": "아카라라이프",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null
+  },
+  {
+   "id": 3586429,
+   "title": "[세미나 초청] 공간디자인의 새로운 패러다임, 스마트홈 인테리어 2026",
+   "date": "2026-09-08",
+   "link": "https://stib.ee/mvHO",
+   "listId": 516396,
+   "sender": "아카라라이프",
+   "sent": null,
+   "openRate": null,
+   "clickRate": null
+  },
   {
    "id": 3571346,
    "title": "(제목 없음)",
@@ -10,17 +32,6 @@
    "link": "https://stib.ee/H4AO",
    "listId": -1,
    "sender": null,
-   "sent": null,
-   "openRate": null,
-   "clickRate": null
-  },
-  {
-   "id": 3572170,
-   "title": "(초청) KOSID 공동 주최 세미나에 초대합니다.",
-   "date": "2026-08-31",
-   "link": "https://stib.ee/0VAO",
-   "listId": 516396,
-   "sender": "아카라라이프",
    "sent": null,
    "openRate": null,
    "clickRate": null
