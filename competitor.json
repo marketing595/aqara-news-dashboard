@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-12 21:12",
+ "generatedAt": "2026-09-13 22:20",
  "brands": [
   {
    "name": "아카라",
@@ -124,12 +124,12 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
-    "아카라 홈캠",
-    "아카라 l100",
     "아카라치몰",
+    "아카라 홈캠",
     "아카라치",
+    "아카라카",
     "아카라 스위치",
-    "아카라카"
+    "아카라 l100"
    ],
    "recent": [
     {
@@ -451,55 +451,51 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 68077,
+   "total": 68081,
    "sentiment": {
-    "pos": 18,
-    "neu": 41,
+    "pos": 19,
+    "neu": 40,
     "neg": 1
    },
    "keywords": [
     [
      "AI",
-     78
+     77
     ],
     [
      "갤럭시",
-     33
-    ],
-    [
-     "방탈출",
-     28
+     30
     ],
     [
      "삼성전자는",
-     20
+     22
+    ],
+    [
+     "방탈출",
+     22
     ],
     [
      "IFA",
-     20
+     19
     ],
     [
      "게임",
      19
     ],
     [
-     "기기와",
-     15
-    ],
-    [
      "가전",
-     12
+     13
     ],
     [
      "SmartThings",
-     12
+     13
     ],
     [
-     "자동화",
-     12
+     "기기와",
+     13
     ],
     [
-     "기술을",
+     "에너지",
      12
     ],
     [
@@ -512,10 +508,10 @@
     ],
     [
      "연결형",
-     11
+     10
     ],
     [
-     "에너지",
+     "자동화",
      10
     ],
     [
@@ -523,11 +519,15 @@
      9
     ],
     [
+     "생활",
+     9
+    ],
+    [
      "심장",
      9
     ],
     [
-     "참가자들은",
+     "기술을",
      9
     ]
    ],
@@ -566,18 +566,42 @@
     ]
    ],
    "related": [
-    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스 연결",
+    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스",
-    "삼성 스마트싱스 연결",
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스 조명"
+    "삼성 스마트싱스 아이폰"
    ],
    "recent": [
+    {
+     "title": "[써보니] 빨아도 남던 물걸레 냄새 ‘싹’…삼성 ‘비스포크 AI 스팀’",
+     "source": "etoday.co.kr",
+     "date": "2026-09-13",
+     "link": "https://www.etoday.co.kr/news/view/2624629"
+    },
+    {
+     "title": "삼성전자, '패밀리허브·AI 콤보'로 중남미 공략…AI 가전 전면에",
+     "source": "아이뉴스24",
+     "date": "2026-09-13",
+     "link": "https://n.news.naver.com/mnews/article/031/0001057868?sid=101"
+    },
+    {
+     "title": "삼성전자, 멕시코서 '더 브리프' 개최…'비스포크 AI'로 남미 가전 시장...",
+     "source": "joongangenews.com",
+     "date": "2026-09-13",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=547768"
+    },
+    {
+     "title": "집안으로 들어온 인공지능…삼성전자, AI가전으로 중남미 공략",
+     "source": "연합뉴스",
+     "date": "2026-09-13",
+     "link": "https://n.news.naver.com/mnews/article/001/0016306620?sid=104"
+    },
     {
      "title": "[기획] '삼성 vs LG' AI 홈 대격돌…가전, LLM 집사로 진화",
      "source": "kfenews.co.kr",
@@ -643,30 +667,6 @@
      "source": "mediapen.com",
      "date": "2026-09-09",
      "link": "https://www.mediapen.com/news/view/1122341"
-    },
-    {
-     "title": "“부모님 약 드셨나, 활동량 줄었나”⋯삼성 헬스, '커넥티드 케어' 강...",
-     "source": "아이뉴스24",
-     "date": "2026-09-09",
-     "link": "https://n.news.naver.com/mnews/article/031/0001056791?sid=105"
-    },
-    {
-     "title": "생명 구하는 갤럭시 워치, 손목 위 심장 '골든타임' 지킨다",
-     "source": "it.chosun.com",
-     "date": "2026-09-09",
-     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092169760"
-    },
-    {
-     "title": "애플·화웨이에 밀린 삼성전자 갤워치···'커넥티드 케어'로 반전 노려",
-     "source": "sisajournal-e.com",
-     "date": "2026-09-09",
-     "link": "https://www.sisajournal-e.com/news/articleView.html?idxno=423594"
-    },
-    {
-     "title": "삼성전자, 갤럭시 워치로 '심장 골든타임' 지킨다…예방 헬스케어 강화",
-     "source": "theguru.co.kr",
-     "date": "2026-09-09",
-     "link": "https://www.theguru.co.kr/news/article.html?no=106878"
     }
    ]
   },
@@ -674,36 +674,36 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77536,
+   "total": 77537,
    "sentiment": {
-    "pos": 17,
-    "neu": 43,
+    "pos": 16,
+    "neu": 44,
     "neg": 0
    },
    "keywords": [
     [
      "AI",
-     50
+     49
     ],
     [
      "AI홈",
-     47
+     48
     ],
     [
      "LG전자",
      42
     ],
     [
-     "ThinQ",
+     "플랫폼",
      35
     ],
     [
-     "플랫폼",
+     "ThinQ",
      34
     ],
     [
      "IFA",
-     29
+     30
     ],
     [
      "가전",
@@ -738,15 +738,15 @@
      16
     ],
     [
-     "공간",
-     13
-    ],
-    [
      "LG전자는",
      13
     ],
     [
-     "생활",
+     "공간",
+     13
+    ],
+    [
+     "연동해",
      12
     ],
     [
@@ -761,7 +761,7 @@
     ],
     [
      "강화",
-     5
+     4
     ],
     [
      "혁신",
@@ -790,17 +790,23 @@
    ],
    "related": [
     "lg 씽큐",
-    "lg 씽큐 연결",
-    "lg 씽큐 세탁기",
-    "lg 씽큐온",
     "lg 씽큐 앱",
+    "lg 씽큐 연결",
+    "lg 씽큐온",
+    "lg 씽큐 세탁기",
     "lg 씽큐 와이파이",
     "lg 씽큐 티비연결",
-    "lg 씽큐 냉장고",
     "lg 씽큐 공유",
-    "lg 씽큐 오류"
+    "lg 씽큐 오류",
+    "lg 씽큐 냉장고"
    ],
    "recent": [
+    {
+     "title": "세탁기 옆에 로봇이 선다, IFA 2026이 보여준 '피지컬 AI'의 실체",
+     "source": "coinreaders.com",
+     "date": "2026-09-13",
+     "link": "http://coinreaders.com/257928"
+    },
     {
      "title": "얼룩 보자 100도 스팀 '칙~'⋯LG 로봇청소기 '로니'[써보니]",
      "source": "아이뉴스24",
@@ -884,12 +890,6 @@
      "source": "dealsite.co.kr",
      "date": "2026-09-10",
      "link": "https://dealsite.co.kr/articles/168736"
-    },
-    {
-     "title": "네덜란드 가전매장에 ‘AI집’ 들인 LG…매장 매출 20%↑[르포]",
-     "source": "이데일리",
-     "date": "2026-09-10",
-     "link": "https://n.news.naver.com/mnews/article/018/0006366670?sid=101"
     }
    ]
   },
@@ -897,20 +897,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75842,
+   "total": 75845,
    "sentiment": {
-    "pos": 15,
-    "neu": 37,
+    "pos": 14,
+    "neu": 38,
     "neg": 8
    },
    "keywords": [
     [
      "AI",
-     54
-    ],
-    [
-     "제미나이",
-     12
+     49
     ],
     [
      "전문",
@@ -926,6 +922,10 @@
     ],
     [
      "입니다",
+     10
+    ],
+    [
+     "제미나이",
      10
     ],
     [
@@ -992,10 +992,6 @@
     ],
     [
      "확대",
-     3
-    ],
-    [
-     "수상",
      2
     ],
     [
@@ -1009,21 +1005,43 @@
     [
      "협업",
      1
+    ],
+    [
+     "수상",
+     1
     ]
    ],
    "related": [
     "구글 홈 스피커",
     "구글 홈",
     "구글 홈 허브",
-    "구글 홈 미니",
     "구글 홈페이지",
+    "구글 홈 미니",
     "구글 홈 미니 초기화",
     "구글 홈 미니 1세대",
-    "구글 홈 스피커 연결",
     "구글 홈 어시스턴트",
-    "구글 홈 연결"
+    "구글 홈 스피커 연결",
+    "구글 홈 미니 2세대"
    ],
    "recent": [
+    {
+     "title": "개별 제품을 넘어 생태계로…‘라이프사이클’을 파는 기업들[테크트렌...",
+     "source": "magazine.hankyung.com",
+     "date": "2026-09-13",
+     "link": "https://n.news.naver.com/mnews/article/050/0000110809?sid=101"
+    },
+    {
+     "title": "[전문가 기고]AI의 '몸'을 찾는 빅테크, 그리고 애플의 세대교체가 던지...",
+     "source": "m-i.kr",
+     "date": "2026-09-13",
+     "link": "https://www.m-i.kr/news/articleView.html?idxno=1413034"
+    },
+    {
+     "title": "당신은 리센느를 좋아할 가능성이 높습니다",
+     "source": "머니투데이",
+     "date": "2026-09-13",
+     "link": "https://n.news.naver.com/mnews/article/008/0005412825?sid=105"
+    },
     {
      "title": "복기왕 의원, 주택 가격과 지역 시장 상황에 맞춰 금융규제 차등 적용해...",
      "source": "breaknews.com",
@@ -1095,24 +1113,6 @@
      "source": "wikitree.co.kr",
      "date": "2026-09-11",
      "link": "https://www.wikitree.co.kr/articles/1158746"
-    },
-    {
-     "title": "[게시판] 에너자이, 브로드컴과 온디바이스 AI 기술 공유 등 단신",
-     "source": "aitimes.com",
-     "date": "2026-09-10",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=215111"
-    },
-    {
-     "title": "대구도시개발공사, 군위 주거취약가구에 ‘홈케어 임팩트’",
-     "source": "breaknews.com",
-     "date": "2026-09-10",
-     "link": "http://www.breaknews.com/1235810"
-    },
-    {
-     "title": "KEF LS LUXE",
-     "source": "audioht.co.kr",
-     "date": "2026-09-10",
-     "link": "http://www.audioht.co.kr/news/articleView.html?idxno=19795"
     }
    ]
   }
