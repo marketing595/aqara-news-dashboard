@@ -1372,6 +1372,24 @@
              </div>
            </div>
            <p class="text-[12px] text-slate-400 mb-2">각 칸을 클릭해 작성하세요. <b class="text-agreen">여러 명이 동시에 편집하면 실시간으로 서로 반영</b>됩니다.</p>
+           <!-- 서식 도구 — 글자를 드래그해서 고른 뒤 누르면 적용됩니다(굵게·기울임·밑줄·취소선·색·형광펜) -->
+           <div id="wkToolbar" class="flex flex-wrap items-center gap-1 mb-3 px-2 py-1.5 rounded-lg border border-[#E6E6E3] bg-[#FAFAF9]"
+                onmousedown="event.preventDefault()">
+             <span class="text-[11px] font-bold text-slate-400 mr-1">서식</span>
+             <button onclick="wkFmt('bold')" title="굵게 (Ctrl+B)" class="w-7 h-7 rounded border border-[#E6E6E3] bg-white hover:bg-[#F1EFE9] text-[13px] font-extrabold">B</button>
+             <button onclick="wkFmt('italic')" title="기울임 (Ctrl+I)" class="w-7 h-7 rounded border border-[#E6E6E3] bg-white hover:bg-[#F1EFE9] text-[13px] italic font-serif">I</button>
+             <button onclick="wkFmt('underline')" title="밑줄 (Ctrl+U)" class="w-7 h-7 rounded border border-[#E6E6E3] bg-white hover:bg-[#F1EFE9] text-[13px] underline">U</button>
+             <button onclick="wkFmt('strikeThrough')" title="취소선" class="w-7 h-7 rounded border border-[#E6E6E3] bg-white hover:bg-[#F1EFE9] text-[13px] line-through">S</button>
+             <span class="w-px h-5 bg-[#E6E6E3] mx-1"></span>
+             <span class="text-[11px] text-slate-400">글자색</span>
+             <span id="wkColorBtns" class="flex items-center gap-1"></span>
+             <span class="w-px h-5 bg-[#E6E6E3] mx-1"></span>
+             <span class="text-[11px] text-slate-400">형광펜</span>
+             <span id="wkMarkBtns" class="flex items-center gap-1"></span>
+             <span class="w-px h-5 bg-[#E6E6E3] mx-1"></span>
+             <button onclick="wkFmtClear()" title="서식 지우기" class="h-7 px-2 rounded border border-[#E6E6E3] bg-white hover:bg-[#F1EFE9] text-[11.5px] font-semibold text-slate-500">서식 지우기</button>
+             <span class="text-[11px] text-slate-300 ml-1">글자를 드래그해 고른 뒤 누르세요</span>
+           </div>
            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
              <div id="wkPresence" class="flex flex-wrap items-center gap-1.5"></div>
              <span id="wkUpdated" class="text-[11px] text-slate-400"></span>
@@ -8675,7 +8693,7 @@
       return (mon.getMonth()+1)+'/'+mon.getDate()+'('+WK_DOW[mon.getDay()]+') ~ '+(fri.getMonth()+1)+'/'+fri.getDate()+'('+WK_DOW[fri.getDay()]+')'; }
     function wkUseFB(){ return !!(typeof WK_FB_READY!=='undefined' && WK_FB_READY && WK_AUTH_OK && WK_DB); }
     // 진입 · 주차 이동
-    function wkOpen(){ if(!wkCur) wkCur=wkReportMonday(); wkWireFocus(); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); wkRenderSave(); }
+    function wkOpen(){ if(!wkCur) wkCur=wkReportMonday(); wkWireFocus(); wkAttach(); wkSeedProjects(); wkPresenceStart(); renderMktWeekly(); wkRenderSave(); wkPaintToolbar(); }
     function wkReportMonday(){ return wkMondayOf(todayStr()); }
     function wkThisReport(){ wkCur=wkReportMonday(); wkAttach(); renderMktWeekly(); wkRenderSave(); }
     function wkShift(n){ if(!wkCur) wkCur=wkReportMonday(); const d=new Date(wkCur); d.setDate(d.getDate()+n*7); wkCur=d.toISOString().slice(0,10); wkAttach(); renderMktWeekly(); }
@@ -8691,7 +8709,7 @@
     function wkStampUpdated(){ const el=document.getElementById('wkUpdated'); if(!el) return; const d=new Date(); el.textContent='마지막 갱신 '+d.getHours()+'시 '+d.getMinutes()+'분 '+d.getSeconds()+'초'; }
     function wkAfterSnap(){ wkStampUpdated(); if(!wkFocused()){ renderMktWeekly(); return; } wkPreserveActive(); wkPatchLive(); wkPendingSnap=true; }
     // 편집 중: 내가 커서를 둔 칸은 건드리지 않고, 나머지 칸의 텍스트만 실시간 갱신(커서·한글조합 안전)
-    function wkPatchLive(){ const body=wkBody(); if(!body) return; const act=document.activeElement; body.querySelectorAll('[data-path]').forEach(function(el){ if(el===act) return; const v=wkGetPath(el.dataset.path); const val=(v==null?'':String(v)); if(el.tagName==='INPUT'){ if(el.value!==val) el.value=val; } else if(/\/summary$/.test(el.dataset.path)){ const html=wkSummaryHtml(val); if(el.innerHTML!==html) el.innerHTML=html; } else { if(el.innerText!==val) el.innerText=val; } }); }
+    function wkPatchLive(){ const body=wkBody(); if(!body) return; const act=document.activeElement; body.querySelectorAll('[data-path]').forEach(function(el){ if(el===act) return; const v=wkGetPath(el.dataset.path); const val=(v==null?'':String(v)); if(el.tagName==='INPUT'){ if(el.value!==val) el.value=val; } else if(/\/summary$/.test(el.dataset.path)){ const html=wkSumRich(val); if(el.innerHTML!==html) el.innerHTML=html; } else if(el.dataset.rich){ const html=wkRich(val); if(el.innerHTML!==html) el.innerHTML=html; } else { if(el.innerText!==val) el.innerText=val; } }); }
     // 편집 중 커서 보호
     function wkBody(){ return document.getElementById('mktWeeklyBody'); }
     function wkFocused(){ const a=document.activeElement, b=wkBody(); return !!(a && b && b.contains(a) && (a.isContentEditable || a.tagName==='INPUT' || a.tagName==='TEXTAREA' || a.tagName==='SELECT')); }
@@ -8716,7 +8734,70 @@
     function wkDirtyState(){ return Object.keys(wkDeb).length>0 || wkInflight>0; }
     function wkRenderSave(){ const el=document.getElementById('wkSaveState'); if(!el) return; if(wkFbErr){ el.innerHTML='<span class="font-semibold" style="color:#B91C1C">⚠ 저장 실패(DB 규칙 확인)</span>'; return; } if(wkDirtyState()){ el.innerHTML='<span class="font-semibold" style="color:#D97706">● 저장 중…</span>'; } else { const d=new Date(); el.innerHTML='<span class="font-semibold" style="color:#16A34A">✓ 저장됨</span> <span class="text-slate-400">'+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+'</span>'; } }
     function wkSaveNow(){ Object.keys(wkDeb).forEach(wkFlushPath); if(!wkUseFB()) wkPersistLocal(); wkRenderSave(); const b=document.getElementById('wkSaveBtn'); if(b){ const t=b.getAttribute('data-lbl')||b.textContent; b.setAttribute('data-lbl',t); b.textContent='저장됨 ✓'; setTimeout(function(){ b.textContent=t; },1500); } }
-    function wkText(el){ if(el&&el.dataset&&el.dataset.path) wkSetText(el.dataset.path, (el.tagName==='INPUT'?el.value:el.innerText)); }
+    function wkText(el){ if(!el||!el.dataset||!el.dataset.path) return;
+      wkSetText(el.dataset.path, (el.tagName==='INPUT') ? el.value
+        : (el.dataset.rich ? wkSanitize(el.innerHTML) : el.innerText)); }
+
+    /* ===== 서식(굵게·기울임·밑줄·색) =====================================
+       칸 내용을 글자만이 아니라 서식까지 저장한다. 아무 서식도 없는 예전 기록은
+       그대로 글자로 읽고(<가 없으면 문자열 취급), 저장할 때는 허용한 태그만 남긴다. */
+    const WK_OK_TAGS={B:1,STRONG:1,I:1,EM:1,U:1,S:1,STRIKE:1,SPAN:1,BR:1,DIV:1,P:1,FONT:1,MARK:1};
+    const WK_OK_CSS=['color','background-color','text-decoration','text-decoration-line','font-weight','font-style'];
+    const WK_COLORS=[['기본','#26282A'],['빨강','#BF5332'],['주황','#D68134'],['초록','#4F6B3A'],
+                     ['파랑','#2563EB'],['보라','#7C5CFF'],['골드','#8A6A00'],['회색','#8E8E93']];
+    const WK_MARKS=[['노랑','#FDF3C7'],['초록','#DCF3D2'],['파랑','#DBEAFE'],['분홍','#FBE0DA']];
+    function wkSanitize(html){
+      const box=document.createElement('div'); box.innerHTML=String(html||'');
+      (function walk(node){
+        Array.prototype.slice.call(node.childNodes).forEach(function(n){
+          if(n.nodeType===3) return;                                  // 글자는 그대로
+          if(n.nodeType!==1){ n.parentNode.removeChild(n); return; }  // 주석 등은 버림
+          if(!WK_OK_TAGS[n.tagName]){                                 // 허용 안 한 태그는 껍데기만 벗김
+            const f=document.createDocumentFragment();
+            while(n.firstChild) f.appendChild(n.firstChild);
+            n.parentNode.replaceChild(f,n); return; }
+          const keep=[];
+          WK_OK_CSS.forEach(function(p){ const v=n.style&&n.style.getPropertyValue(p); if(v) keep.push(p+':'+v); });
+          Array.prototype.slice.call(n.attributes).forEach(function(at){ n.removeAttribute(at.name); });
+          if(keep.length) n.setAttribute('style',keep.join(';'));
+          walk(n);
+        });
+      })(box);
+      return box.innerHTML;
+    }
+    function wkHasTags(v){ return /<[a-zA-Z/]/.test(String(v==null?'':v)); }
+    /* AI 요약 칸 — 자동 생성한 평문은 [마케팅팀]·①② 줄을 굵게 보여주고, 사람이 서식을 넣은 뒤엔 그대로 둔다 */
+    function wkSumRich(v){ v=(v==null?'':String(v)); return wkHasTags(v)?wkSanitize(v):wkSummaryHtml(v); }
+    function wkRich(v){ v=(v==null?'':String(v)); return wkHasTags(v)?wkSanitize(v):esc(v); }
+    /* 텍스트 복사·AI 요약처럼 글자만 필요한 곳 */
+    function wkPlain(v){ v=(v==null?'':String(v)); if(!wkHasTags(v)) return v;
+      const box=document.createElement('div'); box.innerHTML=wkSanitize(v);
+      return (box.innerText||box.textContent||'').replace(/ /g,' '); }
+    /* 툴바 — 버튼을 눌러도 커서가 칸에서 빠지지 않게 mousedown에서 기본동작을 막는다 */
+    let WK_LAST_RICH=null;
+    function wkRichFocus(el){ if(el&&el.dataset&&el.dataset.rich) WK_LAST_RICH=el; }
+    function wkFmt(cmd,val){
+      const el=WK_LAST_RICH;
+      if(!el||!document.getElementById('mktWeeklyBody')||!document.getElementById('mktWeeklyBody').contains(el)){
+        alert('먼저 서식을 넣을 칸을 클릭해 글자를 선택해 주세요.'); return; }
+      el.focus();
+      try{ document.execCommand('styleWithCSS',false,true); }catch(e){}
+      try{ document.execCommand(cmd,false,val||null); }catch(e){}
+      wkText(el);
+    }
+    function wkFmtClear(){ wkFmt('removeFormat'); wkFmt('hiliteColor','transparent'); }
+    /* 색 버튼은 한 번만 그려 둔다 */
+    function wkPaintToolbar(){
+      const cb=document.getElementById('wkColorBtns'), mb=document.getElementById('wkMarkBtns');
+      if(cb && !cb.dataset.done){ cb.dataset.done='1';
+        cb.innerHTML=WK_COLORS.map(c=>'<button onclick="wkFmt(\'foreColor\',\''+c[1]+'\')" title="'+c[0]+'" '
+          +'class="w-6 h-6 rounded border border-[#E6E6E3] bg-white font-extrabold text-[12px]" style="color:'+c[1]+'">가</button>').join(''); }
+      if(mb && !mb.dataset.done){ mb.dataset.done='1';
+        mb.innerHTML=WK_MARKS.map(c=>'<button onclick="wkFmt(\'hiliteColor\',\''+c[1]+'\')" title="'+c[0]+' 형광펜" '
+          +'class="w-6 h-6 rounded border border-[#E6E6E3]" style="background:'+c[1]+'"></button>').join('')
+          +'<button onclick="wkFmt(\'hiliteColor\',\'transparent\')" title="형광펜 지우기" '
+          +'class="w-6 h-6 rounded border border-[#E6E6E3] bg-white text-[11px] text-slate-400">✕</button>'; }
+    }
     // ID · 순서
     function wkNewId(){ if(wkUseFB()){ try{ return WK_DB.ref().push().key; }catch(e){} } return 'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
     function wkNextOrder(bk){ const a=wkItems(bk); return a.length?(a[a.length-1].order+1):0; }
@@ -8806,13 +8887,13 @@
     function wkRowHtml(bk,it){ const projs=wkProjList(); const cur=projs.filter(p=>p.id===it.project)[0]; const dot=cur?('<span class="shrink-0" style="width:8px;height:8px;border-radius:9999px;background:'+cur.color+';display:inline-block"></span>'):''; const wp='weekly/'+wkCur+'/'+bk+'/'+it.id; const cms=wkComments(it.cm);
       const cmHtml=cms.map(c=>`<div class="flex items-start gap-1.5 pl-[52px] py-0.5">
             <span class="text-[#2563EB] text-[12px] leading-5 shrink-0">💬</span>
-            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-path="${wp}/cm/${c.id}/t" oninput="wkText(this)">${esc(c.t)}</div>
+            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-rich="1" data-path="${wp}/cm/${c.id}/t" oninput="wkText(this)" onfocus="wkRichFocus(this)" onmouseup="wkRichFocus(this)">${wkRich(c.t)}</div>
             <button onclick="wkDelComment('${bk}','${it.id}','${c.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="댓글 삭제">✕</button>
           </div>`).join('');
       return `<div class="wk-item border-b border-[#F2EFE9] py-0.5" draggable="false" data-bk="${bk}" data-id="${it.id}" ondragstart="wkDragStart(event)" ondragend="wkDragEnd(event)" ondragover="wkDragOver(event)" ondrop="wkDrop(event)">
           <div class="wk-row flex items-center gap-2 py-1">
           <span class="wk-grip shrink-0 cursor-grab text-slate-300 hover:text-slate-500 select-none text-[13px] leading-none px-0.5" title="드래그해서 순서 이동" onmousedown="wkGripDown(this)" onmouseup="wkGripUp(this)">⠿</span>
-          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none text-slate-700" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-path="${wp}/t" oninput="wkText(this)">${esc(it.t)}</div>
+          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none text-slate-700" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-rich="1" data-path="${wp}/t" oninput="wkText(this)" onfocus="wkRichFocus(this)" onmouseup="wkRichFocus(this)">${wkRich(it.t)}</div>
           ${dot}
           <select onchange="wkSetProject('${bk}','${it.id}',this)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5 shrink-0 max-w-[92px]" title="프로젝트">${wkProjOptions(it.project)}</select>
           <input value="${esc(it.w)}" data-path="${wp}/w" oninput="wkText(this)" placeholder="담당자" class="w-14 text-[12px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0"/>
@@ -8825,7 +8906,7 @@
     const WK_CIRCLED=['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩','⑪','⑫'];
     const WK_SUM_SEC={done:'[전주 실적]', plan:'[금주 계획]', issue:'[이슈·공유]'};
     function wkBuildSummary(){ const projs=wkProjList(); const out=['[마케팅팀 주간보고] '+wkRange()];
-      const bullet=function(it){ return (it.t||'')+(it.w?(' ('+it.w+')'):''); };   // 댓글은 요약에서 제외
+      const bullet=function(it){ return wkPlain(it.t)+(it.w?(' ('+it.w+')'):''); };   // 댓글은 요약에서 제외(서식은 글자만)
       WK_FIELDS.forEach(function(f){ const items=wkItems(f.k).filter(it=>it.t||it.w); if(!items.length) return;
         let n=0; const parts=[];
         projs.forEach(function(p){ const rows=items.filter(it=>(it.project||'')===p.id); if(!rows.length) return; let s=(WK_CIRCLED[n]||('('+(n+1)+')'))+' '+p.name; rows.forEach(function(it){ s+='\n'+bullet(it); }); parts.push(s); n++; });
@@ -8839,13 +8920,13 @@
     function wkCheckRowHtml(it){ const wp='weekly/'+wkCur+'/check/'+it.id; const cms=wkComments(it.cm);
       const cmHtml=cms.map(c=>`<div class="flex items-start gap-1.5 pl-[46px] py-0.5">
             <span class="text-[#2563EB] text-[12px] leading-5 shrink-0">💬</span>
-            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-path="${wp}/cm/${c.id}/t" oninput="wkText(this)">${esc(c.t)}</div>
+            <div class="flex-1 text-[12px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-rich="1" data-path="${wp}/cm/${c.id}/t" oninput="wkText(this)" onfocus="wkRichFocus(this)" onmouseup="wkRichFocus(this)">${wkRich(c.t)}</div>
             <button onclick="wkDelComment('check','${it.id}','${c.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="댓글 삭제">✕</button>
           </div>`).join('');
       return `<div class="wk-item border-b border-[#F2EFE9] py-0.5" draggable="false" data-bk="check" data-id="${it.id}" ondragstart="wkDragStart(event)" ondragend="wkDragEnd(event)" ondragover="wkDragOver(event)" ondrop="wkDrop(event)">
           <div class="wk-row flex items-center gap-2 py-1">
           <span class="wk-grip shrink-0 cursor-grab text-slate-300 hover:text-slate-500 select-none text-[13px] leading-none px-0.5" title="드래그해서 순서 이동" onmousedown="wkGripDown(this)" onmouseup="wkGripUp(this)">⠿</span>
-          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none text-slate-700" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-path="${wp}/t" oninput="wkText(this)">${esc(it.t)}</div>
+          <div class="wk-txt flex-1 text-[13px] min-h-[20px] focus:outline-none text-slate-700" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-rich="1" data-path="${wp}/t" oninput="wkText(this)" onfocus="wkRichFocus(this)" onmouseup="wkRichFocus(this)">${wkRich(it.t)}</div>
           <input value="${esc(it.w)}" data-path="${wp}/w" oninput="wkText(this)" placeholder="확인자" class="w-16 text-[12px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0" title="확인해줄 사람"/>
           <button onclick="wkDelRow('check','${it.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="삭제">✕</button>
           </div>
@@ -8875,7 +8956,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
         <div class="space-y-4">${blocks}</div>
         <div class="space-y-4">
-          <div class="card p-4"><div class="flex items-center justify-between mb-2 gap-2"><h4 class="font-bold text-ink">🤖 AI 요약 <span class="text-[11px] font-normal text-slate-400">([마케팅팀] 형식)</span></h4><button onclick="wkGenSummary()" class="text-[12px] bg-[#7C5CFF] text-white px-2.5 py-1 rounded-lg font-semibold hover:brightness-110 shrink-0">요약하기</button></div><div class="text-[13px] text-slate-700 leading-relaxed min-h-[240px] focus:outline-none border border-[#E6E6E3] rounded-lg px-3 py-2" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-path="weekly/${wkCur}/summary" oninput="wkText(this)">${wkSummaryHtml((weeklyData[wkCur]||{}).summary||'')}</div></div>
+          <div class="card p-4"><div class="flex items-center justify-between mb-2 gap-2"><h4 class="font-bold text-ink">🤖 AI 요약 <span class="text-[11px] font-normal text-slate-400">([마케팅팀] 형식)</span></h4><button onclick="wkGenSummary()" class="text-[12px] bg-[#7C5CFF] text-white px-2.5 py-1 rounded-lg font-semibold hover:brightness-110 shrink-0">요약하기</button></div><div class="text-[13px] text-slate-700 leading-relaxed min-h-[240px] focus:outline-none border border-[#E6E6E3] rounded-lg px-3 py-2" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-rich="1" data-path="weekly/${wkCur}/summary" oninput="wkText(this)" onfocus="wkRichFocus(this)" onmouseup="wkRichFocus(this)">${wkSumRich((weeklyData[wkCur]||{}).summary||'')}</div></div>
           <div class="card p-4"><div class="flex items-center justify-between mb-1"><h4 class="font-bold text-ink">💡 확인 필요 사항 <span class="text-[11px] font-normal text-slate-400">(확인자·체크·댓글)</span></h4><button onclick="wkAddCheck()" class="text-[12px] text-[#7C5CFF] font-semibold hover:underline">＋ 항목 추가</button></div><div>${wkItems('check').map(wkCheckRowHtml).join('')||'<p class="text-[12px] text-slate-400 py-2">＋ 항목 추가로 확인 필요 사항을 적고 확인자를 지정하세요.</p>'}</div>${((weeklyData[wkCur]||{}).insight&&weeklyData[wkCur].insight.trim())?('<p class="text-[11px] text-slate-400 mt-2 border-t border-[#F2EFE9] pt-2" style="white-space:pre-wrap">이전 자유기재 메모:'+esc(weeklyData[wkCur].insight)+'</p>'):''}</div>
         </div>
         </div>`;
@@ -8889,17 +8970,17 @@
         const ov=document.getElementById('wkShareView'); if(!ov) return false; ov.classList.remove('hidden');
         ov.innerHTML='<div class="max-w-3xl mx-auto"><div class="flex items-center justify-between mb-4"><h1 class="text-xl font-extrabold text-ink">마케팅팀 주간보고 <span class="text-sm font-normal text-slate-400">'+esc(p.range||'')+'</span></h1><a href="'+location.pathname+'" class="text-sm text-ink hover:underline">대시보드로 →</a></div>'+
           WK_FIELDS.map(f=>{ const items=wkItemsFrom((p.data&&p.data[f.k])||{}); const groups=wkGroupItems(items,projs);
-            const inner=groups.map(g=>{ const gh=projs.length?('<div class="text-[12px] font-bold mt-2 mb-1" style="color:'+(g.p?g.p.color:'#94A3B8')+'">● '+esc(g.p?g.p.name:'미분류')+'</div>'):''; return gh+g.items.map(it=>'<div class="text-[13px] text-slate-700">· '+esc(it.t)+(it.w?' <span class="text-slate-400">('+esc(it.w)+')</span>':'')+'</div>'+wkCommentsFrom(it.cm).filter(c=>c.t&&c.t.trim()).map(c=>'<div class="text-[12px] text-[#2563EB] pl-5">💬 '+esc(c.t)+'</div>').join('')).join(''); }).join('');
+            const inner=groups.map(g=>{ const gh=projs.length?('<div class="text-[12px] font-bold mt-2 mb-1" style="color:'+(g.p?g.p.color:'#94A3B8')+'">● '+esc(g.p?g.p.name:'미분류')+'</div>'):''; return gh+g.items.map(it=>'<div class="text-[13px] text-slate-700">· '+wkRich(it.t)+(it.w?' <span class="text-slate-400">('+esc(it.w)+')</span>':'')+'</div>'+wkCommentsFrom(it.cm).filter(c=>c.t&&c.t.trim()).map(c=>'<div class="text-[12px] text-[#2563EB] pl-5">💬 '+wkRich(c.t)+'</div>').join('')).join(''); }).join('');
             return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">'+esc(f.label)+'</div><div class="p-3 space-y-1">'+(items.length?inner:'<p class="text-[12px] text-slate-400">-</p>')+'</div></div>'; }).join('')+
           ((p.data&&p.data.summary)?('<div class="rounded-lg border border-[#7C5CFF]/40 mb-3"><div class="px-4 py-2 bg-[#F3F0FF] font-bold text-[#5B44C7]">🤖 AI 요약</div><div class="p-3 text-[13px] text-slate-700" style="white-space:pre-wrap">'+wkSummaryHtml(p.data.summary)+'</div></div>'):'')+
-          (function(){ const chk=wkItemsFrom((p.data&&p.data.check)||{}); const ins=(p.data&&p.data.insight&&p.data.insight.trim())?p.data.insight:''; if(!chk.length && !ins) return ''; let inner=chk.map(it=>'<div class="text-[13px] text-slate-700">· '+esc(it.t)+(it.w?' <span class="text-slate-400">(확인: '+esc(it.w)+')</span>':'')+'</div>'+wkCommentsFrom(it.cm).filter(c=>c.t&&c.t.trim()).map(c=>'<div class="text-[12px] text-[#2563EB] pl-5">💬 '+esc(c.t)+'</div>').join('')).join(''); if(ins) inner+='<div class="text-[12px] text-slate-500 mt-1" style="white-space:pre-wrap">'+esc(ins)+'</div>'; return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">💡 확인 필요 사항</div><div class="p-3 space-y-1">'+inner+'</div></div>'; })()+
+          (function(){ const chk=wkItemsFrom((p.data&&p.data.check)||{}); const ins=(p.data&&p.data.insight&&p.data.insight.trim())?p.data.insight:''; if(!chk.length && !ins) return ''; let inner=chk.map(it=>'<div class="text-[13px] text-slate-700">· '+wkRich(it.t)+(it.w?' <span class="text-slate-400">(확인: '+esc(it.w)+')</span>':'')+'</div>'+wkCommentsFrom(it.cm).filter(c=>c.t&&c.t.trim()).map(c=>'<div class="text-[12px] text-[#2563EB] pl-5">💬 '+wkRich(c.t)+'</div>').join('')).join(''); if(ins) inner+='<div class="text-[12px] text-slate-500 mt-1" style="white-space:pre-wrap">'+esc(ins)+'</div>'; return '<div class="rounded-lg border border-[#E6E6E3] mb-3"><div class="px-4 py-2 bg-[#FAFAF9] font-bold text-ink">💡 확인 필요 사항</div><div class="p-3 space-y-1">'+inner+'</div></div>'; })()+
           '<p class="text-center text-xs text-slate-400 pt-4">읽기전용 공유 보고 · 링크를 가진 사람만 열람</p></div>';
         return true;
       }catch(e){ return false; } }
     function wkCopy(){ wkEnsure(); let t='[마케팅팀 주간보고] '+wkRange()+'\n\n'; const projs=wkProjList();
-      WK_FIELDS.forEach(f=>{ t+='■ '+f.label+'\n'; const groups=wkGroupItems(wkItems(f.k),projs); if(!groups.length) t+='  -\n'; groups.forEach(g=>{ if(projs.length) t+=' ['+(g.p?g.p.name:'미분류')+']\n'; g.items.forEach(it=>{ t+='  - '+(it.t||'')+(it.w?(' ('+it.w+')'):'')+'\n'; wkComments(it.cm).forEach(c=>{ if(c.t&&c.t.trim()) t+='    💬 '+c.t+'\n'; }); }); }); t+='\n'; });
-      const sm=(weeklyData[wkCur]||{}).summary; if(sm) t+='■ AI 요약\n'+sm+'\n\n';
-      const chk=wkItems('check'); if(chk.length){ t+='■ 확인 필요 사항\n'; chk.forEach(it=>{ t+='  - '+(it.t||'')+(it.w?(' (확인: '+it.w+')'):'')+'\n'; wkComments(it.cm).forEach(c=>{ if(c.t&&c.t.trim()) t+='    💬 '+c.t+'\n'; }); }); t+='\n'; }
+      WK_FIELDS.forEach(f=>{ t+='■ '+f.label+'\n'; const groups=wkGroupItems(wkItems(f.k),projs); if(!groups.length) t+='  -\n'; groups.forEach(g=>{ if(projs.length) t+=' ['+(g.p?g.p.name:'미분류')+']\n'; g.items.forEach(it=>{ t+='  - '+wkPlain(it.t)+(it.w?(' ('+it.w+')'):'')+'\n'; wkComments(it.cm).forEach(c=>{ if(c.t&&c.t.trim()) t+='    💬 '+wkPlain(c.t)+'\n'; }); }); }); t+='\n'; });
+      const sm=(weeklyData[wkCur]||{}).summary; if(sm) t+='■ AI 요약\n'+wkPlain(sm)+'\n\n';
+      const chk=wkItems('check'); if(chk.length){ t+='■ 확인 필요 사항\n'; chk.forEach(it=>{ t+='  - '+wkPlain(it.t)+(it.w?(' (확인: '+it.w+')'):'')+'\n'; wkComments(it.cm).forEach(c=>{ if(c.t&&c.t.trim()) t+='    💬 '+wkPlain(c.t)+'\n'; }); }); t+='\n'; }
       const ins=(weeklyData[wkCur]||{}).insight; if(ins&&ins.trim()) t+='■ 확인 필요 사항(메모)\n'+ins+'\n\n';
       if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(()=>alert('주간보고 텍스트를 복사했습니다.'),()=>alert(t)); } else alert(t); }
     let ownedSection='overview';
