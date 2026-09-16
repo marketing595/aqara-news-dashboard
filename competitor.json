@@ -1,14 +1,14 @@
 {
- "generatedAt": "2026-09-15 22:37",
+ "generatedAt": "2026-09-16 22:33",
  "brands": [
   {
    "name": "아카라",
    "me": true,
    "query": "아카라 스마트홈",
-   "total": 1528,
+   "total": 1529,
    "sentiment": {
-    "pos": 23,
-    "neu": 37,
+    "pos": 22,
+    "neu": 38,
     "neg": 0
    },
    "keywords": [
@@ -33,12 +33,12 @@
      15
     ],
     [
-     "AIoT",
+     "공간",
      14
     ],
     [
-     "공간",
-     13
+     "AIoT",
+     14
     ],
     [
      "전문기업",
@@ -115,7 +115,7 @@
      2
     ],
     [
-     "최초",
+     "선도",
      2
     ]
    ],
@@ -124,14 +124,20 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
+    "아카라치몰",
     "아카라치",
     "아카라 홈캠",
-    "아카라치몰",
+    "아카라 l100",
     "아카라 스위치",
-    "아카라카",
-    "아카라 l100"
+    "아카라카"
    ],
    "recent": [
+    {
+     "title": "시각·생체 넘어 '공간'을 감지하는 시대로… 스마트 디바이스, 개인에...",
+     "source": "전자신문",
+     "date": "2026-09-16",
+     "link": "https://n.news.naver.com/mnews/article/030/0003467381?sid=105"
+    },
     {
      "title": "아카라라이프, 바닥난방 연동 '스마트 온도 조절기 W400' 출시",
      "source": "머니투데이",
@@ -215,12 +221,6 @@
      "source": "abcn.kr",
      "date": "2026-08-27",
      "link": "https://www.abcn.kr/news/articleView.html?idxno=90997"
-    },
-    {
-     "title": "아카라라이프, 입문형 스마트 도어락 'L100 SE' 출시",
-     "source": "머니투데이",
-     "date": "2026-08-27",
-     "link": "https://n.news.naver.com/mnews/article/008/0005405830?sid=101"
     }
    ]
   },
@@ -451,109 +451,117 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 68156,
+   "total": 68274,
    "sentiment": {
-    "pos": 41,
-    "neu": 19,
+    "pos": 10,
+    "neu": 50,
     "neg": 0
    },
    "keywords": [
     [
-     "EHS",
-     81
+     "에너지",
+     59
     ],
     [
-     "히트펌프",
-     76
+     "AI",
+     57
     ],
     [
      "삼성전자는",
-     49
-    ],
-    [
-     "출수",
      37
     ],
     [
-     "온도를",
-     37
+     "관리",
+     29
     ],
     [
-     "제어할",
-     36
-    ],
-    [
-     "광주사업장에",
-     36
-    ],
-    [
-     "실내",
-     36
-    ],
-    [
-     "원격",
-     36
-    ],
-    [
-     "앱과",
-     34
-    ],
-    [
-     "온도와",
-     32
-    ],
-    [
-     "확인하고",
-     30
-    ],
-    [
-     "보일러",
+     "솔루션",
      28
     ],
     [
-     "터치",
+     "원격",
      27
     ],
     [
-     "그린수소",
-     27
-    ],
-    [
-     "연동하면",
-     26
-    ],
-    [
-     "생산라인을",
-     26
-    ],
-    [
-     "외부에서도",
+     "기능도",
      25
+    ],
+    [
+     "고효율",
+     23
+    ],
+    [
+     "절감",
+     22
+    ],
+    [
+     "프로",
+     22
+    ],
+    [
+     "EHS",
+     22
+    ],
+    [
+     "기후산업국제박람회",
+     21
+    ],
+    [
+     "B2B",
+     21
+    ],
+    [
+     "앱을",
+     21
+    ],
+    [
+     "난방과",
+     20
+    ],
+    [
+     "냉방",
+     18
+    ],
+    [
+     "급탕",
+     17
+    ],
+    [
+     "히트펌프",
+     17
     ]
    ],
    "posWords": [
     [
-     "글로벌",
-     23
-    ],
-    [
      "확대",
-     17
+     2
     ],
     [
      "공략",
-     7
-    ],
-    [
-     "프리미엄",
-     1
+     2
     ],
     [
      "혁신",
      1
     ],
     [
-     "주목",
+     "강화",
+     1
+    ],
+    [
+     "협업",
+     1
+    ],
+    [
+     "성장",
+     1
+    ],
+    [
+     "글로벌",
+     1
+    ],
+    [
+     "첨단",
      1
     ]
    ],
@@ -562,103 +570,103 @@
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 연결",
     "삼성 스마트싱스",
-    "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
+    "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스 연결 안됨"
+    "삼성 스마트싱스 위치"
    ],
    "recent": [
     {
-     "title": "\"보일러 없는 아파트 시대 연다\"… LG전자, 제주서 국내 첫 공동주택 히...",
-     "source": "mediapen.com",
-     "date": "2026-09-15",
-     "link": "https://www.mediapen.com/news/view/1123535"
+     "title": "삼성·LG전자, '기후산업국제박람회'에서 맞춤형 에너지 절감 솔루션 선...",
+     "source": "consumernews.co.kr",
+     "date": "2026-09-16",
+     "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=764039"
     },
     {
-     "title": "제주서 붙은 LG·삼성 히트펌프… 난방 전기화 실증 나서",
-     "source": "econovill.com",
-     "date": "2026-09-15",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=750812"
+     "title": "삼성전자, 기후산업국제박람회서 에너지 혁신 솔루션 대거 공개",
+     "source": "swtvnews.com",
+     "date": "2026-09-16",
+     "link": "https://www.swtvnews.com/news/newsview.php?ncode=1065596080241678"
     },
     {
-     "title": "'IFA2026' 베를린에서 살펴본 AI기술의 미래",
+     "title": "구독 매출 3조원 앞둔 LG…삼성은 갤럭시로 추격",
+     "source": "it.chosun.com",
+     "date": "2026-09-16",
+     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092170282"
+    },
+    {
+     "title": "부산기후박람회에 집결한 기업들…AI·수소로 탄소중립 해법 제시",
      "source": "ekoreanews.co.kr",
-     "date": "2026-09-15",
-     "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=88115"
+     "date": "2026-09-16",
+     "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=88168"
     },
     {
-     "title": "“내년 무더위도 부탁해”…에어컨 관리 ‘필수 점검’ 노하우[소개+Thi...",
-     "source": "디지털타임스",
-     "date": "2026-09-15",
-     "link": "https://n.news.naver.com/mnews/article/029/0003047973?sid=101"
+     "title": "삼성전자, AI기술·고효율 가전 결합 에너지 절감 솔루션 선봬",
+     "source": "metroseoul.co.kr",
+     "date": "2026-09-16",
+     "link": "http://www.metroseoul.co.kr/article/20260916500442"
     },
     {
-     "title": "휴가이티아이, 모듈러 주택 '가격 경쟁력·디자인 다양화'로 시장 공략...",
-     "source": "weeklytrade.co.kr",
-     "date": "2026-09-14",
-     "link": "https://weeklytrade.co.kr/news/view.html?section=1&category=160&item=&no=101400"
+     "title": "삼성전자·LG전자, 기후산업박람회서 AI·고효율 에너지 솔루션 총출동",
+     "source": "smartbizn.com",
+     "date": "2026-09-16",
+     "link": "https://www.smartbizn.com/news/articleView.html?idxno=154069"
     },
     {
-     "title": "삼성전자, 제주 그린수소 포럼서 'EHS 히트펌프 기술력' 선봬",
-     "source": "파이낸셜뉴스",
-     "date": "2026-09-14",
-     "link": "https://n.news.naver.com/mnews/article/014/0005575555?sid=101"
+     "title": "삼성전자·LG전자, 韓 HVAC 주도권 다툼 '점화'",
+     "source": "techm.kr",
+     "date": "2026-09-16",
+     "link": "https://www.techm.kr/news/articleView.html?idxno=155306"
     },
     {
-     "title": "실외기 하나로 냉난방·급탕까지…삼성전자, EHS 히트펌프 솔루션 공개",
+     "title": "냉방·난방·급탕을 한 대로…삼성전자 ‘히트펌프’ 앞세운 에너지 솔...",
+     "source": "donga.com",
+     "date": "2026-09-16",
+     "link": "https://n.news.naver.com/mnews/article/020/0003748602?sid=101"
+    },
+    {
+     "title": "삼성전자, 히트펌프부터 AI 데이터센터까지…에너지 솔루션 사업 확장",
+     "source": "thefirstmedia.net",
+     "date": "2026-09-16",
+     "link": "http://www.thefirstmedia.net/news/articleView.html?idxno=208735"
+    },
+    {
+     "title": "삼성전자, 히트펌프부터 AI 데이터센터까지···에너지 사업영역 확대",
+     "source": "finomy.com",
+     "date": "2026-09-16",
+     "link": "http://www.finomy.com/news/articleView.html?idxno=261717"
+    },
+    {
+     "title": "삼성전자, '2026 기후산업국제박람회' 출격…에너지 절감 기술 선봬",
+     "source": "m-i.kr",
+     "date": "2026-09-16",
+     "link": "https://www.m-i.kr/news/articleView.html?idxno=1414922"
+    },
+    {
+     "title": "삼성·LG전자 히트펌프 전면에…AI 시대 '에너지 효율' 잡는다",
+     "source": "머니투데이",
+     "date": "2026-09-16",
+     "link": "https://n.news.naver.com/mnews/article/008/0005414706?sid=101"
+    },
+    {
+     "title": "\"가전부터 AI 데이터센터까지\"…삼성전자, '2026 기후산업국제박람회'서...",
      "source": "thepublic.kr",
-     "date": "2026-09-14",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=318594"
+     "date": "2026-09-16",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=319018"
     },
     {
-     "title": "삼성전자, 2026 그린수소 글로벌 포럼서 차세대 EHS 히트펌프 라인업 공...",
-     "source": "ttlnews.com",
-     "date": "2026-09-14",
-     "link": "http://www.ttlnews.com/news/articleView.html?idxno=3143047"
+     "title": "AI 가전 다음은 '에너지 효율'…삼성·LG, HVAC까지 전선 확대",
+     "source": "biztribune.co.kr",
+     "date": "2026-09-16",
+     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=359106"
     },
     {
-     "title": "삼성전자, 제주 그린수소 포럼서 EHS 히트펌프 선보여",
-     "source": "cnet.co.kr",
-     "date": "2026-09-14",
-     "link": "https://www.cnet.co.kr/view/?no=20260914170020"
-    },
-    {
-     "title": "삼성전자, ‘그린수소 글로벌 포럼’서 EHS 히트펌프 기술 공개…주거 ...",
-     "source": "todayeconomic.com",
-     "date": "2026-09-14",
-     "link": "https://www.todayeconomic.com/news/article.html?no=32117"
-    },
-    {
-     "title": "제주서 베일 벗은 삼성전자 'EHS 올인원'…주거용 냉난방 전기화 공략",
-     "source": "pointe.co.kr",
-     "date": "2026-09-14",
-     "link": "https://www.pointe.co.kr/news/articleView.html?idxno=84743"
-    },
-    {
-     "title": "삼성전자, '2026 그린수소 글로벌 포럼'서 차세대 EHS 히트펌프 공개",
-     "source": "efnews.co.kr",
-     "date": "2026-09-14",
-     "link": "http://www.efnews.co.kr/news/articleView.html?idxno=132407"
-    },
-    {
-     "title": "휴가이티아이, 다양한 디자인으로 모듈러 주택 시장 진출",
-     "source": "mbn.mk.co.kr",
-     "date": "2026-09-14",
-     "link": "https://n.news.naver.com/mnews/article/057/0001968910?sid=102"
-    },
-    {
-     "title": "삼성전자, 제주서 EHS 솔루션 전시…LG전자, 美 에미상 공식 파트너 선정...",
-     "source": "sisaon.co.kr",
-     "date": "2026-09-14",
-     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=204404"
-    },
-    {
-     "title": "삼성전자 '스마트싱스', 최신 '매터 1.6' 첫 도입…“연결 생태계 확장”",
-     "source": "전자신문",
-     "date": "2026-09-14",
-     "link": "https://n.news.naver.com/mnews/article/030/0003466613?sid=105"
+     "title": "\"친환경 기술 겨루기\"…삼성·LG, 고효율 HVAC·가전 선봬",
+     "source": "koit.co.kr",
+     "date": "2026-09-16",
+     "link": "https://www.koit.co.kr/news/articleView.html?idxno=209100"
     }
    ]
   },
@@ -666,90 +674,90 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77649,
+   "total": 77654,
    "sentiment": {
-    "pos": 39,
-    "neu": 19,
-    "neg": 2
+    "pos": 35,
+    "neu": 22,
+    "neg": 3
    },
    "keywords": [
     [
      "LG전자",
-     72
+     66
     ],
     [
      "AI홈",
-     68
+     63
     ],
     [
      "B2B",
-     43
+     38
     ],
     [
      "중동",
-     40
+     36
     ],
     [
      "AI",
-     34
-    ],
-    [
-     "전용",
-     27
+     35
     ],
     [
      "ThinQ",
+     26
+    ],
+    [
+     "전용",
      24
     ],
     [
      "허브",
-     22
-    ],
-    [
-     "체험공간",
-     22
-    ],
-    [
-     "프로",
      21
     ],
     [
      "리야드에",
-     20
+     19
     ],
     [
-     "솔루션을",
+     "체험공간",
      18
     ],
     [
-     "건물",
+     "프로",
      17
     ],
     [
-     "호미",
+     "상담",
      16
     ],
     [
-     "유럽에서는",
+     "솔루션을",
      16
+    ],
+    [
+     "상태를",
+     14
     ],
     [
      "사우디에",
-     15
-    ],
-    [
-     "상담",
      14
     ],
     [
-     "관리",
+     "호미",
      14
+    ],
+    [
+     "사우디아라비아",
+     13
+    ],
+    [
+     "중심으로",
+     13
     ]
    ],
    "posWords": [
     [
      "공략",
-     23
+     19
     ],
     [
      "1위",
@@ -757,7 +765,7 @@
     ],
     [
      "글로벌",
-     9
+     8
     ],
     [
      "최초",
@@ -768,12 +776,12 @@
      5
     ],
     [
-     "확대",
+     "우수",
      4
     ],
     [
-     "우수",
-     4
+     "확대",
+     3
     ],
     [
      "프리미엄",
@@ -783,16 +791,46 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐 앱",
-    "lg 씽큐 세탁기",
-    "lg 씽큐 연결",
     "lg 씽큐온",
+    "lg 씽큐 연결",
+    "lg 씽큐 세탁기",
     "lg 씽큐 와이파이",
+    "lg 씽큐 오류",
     "lg 씽큐 티비연결",
     "lg 씽큐 가족 공유",
-    "lg 씽큐 공유",
-    "lg 씽큐 오류"
+    "lg 씽큐 공유"
    ],
    "recent": [
+    {
+     "title": "구독 매출 3조원 앞둔 LG…삼성은 갤럭시로 추격",
+     "source": "it.chosun.com",
+     "date": "2026-09-16",
+     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092170282"
+    },
+    {
+     "title": "LG 스타일링 31분·삼성 건조 39분…의류관리기 성능 갈렸다",
+     "source": "4th.kr",
+     "date": "2026-09-16",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2118175"
+    },
+    {
+     "title": "의류관리기 구김·탈취 비슷… 건조시간 최대 23분 차",
+     "source": "newsclaim.co.kr",
+     "date": "2026-09-16",
+     "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3075612"
+    },
+    {
+     "title": "시판 의류관리기 3종 비교 결과 '작동시간·소음·기능' 브랜드별 차이",
+     "source": "intn.co.kr",
+     "date": "2026-09-16",
+     "link": "http://www.intn.co.kr/news/articleView.html?idxno=2053389"
+    },
+    {
+     "title": "\"불편 말하기 전에 AI가 감지\"…LG전자, 콜센터품질지수 3년 연속 종합 ...",
+     "source": "bizwnews.com",
+     "date": "2026-09-15",
+     "link": "http://www.bizwnews.com/news/articleView.html?idxno=146366"
+    },
     {
      "title": "LG전자, 콜센터품질지수 3년 연속 '종합 1위' 석권",
      "source": "m-i.kr",
@@ -818,16 +856,16 @@
      "link": "https://n.news.naver.com/mnews/article/009/0005735480?sid=101"
     },
     {
-     "title": "'전기료 깎는 가전' 시작한 LG전자...'팔고 난 뒤'에서 활로 찾는다",
-     "source": "insight.co.kr",
-     "date": "2026-09-15",
-     "link": "https://www.insight.co.kr/news/573574"
-    },
-    {
      "title": "LG전자, 콜센터품질지수 3년 연속 종합 1위…가전구독도 최우수",
      "source": "mediapen.com",
      "date": "2026-09-15",
      "link": "https://www.mediapen.com/news/view/1123690"
+    },
+    {
+     "title": "'전기료 깎는 가전' 시작한 LG전자...'팔고 난 뒤'에서 활로 찾는다",
+     "source": "insight.co.kr",
+     "date": "2026-09-15",
+     "link": "https://www.insight.co.kr/news/573574"
     },
     {
      "title": "LG전자, 콜센터품질지수 3년 연속 종합 1위… 가전제품 7년 연속 최우수",
@@ -852,36 +890,6 @@
      "source": "enetnews.co.kr",
      "date": "2026-09-15",
      "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=54419"
-    },
-    {
-     "title": "LG전자, 콜센터품질지수 3년 연속 종합 1위…AI 상담 혁신 통했다",
-     "source": "job-post.co.kr",
-     "date": "2026-09-15",
-     "link": "https://www.job-post.co.kr/news/articleView.html?idxno=227545"
-    },
-    {
-     "title": "LG전자, 3년 연속 '콜센터품질지수' 종합 1위…AX 질 높은 평가",
-     "source": "g-enews.com",
-     "date": "2026-09-15",
-     "link": "https://www.g-enews.com/view.php?ud=20260915110426484527fa31d75c_1"
-    },
-    {
-     "title": "LG전자, 한국표준협회 콜센터품질지수 3년 연속 종합 1위",
-     "source": "news1.kr",
-     "date": "2026-09-15",
-     "link": "https://n.news.naver.com/mnews/article/421/0009170486?sid=101"
-    },
-    {
-     "title": "LG전자, 사우디에 중동 첫 'B2B AI홈 쇼룸' 개소…글로벌 사우스 공략 가...",
-     "source": "industrynews.co.kr",
-     "date": "2026-09-15",
-     "link": "https://www.industrynews.co.kr/news/articleView.html?idxno=85998"
-    },
-    {
-     "title": "LG전자, 사우디에 B2B 전용 AI홈 체험공간",
-     "source": "donga.com",
-     "date": "2026-09-15",
-     "link": "https://n.news.naver.com/mnews/article/020/0003748070?sid=101"
     }
    ]
   },
@@ -889,27 +897,27 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75867,
+   "total": 75873,
    "sentiment": {
-    "pos": 16,
+    "pos": 17,
     "neu": 37,
-    "neg": 7
+    "neg": 6
    },
    "keywords": [
     [
      "AI",
-     54
+     48
     ],
     [
      "글로벌",
      12
     ],
     [
-     "제미나이",
+     "차세대",
      9
     ],
     [
-     "차세대",
+     "제미나이",
      8
     ],
     [
@@ -975,7 +983,7 @@
      12
     ],
     [
-     "최초",
+     "협업",
      3
     ],
     [
@@ -983,12 +991,16 @@
      2
     ],
     [
-     "협업",
+     "최초",
      2
     ],
     [
      "돌파",
      2
+    ],
+    [
+     "투자",
+     1
     ],
     [
      "강화",
@@ -1007,11 +1019,47 @@
     "구글 홈페이지",
     "구글 홈 미니 초기화",
     "구글 홈 미니 1세대",
-    "구글 홈 어시스턴트",
     "구글 홈 미니 연결",
+    "구글 홈 어시스턴트",
     "구글 홈 연결"
    ],
    "recent": [
+    {
+     "title": "4K 레이저 빔프로젝터가 198만원대, 뷰소닉 LX750-4K “9월 홈시어터 지...",
+     "source": "betanews.net",
+     "date": "2026-09-16",
+     "link": "https://www.betanews.net/article/view/beta202609160072"
+    },
+    {
+     "title": "메이크온 ‘온페이스 LED 마스크’ 임상 결과, 국제 학술지 두 곳 게재",
+     "source": "biz.chosun.com",
+     "date": "2026-09-16",
+     "link": "https://n.news.naver.com/mnews/article/366/0001192799?sid=101"
+    },
+    {
+     "title": "메이크온 '온페이스 LED 마스크' 임상 결과, 세계적 학술지 연이어 게재",
+     "source": "view.asiae.co.kr",
+     "date": "2026-09-16",
+     "link": "https://n.news.naver.com/mnews/article/277/0005817315?sid=101"
+    },
+    {
+     "title": "LG전자, AI 데브콘 2026 개최…개발자 1500명 참여",
+     "source": "digitaltoday.co.kr",
+     "date": "2026-09-16",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=700873"
+    },
+    {
+     "title": "\"구글 버리고 '이 주식' 쓸어담았다\"...'돈나무 언니'의 375억 갈아타기",
+     "source": "파이낸셜뉴스",
+     "date": "2026-09-16",
+     "link": "https://n.news.naver.com/mnews/article/014/0005576381?sid=101"
+    },
+    {
+     "title": "애플, Siri 전면 개편⋯개인 맥락 읽는 'Siri AI' 한국어 10월 지원 예정",
+     "source": "autodaily.co.kr",
+     "date": "2026-09-15",
+     "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=600472"
+    },
     {
      "title": "[통신 풍향계] SKT 'RCS 표준화 회의'·LGU+ '홈미디어 신제품' 공개-'선...",
      "source": "newsworks.co.kr",
@@ -1065,42 +1113,6 @@
      "source": "sateconomy.co.kr",
      "date": "2026-09-15",
      "link": "https://sateconomy.co.kr/news/view/1065574629822925"
-    },
-    {
-     "title": "애플, AI로 완전히 다시 만든 '시리 AI' 공개…'질문에 답하는 시리'에서...",
-     "source": "aitimes.kr",
-     "date": "2026-09-15",
-     "link": "https://www.aitimes.kr/news/articleView.html?idxno=41918"
-    },
-    {
-     "title": "[Game & Now] SOOP, ASL 8강 경쟁…수퍼스 '첫 시즌' 팬 모은다",
-     "source": "ebn.co.kr",
-     "date": "2026-09-15",
-     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1724273"
-    },
-    {
-     "title": "[통신 레이더] LG유플러스, IBC서 홈미디어 공개… SKT, AI 메시징·상담...",
-     "source": "thevaluenews.co.kr",
-     "date": "2026-09-15",
-     "link": "http://www.thevaluenews.co.kr/news/view.php?idx=201578"
-    },
-    {
-     "title": "\"개인정보 유출 차단 온디바이스 AI\"…애플 '시리 AI' 10월 한국어 상륙",
-     "source": "jnilbo.com",
-     "date": "2026-09-15",
-     "link": "https://www.jnilbo.com/news/articleView.html?idxno=90000065466"
-    },
-    {
-     "title": "\"이제야 약속 지킨다\"…애플, 차세대 인텔리전스 결합한 '시리 AI' 정식 ...",
-     "source": "ddaily.co.kr",
-     "date": "2026-09-15",
-     "link": "https://n.news.naver.com/mnews/article/138/0002241385?sid=105"
-    },
-    {
-     "title": "\"OTT엔 멍석, K-플랫폼엔 족쇄…'낡은 규제' 깨야 K-콘텐츠 숲 산다\"",
-     "source": "mediaus.co.kr",
-     "date": "2026-09-15",
-     "link": "https://www.mediaus.co.kr/news/articleView.html?idxno=318113"
     }
    ]
   }
