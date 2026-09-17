@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>학동 스마트 인테리어 MAP · AQARA LIFE</title>
+  <meta name="description" content="학동역~도산대로 인테리어 거리, 발품 파는 분들을 위한 쇼룸 가이드 지도. 타일·주방·스위치·가구 쇼룸 30곳 + 아카라라이프 쇼룸 웰컴 쿠폰." />
+  <meta property="og:title" content="학동 스마트 인테리어 MAP · AQARA LIFE" />
+  <meta property="og:description" content="쇼룸 투어 필수 지도 · 학동 인테리어 발품 길잡이. 아카라라이프 쇼룸에서 커피 한 잔 쉬어가세요." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Firebase: ONLY MKT에서 고친 스팟 정보(hakdong/spots) 반영 + 쿠폰 발급 집계(hakdong/coupons). 연결 안 돼도 페이지는 동작 -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <style>
+    :root{
+      --bg:#F9F8F6; --paper:#FFFFFF; --ink:#222222; --ink2:#444444; --muted:#7A7772; --line:#E5E3DF; --line2:#D8D5CF;
+      --accent:#E65100; --accent-soft:#FFF1E8; --charcoal:#222222;
+      --r:8px; --hdr:64px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%}
+    body{background:var(--bg);color:var(--ink);font-family:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,system-ui,"Malgun Gothic",sans-serif;
+      -webkit-font-smoothing:antialiased;letter-spacing:-0.012em;line-height:1.55;word-break:keep-all;font-feature-settings:"tnum" 1}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit;cursor:pointer}
+
+    /* ─── 헤더 ─── */
+    header{position:sticky;top:0;z-index:50;height:var(--hdr);background:rgba(249,248,246,.92);backdrop-filter:blur(10px);color:var(--ink);display:flex;align-items:center;gap:18px;padding:0 22px;border-bottom:1px solid var(--line)}
+    .logo{display:flex;align-items:center;gap:11px;min-width:0}
+    .logo .mark{width:30px;height:30px;border-radius:var(--r);background:var(--charcoal);display:grid;place-items:center;color:#fff;font-weight:900;font-size:13px;letter-spacing:0;flex:none}
+    .logo .brand{font-size:10.5px;font-weight:800;letter-spacing:.18em;color:var(--muted)}
+    .logo h1{margin:0;font-size:16px;font-weight:800;letter-spacing:-0.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .logo h1 span{color:var(--muted);font-weight:500;margin-left:8px;font-size:12px;letter-spacing:0}
+    .hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+    .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:var(--r);padding:8px 14px;font-size:12.5px;font-weight:700;transition:.15s;white-space:nowrap;line-height:1.2}
+    .btn:hover{border-color:var(--ink)}
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+    .btn.primary:hover{filter:brightness(1.06)}
+    .btn.dark{background:var(--charcoal);border-color:var(--charcoal);color:#fff}
+    .btn.sm{padding:6px 11px;font-size:11.5px}
+
+    /* ─── 레이아웃 ─── */
+    .wrap{display:grid;grid-template-columns:460px 1fr;height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr))}
+    aside{border-right:1px solid var(--line);background:var(--bg);display:flex;flex-direction:column;min-height:0}
+    .side-top{padding:20px 22px 12px;border-bottom:1px solid var(--line);background:var(--bg)}
+    .eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
+    .side-top h2{margin:4px 0 6px;font-size:26px;font-weight:800;letter-spacing:-0.03em;line-height:1.15}
+    .side-top p{margin:0;font-size:13px;color:var(--muted)}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+    .chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);background:#fff;border-radius:999px;padding:6px 11px 6px 9px;font-size:12px;font-weight:700;color:var(--ink2);transition:.15s}
+    .chip .dot{width:9px;height:9px;border-radius:50%;background:var(--c,#999);flex:none}
+    .chip .n{font-size:10.5px;color:var(--muted);font-weight:600}
+    .chip.on{background:var(--charcoal);border-color:var(--charcoal);color:#fff}
+    .chip.on .n{color:#BDBAB5}
+    .catdesc{margin-top:10px;font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:9px 12px;display:flex;gap:8px;align-items:flex-start}
+    .catdesc .dot{width:9px;height:9px;border-radius:50%;flex:none;margin-top:6px}
+    .search{margin-top:10px;position:relative}
+    .search input{width:100%;border:1px solid var(--line2);background:#fff;border-radius:var(--r);padding:9px 12px 9px 34px;font-size:13px;font-family:inherit;outline:none;color:var(--ink)}
+    .search input:focus{border-color:var(--ink)}
+    .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted)}
+    .list{overflow:auto;flex:1;min-height:0;padding:8px 14px 40px;scroll-behavior:smooth}
+    .sec{margin:16px 6px 6px;display:flex;align-items:baseline;gap:8px}
+    .sec b{font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+    .sec span{font-size:11.5px;color:var(--muted)}
+    .sec i{flex:1;height:1px;background:var(--line)}
+
+    /* 스팟 카드 */
+    .spot{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin:6px 0;display:grid;grid-template-columns:96px 1fr;gap:12px;transition:.15s;cursor:pointer;position:relative}
+    .spot:hover{border-color:var(--line2);box-shadow:0 10px 26px -18px rgba(0,0,0,.28)}
+    .spot.active{border-color:var(--ink);box-shadow:0 12px 30px -18px rgba(0,0,0,.35)}
+    .thumb{width:96px;aspect-ratio:1/1;border-radius:6px;background:color-mix(in srgb,var(--c) 10%,#F3F1EC);border:1px solid color-mix(in srgb,var(--c) 18%,var(--line));position:relative;overflow:hidden;display:grid;place-items:center}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .thumb .ph{font-size:30px;font-weight:900;color:color-mix(in srgb,var(--c) 55%,#fff);letter-spacing:-0.04em;line-height:1}
+    .thumb .no{position:absolute;left:6px;top:6px;width:22px;height:22px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:10.5px;font-weight:800;box-shadow:0 2px 6px -1px rgba(0,0,0,.35)}
+    .spot .en{font-size:9.5px;letter-spacing:.1em;color:var(--muted);font-weight:700}
+    .spot .nm{font-size:14.5px;font-weight:800;letter-spacing:-0.02em;line-height:1.25;margin:1px 0 4px}
+    .tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.02em;padding:2px 7px;border-radius:5px;background:color-mix(in srgb,var(--c) 12%,#fff);color:var(--c);margin-left:6px;vertical-align:2px;white-space:nowrap}
+    .spot .ds{font-size:12.5px;color:var(--ink2);line-height:1.5}
+    .spot .ad{font-size:11.5px;color:var(--muted);margin-top:5px;display:flex;gap:5px;align-items:flex-start}
+    .spot .ad svg{width:12px;height:12px;flex:none;margin-top:3px}
+    .spot .acts{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+    .spot .chk{font-size:10.5px;color:var(--accent);font-weight:700;margin-left:6px}
+    .spot.hl{border:1.5px solid var(--accent);background:linear-gradient(180deg,#FFF6EF,#fff);grid-template-columns:1fr}
+    .spot.hl .thumb{width:100%;aspect-ratio:16/7;background:var(--charcoal);border-color:var(--charcoal)}
+    .spot.hl .thumb .ph{color:var(--accent);font-size:22px;letter-spacing:.08em}
+    .spot.hl .nm{font-size:17px}
+    .badge-hl{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.08em;background:var(--accent);color:#fff;padding:3px 8px;border-radius:5px;margin-bottom:5px}
+
+    /* ─── 지도 ─── */
+    .mapwrap{position:relative;min-height:0}
+    #map{position:absolute;inset:0;background:#EDECE8}
+    .leaflet-tile-pane{filter:grayscale(1) contrast(1.02) brightness(1.04) sepia(.08)}
+    .leaflet-container{font-family:inherit}
+    .leaflet-control-attribution{font-size:9.5px;background:rgba(255,255,255,.75)}
+    .pin{width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800;border:2px solid #fff;box-shadow:0 3px 10px -2px rgba(0,0,0,.45);transition:transform .15s}
+    .pin.on{transform:scale(1.25);border-color:var(--ink)}
+    .hqpin{position:relative;width:48px;height:48px}
+    .hqpin .core{position:absolute;inset:0;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:9px;font-weight:900;letter-spacing:.02em;border:3px solid #fff;box-shadow:0 0 0 7px rgba(230,81,0,.22),0 8px 20px -6px rgba(0,0,0,.5);animation:pulse 2.2s ease-out infinite}
+    .hqpin .wc{position:absolute;left:50%;top:-22px;transform:translateX(-50%);background:var(--charcoal);color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.04em;padding:3px 8px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 12px -4px rgba(0,0,0,.5)}
+    .hqpin .wc:after{content:'';position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--charcoal);border-bottom:0}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(230,81,0,.55),0 8px 20px -6px rgba(0,0,0,.5)}100%{box-shadow:0 0 0 22px rgba(230,81,0,0),0 8px 20px -6px rgba(0,0,0,.5)}}
+    .leaflet-popup-content-wrapper{border-radius:var(--r);box-shadow:0 14px 40px -18px rgba(0,0,0,.45);padding:2px}
+    .leaflet-popup-content{margin:12px 14px;font-size:12.5px;line-height:1.5;min-width:230px}
+    .pp .en{font-size:9.5px;letter-spacing:.1em;color:var(--muted);font-weight:700}
+    .pp .nm{font-size:15px;font-weight:800;letter-spacing:-0.02em;margin:1px 0 4px}
+    .pp .ds{color:var(--ink2)}
+    .pp .ad{color:var(--muted);font-size:11.5px;margin-top:4px}
+    .pp .acts{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+    .legend{position:absolute;left:12px;bottom:12px;z-index:400;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:var(--r);padding:9px 12px;font-size:11px;display:grid;gap:4px}
+    .legend div{display:flex;align-items:center;gap:7px;color:var(--ink2);font-weight:600}
+    .legend .dot{width:9px;height:9px;border-radius:50%}
+    .cta{position:absolute;right:12px;bottom:12px;z-index:400;background:#fff;color:var(--ink);border-radius:var(--r);padding:14px 16px;width:296px;box-shadow:0 18px 44px -18px rgba(0,0,0,.4);border:1px solid var(--line)}
+    .cta .ey{font-size:10px;font-weight:800;letter-spacing:.16em;color:var(--accent)}
+    .cta h3{margin:4px 0 6px;font-size:15px;font-weight:800;letter-spacing:-0.02em;line-height:1.3}
+    .cta p{margin:0 0 10px;font-size:11.5px;color:var(--ink2);line-height:1.45}
+    .cta .x{position:absolute;right:8px;top:6px;background:none;border:0;color:var(--muted);font-size:16px;line-height:1}
+    .mtoggle{display:none}
+
+    /* ─── 모달 ─── */
+    .ov{position:fixed;inset:0;background:rgba(34,34,34,.5);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center;padding:18px}
+    .ov.show{display:flex}
+    .md{background:var(--paper);border-radius:14px;width:min(640px,100%);max-height:calc(100vh - 36px);overflow:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);position:relative}
+    .md .hd{background:var(--charcoal);color:#fff;padding:26px 26px 22px;border-radius:14px 14px 0 0;position:relative;overflow:hidden}
+    .md .hd:before{content:'';position:absolute;right:-40px;top:-60px;width:200px;height:200px;border-radius:50%;background:var(--accent);opacity:.25;filter:blur(30px)}
+    .md .hd .ey{font-size:10.5px;font-weight:800;letter-spacing:.18em;color:#FFB280}
+    .md .hd h2{margin:6px 0 6px;font-size:25px;font-weight:800;letter-spacing:-0.03em;line-height:1.2}
+    .md .hd p{margin:0;font-size:13px;color:#D6D3CE}
+    .md .x{position:absolute;right:14px;top:12px;background:rgba(255,255,255,.12);border:0;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;line-height:1;z-index:1}
+    .md .bd{padding:18px 26px 26px}
+    .bn{display:grid;grid-template-columns:46px 1fr;gap:12px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line)}
+    .bn:last-of-type{border-bottom:0}
+    .bn .ic{width:46px;height:46px;border-radius:var(--r);background:var(--accent-soft);display:grid;place-items:center;font-size:21px}
+    .bn .k{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--accent)}
+    .bn b{font-size:15px;letter-spacing:-0.02em;display:block;margin-top:1px}
+    .bn p{margin:3px 0 0;font-size:12.5px;color:var(--ink2)}
+    .bn .tg{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;color:var(--accent);background:var(--accent-soft);border-radius:5px;padding:2px 7px;margin-top:6px}
+    .coupon{margin-top:14px;border:1.5px dashed var(--line2);border-radius:var(--r);padding:18px;background:var(--bg);text-align:center}
+    .coupon .code{font-size:30px;font-weight:900;letter-spacing:.12em;margin:6px 0 2px;color:var(--charcoal)}
+    .coupon .meta{font-size:11.5px;color:var(--muted)}
+    .coupon #qr{display:inline-block;margin:12px auto 4px;padding:8px;background:#fff;border-radius:var(--r);border:1px solid var(--line)}
+    .coupon #qr img,.coupon #qr canvas{display:block}
+    .coupon .how{font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.5}
+    .fine{font-size:10.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+
+    /* ─── 모바일 ─── */
+    @media (max-width:860px){
+      :root{--hdr:56px}
+      header{padding:0 14px;gap:10px}
+      .logo h1{font-size:14.5px}
+      .logo h1 span{display:none}
+      .logo .brand{display:none}
+      .hdr-right .btn.dark{display:none}
+      .wrap{grid-template-columns:1fr;grid-template-rows:44vh minmax(0,1fr);height:auto;min-height:calc(100dvh - var(--hdr))}
+      .wrap.list-only{grid-template-rows:0 minmax(0,1fr)}
+      .wrap.list-only .mapwrap{display:none}
+      aside{order:2;border-right:0;border-top:1px solid var(--line)}
+      .mapwrap{order:1}
+      .side-top{padding:14px 16px 10px}
+      .side-top h2{font-size:21px}
+      .list{overflow:visible}
+      .legend{display:none}
+      .cta{width:auto;left:12px;right:12px;padding:12px 14px}
+      .cta p{display:none}
+      .mtoggle{display:inline-flex}
+      .spot{grid-template-columns:84px 1fr}
+      .thumb{width:84px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <div class="mark">A</div>
+      <div>
+        <div class="brand">AQARA LIFE</div>
+        <h1 id="hdrTtl">학동 스마트 인테리어 MAP <span>쇼룸 투어 필수 지도</span></h1>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <button class="btn dark sm" onclick="flyHQ()">📍 아카라라이프 쇼룸</button>
+      <button class="btn primary" onclick="openBenefit()">🎟️ 웰컴 쿠폰 받기</button>
+    </div>
+  </header>
+
+  <div class="wrap" id="wrap">
+    <aside>
+      <div class="side-top">
+        <div class="eyebrow" id="tagline">쇼룸 투어 필수 지도 · 학동 인테리어 발품 길잡이</div>
+        <h2 id="ttl">학동 스마트 인테리어 MAP</h2>
+        <p id="sub">학동역 ~ 도산대로 · 발품 파는 분들을 위한 인테리어 쇼룸 가이드</p>
+        <div class="chips" id="chips"></div>
+        <div class="catdesc" id="catdesc"></div>
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="브랜드 · 타일 · 주방 · 소파 … 검색" oninput="paint()" />
+        </div>
+      </div>
+      <div class="list" id="list"></div>
+    </aside>
+    <div class="mapwrap">
+      <div id="map"></div>
+      <div class="legend" id="legend"></div>
+      <div class="cta" id="cta">
+        <button class="x" onclick="document.getElementById('cta').style.display='none'" aria-label="닫기">×</button>
+        <div class="ey">WELCOME COUPON</div>
+        <h3>쇼룸 투어하다 지치셨나요? ☕</h3>
+        <p>아카라라이프 쇼룸에서 웰컴 음료 무료 · 우리 집 도면 배선 상담 · 스마트 센서 증정</p>
+        <button class="btn primary sm" onclick="openBenefit()">🎟️ 웰컴 쿠폰 받기</button>
+        <button class="btn sm" onclick="flyHQ()">쇼룸 위치</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 혜택 모달 -->
+  <div class="ov" id="ov" onclick="if(event.target===this)closeBenefit()">
+    <div class="md" role="dialog" aria-modal="true" aria-labelledby="mdTitle">
+      <div class="hd">
+        <button class="x" onclick="closeBenefit()" aria-label="닫기">×</button>
+        <div class="ey">AQARA LIFE SHOWROOM · 논현역 도보 1분</div>
+        <h2 id="mdTitle">학동 쇼룸 투어 웰컴 쿠폰</h2>
+        <p>학동 인테리어 거리를 돌아보시는 분들께 드려요. 쿠폰 받고 아카라라이프 쇼룸에서 쉬었다 가세요.</p>
+      </div>
+      <div class="bd">
+        <div id="bnList"></div>
+        <div class="coupon" id="coupon">
+          <div class="eyebrow">Welcome Coupon</div>
+          <div id="cpBody"></div>
+        </div>
+        <p class="fine" id="hqAddr"></p>
+      </div>
+    </div>
+  </div>
+
+<script>
+  /* ───────── 데이터 ───────── */
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyAs_yQ1fgGKfRDKbkUb0lviIoJ2e00KRGA",
+    authDomain: "aqara-weekly-1227c.firebaseapp.com",
+    databaseURL: "https://aqara-weekly-1227c-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "aqara-weekly-1227c",
+    storageBucket: "aqara-weekly-1227c.firebasestorage.app",
+    messagingSenderId: "869711080033",
+    appId: "1:869711080033:web:9fc6fb53b272b942085820"
+  };
+  let DB=null, AUTH_OK=false;
+  try{
+    if(typeof firebase!=='undefined'){
+      firebase.initializeApp(FIREBASE_CONFIG); DB=firebase.database();
+      firebase.auth().signInAnonymously().catch(()=>{});
+      firebase.auth().onAuthStateChanged(u=>{ AUTH_OK=!!u; if(u) watchOverrides(); });
+    }
+  }catch(e){ DB=null; }
+
+  let DATA=null, SPOTS=[], CATS=[], OVER={}, MAP=null, MARK={}, FILTER='all', ACTIVE=null;
+  const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const catOf=id=>CATS.find(c=>c.id===id)||{color:'#888',en:'',ko:''};
+  const naverUrl=s=>'https://map.naver.com/p/search/'+encodeURIComponent(s.n+' '+(s.a||'').replace(/^서울 /,''));
+  const initial=s=>{ const t=(s.en||s.n||'').trim(); const m=t.match(/[A-Za-z]/); return m?m[0].toUpperCase():t.slice(0,1); };
+
+  fetch('hakdong.json?_='+Date.now()).then(r=>r.json()).then(d=>{ DATA=d; CATS=d.categories; boot(); })
+    .catch(()=>{ document.getElementById('list').innerHTML='<p style="padding:30px;text-align:center;color:#E65100">자료를 불러오지 못했어요. 새로고침해 주세요.</p>'; });
+
+  /* ONLY MKT에서 고친 스팟 정보(좌표·설명·사진·숨김)를 얹는다 — 없으면 json 원본 그대로 */
+  function watchOverrides(){ if(!DB) return;
+    DB.ref('hakdong/spots').on('value',s=>{ OVER=s.val()||{}; if(DATA) applyOver(); });
+  }
+  function applyOver(){
+    SPOTS=DATA.spots.map(s=>Object.assign({},s,OVER[s.id]||{}));
+    Object.keys(OVER).forEach(id=>{ if(!DATA.spots.some(s=>s.id===id)&&OVER[id]&&OVER[id].n) SPOTS.push(Object.assign({id},OVER[id])); });
+    SPOTS=SPOTS.filter(s=>!s.hide&&isFinite(+s.lat)&&isFinite(+s.lng));
+    paint(); paintMarkers();
+  }
+
+  function boot(){
+    document.getElementById('ttl').textContent=DATA.title||'학동 스마트 인테리어 MAP';
+    document.title=(DATA.title||'학동 스마트 인테리어 MAP')+' · AQARA LIFE';
+    if(DATA.subtitle) document.getElementById('sub').textContent=DATA.subtitle;
+    if(DATA.tagline) document.getElementById('tagline').textContent=DATA.tagline;
+    document.getElementById('legend').innerHTML=CATS.map(c=>`<div><span class="dot" style="background:${c.color}"></span>${esc(c.ko)}</div>`).join('');
+    document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map(b=>`<div class="bn"><div class="ic">${b.icon||'🎁'}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}</div></div>`).join('');
+    const hq=DATA.spots.find(s=>s.hl)||DATA.spots.find(s=>s.cat==='iot')||{};
+    document.getElementById('hqAddr').innerHTML=`📍 아카라라이프 쇼룸 · ${esc(hq.a||'')}<br>${esc(DATA.note||'')}<br>쿠폰은 발급일로부터 30일간 유효해요. 다른 혜택과 중복 적용되지 않을 수 있으며, 증정·할인 혜택의 상세 조건은 쇼룸에서 안내드려요.`;
+    initMap(); applyOver();
+    const p=new URLSearchParams(location.search);
+    if(p.get('cat')) setFilter(p.get('cat'));
+    if(p.get('spot')) setTimeout(()=>focusSpot(p.get('spot')),400);
+    if(p.get('benefit')==='1') openBenefit();
+  }
+
+  /* ───────── 지도 ───────── */
+  function initMap(){
+    const hq=DATA.hq||{lat:37.5145,lng:127.031};
+    MAP=L.map('map',{zoomControl:false,scrollWheelZoom:true,attributionControl:true}).setView([hq.lat+0.005,hq.lng+0.009],15);
+    L.control.zoom({position:'topright'}).addTo(MAP);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(MAP);
+    MAP.on('popupclose',()=>{ setActive(null,false); });
+  }
+  function pinHtml(s){ const c=catOf(s.cat);
+    return s.hl?`<div class="hqpin"><span class="wc">🎟️ Welcome Coupon</span><div class="core">AQARA</div></div>`:`<div class="pin" style="--c:${c.color}">${s._no}</div>`; }
+  function popupHtml(s){ const c=catOf(s.cat);
+    return `<div class="pp" style="--c:${c.color}">${s.hl?'<span class="badge-hl">☕ 웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${esc(s.en||'')}</span>
+      <div class="nm">${esc(s.n)}<span class="tag">${esc(c.ko)}</span></div>
+      <div class="ds">${esc(s.d||'')}</div><div class="ad">📍 ${esc(s.a||'')}</div>
+      <div class="acts">${s.hl?`<button class="btn primary sm" onclick="openBenefit()">🎟️ 웰컴 쿠폰</button>`:''}<a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div>`; }
+  function paintMarkers(){
+    Object.values(MARK).forEach(m=>MAP.removeLayer(m)); MARK={};
+    visible().forEach(s=>{
+      const icon=L.divIcon({className:'',html:pinHtml(s),iconSize:s.hl?[48,48]:[26,26],iconAnchor:s.hl?[24,24]:[13,13],popupAnchor:[0,s.hl?-44:-14]});
+      const m=L.marker([+s.lat,+s.lng],{icon,zIndexOffset:s.hl?1000:0,riseOnHover:true}).addTo(MAP).bindPopup(popupHtml(s),{maxWidth:300});
+      m.on('click',()=>setActive(s.id,true)); MARK[s.id]=m;
+    });
+  }
+  function focusSpot(id,fromList){ const s=SPOTS.find(x=>x.id===id); if(!s) return;
+    if(!MARK[id]){ FILTER='all'; paint(); paintMarkers(); }
+    const mm=MARK[id]; if(!mm) return;
+    if(window.innerWidth<=860){ document.getElementById('wrap').classList.remove('list-only'); window.scrollTo({top:0,behavior:'smooth'}); setTimeout(()=>MAP.invalidateSize(),50); }
+    MAP.flyTo([+s.lat,+s.lng],17,{duration:.7}); setTimeout(()=>mm.openPopup(),520); setActive(id,!fromList);
+  }
+  function flyHQ(){ const s=SPOTS.find(x=>x.hl)||SPOTS.find(x=>x.cat==='iot'); if(s) focusSpot(s.id,true); }
+  function setActive(id,scroll){ ACTIVE=id;
+    document.querySelectorAll('.spot').forEach(el=>el.classList.toggle('active',el.dataset.id===id));
+    document.querySelectorAll('.pin').forEach(el=>el.classList.remove('on'));
+    if(id&&MARK[id]){ const el=MARK[id].getElement(); if(el){ const p=el.querySelector('.pin'); if(p) p.classList.add('on'); } }
+    if(id&&scroll){ const el=document.querySelector(`.spot[data-id="${id}"]`); if(el) el.scrollIntoView({block:'center',behavior:'smooth'}); }
+  }
+
+  /* ───────── 목록·필터 ───────── */
+  function numbered(){ let n=0; return SPOTS.map(s=>Object.assign(s,{_no:s.hl?'A':(++n)})); }
+  function visible(){ const q=(document.getElementById('q').value||'').trim().toLowerCase();
+    return numbered().filter(s=>(FILTER==='all'||s.cat===FILTER)&&(!q||[s.n,s.en,s.d,s.a,catOf(s.cat).ko,catOf(s.cat).en].join(' ').toLowerCase().includes(q))); }
+  function setFilter(id){ FILTER=CATS.some(c=>c.id===id)?id:'all'; paint(); paintMarkers();
+    const vs=visible(); if(vs.length&&FILTER!=='all'){ const b=L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])); MAP.fitBounds(b.pad(0.25),{maxZoom:16}); } }
+  function paint(){
+    const all=numbered();
+    document.getElementById('chips').innerHTML=[`<button class="chip ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="dot" style="--c:#222"></span>전체 <span class="n">${all.length}</span></button>`]
+      .concat(CATS.map(c=>`<button class="chip ${FILTER===c.id?'on':''}" style="--c:${c.color}" onclick="setFilter('${c.id}')"><span class="dot"></span>${esc(c.ko)} <span class="n">${all.filter(s=>s.cat===c.id).length}</span></button>`)).join('');
+    const cd=document.getElementById('catdesc'), cc=CATS.find(c=>c.id===FILTER);
+    cd.style.display=cc?'flex':'none'; if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b> · ${esc(cc.desc||'')}</span>`;
+    const vs=visible(), box=document.getElementById('list'); let html='';
+    CATS.forEach(c=>{ const g=vs.filter(s=>s.cat===c.id); if(!g.length) return;
+      html+=`<div class="sec"><b style="color:${c.color}">${esc(c.ko)}</b><span>${esc(c.en)} · ${g.length}곳</span><i></i></div>`;
+      html+=g.map(s=>`<div class="spot ${s.hl?'hl':''} ${ACTIVE===s.id?'active':''}" style="--c:${c.color}" data-id="${s.id}" onclick="focusSpot('${s.id}',true)">
+        <div class="thumb">${s.img?`<img src="${esc(s.img)}" alt="" loading="lazy" onerror="this.remove()">`:`<span class="ph">${s.hl?'AQARA LIFE':esc(initial(s))}</span>`}${s.hl?'':`<span class="no">${s._no}</span>`}</div>
+        <div>${s.hl?'<span class="badge-hl">☕ 웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${esc(s.en||'')}</span>
+          <div class="nm">${esc(s.n)}<span class="tag">${esc(c.ko)}</span>${s.check?`<span class="chk">· ${esc(s.check)}</span>`:''}</div>
+          <div class="ds">${esc(s.d||'')}</div>
+          <div class="ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><span>${esc(s.a||'')}</span></div>
+          <div class="acts" onclick="event.stopPropagation()">
+            <button class="btn sm" onclick="focusSpot('${s.id}',true)">📍 지도에서 보기</button>
+            <a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a>
+            ${s.hl?`<button class="btn primary sm" onclick="openBenefit()">🎟️ 웰컴 쿠폰</button>`:''}
+          </div></div></div>`).join('');
+    });
+    box.innerHTML=html||'<p style="padding:40px 10px;text-align:center;color:#7A7772;font-size:13px">검색 결과가 없어요. 다른 단어로 찾아보세요.</p>';
+  }
+
+  /* ───────── 혜택 모달 · 쿠폰 발급 ───────── */
+  function openBenefit(){ document.getElementById('ov').classList.add('show'); renderCoupon(); document.body.style.overflow='hidden'; }
+  function closeBenefit(){ document.getElementById('ov').classList.remove('show'); document.body.style.overflow=''; }
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeBenefit(); });
+  function getCoupon(){ try{ const c=JSON.parse(localStorage.getItem('aqaraHakdongCoupon')||'null'); if(c&&c.code&&c.exp>Date.now()) return c; }catch(e){} return null; }
+  function issueCoupon(){
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let r=''; const a=new Uint8Array(6);
+    if(window.crypto&&crypto.getRandomValues) crypto.getRandomValues(a); else for(let i=0;i<6;i++) a[i]=Math.floor(Math.random()*256);
+    for(let i=0;i<6;i++) r+=chars[a[i]%chars.length];
+    const c={code:'HD-'+r.slice(0,3)+'-'+r.slice(3),ts:Date.now(),exp:Date.now()+30*864e5};
+    try{ localStorage.setItem('aqaraHakdongCoupon',JSON.stringify(c)); }catch(e){}
+    try{ if(DB&&AUTH_OK) DB.ref('hakdong/coupons/'+c.code).set({ts:c.ts,exp:c.exp,src:(new URLSearchParams(location.search).get('ref')||'web'),mobile:window.innerWidth<=860?1:0}); }catch(e){}
+    renderCoupon(); }
+  function renderCoupon(){ const box=document.getElementById('cpBody'), c=getCoupon();
+    if(!c){ box.innerHTML=`<p style="font-size:13px;color:#444;margin:6px 0 12px">버튼을 누르면 이 휴대폰에 웰컴 쿠폰이 발급돼요. 쇼룸에서 쿠폰 화면만 보여주시면 끝!</p>
+      <button class="btn primary" style="font-size:14px;padding:11px 22px" onclick="issueCoupon()">🎟️ 웰컴 쿠폰 발급받기</button>`; return; }
+    const d=new Date(c.ts), e=new Date(c.exp), f=x=>x.getFullYear()+'.'+String(x.getMonth()+1).padStart(2,'0')+'.'+String(x.getDate()).padStart(2,'0');
+    box.innerHTML=`<div class="code">${esc(c.code)}</div><div class="meta">발급 ${f(d)} · ${f(e)}까지 사용 가능 · 웰컴 음료 + 도면 배선 상담 + 스마트 센서 증정/패키지 할인</div>
+      <div id="qr"></div><div class="how">쇼룸 방문 시 이 화면(코드 또는 QR)을 스태프에게 보여주세요.<br><b>아카라라이프 쇼룸</b> · 논현역 도보 1분</div>
+      <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap"><button class="btn sm" onclick="copyCode('${esc(c.code)}')">코드 복사</button><button class="btn sm" onclick="closeBenefit();flyHQ()">쇼룸 위치 보기</button><a class="btn sm" href="https://map.naver.com/p/search/${encodeURIComponent('아카라라이프 논현동 131-10')}" target="_blank" rel="noopener">길찾기 ↗</a></div>`;
+    try{ new QRCode(document.getElementById('qr'),{text:'AQARA-HAKDONG '+c.code,width:112,height:112,colorDark:'#222222',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const q=document.getElementById('qr'); if(q) q.style.display='none'; }
+  }
+  function copyCode(t){ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('쿠폰 코드가 복사됐어요: '+t)).catch(()=>prompt('쿠폰 코드',t)); }
+</script>
+</body>
+</html>

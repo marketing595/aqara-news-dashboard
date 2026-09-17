@@ -12,7 +12,9 @@ export const config = {
   //   index.html의 캠페인 리포트를 정적으로 굳힌 사본이라 이 파일 하나만 열리고,
   //   다른 데이터(json)는 계속 로그인 뒤에 있다. 단, 매출·이익률 등 내부 수치를 담고 있으므로
   //   페이지 자체에 noindex와 대외비 경고를 넣어두었다. 갱신: tools/build-campaign-share.sh
-  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json|campaign-l100.html).*)'],
+  // hakdong.html / hakdong.json = 학동 스마트 인테리어 MAP(일반 소비자용 공개 지도 + 웰컴 쿠폰). 쇼룸 QR로 배포되므로 공개.
+  //   팀 수정분·쿠폰 로그는 Firebase(hakdong/*)에 있고 개인정보는 담지 않는다.
+  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json|campaign-l100.html|hakdong.html|hakdong.json).*)'],
 };
 
 function fromB64url(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; return atob(s); }

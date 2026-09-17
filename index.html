@@ -1312,6 +1312,7 @@
              <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">11월 세미나</button>
              <button id="mktBtn-brandbook" onclick="mktSub('brandbook')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">📕 브랜드북</button>
              <button id="mktBtn-lanseon" onclick="mktSub('lanseon')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🏠 랜선집들이</button>
+             <button id="mktBtn-hakmap" onclick="mktSub('hakmap')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🗺 학동 인테리어 지도</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">언론홍보</p>
@@ -1335,6 +1336,7 @@
        <div id="mktSeminarSlot"></div>
        <div id="view-brandbook" class="hidden"><div id="bbBody"></div></div>
        <div id="view-lanseon" class="hidden"><div id="lnBody"></div></div>
+       <div id="view-hakmap" class="hidden"><div id="hkBody"></div></div>
        <div id="view-rnr" class="hidden"><div id="rrBody"></div></div>
        <div id="mktKpiSlot"></div>
        <div id="mktAdSlot"></div>
@@ -8339,6 +8341,131 @@
       if(document.fonts&&document.fonts.ready) document.fonts.ready.then(tmDraw); else tmDraw();
       tmDraw();
     }
+    /* ===================== 🗺 학동 스마트 인테리어 MAP · 관리 =====================
+       공개 페이지 = /hakdong.html (로그인 없이 열림, 일반 소비자용 쇼룸 투어 지도 + 웰컴 쿠폰).
+       원본 데이터 = hakdong.json / 팀 수정분 = Firebase `hakdong/spots/<id>`(필드 단위 덮어쓰기, hide=숨김)
+       쿠폰 발급 로그 = Firebase `hakdong/coupons/<code>`. 여기서 고치면 공개 페이지에 즉시 반영된다.     */
+    let HK=null, HK_LOADING=false, HK_OVER={}, HK_CP={}, hkRefOn=false, HK_FBERR='', HK_DIRTY=false;
+    function hkRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('hakdong'):null; }
+    function hkStart(){ if(hkRefOn) return; const ref=hkRef(); if(!ref) return; hkRefOn=true;
+      ref.child('spots').on('value',s=>{ HK_OVER=s.val()||{}; if(mktSection!=='hakmap'||!HK) return;
+        const t=document.getElementById('hkTable'); if(t&&t.contains(document.activeElement)){ HK_DIRTY=true; return; }   // 입력 중엔 표를 다시 그리지 않는다
+        hkPaintTable(); hkPaintStats(); });
+      ref.child('coupons').on('value',s=>{ HK_CP=s.val()||{}; if(mktSection==='hakmap'&&HK) hkPaintStats(); }); }
+    function hkCatOf(id){ return (HK.categories||[]).find(c=>c.id===id)||{color:'#888',ko:'',en:''}; }
+    function hkSpots(){ const seed=(HK.spots||[]).map(s=>Object.assign({_seed:true},s,HK_OVER[s.id]||{}));
+      Object.keys(HK_OVER).forEach(id=>{ if(!(HK.spots||[]).some(s=>s.id===id)&&HK_OVER[id]&&HK_OVER[id].n) seed.push(Object.assign({id,_seed:false},HK_OVER[id])); });
+      return seed; }
+    function hkSaved(err){ const el=document.getElementById('hkSave'); if(!el) return;
+      el.innerHTML=err?'<span class="text-ared font-semibold">저장 실패</span>':'<span class="text-agreen font-semibold">✓ 저장됨 · 공개 페이지에 바로 반영</span>';
+      clearTimeout(window.__hkST); window.__hkST=setTimeout(()=>{ const e2=document.getElementById('hkSave'); if(e2) e2.innerHTML=''; },2600); }
+    function hkSave(id,field,val){ const ref=hkRef();
+      if(!ref){ HK_FBERR='서버 연결 없음'; hkPaintConn(); hkSaved(1); return; }
+      const p=(val==null||val==='')?ref.child('spots/'+id+'/'+field).remove():ref.child('spots/'+id+'/'+field).set(val);
+      p.then(()=>hkSaved()).catch(e=>{ HK_FBERR=(e&&e.message)||'쓰기 거부'; hkSaved(1); hkPaintConn(); }); }
+    function hkInput(el){ const id=el.dataset.id, f=el.dataset.f; let v=el.value.trim();
+      if(f==='coord'){ const m=v.replace(/[()]/g,'').split(/[,\s]+/).map(Number).filter(n=>isFinite(n)); if(m.length<2||m[0]<33||m[0]>39||m[1]<124||m[1]>132){ el.classList.add('border-ared'); return; }
+        el.classList.remove('border-ared'); hkSave(id,'lat',+m[0].toFixed(6)); hkSave(id,'lng',+m[1].toFixed(6)); return; }
+      const seed=(HK.spots||[]).find(s=>s.id===id); if(seed&&(seed[f]||'')===v) v='';   // 원본과 같으면 덮어쓰기 제거
+      hkSave(id,f,v); }
+    function hkToggleHide(id,hide){ hkSave(id,'hide',hide?true:''); }
+    function hkReset(id){ if(!confirm('이 스팟의 수정 내용을 모두 지우고 원본(hakdong.json)으로 되돌릴까요?')) return; const ref=hkRef(); if(ref) ref.child('spots/'+id).remove().then(()=>hkSaved()).catch(()=>hkSaved(1)); }
+    function hkRemove(id){ if(!confirm('직접 추가한 이 스팟을 삭제할까요?')) return; const ref=hkRef(); if(ref) ref.child('spots/'+id).remove().then(()=>hkSaved()).catch(()=>hkSaved(1)); }
+    function hkAdd(){ const ref=hkRef(); if(!ref){ alert('서버에 연결되지 않아 추가할 수 없어요.'); return; }
+      const id='x'+Date.now().toString(36); const hq=HK.hq||{lat:37.5118,lng:127.0228};
+      ref.child('spots/'+id).set({n:'새 스팟 (이름을 입력하세요)',en:'',cat:'fur',a:'',d:'',lat:+(hq.lat+0.002).toFixed(6),lng:+(hq.lng+0.002).toFixed(6),by:(typeof wkDeviceName==='function'?wkDeviceName():''),ts:Date.now()})
+        .then(()=>{ hkSaved(); setTimeout(()=>{ const el=document.querySelector('#hkTable input[data-id="'+id+'"][data-f="n"]'); if(el){ el.focus(); el.select(); } },300); }).catch(()=>hkSaved(1)); }
+    function hkPaintConn(){ const el=document.getElementById('hkConn'); if(!el) return;
+      const on=(typeof wkUseFB==='function'&&wkUseFB());
+      if(on&&!HK_FBERR){ el.className='text-[11.5px] font-semibold text-agreen'; el.textContent='🟢 실시간 연결됨 — 표에서 고치면 공개 페이지에 즉시 반영됩니다'; return; }
+      el.className='text-[11.5px] font-semibold text-ared';
+      el.textContent=HK_FBERR?('⚠️ 서버 저장이 거부됐습니다('+HK_FBERR+') — 수정이 공개 페이지에 반영되지 않습니다.'):'⚠️ 서버에 연결되지 않아 수정할 수 없습니다. 잠시 후 새로고침해 주세요.'; }
+    function hkUrl(){ return (location.origin&&/^https?:/.test(location.origin)?location.origin:'https://aqara-news-dashboard.vercel.app')+'/hakdong.html'; }
+    function hkCopy(){ const u=hkUrl(); (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>hkToastMsg('링크를 복사했어요: '+u)).catch(()=>prompt('공개 링크',u)); }
+    function hkToastMsg(m){ const el=document.getElementById('hkSave'); if(el){ el.innerHTML='<span class="text-agreen font-semibold">'+esc(m)+'</span>'; clearTimeout(window.__hkST); window.__hkST=setTimeout(()=>{ el.innerHTML=''; },2600); } }
+    function hkQr(){ const box=document.getElementById('hkQr'); if(!box) return; box.classList.toggle('hidden');
+      if(box.classList.contains('hidden')||box.dataset.done) return;
+      const draw=()=>{ try{ box.querySelector('.qr').innerHTML=''; new QRCode(box.querySelector('.qr'),{text:hkUrl()+'?ref=qr',width:168,height:168,colorDark:'#1D1D1F',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); box.dataset.done='1'; }catch(e){ box.querySelector('.qr').textContent='QR 생성 실패'; } };
+      if(window.QRCode) draw(); else { const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s.onload=draw; s.onerror=()=>{ box.querySelector('.qr').textContent='QR 라이브러리 로드 실패'; }; document.head.appendChild(s); } }
+    function hkPaintStats(){ const el=document.getElementById('hkStats'); if(!el||!HK) return;
+      const sp=hkSpots(), shown=sp.filter(s=>!s.hide), cps=Object.entries(HK_CP).map(([code,v])=>Object.assign({code},v||{})).sort((a,b)=>(b.ts||0)-(a.ts||0));
+      const today=kstToday(), kd=t=>{ const d=new Date((t||0)+9*36e5); return d.toISOString().slice(0,10); };
+      const cToday=cps.filter(c=>kd(c.ts)===today).length, cMonth=cps.filter(c=>kd(c.ts).slice(0,7)===today.slice(0,7)).length, cQr=cps.filter(c=>c.src==='qr').length;
+      const tile=(l,v,s)=>`<div class="rounded-xl border border-[#E6E6E3] bg-white p-3"><p class="text-[11px] text-slate-400">${l}</p><p class="text-[22px] font-extrabold text-ink num leading-tight">${v}</p>${s?`<p class="text-[11px] text-slate-400 mt-0.5">${s}</p>`:''}</div>`;
+      el.innerHTML=`<div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+        ${tile('공개 중인 스팟',shown.length+'곳',(HK.categories||[]).map(c=>`<span style="color:${c.color}">●</span>${shown.filter(s=>s.cat===c.id).length}`).join(' '))}
+        ${tile('숨긴 스팟',sp.filter(s=>s.hide).length+'곳','표에서 다시 켤 수 있어요')}
+        ${tile('웰컴 쿠폰 · 누적',cps.length+'건','QR 유입 '+cQr+'건')}
+        ${tile('쿠폰 · 이번 달',cMonth+'건',today.slice(0,7))}
+        ${tile('쿠폰 · 오늘',cToday+'건',today)}</div>
+        ${cps.length?`<details class="mt-2"><summary class="text-[12px] text-slate-500 cursor-pointer">최근 발급 쿠폰 ${Math.min(cps.length,15)}건 보기</summary>
+          <div class="mt-1 flex flex-wrap gap-1.5">${cps.slice(0,15).map(c=>`<span class="text-[11px] rounded-md border border-[#E6E6E3] bg-white px-2 py-0.5 num" title="${esc(kd(c.ts))} · ${esc(c.src||'web')}${c.mobile?' · 모바일':''}">${esc(c.code)} <span class="text-slate-400">${esc(kd(c.ts).slice(5))}</span></span>`).join('')}</div>
+          <p class="text-[11px] text-slate-400 mt-1">쿠폰은 방문객 휴대폰에 발급되며 여기엔 코드·발급시각·유입경로만 기록됩니다(개인정보 없음). 쇼룸에서 코드 확인 시 이 목록과 대조하세요.</p></details>`:''}`; }
+    function hkPaintTable(){ const box=document.getElementById('hkTable'); if(!box||!HK) return; HK_DIRTY=false;
+      const cats=HK.categories||[], sp=hkSpots(); let n=0;
+      const rows=sp.map(s=>{ const c=hkCatOf(s.cat), no=s.hl?'A':(s.hide?'—':(++n)); const ov=HK_OVER[s.id]||{}; const mod=Object.keys(ov).filter(k=>!['by','ts'].includes(k)).length;
+        const inp=(f,val,ph,cls)=>`<input data-id="${s.id}" data-f="${f}" value="${esc(val==null?'':val)}" placeholder="${ph||''}" onchange="hkInput(this)" class="w-full text-[12px] border border-[#E6E6E3] rounded-md px-2 py-1 bg-white focus:border-[#7C5CFF] outline-none ${cls||''}" />`;
+        return `<tr class="${s.hide?'opacity-50':''} align-top border-t border-[#F0EEE9]">
+          <td class="px-2 py-2 text-center"><span class="inline-grid place-items-center w-6 h-6 rounded-full text-white text-[10.5px] font-extrabold" style="background:${s.hl?'#E65100':c.color}">${no}</span>${mod?`<p class="text-[9.5px] text-[#7C5CFF] mt-1 whitespace-nowrap">수정 ${mod}</p>`:''}</td>
+          <td class="px-2 py-2 min-w-[190px]">${inp('n',s.n,'이름','font-bold')}<div class="mt-1">${inp('en',s.en,'영문명(소문자 X)','text-[11px] uppercase tracking-wide')}</div></td>
+          <td class="px-2 py-2"><select data-id="${s.id}" data-f="cat" onchange="hkInput(this)" class="text-[12px] border border-[#E6E6E3] rounded-md px-1.5 py-1 bg-white">${cats.map(k=>`<option value="${k.id}" ${k.id===s.cat?'selected':''}>${esc(k.ko)}</option>`).join('')}</select></td>
+          <td class="px-2 py-2 min-w-[200px]">${inp('a',s.a,'도로명 주소')}</td>
+          <td class="px-2 py-2 min-w-[260px]">${inp('d',s.d,'한 줄 소개(일반인 눈높이, 감성적으로)')}</td>
+          <td class="px-2 py-2 min-w-[170px]">${inp('coord',(s.lat!=null?(+s.lat).toFixed(5)+', '+(+s.lng).toFixed(5):''),'37.5118, 127.0228','num')}<a href="https://map.naver.com/p/search/${encodeURIComponent((s.n||'')+' '+(s.a||'').replace(/^서울 /,''))}" target="_blank" rel="noopener" class="text-[10.5px] text-slate-400 hover:text-ink">네이버지도에서 확인 ↗</a></td>
+          <td class="px-2 py-2 min-w-[150px]">${inp('img',s.img,'사진 URL(선택)')}${s.img?`<img src="${esc(s.img)}" class="mt-1 w-14 h-10 object-cover rounded border border-[#E6E6E3]" onerror="this.remove()">`:''}</td>
+          <td class="px-2 py-2 whitespace-nowrap text-center">
+            <label class="inline-flex items-center gap-1 text-[11px] cursor-pointer"><input type="checkbox" ${s.hide?'':'checked'} onchange="hkToggleHide('${s.id}',!this.checked)"> 표시</label>
+            <div class="mt-1">${s._seed?(mod?`<button onclick="hkReset('${s.id}')" class="text-[10.5px] text-slate-400 hover:text-ared">원본으로</button>`:''):`<button onclick="hkRemove('${s.id}')" class="text-[10.5px] text-slate-400 hover:text-ared">삭제</button>`}</div></td></tr>`; }).join('');
+      box.innerHTML=`<table class="w-full text-[12px]"><thead><tr class="text-[11px] text-slate-400 text-left"><th class="px-2 py-1.5 text-center">#</th><th class="px-2 py-1.5">이름 · 영문</th><th class="px-2 py-1.5">카테고리</th><th class="px-2 py-1.5">주소</th><th class="px-2 py-1.5">한 줄 소개</th><th class="px-2 py-1.5">좌표(위도, 경도)</th><th class="px-2 py-1.5">사진</th><th class="px-2 py-1.5 text-center">공개</th></tr></thead><tbody>${rows}</tbody></table>`;
+      box.onfocusout=()=>{ setTimeout(()=>{ if(HK_DIRTY&&!box.contains(document.activeElement)){ hkPaintTable(); hkPaintStats(); } },80); }; }
+    function renderHakmap(){ const box=document.getElementById('hkBody'); if(!box) return;
+      if(!HK){ box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">학동 지도 데이터를 불러오는 중…</p>';
+        if(HK_LOADING) return; HK_LOADING=true;
+        fetch('hakdong.json?_='+Date.now()).then(r=>r.json()).then(d=>{ HK=d; HK_LOADING=false; renderHakmap(); })
+          .catch(()=>{ HK_LOADING=false; box.innerHTML='<p class="text-sm text-ared py-16 text-center">hakdong.json을 불러오지 못했습니다.</p>'; }); return; }
+      hkStart();
+      const u=hkUrl();
+      box.innerHTML=`
+      <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#E65100">
+        <p class="text-[12.5px] text-slate-500"><b class="text-ink">일반 소비자용 공개 페이지</b>예요(로그인 없이 열림). 쇼룸·거리에서 QR로 배포하고, 아래 표에서 스팟 정보·좌표·사진을 고치면 공개 페이지에 바로 반영됩니다.</p>
+        <p id="hkConn" class="mt-1"></p>
+      </div>
+      <div class="card p-5 sm:p-6 mb-4">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0">
+            <p class="text-[11px] font-extrabold tracking-wider" style="color:#E65100">AQARA LIFE · 쇼룸 유입 캠페인</p>
+            <h2 class="text-[22px] sm:text-[26px] font-extrabold text-ink leading-tight mt-0.5">🗺 ${esc(HK.title||'학동 스마트 인테리어 MAP')}</h2>
+            <p class="text-[13px] text-slate-500 mt-1 max-w-[760px]">${esc(HK.subtitle||'')} · 아카라라이프 쇼룸을 <b>Special Highlight</b>로 두고, 학동역~도산대로 쇼룸 ${(HK.spots||[]).length-1}곳을 카테고리별로 안내합니다. 방문 혜택: ${(HK.benefits||[]).map(b=>esc(b.t)).join(' / ')}.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <a href="${u}" target="_blank" rel="noopener" class="text-sm text-white px-3 py-1.5 rounded-lg font-semibold" style="background:#E65100">공개 페이지 열기 ↗</a>
+            <button onclick="hkCopy()" class="text-sm border border-[#E6E6E3] hover:bg-slate-50 px-3 py-1.5 rounded-lg font-semibold">링크 복사</button>
+            <button onclick="hkQr()" class="text-sm border border-[#E6E6E3] hover:bg-slate-50 px-3 py-1.5 rounded-lg font-semibold">QR 코드</button>
+            <button onclick="document.getElementById('hkFrame').src='hakdong.html?_='+Date.now()" class="text-sm border border-[#E6E6E3] hover:bg-slate-50 px-3 py-1.5 rounded-lg font-semibold">미리보기 새로고침</button>
+            <span id="hkSave" class="text-[12px]"></span>
+          </div>
+        </div>
+        <div id="hkQr" class="hidden mt-3 flex flex-wrap items-center gap-4 rounded-xl border border-[#E6E6E3] bg-[#FAFAF9] p-3">
+          <div class="qr bg-white p-2 rounded-lg border border-[#E6E6E3]"></div>
+          <div class="text-[12px] text-slate-500"><p class="font-bold text-ink">배포용 QR</p><p class="num">${esc(u)}?ref=qr</p><p class="mt-1">QR로 들어온 방문객이 발급한 쿠폰은 <b>QR 유입</b>으로 따로 집계됩니다. 이미지를 우클릭해 저장하거나 캡처해서 리플릿·스탠드에 넣으세요.</p></div>
+        </div>
+        <div id="hkStats" class="mt-4"></div>
+      </div>
+      <div class="card p-5 sm:p-6 mb-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <h3 class="accent font-extrabold text-ink">스팟 편집 <span class="text-xs font-normal text-slate-400">(칸을 고치고 다른 곳을 클릭하면 저장)</span></h3>
+          <button onclick="hkAdd()" class="text-sm bg-[#7C5CFF] text-white px-3 py-1.5 rounded-lg font-semibold">+ 스팟 추가</button>
+        </div>
+        <p class="text-[12px] text-slate-500 mb-3">지도 위 위치는 <b>도로명주소 기준 근사치</b>로 잡아뒀어요. 정확히 맞추려면 <b>구글지도에서 그 건물을 우클릭 → 맨 위에 뜨는 좌표를 클릭(복사)</b> → 좌표 칸에 붙여넣기. 네이버지도는 좌표를 안 보여주니 위치 확인용으로만 쓰세요. <span class="text-ared">주소 확인 필요</span>로 표시된 곳(HAY 논현점 '산성대로')은 실제 주소를 찾아 고쳐주세요.</p>
+        <div id="hkTable" class="overflow-x-auto -mx-2"></div>
+      </div>
+      <div class="card p-3 mb-4">
+        <p class="text-[12px] text-slate-500 px-2 pb-2">공개 페이지 미리보기 <span class="text-slate-400">(실제 방문객이 보는 화면 · 폭 좁히면 모바일 레이아웃)</span></p>
+        <iframe id="hkFrame" src="hakdong.html" title="학동 스마트 인테리어 MAP 미리보기" class="w-full rounded-xl border border-[#E6E6E3] bg-white" style="height:760px"></iframe>
+      </div>`;
+      hkPaintConn(); hkPaintStats(); hkPaintTable();
+    }
+
     // ===== ONLY MKT (팀 전용) =====
     const MKT_PW='aqara2026';   // 팀 공유 비밀번호(정적 사이트=화면 가림 수준). 변경 시 이 값 수정.
     let mktSection='weekly';   // ONLY MKT 첫 화면 = 주간보고
@@ -8367,6 +8494,7 @@
       const sem=document.getElementById('view-seminar'); if(sem) sem.classList.toggle('hidden', s!=='seminar');
       const bbv=document.getElementById('view-brandbook'); if(bbv) bbv.classList.toggle('hidden', s!=='brandbook');
       const lnv=document.getElementById('view-lanseon'); if(lnv) lnv.classList.toggle('hidden', s!=='lanseon');
+      const hkv=document.getElementById('view-hakmap'); if(hkv) hkv.classList.toggle('hidden', s!=='hakmap');
       const rrv=document.getElementById('view-rnr'); if(rrv) rrv.classList.toggle('hidden', s!=='rnr');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
@@ -8376,7 +8504,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','rnr','insta','blog','thumb','prpitch','ad','seminar','brandbook','lanseon','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
+      ['weekly','medialist','calendar','rnr','insta','blog','thumb','prpitch','ad','seminar','brandbook','lanseon','hakmap','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -8388,6 +8516,7 @@
       if(s==='seminar'){ renderSeminar(); }
       if(s==='brandbook'){ renderBrandbook(); }
       if(s==='lanseon'){ renderLanseon(); }
+      if(s==='hakmap'){ renderHakmap(); }
       if(s==='rnr'){ renderRnr(); }
       if(s==='report'){ mktReportSub(mktRptView); }
 
