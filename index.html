@@ -8368,7 +8368,8 @@
         el.classList.remove('border-ared'); hkSave(id,'lat',+m[0].toFixed(6)); hkSave(id,'lng',+m[1].toFixed(6)); return; }
       const seed=(HK.spots||[]).find(s=>s.id===id); if(seed&&(seed[f]||'')===v) v='';   // 원본과 같으면 덮어쓰기 제거
       hkSave(id,f,v); }
-    function hkToggleHide(id,hide){ hkSave(id,'hide',hide?true:''); }
+    // 원본(hakdong.json)이 hide:true인 스팟(미확인 업체)은 false를 명시해야 공개된다
+    function hkToggleHide(id,hide){ const seed=(HK.spots||[]).find(s=>s.id===id); hkSave(id,'hide',hide?true:((seed&&seed.hide)?false:'')); }
     function hkReset(id){ if(!confirm('이 스팟의 수정 내용을 모두 지우고 원본(hakdong.json)으로 되돌릴까요?')) return; const ref=hkRef(); if(ref) ref.child('spots/'+id).remove().then(()=>hkSaved()).catch(()=>hkSaved(1)); }
     function hkRemove(id){ if(!confirm('직접 추가한 이 스팟을 삭제할까요?')) return; const ref=hkRef(); if(ref) ref.child('spots/'+id).remove().then(()=>hkSaved()).catch(()=>hkSaved(1)); }
     function hkAdd(){ const ref=hkRef(); if(!ref){ alert('서버에 연결되지 않아 추가할 수 없어요.'); return; }
@@ -8407,7 +8408,7 @@
         const inp=(f,val,ph,cls)=>`<input data-id="${s.id}" data-f="${f}" value="${esc(val==null?'':val)}" placeholder="${ph||''}" onchange="hkInput(this)" class="w-full text-[12px] border border-[#E6E6E3] rounded-md px-2 py-1 bg-white focus:border-[#7C5CFF] outline-none ${cls||''}" />`;
         return `<tr class="${s.hide?'opacity-50':''} align-top border-t border-[#F0EEE9]">
           <td class="px-2 py-2 text-center"><span class="inline-grid place-items-center w-6 h-6 rounded-full text-white text-[10.5px] font-extrabold" style="background:${s.hl?'#E65100':c.color}">${no}</span>${mod?`<p class="text-[9.5px] text-[#7C5CFF] mt-1 whitespace-nowrap">수정 ${mod}</p>`:''}</td>
-          <td class="px-2 py-2 min-w-[190px]">${inp('n',s.n,'이름','font-bold')}<div class="mt-1">${inp('en',s.en,'영문명(소문자 X)','text-[11px] uppercase tracking-wide')}</div></td>
+          <td class="px-2 py-2 min-w-[190px]">${inp('n',s.n,'이름','font-bold')}${s.check?`<p class="text-[10.5px] text-ared mt-1 leading-snug">⚠ ${esc(s.check)}</p>`:''}<div class="mt-1">${inp('en',s.en,'영문명(소문자 X)','text-[11px] uppercase tracking-wide')}</div></td>
           <td class="px-2 py-2"><select data-id="${s.id}" data-f="cat" onchange="hkInput(this)" class="text-[12px] border border-[#E6E6E3] rounded-md px-1.5 py-1 bg-white">${cats.map(k=>`<option value="${k.id}" ${k.id===s.cat?'selected':''}>${esc(k.ko)}</option>`).join('')}</select></td>
           <td class="px-2 py-2 min-w-[200px]">${inp('a',s.a,'도로명 주소')}</td>
           <td class="px-2 py-2 min-w-[260px]">${inp('d',s.d,'한 줄 소개(일반인 눈높이, 감성적으로)')}</td>
