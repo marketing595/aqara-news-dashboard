@@ -8411,12 +8411,12 @@
           <td class="px-2 py-2"><select data-id="${s.id}" data-f="cat" onchange="hkInput(this)" class="text-[12px] border border-[#E6E6E3] rounded-md px-1.5 py-1 bg-white">${cats.map(k=>`<option value="${k.id}" ${k.id===s.cat?'selected':''}>${esc(k.ko)}</option>`).join('')}</select></td>
           <td class="px-2 py-2 min-w-[200px]">${inp('a',s.a,'도로명 주소')}</td>
           <td class="px-2 py-2 min-w-[260px]">${inp('d',s.d,'한 줄 소개(일반인 눈높이, 감성적으로)')}</td>
-          <td class="px-2 py-2 min-w-[170px]">${inp('coord',(s.lat!=null?(+s.lat).toFixed(5)+', '+(+s.lng).toFixed(5):''),'37.5118, 127.0228','num')}<a href="https://map.naver.com/p/search/${encodeURIComponent((s.n||'')+' '+(s.a||'').replace(/^서울 /,''))}" target="_blank" rel="noopener" class="text-[10.5px] text-slate-400 hover:text-ink">네이버지도에서 확인 ↗</a></td>
-          <td class="px-2 py-2 min-w-[150px]">${inp('img',s.img,'사진 URL(선택)')}${s.img?`<img src="${esc(s.img)}" class="mt-1 w-14 h-10 object-cover rounded border border-[#E6E6E3]" onerror="this.remove()">`:''}</td>
+          <td class="px-2 py-2 min-w-[170px]">${inp('coord',(s.lat!=null?(+s.lat).toFixed(5)+', '+(+s.lng).toFixed(5):''),'37.5118, 127.0228','num')}<a href="${s.np?('https://map.naver.com/p/entry/place/'+encodeURIComponent(s.np)):('https://map.naver.com/p/search/'+encodeURIComponent((s.n||'').replace(/\s*\([^)]*\)/g,'').trim()))}" target="_blank" rel="noopener" class="text-[10.5px] text-slate-400 hover:text-ink">네이버지도에서 확인 ↗</a></td>
+          <td class="px-2 py-2 min-w-[150px]">${inp('np',s.np,'네이버 플레이스 ID(선택)','num')}<div class="mt-1">${inp('img',s.img,'사진 URL(선택)')}</div>${s.img?`<img src="${esc(s.img)}" class="mt-1 w-14 h-10 object-cover rounded border border-[#E6E6E3]" onerror="this.remove()">`:''}</td>
           <td class="px-2 py-2 whitespace-nowrap text-center">
             <label class="inline-flex items-center gap-1 text-[11px] cursor-pointer"><input type="checkbox" ${s.hide?'':'checked'} onchange="hkToggleHide('${s.id}',!this.checked)"> 표시</label>
             <div class="mt-1">${s._seed?(mod?`<button onclick="hkReset('${s.id}')" class="text-[10.5px] text-slate-400 hover:text-ared">원본으로</button>`:''):`<button onclick="hkRemove('${s.id}')" class="text-[10.5px] text-slate-400 hover:text-ared">삭제</button>`}</div></td></tr>`; }).join('');
-      box.innerHTML=`<table class="w-full text-[12px]"><thead><tr class="text-[11px] text-slate-400 text-left"><th class="px-2 py-1.5 text-center">#</th><th class="px-2 py-1.5">이름 · 영문</th><th class="px-2 py-1.5">카테고리</th><th class="px-2 py-1.5">주소</th><th class="px-2 py-1.5">한 줄 소개</th><th class="px-2 py-1.5">좌표(위도, 경도)</th><th class="px-2 py-1.5">사진</th><th class="px-2 py-1.5 text-center">공개</th></tr></thead><tbody>${rows}</tbody></table>`;
+      box.innerHTML=`<table class="w-full text-[12px]"><thead><tr class="text-[11px] text-slate-400 text-left"><th class="px-2 py-1.5 text-center">#</th><th class="px-2 py-1.5">이름 · 영문</th><th class="px-2 py-1.5">카테고리</th><th class="px-2 py-1.5">주소</th><th class="px-2 py-1.5">한 줄 소개</th><th class="px-2 py-1.5">좌표(위도, 경도)</th><th class="px-2 py-1.5">네이버 ID · 사진</th><th class="px-2 py-1.5 text-center">공개</th></tr></thead><tbody>${rows}</tbody></table>`;
       box.onfocusout=()=>{ setTimeout(()=>{ if(HK_DIRTY&&!box.contains(document.activeElement)){ hkPaintTable(); hkPaintStats(); } },80); }; }
     function renderHakmap(){ const box=document.getElementById('hkBody'); if(!box) return;
       if(!HK){ box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">학동 지도 데이터를 불러오는 중…</p>';
@@ -8456,7 +8456,7 @@
           <h3 class="accent font-extrabold text-ink">스팟 편집 <span class="text-xs font-normal text-slate-400">(칸을 고치고 다른 곳을 클릭하면 저장)</span></h3>
           <button onclick="hkAdd()" class="text-sm bg-[#7C5CFF] text-white px-3 py-1.5 rounded-lg font-semibold">+ 스팟 추가</button>
         </div>
-        <p class="text-[12px] text-slate-500 mb-3">지도 위 위치는 <b>도로명주소 기준 근사치</b>로 잡아뒀어요. 정확히 맞추려면 <b>구글지도에서 그 건물을 우클릭 → 맨 위에 뜨는 좌표를 클릭(복사)</b> → 좌표 칸에 붙여넣기. 네이버지도는 좌표를 안 보여주니 위치 확인용으로만 쓰세요. <span class="text-ared">주소 확인 필요</span>로 표시된 곳(HAY 논현점 '산성대로')은 실제 주소를 찾아 고쳐주세요.</p>
+        <p class="text-[12px] text-slate-500 mb-3">주소·좌표는 <b>네이버 플레이스 등록 정보로 검증</b>해 뒀어요(2026-09-17). 이전이나 폐점이 생기면 여기서 바로 고치세요 — 좌표는 <b>구글지도에서 그 건물을 우클릭 → 맨 위에 뜨는 좌표를 클릭(복사)</b> → 좌표 칸에 붙여넣기. 네이버지도는 좌표를 안 보여주니 위치 확인용으로만 쓰세요. <b>네이버 플레이스 ID</b>(map.naver.com/p/entry/place/<b>숫자</b>)를 넣어두면 카드의 네이버지도 버튼이 검색 없이 그 업체로 바로 열려요.</p>
         <div id="hkTable" class="overflow-x-auto -mx-2"></div>
       </div>
       <div class="card p-3 mb-4">

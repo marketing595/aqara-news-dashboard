@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>학동 스마트 인테리어 MAP · AQARA LIFE</title>
-  <meta name="description" content="학동역~도산대로 인테리어 거리, 발품 파는 분들을 위한 쇼룸 가이드 지도. 타일·주방·스위치·가구 쇼룸 30곳 + 아카라라이프 쇼룸 웰컴 쿠폰." />
+  <meta name="description" content="학동역~도산대로 인테리어 거리, 발품 파는 분들을 위한 쇼룸 가이드 지도. 타일·주방·스위치·가구 쇼룸 + 아카라라이프 쇼룸 웰컴 쿠폰." />
   <meta property="og:title" content="학동 스마트 인테리어 MAP · AQARA LIFE" />
   <meta property="og:description" content="쇼룸 투어 필수 지도 · 학동 인테리어 발품 길잡이. 아카라라이프 쇼룸에서 커피 한 잔 쉬어가세요." />
   <meta property="og:type" content="website" />
@@ -224,7 +224,7 @@
     <div class="md" role="dialog" aria-modal="true" aria-labelledby="mdTitle">
       <div class="hd">
         <button class="x" onclick="closeBenefit()" aria-label="닫기">×</button>
-        <div class="ey">AQARA LIFE SHOWROOM · 논현역 도보 1분</div>
+        <div class="ey">AQARA LIFE SHOWROOM · 학동역 도보 3분</div>
         <h2 id="mdTitle">학동 쇼룸 투어 웰컴 쿠폰</h2>
         <p>학동 인테리어 거리를 돌아보시는 분들께 드려요. 쿠폰 받고 아카라라이프 쇼룸에서 쉬었다 가세요.</p>
       </div>
@@ -262,7 +262,9 @@
   let DATA=null, SPOTS=[], CATS=[], OVER={}, MAP=null, MARK={}, FILTER='all', ACTIVE=null;
   const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const catOf=id=>CATS.find(c=>c.id===id)||{color:'#888',en:'',ko:''};
-  const naverUrl=s=>'https://map.naver.com/p/search/'+encodeURIComponent(s.n+' '+(s.a||'').replace(/^서울 /,''));
+  // 네이버지도는 '상호+주소'를 같이 넣으면 '조건에 맞는 업체가 없습니다'가 뜬다 → 업체명만 검색(괄호 속 영문 표기는 제거)
+  const naverUrl=s=>s.np?('https://map.naver.com/p/entry/place/'+encodeURIComponent(s.np)):('https://map.naver.com/p/search/'+encodeURIComponent(naverName(s)));   // np = 네이버 플레이스 ID(검증 완료분) → 바로 그 업체로
+  const naverName=s=>(s.n||'').replace(/\s*\([^)]*\)/g,'').replace(/\s*(플래그십|브랜드)?\s*(쇼룸|갤러리|스토어 서울)$/,'').trim()||s.n;
   const initial=s=>{ const t=(s.en||s.n||'').trim(); const m=t.match(/[A-Za-z]/); return m?m[0].toUpperCase():t.slice(0,1); };
 
   fetch('hakdong.json?_='+Date.now()).then(r=>r.json()).then(d=>{ DATA=d; CATS=d.categories; boot(); })
@@ -380,8 +382,8 @@
       <button class="btn primary" style="font-size:14px;padding:11px 22px" onclick="issueCoupon()">🎟️ 웰컴 쿠폰 발급받기</button>`; return; }
     const d=new Date(c.ts), e=new Date(c.exp), f=x=>x.getFullYear()+'.'+String(x.getMonth()+1).padStart(2,'0')+'.'+String(x.getDate()).padStart(2,'0');
     box.innerHTML=`<div class="code">${esc(c.code)}</div><div class="meta">발급 ${f(d)} · ${f(e)}까지 사용 가능 · 웰컴 음료 + 도면 배선 상담 + 스마트 센서 증정/패키지 할인</div>
-      <div id="qr"></div><div class="how">쇼룸 방문 시 이 화면(코드 또는 QR)을 스태프에게 보여주세요.<br><b>아카라라이프 쇼룸</b> · 논현역 도보 1분</div>
-      <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap"><button class="btn sm" onclick="copyCode('${esc(c.code)}')">코드 복사</button><button class="btn sm" onclick="closeBenefit();flyHQ()">쇼룸 위치 보기</button><a class="btn sm" href="https://map.naver.com/p/search/${encodeURIComponent('아카라라이프 논현동 131-10')}" target="_blank" rel="noopener">길찾기 ↗</a></div>`;
+      <div id="qr"></div><div class="how">쇼룸 방문 시 이 화면(코드 또는 QR)을 스태프에게 보여주세요.<br><b>아카라라이프 쇼룸</b> · 학동역 도보 3분 · 논현로127길 13-11</div>
+      <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap"><button class="btn sm" onclick="copyCode('${esc(c.code)}')">코드 복사</button><button class="btn sm" onclick="closeBenefit();flyHQ()">쇼룸 위치 보기</button><a class="btn sm" href="https://map.naver.com/p/search/${encodeURIComponent('아카라라이프')}" target="_blank" rel="noopener">길찾기 ↗</a></div>`;
     try{ new QRCode(document.getElementById('qr'),{text:'AQARA-HAKDONG '+c.code,width:112,height:112,colorDark:'#222222',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const q=document.getElementById('qr'); if(q) q.style.display='none'; }
   }
   function copyCode(t){ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('쿠폰 코드가 복사됐어요: '+t)).catch(()=>prompt('쿠폰 코드',t)); }
