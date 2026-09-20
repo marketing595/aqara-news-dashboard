@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-19 21:32",
+ "generatedAt": "2026-09-20 22:04",
  "brands": [
   {
    "name": "아카라",
@@ -123,8 +123,8 @@
     "아카라이브",
     "아카라 도어락",
     "아카라",
-    "아카라치",
     "아카라 k100",
+    "아카라치",
     "아카라치몰",
     "아카라 홈캠",
     "아카라카",
@@ -351,8 +351,8 @@
     "헤이홈 중국",
     "헤이홈 공유",
     "헤이홈 오프라인",
-    "헤이홈 홈캠 거치대",
-    "헤이홈 재부팅"
+    "헤이홈 카메라",
+    "헤이홈 프로"
    ],
    "recent": [
     {
@@ -451,7 +451,7 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 68512,
+   "total": 68517,
    "sentiment": {
     "pos": 29,
     "neu": 31,
@@ -460,7 +460,7 @@
    "keywords": [
     [
      "AI",
-     100
+     99
     ],
     [
      "삼성전자는",
@@ -468,38 +468,34 @@
     ],
     [
      "필리핀",
-     34
-    ],
-    [
-     "B2B",
-     29
+     30
     ],
     [
      "솔루션",
-     27
+     26
     ],
     [
      "가전",
-     26
+     25
+    ],
+    [
+     "B2B",
+     25
     ],
     [
      "맞춤형",
-     26
-    ],
-    [
-     "프로",
-     24
+     25
     ],
     [
      "가전과",
      24
     ],
     [
-     "공급",
-     20
+     "프로",
+     23
     ],
     [
-     "연계한",
+     "공급",
      19
     ],
     [
@@ -507,41 +503,45 @@
      18
     ],
     [
-     "단지",
+     "연계한",
      18
     ],
     [
-     "복합단지에",
-     17
+     "단지",
+     16
     ],
     [
      "홈을",
-     16
-    ],
-    [
-     "레지던스와",
-     16
+     15
     ],
     [
      "복합단지",
      15
     ],
     [
-     "운영",
+     "복합단지에",
+     15
+    ],
+    [
+     "레지던스와",
      14
+    ],
+    [
+     "플랫폼인",
+     13
     ]
    ],
    "posWords": [
     [
      "공략",
-     13
-    ],
-    [
-     "확대",
-     6
+     12
     ],
     [
      "글로벌",
+     6
+    ],
+    [
+     "확대",
      5
     ],
     [
@@ -549,12 +549,12 @@
      5
     ],
     [
-     "프리미엄",
+     "강화",
      4
     ],
     [
-     "강화",
-     3
+     "프리미엄",
+     4
     ],
     [
      "협업",
@@ -566,18 +566,48 @@
     ]
    ],
    "related": [
-    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 스테이션",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 연결",
-    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스",
+    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스 스위치",
-    "삼성 스마트싱스 아이폰"
+    "삼성 스마트싱스 아이폰",
+    "삼성 스마트싱스 스위치"
    ],
    "recent": [
+    {
+     "title": "[삼성전자] 美 실리콘밸리서 AI 기술 포럼 / '갤럭시 클래스룸' / 기후산...",
+     "source": "webeconomy.co.kr",
+     "date": "2026-09-20",
+     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2313020"
+    },
+    {
+     "title": "가스 대신 공기로 난방을?…삼성·LG가 '히트펌프'에 꽂힌 이유",
+     "source": "news.bizwatch.co.kr",
+     "date": "2026-09-20",
+     "link": "https://n.news.naver.com/mnews/article/648/0000050938?sid=101"
+    },
+    {
+     "title": "도시화 바람 탄 신흥국⋯ 삼성·LG, 촘촘해진 ‘글로벌 사우스' 현지화...",
+     "source": "viva100.com",
+     "date": "2026-09-20",
+     "link": "https://www.viva100.com/article/20260920500372"
+    },
+    {
+     "title": "삼성전자, 美 실리콘밸리서 '2026 테크 포럼' 개최...AI·로보틱스 전략...",
+     "source": "consumernews.co.kr",
+     "date": "2026-09-20",
+     "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=764319"
+    },
+    {
+     "title": "\"가전 다음은 냉난방\"…삼성·LG가 히트펌프에 힘주는 이유",
+     "source": "wolyo.co.kr",
+     "date": "2026-09-20",
+     "link": "https://www.wolyo.co.kr/news/articleView.html?idxno=318051"
+    },
     {
      "title": "난방부터 AI 데이터센터까지…삼성전자, WCE서 제시한 '친환경 일상'",
      "source": "financialpost.co.kr",
@@ -615,16 +645,16 @@
      "link": "https://www.econovill.com/news/articleView.html?idxno=751234"
     },
     {
-     "title": "\"기후·문화 맞춤형 AI 가전 어때요?\"…삼성전자, 인도서 테크세미나 '더...",
-     "source": "thepublic.kr",
-     "date": "2026-09-18",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=319168"
-    },
-    {
      "title": "'LG 플랫폼'서 '삼성 세탁기' 연동… 경쟁사에 스마트홈 문 여는 업체들",
      "source": "thepublic.kr",
      "date": "2026-09-18",
      "link": "https://www.thepublic.kr/news/articleView.html?idxno=319164"
+    },
+    {
+     "title": "\"기후·문화 맞춤형 AI 가전 어때요?\"…삼성전자, 인도서 테크세미나 '더...",
+     "source": "thepublic.kr",
+     "date": "2026-09-18",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=319168"
     },
     {
      "title": "\"빌딩 전체가 거대한 가전\" 삼성·LG전자, 955조원 규모 스마트 빌딩 시...",
@@ -637,36 +667,6 @@
      "source": "머니투데이",
      "date": "2026-09-18",
      "link": "https://n.news.naver.com/mnews/article/008/0005415634?sid=101"
-    },
-    {
-     "title": "[오늘의 신문] 대미투자 원전 협상 막판 진통…美 금리인상·유가 120달...",
-     "source": "kor.theasian.asia",
-     "date": "2026-09-18",
-     "link": "http://kor.theasian.asia/archives/415874"
-    },
-    {
-     "title": "“폭염·요금 폭탄 막는다” 삼성·LG, 신흥국 정조준한 맞춤형 AI 가전...",
-     "source": "g-enews.com",
-     "date": "2026-09-18",
-     "link": "https://www.g-enews.com/view.php?ud=2026091807112476432bd56fbc3c_1"
-    },
-    {
-     "title": "꿀잠 돕는 워치·안부 묻는 냉장고… 14억 인도 홀리는 '맞춤형 AI가전'",
-     "source": "머니투데이",
-     "date": "2026-09-18",
-     "link": "https://n.news.naver.com/mnews/article/008/0005415560?sid=101"
-    },
-    {
-     "title": "삼성전자서비스, 한국경영대상 고객만족 부문 2년 연속 대상",
-     "source": "worktoday.co.kr",
-     "date": "2026-09-18",
-     "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=89422"
-    },
-    {
-     "title": "삼성전자 맞춤형 AI 가전 경험 선봬",
-     "source": "segye.com",
-     "date": "2026-09-17",
-     "link": "https://n.news.naver.com/mnews/article/022/0004159980?sid=101"
     }
    ]
   },
@@ -674,7 +674,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77663,
+   "total": 77664,
    "sentiment": {
     "pos": 35,
     "neu": 23,
@@ -683,19 +683,19 @@
    "keywords": [
     [
      "LG전자",
-     60
+     59
     ],
     [
      "AI홈",
-     55
+     54
     ],
     [
      "AI",
-     34
+     35
     ],
     [
      "B2B",
-     33
+     32
     ],
     [
      "중동",
@@ -706,11 +706,11 @@
      24
     ],
     [
-     "전용",
-     21
+     "허브",
+     20
     ],
     [
-     "허브",
+     "전용",
      20
     ],
     [
@@ -722,27 +722,23 @@
      16
     ],
     [
-     "솔루션을",
-     15
-    ],
-    [
      "상태를",
      15
     ],
     [
+     "솔루션을",
+     14
+    ],
+    [
      "프로",
-     15
+     14
     ],
     [
      "LG전자는",
      13
     ],
     [
-     "사우디에",
-     13
-    ],
-    [
-     "글로벌",
+     "가전",
      12
     ],
     [
@@ -750,18 +746,22 @@
      12
     ],
     [
-     "관리",
+     "호미",
+     12
+    ],
+    [
+     "연속",
      12
     ]
    ],
    "posWords": [
     [
      "공략",
-     18
+     17
     ],
     [
      "글로벌",
-     12
+     11
     ],
     [
      "1위",
@@ -769,7 +769,7 @@
     ],
     [
      "강화",
-     7
+     6
     ],
     [
      "확대",
@@ -792,15 +792,21 @@
     "lg 씽큐",
     "lg 씽큐 앱",
     "lg 씽큐 세탁기",
-    "lg 씽큐 연결",
     "lg 씽큐 티비연결",
     "lg 씽큐온",
-    "lg 씽큐 에어컨 연결",
-    "lg 씽큐 공유",
+    "lg 씽큐 연결",
     "lg 씽큐 와이파이",
-    "lg 씽큐 가족 공유"
+    "lg 씽큐 에어컨 연결",
+    "lg 씽큐 오류",
+    "lg 씽큐 공유"
    ],
    "recent": [
+    {
+     "title": "“집도 가전처럼 일정한 품질로”… LG전자, 주택 패러다임 바꾸다",
+     "source": "kmib.co.kr",
+     "date": "2026-09-20",
+     "link": "https://n.news.naver.com/mnews/article/005/0001874123?sid=101"
+    },
     {
      "title": "커지는 '글로벌 사우스' AI홈 시장…삼성·LG, 현지 맞춤 선점 나서",
      "source": "asiatime.co.kr",
@@ -884,12 +890,6 @@
      "source": "bizwnews.com",
      "date": "2026-09-15",
      "link": "http://www.bizwnews.com/news/articleView.html?idxno=146366"
-    },
-    {
-     "title": "LG전자, 콜센터품질지수 3년 연속 '종합 1위' 석권",
-     "source": "m-i.kr",
-     "date": "2026-09-15",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1414368"
     }
    ]
   },
@@ -897,11 +897,11 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75894,
+   "total": 75898,
    "sentiment": {
     "pos": 18,
-    "neu": 38,
-    "neg": 4
+    "neu": 39,
+    "neg": 3
    },
    "keywords": [
     [
@@ -913,7 +913,7 @@
      10
     ],
     [
-     "으로",
+     "제미나이",
      9
     ],
     [
@@ -921,8 +921,16 @@
      9
     ],
     [
+     "으로",
+     8
+    ],
+    [
      "모델",
      8
+    ],
+    [
+     "주요",
+     7
     ],
     [
      "통신",
@@ -934,14 +942,6 @@
     ],
     [
      "플랫폼",
-     7
-    ],
-    [
-     "제미나이",
-     7
-    ],
-    [
-     "전문",
      7
     ],
     [
@@ -973,7 +973,7 @@
      7
     ],
     [
-     "아래는",
+     "전문",
      6
     ]
    ],
@@ -999,15 +999,15 @@
      2
     ],
     [
+     "수출",
+     1
+    ],
+    [
      "주목",
      1
     ],
     [
      "1위",
-     1
-    ],
-    [
-     "인기",
      1
     ]
    ],
@@ -1020,10 +1020,34 @@
     "구글 홈 미니 초기화",
     "구글 홈 미니 1세대",
     "구글 홈 어시스턴트",
-    "구글 홈 미니 연결",
-    "구글 홈 연결"
+    "구글 홈 연결",
+    "구글 홈 스피커 연결"
    ],
    "recent": [
+    {
+     "title": "[주간 유통 나침반] 추석 대목인데 유통업계 '긴장'…홈플러스 매각·공...",
+     "source": "joongangenews.com",
+     "date": "2026-09-20",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=549300"
+    },
+    {
+     "title": "스마트홈 기기 마음대로 켜고 끈다… 빅테크 '표준 규격(MCP)' 타고 안방...",
+     "source": "coinreaders.com",
+     "date": "2026-09-20",
+     "link": "http://coinreaders.com/259236"
+    },
+    {
+     "title": "구글 9월 픽셀 드롭, 픽셀워치4·5 손목만 들면 제미나이 호출 가능해졌...",
+     "source": "wikitree.co.kr",
+     "date": "2026-09-20",
+     "link": "https://www.wikitree.co.kr/articles/1160744"
+    },
+    {
+     "title": "[AI 이슈트렌드] 역대급 수출 실적 속 AI 속도조절론·대통령 지지율 최...",
+     "source": "aitimes.com",
+     "date": "2026-09-19",
+     "link": "https://www.aitimes.com/news/articleView.html?idxno=215491"
+    },
     {
      "title": "\"퇴근 맞춰 집 데우고 조명 켜라\"… 안방 파고든 자율 AI 스마트홈과 내...",
      "source": "coinreaders.com",
@@ -1089,30 +1113,6 @@
      "source": "topdaily.kr",
      "date": "2026-09-17",
      "link": "https://www.topdaily.kr/articles/112006"
-    },
-    {
-     "title": "생성형 AI 열풍 속 존재감… 크라우드웍스, 데이터 솔루션 사업 탄력",
-     "source": "pinpointnews.co.kr",
-     "date": "2026-09-17",
-     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=488066"
-    },
-    {
-     "title": "홈플러스, 대형마트 67개점·본사·온라인사업부 매각 착수",
-     "source": "breaknews.com",
-     "date": "2026-09-17",
-     "link": "http://www.breaknews.com/1237420"
-    },
-    {
-     "title": "[유통레이더] 애경산업, NS홈쇼핑, hy, 한솔제지, 인스파이어리조트, 씰...",
-     "source": "daily.hankooki.com",
-     "date": "2026-09-17",
-     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1407137"
-    },
-    {
-     "title": "TCL \"추석 앞두고 실용 가전제품 선물 주목\"",
-     "source": "hansbiz.co.kr",
-     "date": "2026-09-17",
-     "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=866048"
     }
    ]
   }
