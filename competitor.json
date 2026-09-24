@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-23 22:41",
+ "generatedAt": "2026-09-24 22:35",
  "brands": [
   {
    "name": "아카라",
@@ -124,12 +124,12 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
-    "아카라치",
     "아카라 홈캠",
     "아카라카",
+    "아카라치",
     "아카라 스위치",
     "아카라 l100",
-    "아카라치몰"
+    "니케 아카라이브"
    ],
    "recent": [
     {
@@ -228,10 +228,10 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 968,
+   "total": 970,
    "sentiment": {
-    "pos": 25,
-    "neu": 35,
+    "pos": 23,
+    "neu": 37,
     "neg": 0
    },
    "keywords": [
@@ -338,8 +338,8 @@
      2
     ],
     [
-     "최초",
-     2
+     "글로벌",
+     1
     ]
    ],
    "related": [
@@ -355,6 +355,18 @@
     "헤이홈 프로"
    ],
    "recent": [
+    {
+     "title": "부울경 최대 규모 부산 코베 베이비페어, 10월 1~4일 벡스코서 개최",
+     "source": "beyondpost.co.kr",
+     "date": "2026-09-24",
+     "link": "http://www.beyondpost.co.kr/view.php?ud=202609232112582619aeda69934_30"
+    },
+    {
+     "title": "부울경 최대 규모 '제109회 부산 코베 베이비페어&유아교육전', 10월 1일...",
+     "source": "gokorea.kr",
+     "date": "2026-09-24",
+     "link": "https://www.gokorea.kr/news/articleView.html?idxno=879647"
+    },
     {
      "title": "‘수원 코베 베이비페어&유아교육전’ 역대 최대 규모로 개막…20일까지...",
      "source": "gosiweek.com",
@@ -432,18 +444,6 @@
      "source": "gamevu.co.kr",
      "date": "2026-07-08",
      "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=59205"
-    },
-    {
-     "title": "KT-더핑크퐁컴퍼니, '홈캠 아기상어 에디션' 출시…가족 친화형 서비스...",
-     "source": "efnews.co.kr",
-     "date": "2026-07-08",
-     "link": "http://www.efnews.co.kr/news/articleView.html?idxno=130837"
-    },
-    {
-     "title": "KT, 홈캠 아기상어 에디션으로 육아템 시장 노크",
-     "source": "dizzotv.com",
-     "date": "2026-07-08",
-     "link": "https://www.dizzotv.com/site/data/html_dir/2026/07/08/2026070880152.html"
     }
    ]
   },
@@ -451,105 +451,159 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 68727,
+   "total": 68737,
    "sentiment": {
-    "pos": 0,
-    "neu": 4,
-    "neg": 56
+    "pos": 1,
+    "neu": 5,
+    "neg": 54
    },
    "keywords": [
     [
      "냉장고",
-     103
+     104
     ],
     [
      "업데이트",
-     51
+     47
     ],
     [
      "추석",
-     43
+     41
     ],
     [
      "먹통",
-     38
+     39
     ],
     [
      "플랫폼",
-     34
-    ],
-    [
-     "삼성멤버스",
      32
     ],
     [
-     "23일",
-     31
-    ],
-    [
-     "앞두고",
-     30
+     "삼성멤버스",
+     27
     ],
     [
      "소프트웨어",
      27
     ],
     [
-     "온라인",
-     27
-    ],
-    [
-     "커뮤니티",
-     27
-    ],
-    [
      "제품이",
-     27
-    ],
-    [
-     "업데이트를",
      26
     ],
     [
+     "앞두고",
+     26
+    ],
+    [
+     "업데이트를",
+     25
+    ],
+    [
+     "23일",
+     25
+    ],
+    [
+     "온라인",
+     24
+    ],
+    [
+     "커뮤니티",
+     24
+    ],
+    [
      "작동하지",
-     23
+     22
     ],
     [
      "SW",
-     23
-    ],
-    [
-     "전날부터",
-     21
-    ],
-    [
-     "따르면",
      21
     ],
     [
      "일부",
-     21
+     20
+    ],
+    [
+     "에는",
+     19
+    ],
+    [
+     "글이",
+     19
     ]
    ],
    "posWords": [
     [
      "확대",
-     1
+     2
     ]
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 연결",
     "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스 업데이트",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 오류",
-    "삼성 스마트싱스 아이폰"
+    "삼성 스마트싱스 세탁기"
    ],
    "recent": [
+    {
+     "title": "[AI 열폭주 잡는 K산업]上 삼성·LG, 불붙은 냉각 패권 전쟁",
+     "source": "news.bizwatch.co.kr",
+     "date": "2026-09-24",
+     "link": "https://n.news.naver.com/mnews/article/648/0000051053?sid=101"
+    },
+    {
+     "title": "테스트용 SW 잘못 배포..삼성 냉장고 ‘먹통’에 긴급 대응",
+     "source": "kpenews.com",
+     "date": "2026-09-24",
+     "link": "https://kpenews.com/View.aspx?No=4241130"
+    },
+    {
+     "title": "삼성 냉장고 일부 SW 오류로 '먹통'...24일까지 긴급 복구",
+     "source": "news2day.co.kr",
+     "date": "2026-09-24",
+     "link": "https://www.news2day.co.kr/article/20260924500071"
+    },
+    {
+     "title": "삼성전자 냉장고 업데이트에 먹통…\"긴급 복구 중\"",
+     "source": "yonhapnewstv.co.kr",
+     "date": "2026-09-24",
+     "link": "https://n.news.naver.com/mnews/article/422/0000909303?sid=101"
+    },
+    {
+     "title": "\"명절 음식 어떡하라고\"…'먹통' 된 최신 냉장고",
+     "source": "news.sbs.co.kr",
+     "date": "2026-09-24",
+     "link": "https://n.news.naver.com/mnews/article/055/0001390832?sid=101"
+    },
+    {
+     "title": "“식사는 하셨나요?”… 추석 연휴 어르신 곁 지키는 ‘효자 AI’",
+     "source": "kmib.co.kr",
+     "date": "2026-09-24",
+     "link": "https://n.news.naver.com/mnews/article/005/0001874918?sid=101"
+    },
+    {
+     "title": "“추석 식재료 어쩌나”…일부 삼성 냉장고 먹통",
+     "source": "joongang.co.kr",
+     "date": "2026-09-24",
+     "link": "https://n.news.naver.com/mnews/article/025/0003553578?sid=101"
+    },
+    {
+     "title": "추석 직전인데…삼성 AI 냉장고 먹통",
+     "source": "kookje.co.kr",
+     "date": "2026-09-23",
+     "link": "https://n.news.naver.com/mnews/article/658/0000156559?sid=102"
+    },
+    {
+     "title": "“갈비 선물 넣어뒀는데” 삼성 냉장고 ‘우르르’ 먹통…삼성 “수리...",
+     "source": "서울경제",
+     "date": "2026-09-23",
+     "link": "https://n.news.naver.com/mnews/article/011/0004665089?sid=105"
+    },
     {
      "title": "추석 코앞에 냉장고 '먹통'...삼성전자 업데이트 오류",
      "source": "ytn.co.kr",
@@ -585,60 +639,6 @@
      "source": "ichannela.com",
      "date": "2026-09-23",
      "link": "https://n.news.naver.com/mnews/article/449/0000361888?sid=101"
-    },
-    {
-     "title": "\"전원 꺼져 있어\"… 삼성전자, 냉장고 업데이트 복구 방법 없나?",
-     "source": "gukjenews.com",
-     "date": "2026-09-23",
-     "link": "https://www.gukjenews.com/news/articleView.html?idxno=3705019"
-    },
-    {
-     "title": "삼성전자, 냉장고 오류 '추석 전 복구' 총력… 수습 속도전",
-     "source": "econovill.com",
-     "date": "2026-09-23",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=751604"
-    },
-    {
-     "title": "삼성 냉장고 SW 업데이트 오류…일부 제품 작동 중단",
-     "source": "news.mtn.co.kr",
-     "date": "2026-09-23",
-     "link": "https://news.mtn.co.kr/news-detail/2026092315001244293"
-    },
-    {
-     "title": "삼성전자, 냉장고 SW 장애 수습 확대…미접수 고객도 개별 안내",
-     "source": "m-i.kr",
-     "date": "2026-09-23",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1417927"
-    },
-    {
-     "title": "추석 음식 다 상한다…삼성 AI 냉장고 ‘먹통’에 소비자 발 동동",
-     "source": "매일경제",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/024/0000108440?sid=102"
-    },
-    {
-     "title": "명절 앞두고 냉장고 ‘먹통’…삼성 “업데이트 잘못 배포”",
-     "source": "kmib.co.kr",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/005/0001874799?sid=102"
-    },
-    {
-     "title": "삼성 냉장고 SW 오배포 후폭풍…‘24일 복구’ 목표에도 현장 AS 혼선",
-     "source": "thetracker.co.kr",
-     "date": "2026-09-23",
-     "link": "https://thetracker.co.kr/View.aspx?No=4240341"
-    },
-    {
-     "title": "추석 앞두고 삼성 냉장고 '업데이트 먹통'…일부 제품 작동 중단",
-     "source": "namdonews.com",
-     "date": "2026-09-23",
-     "link": "https://www.namdonews.com/news/articleView.html?idxno=924349"
-    },
-    {
-     "title": "[퇴근길 7분 뉴스] 韓美정상회담·추석·삼성냉장고·김범수",
-     "source": "news.dealsitetv.com",
-     "date": "2026-09-23",
-     "link": "https://news.dealsitetv.com/articles/176345"
     }
    ]
   },
@@ -646,10 +646,10 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77699,
+   "total": 77702,
    "sentiment": {
-    "pos": 18,
-    "neu": 38,
+    "pos": 17,
+    "neu": 39,
     "neg": 4
    },
    "keywords": [
@@ -659,51 +659,51 @@
     ],
     [
      "ThinQ",
-     44
-    ],
-    [
-     "AI",
-     32
+     45
     ],
     [
      "LG전자는",
-     27
+     29
+    ],
+    [
+     "AI",
+     28
     ],
     [
      "에이아이돌",
-     24
+     26
     ],
     [
      "가전",
+     23
+    ],
+    [
+     "세탁기",
      22
     ],
     [
      "앱에서",
-     20
-    ],
-    [
-     "세탁기",
-     20
+     21
     ],
     [
      "걸그룹",
-     19
+     20
     ],
     [
      "세탁기에",
-     17
+     19
     ],
     [
      "적용할",
-     17
+     19
     ],
     [
      "종료음을",
-     16
+     18
     ],
     [
      "데뷔",
-     15
+     16
     ],
     [
      "내려받아",
@@ -714,22 +714,22 @@
      15
     ],
     [
-     "상담",
-     15
-    ],
-    [
      "아이워시",
-     12
+     13
     ],
     [
      "활동",
+     12
+    ],
+    [
+     "에이아이돌은",
      11
     ]
    ],
    "posWords": [
     [
      "1위",
-     9
+     7
     ],
     [
      "강화",
@@ -763,16 +763,34 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐 앱",
-    "lg 씽큐 세탁기",
     "lg 씽큐온",
-    "lg 씽큐 연결",
+    "lg 씽큐 세탁기",
     "lg 씽큐 와이파이",
+    "lg 씽큐 연결",
     "lg 씽큐 티비연결",
     "lg 씽큐 공유",
-    "lg 씽큐 냉장고",
-    "lg 씽큐 스마트싱스"
+    "lg 씽큐 오류",
+    "lg 씽큐 냉장고"
    ],
    "recent": [
+    {
+     "title": "화제의 신인그룹 LG전자 ‘에이아이돌’…방송활동 본격화",
+     "source": "news2day.co.kr",
+     "date": "2026-09-24",
+     "link": "https://www.news2day.co.kr/article/20260923500027"
+    },
+    {
+     "title": "[재계뒷담] 걸그룹 만든 LG전자… 데뷔곡은 세탁기 이름 딴 ‘아이 워시...",
+     "source": "kmib.co.kr",
+     "date": "2026-09-24",
+     "link": "https://n.news.naver.com/mnews/article/005/0001874864?sid=101"
+    },
+    {
+     "title": "\"연휴에 가전 고장나면\"…삼성·LG 추석 서비스센터 이곳으로",
+     "source": "news.tf.co.kr",
+     "date": "2026-09-24",
+     "link": "https://n.news.naver.com/mnews/article/629/0000536723?sid=101"
+    },
     {
      "title": "LG전자 걸그룹 '에이아이돌', 제대로 돌리는 매력?... AI워시콤보 특징 ...",
      "source": "aitimes.kr",
@@ -844,24 +862,6 @@
      "source": "newstnt.com",
      "date": "2026-09-23",
      "link": "https://www.newstnt.com/news/articleView.html?idxno=719867"
-    },
-    {
-     "title": "LG전자 신인 걸그룹 '에이아이돌', 음악방송 출연하며 활동 본격화",
-     "source": "efnews.co.kr",
-     "date": "2026-09-23",
-     "link": "http://www.efnews.co.kr/news/articleView.html?idxno=132640"
-    },
-    {
-     "title": "LG전자가 기획한 걸그룹 ‘에이아이돌’ 음악방송 데뷔… 세탁건조기 마...",
-     "source": "biz.chosun.com",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/366/0001194155?sid=105"
-    },
-    {
-     "title": "LG전자 '에이아이돌', 음악방송 타고 활동 본격화",
-     "source": "businessplus.kr",
-     "date": "2026-09-23",
-     "link": "https://www.businessplus.kr/news/articleView.html?idxno=117277"
     }
    ]
   },
@@ -869,7 +869,7 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75943,
+   "total": 75947,
    "sentiment": {
     "pos": 21,
     "neu": 32,
@@ -878,7 +878,7 @@
    "keywords": [
     [
      "AI",
-     45
+     46
     ],
     [
      "배틀그라운드",
@@ -901,16 +901,20 @@
      12
     ],
     [
+     "글로벌",
+     9
+    ],
+    [
      "스태프",
      9
     ],
     [
-     "글로벌",
+     "프로",
      8
     ],
     [
-     "프로",
-     8
+     "추석",
+     7
     ],
     [
      "제미나이",
@@ -933,26 +937,22 @@
      7
     ],
     [
-     "메타",
-     6
-    ],
-    [
-     "추석",
-     6
-    ],
-    [
      "사전예약",
      6
     ],
     [
      "홈페이지를",
      6
+    ],
+    [
+     "않은",
+     6
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     8
+     9
     ],
     [
      "성장",
@@ -975,11 +975,11 @@
      3
     ],
     [
-     "최초",
+     "공략",
      1
     ],
     [
-     "강화",
+     "최초",
      1
     ]
    ],
@@ -990,12 +990,36 @@
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 초기화",
-    "구글 홈 미니 1세대",
     "구글 홈 연결",
+    "구글 홈 미니 1세대",
     "구글 홈 미니 2세대",
     "구글 홈 어시스턴트"
    ],
    "recent": [
+    {
+     "title": "고도화되는 맞춤형 AI 쇼핑, 개인정보 유출 우려 더 커진다",
+     "source": "enewstoday.co.kr",
+     "date": "2026-09-24",
+     "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2474127"
+    },
+    {
+     "title": "\"명절 수요 집중공략\"...유통업계, 추석 맞이 할인·여행상품 \"경쟁치열...",
+     "source": "youthdaily.co.kr",
+     "date": "2026-09-24",
+     "link": "https://www.youthdaily.co.kr/news/article.html?no=227568"
+    },
+    {
+     "title": "“자동 회전 켰는데 왜 그대로?” 화면 방향은 앱 지원 따라 달라",
+     "source": "vegannews.co.kr",
+     "date": "2026-09-24",
+     "link": "https://www.vegannews.co.kr/news/article.html?no=386939"
+    },
+    {
+     "title": "유튜브, '유튜버 초상권 감지' 기능 도입…불펌·가짜 영상 줄어들까",
+     "source": "이데일리",
+     "date": "2026-09-24",
+     "link": "https://n.news.naver.com/mnews/article/018/0006375185?sid=105"
+    },
     {
      "title": "와이파이 비밀번호 바꾸면 기기마다 다시 연결해야",
      "source": "vegannews.co.kr",
@@ -1061,30 +1085,6 @@
      "source": "breaknews.com",
      "date": "2026-09-23",
      "link": "http://www.breaknews.com/1238856"
-    },
-    {
-     "title": "여러 카테고리 한눈에... 구글 메시지, 검색 기능 개편 예고",
-     "source": "ditoday.com",
-     "date": "2026-09-23",
-     "link": "https://ditoday.com/%ec%97%ac%eb%9f%ac-%ec%b9%b4%ed%85%8c%ea%b3%a0%eb%a6%ac-%ed%95%9c%eb%88%88%ec%97%90-%ea%b5%ac%ea%b8%80-%eb%a9%94%ec%8b%9c%ec%a7%80-%ea%b2%80%ec%83%89-%ea%b8%b0%eb%8a%a5-%ea%b0%9c%ed%8e%b8/"
-    },
-    {
-     "title": "[기고] 검색에서 실행으로: AI 에이전트 시대, 방송 콘텐츠의 발견 전략",
-     "source": "journal.kobeta.com",
-     "date": "2026-09-23",
-     "link": "http://journal.kobeta.com/?post_type=post&p=63957"
-    },
-    {
-     "title": "미국증시 다우지수 '홀로 부진'..필수소비주 '활짝' vs 금융주 '뚝'",
-     "source": "choicenews.co.kr",
-     "date": "2026-09-23",
-     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=171632"
-    },
-    {
-     "title": "[뉴스 저격] 프로 몸값 뺨치는 대학 리그… 170년 美 스포츠 질서가 흔들...",
-     "source": "chosun.com",
-     "date": "2026-09-22",
-     "link": "https://n.news.naver.com/mnews/article/023/0003999943?sid=104"
     }
    ]
   }
