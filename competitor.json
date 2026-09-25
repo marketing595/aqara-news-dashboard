@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-24 22:35",
+ "generatedAt": "2026-09-25 22:53",
  "brands": [
   {
    "name": "아카라",
@@ -125,11 +125,11 @@
     "아카라",
     "아카라 k100",
     "아카라 홈캠",
-    "아카라카",
     "아카라치",
+    "아카라카",
     "아카라 스위치",
     "아카라 l100",
-    "니케 아카라이브"
+    "아카라이브 핫딜"
    ],
    "recent": [
     {
@@ -352,7 +352,7 @@
     "헤이홈 공유",
     "헤이홈 오프라인",
     "헤이홈 카메라",
-    "헤이홈 프로"
+    "헤이홈 as"
    ],
    "recent": [
     {
@@ -451,105 +451,155 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 68737,
+   "total": 68745,
    "sentiment": {
-    "pos": 1,
-    "neu": 5,
-    "neg": 54
+    "pos": 3,
+    "neu": 11,
+    "neg": 46
    },
    "keywords": [
     [
      "냉장고",
-     104
+     90
     ],
     [
      "업데이트",
-     47
-    ],
-    [
-     "추석",
-     41
-    ],
-    [
-     "먹통",
      39
     ],
     [
-     "플랫폼",
+     "추석",
+     36
+    ],
+    [
+     "먹통",
      32
     ],
     [
-     "삼성멤버스",
+     "플랫폼",
+     31
+    ],
+    [
+     "제품이",
      27
     ],
     [
      "소프트웨어",
-     27
-    ],
-    [
-     "제품이",
      26
     ],
     [
      "앞두고",
-     26
+     24
     ],
     [
-     "업데이트를",
-     25
+     "삼성멤버스",
+     23
     ],
     [
      "23일",
-     25
-    ],
-    [
-     "온라인",
-     24
-    ],
-    [
-     "커뮤니티",
-     24
-    ],
-    [
-     "작동하지",
      22
     ],
     [
-     "SW",
+     "작동하지",
      21
     ],
     [
-     "일부",
+     "온라인",
+     21
+    ],
+    [
+     "SW",
      20
     ],
     [
-     "에는",
-     19
+     "커뮤니티",
+     20
     ],
     [
-     "글이",
-     19
+     "업데이트를",
+     20
+    ],
+    [
+     "일부",
+     18
+    ],
+    [
+     "SmartThings",
+     17
+    ],
+    [
+     "않는다는",
+     17
     ]
    ],
    "posWords": [
     [
      "확대",
      2
+    ],
+    [
+     "성장",
+     1
+    ],
+    [
+     "인기",
+     1
     ]
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 연결",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 냉장고",
+    "삼성 스마트싱스 연결",
     "삼성 스마트싱스",
+    "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 업데이트",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 세탁기"
    ],
    "recent": [
+    {
+     "title": "주말 낮에 세탁기 돌리세요… 전기요금 돌려주는 가전 캐시백",
+     "source": "wikitree.co.kr",
+     "date": "2026-09-25",
+     "link": "https://www.wikitree.co.kr/articles/1162012"
+    },
+    {
+     "title": "\"세탁기 주말 낮에 돌리세요\"...전기요금 캐시백",
+     "source": "ytn.co.kr",
+     "date": "2026-09-25",
+     "link": "https://n.news.naver.com/mnews/article/052/0002411134?sid=101"
+    },
+    {
+     "title": "무심코 세탁기 ‘주말 낮’에 돌렸더니…2달 동안 '전기 요금 캐시백' 받...",
+     "source": "economist.co.kr",
+     "date": "2026-09-25",
+     "link": "https://n.news.naver.com/mnews/article/243/0000103537?sid=101"
+    },
+    {
+     "title": "'메타 독주' AI 글라스 시장 263% 급성장…삼성 출격 앞두고 경쟁 본격화",
+     "source": "asiatoday.co.kr",
+     "date": "2026-09-25",
+     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20260925010009032"
+    },
+    {
+     "title": "\"명절에 우리 집은?\"…'AI 집사'가 추석 빈집 지킨다",
+     "source": "머니투데이",
+     "date": "2026-09-25",
+     "link": "https://n.news.naver.com/mnews/article/008/0005418302?sid=101"
+    },
+    {
+     "title": "20년 전 삼성이 소니 꺾던 공식 그대로… 공수 바뀐 한국 가전 데자뷔",
+     "source": "mediapen.com",
+     "date": "2026-09-25",
+     "link": "https://www.mediapen.com/news/view/1125626"
+    },
+    {
+     "title": "인기 명절 선물 된 가전제품 '구독'",
+     "source": "sidae.com",
+     "date": "2026-09-25",
+     "link": "https://n.news.naver.com/mnews/article/417/0001159234?sid=101"
+    },
     {
      "title": "[AI 열폭주 잡는 K산업]上 삼성·LG, 불붙은 냉각 패권 전쟁",
      "source": "news.bizwatch.co.kr",
@@ -597,48 +647,6 @@
      "source": "kookje.co.kr",
      "date": "2026-09-23",
      "link": "https://n.news.naver.com/mnews/article/658/0000156559?sid=102"
-    },
-    {
-     "title": "“갈비 선물 넣어뒀는데” 삼성 냉장고 ‘우르르’ 먹통…삼성 “수리...",
-     "source": "서울경제",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/011/0004665089?sid=105"
-    },
-    {
-     "title": "추석 코앞에 냉장고 '먹통'...삼성전자 업데이트 오류",
-     "source": "ytn.co.kr",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/052/0002410713?sid=101"
-    },
-    {
-     "title": "\"테스트용 버전 배포됐다\" 황당한 실수‥수리·보상은 어떻게?",
-     "source": "imnews.imbc.com",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/214/0001525630?sid=101"
-    },
-    {
-     "title": "\"다 버려야 하나\" 추석 직전 날벼락…진화 나선 삼전",
-     "source": "news.sbs.co.kr",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/055/0001390754?sid=101"
-    },
-    {
-     "title": "\"명절 음식 다 상한다\"‥'먹통' 된 삼성 냉장고",
-     "source": "imnews.imbc.com",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/214/0001525629?sid=102"
-    },
-    {
-     "title": "추석인데 삼성 냉장고 '먹통'…긴급수리 예고에도 \"내달 가능\"",
-     "source": "metroseoul.co.kr",
-     "date": "2026-09-23",
-     "link": "http://www.metroseoul.co.kr/article/20260923500268"
-    },
-    {
-     "title": "냉장고 업데이트에 ‘먹통’…“추석 음식 가득한데”",
-     "source": "ichannela.com",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/449/0000361888?sid=101"
     }
    ]
   },
@@ -646,60 +654,60 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77702,
+   "total": 77710,
    "sentiment": {
-    "pos": 17,
-    "neu": 39,
-    "neg": 4
+    "pos": 13,
+    "neu": 45,
+    "neg": 2
    },
    "keywords": [
     [
      "LG전자",
-     47
+     43
     ],
     [
      "ThinQ",
-     45
+     42
     ],
     [
-     "LG전자는",
-     29
-    ],
-    [
-     "AI",
+     "세탁기",
      28
     ],
     [
      "에이아이돌",
-     26
+     27
     ],
     [
-     "가전",
-     23
-    ],
-    [
-     "세탁기",
-     22
+     "LG전자는",
+     27
     ],
     [
      "앱에서",
-     21
+     24
+    ],
+    [
+     "가전",
+     24
+    ],
+    [
+     "AI",
+     23
     ],
     [
      "걸그룹",
-     20
+     21
     ],
     [
      "세탁기에",
-     19
+     20
     ],
     [
      "적용할",
-     19
+     20
     ],
     [
      "종료음을",
-     18
+     19
     ],
     [
      "데뷔",
@@ -715,11 +723,11 @@
     ],
     [
      "아이워시",
-     13
+     14
     ],
     [
      "활동",
-     12
+     13
     ],
     [
      "에이아이돌은",
@@ -728,24 +736,20 @@
    ],
    "posWords": [
     [
-     "1위",
-     7
-    ],
-    [
-     "강화",
-     5
-    ],
-    [
-     "확대",
-     4
-    ],
-    [
      "글로벌",
      4
     ],
     [
-     "우수",
-     4
+     "프리미엄",
+     3
+    ],
+    [
+     "확대",
+     3
+    ],
+    [
+     "1위",
+     2
     ],
     [
      "기대",
@@ -756,12 +760,15 @@
      2
     ],
     [
-     "프리미엄",
+     "공략",
+     2
+    ],
+    [
+     "강화",
      2
     ]
    ],
    "related": [
-    "lg 씽큐",
     "lg 씽큐 앱",
     "lg 씽큐온",
     "lg 씽큐 세탁기",
@@ -769,10 +776,53 @@
     "lg 씽큐 연결",
     "lg 씽큐 티비연결",
     "lg 씽큐 공유",
-    "lg 씽큐 오류",
-    "lg 씽큐 냉장고"
+    "lg 씽큐 스마트싱스",
+    "lg 씽큐 냉장고",
+    "lg 씽큐 오류"
    ],
    "recent": [
+    {
+     "title": "LG전자, 걸그룹 '에이아이돌' 활동 본격화...음방·인터뷰 등 예고",
+     "source": "ftoday.co.kr",
+     "date": "2026-09-25",
+     "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=366109"
+    },
+    {
+     "title": "주말 낮에 세탁기 돌리세요… 전기요금 돌려주는 가전 캐시백",
+     "source": "wikitree.co.kr",
+     "date": "2026-09-25",
+     "link": "https://www.wikitree.co.kr/articles/1162012"
+    },
+    {
+     "title": "\"세탁기 주말 낮에 돌리세요\"...전기요금 캐시백",
+     "source": "ytn.co.kr",
+     "date": "2026-09-25",
+     "link": "https://n.news.naver.com/mnews/article/052/0002411134?sid=101"
+    },
+    {
+     "title": "무심코 세탁기 ‘주말 낮’에 돌렸더니…2달 동안 '전기 요금 캐시백' 받...",
+     "source": "economist.co.kr",
+     "date": "2026-09-25",
+     "link": "https://n.news.naver.com/mnews/article/243/0000103537?sid=101"
+    },
+    {
+     "title": "가전 한파 뚫은 LG의 '삼각편대'… 프리미엄·구독·B2B 전면에",
+     "source": "g-enews.com",
+     "date": "2026-09-25",
+     "link": "https://www.g-enews.com/view.php?ud=202609231155463652139bf6e4b2_1"
+    },
+    {
+     "title": "“전 부친 후 쌓인 접시는 누가 치우나”…명절 집안일 줄여주는 AI 가전",
+     "source": "seoul.co.kr",
+     "date": "2026-09-25",
+     "link": "https://n.news.naver.com/mnews/article/081/0003683492?sid=101"
+    },
+    {
+     "title": "\"명절에 우리 집은?\"…'AI 집사'가 추석 빈집 지킨다",
+     "source": "머니투데이",
+     "date": "2026-09-25",
+     "link": "https://n.news.naver.com/mnews/article/008/0005418302?sid=101"
+    },
     {
      "title": "화제의 신인그룹 LG전자 ‘에이아이돌’…방송활동 본격화",
      "source": "news2day.co.kr",
@@ -820,48 +870,6 @@
      "source": "itdaily.kr",
      "date": "2026-09-23",
      "link": "https://www.itdaily.kr/news/articleView.html?idxno=241823"
-    },
-    {
-     "title": "전자회사가 만든 걸그룹?…LG 세탁기 특장점 담은 ‘에이아이돌’ 등장",
-     "source": "donga.com",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/020/0003750395?sid=101"
-    },
-    {
-     "title": "세탁기 알리려 걸그룹 만든 LG전자…‘에이아이돌’ 음악방송 데뷔",
-     "source": "이데일리",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/018/0006374970?sid=101"
-    },
-    {
-     "title": "'인스타 1위' 섭외 폭주한 걸그룹 누구길래…'음방'까지 떴다",
-     "source": "한국경제",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/015/0005335623?sid=101"
-    },
-    {
-     "title": "기술 대신 아이돌 선보인 LG전자, 가전 마케팅 판도 바꾸나",
-     "source": "goodkyung.com",
-     "date": "2026-09-23",
-     "link": "https://www.goodkyung.com/news/articleView.html?idxno=291750"
-    },
-    {
-     "title": "[오늘 뭐했니?] LG전자",
-     "source": "financialreview.co.kr",
-     "date": "2026-09-23",
-     "link": "http://www.financialreview.co.kr/news/articleView.html?idxno=45068"
-    },
-    {
-     "title": "세탁건조기 알리려 '진짜 걸그룹' 만든 LG전자…음악방송까지 출격",
-     "source": "아이뉴스24",
-     "date": "2026-09-23",
-     "link": "https://n.news.naver.com/mnews/article/031/0001060942?sid=101"
-    },
-    {
-     "title": "LG전자, 실존 멤버로 만든 AI 걸그룹 '에이아이돌' 음악방송 데뷔",
-     "source": "newstnt.com",
-     "date": "2026-09-23",
-     "link": "https://www.newstnt.com/news/articleView.html?idxno=719867"
     }
    ]
   },
@@ -869,16 +877,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75947,
+   "total": 75951,
    "sentiment": {
-    "pos": 21,
-    "neu": 32,
-    "neg": 7
+    "pos": 20,
+    "neu": 31,
+    "neg": 9
    },
    "keywords": [
     [
      "AI",
-     46
+     39
     ],
     [
      "배틀그라운드",
@@ -909,14 +917,6 @@
      9
     ],
     [
-     "프로",
-     8
-    ],
-    [
-     "추석",
-     7
-    ],
-    [
      "제미나이",
      7
     ],
@@ -935,6 +935,14 @@
     [
      "방치",
      7
+    ],
+    [
+     "시리",
+     6
+    ],
+    [
+     "화면",
+     6
     ],
     [
      "사전예약",
@@ -959,12 +967,12 @@
      6
     ],
     [
-     "확대",
+     "인기",
      4
     ],
     [
-     "인기",
-     4
+     "확대",
+     3
     ],
     [
      "돌파",
@@ -990,12 +998,36 @@
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 초기화",
-    "구글 홈 연결",
     "구글 홈 미니 1세대",
+    "구글 홈 연결",
     "구글 홈 미니 2세대",
     "구글 홈 어시스턴트"
    ],
    "recent": [
+    {
+     "title": "中 스위치봇, 로봇청소기 K11+ 미국 출시",
+     "source": "전자신문",
+     "date": "2026-09-25",
+     "link": "https://n.news.naver.com/mnews/article/030/0003469902?sid=105"
+    },
+    {
+     "title": "피감 기관 800곳, 국정감사 증인 누가 나오나.",
+     "source": "slownews.kr",
+     "date": "2026-09-25",
+     "link": "https://slownews.kr/166960"
+    },
+    {
+     "title": "[스냅드래곤 서밋] 안경 속 제미나이가 포토샵 가르치고 손바닥에 메뉴...",
+     "source": "econovill.com",
+     "date": "2026-09-25",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=751883"
+    },
+    {
+     "title": "[르포] 구글북·XR 글래스·리눅스 총출동…놀라움과 한계 공존",
+     "source": "ddaily.co.kr",
+     "date": "2026-09-25",
+     "link": "https://n.news.naver.com/mnews/article/138/0002242658?sid=105"
+    },
     {
      "title": "고도화되는 맞춤형 AI 쇼핑, 개인정보 유출 우려 더 커진다",
      "source": "enewstoday.co.kr",
@@ -1061,30 +1093,6 @@
      "source": "ddaily.co.kr",
      "date": "2026-09-23",
      "link": "https://n.news.naver.com/mnews/article/138/0002242572?sid=105"
-    },
-    {
-     "title": "진화 중인 아시아 최대 컴퓨터전 ‘컴퓨텍스’",
-     "source": "dream.kotra.or.kr",
-     "date": "2026-09-23",
-     "link": "http://dream.kotra.or.kr/kotranews/cms/news/actionKotraBoardDetail.do?SITE_NO=3&MENU_ID=110&CONTENTS_NO=1&bbsGbn=245&bbsSn=245&pNttSn=150461"
-    },
-    {
-     "title": "‘스파이더맨: 브랜드 뉴 데이’, 900만 관객 돌파..역대 시리즈 최고 흥...",
-     "source": "breaknews.com",
-     "date": "2026-09-23",
-     "link": "http://www.breaknews.com/1238869"
-    },
-    {
-     "title": "삼성 냉장고 업데이트 눌렀다 '먹통' 속출…추석 앞두고 온라인서 논란...",
-     "source": "pennmike.com",
-     "date": "2026-09-23",
-     "link": "https://www.pennmike.com/news/articleView.html?idxno=128349"
-    },
-    {
-     "title": "LGU+, 추석 연휴 여행·빈집·집콕 혜택 운영",
-     "source": "breaknews.com",
-     "date": "2026-09-23",
-     "link": "http://www.breaknews.com/1238856"
     }
    ]
   }
