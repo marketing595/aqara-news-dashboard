@@ -8413,11 +8413,11 @@
           <td class="px-2 py-2 min-w-[200px]">${inp('a',s.a,'도로명 주소')}</td>
           <td class="px-2 py-2 min-w-[260px]">${inp('d',s.d,'한 줄 소개(일반인 눈높이, 감성적으로)')}</td>
           <td class="px-2 py-2 min-w-[170px]">${inp('coord',(s.lat!=null?(+s.lat).toFixed(5)+', '+(+s.lng).toFixed(5):''),'37.5118, 127.0228','num')}<a href="${s.np?('https://map.naver.com/p/entry/place/'+encodeURIComponent(s.np)):('https://map.naver.com/p/search/'+encodeURIComponent((s.n||'').replace(/\s*\([^)]*\)/g,'').trim()))}" target="_blank" rel="noopener" class="text-[10.5px] text-slate-400 hover:text-ink">네이버지도에서 확인 ↗</a></td>
-          <td class="px-2 py-2 min-w-[150px]">${inp('np',s.np,'네이버 플레이스 ID(선택)','num')}<div class="mt-1">${inp('img',s.img,'사진 URL(선택)')}</div>${s.img?`<img src="${esc(s.img)}" class="mt-1 w-14 h-10 object-cover rounded border border-[#E6E6E3]" onerror="this.remove()">`:''}</td>
+          <td class="px-2 py-2 min-w-[150px]">${inp('np',s.np,'네이버 플레이스 ID(선택)','num')}</td>
           <td class="px-2 py-2 whitespace-nowrap text-center">
             <label class="inline-flex items-center gap-1 text-[11px] cursor-pointer"><input type="checkbox" ${s.hide?'':'checked'} onchange="hkToggleHide('${s.id}',!this.checked)"> 표시</label>
             <div class="mt-1">${s._seed?(mod?`<button onclick="hkReset('${s.id}')" class="text-[10.5px] text-slate-400 hover:text-ared">원본으로</button>`:''):`<button onclick="hkRemove('${s.id}')" class="text-[10.5px] text-slate-400 hover:text-ared">삭제</button>`}</div></td></tr>`; }).join('');
-      box.innerHTML=`<table class="w-full text-[12px]"><thead><tr class="text-[11px] text-slate-400 text-left"><th class="px-2 py-1.5 text-center">#</th><th class="px-2 py-1.5">이름 · 영문</th><th class="px-2 py-1.5">카테고리</th><th class="px-2 py-1.5">주소</th><th class="px-2 py-1.5">한 줄 소개</th><th class="px-2 py-1.5">좌표(위도, 경도)</th><th class="px-2 py-1.5">네이버 ID · 사진</th><th class="px-2 py-1.5 text-center">공개</th></tr></thead><tbody>${rows}</tbody></table>`;
+      box.innerHTML=`<table class="w-full text-[12px]"><thead><tr class="text-[11px] text-slate-400 text-left"><th class="px-2 py-1.5 text-center">#</th><th class="px-2 py-1.5">이름 · 영문</th><th class="px-2 py-1.5">카테고리</th><th class="px-2 py-1.5">주소</th><th class="px-2 py-1.5">한 줄 소개</th><th class="px-2 py-1.5">좌표(위도, 경도)</th><th class="px-2 py-1.5">네이버 ID</th><th class="px-2 py-1.5 text-center">공개</th></tr></thead><tbody>${rows}</tbody></table>`;
       box.onfocusout=()=>{ setTimeout(()=>{ if(HK_DIRTY&&!box.contains(document.activeElement)){ hkPaintTable(); hkPaintStats(); } },80); }; }
     function renderHakmap(){ const box=document.getElementById('hkBody'); if(!box) return;
       if(!HK){ box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">학동 지도 데이터를 불러오는 중…</p>';
@@ -8428,7 +8428,7 @@
       const u=hkUrl();
       box.innerHTML=`
       <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#E65100">
-        <p class="text-[12.5px] text-slate-500"><b class="text-ink">일반 소비자용 공개 페이지</b>예요(로그인 없이 열림). 쇼룸·거리에서 QR로 배포하고, 아래 표에서 스팟 정보·좌표·사진을 고치면 공개 페이지에 바로 반영됩니다.</p>
+        <p class="text-[12.5px] text-slate-500"><b class="text-ink">일반 소비자용 공개 페이지</b>예요(로그인 없이 열림). 쇼룸·거리에서 QR로 배포하고, 아래 표에서 스팟 정보·좌표를 고치면 공개 페이지에 바로 반영됩니다.</p>
         <p id="hkConn" class="mt-1"></p>
       </div>
       <div class="card p-5 sm:p-6 mb-4">
