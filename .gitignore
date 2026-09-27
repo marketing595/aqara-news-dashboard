@@ -4,3 +4,7 @@
 
 # 아임웹 앱 Client ID/Secret 로컬 설정 — 절대 커밋 금지
 crawler/imweb-config.txt
+
+# 아임웹 포스팅 설정(키 포함) — 서식 파일 .env.example 만 올린다
+crawler/.env
+.env
