@@ -21,8 +21,17 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <style>
     :root{
-      --bg:#F9F8F6; --paper:#FFFFFF; --ink:#222222; --ink2:#444444; --muted:#7A7772; --line:#E5E3DF; --line2:#D8D5CF;
-      --accent:#E65100; --accent-soft:#FFF1E8; --charcoal:#222222;
+      /* ─── 아카라라이프 브랜드 팔레트 ───────────────────────────────
+         Primary Accent  #FBC400  Aqara Yellow — 버튼·배지·핀 '채움' 전용
+         Secondary Base  #F7F7F7  Off-white(배경) / #D9D9D1 Warm Grey(구분선)
+         Accent & Warm   #BFA97C  Beige(하이라이트) / #382D18 Deep Brown(어두운 면)
+         Body Text       #5E625F  Dark Grey / 제목은 #382D18
+         ※ 옐로는 밝은 배경 위 '글자색'으로 쓰지 않는다(대비 부족).
+           옐로 위 글자는 항상 딥브라운(--on-accent), 어두운 면 위에서만 옐로 글자를 쓴다. */
+      --bg:#F7F7F7; --paper:#FFFFFF; --ink:#382D18; --ink2:#5E625F; --muted:#8B8E8A;
+      --line:#D9D9D1; --line2:#C6C6BC;                 /* line2 = 워엄그레이를 한 단계 진하게 쓴 파생 톤 */
+      --accent:#FBC400; --accent-soft:#FFF7DE; --on-accent:#382D18;
+      --beige:#BFA97C; --charcoal:#382D18;
       --r:8px; --hdr:64px;
     }
     *{box-sizing:border-box}
@@ -33,16 +42,16 @@
     button{font-family:inherit;cursor:pointer}
 
     /* ─── 헤더 ─── */
-    header{position:sticky;top:0;z-index:50;height:var(--hdr);background:rgba(249,248,246,.92);backdrop-filter:blur(10px);color:var(--ink);display:flex;align-items:center;gap:18px;padding:0 22px;border-bottom:1px solid var(--line)}
+    header{position:sticky;top:0;z-index:50;height:var(--hdr);background:rgba(247,247,247,.94);backdrop-filter:blur(10px);color:var(--ink);display:flex;align-items:center;gap:18px;padding:0 22px;border-bottom:1px solid var(--line)}
     .logo{display:flex;align-items:center;gap:11px;min-width:0}
-    .logo .mark{width:30px;height:30px;border-radius:var(--r);background:var(--charcoal);display:grid;place-items:center;color:#fff;font-weight:900;font-size:13px;letter-spacing:0;flex:none}
+    .logo .mark{width:30px;height:30px;border-radius:var(--r);background:var(--accent);display:grid;place-items:center;color:var(--on-accent);font-weight:900;font-size:13px;letter-spacing:0;flex:none}
     .logo .brand{font-size:10.5px;font-weight:800;letter-spacing:.18em;color:var(--muted)}
     .logo h1{margin:0;font-size:16px;font-weight:800;letter-spacing:-0.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .logo h1 span{color:var(--muted);font-weight:500;margin-left:8px;font-size:12px;letter-spacing:0}
     .hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px}
     .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:var(--r);padding:8px 14px;font-size:12.5px;font-weight:700;transition:.15s;white-space:nowrap;line-height:1.2}
     .btn:hover{border-color:var(--ink)}
-    .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
     .btn.primary:hover{filter:brightness(1.06)}
     .btn.dark{background:var(--charcoal);border-color:var(--charcoal);color:#fff}
     .btn.sm{padding:6px 11px;font-size:11.5px}
@@ -51,15 +60,16 @@
     .wrap{display:grid;grid-template-columns:460px 1fr;height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr))}
     aside{border-right:1px solid var(--line);background:var(--bg);display:flex;flex-direction:column;min-height:0}
     .side-top{padding:20px 22px 12px;border-bottom:1px solid var(--line);background:var(--bg)}
-    .eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
+    .eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.18em;color:var(--ink);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+    .eyebrow:before{content:'';width:12px;height:3px;border-radius:2px;background:var(--accent);flex:none}
     .side-top h2{margin:4px 0 6px;font-size:26px;font-weight:800;letter-spacing:-0.03em;line-height:1.15}
     .side-top p{margin:0;font-size:13px;color:var(--muted)}
     .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
     .chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);background:#fff;border-radius:999px;padding:6px 11px 6px 9px;font-size:12px;font-weight:700;color:var(--ink2);transition:.15s}
-    .chip .dot{width:9px;height:9px;border-radius:50%;background:var(--c,#999);flex:none}
+    .chip .dot{width:9px;height:9px;border-radius:50%;background:var(--c,var(--beige));flex:none}
     .chip .n{font-size:10.5px;color:var(--muted);font-weight:600}
     .chip.on{background:var(--charcoal);border-color:var(--charcoal);color:#fff}
-    .chip.on .n{color:#BDBAB5}
+    .chip.on .n{color:#D9D9D1}
     .catdesc{margin-top:10px;font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:9px 12px;display:flex;gap:8px;align-items:flex-start}
     .catdesc .dot{width:9px;height:9px;border-radius:50%;flex:none;margin-top:6px}
     .search{margin-top:10px;position:relative}
@@ -86,7 +96,7 @@
     .thumb{border-radius:6px;position:relative;overflow:hidden;display:grid;place-items:center}
     .thumb .ph{font-weight:900;line-height:1}
     .spot .num{font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--line2);font-variant-numeric:tabular-nums;line-height:1.6;transition:color .16s}
-    .spot:hover .num,.spot.active .num{color:var(--accent)}
+    .spot:hover .num,.spot.active .num{color:var(--ink)}
     .spot .en{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
     .spot .nm{font-size:14.5px;font-weight:800;letter-spacing:-0.02em;line-height:1.3;margin:1px 0 4px}
     .tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;letter-spacing:.01em;color:var(--muted);margin-left:7px;vertical-align:1px;white-space:nowrap}
@@ -95,36 +105,36 @@
     .spot .ad{font-size:11.5px;color:var(--muted);margin-top:5px;display:flex;gap:5px;align-items:flex-start}
     .spot .ad svg{width:12px;height:12px;flex:none;margin-top:3px}
     .spot .acts{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
-    .spot .chk{font-size:10.5px;color:var(--accent);font-weight:700;margin-left:6px}
-    .spot.hl{border:1.5px solid var(--accent);background:linear-gradient(180deg,#FFF6EF,#fff);grid-template-columns:1fr}
+    .spot .chk{font-size:10.5px;color:var(--ink);font-weight:700;margin-left:6px}
+    .spot.hl{border:1.5px solid var(--beige);background:linear-gradient(180deg,#FBF7EE,#fff);grid-template-columns:1fr}
     /* 사진 대신 얇은 브랜드 스트립 — 빈 이미지 자리처럼 보이지 않게 */
     .spot.hl .thumb{width:100%;background:var(--charcoal);border:1px solid var(--charcoal);padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
     .spot.hl .thumb .ph{color:var(--accent);font-size:14px;letter-spacing:.16em}
-    .spot.hl .thumb .sh{font-size:9.5px;font-weight:700;letter-spacing:.16em;color:#A8A49E;white-space:nowrap}
+    .spot.hl .thumb .sh{font-size:9.5px;font-weight:700;letter-spacing:.16em;color:var(--beige);white-space:nowrap}
     .spot.hl .nm{font-size:17px}
 
     /* 목록 맨 아래 정보 블록 — 쇼룸·자료 기준일 안내 */
     .foot{margin:24px 5px 8px;padding-top:16px;border-top:1px solid var(--line)}
-    .foot .ft{font-size:9.5px;font-weight:800;letter-spacing:.18em;color:var(--accent)}
+    .foot .ft{font-size:9.5px;font-weight:800;letter-spacing:.18em;color:var(--ink)}
     .foot b{display:block;font-size:13.5px;font-weight:800;letter-spacing:-0.02em;margin:3px 0 2px}
     .foot p{margin:0;font-size:11.5px;color:var(--muted);line-height:1.5}
     .foot .fa{display:flex;gap:6px;flex-wrap:wrap;margin:11px 0}
     .foot .fn{font-size:10.5px;line-height:1.55}
-    .badge-hl{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.08em;background:var(--accent);color:#fff;padding:3px 8px;border-radius:5px;margin-bottom:5px}
+    .badge-hl{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.08em;background:var(--accent);color:var(--on-accent);padding:3px 8px;border-radius:5px;margin-bottom:5px}
 
     /* ─── 지도 ─── */
     .mapwrap{position:relative;min-height:0}
-    #map{position:absolute;inset:0;background:#EDECE8}
-    .leaflet-tile-pane{filter:grayscale(1) contrast(1.02) brightness(1.04) sepia(.08)}
+    #map{position:absolute;inset:0;background:#EFEEE9}
+    .leaflet-tile-pane{filter:grayscale(1) contrast(1.02) brightness(1.04) sepia(.14)}
     .leaflet-container{font-family:inherit}
     .leaflet-control-attribution{font-size:9.5px;background:rgba(255,255,255,.75)}
     .pin{width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:10.5px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.01em;border:2px solid #fff;box-shadow:0 3px 10px -2px rgba(0,0,0,.45);transition:transform .15s}
     .pin.on{transform:scale(1.25);border-color:var(--ink)}
     .hqpin{position:relative;width:48px;height:48px}
-    .hqpin .core{position:absolute;inset:0;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:9px;font-weight:900;letter-spacing:.02em;border:3px solid #fff;box-shadow:0 0 0 7px rgba(230,81,0,.22),0 8px 20px -6px rgba(0,0,0,.5);animation:pulse 2.2s ease-out infinite}
+    .hqpin .core{position:absolute;inset:0;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:9px;font-weight:900;letter-spacing:.02em;border:3px solid #fff;box-shadow:0 0 0 7px rgba(251,196,0,.30),0 8px 20px -6px rgba(0,0,0,.5);animation:pulse 2.2s ease-out infinite}
     .hqpin .wc{position:absolute;left:50%;top:-22px;transform:translateX(-50%);background:var(--charcoal);color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.04em;padding:3px 8px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 12px -4px rgba(0,0,0,.5)}
     .hqpin .wc:after{content:'';position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--charcoal);border-bottom:0}
-    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(230,81,0,.55),0 8px 20px -6px rgba(0,0,0,.5)}100%{box-shadow:0 0 0 22px rgba(230,81,0,0),0 8px 20px -6px rgba(0,0,0,.5)}}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(251,196,0,.58),0 8px 20px -6px rgba(0,0,0,.5)}100%{box-shadow:0 0 0 22px rgba(251,196,0,0),0 8px 20px -6px rgba(0,0,0,.5)}}
     .leaflet-popup-content-wrapper{border-radius:var(--r);box-shadow:0 14px 40px -18px rgba(0,0,0,.45);padding:2px}
     .leaflet-popup-content{margin:12px 14px;font-size:12.5px;line-height:1.5;min-width:230px}
     .pp .en{font-size:9.5px;letter-spacing:.1em;color:var(--muted);font-weight:700}
@@ -136,7 +146,7 @@
     .legend div{display:flex;align-items:center;gap:7px;color:var(--ink2);font-weight:600}
     .legend .dot{width:9px;height:9px;border-radius:50%}
     .cta{position:absolute;right:12px;bottom:12px;z-index:400;background:#fff;color:var(--ink);border-radius:var(--r);padding:14px 16px;width:296px;box-shadow:0 18px 44px -18px rgba(0,0,0,.4);border:1px solid var(--line)}
-    .cta .ey{font-size:10px;font-weight:800;letter-spacing:.16em;color:var(--accent)}
+    .cta .ey{font-size:10px;font-weight:800;letter-spacing:.16em;color:var(--ink)}
     .cta h3{margin:4px 0 6px;font-size:15px;font-weight:800;letter-spacing:-0.02em;line-height:1.3}
     .cta p{margin:0 0 10px;font-size:11.5px;color:var(--ink2);line-height:1.45}
     .cta .x{position:absolute;right:8px;top:6px;background:none;border:0;color:var(--muted);font-size:16px;line-height:1}
@@ -147,24 +157,25 @@
     .mtoggle button.on{background:var(--charcoal);color:#fff}
 
     /* ─── 모달 ─── */
-    .ov{position:fixed;inset:0;background:rgba(34,34,34,.5);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center;padding:18px}
+    .ov{position:fixed;inset:0;background:rgba(56,45,24,.55);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center;padding:18px}
     .ov.show{display:flex}
     .md{background:var(--paper);border-radius:14px;width:min(640px,100%);max-height:calc(100vh - 36px);overflow:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);position:relative}
     .md .hd{background:var(--charcoal);color:#fff;padding:26px 26px 22px;border-radius:14px 14px 0 0;position:relative;overflow:hidden}
     .md .hd:before{content:'';position:absolute;right:-40px;top:-60px;width:200px;height:200px;border-radius:50%;background:var(--accent);opacity:.25;filter:blur(30px)}
-    .md .hd .ey{font-size:10.5px;font-weight:800;letter-spacing:.18em;color:#FFB280}
+    .md .hd .ey{font-size:10.5px;font-weight:800;letter-spacing:.18em;color:var(--accent)}
     .md .hd h2{margin:6px 0 6px;font-size:25px;font-weight:800;letter-spacing:-0.03em;line-height:1.2}
-    .md .hd p{margin:0;font-size:13px;color:#D6D3CE}
+    .md .hd p{margin:0;font-size:13px;color:#D9D9D1}
     .md .x{position:absolute;right:14px;top:12px;background:rgba(255,255,255,.12);border:0;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;line-height:1;z-index:1}
     .md .bd{padding:18px 26px 26px}
     .bn{display:grid;grid-template-columns:46px 1fr;gap:12px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line)}
     .bn:last-of-type{border-bottom:0}
     .bn .ic{width:46px;height:46px;border-radius:var(--r);background:var(--accent-soft);display:grid;place-items:center;font-size:21px}
-    .bn .k{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--accent)}
+    .bn .k{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--ink)}
     .bn b{font-size:15px;letter-spacing:-0.02em;display:block;margin-top:1px}
     .bn p{margin:3px 0 0;font-size:12.5px;color:var(--ink2)}
-    .bn .tg{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;color:var(--accent);background:var(--accent-soft);border-radius:5px;padding:2px 7px;margin-top:6px}
+    .bn .tg{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;color:var(--on-accent);background:var(--accent-soft);border-radius:5px;padding:2px 7px;margin-top:6px}
     .coupon{margin-top:14px;border:1.5px dashed var(--line2);border-radius:var(--r);padding:18px;background:var(--bg);text-align:center}
+    .coupon .eyebrow{justify-content:center}
     .coupon .code{font-size:30px;font-weight:900;letter-spacing:.12em;margin:6px 0 2px;color:var(--charcoal)}
     .coupon .meta{font-size:11.5px;color:var(--muted)}
     .coupon #qr{display:inline-block;margin:12px auto 4px;padding:8px;background:#fff;border-radius:var(--r);border:1px solid var(--line)}
@@ -290,14 +301,14 @@
 
   let DATA=null, SPOTS=[], CATS=[], OVER={}, MAP=null, MARK={}, FILTER='all', ACTIVE=null;
   const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const catOf=id=>CATS.find(c=>c.id===id)||{color:'#888',en:'',ko:''};
+  const catOf=id=>CATS.find(c=>c.id===id)||{color:'#BFA97C',en:'',ko:''};
   // 네이버지도는 '상호+주소'를 같이 넣으면 '조건에 맞는 업체가 없습니다'가 뜬다 → 업체명만 검색(괄호 속 영문 표기는 제거)
   const naverUrl=s=>s.np?('https://map.naver.com/p/entry/place/'+encodeURIComponent(s.np)):('https://map.naver.com/p/search/'+encodeURIComponent(naverName(s)));   // np = 네이버 플레이스 ID(검증 완료분) → 바로 그 업체로
   const naverName=s=>(s.n||'').replace(/\s*\([^)]*\)/g,'').replace(/\s*(플래그십|브랜드)?\s*(쇼룸|갤러리|스토어 서울)$/,'').trim()||s.n;
   const no2=n=>String(n).length<2?'0'+n:String(n);   // 카탈로그 목차처럼 01, 02 … 두 자리로
 
   fetch('hakdong.json?_='+Date.now()).then(r=>r.json()).then(d=>{ DATA=d; CATS=d.categories; boot(); })
-    .catch(()=>{ document.getElementById('list').innerHTML='<p style="padding:30px;text-align:center;color:#E65100">자료를 불러오지 못했어요. 새로고침해 주세요.</p>'; });
+    .catch(()=>{ document.getElementById('list').innerHTML='<p style="padding:30px;text-align:center;color:#382D18">자료를 불러오지 못했어요. 새로고침해 주세요.</p>'; });
 
   /* ONLY MKT에서 고친 스팟 정보(좌표·설명·사진·숨김)를 얹는다 — 없으면 json 원본 그대로 */
   function watchOverrides(){ if(!DB) return;
@@ -381,7 +392,7 @@
     const vs=visible(); if(vs.length&&FILTER!=='all'){ const b=L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])); MAP.fitBounds(b.pad(0.25),{maxZoom:16}); } }
   function paint(){
     const all=numbered();
-    document.getElementById('chips').innerHTML=[`<button class="chip ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="dot" style="--c:#222"></span>전체 <span class="n">${all.length}</span></button>`]
+    document.getElementById('chips').innerHTML=[`<button class="chip ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="dot" style="--c:var(--ink)"></span>전체 <span class="n">${all.length}</span></button>`]
       .concat(CATS.map(c=>`<button class="chip ${FILTER===c.id?'on':''}" style="--c:${c.color}" onclick="setFilter('${c.id}')"><span class="dot"></span>${esc(c.ko)} <span class="n">${all.filter(s=>s.cat===c.id).length}</span></button>`)).join('');
     const cd=document.getElementById('catdesc'), cc=CATS.find(c=>c.id===FILTER);
     cd.style.display=cc?'flex':'none'; if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b> · ${esc(cc.desc||'')}</span>`;
@@ -400,7 +411,7 @@
             ${s.hl?`<button class="btn primary sm" onclick="openBenefit()">🎟️ 웰컴 쿠폰</button>`:''}
           </div></div></div>`).join('');
     });
-    box.innerHTML=(html?html+footHtml():'<p style="padding:40px 10px;text-align:center;color:#7A7772;font-size:13px">검색 결과가 없어요. 다른 단어로 찾아보세요.</p>');
+    box.innerHTML=(html?html+footHtml():'<p style="padding:40px 10px;text-align:center;color:#8B8E8A;font-size:13px">검색 결과가 없어요. 다른 단어로 찾아보세요.</p>');
   }
   function footHtml(){ const hq=(DATA.spots||[]).find(s=>s.hl)||{};
     return `<footer class="foot">
@@ -425,13 +436,13 @@
     try{ if(DB&&AUTH_OK) DB.ref('hakdong/coupons/'+c.code).set({ts:c.ts,exp:c.exp,src:(new URLSearchParams(location.search).get('ref')||'web'),mobile:window.innerWidth<=860?1:0}); }catch(e){}
     renderCoupon(); }
   function renderCoupon(){ const box=document.getElementById('cpBody'), c=getCoupon();
-    if(!c){ box.innerHTML=`<p style="font-size:13px;color:#444;margin:6px 0 12px">버튼을 누르면 이 휴대폰에 웰컴 쿠폰이 발급돼요. 쇼룸에서 쿠폰 화면만 보여주시면 끝!</p>
+    if(!c){ box.innerHTML=`<p style="font-size:13px;color:#5E625F;margin:6px 0 12px">버튼을 누르면 이 휴대폰에 웰컴 쿠폰이 발급돼요. 쇼룸에서 쿠폰 화면만 보여주시면 끝!</p>
       <button class="btn primary" style="font-size:14px;padding:11px 22px" onclick="issueCoupon()">🎟️ 웰컴 쿠폰 발급받기</button>`; return; }
     const d=new Date(c.ts), e=new Date(c.exp), f=x=>x.getFullYear()+'.'+String(x.getMonth()+1).padStart(2,'0')+'.'+String(x.getDate()).padStart(2,'0');
     box.innerHTML=`<div class="code">${esc(c.code)}</div><div class="meta">발급 ${f(d)} · ${f(e)}까지 사용 가능 · 웰컴 음료 + 도면 배선 상담 + 스마트 센서 증정/패키지 할인</div>
       <div id="qr"></div><div class="how">쇼룸 방문 시 이 화면(코드 또는 QR)을 스태프에게 보여주세요.<br><b>아카라라이프 쇼룸</b> · 학동역 도보 3분 · 논현로127길 13-11</div>
       <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap"><button class="btn sm" onclick="copyCode('${esc(c.code)}')">코드 복사</button><button class="btn sm" onclick="closeBenefit();flyHQ()">쇼룸 위치 보기</button><a class="btn sm" href="https://map.naver.com/p/search/${encodeURIComponent('아카라라이프')}" target="_blank" rel="noopener">길찾기 ↗</a></div>`;
-    try{ new QRCode(document.getElementById('qr'),{text:'AQARA-HAKDONG '+c.code,width:112,height:112,colorDark:'#222222',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const q=document.getElementById('qr'); if(q) q.style.display='none'; }
+    try{ new QRCode(document.getElementById('qr'),{text:'AQARA-HAKDONG '+c.code,width:112,height:112,colorDark:'#382D18',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const q=document.getElementById('qr'); if(q) q.style.display='none'; }
   }
   function copyCode(t){ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('쿠폰 코드가 복사됐어요: '+t)).catch(()=>prompt('쿠폰 코드',t)); }
 </script>
