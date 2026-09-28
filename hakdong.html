@@ -62,9 +62,7 @@
     header{position:sticky;top:0;z-index:9999;height:var(--hdr);background:rgba(255,255,255,.8);
       backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
       border-bottom:1px solid var(--line2);display:flex;align-items:center}
-    .hdr-in{width:100%;padding:0 22px;display:flex;justify-content:space-between;align-items:center;gap:16px}
-    .hdr-brand{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;letter-spacing:-0.02em;color:var(--ink);white-space:nowrap;background:none;border:0;padding:0}
-    .hdr-brand .mark{width:22px;height:22px;border-radius:5px;background:var(--accent);display:grid;place-items:center;color:var(--on-accent);font-weight:700;font-size:11px;flex:none}
+    .hdr-in{width:100%;padding:0 22px;display:flex;justify-content:flex-end;align-items:center;gap:16px}
     .hdr-nav{display:flex;gap:24px;align-items:center}
     .nav-link{font-size:12px;font-weight:400;color:var(--ink);opacity:.8;background:none;border:0;padding:0;transition:opacity .3s ease;white-space:nowrap;letter-spacing:-0.01em}
     .nav-link:hover{opacity:1}
@@ -98,6 +96,7 @@
     .cats{display:flex;gap:0;margin:0 -24px;padding:10px 24px 0;overflow-x:auto;scrollbar-width:none}
     .cats::-webkit-scrollbar{display:none}
     .cat{flex:none;border:0;background:none;padding:9px 0 11px;margin-right:18px;display:flex;align-items:baseline;gap:6px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;border-bottom:2px solid transparent;transition:color .16s,border-color .16s}
+    .cat .dot{width:7px;height:7px;border-radius:50%;background:var(--c);flex:none;align-self:center}
     .cat .no{font-size:10px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--muted2);transition:color .16s}
     .cat .n{font-size:10px;font-variant-numeric:tabular-nums;color:var(--muted2)}
     .cat:hover{color:var(--ink)}
@@ -178,7 +177,7 @@
     .badge-hl{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;background:var(--accent);color:var(--on-accent);padding:3px 7px;border-radius:3px;margin-bottom:5px}
     .legend{position:absolute;left:14px;bottom:14px;z-index:400;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border-radius:4px;padding:11px 13px;font-size:11px;display:grid;gap:5px;box-shadow:0 4px 16px -8px rgba(0,0,0,.3)}
     .legend div{display:flex;align-items:center;gap:8px;color:var(--ink2);font-weight:600}
-    .legend .dot{width:7px;height:7px;border-radius:50%}
+    .legend .dot{width:9px;height:9px;border-radius:50%;flex:none}
 
     /* 모바일 전용 지도↔목록 전환 */
     .mtoggle{display:none;position:sticky;top:var(--hdr);z-index:30;background:var(--paper);border-bottom:1px solid var(--line);padding:0 16px}
@@ -238,7 +237,6 @@
 <body>
   <header>
     <div class="hdr-in">
-      <button class="hdr-brand" onclick="navHome()"><span class="mark">A</span>학동 MAP</button>
       <nav class="hdr-nav">
         <button class="nav-link" onclick="navMap()">지도 전체 보기</button>
         <button class="nav-link" onclick="flyHQ()">아카라라이프 쇼룸</button>
@@ -399,7 +397,6 @@
   function fitAll(){ const vs=visible(); if(!MAP||!vs.length) return;
     MAP.fitBounds(L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])).pad(0.15),{maxZoom:16}); }
   function navMap(){ if(window.innerWidth<=860) setMobileView('map'); setActive(null,false); fitAll(); }
-  function navHome(){ const q=document.getElementById('q'); if(q) q.value=''; setFilter('all'); navMap(); }
 
   /* 모바일에서 지도↔목록 전환 — 지도가 화면 절반을 먹어 목록을 보려면 스크롤해야 하는 문제 해결 */
   function setMobileView(v){
@@ -426,8 +423,8 @@
   function paint(){
     const all=numbered();
     // 카테고리 네비 — 알약 대신 01·02… 번호를 단 텍스트 인덱스
-    document.getElementById('chips').innerHTML=[`<button class="cat ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="no">ALL</span>전체<span class="n">${all.length}</span></button>`]
-      .concat(CATS.map((c,i)=>`<button class="cat ${FILTER===c.id?'on':''}" style="--c:${c.color}" onclick="setFilter('${c.id}')"><span class="no">${no2(i+1)}</span>${esc(c.ko)}<span class="n">${all.filter(s=>s.cat===c.id).length}</span></button>`)).join('');
+    document.getElementById('chips').innerHTML=[`<button class="cat ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="dot" style="background:var(--ink)"></span><span class="no">ALL</span>전체<span class="n">${all.length}</span></button>`]
+      .concat(CATS.map((c,i)=>`<button class="cat ${FILTER===c.id?'on':''}" style="--c:${c.color}" onclick="setFilter('${c.id}')"><span class="dot"></span><span class="no">${no2(i+1)}</span>${esc(c.ko)}<span class="n">${all.filter(s=>s.cat===c.id).length}</span></button>`)).join('');
     const cd=document.getElementById('catdesc'), cc=CATS.find(c=>c.id===FILTER);
     cd.style.display=cc?'flex':'none'; if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b> · ${esc(cc.desc||'')}</span>`;
     const vs=visible(), box=document.getElementById('list'); let html='';
