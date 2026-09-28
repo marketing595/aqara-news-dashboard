@@ -368,7 +368,7 @@
     return s.hl?`<div class="hqpin"><span class="wc">🎟️ Welcome Coupon</span><div class="core">AQARA</div></div>`:`<div class="pin" style="--c:${c.color}">${no2(s._no)}</div>`; }
   function popupHtml(s){ const c=catOf(s.cat);
     return `<div class="pp" style="--c:${c.color}">${s.hl?'<span class="badge-hl">☕ 웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${esc(s.en||'')}</span>
-      <div class="nm">${esc(s.n)}<span class="tag">${esc(c.ko)}</span></div>
+      <div class="nm">${esc(s.n)}</div>
       <div class="ds">${esc(s.d||'')}</div><div class="ad">📍 ${esc(s.a||'')}</div>
       <div class="acts">${s.hl?`<button class="btn primary sm" onclick="openBenefit()">🎟️ 웰컴 쿠폰</button>`:''}<a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div>`; }
   function paintMarkers(){
