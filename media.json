@@ -15,13 +15,6 @@
    ]
   },
   {
-   "name": "홈페이지 연결 소개자료",
-   "pinned": true,
-   "desc": "aqaralife.kr 연결 소개 자료",
-   "folderId": "1CshLuVi7IeXD_qhI1Ra-zZT44hGzEuE4",
-   "items": []
-  },
-  {
    "name": "회사소개서 및 제안서",
    "pinned": true,
    "desc": "회사소개서·제안서(대외 배포용)",
@@ -31,17 +24,14 @@
   {
    "name": "전사 제작물",
    "pinned": true,
-   "desc": "브로셔·전제품 리플렛·스펙시트·소개 영상",
+   "desc": "브로셔·전제품 리플렛·대표 제품·시나리오 리플렛",
    "folderId": "1E2TtwSfeYSOfsXe2JhroakJj10k3GarL",
    "items": [
     {"title": "아카라라이프 인테리어 브로셔", "kind": "pdf", "id": "1I7-RnKD8Xkf5Wh4zOER9d2l2a--pnoQL", "size": "57.7MB"},
     {"title": "전제품 리플렛 (260605)", "kind": "pdf", "id": "1Os2goW4Mv6WZhH52VK_9niZSziZj3fQ9", "size": "11.2MB"},
-    {"title": "스펙시트·디지털 가이드 (260213)", "kind": "pdf", "id": "1x-odtMiwuAip2fRa0cRDnZlJ7pVY9Wk_", "size": "33.7MB"},
     {"title": "아카라라이프 Full Brochure (241017)", "kind": "pdf", "id": "1uv8ZwBcpPk2M-b1B2NiHnYAdBTOW-_5E", "size": "16.3MB"},
     {"title": "대표 제품 리플렛 (240809)", "kind": "pdf", "id": "1bzFB4iwOgeiHeXj4PMBjAGt3lEOpfk3u", "size": "9.6MB"},
-    {"title": "시나리오 리플렛 (240809)", "kind": "pdf", "id": "1dRK0IojK7_l8lQPMsG86BVVuEu8MlWO3", "size": "8.2MB"},
-    {"title": "아카라라이프 소개 영상 (MWS)", "kind": "video", "id": "17nhGV2b81J5tIBJ_esVfFnHWueTSvdos", "size": "229MB"},
-    {"title": "외부 리플렛", "kind": "folder", "id": "1bmhbSimVd2ZbGBf4A-lTmPVyXZRb0tu6"}
+    {"title": "시나리오 리플렛 (240809)", "kind": "pdf", "id": "1dRK0IojK7_l8lQPMsG86BVVuEu8MlWO3", "size": "8.2MB"}
    ]
   },
   {
@@ -55,16 +45,6 @@
    "desc": "제품 촬영 사진·영상",
    "folderId": "1fBueFJrvyAqgIMHYyIYEQl7L_c2Fqbp_",
    "items": []
-  },
-  {
-   "name": "제품별 MKT 자료",
-   "desc": "제품별 이미지·영상·리플렛 (스마트도어락 L100·K100·스마트 욕실 복합환풍기 T1 / 내부 트래킹·원본 제외)",
-   "folderId": "16pHNBwKb_lfO6WhX8OdFXWfWxX-4ewxE",
-   "items": [
-    {"title": "스마트 도어락 L100", "kind": "folder", "id": "14V2Nv0n-tPCv0-UEvkp1xyQA_HVvlqrG"},
-    {"title": "스마트 도어락 K100", "kind": "folder", "id": "1PArCqf9O9HDFbuEoK1EFotW2SQVqI6Rt"},
-    {"title": "스마트 욕실 복합환풍기 T1", "kind": "folder", "id": "1ycOHuxyw7QGvhZejJ4VbbXPFRT7r9ChY"}
-   ]
   }
  ]
 }
