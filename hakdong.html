@@ -240,7 +240,6 @@
       <button class="hdr-brand" onclick="navHome()"><span class="mark">A</span>학동 MAP</button>
       <nav class="hdr-nav">
         <button class="nav-link" onclick="navMap()">지도 전체 보기</button>
-        <button class="nav-link" onclick="navList()">쇼룸 목록</button>
         <button class="nav-link" onclick="flyHQ()">아카라라이프 쇼룸</button>
         <button class="btn primary sm" onclick="openBenefit()">웰컴 쿠폰 받기</button>
       </nav>
@@ -397,8 +396,6 @@
   function fitAll(){ const vs=visible(); if(!MAP||!vs.length) return;
     MAP.fitBounds(L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])).pad(0.15),{maxZoom:16}); }
   function navMap(){ if(window.innerWidth<=860) setMobileView('map'); setActive(null,false); fitAll(); }
-  function navList(){ if(window.innerWidth<=860) setMobileView('list');
-    else { const l=document.getElementById('list'); if(l) l.scrollTo({top:0,behavior:'smooth'}); } }
   function navHome(){ const q=document.getElementById('q'); if(q) q.value=''; setFilter('all'); navMap(); }
 
   /* 모바일에서 지도↔목록 전환 — 지도가 화면 절반을 먹어 목록을 보려면 스크롤해야 하는 문제 해결 */
