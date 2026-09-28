@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-27 23:02",
+ "generatedAt": "2026-09-29 01:47",
  "brands": [
   {
    "name": "아카라",
@@ -124,12 +124,12 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
-    "아카라 홈캠",
     "아카라치",
+    "아카라 홈캠",
     "아카라카",
     "아카라 스위치",
-    "원신 아카라이브",
-    "메랜 아카라이브"
+    "명조 아카라이브",
+    "아카라이브 핫딜"
    ],
    "recent": [
     {
@@ -352,7 +352,7 @@
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 프로"
+    "헤이홈 as"
    ],
    "recent": [
     {
@@ -451,214 +451,206 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 68840,
+   "total": 68947,
    "sentiment": {
-    "pos": 11,
-    "neu": 48,
+    "pos": 25,
+    "neu": 34,
     "neg": 1
    },
    "keywords": [
     [
      "AI",
-     166
+     137
     ],
     [
-     "갤럭시",
-     65
+     "구독",
+     104
     ],
     [
-     "TV",
-     47
+     "신혼",
+     32
     ],
     [
-     "멕시코",
-     44
-    ],
-    [
-     "삼성전자는",
-     43
-    ],
-    [
-     "비전",
-     42
-    ],
-    [
-     "컴패니언",
-     41
+     "설치",
+     30
     ],
     [
      "가전",
-     35
+     29
     ],
     [
-     "모니터",
-     32
+     "사전케어",
+     29
     ],
     [
-     "웨어러블",
-     32
-    ],
-    [
-     "연결",
+     "시니어",
      28
     ],
     [
-     "중심으로",
-     28
+     "세팅",
+     27
     ],
     [
-     "경험",
+     "알림",
+     26
+    ],
+    [
+     "맞춤",
      24
     ],
     [
-     "스마트폰",
-     23
-    ],
-    [
-     "행사에서",
+     "삼성전자가",
      20
     ],
     [
-     "박람회",
+     "올인원",
      20
     ],
     [
-     "AI와",
+     "요금제",
+     20
+    ],
+    [
+     "케어",
+     19
+    ],
+    [
+     "시간맞춤",
+     19
+    ],
+    [
+     "삼성전자는",
+     19
+    ],
+    [
+     "새단장",
      18
     ],
     [
-     "기술을",
-     18
+     "블루패스는",
+     17
     ]
    ],
    "posWords": [
     [
      "확대",
-     5
+     13
+    ],
+    [
+     "강화",
+     13
+    ],
+    [
+     "혁신",
+     7
     ],
     [
      "공략",
-     3
-    ],
-    [
-     "기대",
-     1
-    ],
-    [
-     "최초",
-     1
-    ],
-    [
-     "글로벌",
-     1
-    ],
-    [
-     "첨단",
      1
     ]
    ],
    "related": [
-    "삼성 스마트싱스 연결",
-    "삼성 스마트싱스 냉장고",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 스테이션",
+    "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스",
+    "삼성 스마트싱스 연결",
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 업데이트",
-    "삼성 스마트싱스 장애",
+    "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 공유"
    ],
    "recent": [
     {
-     "title": "삼성전자, 멕시코 K박람회서 'AI 연결 경험' 선보였다",
-     "source": "newsbrite.net",
-     "date": "2026-09-27",
-     "link": "http://www.newsbrite.net/news/articleView.html?idxno=200617"
+     "title": "삼성전자 구독 서비스, 신혼·시니어·기업으로 확대",
+     "source": "chosun.com",
+     "date": "2026-09-29",
+     "link": "https://n.news.naver.com/mnews/article/023/0004000882?sid=105"
     },
     {
-     "title": "삼성전자, 멕시코 K-박람회서 AI 연결 경험 선봬",
-     "source": "beyondpost.co.kr",
-     "date": "2026-09-27",
-     "link": "http://www.beyondpost.co.kr/view.php?ud=202609271921121111be44c0aacd_30"
+     "title": "삼성전자, 가전 구독 서비스 대상별 프로그램 신설",
+     "source": "datasom.co.kr",
+     "date": "2026-09-28",
+     "link": "https://www.datasom.co.kr/news/articleView.html?idxno=210132"
     },
     {
-     "title": "삼성전자, 멕시코 K-컬처에 AI 입혔다… 중남미 접점 확대",
-     "source": "biztribune.co.kr",
-     "date": "2026-09-27",
-     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=359613"
+     "title": "삼성전자, 'AI 구독' 판 키운다…신혼·시니어·B2B 서비스 확대",
+     "source": "apnews.kr",
+     "date": "2026-09-28",
+     "link": "https://www.apnews.kr/news/articleView.html?idxno=3051561"
     },
     {
-     "title": "삼성전자, '2026 멕시코 K-박람회' 참가...AI 연결 경험 선보여",
-     "source": "womentimes.co.kr",
-     "date": "2026-09-27",
-     "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=106505"
+     "title": "‘AI 구독’ 매출 1조 눈앞…삼성전자, 서비스 확대",
+     "source": "khan.co.kr",
+     "date": "2026-09-28",
+     "link": "https://n.news.naver.com/mnews/article/032/0003472931?sid=101"
     },
     {
-     "title": "최태원, 멕시코서 “韓 기술·멕시코 제조 기반 협력 기대”...재계, AI부...",
-     "source": "seoul.co.kr",
-     "date": "2026-09-27",
-     "link": "https://n.news.naver.com/mnews/article/081/0003683734?sid=101"
+     "title": "삼성전자, 구독 서비스 새단장…신혼·시니어·기업까지 맞춤 케어 강화",
+     "source": "economist.co.kr",
+     "date": "2026-09-28",
+     "link": "https://n.news.naver.com/mnews/article/243/0000103618?sid=101"
     },
     {
-     "title": "삼성 AI 냉장고 ‘업데이트 오류’ 긴급 수습… 삼성 “연휴 일정 제외...",
-     "source": "dnews.co.kr",
-     "date": "2026-09-27",
-     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202609271302115560434"
+     "title": "삼성전자, 멕시코 K-박람회서 AI 경험 확대…제품 연결보다 '사용 장면'...",
+     "source": "dailypop.kr",
+     "date": "2026-09-28",
+     "link": "http://www.dailypop.kr/news/articleView.html?idxno=102914"
     },
     {
-     "title": "삼성전자, 멕시코서 AI 가전 체험…중남미 스마트 가전 시장 공략",
-     "source": "lcnews.co.kr",
-     "date": "2026-09-27",
-     "link": "https://www.lcnews.co.kr/news/articleView.html?idxno=208850"
+     "title": "삼성전자, '멕시코 K-박람회'서 제품-AI 연결 경험 선보여",
+     "source": "thepublic.kr",
+     "date": "2026-09-28",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=320282"
     },
     {
-     "title": "외부 AI에 문 여는 스마트홈…제미나이가 펫 돌보고, 챗GPT가 가전 제어",
-     "source": "전자신문",
-     "date": "2026-09-27",
-     "link": "https://n.news.naver.com/mnews/article/030/0003470094?sid=105"
+     "title": "삼성 AI 구독, 신혼부부·자영업자 겨냥…초기 비용 낮춰 가전 파고든다",
+     "source": "econovill.com",
+     "date": "2026-09-28",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=752029"
     },
     {
-     "title": "삼성전자, 중남미서 AI 연결 경험 알린다…'멕시코 K-박람회' 참가",
-     "source": "moneystorm.kr",
-     "date": "2026-09-27",
-     "link": "https://www.moneystorm.kr/news/articleView.html?idxno=6778"
+     "title": "삼성전자, '냉장고 먹통' 고개 숙였다···\"업데이트 절차 전면 재점검...",
+     "source": "finomy.com",
+     "date": "2026-09-28",
+     "link": "http://www.finomy.com/news/articleView.html?idxno=262397"
     },
     {
-     "title": "삼성전자, 멕시코서 AI 생태계 알려…K-컬처와 접점 확대",
-     "source": "metroseoul.co.kr",
-     "date": "2026-09-27",
-     "link": "http://www.metroseoul.co.kr/article/20260927500213"
+     "title": "삼성전자, AI 구독 판 넓힌다···신혼·시니어 넘어 기업까지",
+     "source": "finomy.com",
+     "date": "2026-09-28",
+     "link": "http://www.finomy.com/news/articleView.html?idxno=262384"
     },
     {
-     "title": "삼성전자, 2026 멕시코 K-박람회서 AI 기반 연결 경험 선보여",
-     "source": "kihoilbo.co.kr",
-     "date": "2026-09-27",
-     "link": "https://www.kihoilbo.co.kr/news/articleView.html?idxno=3035856"
+     "title": "삼성전자, 구독 서비스 생애주기별 세분화…B2B 시장도 공략",
+     "source": "sisacast.kr",
+     "date": "2026-09-28",
+     "link": "http://www.sisacast.kr/news/articleView.html?idxno=100460"
     },
     {
-     "title": "삼성전자, '2026 멕시코 K-박람회'서 AI 초연결 생태계 공개",
-     "source": "ajunews.com",
-     "date": "2026-09-27",
-     "link": "https://www.ajunews.com/view/20260927150215018"
+     "title": "삼성전자, 'AI 구독' 서비스 신혼·시니어에 B2B까지 무한확장",
+     "source": "meconomynews.com",
+     "date": "2026-09-28",
+     "link": "https://www.meconomynews.com/news/articleView.html?idxno=202020"
     },
     {
-     "title": "삼성전자, 멕시코 K-박람회서 AI 기반 연결 경험 선봬",
-     "source": "segyebiz.com",
-     "date": "2026-09-27",
-     "link": "http://www.segyebiz.com/newsView/20260927506708?OutUrl=naver"
+     "title": "삼성전자, '삼성 AI 구독' 서비스...신혼·시니어·기업까지 맞춤 케어 ...",
+     "source": "discoverynews.kr",
+     "date": "2026-09-28",
+     "link": "https://www.discoverynews.kr/news/articleView.html?idxno=1102699"
     },
     {
-     "title": "삼성전자, 멕시코서 '갤럭시AI' 통해 K-컬처 팬덤 잡는다",
-     "source": "shinailbo.co.kr",
-     "date": "2026-09-27",
-     "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5066105"
+     "title": "삼성전자, 가전 구독 서비스 새단장…기업용 B2B 구독 출시",
+     "source": "socialvalue.kr",
+     "date": "2026-09-28",
+     "link": "https://www.socialvalue.kr/news/view/1065597450021029"
     },
     {
-     "title": "삼성전자, 멕시코서 'AI 초연결'…통역·K팝 제작 한 번에",
-     "source": "ftoday.co.kr",
-     "date": "2026-09-27",
-     "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=366135"
+     "title": "삼성전자, 구독 매출 1조 눈앞…신혼·시니어 맞춤 강화",
+     "source": "이데일리",
+     "date": "2026-09-28",
+     "link": "https://n.news.naver.com/mnews/article/018/0006376518?sid=101"
     }
    ]
   },
@@ -666,7 +658,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77715,
+   "total": 77731,
    "sentiment": {
     "pos": 14,
     "neu": 44,
@@ -675,35 +667,31 @@
    "keywords": [
     [
      "LG전자",
-     43
+     46
     ],
     [
      "ThinQ",
-     42
+     46
     ],
     [
      "세탁기",
      30
     ],
     [
-     "가전",
-     27
+     "LG전자는",
+     28
     ],
     [
      "에이아이돌",
      27
     ],
     [
-     "앱에서",
+     "가전",
      25
     ],
     [
-     "LG전자는",
-     24
-    ],
-    [
-     "AI",
-     22
+     "앱에서",
+     25
     ],
     [
      "걸그룹",
@@ -738,61 +726,119 @@
      14
     ],
     [
+     "AI",
+     13
+    ],
+    [
      "활동",
      13
     ],
     [
-     "에이아이돌은",
-     11
+     "고객",
+     12
     ]
    ],
    "posWords": [
     [
      "확대",
-     4
-    ],
-    [
-     "글로벌",
-     3
-    ],
-    [
-     "프리미엄",
-     2
-    ],
-    [
-     "1위",
-     2
+     5
     ],
     [
      "기대",
      2
     ],
     [
-     "성장",
-     2
+     "우수",
+     1
     ],
     [
-     "공략",
-     2
+     "수상",
+     1
     ],
     [
-     "강화",
-     2
+     "최초",
+     1
+    ],
+    [
+     "프리미엄",
+     1
+    ],
+    [
+     "1위",
+     1
+    ],
+    [
+     "인기",
+     1
     ]
    ],
    "related": [
     "lg 씽큐",
-    "lg 씽큐 앱",
     "lg 씽큐온",
     "lg 씽큐 세탁기",
-    "lg 씽큐 냉장고",
     "lg 씽큐 와이파이",
+    "lg 씽큐 냉장고",
+    "lg 씽큐 티비연결",
+    "lg 씽큐 에어컨 연결",
     "lg 씽큐 연결",
     "lg 씽큐 공유",
-    "lg 씽큐 티비연결",
     "lg 씽큐 스마트싱스"
    ],
    "recent": [
+    {
+     "title": "LG전자, 서울경제진흥원과 ‘마이컵’으로 다회용컵 사용 확산 나선다",
+     "source": "biz.newdaily.co.kr",
+     "date": "2026-09-28",
+     "link": "https://biz.newdaily.co.kr/site/data/html/2026/09/28/2026092800268.html"
+    },
+    {
+     "title": "LG전자, 서울경제진흥원과 손잡고 'LG 마이컵' 보급… 다회용컵 문화 확...",
+     "source": "mediapen.com",
+     "date": "2026-09-28",
+     "link": "https://www.mediapen.com/news/view/1126334"
+    },
+    {
+     "title": "中, 로청기 넘어 생활가전까지…삼성·LG, 'AI·보안'으로 안방 수성",
+     "source": "m-i.kr",
+     "date": "2026-09-28",
+     "link": "https://www.m-i.kr/news/articleView.html?idxno=1418545"
+    },
+    {
+     "title": "LG전자, ‘마이컵’으로 다회용컵 확산…중소기업 ESG 지원",
+     "source": "datanews.co.kr",
+     "date": "2026-09-28",
+     "link": "http://www.datanews.co.kr/news/article.html?no=146659"
+    },
+    {
+     "title": "LG전자, '마이컵' 들고 ESG 확장…\"다회용컵 문화 확산 나선다\"",
+     "source": "ebn.co.kr",
+     "date": "2026-09-28",
+     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1725806"
+    },
+    {
+     "title": "LG전자, 실행형 AI ‘씽큐 클로’ 베타테스트",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-09-28",
+     "link": "https://n.news.naver.com/mnews/article/016/0002702504?sid=101"
+    },
+    {
+     "title": "LG전자, 서울경제진흥원과 맞손…'LG 마이컵'으로 다회용컵 문화 확산",
+     "source": "joongangenews.com",
+     "date": "2026-09-28",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=550806"
+    },
+    {
+     "title": "LG 워시타워·스타일러, 美 포브스 ‘스마트홈 어워드’ 수상",
+     "source": "디지털타임스",
+     "date": "2026-09-28",
+     "link": "https://n.news.naver.com/mnews/article/029/0003050109?sid=101"
+    },
+    {
+     "title": "LG전자 ‘씽큐 클로’ 베타테스트 돌입…연내 출시",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-09-28",
+     "link": "https://n.news.naver.com/mnews/article/016/0002702351?sid=101"
+    },
     {
      "title": "외부 AI에 문 여는 스마트홈…제미나이가 펫 돌보고, 챗GPT가 가전 제어",
      "source": "전자신문",
@@ -828,60 +874,6 @@
      "source": "ftoday.co.kr",
      "date": "2026-09-25",
      "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=366109"
-    },
-    {
-     "title": "주말 낮에 세탁기 돌리세요… 전기요금 돌려주는 가전 캐시백",
-     "source": "wikitree.co.kr",
-     "date": "2026-09-25",
-     "link": "https://www.wikitree.co.kr/articles/1162012"
-    },
-    {
-     "title": "\"세탁기 주말 낮에 돌리세요\"...전기요금 캐시백",
-     "source": "ytn.co.kr",
-     "date": "2026-09-25",
-     "link": "https://n.news.naver.com/mnews/article/052/0002411134?sid=101"
-    },
-    {
-     "title": "무심코 세탁기 ‘주말 낮’에 돌렸더니…2달 동안 '전기 요금 캐시백' 받...",
-     "source": "economist.co.kr",
-     "date": "2026-09-25",
-     "link": "https://n.news.naver.com/mnews/article/243/0000103537?sid=101"
-    },
-    {
-     "title": "가전 한파 뚫은 LG의 '삼각편대'… 프리미엄·구독·B2B 전면에",
-     "source": "g-enews.com",
-     "date": "2026-09-25",
-     "link": "https://www.g-enews.com/view.php?ud=202609231155463652139bf6e4b2_1"
-    },
-    {
-     "title": "“전 부친 후 쌓인 접시는 누가 치우나”…명절 집안일 줄여주는 AI 가전",
-     "source": "seoul.co.kr",
-     "date": "2026-09-25",
-     "link": "https://n.news.naver.com/mnews/article/081/0003683492?sid=101"
-    },
-    {
-     "title": "\"명절에 우리 집은?\"…'AI 집사'가 추석 빈집 지킨다",
-     "source": "머니투데이",
-     "date": "2026-09-25",
-     "link": "https://n.news.naver.com/mnews/article/008/0005418302?sid=101"
-    },
-    {
-     "title": "화제의 신인그룹 LG전자 ‘에이아이돌’…방송활동 본격화",
-     "source": "news2day.co.kr",
-     "date": "2026-09-24",
-     "link": "https://www.news2day.co.kr/article/20260923500027"
-    },
-    {
-     "title": "[재계뒷담] 걸그룹 만든 LG전자… 데뷔곡은 세탁기 이름 딴 ‘아이 워시...",
-     "source": "kmib.co.kr",
-     "date": "2026-09-24",
-     "link": "https://n.news.naver.com/mnews/article/005/0001874864?sid=101"
-    },
-    {
-     "title": "\"연휴에 가전 고장나면\"…삼성·LG 추석 서비스센터 이곳으로",
-     "source": "news.tf.co.kr",
-     "date": "2026-09-24",
-     "link": "https://n.news.naver.com/mnews/article/629/0000536723?sid=101"
     }
    ]
   },
@@ -889,60 +881,52 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75962,
+   "total": 75984,
    "sentiment": {
-    "pos": 23,
-    "neu": 27,
-    "neg": 10
+    "pos": 19,
+    "neu": 32,
+    "neg": 9
    },
    "keywords": [
     [
      "AI",
-     30
-    ],
-    [
-     "소드",
-     13
-    ],
-    [
-     "공식",
-     12
-    ],
-    [
-     "앱스토어",
-     12
+     32
     ],
     [
      "글로벌",
-     11
+     12
     ],
     [
-     "모바일",
+     "소드",
      11
-    ],
-    [
-     "배틀그라운드",
-     11
-    ],
-    [
-     "스태프",
-     10
     ],
     [
      "제미나이",
-     9
+     10
     ],
     [
-     "볼트레이",
+     "직접",
      8
     ],
     [
-     "저택",
+     "스태프",
      8
     ],
     [
-     "접속하지",
+     "앱스토어",
      8
+    ],
+    [
+     "번역한",
+     7
+    ],
+    [
+     "기사의",
+     7
+    ],
+    [
+     "에이전트",
+     7
     ],
     [
      "제미나이가",
@@ -953,11 +937,11 @@
      7
     ],
     [
-     "않은",
+     "저택",
      7
     ],
     [
-     "시간에도",
+     "접속하지",
      7
     ],
     [
@@ -965,26 +949,26 @@
      7
     ],
     [
-     "직접",
-     7
+     "아래는",
+     6
+    ],
+    [
+     "기사를",
+     6
+    ],
+    [
+     "전문",
+     6
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     11
+     12
     ],
     [
      "성장",
-     7
-    ],
-    [
-     "인기",
-     4
-    ],
-    [
-     "확대",
-     3
+     6
     ],
     [
      "돌파",
@@ -996,10 +980,18 @@
     ],
     [
      "혁신",
-     1
+     2
+    ],
+    [
+     "확대",
+     2
     ],
     [
      "투자",
+     1
+    ],
+    [
+     "공략",
      1
     ]
    ],
@@ -1010,12 +1002,72 @@
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 초기화",
-    "구글 홈 미니 1세대",
     "구글 홈 연결",
     "구글 홈 미니 2세대",
-    "구글 홈 어시스턴트"
+    "구글 홈 어시스턴트",
+    "구글 홈 스피커 연결"
    ],
    "recent": [
+    {
+     "title": "국감 기업인 줄소환 본격화…MBK 김병주·배민·강남언니 등 증인석 선다",
+     "source": "wemakenews.co.kr",
+     "date": "2026-09-28",
+     "link": "https://wemakenews.co.kr/news/view.php?no=26418"
+    },
+    {
+     "title": "전주월드컵경기장 '그린스타디움' 전국 2위",
+     "source": "breaknews.com",
+     "date": "2026-09-28",
+     "link": "http://www.breaknews.com/1239540"
+    },
+    {
+     "title": "“가을에 어디로 놀러 갈까?” 스마트폰 붙잡고 대화하는 사람 많다더니...",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-09-28",
+     "link": "https://n.news.naver.com/mnews/article/016/0002702736?sid=105"
+    },
+    {
+     "title": "추석 지나 본격 가을 성수기… 광주신세계, '스트리트 패션 특집전' 개...",
+     "source": "breaknews.com",
+     "date": "2026-09-28",
+     "link": "http://www.breaknews.com/1239460"
+    },
+    {
+     "title": "[Interview] 폴 베지어 퓨라토스 글로벌 R&D 최고책임자 | “대량생산과...",
+     "source": "economychosun.com",
+     "date": "2026-09-28",
+     "link": "https://economychosun.com/site/data/html_dir/2026/09/20/2026092000017.html"
+    },
+    {
+     "title": "LG전자, 실행형 AI ‘씽큐 클로’ 베타테스트",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-09-28",
+     "link": "https://n.news.naver.com/mnews/article/016/0002702504?sid=101"
+    },
+    {
+     "title": "챗봇 다음은 'AI 직원'… MS·오픈AI·구글·앤트로픽 붙었다",
+     "source": "the-biz.co.kr",
+     "date": "2026-09-28",
+     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=728409"
+    },
+    {
+     "title": "챗GPT vs 제미나이, 직접 써보니…음성 AI 승부 갈린 결정적 차이",
+     "source": "digitaltoday.co.kr",
+     "date": "2026-09-28",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=703132"
+    },
+    {
+     "title": "LG전자 ‘씽큐 클로’ 베타테스트 돌입…연내 출시",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-09-28",
+     "link": "https://n.news.naver.com/mnews/article/016/0002702351?sid=101"
+    },
+    {
+     "title": "[박수진의 금융人] 메리츠증권 장원재의 2막, '56만 고객' 잡고…'모음'...",
+     "source": "newswatch.kr",
+     "date": "2026-09-28",
+     "link": "http://www.newswatch.kr/news/articleView.html?idxno=81299"
+    },
     {
      "title": "외부 AI에 문 여는 스마트홈…제미나이가 펫 돌보고, 챗GPT가 가전 제어",
      "source": "전자신문",
@@ -1045,66 +1097,6 @@
      "source": "wikitree.co.kr",
      "date": "2026-09-26",
      "link": "https://www.wikitree.co.kr/articles/1162123"
-    },
-    {
-     "title": "“AI가 창작 혁신” 강조한 유튜브, AI가 썸네일 골라주고 영상 직접 편...",
-     "source": "joongang.co.kr",
-     "date": "2026-09-26",
-     "link": "https://n.news.naver.com/mnews/article/025/0003553871?sid=105"
-    },
-    {
-     "title": "\"묻는 말에 답하던 AI는 가라\"…삼성·애플, '진짜 AI' 맞대결[가을 폰대...",
-     "source": "뉴시스",
-     "date": "2026-09-26",
-     "link": "https://n.news.naver.com/mnews/article/003/0014214292?sid=105"
-    },
-    {
-     "title": "MS, 에이전트·코딩 통합 새 '코파일럿' 공개…'AI 시대 업무 OS' 선언",
-     "source": "aitimes.com",
-     "date": "2026-09-26",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=215662"
-    },
-    {
-     "title": "MS, 코파일럿 전면 개편에 3.66% 급등…'기업용 단일 앱' 승부수",
-     "source": "g-enews.com",
-     "date": "2026-09-26",
-     "link": "https://www.g-enews.com/view.php?ud=202609260625268176e250e8e188_1"
-    },
-    {
-     "title": "루이 14세가 애용한 ‘하이힐’과 ‘분홍색’ 옷 입은 조선 관리…뒤바...",
-     "source": "segye.com",
-     "date": "2026-09-26",
-     "link": "https://n.news.naver.com/mnews/article/022/0004161847?sid=103"
-    },
-    {
-     "title": "절대 방심하지 마세요… 내 스마트폰이 해킹됐을 때 나타나는 신호 TOP ...",
-     "source": "wikitree.co.kr",
-     "date": "2026-09-26",
-     "link": "https://www.wikitree.co.kr/articles/1162033"
-    },
-    {
-     "title": "中 스위치봇, 로봇청소기 K11+ 미국 출시",
-     "source": "전자신문",
-     "date": "2026-09-25",
-     "link": "https://n.news.naver.com/mnews/article/030/0003469902?sid=105"
-    },
-    {
-     "title": "피감 기관 800곳, 국정감사 증인 누가 나오나.",
-     "source": "slownews.kr",
-     "date": "2026-09-25",
-     "link": "https://slownews.kr/166960"
-    },
-    {
-     "title": "[스냅드래곤 서밋] 안경 속 제미나이가 포토샵 가르치고 손바닥에 메뉴...",
-     "source": "econovill.com",
-     "date": "2026-09-25",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=751883"
-    },
-    {
-     "title": "[르포] 구글북·XR 글래스·리눅스 총출동…놀라움과 한계 공존",
-     "source": "ddaily.co.kr",
-     "date": "2026-09-25",
-     "link": "https://n.news.naver.com/mnews/article/138/0002242658?sid=105"
     }
    ]
   }
