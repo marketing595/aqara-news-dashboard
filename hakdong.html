@@ -34,7 +34,7 @@
     :root{
       /* 애플 스타일 뉴트럴 — 텍스트·보더는 무채색, 포인트만 아카라 옐로 */
       --bg:#F7F7F7; --paper:#FFFFFF;
-      --ink:#1D1D1F; --ink2:#424245; --muted:#86868B;
+      --ink:#1D1D1F; --ink2:#424245; --muted:#86868B; --muted2:#6E6E73;   /* muted2 = 흰 배경에서 4.5:1을 넘는 보조 회색 */
       --line:rgba(0,0,0,.10); --line2:rgba(0,0,0,.16);
       --accent:#FBC400; --accent-soft:#FFF8E2; --on-accent:#1D1D1F;   /* 액센트는 브랜드 옐로 유지(애플 블루 대신) */
       --dark:#1D1D1F;
@@ -48,6 +48,15 @@
       -webkit-font-smoothing:antialiased;letter-spacing:-0.01em;line-height:1.55;word-break:keep-all;font-feature-settings:"tnum" 1}
     a{color:inherit;text-decoration:none}
     button{font-family:inherit;cursor:pointer}
+    /* 화면에는 안 보이지만 스크린리더는 읽는 라벨 */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    /* 키보드 포커스 — 마우스 클릭에는 안 뜨고 탭 이동에만 뜬다 */
+    :focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+    .hero-section :focus-visible,.foot :focus-visible{outline-color:var(--accent)}
+    /* 움직임을 줄이도록 설정한 사용자에게는 애니메이션을 끈다 */
+    @media (prefers-reduced-motion:reduce){
+      *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+    }
 
     /* ─── 헤더 : 애플 글로벌 내비 (반투명 + 블러) ─── */
     header{position:sticky;top:0;z-index:9999;height:var(--hdr);background:rgba(255,255,255,.8);
@@ -67,26 +76,16 @@
     .btn.primary:hover{background:#FFD22E;border-color:#FFD22E}
     .btn.dark{background:var(--dark);border-color:var(--dark);color:#fff}
     .btn.dark:hover{background:#3A3A3C;border-color:#3A3A3C}
-    .btn.ghost{background:transparent;border-color:rgba(255,255,255,.3);color:#fff}
-    .btn.ghost:hover{background:#fff;border-color:#fff;color:var(--ink)}
     .btn.sm{padding:5px 13px;font-size:12px}
 
     /* ─── 레이아웃 ─── */
     .wrap{display:grid;grid-template-columns:400px 1fr;height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr))}
     aside{background:var(--paper);display:flex;flex-direction:column;min-height:0;min-width:0;border-right:1px solid var(--line)}
 
-    /* ─── 다크 헤로 : 사진 없이 타이포만으로 무게를 준다 ─── */
-    .hero{background:var(--dark);color:#fff;padding:26px 24px 22px;position:relative;overflow:hidden}
-    .hero:after{content:'';position:absolute;right:-70px;top:-90px;width:230px;height:230px;border-radius:50%;background:var(--accent);opacity:.10;filter:blur(40px)}
-    .hero .eyebrow{font-size:9px;font-weight:800;letter-spacing:.24em;color:var(--accent);display:flex;align-items:center;gap:8px;text-transform:uppercase}
-    .hero .eyebrow:before{content:'';width:16px;height:2px;background:var(--accent);flex:none}
-    .hero h1{margin:12px 0 0;font-size:28px;font-weight:800;letter-spacing:-0.045em;line-height:1.1}
-    .hero .en{margin-top:7px;font-size:9.5px;font-weight:700;letter-spacing:.22em;color:#86868B;text-transform:uppercase}
-    .hero p{margin:13px 0 0;font-size:12.5px;color:#A1A1A6;line-height:1.55;max-width:31em}
-    .hero .meta{display:flex;align-items:baseline;gap:7px;margin-top:16px;padding-top:15px;border-top:1px solid rgba(255,255,255,.12)}
-    .hero .meta .big{font-size:19px;font-weight:800;letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
-    .hero .meta .lb{font-size:11px;color:#A1A1A6}
-    .hero .cta{display:flex;gap:7px;margin-top:14px;flex-wrap:wrap}
+    /* ─── 애플 스타일 미니멀 히어로 : 제목 + 영문 부제만 ─── */
+    .hero-section{padding:32px 24px 24px;background-color:var(--dark);color:#fff}
+    .hero-title{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:0 0 4px}
+    .hero-subtitle{font-size:13px;font-weight:400;color:var(--muted);margin:0;letter-spacing:-0.01em}
 
     /* ─── 도구 : 검색 + 번호 매긴 카테고리 네비 ─── */
     .tools{padding:16px 24px 0;border-bottom:1px solid var(--line);background:var(--paper)}
@@ -99,8 +98,8 @@
     .cats{display:flex;gap:0;margin:0 -24px;padding:10px 24px 0;overflow-x:auto;scrollbar-width:none}
     .cats::-webkit-scrollbar{display:none}
     .cat{flex:none;border:0;background:none;padding:9px 0 11px;margin-right:18px;display:flex;align-items:baseline;gap:6px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;border-bottom:2px solid transparent;transition:color .16s,border-color .16s}
-    .cat .no{font-size:9.5px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--line2);transition:color .16s}
-    .cat .n{font-size:10px;font-variant-numeric:tabular-nums;color:var(--line2)}
+    .cat .no{font-size:10px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--muted2);transition:color .16s}
+    .cat .n{font-size:10px;font-variant-numeric:tabular-nums;color:var(--muted2)}
     .cat:hover{color:var(--ink)}
     .cat:hover .no{color:var(--muted)}
     .cat.on{color:var(--ink);font-weight:800;border-bottom-color:var(--accent)}
@@ -116,42 +115,42 @@
     .sec{display:flex;align-items:flex-start;gap:12px;padding:26px 24px 12px;background:var(--paper);border-bottom:1px solid var(--ink)}
     .sec .no{font-size:11px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--c);padding-top:3px}
     .sec b{display:block;font-size:14px;font-weight:800;letter-spacing:-0.03em;line-height:1.3}
-    .sec em{display:block;font-style:normal;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+    .sec em{display:block;font-style:normal;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:3px}
     .sec i{flex:1}
-    .sec .cnt{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
+    .sec .cnt{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
 
     .spot{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:16px 24px;border-bottom:1px solid var(--line);cursor:pointer;position:relative;transition:background .16s}
     .spot:before{content:'';position:absolute;left:0;top:-1px;bottom:-1px;width:2px;background:var(--accent);opacity:0;transition:opacity .16s}
     .spot:hover{background:#FAFAF9}
     .spot.active{background:var(--accent-soft)}
     .spot.active:before{opacity:1}
-    .spot .num{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--line2);font-variant-numeric:tabular-nums;line-height:1.7;transition:color .16s}
+    .spot .num{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--muted2);font-variant-numeric:tabular-nums;line-height:1.7;transition:color .16s}
     .spot:hover .num{color:var(--muted)}
     .spot.active .num{color:var(--ink)}
-    .spot .en{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .spot .en{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:700}
     .spot .nm{font-size:15px;font-weight:700;letter-spacing:-0.03em;line-height:1.35;margin:3px 0 6px;transition:color .16s}
     .spot:hover .nm{color:#000}
-    .spot .chk{font-size:10.5px;color:var(--ink2);font-weight:600;margin-left:6px}
+    .spot .chk{font-size:11px;color:var(--ink2);font-weight:600;margin-left:6px}
     /* 아카라 쇼룸 행 — 카드로 감싸지 않고 옐로 바와 작은 배지로만 구분한다 */
     .spot.hq{background:var(--accent-soft)}
     .spot.hq:before{opacity:1}
     .spot.hq .num{color:var(--ink)}
-    .hqtag{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.02em;background:var(--accent);color:var(--on-accent);padding:2px 7px;border-radius:980px;margin-left:7px;vertical-align:2px;white-space:nowrap}
-    .spot .ds{font-size:12.5px;color:var(--ink2);line-height:1.6}
-    .spot .ad{font-size:11px;color:var(--muted);margin-top:8px;display:flex;gap:8px;align-items:baseline}
+    .hqtag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.02em;background:var(--accent);color:var(--on-accent);padding:2px 7px;border-radius:980px;margin-left:7px;vertical-align:2px;white-space:nowrap}
+    .spot .ds{font-size:13px;color:var(--ink2);line-height:1.6}
+    .spot .ad{font-size:11px;color:var(--muted2);margin-top:8px;display:flex;gap:8px;align-items:baseline}
     .spot .ad span{flex:1;min-width:0}
-    .spot .ad .nv{color:var(--muted);font-weight:600;white-space:nowrap;flex:none;border-bottom:1px solid var(--line2);transition:.16s}
+    .spot .ad .nv{color:var(--muted2);font-weight:600;white-space:nowrap;flex:none;border-bottom:1px solid var(--line2);transition:.16s}
     .spot .ad .nv:hover{color:var(--ink);border-color:var(--ink)}
-    .empty{margin:0;padding:52px 24px;text-align:center;font-size:12.5px;color:var(--muted);line-height:1.8}
+    .empty{margin:0;padding:52px 24px;text-align:center;font-size:13px;color:var(--muted);line-height:1.8}
     .empty b{color:var(--ink)}
 
     /* ─── 푸터 : 영업 정보 정리 ─── */
     .foot{padding:26px 24px 16px;background:var(--dark);color:#fff}
-    .foot .ft{font-size:9px;font-weight:800;letter-spacing:.24em;color:var(--accent)}
+    .foot .ft{font-size:10px;font-weight:800;letter-spacing:.24em;color:var(--accent)}
     .foot b{display:block;font-size:14px;font-weight:800;letter-spacing:-0.03em;margin:6px 0 3px}
-    .foot p{margin:0;font-size:11.5px;color:#A1A1A6;line-height:1.6}
+    .foot p{margin:0;font-size:11px;color:#A1A1A6;line-height:1.6}
     .foot .fa{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 13px}
-    .foot .fn{font-size:10.5px;color:#86868B;line-height:1.6;padding-top:13px;border-top:1px solid rgba(255,255,255,.12)}
+    .foot .fn{font-size:11px;color:#86868B;line-height:1.6;padding-top:13px;border-top:1px solid rgba(255,255,255,.12)}
 
     /* ─── 지도 ─── */
     .mapwrap{position:relative;min-height:0;min-width:0;background:#F2F2F0}
@@ -159,32 +158,32 @@
     /* OSM 기본 타일을 Positron풍 무채색으로 — 채도를 죽이고 밝기를 올려 글자·도로를 눌러준다 */
     .leaflet-tile-pane{filter:grayscale(1) brightness(1.07) contrast(.86) opacity(.9)}
     .leaflet-container{font-family:inherit;background:#F2F2F0}
-    .leaflet-control-attribution{font-size:9px;background:rgba(255,255,255,.7);color:var(--muted)}
+    .leaflet-control-attribution{font-size:10px;background:rgba(255,255,255,.7);color:var(--muted)}
     .leaflet-control-attribution a{color:var(--ink2)}
     .leaflet-bar a{border-radius:0;color:var(--ink);border-bottom-color:var(--line)}
     .pin{width:25px;height:25px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;border:2px solid #fff;box-shadow:0 2px 8px -1px rgba(0,0,0,.35);transition:transform .16s}
     .pin.on{transform:scale(1.3);border-color:var(--ink);box-shadow:0 5px 14px -3px rgba(0,0,0,.45)}
     .hqpin{position:relative;width:46px;height:46px}
-    .hqpin .core{position:absolute;inset:0;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:8.5px;font-weight:900;letter-spacing:.04em;border:3px solid #fff;box-shadow:0 0 0 6px rgba(251,196,0,.26),0 6px 18px -5px rgba(0,0,0,.45);animation:pulse 2.4s ease-out infinite}
-    .hqpin .wc{position:absolute;left:50%;top:-21px;transform:translateX(-50%);background:var(--dark);color:#fff;font-size:9px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:3px;white-space:nowrap;box-shadow:0 4px 12px -4px rgba(0,0,0,.45)}
+    .hqpin .core{position:absolute;inset:0;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:10px;font-weight:900;letter-spacing:.04em;border:3px solid #fff;box-shadow:0 0 0 6px rgba(251,196,0,.26),0 6px 18px -5px rgba(0,0,0,.45);animation:pulse 2.4s ease-out infinite}
+    .hqpin .wc{position:absolute;left:50%;top:-21px;transform:translateX(-50%);background:var(--dark);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:3px;white-space:nowrap;box-shadow:0 4px 12px -4px rgba(0,0,0,.45)}
     .hqpin .wc:after{content:'';position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--dark);border-bottom:0}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(251,196,0,.5),0 6px 18px -5px rgba(0,0,0,.45)}100%{box-shadow:0 0 0 20px rgba(251,196,0,0),0 6px 18px -5px rgba(0,0,0,.45)}}
     .leaflet-popup-content-wrapper{border-radius:4px;box-shadow:0 16px 44px -20px rgba(0,0,0,.4);padding:2px}
-    .leaflet-popup-content{margin:13px 15px;font-size:12.5px;line-height:1.55;min-width:226px}
-    .pp .en{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .leaflet-popup-content{margin:13px 15px;font-size:13px;line-height:1.55;min-width:226px}
+    .pp .en{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700}
     .pp .nm{font-size:15px;font-weight:700;letter-spacing:-0.03em;margin:3px 0 5px}
     .pp .ds{color:var(--ink2)}
     .pp .ad{color:var(--muted);font-size:11px;margin-top:5px}
     .pp .acts{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap}
-    .badge-hl{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.04em;background:var(--accent);color:var(--on-accent);padding:3px 7px;border-radius:3px;margin-bottom:5px}
-    .legend{position:absolute;left:14px;bottom:14px;z-index:400;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border-radius:4px;padding:11px 13px;font-size:10.5px;display:grid;gap:5px;box-shadow:0 4px 16px -8px rgba(0,0,0,.3)}
+    .badge-hl{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;background:var(--accent);color:var(--on-accent);padding:3px 7px;border-radius:3px;margin-bottom:5px}
+    .legend{position:absolute;left:14px;bottom:14px;z-index:400;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border-radius:4px;padding:11px 13px;font-size:11px;display:grid;gap:5px;box-shadow:0 4px 16px -8px rgba(0,0,0,.3)}
     .legend div{display:flex;align-items:center;gap:8px;color:var(--ink2);font-weight:600}
     .legend .dot{width:7px;height:7px;border-radius:50%}
 
     /* 모바일 전용 지도↔목록 전환 */
     .mtoggle{display:none;position:sticky;top:var(--hdr);z-index:30;background:var(--paper);border-bottom:1px solid var(--line);padding:0 16px}
     .mtoggle .seg{display:flex;flex:1;gap:22px}
-    .mtoggle button{border:0;background:none;padding:12px 0;font-size:12.5px;font-weight:600;color:var(--muted);letter-spacing:-0.01em;border-bottom:2px solid transparent;transition:.16s}
+    .mtoggle button{border:0;background:none;padding:12px 0;font-size:13px;font-weight:600;color:var(--muted);letter-spacing:-0.01em;border-bottom:2px solid transparent;transition:.16s}
     .mtoggle button.on{color:var(--ink);font-weight:800;border-bottom-color:var(--accent)}
 
     /* ─── 쿠폰 모달 ─── */
@@ -192,27 +191,26 @@
     .ov.show{display:flex}
     .md{background:var(--paper);border-radius:6px;width:min(600px,100%);max-height:calc(100vh - 36px);overflow:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);position:relative}
     .md .hd{background:var(--dark);color:#fff;padding:28px 28px 24px;position:relative;overflow:hidden}
-    .md .hd:before{content:'';position:absolute;right:-40px;top:-70px;width:210px;height:210px;border-radius:50%;background:var(--accent);opacity:.18;filter:blur(36px)}
-    .md .hd .ey{font-size:9px;font-weight:800;letter-spacing:.24em;color:var(--accent);text-transform:uppercase}
-    .md .hd h2{margin:11px 0 7px;font-size:25px;font-weight:800;letter-spacing:-0.045em;line-height:1.15}
-    .md .hd p{margin:0;font-size:12.5px;color:#A1A1A6}
-    .md .x{position:absolute;right:14px;top:12px;background:rgba(255,255,255,.12);border:0;color:#fff;width:30px;height:30px;border-radius:50%;font-size:17px;line-height:1;z-index:1}
+    .md .hd .ey{font-size:10px;font-weight:800;letter-spacing:.24em;color:var(--accent);text-transform:uppercase}
+    .md .hd h2{margin:11px 0 7px;font-size:22px;font-weight:800;letter-spacing:-0.045em;line-height:1.15}
+    .md .hd p{margin:0;font-size:13px;color:#A1A1A6}
+    .md .x{position:absolute;right:14px;top:12px;background:rgba(255,255,255,.12);border:0;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;line-height:1;z-index:1}
     .md .bd{padding:20px 28px 28px}
     .bn{display:grid;grid-template-columns:40px 1fr;gap:13px;align-items:start;padding:15px 0;border-bottom:1px solid var(--line)}
     .bn:last-of-type{border-bottom:0}
-    .bn .ic{width:40px;height:40px;border-radius:4px;background:var(--accent-soft);display:grid;place-items:center;font-size:19px}
-    .bn .k{font-size:9px;font-weight:800;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
-    .bn b{font-size:14.5px;font-weight:700;letter-spacing:-0.03em;display:block;margin-top:3px}
-    .bn p{margin:4px 0 0;font-size:12.5px;color:var(--ink2)}
-    .bn .tg{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.04em;color:var(--on-accent);background:var(--accent-soft);border-radius:3px;padding:3px 7px;margin-top:7px}
+    .bn .ic{width:40px;height:40px;border-radius:4px;background:var(--accent-soft);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--on-accent);font-variant-numeric:tabular-nums}
+    .bn .k{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+    .bn b{font-size:14px;font-weight:700;letter-spacing:-0.03em;display:block;margin-top:3px}
+    .bn p{margin:4px 0 0;font-size:13px;color:var(--ink2)}
+    .bn .tg{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--on-accent);background:var(--accent-soft);border-radius:3px;padding:3px 7px;margin-top:7px}
     .coupon{margin-top:16px;border:1px solid var(--line2);border-radius:4px;padding:20px;background:var(--bg);text-align:center}
-    .coupon .eyebrow{font-size:9px;font-weight:800;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
-    .coupon .code{font-size:30px;font-weight:800;letter-spacing:.14em;margin:8px 0 3px;color:var(--ink)}
+    .coupon .eyebrow{font-size:10px;font-weight:800;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+    .coupon .code{font-size:28px;font-weight:800;letter-spacing:.14em;margin:8px 0 3px;color:var(--ink)}
     .coupon .meta{font-size:11px;color:var(--muted)}
     .coupon #qr{display:inline-block;margin:13px auto 4px;padding:8px;background:#fff;border-radius:4px;border:1px solid var(--line)}
     .coupon #qr img,.coupon #qr canvas{display:block}
     .coupon .how{font-size:12px;color:var(--ink2);margin-top:9px;line-height:1.6}
-    .fine{font-size:10.5px;color:var(--muted);margin-top:16px;line-height:1.6}
+    .fine{font-size:11px;color:var(--muted);margin-top:16px;line-height:1.6}
 
     /* ─── 모바일 ─── */
     @media (max-width:860px){
@@ -225,9 +223,7 @@
       .wrap.list-only .mapwrap{display:none}
       aside{order:2;border-right:0}
       .mapwrap{order:1}
-      .hero{padding:22px 18px 20px}
-      .hero h1{font-size:23px}
-      .hero p{font-size:12px}
+      .hero-section{padding:24px 18px 20px}
       .tools{padding:14px 18px 0}
       .cats{margin:0 -18px;padding:10px 18px 0}
       .sec{padding:22px 18px 11px}
@@ -260,26 +256,21 @@
         </div>
       </div>
       <!-- 다크 헤로 : 사진 없이 타이포만으로 무게를 준다. 쇼룸 CTA도 여기로 합쳤다 -->
-      <div class="hero">
-        <div class="eyebrow">AQARA LIFE · SHOWROOM GUIDE</div>
-        <h1 id="ttl">학동 스마트 인테리어 MAP</h1>
-        <div class="en" id="heroSub2">Hakdong Interior Showroom Map</div>
-        <p id="sub">학동역 ~ 도산대로 · 발품 파는 분들을 위한 인테리어 쇼룸 가이드</p>
-        <div class="meta"><span class="big" id="cntAll">–</span><span class="lb">곳의 쇼룸 · 아카라라이프 쇼룸 학동역 도보 3분</span></div>
-        <div class="cta">
-          <button class="btn primary sm" onclick="openBenefit()">🎟️ 웰컴 쿠폰 받기</button>
-          <button class="btn ghost sm" onclick="flyHQ()">아카라라이프 쇼룸 →</button>
-        </div>
+      <!-- 상단 히어로 섹션 -->
+      <div class="hero-section">
+        <h1 class="hero-title" id="ttl">학동 스마트 인테리어 MAP</h1>
+        <p class="hero-subtitle">Hakdong Interior Showroom Map</p>
       </div>
       <div class="tools">
         <div class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="q" type="search" placeholder="브랜드 · 타일 · 주방 · 소파 … 검색" oninput="paint()" />
+          <label for="q" class="sr-only">쇼룸 검색</label>
+          <input id="q" type="search" aria-label="쇼룸 검색" placeholder="브랜드 · 타일 · 주방 · 소파 … 검색" oninput="paint()" />
         </div>
         <nav class="cats" id="chips"></nav>
       </div>
       <div class="catdesc" id="catdesc"></div>
-      <div class="list" id="list"></div>
+      <div class="list" id="list" aria-live="polite"><p class="empty">쇼룸 목록을 불러오는 중…</p></div>
     </aside>
     <div class="mapwrap">
       <div id="map"></div>
@@ -352,11 +343,10 @@
   function boot(){
     document.getElementById('ttl').textContent=DATA.title||'학동 스마트 인테리어 MAP';
     document.title=(DATA.title||'학동 스마트 인테리어 MAP')+' · AQARA LIFE';
-    if(DATA.subtitle) document.getElementById('sub').textContent=DATA.subtitle;
     document.getElementById('legend').innerHTML=CATS.map(c=>`<div><span class="dot" style="background:${c.color}"></span>${esc(c.ko)}</div>`).join('');
-    document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map(b=>`<div class="bn"><div class="ic">${b.icon||'🎁'}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}</div></div>`).join('');
+    document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map((b,i)=>`<div class="bn"><div class="ic">${no2(i+1)}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}</div></div>`).join('');
     const hq=DATA.spots.find(s=>s.hl)||DATA.spots.find(s=>s.cat==='iot')||{};
-    document.getElementById('hqAddr').innerHTML=`📍 아카라라이프 쇼룸 · ${esc(hq.a||'')}<br>${esc(DATA.note||'')}<br>쿠폰은 발급일로부터 30일간 유효해요. 다른 혜택과 중복 적용되지 않을 수 있으며, 증정·할인 혜택의 상세 조건은 쇼룸에서 안내드려요.`;
+    document.getElementById('hqAddr').innerHTML=`아카라라이프 쇼룸 · ${esc(hq.a||'')}<br>${esc(DATA.note||'')}<br>쿠폰은 발급일로부터 30일간 유효해요. 다른 혜택과 중복 적용되지 않을 수 있으며, 증정·할인 혜택의 상세 조건은 쇼룸에서 안내드려요.`;
     initMap(); applyOver();
     const p=new URLSearchParams(location.search);
     if(p.get('cat')) setFilter(p.get('cat'));
@@ -375,12 +365,12 @@
     MAP.on('popupclose',()=>{ setActive(null,false); });
   }
   function pinHtml(s){ const c=catOf(s.cat);
-    return s.hl?`<div class="hqpin"><span class="wc">🎟️ Welcome Coupon</span><div class="core">AQARA</div></div>`:`<div class="pin" style="--c:${c.color}">${no2(s._no)}</div>`; }
+    return s.hl?`<div class="hqpin"><span class="wc">Welcome Coupon</span><div class="core">AQARA</div></div>`:`<div class="pin" style="--c:${c.color}">${no2(s._no)}</div>`; }
   function popupHtml(s){ const c=catOf(s.cat);
-    return `<div class="pp" style="--c:${c.color}">${s.hl?'<span class="badge-hl">☕ 웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${esc(s.en||'')}</span>
+    return `<div class="pp" style="--c:${c.color}">${s.hl?'<span class="badge-hl">웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${esc(s.en||'')}</span>
       <div class="nm">${esc(s.n)}</div>
-      <div class="ds">${esc(s.d||'')}</div><div class="ad">📍 ${esc(s.a||'')}</div>
-      <div class="acts">${s.hl?`<button class="btn primary sm" onclick="openBenefit()">🎟️ 웰컴 쿠폰</button>`:''}<a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div>`; }
+      <div class="ds">${esc(s.d||'')}</div><div class="ad">${esc(s.a||'')}</div>
+      <div class="acts">${s.hl?`<button class="btn primary sm" onclick="openBenefit()">웰컴 쿠폰</button>`:''}<a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div>`; }
   function paintMarkers(){
     Object.values(MARK).forEach(m=>MAP.removeLayer(m)); MARK={};
     visible().forEach(s=>{
@@ -396,6 +386,14 @@
     MAP.flyTo([+s.lat,+s.lng],17,{duration:.7}); setTimeout(()=>mm.openPopup(),520); setActive(id,!fromList);
   }
   function flyHQ(){ const s=SPOTS.find(x=>x.hl)||SPOTS.find(x=>x.cat==='iot'); if(s) focusSpot(s.id,true); }
+
+  /* 목록 행은 div라서 클릭만으로는 키보드에서 열리지 않는다 → Enter·Space를 클릭과 똑같이 받는다 */
+  document.addEventListener('keydown',e=>{
+    if(e.key!=='Enter'&&e.key!==' ') return;
+    const row=e.target.closest&&e.target.closest('.spot[data-id]');
+    if(!row) return;
+    e.preventDefault(); focusSpot(row.dataset.id,true);
+  });
 
   /* 헤더 내비 — 이 페이지에 실제로 있는 곳으로만 보낸다 */
   function fitAll(){ const vs=visible(); if(!MAP||!vs.length) return;
@@ -427,7 +425,6 @@
     const vs=visible(); if(vs.length&&FILTER!=='all'){ const b=L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])); MAP.fitBounds(b.pad(0.25),{maxZoom:16}); } }
   function paint(){
     const all=numbered();
-    document.getElementById('cntAll').textContent=all.length;
     // 카테고리 네비 — 알약 대신 01·02… 번호를 단 텍스트 인덱스
     document.getElementById('chips').innerHTML=[`<button class="cat ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="no">ALL</span>전체<span class="n">${all.length}</span></button>`]
       .concat(CATS.map((c,i)=>`<button class="cat ${FILTER===c.id?'on':''}" style="--c:${c.color}" onclick="setFilter('${c.id}')"><span class="no">${no2(i+1)}</span>${esc(c.ko)}<span class="n">${all.filter(s=>s.cat===c.id).length}</span></button>`)).join('');
@@ -436,8 +433,8 @@
     const vs=visible(), box=document.getElementById('list'); let html='';
     CATS.forEach((c,ci)=>{ const g=vs.filter(s=>s.cat===c.id); if(!g.length) return;   // 아카라 쇼룸(hl)도 일반 행으로 함께 보여준다
       html+=`<div class="sec" style="--c:${c.color}"><span class="no">${no2(ci+1)}</span><div><b>${esc(c.ko)}</b><em>${esc(c.en)}</em></div><i></i><span class="cnt">${g.length}곳</span></div>`;
-      html+=g.map(s=>`<div class="spot ${s.hl?'hq':''} ${ACTIVE===s.id?'active':''}" style="--c:${c.color}" data-id="${s.id}" onclick="focusSpot('${s.id}',true)">
-        <div class="num">${s.hl?'★':no2(s._no)}</div>
+      html+=g.map(s=>`<div class="spot ${s.hl?'hq':''} ${ACTIVE===s.id?'active':''}" style="--c:${c.color}" data-id="${s.id}" onclick="focusSpot('${s.id}',true)" role="button" tabindex="0" aria-label="${esc(s.n)} — 지도에서 보기">
+        <div class="num">${s.hl?'00':no2(s._no)}</div>
         <div><span class="en">${esc(s.en||'')}</span>
           <div class="nm">${esc(s.n)}${s.hl?'<span class="hqtag">웰컴 쿠폰</span>':''}${s.check?`<span class="chk">· ${esc(s.check)}</span>`:''}</div>
           <div class="ds">${esc(s.d||'')}</div>
@@ -452,13 +449,17 @@
       <div class="ft">AQARA LIFE SHOWROOM</div>
       <b>아카라라이프 쇼룸</b>
       <p>${esc(hq.a||'')}${hq.a?' · 학동역 도보 3분':''}</p>
-      <div class="fa"><button class="btn sm" onclick="openBenefit()">🎟️ 웰컴 쿠폰</button><button class="btn sm" onclick="flyHQ()">쇼룸 위치</button><a class="btn sm" href="https://map.naver.com/p/search/${encodeURIComponent('아카라라이프')}" target="_blank" rel="noopener">길찾기 ↗</a></div>
+      <div class="fa"><a class="btn sm" href="https://map.naver.com/p/search/${encodeURIComponent('아카라라이프')}" target="_blank" rel="noopener">길찾기 ↗</a></div>
       <p class="fn">${DATA.updated?`자료 기준 ${esc(DATA.updated)} · `:''}${esc(DATA.note||'')}</p>
     </footer>`; }
 
   /* ───────── 혜택 모달 · 쿠폰 발급 ───────── */
-  function openBenefit(){ document.getElementById('ov').classList.add('show'); renderCoupon(); document.body.style.overflow='hidden'; }
-  function closeBenefit(){ document.getElementById('ov').classList.remove('show'); document.body.style.overflow=''; }
+  let LAST_FOCUS=null;
+  function openBenefit(){ LAST_FOCUS=document.activeElement;   // 닫을 때 원래 자리로 포커스를 돌려준다
+    document.getElementById('ov').classList.add('show'); renderCoupon(); document.body.style.overflow='hidden';
+    const x=document.querySelector('.md .x'); if(x) x.focus(); }
+  function closeBenefit(){ document.getElementById('ov').classList.remove('show'); document.body.style.overflow='';
+    if(LAST_FOCUS&&LAST_FOCUS.focus) LAST_FOCUS.focus(); LAST_FOCUS=null; }
   document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeBenefit(); });
   function getCoupon(){ try{ const c=JSON.parse(localStorage.getItem('aqaraHakdongCoupon')||'null'); if(c&&c.code&&c.exp>Date.now()) return c; }catch(e){} return null; }
   function issueCoupon(){
@@ -471,7 +472,7 @@
     renderCoupon(); }
   function renderCoupon(){ const box=document.getElementById('cpBody'), c=getCoupon();
     if(!c){ box.innerHTML=`<p style="font-size:13px;color:#5E625F;margin:6px 0 12px">버튼을 누르면 이 휴대폰에 웰컴 쿠폰이 발급돼요. 쇼룸에서 쿠폰 화면만 보여주시면 끝!</p>
-      <button class="btn primary" style="font-size:14px;padding:11px 22px" onclick="issueCoupon()">🎟️ 웰컴 쿠폰 발급받기</button>`; return; }
+      <button class="btn primary" style="font-size:14px;padding:11px 22px" onclick="issueCoupon()">웰컴 쿠폰 발급받기</button>`; return; }
     const d=new Date(c.ts), e=new Date(c.exp), f=x=>x.getFullYear()+'.'+String(x.getMonth()+1).padStart(2,'0')+'.'+String(x.getDate()).padStart(2,'0');
     box.innerHTML=`<div class="code">${esc(c.code)}</div><div class="meta">발급 ${f(d)} · ${f(e)}까지 사용 가능 · 웰컴 음료 + 도면 배선 상담 + 스마트 센서 증정/패키지 할인</div>
       <div id="qr"></div><div class="how">쇼룸 방문 시 이 화면(코드 또는 QR)을 스태프에게 보여주세요.<br><b>아카라라이프 쇼룸</b> · 학동역 도보 3분 · 논현로127길 13-11</div>
