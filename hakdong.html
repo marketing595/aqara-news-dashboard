@@ -21,23 +21,22 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <style>
     /* ─────────────────────────────────────────────────────────────────
-       학동 스마트 인테리어 MAP — 디자인 방향
-         목적   : 발품 도는 사람이 '다음에 어디 갈지'를 고르는 도구
-         독자   : 인테리어 준비 중인 일반 소비자, 대부분 현장에서 폰으로 봄
-         톤     : 따뜻한 미니멀 · 잡지 목차(editorial). 마케팅 배너가 지도를 가리지 않는다
-         기억점 : 목록의 인덱스 번호(01·02…)가 지도 핀 번호와 1:1로 붙는다
+       학동 스마트 인테리어 MAP
+         톤     : 흑백 중심의 가라앉은 프리미엄 미니멀. 색은 '포인트'로만 쓴다
+         구조   : 좌 = 다크 헤로 + 번호 인덱싱된 카탈로그 목록 / 우 = 지도(본체)
+         기억점 : 01·02… 인덱스가 카테고리 네비 → 섹션 → 지도 핀까지 하나로 이어진다
        규칙
-         - 카드 안에 카드를 넣지 않는다. 목록은 박스가 아니라 '구분선 있는 행'이다
-         - 지도는 이 페이지의 본체다. 그 위에 떠 있는 것은 범례뿐이다
-         - 옐로는 채움(버튼·핀·선택 표시) 전용. 밝은 배경 위 글자색으로 쓰지 않는다
+         - 카드 안에 카드 금지. 목록은 박스가 아니라 구분선 행이다
+         - 지도 위에 띄우는 것은 범례뿐
+         - 옐로(#FBC400)는 채움 전용. 밝은 배경 위 글자색으로 쓰지 않는다
+         - 카테고리 색은 '작은 점·인덱스'에만. 면으로 칠하지 않는다
        ───────────────────────────────────────────────────────────────── */
     :root{
-      /* 아카라라이프 브랜드 팔레트 */
       --bg:#F7F7F7; --paper:#FFFFFF; --ink:#382D18; --ink2:#5E625F; --muted:#8B8E8A;
-      --line:#D9D9D1; --line2:#C6C6BC;
-      --accent:#FBC400; --accent-soft:#FFF7DE; --on-accent:#382D18;
-      --beige:#BFA97C; --charcoal:#382D18;
-      --r:8px; --hdr:60px;
+      --line:#E3E3DF; --line2:#D9D9D1;
+      --accent:#FBC400; --accent-soft:#FFF8E2; --on-accent:#382D18;
+      --beige:#BFA97C; --dark:#26231D; --dark2:#332F27;
+      --hdr:58px;
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%}
@@ -47,174 +46,180 @@
     button{font-family:inherit;cursor:pointer}
 
     /* ─── 헤더 ─── */
-    header{position:sticky;top:0;z-index:50;height:var(--hdr);background:rgba(247,247,247,.94);backdrop-filter:blur(10px);color:var(--ink);display:flex;align-items:center;gap:18px;padding:0 20px;border-bottom:1px solid var(--line)}
+    header{position:sticky;top:0;z-index:50;height:var(--hdr);background:rgba(247,247,247,.92);backdrop-filter:blur(12px);display:flex;align-items:center;gap:16px;padding:0 20px;border-bottom:1px solid var(--line)}
     .logo{display:flex;align-items:center;gap:10px;min-width:0}
-    .logo .mark{width:28px;height:28px;border-radius:6px;background:var(--accent);display:grid;place-items:center;color:var(--on-accent);font-weight:900;font-size:13px;flex:none}
-    .logo .brand{font-size:9.5px;font-weight:800;letter-spacing:.2em;color:var(--muted)}
-    .logo h1{margin:0;font-size:15px;font-weight:800;letter-spacing:-0.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .logo h1 span{color:var(--muted);font-weight:500;margin-left:8px;font-size:12px;letter-spacing:0}
-    .hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-    .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:6px;padding:8px 13px;font-size:12.5px;font-weight:700;transition:.15s;white-space:nowrap;line-height:1.2}
+    .logo .mark{width:26px;height:26px;border-radius:5px;background:var(--accent);display:grid;place-items:center;color:var(--on-accent);font-weight:900;font-size:12.5px;flex:none}
+    .logo .brand{font-size:9px;font-weight:800;letter-spacing:.22em;color:var(--muted)}
+    .logo h1{margin:0;font-size:14.5px;font-weight:700;letter-spacing:-0.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .logo h1 span{color:var(--muted);font-weight:400;margin-left:8px;font-size:11.5px;letter-spacing:0}
+    .hdr-right{margin-left:auto;display:flex;align-items:center;gap:7px}
+    .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:4px;padding:8px 13px;font-size:12px;font-weight:600;transition:.16s;white-space:nowrap;line-height:1.2}
     .btn:hover{border-color:var(--ink)}
-    .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
     .btn.primary:hover{filter:brightness(1.05)}
-    .btn.dark{background:var(--charcoal);border-color:var(--charcoal);color:#fff}
-    .btn.sm{padding:6px 10px;font-size:11.5px}
+    .btn.dark{background:var(--dark);border-color:var(--dark);color:#fff}
+    .btn.ghost{background:transparent;border-color:rgba(255,255,255,.28);color:#fff}
+    .btn.ghost:hover{border-color:#fff}
+    .btn.sm{padding:7px 11px;font-size:11.5px}
 
     /* ─── 레이아웃 ─── */
-    .wrap{display:grid;grid-template-columns:420px 1fr;height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr))}
-    aside{border-right:1px solid var(--line);background:var(--bg);display:flex;flex-direction:column;min-height:0;min-width:0}   /* min-width:0 — 가로 스크롤 칩 행이 그리드 칼럼을 밀어내지 않게 */
+    .wrap{display:grid;grid-template-columns:400px 1fr;height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr))}
+    aside{background:var(--paper);display:flex;flex-direction:column;min-height:0;min-width:0;border-right:1px solid var(--line)}
 
-    /* ─── 사이드바 머리 : 표지가 아니라 '도구의 손잡이'. 최소한으로 ─── */
-    .side-top{padding:18px 20px 0;background:var(--bg)}
-    .eyebrow{font-size:9.5px;font-weight:800;letter-spacing:.2em;color:var(--ink);text-transform:uppercase;display:flex;align-items:center;gap:7px}
-    .eyebrow:before{content:'';width:14px;height:3px;border-radius:2px;background:var(--accent);flex:none}
-    .side-top h2{margin:7px 0 4px;font-size:25px;font-weight:800;letter-spacing:-0.035em;line-height:1.14}
-    .side-top p{margin:0;font-size:12.5px;color:var(--muted)}
+    /* ─── 다크 헤로 : 사진 없이 타이포만으로 무게를 준다 ─── */
+    .hero{background:var(--dark);color:#fff;padding:26px 24px 22px;position:relative;overflow:hidden}
+    .hero:after{content:'';position:absolute;right:-70px;top:-90px;width:230px;height:230px;border-radius:50%;background:var(--accent);opacity:.10;filter:blur(40px)}
+    .hero .eyebrow{font-size:9px;font-weight:800;letter-spacing:.24em;color:var(--accent);display:flex;align-items:center;gap:8px;text-transform:uppercase}
+    .hero .eyebrow:before{content:'';width:16px;height:2px;background:var(--accent);flex:none}
+    .hero h2{margin:12px 0 0;font-size:28px;font-weight:800;letter-spacing:-0.045em;line-height:1.1}
+    .hero .en{margin-top:7px;font-size:9.5px;font-weight:700;letter-spacing:.22em;color:#8E887A;text-transform:uppercase}
+    .hero p{margin:13px 0 0;font-size:12.5px;color:#B9B3A6;line-height:1.55;max-width:31em}
+    .hero .meta{display:flex;align-items:baseline;gap:7px;margin-top:16px;padding-top:15px;border-top:1px solid rgba(255,255,255,.12)}
+    .hero .meta .big{font-size:19px;font-weight:800;letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
+    .hero .meta .lb{font-size:11px;color:#8E887A}
+    .hero .cta{display:flex;gap:7px;margin-top:14px;flex-wrap:wrap}
 
-    .search{margin-top:14px;position:relative}
-    .search input{width:100%;border:1px solid var(--line2);background:#fff;border-radius:6px;padding:10px 12px 10px 34px;font-size:13px;font-family:inherit;outline:none;color:var(--ink)}
+    /* ─── 도구 : 검색 + 번호 매긴 카테고리 네비 ─── */
+    .tools{padding:16px 24px 0;border-bottom:1px solid var(--line);background:var(--paper)}
+    .search{position:relative}
+    .search input{width:100%;border:0;border-bottom:1px solid var(--line2);background:transparent;padding:9px 4px 9px 26px;font-size:13px;font-family:inherit;outline:none;color:var(--ink);transition:border-color .16s}
     .search input::placeholder{color:var(--muted)}
     .search input:focus{border-color:var(--ink)}
-    .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted)}
+    .search svg{position:absolute;left:3px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted)}
+    /* 알약(pill)을 버리고 번호 매긴 텍스트 네비로 — 잡지 목차의 인덱스처럼 */
+    .cats{display:flex;gap:0;margin:0 -24px;padding:10px 24px 0;overflow-x:auto;scrollbar-width:none}
+    .cats::-webkit-scrollbar{display:none}
+    .cat{flex:none;border:0;background:none;padding:9px 0 11px;margin-right:18px;display:flex;align-items:baseline;gap:6px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;border-bottom:2px solid transparent;transition:color .16s,border-color .16s}
+    .cat .no{font-size:9.5px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--line2);transition:color .16s}
+    .cat .n{font-size:10px;font-variant-numeric:tabular-nums;color:var(--line2)}
+    .cat:hover{color:var(--ink)}
+    .cat:hover .no{color:var(--beige)}
+    .cat.on{color:var(--ink);font-weight:800;border-bottom-color:var(--accent)}
+    .cat.on .no,.cat.on .n{color:var(--ink)}
 
-    /* 필터 : 두 줄로 흩어지지 않게 한 줄 가로 스크롤 */
-    .chips{display:flex;gap:6px;min-width:0;margin:12px -20px 0;padding:0 20px 12px;overflow-x:auto;scrollbar-width:none}
-    .chips::-webkit-scrollbar{display:none}
-    .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#fff;border-radius:999px;padding:6px 11px 6px 9px;font-size:12px;font-weight:700;color:var(--ink2);transition:.15s;white-space:nowrap;flex:none}
-    .chip .dot{width:8px;height:8px;border-radius:50%;background:var(--c,var(--beige));flex:none}
-    .chip .n{font-size:10.5px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
-    .chip.on{background:var(--charcoal);border-color:var(--charcoal);color:#fff}
-    .chip.on .n{color:#D9D9D1}
+    /* 카테고리 설명 — 한 줄, 박스 없이 */
+    .catdesc{padding:11px 24px;font-size:12px;color:var(--ink2);background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:flex-start;line-height:1.5}
+    .catdesc .dot{width:7px;height:7px;border-radius:50%;flex:none;margin-top:6px}
 
-    /* ─── 쇼룸 밴드 : 목록 속 '카드 안 카드'였던 것을 한 줄 밴드로 꺼냈다 ─── */
-    .hqband{background:var(--charcoal);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;border-top:1px solid var(--line)}
-    .hqband .k{font-size:9px;font-weight:800;letter-spacing:.2em;color:var(--accent)}
-    .hqband b{display:block;font-size:15px;font-weight:800;letter-spacing:-0.02em;margin-top:2px}
-    .hqband p{margin:2px 0 0;font-size:11.5px;color:#C9C4BA;line-height:1.45}
-    .hqband .go{margin-left:auto;flex:none}
-
-    /* ─── 목록 : 박스가 아니라 행. 구분선 하나로 나눈다 ─── */
-    .list{overflow:auto;flex:1;min-height:0;padding:0 0 40px;scroll-behavior:smooth;background:var(--paper);border-top:1px solid var(--line)}
-    .sec{display:flex;align-items:center;gap:8px;padding:18px 20px 7px;background:var(--paper);position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
-    .sec .dot{width:7px;height:7px;border-radius:50%;flex:none}
-    .sec b{font-size:12px;font-weight:800;letter-spacing:-0.01em}
-    .sec em{font-style:normal;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    /* ─── 목록 ─── */
+    .list{overflow:auto;flex:1;min-height:0;padding:0 0 32px;scroll-behavior:smooth;background:var(--paper)}
+    /* 섹션 = 잡지의 '챕터' */
+    .sec{display:flex;align-items:flex-start;gap:12px;padding:26px 24px 12px;background:var(--paper);border-bottom:1px solid var(--ink)}
+    .sec .no{font-size:11px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--c);padding-top:3px}
+    .sec b{display:block;font-size:14px;font-weight:800;letter-spacing:-0.03em;line-height:1.3}
+    .sec em{display:block;font-style:normal;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:3px}
     .sec i{flex:1}
-    .sec .cnt{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .sec .cnt{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
 
-    .spot{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:15px 20px;border-bottom:1px solid var(--line);cursor:pointer;position:relative;transition:background .14s}
-    .spot:before{content:'';position:absolute;left:0;top:-1px;bottom:-1px;width:3px;background:var(--accent);opacity:0;transition:opacity .14s}
-    .spot:hover{background:var(--bg)}
+    .spot{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:16px 24px;border-bottom:1px solid var(--line);cursor:pointer;position:relative;transition:background .16s}
+    .spot:before{content:'';position:absolute;left:0;top:-1px;bottom:-1px;width:2px;background:var(--accent);opacity:0;transition:opacity .16s}
+    .spot:hover{background:#FAFAF9}
     .spot.active{background:var(--accent-soft)}
     .spot.active:before{opacity:1}
-    .spot .num{font-size:13px;font-weight:800;letter-spacing:.02em;color:var(--line2);font-variant-numeric:tabular-nums;line-height:1.5;transition:color .14s}
+    .spot .num{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--line2);font-variant-numeric:tabular-nums;line-height:1.7;transition:color .16s}
     .spot:hover .num{color:var(--beige)}
     .spot.active .num{color:var(--ink)}
-    .spot .en{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
-    .spot .nm{font-size:15.5px;font-weight:800;letter-spacing:-0.025em;line-height:1.3;margin:2px 0 5px}
-    .tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--muted);margin-left:7px;vertical-align:1px;white-space:nowrap}
-    .tag:before{content:'';width:6px;height:6px;border-radius:50%;background:var(--c);flex:none}
-    .spot .ds{font-size:12.5px;color:var(--ink2);line-height:1.55}
-    .spot .chk{font-size:10.5px;color:var(--ink);font-weight:700;margin-left:6px}
-    /* 주소 줄 : 버튼 두 개를 없애고 한 줄로 합쳤다. 클릭=지도 이동은 행 전체가 받는다 */
-    .spot .ad{font-size:11.5px;color:var(--muted);margin-top:7px;display:flex;gap:6px;align-items:baseline}
+    .spot .en{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .spot .nm{font-size:15px;font-weight:700;letter-spacing:-0.03em;line-height:1.35;margin:3px 0 6px;transition:color .16s}
+    .spot:hover .nm{color:#000}
+    .spot .chk{font-size:10.5px;color:var(--ink2);font-weight:600;margin-left:6px}
+    .spot .ds{font-size:12.5px;color:var(--ink2);line-height:1.6}
+    .spot .ad{font-size:11px;color:var(--muted);margin-top:8px;display:flex;gap:8px;align-items:baseline}
     .spot .ad span{flex:1;min-width:0}
-    .spot .ad .nv{color:var(--ink2);font-weight:700;border-bottom:1px solid var(--line2);white-space:nowrap;flex:none}
-    .spot .ad .nv:hover{border-color:var(--ink);color:var(--ink)}
-
-    .empty{margin:0;padding:44px 24px;text-align:center;font-size:13px;color:var(--muted);line-height:1.7}
+    .spot .ad .nv{color:var(--muted);font-weight:600;white-space:nowrap;flex:none;border-bottom:1px solid var(--line2);transition:.16s}
+    .spot .ad .nv:hover{color:var(--ink);border-color:var(--ink)}
+    .empty{margin:0;padding:52px 24px;text-align:center;font-size:12.5px;color:var(--muted);line-height:1.8}
     .empty b{color:var(--ink)}
 
-    /* 카테고리 설명 — 박스를 없애고 섹션 아래 한 줄로 */
-    .catdesc{padding:10px 20px;font-size:12px;color:var(--ink2);background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:flex-start;line-height:1.5}
-    .catdesc .dot{width:8px;height:8px;border-radius:50%;flex:none;margin-top:5px}
+    /* ─── 푸터 : 영업 정보 정리 ─── */
+    .foot{padding:26px 24px 16px;background:var(--dark);color:#fff}
+    .foot .ft{font-size:9px;font-weight:800;letter-spacing:.24em;color:var(--accent)}
+    .foot b{display:block;font-size:14px;font-weight:800;letter-spacing:-0.03em;margin:6px 0 3px}
+    .foot p{margin:0;font-size:11.5px;color:#B9B3A6;line-height:1.6}
+    .foot .fa{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 13px}
+    .foot .fn{font-size:10.5px;color:#8E887A;line-height:1.6;padding-top:13px;border-top:1px solid rgba(255,255,255,.12)}
 
-    /* 목록 맨 아래 */
-    .foot{padding:22px 20px 10px;background:var(--bg);border-top:1px solid var(--line)}
-    .foot .ft{font-size:9px;font-weight:800;letter-spacing:.2em;color:var(--ink)}
-    .foot b{display:block;font-size:13.5px;font-weight:800;letter-spacing:-0.02em;margin:3px 0 2px}
-    .foot p{margin:0;font-size:11.5px;color:var(--muted);line-height:1.5}
-    .foot .fa{display:flex;gap:6px;flex-wrap:wrap;margin:11px 0}
-    .foot .fn{font-size:10.5px;line-height:1.55}
-
-    /* ─── 지도 : 이 페이지의 본체. 위에 띄우는 것은 범례뿐 ─── */
-    .mapwrap{position:relative;min-height:0;min-width:0}
-    #map{position:absolute;inset:0;background:#EFEEE9}
-    .leaflet-tile-pane{filter:grayscale(1) contrast(1.02) brightness(1.04) sepia(.14)}
-    .leaflet-container{font-family:inherit}
-    .leaflet-control-attribution{font-size:9.5px;background:rgba(255,255,255,.75)}
-    .pin{width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:10.5px;font-weight:800;font-variant-numeric:tabular-nums;border:2px solid #fff;box-shadow:0 3px 10px -2px rgba(0,0,0,.45);transition:transform .15s}
-    .pin.on{transform:scale(1.28);border-color:var(--ink);box-shadow:0 5px 14px -3px rgba(0,0,0,.5)}
-    .hqpin{position:relative;width:48px;height:48px}
-    .hqpin .core{position:absolute;inset:0;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:9px;font-weight:900;letter-spacing:.02em;border:3px solid #fff;box-shadow:0 0 0 7px rgba(251,196,0,.30),0 8px 20px -6px rgba(0,0,0,.5);animation:pulse 2.2s ease-out infinite}
-    .hqpin .wc{position:absolute;left:50%;top:-22px;transform:translateX(-50%);background:var(--charcoal);color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.04em;padding:3px 8px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 12px -4px rgba(0,0,0,.5)}
-    .hqpin .wc:after{content:'';position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--charcoal);border-bottom:0}
-    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(251,196,0,.58),0 8px 20px -6px rgba(0,0,0,.5)}100%{box-shadow:0 0 0 22px rgba(251,196,0,0),0 8px 20px -6px rgba(0,0,0,.5)}}
-    .leaflet-popup-content-wrapper{border-radius:var(--r);box-shadow:0 14px 40px -18px rgba(0,0,0,.45);padding:2px}
-    .leaflet-popup-content{margin:12px 14px;font-size:12.5px;line-height:1.5;min-width:230px}
-    .pp .en{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
-    .pp .nm{font-size:15px;font-weight:800;letter-spacing:-0.025em;margin:2px 0 4px}
+    /* ─── 지도 ─── */
+    .mapwrap{position:relative;min-height:0;min-width:0;background:#F2F2F0}
+    #map{position:absolute;inset:0;background:#F2F2F0}
+    /* OSM 기본 타일을 Positron풍 무채색으로 — 채도를 죽이고 밝기를 올려 글자·도로를 눌러준다 */
+    .leaflet-tile-pane{filter:grayscale(1) brightness(1.07) contrast(.86) opacity(.9)}
+    .leaflet-container{font-family:inherit;background:#F2F2F0}
+    .leaflet-control-attribution{font-size:9px;background:rgba(255,255,255,.7);color:var(--muted)}
+    .leaflet-control-attribution a{color:var(--ink2)}
+    .leaflet-bar a{border-radius:0;color:var(--ink);border-bottom-color:var(--line)}
+    .pin{width:25px;height:25px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;border:2px solid #fff;box-shadow:0 2px 8px -1px rgba(0,0,0,.35);transition:transform .16s}
+    .pin.on{transform:scale(1.3);border-color:var(--ink);box-shadow:0 5px 14px -3px rgba(0,0,0,.45)}
+    .hqpin{position:relative;width:46px;height:46px}
+    .hqpin .core{position:absolute;inset:0;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:8.5px;font-weight:900;letter-spacing:.04em;border:3px solid #fff;box-shadow:0 0 0 6px rgba(251,196,0,.26),0 6px 18px -5px rgba(0,0,0,.45);animation:pulse 2.4s ease-out infinite}
+    .hqpin .wc{position:absolute;left:50%;top:-21px;transform:translateX(-50%);background:var(--dark);color:#fff;font-size:9px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:3px;white-space:nowrap;box-shadow:0 4px 12px -4px rgba(0,0,0,.45)}
+    .hqpin .wc:after{content:'';position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--dark);border-bottom:0}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(251,196,0,.5),0 6px 18px -5px rgba(0,0,0,.45)}100%{box-shadow:0 0 0 20px rgba(251,196,0,0),0 6px 18px -5px rgba(0,0,0,.45)}}
+    .leaflet-popup-content-wrapper{border-radius:4px;box-shadow:0 16px 44px -20px rgba(0,0,0,.4);padding:2px}
+    .leaflet-popup-content{margin:13px 15px;font-size:12.5px;line-height:1.55;min-width:226px}
+    .pp .en{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .pp .nm{font-size:15px;font-weight:700;letter-spacing:-0.03em;margin:3px 0 5px}
     .pp .ds{color:var(--ink2)}
-    .pp .ad{color:var(--muted);font-size:11.5px;margin-top:4px}
-    .pp .acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-    .badge-hl{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.06em;background:var(--accent);color:var(--on-accent);padding:3px 8px;border-radius:5px;margin-bottom:5px}
-    .legend{position:absolute;left:12px;bottom:12px;z-index:400;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:6px;padding:9px 12px;font-size:11px;display:grid;gap:4px}
-    .legend div{display:flex;align-items:center;gap:7px;color:var(--ink2);font-weight:600}
-    .legend .dot{width:8px;height:8px;border-radius:50%}
+    .pp .ad{color:var(--muted);font-size:11px;margin-top:5px}
+    .pp .acts{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap}
+    .badge-hl{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.04em;background:var(--accent);color:var(--on-accent);padding:3px 7px;border-radius:3px;margin-bottom:5px}
+    .legend{position:absolute;left:14px;bottom:14px;z-index:400;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border-radius:4px;padding:11px 13px;font-size:10.5px;display:grid;gap:5px;box-shadow:0 4px 16px -8px rgba(0,0,0,.3)}
+    .legend div{display:flex;align-items:center;gap:8px;color:var(--ink2);font-weight:600}
+    .legend .dot{width:7px;height:7px;border-radius:50%}
 
     /* 모바일 전용 지도↔목록 전환 */
-    .mtoggle{display:none;position:sticky;top:var(--hdr);z-index:30;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 14px}
-    .mtoggle .seg{display:flex;flex:1;gap:3px;background:#fff;border:1px solid var(--line2);border-radius:999px;padding:3px}
-    .mtoggle button{flex:1;border:0;background:none;border-radius:999px;padding:7px 0;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:-0.01em;transition:.15s}
-    .mtoggle button.on{background:var(--charcoal);color:#fff}
+    .mtoggle{display:none;position:sticky;top:var(--hdr);z-index:30;background:var(--paper);border-bottom:1px solid var(--line);padding:0 16px}
+    .mtoggle .seg{display:flex;flex:1;gap:22px}
+    .mtoggle button{border:0;background:none;padding:12px 0;font-size:12.5px;font-weight:600;color:var(--muted);letter-spacing:-0.01em;border-bottom:2px solid transparent;transition:.16s}
+    .mtoggle button.on{color:var(--ink);font-weight:800;border-bottom-color:var(--accent)}
 
     /* ─── 쿠폰 모달 ─── */
-    .ov{position:fixed;inset:0;background:rgba(56,45,24,.55);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center;padding:18px}
+    .ov{position:fixed;inset:0;background:rgba(38,35,29,.6);backdrop-filter:blur(5px);z-index:1000;display:none;align-items:center;justify-content:center;padding:18px}
     .ov.show{display:flex}
-    .md{background:var(--paper);border-radius:12px;width:min(620px,100%);max-height:calc(100vh - 36px);overflow:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);position:relative}
-    .md .hd{background:var(--charcoal);color:#fff;padding:26px 26px 22px;border-radius:12px 12px 0 0;position:relative;overflow:hidden}
-    .md .hd:before{content:'';position:absolute;right:-40px;top:-60px;width:200px;height:200px;border-radius:50%;background:var(--accent);opacity:.25;filter:blur(30px)}
-    .md .hd .ey{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--accent)}
-    .md .hd h2{margin:7px 0 6px;font-size:24px;font-weight:800;letter-spacing:-0.035em;line-height:1.2}
-    .md .hd p{margin:0;font-size:13px;color:#D9D9D1}
-    .md .x{position:absolute;right:14px;top:12px;background:rgba(255,255,255,.12);border:0;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;line-height:1;z-index:1}
-    .md .bd{padding:18px 26px 26px}
-    .bn{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line)}
+    .md{background:var(--paper);border-radius:6px;width:min(600px,100%);max-height:calc(100vh - 36px);overflow:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);position:relative}
+    .md .hd{background:var(--dark);color:#fff;padding:28px 28px 24px;position:relative;overflow:hidden}
+    .md .hd:before{content:'';position:absolute;right:-40px;top:-70px;width:210px;height:210px;border-radius:50%;background:var(--accent);opacity:.18;filter:blur(36px)}
+    .md .hd .ey{font-size:9px;font-weight:800;letter-spacing:.24em;color:var(--accent);text-transform:uppercase}
+    .md .hd h2{margin:11px 0 7px;font-size:25px;font-weight:800;letter-spacing:-0.045em;line-height:1.15}
+    .md .hd p{margin:0;font-size:12.5px;color:#B9B3A6}
+    .md .x{position:absolute;right:14px;top:12px;background:rgba(255,255,255,.12);border:0;color:#fff;width:30px;height:30px;border-radius:50%;font-size:17px;line-height:1;z-index:1}
+    .md .bd{padding:20px 28px 28px}
+    .bn{display:grid;grid-template-columns:40px 1fr;gap:13px;align-items:start;padding:15px 0;border-bottom:1px solid var(--line)}
     .bn:last-of-type{border-bottom:0}
-    .bn .ic{width:44px;height:44px;border-radius:6px;background:var(--accent-soft);display:grid;place-items:center;font-size:20px}
-    .bn .k{font-size:9.5px;font-weight:800;letter-spacing:.16em;color:var(--ink)}
-    .bn b{font-size:15px;letter-spacing:-0.02em;display:block;margin-top:1px}
-    .bn p{margin:3px 0 0;font-size:12.5px;color:var(--ink2)}
-    .bn .tg{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;color:var(--on-accent);background:var(--accent-soft);border-radius:5px;padding:2px 7px;margin-top:6px}
-    .coupon{margin-top:14px;border:1.5px dashed var(--line2);border-radius:var(--r);padding:18px;background:var(--bg);text-align:center}
-    .coupon .eyebrow{justify-content:center}
-    .coupon .code{font-size:30px;font-weight:900;letter-spacing:.12em;margin:6px 0 2px;color:var(--charcoal)}
-    .coupon .meta{font-size:11.5px;color:var(--muted)}
-    .coupon #qr{display:inline-block;margin:12px auto 4px;padding:8px;background:#fff;border-radius:6px;border:1px solid var(--line)}
+    .bn .ic{width:40px;height:40px;border-radius:4px;background:var(--accent-soft);display:grid;place-items:center;font-size:19px}
+    .bn .k{font-size:9px;font-weight:800;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+    .bn b{font-size:14.5px;font-weight:700;letter-spacing:-0.03em;display:block;margin-top:3px}
+    .bn p{margin:4px 0 0;font-size:12.5px;color:var(--ink2)}
+    .bn .tg{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.04em;color:var(--on-accent);background:var(--accent-soft);border-radius:3px;padding:3px 7px;margin-top:7px}
+    .coupon{margin-top:16px;border:1px solid var(--line2);border-radius:4px;padding:20px;background:var(--bg);text-align:center}
+    .coupon .eyebrow{font-size:9px;font-weight:800;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+    .coupon .code{font-size:30px;font-weight:800;letter-spacing:.14em;margin:8px 0 3px;color:var(--ink)}
+    .coupon .meta{font-size:11px;color:var(--muted)}
+    .coupon #qr{display:inline-block;margin:13px auto 4px;padding:8px;background:#fff;border-radius:4px;border:1px solid var(--line)}
     .coupon #qr img,.coupon #qr canvas{display:block}
-    .coupon .how{font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.5}
-    .fine{font-size:10.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+    .coupon .how{font-size:12px;color:var(--ink2);margin-top:9px;line-height:1.6}
+    .fine{font-size:10.5px;color:var(--muted);margin-top:16px;line-height:1.6}
 
     /* ─── 모바일 ─── */
     @media (max-width:860px){
-      :root{--hdr:54px}
+      :root{--hdr:52px}
       header{padding:0 14px;gap:10px}
-      .logo h1{font-size:14px}
+      .logo h1{font-size:13.5px}
       .logo h1 span,.logo .brand{display:none}
       .hdr-right .btn.dark{display:none}
-      .wrap{grid-template-columns:1fr;grid-template-rows:40vh minmax(0,1fr);height:auto;min-height:calc(100dvh - var(--hdr))}
+      .wrap{grid-template-columns:1fr;grid-template-rows:38vh minmax(0,1fr);height:auto;min-height:calc(100dvh - var(--hdr))}
       .wrap.list-only{grid-template-rows:0 minmax(0,1fr)}
       .wrap.list-only .mapwrap{display:none}
       aside{order:2;border-right:0}
       .mapwrap{order:1}
-      .side-top{padding:14px 16px 0}
-      .side-top h2{font-size:21px}
-      .chips{margin:11px -16px 0;padding:0 16px 11px}
-      .hqband{padding:13px 16px}
-      .sec{padding:16px 16px 7px;position:static}
-      .spot{padding:14px 16px}
-      .catdesc,.foot{padding-left:16px;padding-right:16px}
+      .hero{padding:22px 18px 20px}
+      .hero h2{font-size:23px}
+      .hero p{font-size:12px}
+      .tools{padding:14px 18px 0}
+      .cats{margin:0 -18px;padding:10px 18px 0}
+      .sec{padding:22px 18px 11px}
+      .spot{padding:15px 18px}
+      .catdesc,.foot{padding-left:18px;padding-right:18px}
       .list{overflow:visible}
       .legend{display:none}
       .mtoggle{display:flex}
@@ -244,24 +249,24 @@
           <button id="mtList" onclick="setMobileView('list')">목록 · 검색</button>
         </div>
       </div>
-      <div class="side-top">
-        <div class="eyebrow" id="tagline">쇼룸 투어 필수 지도 · 학동 인테리어 발품 길잡이</div>
+      <!-- 다크 헤로 : 사진 없이 타이포만으로 무게를 준다. 쇼룸 CTA도 여기로 합쳤다 -->
+      <div class="hero">
+        <div class="eyebrow">AQARA LIFE · SHOWROOM GUIDE</div>
         <h2 id="ttl">학동 스마트 인테리어 MAP</h2>
+        <div class="en" id="heroSub2">Hakdong Interior Showroom Map</div>
         <p id="sub">학동역 ~ 도산대로 · 발품 파는 분들을 위한 인테리어 쇼룸 가이드</p>
+        <div class="meta"><span class="big" id="cntAll">–</span><span class="lb">곳의 쇼룸 · 아카라라이프 쇼룸 학동역 도보 3분</span></div>
+        <div class="cta">
+          <button class="btn primary sm" onclick="openBenefit()">🎟️ 웰컴 쿠폰 받기</button>
+          <button class="btn ghost sm" onclick="flyHQ()">아카라라이프 쇼룸 →</button>
+        </div>
+      </div>
+      <div class="tools">
         <div class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           <input id="q" type="search" placeholder="브랜드 · 타일 · 주방 · 소파 … 검색" oninput="paint()" />
         </div>
-        <div class="chips" id="chips"></div>
-      </div>
-      <!-- 쇼룸 밴드 : 예전엔 목록 안의 '카드 속 카드'였다. 꺼내서 고정 밴드로 둔다 -->
-      <div class="hqband" id="hqband" onclick="flyHQ()">
-        <div>
-          <div class="k">AQARA LIFE SHOWROOM</div>
-          <b>아카라라이프 쇼룸 · 학동역 3분</b>
-          <p id="hqbandSub">웰컴 음료 · 우리 집 도면 배선 상담 · 스마트 센서 증정</p>
-        </div>
-        <button class="btn primary sm go" onclick="event.stopPropagation();openBenefit()">🎟️ 웰컴 쿠폰</button>
+        <nav class="cats" id="chips"></nav>
       </div>
       <div class="catdesc" id="catdesc"></div>
       <div class="list" id="list"></div>
@@ -338,7 +343,6 @@
     document.getElementById('ttl').textContent=DATA.title||'학동 스마트 인테리어 MAP';
     document.title=(DATA.title||'학동 스마트 인테리어 MAP')+' · AQARA LIFE';
     if(DATA.subtitle) document.getElementById('sub').textContent=DATA.subtitle;
-    if(DATA.tagline) document.getElementById('tagline').textContent=DATA.tagline;
     document.getElementById('legend').innerHTML=CATS.map(c=>`<div><span class="dot" style="background:${c.color}"></span>${esc(c.ko)}</div>`).join('');
     document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map(b=>`<div class="bn"><div class="ic">${b.icon||'🎁'}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}</div></div>`).join('');
     const hq=DATA.spots.find(s=>s.hl)||DATA.spots.find(s=>s.cat==='iot')||{};
@@ -355,6 +359,8 @@
     const hq=DATA.hq||{lat:37.5145,lng:127.031};
     MAP=L.map('map',{zoomControl:false,scrollWheelZoom:true,attributionControl:true}).setView([hq.lat+0.005,hq.lng+0.009],15);
     L.control.zoom({position:'topright'}).addTo(MAP);
+    // 타일은 OSM 기본(키 불필요). CARTO Positron은 2026년부터 API 키를 요구해 쓸 수 없다.
+    // 대신 CSS 필터로 무채색·저채도로 눌러 Positron에 가까운 톤을 만든다(.leaflet-tile-pane)
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(MAP);
     MAP.on('popupclose',()=>{ setActive(null,false); });
   }
@@ -405,17 +411,19 @@
     const vs=visible(); if(vs.length&&FILTER!=='all'){ const b=L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])); MAP.fitBounds(b.pad(0.25),{maxZoom:16}); } }
   function paint(){
     const all=numbered();
-    document.getElementById('chips').innerHTML=[`<button class="chip ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="dot" style="--c:var(--ink)"></span>전체 <span class="n">${all.length}</span></button>`]
-      .concat(CATS.map(c=>`<button class="chip ${FILTER===c.id?'on':''}" style="--c:${c.color}" onclick="setFilter('${c.id}')"><span class="dot"></span>${esc(c.ko)} <span class="n">${all.filter(s=>s.cat===c.id).length}</span></button>`)).join('');
+    document.getElementById('cntAll').textContent=all.length;
+    // 카테고리 네비 — 알약 대신 01·02… 번호를 단 텍스트 인덱스
+    document.getElementById('chips').innerHTML=[`<button class="cat ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="no">ALL</span>전체<span class="n">${all.length}</span></button>`]
+      .concat(CATS.map((c,i)=>`<button class="cat ${FILTER===c.id?'on':''}" style="--c:${c.color}" onclick="setFilter('${c.id}')"><span class="no">${no2(i+1)}</span>${esc(c.ko)}<span class="n">${all.filter(s=>s.cat===c.id).length}</span></button>`)).join('');
     const cd=document.getElementById('catdesc'), cc=CATS.find(c=>c.id===FILTER);
     cd.style.display=cc?'flex':'none'; if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b> · ${esc(cc.desc||'')}</span>`;
     const vs=visible(), box=document.getElementById('list'); let html='';
-    CATS.forEach(c=>{ const g=vs.filter(s=>s.cat===c.id&&!s.hl); if(!g.length) return;   // 쇼룸(hl)은 위 고정 밴드에 있으니 목록에서 뺀다
-      html+=`<div class="sec"><span class="dot" style="background:${c.color}"></span><b>${esc(c.ko)}</b><em>${esc(c.en)}</em><i></i><span class="cnt">${g.length}곳</span></div>`;
+    CATS.forEach((c,ci)=>{ const g=vs.filter(s=>s.cat===c.id&&!s.hl); if(!g.length) return;   // 쇼룸(hl)은 헤로의 CTA로 올렸으니 목록에서 뺀다
+      html+=`<div class="sec" style="--c:${c.color}"><span class="no">${no2(ci+1)}</span><div><b>${esc(c.ko)}</b><em>${esc(c.en)}</em></div><i></i><span class="cnt">${g.length}곳</span></div>`;
       html+=g.map(s=>`<div class="spot ${ACTIVE===s.id?'active':''}" style="--c:${c.color}" data-id="${s.id}" onclick="focusSpot('${s.id}',true)">
         <div class="num">${no2(s._no)}</div>
         <div><span class="en">${esc(s.en||'')}</span>
-          <div class="nm">${esc(s.n)}<span class="tag">${esc(c.ko)}</span>${s.check?`<span class="chk">· ${esc(s.check)}</span>`:''}</div>
+          <div class="nm">${esc(s.n)}${s.check?`<span class="chk">· ${esc(s.check)}</span>`:''}</div>
           <div class="ds">${esc(s.d||'')}</div>
           <div class="ad"><span>${esc(s.a||'')}</span><a class="nv" href="${naverUrl(s)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">네이버 ↗</a></div>
         </div></div>`).join('');
@@ -423,7 +431,7 @@
     // 쇼룸만 걸린 분류(스마트홈·제어)는 목록이 비는 게 정상이다 — 위 밴드를 가리킨다
     const onlyHQ=!html&&vs.some(s=>s.hl);
     box.innerHTML=html?html+footHtml()
-      :onlyHQ?`<p class="empty">이 분류에는 <b>아카라라이프 쇼룸</b>만 있어요.<br>바로 위 배너에서 확인하실 수 있습니다.</p>`+footHtml()
+      :onlyHQ?`<p class="empty">이 분류에는 <b>아카라라이프 쇼룸</b>만 있어요.<br>위 <b>아카라라이프 쇼룸 →</b> 버튼으로 지도에서 확인하세요.</p>`+footHtml()
       :'<p class="empty">검색 결과가 없어요.<br>다른 단어로 찾아보세요.</p>';
   }
   function footHtml(){ const hq=(DATA.spots||[]).find(s=>s.hl)||{};
