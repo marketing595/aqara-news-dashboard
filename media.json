@@ -24,11 +24,18 @@
   {
    "name": "전사 제작물",
    "pinned": true,
-   "desc": "브로셔·전제품 리플렛·대표 제품·시나리오 리플렛",
+   "desc": "인테리어 브로셔·전제품 리플렛(최신)",
    "folderId": "1E2TtwSfeYSOfsXe2JhroakJj10k3GarL",
    "items": [
     {"title": "아카라라이프 인테리어 브로셔", "kind": "pdf", "id": "1I7-RnKD8Xkf5Wh4zOER9d2l2a--pnoQL"},
-    {"title": "전제품 리플렛 (260605)", "kind": "pdf", "id": "17ozJEQ9NewYnB2H_1UAJHhGNxrNm3m8S"},
+    {"title": "전제품 리플렛 (260605)", "kind": "pdf", "id": "17ozJEQ9NewYnB2H_1UAJHhGNxrNm3m8S"}
+   ]
+  },
+  {
+   "name": "과거 제작물",
+   "desc": "이전 버전 브로셔·리플렛(참고용)",
+   "folderId": "1E2TtwSfeYSOfsXe2JhroakJj10k3GarL",
+   "items": [
     {"title": "아카라라이프 Full Brochure (241017)", "kind": "pdf", "id": "1uv8ZwBcpPk2M-b1B2NiHnYAdBTOW-_5E", "size": "16.3MB"},
     {"title": "대표 제품 리플렛 (240809)", "kind": "pdf", "id": "1bzFB4iwOgeiHeXj4PMBjAGt3lEOpfk3u", "size": "9.6MB"},
     {"title": "시나리오 리플렛 (240809)", "kind": "pdf", "id": "1dRK0IojK7_l8lQPMsG86BVVuEu8MlWO3", "size": "8.2MB"}
