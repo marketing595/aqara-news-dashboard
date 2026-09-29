@@ -7494,7 +7494,7 @@
       const m=/^tasks\/(p_[^/]+)\/w\/([0-9-]+)\/(done|plan|issue|check)\/([^/]+)\/t$/.exec(path||'');
       if(!m) return;
       const id=m[4]; if(!TK_NEW.has(id)) return;
-      const t=String(v==null?'':v).trim(); if(!t) return;
+      const t=wkPlain(String(v==null?'':v)).trim(); if(!t) return;
       TK_NEW.delete(id);
       const who=tkNameOf(m[1]), by=TK_MENAME||'';
       tkChatSend('🗒 *'+who+'님의 업무가 추가됐습니다*'
@@ -7575,7 +7575,32 @@
       b.querySelectorAll('[data-tpath]').forEach(el=>{ if(el===act) return;
         const v=tkGet(el.dataset.tpath), val=(v==null?'':String(v));
         if(el.tagName==='INPUT'){ if(el.value!==val) el.value=val; }
+        else if(el.dataset.rich){ const html=wkRich(val); if(el.innerHTML!==html) el.innerHTML=html; }   // 서식 유지
         else if(el.innerText!==val) el.innerText=val; }); }
+
+    /* ===== TASK 서식 — 주간보고와 같은 도구(허용 태그·색 팔레트 공유) ===== */
+    let TK_LAST_RICH=null;
+    function tkRichFocus(el){ if(el&&el.dataset&&el.dataset.rich) TK_LAST_RICH=el; }
+    function tkFmt(cmd,val){
+      const el=TK_LAST_RICH, b=tkBody();
+      if(!el||!b||!b.contains(el)){ alert('먼저 서식을 넣을 칸을 클릭해 글자를 선택해 주세요.'); return; }
+      el.focus();
+      try{ document.execCommand('styleWithCSS',false,true); }catch(e){}
+      try{ document.execCommand(cmd,false,val||null); }catch(e){}
+      tkText(el);
+    }
+    function tkFmtClear(){ tkFmt('removeFormat'); tkFmt('hiliteColor','transparent'); }
+    function tkPaintToolbar(){
+      const cb=document.getElementById('tkColorBtns'), mb=document.getElementById('tkMarkBtns');
+      if(cb && !cb.dataset.done){ cb.dataset.done='1';
+        cb.innerHTML=WK_COLORS.map(c=>'<button onclick="tkFmt(\'foreColor\',\''+c[1]+'\')" title="'+c[0]+'" '
+          +'class="w-6 h-6 rounded border border-[#E6E6E3] bg-white font-extrabold text-[12px]" style="color:'+c[1]+'">가</button>').join(''); }
+      if(mb && !mb.dataset.done){ mb.dataset.done='1';
+        mb.innerHTML=WK_MARKS.map(c=>'<button onclick="tkFmt(\'hiliteColor\',\''+c[1]+'\')" title="'+c[0]+' 형광펜" '
+          +'class="w-6 h-6 rounded border border-[#E6E6E3]" style="background:'+c[1]+'"></button>').join('')
+          +'<button onclick="tkFmt(\'hiliteColor\',\'transparent\')" title="형광펜 지우기" '
+          +'class="w-6 h-6 rounded border border-[#E6E6E3] bg-white text-[11px] text-slate-400">✕</button>'; }
+    }
 
     function tkRoot(k){ return k==='projects' ? (typeof wkProjects!=='undefined'?wkProjects:{}) : TK_ALL; }
     function tkGet(path){ const p=path.split('/'); let o=tkRoot(p[0]);
@@ -7591,7 +7616,8 @@
       const done=()=>{ tkInflight=Math.max(0,tkInflight-1); tkSaveState(); };
       if(p&&p.then) p.then(()=>{ tkErr=false; done(); }, e=>{ tkErr=true; console.warn('저장 실패(권한?):',e&&e.message); done(); }); else done(); }
     function tkText(el){ const path=el.dataset.tpath; if(!path) return;
-      tkLocalSet(path,(el.tagName==='INPUT'?el.value:el.innerText));
+      tkLocalSet(path,(el.tagName==='INPUT') ? el.value
+        : (el.dataset.rich ? wkSanitize(el.innerHTML) : el.innerText));   // 서식 칸은 허용 태그만 남겨 그대로 저장
       clearTimeout(tkDeb[path]); tkDeb[path]=setTimeout(()=>tkFlush(path),300); tkSaveState(); }
     function tkFlush(path){ clearTimeout(tkDeb[path]); delete tkDeb[path]; const v=tkGet(path);
       if(tkUse()){ const u={}; u[path]=(v==null?'':v); tkTrack(WK_DB.ref().update(u)); } else tkPersist();
@@ -7667,11 +7693,11 @@
       TK_FIELDS.forEach(f=>{ const rows=tkRows(pk,f.k).filter(r=>r.t.trim());
         t+='■ '+f.label+'\n'; if(!rows.length) t+='  -\n';
         rows.forEach(r=>{ const p=projs.filter(x=>x.id===r.project)[0];
-          t+='  - '+(r.c?'[완료] ':'')+r.t+(p?(' ('+p.name+')'):'')+'\n';
-          tkCmts(r.cm).forEach(c=>{ if(c.t.trim()) t+='    💬 '+c.t+'\n'; }); }); });
+          t+='  - '+(r.c?'[완료] ':'')+wkPlain(r.t)+(p?(' ('+p.name+')'):'')+'\n';
+          tkCmts(r.cm).forEach(c=>{ if(c.t.trim()) t+='    💬 '+wkPlain(c.t)+'\n'; }); }); });
       const chk=tkRows(pk,'check').filter(r=>r.t.trim());
-      if(chk.length){ t+='■ 확인 필요 사항\n'; chk.forEach(r=>{ t+='  - '+r.t+(r.w?(' (확인: '+r.w+')'):'')+'\n'; }); }
-      const memo=(tkNode(pk)||{}).memo||''; if(memo.trim()) t+='■ 메모\n'+memo+'\n';
+      if(chk.length){ t+='■ 확인 필요 사항\n'; chk.forEach(r=>{ t+='  - '+wkPlain(r.t)+(r.w?(' (확인: '+r.w+')'):'')+'\n'; }); }
+      const memo=wkPlain((tkNode(pk)||{}).memo||''); if(memo.trim()) t+='■ 메모\n'+memo+'\n';
       return t; }
     function tkCopy(){
       const t=(TK_MODE==='board')
@@ -7763,14 +7789,14 @@
       const cms=tkCmts(it.cm);
       const cmHtml=cms.map(c=>`<div class="flex items-start gap-1.5 pl-[26px] py-0.5">
             <span class="text-[#2563EB] text-[11px] leading-5 shrink-0">💬</span>
-            <div class="flex-1 text-[11.5px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${wp}/cm/${c.id}/t" oninput="tkText(this)">${esc(c.t)}</div>
+            <div class="flex-1 text-[11.5px] leading-5 text-[#2563EB] bg-[#EFF6FF] border border-[#DBEAFE] rounded px-2 py-0.5 focus:outline-none focus:border-[#2563EB]" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-rich="1" data-tpath="${wp}/cm/${c.id}/t" oninput="tkText(this)" onfocus="tkRichFocus(this)" onmouseup="tkRichFocus(this)">${wkRich(c.t)}</div>
             <button onclick="tkDelCmt('${pk}','${fk}','${it.id}','${c.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0" title="메모 삭제">✕</button>
           </div>`).join('');
       const others=TK_PEOPLE.filter(p=>p.n!==name);
       return `<div class="group border-b border-[#F2EFE9] py-0.5">
           <div class="flex items-start gap-1.5 py-1">
             <input type="checkbox" ${it.c?'checked':''} onchange="tkToggle('${pk}','${fk}','${it.id}',this.checked)" class="mt-1 w-3.5 h-3.5 accent-[#5E7350] shrink-0" title="완료 표시" />
-            <div class="flex-1 text-[12.5px] leading-snug min-h-[18px] focus:outline-none ${it.c?'text-slate-400 line-through':'text-slate-700'}" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${wp}/t" oninput="tkText(this)">${esc(it.t)}</div>
+            <div class="flex-1 text-[12.5px] leading-snug min-h-[18px] focus:outline-none ${it.c?'text-slate-400 line-through':'text-slate-700'}" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-rich="1" data-tpath="${wp}/t" oninput="tkText(this)" onfocus="tkRichFocus(this)" onmouseup="tkRichFocus(this)">${wkRich(it.t)}</div>
             ${dot}
             ${compact?'':`<select onchange="tkSetProject('${pk}','${fk}','${it.id}',this)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5 shrink-0 max-w-[100px]" title="프로젝트">${tkProjOpts(it.project)}</select>`}
             <button onclick="tkDelRow('${pk}','${fk}','${it.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0 opacity-0 group-hover:opacity-100" title="삭제">✕</button>
@@ -7785,7 +7811,7 @@
     function tkCheckRowHtml(name,it,compact){ const pk=tkPKey(name), wp=tkBase(pk)+'/check/'+it.id;
       return `<div class="group border-b border-[#F2EFE9] flex items-start gap-1.5 py-1.5">
           <input type="checkbox" ${it.c?'checked':''} onchange="tkToggle('${pk}','check','${it.id}',this.checked)" class="mt-1 w-3.5 h-3.5 accent-[#5E7350] shrink-0" title="확인 완료" />
-          <div class="flex-1 text-[12.5px] leading-snug min-h-[18px] focus:outline-none ${it.c?'text-slate-400 line-through':'text-slate-700'}" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${wp}/t" oninput="tkText(this)">${esc(it.t)}</div>
+          <div class="flex-1 text-[12.5px] leading-snug min-h-[18px] focus:outline-none ${it.c?'text-slate-400 line-through':'text-slate-700'}" style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-rich="1" data-tpath="${wp}/t" oninput="tkText(this)" onfocus="tkRichFocus(this)" onmouseup="tkRichFocus(this)">${wkRich(it.t)}</div>
           <input value="${esc(it.w)}" data-tpath="${wp}/w" oninput="tkText(this)" placeholder="확인자" class="w-14 text-[11.5px] border border-[#E6E6E3] rounded px-1.5 py-0.5 shrink-0" title="확인해줄 사람" />
           <button onclick="tkDelRow('${pk}','check','${it.id}')" class="text-[11px] text-slate-300 hover:text-ared shrink-0 opacity-0 group-hover:opacity-100" title="삭제">✕</button>
         </div>`; }
@@ -7824,7 +7850,7 @@
         <div class="px-3 py-2.5">
           <p class="text-[11.5px] font-extrabold text-slate-500 mb-1">🗒 메모장</p>
           <div class="text-[12.5px] text-slate-700 leading-relaxed min-h-[70px] focus:outline-none border border-[#E6E6E3] rounded-lg px-2.5 py-1.5"
-               style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${tkBase(pk)}/memo" oninput="tkText(this)">${esc(memo)}</div>
+               style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-rich="1" data-tpath="${tkBase(pk)}/memo" oninput="tkText(this)" onfocus="tkRichFocus(this)" onmouseup="tkRichFocus(this)">${wkRich(memo)}</div>
         </div>
       </div>`; }
 
@@ -7886,6 +7912,23 @@
             <button onclick="tkToWeekly()" class="text-[13px] bg-[#7C5CFF] text-white px-3 py-1.5 rounded-lg font-semibold hover:brightness-110">주간보고로 보내기</button>
           </div>
         </div>
+        <!-- 서식 도구 — 글자를 드래그해서 고른 뒤 누르면 적용됩니다(주간보고와 동일) -->
+        <div id="tkToolbar" class="flex flex-wrap items-center gap-1 mt-3 pt-3 border-t border-[#F2EFE9]" onmousedown="event.preventDefault()">
+          <span class="text-[11px] font-bold text-slate-400 mr-1">서식</span>
+          <button onclick="tkFmt('bold')" title="굵게 (Ctrl+B)" class="w-7 h-7 rounded border border-[#E6E6E3] bg-white hover:bg-[#F1EFE9] text-[13px] font-extrabold">B</button>
+          <button onclick="tkFmt('italic')" title="기울임 (Ctrl+I)" class="w-7 h-7 rounded border border-[#E6E6E3] bg-white hover:bg-[#F1EFE9] text-[13px] italic font-serif">I</button>
+          <button onclick="tkFmt('underline')" title="밑줄 (Ctrl+U)" class="w-7 h-7 rounded border border-[#E6E6E3] bg-white hover:bg-[#F1EFE9] text-[13px] underline">U</button>
+          <button onclick="tkFmt('strikeThrough')" title="취소선" class="w-7 h-7 rounded border border-[#E6E6E3] bg-white hover:bg-[#F1EFE9] text-[13px] line-through">S</button>
+          <span class="w-px h-5 bg-[#E6E6E3] mx-1"></span>
+          <span class="text-[11px] text-slate-400">글자색</span>
+          <span id="tkColorBtns" class="flex items-center gap-1"></span>
+          <span class="w-px h-5 bg-[#E6E6E3] mx-1"></span>
+          <span class="text-[11px] text-slate-400">형광펜</span>
+          <span id="tkMarkBtns" class="flex items-center gap-1"></span>
+          <span class="w-px h-5 bg-[#E6E6E3] mx-1"></span>
+          <button onclick="tkFmtClear()" title="서식 지우기" class="h-7 px-2 rounded border border-[#E6E6E3] bg-white hover:bg-[#F1EFE9] text-[11.5px] font-semibold text-slate-500">서식 지우기</button>
+          <span class="text-[11px] text-slate-300 ml-1">글자를 드래그해 고른 뒤 누르세요</span>
+        </div>
         <div class="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-[#F2EFE9]">
           ${(()=>{ const m=TK_CHAT_MODES.filter(x=>x.k===tkChatMode())[0]||TK_CHAT_MODES[0], on=(m.k!=='off');
             return `<button onclick="tkChatCycle()" title="눌러서 방식 변경 — 하루 2번 요약 / 바로 알림 / 끔"
@@ -7910,7 +7953,7 @@
           </div>
         </div>
         <div class="text-[13px] text-slate-700 leading-relaxed min-h-[140px] border border-[#E6E6E3] rounded-lg px-3 py-2 focus:outline-none focus:border-ink"
-             style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-tpath="${tkSumPath()}" oninput="tkText(this)">${esc(tkSumText())}</div>
+             style="white-space:pre-wrap;overflow-wrap:anywhere" contenteditable="true" data-rich="1" data-tpath="${tkSumPath()}" oninput="tkText(this)" onfocus="tkRichFocus(this)" onmouseup="tkRichFocus(this)">${wkRich(tkSumText())}</div>
         <p class="text-[11px] text-slate-400 mt-1.5">${tkSumBusy?'AI가 정리하는 중입니다…':'적어둔 할 일만 가지고 정리합니다(없는 내용은 만들지 않음). 문장은 직접 고쳐도 팀에 그대로 공유됩니다.'}</p>
       </div>`:''}
 
@@ -7918,6 +7961,7 @@
         ? `<div class="grid grid-cols-1 lg:grid-cols-3 gap-3 items-start">${TK_PEOPLE.map(p=>tkColumn(p,true)).join('')}</div>`
         : `<div class="max-w-[760px]">${tkColumn(meP||TK_PEOPLE[0],false)}</div>`}
       <div class="h-8"></div>`;
+      tkPaintToolbar();
       tkSaveState();
     }
     function tkWhoPick(){ const v=prompt('내 이름 (강유선 / 정여진 / 홍수영)', TK_MENAME||''); if(v!=null) tkSetWho(v); }
@@ -9107,7 +9151,13 @@
     // 편집 중 커서 보호
     function wkBody(){ return document.getElementById('mktWeeklyBody'); }
     function wkFocused(){ const a=document.activeElement, b=wkBody(); return !!(a && b && b.contains(a) && (a.isContentEditable || a.tagName==='INPUT' || a.tagName==='TEXTAREA' || a.tagName==='SELECT')); }
-    function wkPreserveActive(){ const a=document.activeElement; if(a && a.dataset && a.dataset.path){ wkLocalSet(a.dataset.path, (a.tagName==='INPUT'?a.value:a.innerText)); } }
+    /* 편집 중인 칸의 최신 내용을 로컬에 보관한다.
+       ※ 서식 칸(data-rich)을 innerText로 담으면 굵게·색이 전부 날아간다 —
+          서버 응답이 올 때마다 이 함수가 돌기 때문에 방금 넣은 서식이 곧바로 풀렸다. */
+    function wkPreserveActive(){ const a=document.activeElement;
+      if(a && a.dataset && a.dataset.path){
+        wkLocalSet(a.dataset.path, (a.tagName==='INPUT') ? a.value
+          : (a.dataset.rich ? wkSanitize(a.innerHTML) : a.innerText)); } }
     function wkWireFocus(){ if(wkFocusWired) return; const b=wkBody(); if(!b) return; wkFocusWired=true;
       b.addEventListener('focusout', function(){ Object.keys(wkDeb).forEach(wkFlushPath); setTimeout(function(){ if(!wkFocused() && wkPendingSnap){ wkPendingSnap=false; renderMktWeekly(); } }, 80); });
       // 붙여넣기: 서식·폰트 제거하고 순수 텍스트로 삽입 → 필드 폰트(Pretendard)로 통일
