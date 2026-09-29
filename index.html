@@ -6074,7 +6074,7 @@
           return;
         }
         flush();
-        out+=`<section class="mb-7 ${c.pinned?'rounded-xl border border-[#F0E7C0] bg-[#FEFCF3] p-4':''}">
+        out+=`<section class="mb-7 rounded-xl border p-4 ${c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3] bg-white'}">
           <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
             <h3 class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)} <span class="text-xs font-normal text-slate-400 ml-1">${esc(c.desc||'')}</span></h3>
             <span class="flex items-center gap-2 shrink-0">
