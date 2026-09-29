@@ -7709,7 +7709,12 @@
        팀 보드에서 누르면 3명 전체를, [내 칸만]에서 누르면 내 것만 정리한다.
        Gemini(/api/ai-assist)로 문장을 다듬고, 실패하면 그냥 모아 쓴 원문을 넣는다.
        결과는 고칠 수 있고 팀에 공유 저장된다(팀=tasks/_sum/<주>, 개인=…/w/<주>/summary). */
-    let TK_SUM_OPEN=false, TK_SUM_HIDE=false, tkSumBusy=false;
+    let TK_SUM_OPEN=false, tkSumBusy=false;
+    /* 요약칸을 X로 닫은 상태는 기억해 둔다 — 예전에는 메모리에만 두어 새로고침하면 다시 열렸다.
+       주(週)별로 기억하므로, 다음 주에 새로 요약하면 다시 열린다. */
+    const TK_SUM_HIDE_KEY='aqaraTkSumHide';
+    function tkSumHidden(){ try{ return localStorage.getItem(TK_SUM_HIDE_KEY)===(TK_WEEK||''); }catch(e){ return false; } }
+    function tkSumSetHidden(v){ try{ if(v) localStorage.setItem(TK_SUM_HIDE_KEY,(TK_WEEK||'')); else localStorage.removeItem(TK_SUM_HIDE_KEY); }catch(e){} }
     function tkSumPath(){ return (TK_MODE==='board')
       ? ('tasks/_sum/'+TK_WEEK)
       : (tkBase(tkPKey(TK_MENAME||TK_PEOPLE[0].n))+'/summary'); }
@@ -7723,7 +7728,7 @@
       const raw=tkSumRaw();
       if(raw.replace(/[^가-힣A-Za-z0-9]/g,'').length<10){ alert('요약할 내용이 없습니다. 먼저 할 일을 적어 주세요.'); return; }
       if(tkSumText().trim() && !confirm('이미 있는 요약을 새로 만든 내용으로 바꿀까요?')) return;
-      tkSumBusy=true; TK_SUM_OPEN=true; TK_SUM_HIDE=false; tkPaint();
+      tkSumBusy=true; TK_SUM_OPEN=true; tkSumSetHidden(false); tkPaint();
       fetch('/api/ai-assist',{method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
           system:'너는 마케팅팀 주간보고를 정리하는 도우미다. 아래 업무 메모를 주간보고에 그대로 쓸 수 있게 다듬어라. '
@@ -7740,7 +7745,7 @@
     function tkSumCopy(){ const t=tkSumText(); if(!t.trim()){ alert('먼저 요약을 만들어 주세요.'); return; }
       if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(()=>alert('요약을 복사했습니다.'),()=>alert(t));
       else alert(t); }
-    function tkSumToggle(){ TK_SUM_HIDE=!TK_SUM_HIDE; TK_SUM_OPEN=!TK_SUM_HIDE; tkPaint(); }
+    function tkSumToggle(){ const h=!tkSumHidden(); tkSumSetHidden(h); TK_SUM_OPEN=!h; tkPaint(); }
     /* 요약을 주간보고의 'AI 요약' 칸에 붙여 넣는다(기존 내용은 지우지 않고 아래에 덧붙임) */
     function tkSumToWeekly(){
       const t=tkSumText().trim(); if(!t){ alert('먼저 요약을 만들어 주세요.'); return; }
@@ -7905,7 +7910,7 @@
             <span id="tkSave" class="text-[12px] mr-1"></span>
             <button id="tkSaveBtn" onclick="tkSaveNow()" class="text-[13px] text-white px-3 py-1.5 rounded-lg font-semibold" style="background:#16A34A">저장</button>
             <button onclick="tkCopy()" class="text-[13px] border border-[#E6E6E3] hover:bg-[#FAFAF9] px-3 py-1.5 rounded-lg font-semibold">텍스트 복사</button>
-            ${(tkSumText().trim()&&TK_SUM_HIDE)
+            ${(tkSumText().trim()&&tkSumHidden())
               ? `<button onclick="tkSumToggle()" class="text-[13px] font-bold px-3 py-1.5 rounded-lg bg-ink text-white hover:brightness-125">✨ 요약 보기</button>`
               : `<button onclick="tkSummarize()" ${tkSumBusy?'disabled':''} class="text-[13px] font-bold px-3 py-1.5 rounded-lg ${tkSumBusy?'bg-slate-200 text-slate-400':'bg-ink text-white hover:brightness-125'}"
                    title="적어둔 할 일을 주간보고 문장으로 다듬습니다">${tkSumBusy?'요약 중…':'✨ 요약하기'}</button>`}
@@ -7940,7 +7945,7 @@
         </div>
       </div>
 
-      ${(!TK_SUM_HIDE&&(TK_SUM_OPEN||tkSumText().trim()))?`
+      ${(!tkSumHidden()&&(TK_SUM_OPEN||tkSumText().trim()))?`
       <div class="card p-4 mb-4 border-l-4" style="border-left-color:#26282A">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
           <h4 class="font-bold text-ink">✨ 요약 <span class="text-[11px] font-normal text-slate-400">
