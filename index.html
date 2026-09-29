@@ -6043,10 +6043,28 @@
     function loadLibrary(){ fetch('media.json?_='+Date.now()).then(r=>r.json()).then(d=>{ LIBRARY=d&&d.categories?d:{categories:[]}; renderLibrary(); }).catch(()=>{ LIBRARY={categories:[]}; renderLibrary(); }); }
     function libIcon(k){ return k==='pdf'?'📄':k==='video'?'🎬':k==='image'?'🖼️':k==='ppt'?'📊':k==='folder'?'📁':'📎'; }
     function libItemUrl(it){ return it.kind==='folder'?('https://drive.google.com/drive/folders/'+it.id):('https://drive.google.com/file/d/'+it.id+'/view'); }
-    function libCard(it){
-      const url=libItemUrl(it), isFolder=it.kind==='folder';
-      const thumb = it.kind==='image' ? `<img src="https://drive.google.com/thumbnail?id=${esc(it.id)}&sz=w200" loading="lazy" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='<span class=\\'text-2xl\\'>🖼️</span>'"/>` : `<span class="text-2xl">${libIcon(it.kind)}</span>`;
-      return `<a href="${url}" target="_blank" rel="noopener" title="${esc(it.title)}${it.size?(' · '+esc(it.size)):''}" class="flex flex-col items-center text-center p-1.5 rounded-lg hover:bg-brand/5 transition"><div class="w-14 h-14 rounded-lg bg-[#F4F1EA] border border-[#ECE9E1] flex items-center justify-center overflow-hidden mb-1">${thumb}</div><div class="text-[11px] text-ink leading-tight line-clamp-2 w-full">${esc(it.title)}</div></a>`;
+    function libKindLabel(k){ return k==='pdf'?'PDF':k==='video'?'VIDEO':k==='image'?'IMAGE':k==='ppt'?'PPT':k==='folder'?'FOLDER':'FILE'; }
+    // 자산 한 줄 — 얇은 구분선 · 왼쪽 썸네일 · 오른쪽 화살표(호버 시에만 포인트 컬러)
+    function libRow(it){
+      const url=libItemUrl(it);
+      const thumb = it.kind==='image'
+        ? `<img src="https://drive.google.com/thumbnail?id=${esc(it.id)}&sz=w120" loading="lazy" class="w-full h-full object-cover" onerror="this.parentNode.innerHTML='<span class=\\'text-[15px]\\'>🖼️</span>'"/>`
+        : `<span class="text-[15px]">${libIcon(it.kind)}</span>`;
+      return `<a href="${url}" target="_blank" rel="noopener" title="${esc(it.title)}" class="group flex items-center gap-3.5 px-4 sm:px-5 py-2.5 border-b border-[#F1F1EE] last:border-b-0 hover:bg-[#FAFAF8] transition">
+        <span class="w-8 h-8 rounded-lg bg-[#F4F1EA] border border-[#ECE9E1] flex items-center justify-center overflow-hidden shrink-0">${thumb}</span>
+        <span class="min-w-0 flex-1 text-[13.5px] font-semibold text-ink leading-snug truncate group-hover:text-brand-ink transition">${esc(it.title)}</span>
+        <span class="text-[11px] text-muted tracking-tight shrink-0">${libKindLabel(it.kind)}${it.size?(' · '+esc(it.size)):''}</span>
+        <span class="w-4 text-right text-[13px] text-[#C9C9C4] group-hover:text-brand-ink group-hover:translate-x-0.5 transition shrink-0">↗</span>
+      </a>`;
+    }
+    // 카테고리 이름 옆 영문 병기 · 고정 배지 (카탈로그 톤)
+    function libMeta(c, count){
+      return `<div class="flex items-center gap-2 flex-wrap">
+        <h3 class="text-[15px] font-extrabold text-ink tracking-tight">${esc(c.name)}</h3>
+        ${c.en?`<span class="text-[11px] text-muted tracking-tight">${esc(c.en)}</span>`:''}
+        ${c.pinned?'<span class="text-[10px] font-bold text-brand-ink bg-[#FFFBEA] border border-[#F0E7C0] rounded px-1.5 py-[1px] leading-[1.5]">고정</span>':''}
+        ${count!=null?`<span class="text-[11px] text-muted">· ${count}개</span>`:''}
+      </div>`;
     }
     // 외부 공유 — 로그인 없이 열리는 /media.html 주소를 복사(카테고리명을 주면 그 카테고리만)
     function libShare(cat){
@@ -6068,22 +6086,32 @@
         const folderUrl='https://drive.google.com/drive/folders/'+esc(c.folderId);
         if(!items.length){
           if(!marked){ out+=FOLDER_ROW_MARK; marked=true; }
-          // 폴더 전용 카테고리 → 컴팩트 블록(한 줄에 최대 3개)
-          buf.push(`<div class="relative rounded-xl border ${c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3] bg-white'} hover:border-brand transition">
-            <a href="${folderUrl}" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 p-4"><div><div class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)}</div><div class="text-[11px] text-slate-400 mt-0.5">${esc(c.desc||'')}</div><div class="text-[11px] text-ink mt-1 font-medium">드라이브에서 다운로드 ↗</div></div><span class="text-xl shrink-0">📁</span></a>
-            <button onclick="libShare('${esc(c.name).replace(/'/g,"\\'")}')" title="이 카테고리만 담긴 외부 공유 링크 복사" class="absolute top-2 right-2 text-[11px] border border-[#E6E6E3] bg-white/90 hover:bg-white rounded-lg px-1.5 py-0.5">🔗</button>
+          // 폴더 전용 카테고리 → 컴팩트 카드(한 줄에 최대 3개)
+          buf.push(`<div class="group relative rounded-2xl border ${c.pinned?'border-[#EADFB4]':'border-[#E6E6E3]'} bg-white shadow-card hover:border-[#C9C9C4] hover:shadow-cardhover transition">
+            <a href="${folderUrl}" target="_blank" rel="noopener" class="flex flex-col h-full p-5">
+              <span class="block pr-7">${libMeta(c, null)}</span>
+              ${c.desc?`<span class="block mt-2 text-[12px] text-muted leading-snug">${esc(c.desc)}</span>`:''}
+              <span class="mt-auto pt-4 flex items-center justify-between gap-2">
+                <span class="text-[12px] font-semibold text-muted group-hover:text-brand-ink transition">드라이브에서 다운로드</span>
+                <span class="text-[13px] text-[#C9C9C4] group-hover:text-brand-ink group-hover:translate-x-0.5 transition">↗</span>
+              </span>
+            </a>
+            <button onclick="libShare('${esc(c.name).replace(/'/g,"\\'")}')" title="이 카테고리만 담긴 외부 공유 링크 복사" class="absolute top-3 right-3 text-[11px] text-muted hover:text-ink border border-transparent hover:border-[#E6E6E3] bg-white/80 rounded-lg px-1.5 py-0.5 transition">🔗</button>
           </div>`);
           return;
         }
-        out+=`<section class="mb-7 rounded-xl border p-4 ${c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3] bg-white'}">
-          <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
-            <h3 class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)} <span class="text-xs font-normal text-slate-400 ml-1">${esc(c.desc||'')}</span></h3>
-            <span class="flex items-center gap-2 shrink-0">
-              <button onclick="libShare('${esc(c.name).replace(/'/g,"\\'")}')" title="이 카테고리만 담긴 외부 공유 링크 복사" class="text-[12px] border border-[#E6E6E3] bg-white hover:bg-slate-50 rounded-lg px-2 py-1 font-semibold whitespace-nowrap">🔗 공유</button>
-              <a href="${folderUrl}" target="_blank" rel="noopener" class="text-[13px] text-ink hover:underline font-medium whitespace-nowrap">드라이브 폴더 열기 ↗</a>
+        out+=`<section class="mb-5 rounded-2xl border ${c.pinned?'border-[#EADFB4]':'border-[#E6E6E3]'} bg-white shadow-card overflow-hidden">
+          <div class="flex items-end justify-between flex-wrap gap-3 px-4 sm:px-5 pt-4 pb-3 border-b border-[#EFEFEC]">
+            <div class="min-w-0">
+              ${libMeta(c, items.length)}
+              ${c.desc?`<p class="mt-1 text-[12px] text-muted leading-snug">${esc(c.desc)}</p>`:''}
+            </div>
+            <span class="flex items-center gap-1.5 shrink-0">
+              <button onclick="libShare('${esc(c.name).replace(/'/g,"\\'")}')" title="이 카테고리만 담긴 외부 공유 링크 복사" class="text-[11.5px] font-semibold text-muted hover:text-ink border border-[#E6E6E3] hover:border-[#D6D6D2] bg-white rounded-lg px-2 py-1 transition whitespace-nowrap">🔗 공유</button>
+              <a href="${folderUrl}" target="_blank" rel="noopener" class="text-[11.5px] font-semibold text-muted hover:text-ink border border-[#E6E6E3] hover:border-[#D6D6D2] bg-white rounded-lg px-2 py-1 transition whitespace-nowrap">드라이브 폴더 ↗</a>
             </span>
           </div>
-          <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-1">${items.map(libCard).join('')}</div>
+          <div>${items.map(libRow).join('')}</div>
         </section>`;
       });
       // 모아둔 폴더 블록을 한 줄로 만들어 표시해 둔 자리에 넣는다(제목에 $ 가 있어도 안전하게 함수로)

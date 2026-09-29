@@ -3,6 +3,7 @@
  "categories": [
   {
    "name": "아카라라이프 CI",
+   "en": "Brand Identity",
    "pinned": true,
    "desc": "로고·모티프·서체·컬러 가이드·이메일 서명·PPT 양식",
    "folderId": "1aslP5jrclus5HucZwNj3BX2rxIRIfre1",
@@ -16,6 +17,7 @@
   },
   {
    "name": "회사소개서 및 제안서",
+   "en": "Company Profile",
    "pinned": true,
    "desc": "회사소개서·제안서(대외 배포용)",
    "folderId": "1oZUfG6X2GfvvmhzBr3hgBjpAabcHPA42",
@@ -23,6 +25,7 @@
   },
   {
    "name": "전사 제작물",
+   "en": "Brand Collateral",
    "pinned": true,
    "desc": "인테리어 브로셔·전제품 리플렛(최신)",
    "folderId": "1E2TtwSfeYSOfsXe2JhroakJj10k3GarL",
@@ -33,6 +36,7 @@
   },
   {
    "name": "과거 제작물",
+   "en": "Archive",
    "desc": "이전 버전 브로셔·리플렛(참고용)",
    "folderId": "1E2TtwSfeYSOfsXe2JhroakJj10k3GarL",
    "items": [
@@ -43,12 +47,14 @@
   },
   {
    "name": "제품 이미지",
+   "en": "Product Images",
    "desc": "제품 누끼·상세 이미지",
    "folderId": "1nXB79hlvdb4IAFlnxxjLjyztLLnOm20x",
    "items": []
   },
   {
    "name": "브랜드 영상",
+   "en": "Brand Films",
    "desc": "제품 촬영 영상",
    "folderId": "1eojPyOi-bup549x8mdhamgxvCmsnDBS7",
    "items": []
