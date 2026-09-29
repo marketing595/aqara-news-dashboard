@@ -9165,8 +9165,21 @@
     function wkRich(v){ v=(v==null?'':String(v)); return wkHasTags(v)?wkSanitize(v):esc(v); }
     /* 텍스트 복사·AI 요약처럼 글자만 필요한 곳 */
     function wkPlain(v){ v=(v==null?'':String(v)); if(!wkHasTags(v)) return v;
-      const box=document.createElement('div'); box.innerHTML=wkSanitize(v);
-      return (box.innerText||box.textContent||'').replace(/ /g,' '); }
+      const html=wkSanitize(v);
+      const box=document.createElement('div');
+      if(document.body){
+        // 화면 밖에 잠깐 붙였다 뗀다 — 브라우저가 실제로 보는 줄바꿈을 그대로 가져오기 위해
+        box.style.cssText='position:absolute;left:-9999px;top:0;width:600px;white-space:pre-wrap';
+        box.innerHTML=html;
+        document.body.appendChild(box);
+        const t=(box.innerText||box.textContent||'');
+        document.body.removeChild(box);
+        // \ube48 \uc904(<div><br></div>)\uc774 \uc904\ubc14\uafc8 3\uac1c\ub85c \ub098\uc624\ub294 \uacbd\uc6b0\uac00 \uc788\uc5b4 \ud55c \uc904\ub85c \uc815\ub9ac
+        return t.replace(/\u00a0/g,' ').replace(/\n{3,}/g,'\n\n');
+      }
+      // 예비 경로 — 블록·줄바꿈 태그를 직접 줄바꿈으로 바꾼다
+      box.innerHTML=html.replace(/<br\s*\/?>/gi,'\n').replace(/<\/(div|p)>/gi,'\n').replace(/<(div|p)[^>]*>/gi,'');
+      return (box.textContent||'').replace(/\u00a0/g,' ').replace(/\n{3,}/g,'\n\n'); }
     /* 툴바 — 버튼을 눌러도 커서가 칸에서 빠지지 않게 mousedown에서 기본동작을 막는다 */
     let WK_LAST_RICH=null;
     function wkRichFocus(el){ if(el&&el.dataset&&el.dataset.rich) WK_LAST_RICH=el; }
