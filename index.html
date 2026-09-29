@@ -6060,20 +6060,21 @@
       const cf=csel?csel.value:'', q=(document.getElementById('libSearch').value||'').toLowerCase().trim();
       const ordered=cats.filter(c=>!cf||c.name===cf).slice().sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0));
       const grid=document.getElementById('libGrid');
-      let out='', buf=[];
-      const flush=()=>{ if(buf.length){ out+=`<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">${buf.join('')}</div>`; buf=[]; } };
+      // 폴더 전용 블록은 흩어놓지 않고 한 줄(최대 3개)로 모아, 처음 나온 자리에 끼워넣는다
+      let out='', buf=[], marked=false;
+      const FOLDER_ROW_MARK='<!--__FOLDER_ROW__-->';
       ordered.forEach(c=>{
         const items=(c.items||[]).filter(it=>!q||(it.title||'').toLowerCase().indexOf(q)>-1);
         const folderUrl='https://drive.google.com/drive/folders/'+esc(c.folderId);
         if(!items.length){
-          // 폴더 전용 카테고리 → 반폭 컴팩트 블록(두 개씩 한 줄)
+          if(!marked){ out+=FOLDER_ROW_MARK; marked=true; }
+          // 폴더 전용 카테고리 → 컴팩트 블록(한 줄에 최대 3개)
           buf.push(`<div class="relative rounded-xl border ${c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3] bg-white'} hover:border-brand transition">
             <a href="${folderUrl}" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 p-4"><div><div class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)}</div><div class="text-[11px] text-slate-400 mt-0.5">${esc(c.desc||'')}</div><div class="text-[11px] text-ink mt-1 font-medium">드라이브에서 다운로드 ↗</div></div><span class="text-xl shrink-0">📁</span></a>
             <button onclick="libShare('${esc(c.name).replace(/'/g,"\\'")}')" title="이 카테고리만 담긴 외부 공유 링크 복사" class="absolute top-2 right-2 text-[11px] border border-[#E6E6E3] bg-white/90 hover:bg-white rounded-lg px-1.5 py-0.5">🔗</button>
           </div>`);
           return;
         }
-        flush();
         out+=`<section class="mb-7 rounded-xl border p-4 ${c.pinned?'border-[#F0E7C0] bg-[#FEFCF3]':'border-[#E6E6E3] bg-white'}">
           <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
             <h3 class="font-extrabold text-ink">${c.pinned?'<span class="text-[#E0A500]">★ </span>':''}${esc(c.name)} <span class="text-xs font-normal text-slate-400 ml-1">${esc(c.desc||'')}</span></h3>
@@ -6085,7 +6086,9 @@
           <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-1">${items.map(libCard).join('')}</div>
         </section>`;
       });
-      flush();
+      // 모아둔 폴더 블록을 한 줄로 만들어 표시해 둔 자리에 넣는다(제목에 $ 가 있어도 안전하게 함수로)
+      const folderRow = buf.length ? `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">${buf.join('')}</div>` : '';
+      out = out.replace(FOLDER_ROW_MARK, () => folderRow);
       grid.innerHTML=out||'<div class="text-center py-16 text-slate-400"><div class="text-4xl mb-2">📁</div>등록된 카테고리가 없습니다.</div>';
     }
 
