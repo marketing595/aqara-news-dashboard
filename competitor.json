@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-29 23:52",
+ "generatedAt": "2026-09-30 23:58",
  "brands": [
   {
    "name": "아카라",
@@ -126,9 +126,9 @@
     "아카라 k100",
     "아카라 홈캠",
     "아카라카",
+    "아카라치",
     "아카라 스위치",
-    "명조 아카라이브",
-    "아카라 l100",
+    "메랜 아카라이브",
     "아카라이브 핫딜"
    ],
    "recent": [
@@ -352,7 +352,7 @@
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 as"
+    "헤이홈 프로"
    ],
    "recent": [
     {
@@ -451,98 +451,106 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 68962,
+   "total": 68980,
    "sentiment": {
-    "pos": 23,
+    "pos": 21,
     "neu": 34,
-    "neg": 3
+    "neg": 5
    },
    "keywords": [
     [
      "AI",
-     142
+     125
     ],
     [
      "구독",
-     87
-    ],
-    [
-     "신혼",
-     28
-    ],
-    [
-     "사전케어",
-     25
-    ],
-    [
-     "설치",
-     25
-    ],
-    [
-     "시니어",
-     24
+     56
     ],
     [
      "가전",
      24
     ],
     [
-     "세팅",
-     23
+     "슬립봇",
+     20
+    ],
+    [
+     "신혼",
+     19
+    ],
+    [
+     "사전케어",
+     18
+    ],
+    [
+     "텐마인즈",
+     18
     ],
     [
      "맞춤",
-     21
-    ],
-    [
-     "알림",
-     21
-    ],
-    [
-     "올인원",
-     19
-    ],
-    [
-     "요금제",
-     19
-    ],
-    [
-     "삼성전자가",
      18
-    ],
-    [
-     "케어",
-     18
-    ],
-    [
-     "고객",
-     16
     ],
     [
      "삼성전자는",
+     17
+    ],
+    [
+     "시니어",
+     17
+    ],
+    [
+     "설치",
+     17
+    ],
+    [
+     "알림",
      16
     ],
     [
-     "슬립봇",
+     "세팅",
+     16
+    ],
+    [
+     "SmartThings",
      15
     ],
     [
-     "새단장",
-     15
+     "삼성전자가",
+     14
+    ],
+    [
+     "올인원",
+     13
+    ],
+    [
+     "요금제",
+     13
+    ],
+    [
+     "고객",
+     13
     ]
    ],
    "posWords": [
-    [
-     "확대",
-     14
-    ],
     [
      "강화",
      11
     ],
     [
+     "확대",
+     10
+    ],
+    [
      "혁신",
-     6
+     4
+    ],
+    [
+     "프리미엄",
+     3
+    ],
+    [
+     "글로벌",
+     1
     ],
     [
      "계약",
@@ -557,104 +565,104 @@
     "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 연결",
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 업데이트",
-    "삼성 스마트싱스 스위치",
-    "삼성 스마트싱스 세탁기"
+    "삼성 스마트싱스 세탁기",
+    "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 에어컨"
    ],
    "recent": [
     {
-     "title": "삼성전자, 신혼·시니어 맞춤 AI 가전 구독 확대",
-     "source": "jndn.com",
-     "date": "2026-09-29",
-     "link": "http://www.jndn.com/article.php?aid=1790670129440411004"
+     "title": "배터리 790일 버티는데 아이폰 첫 지원…이 기업 위치추적기가 노린 것",
+     "source": "wikitree.co.kr",
+     "date": "2026-09-30",
+     "link": "https://www.wikitree.co.kr/articles/1163138"
     },
     {
-     "title": "“마감재만으론 계약 안 나와요”… 인테리어 디자이너들이 '스마트홈'...",
-     "source": "전자신문",
-     "date": "2026-09-29",
-     "link": "https://n.news.naver.com/mnews/article/030/0003470830?sid=101"
-    },
-    {
-     "title": "“잠들면 침실도 함께 움직인다”… 텐마인즈 AI 슬립봇, 삼성 스마트싱...",
-     "source": "segye.com",
-     "date": "2026-09-29",
-     "link": "https://n.news.naver.com/mnews/article/022/0004162699?sid=101"
-    },
-    {
-     "title": "텐마인즈, 'AI 슬립봇' 스마트싱스 인증 획득·연동 완료···11월 공식 ...",
-     "source": "enewstoday.co.kr",
-     "date": "2026-09-29",
-     "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2475192"
-    },
-    {
-     "title": "텐마인즈, 삼성 스마트싱스 연동 완료",
-     "source": "hansbiz.co.kr",
-     "date": "2026-09-29",
-     "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=868709"
-    },
-    {
-     "title": "'구독 2조' LG 텃밭 파고든 삼성… 가전 구독 판 커진다",
-     "source": "the-biz.co.kr",
-     "date": "2026-09-29",
-     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=728512"
-    },
-    {
-     "title": "\"잠들면 조명 끄고 에어컨 조절\"…텐마인즈 AI 베개, 삼성과 연결",
-     "source": "머니투데이",
-     "date": "2026-09-29",
-     "link": "https://n.news.naver.com/mnews/article/008/0005419706?sid=101"
-    },
-    {
-     "title": "삼성전자, AI 구독 새단장…신혼·시니어·기업까지 맞춤 케어",
-     "source": "banronbodo.com",
-     "date": "2026-09-29",
-     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33092"
-    },
-    {
-     "title": "[칼럼] 멈춰 선 냉장고, 먹통이 된 스마트폰. 그래도 펌웨어를 업데이트...",
+     "title": "[위클리 IT뷰] 7조 원 배상 위기의 애플과 개인정보 유출된 정부24",
      "source": "gamevu.co.kr",
-     "date": "2026-09-29",
-     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=61085"
+     "date": "2026-09-30",
+     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=61128"
     },
     {
-     "title": "텐마인즈, 'AI 슬립봇' 스마트싱스 인증 획득… 11월 출시",
-     "source": "지디넷",
-     "date": "2026-09-29",
-     "link": "https://n.news.naver.com/mnews/article/092/0002439061?sid=105"
+     "title": "[WIKI 현장] '스드메' 상담받고 삼성스토어 청담 가자…\"신혼가전은 역...",
+     "source": "wikileaks-kr.org",
+     "date": "2026-09-30",
+     "link": "http://www.wikileaks-kr.org/news/articleView.html?idxno=192650"
     },
     {
-     "title": "\"잠들면 침실도 함께 움직인다\"…텐마인즈 AI 슬립봇, 삼성 스마트싱스...",
-     "source": "ftoday.co.kr",
-     "date": "2026-09-29",
-     "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=366237"
+     "title": "삼성, 스마트싱스 '트래커' 서비스 10월 31일 종료…갤럭시 스마트태그...",
+     "source": "kbench.com",
+     "date": "2026-09-30",
+     "link": "https://kbench.com/?q=node/282216"
     },
     {
-     "title": "텐마인즈 AI 슬립봇, 삼성 스마트싱스 생태계 합류…11월 공식 출시",
-     "source": "biotimes.co.kr",
-     "date": "2026-09-29",
-     "link": "https://www.biotimes.co.kr/news/articleView.html?idxno=34765"
+     "title": "삼성전자, 'AI 생태계' 쥐고 '가격 경쟁력'은 높인다… 삼성 가전의 실속...",
+     "source": "thevaluenews.co.kr",
+     "date": "2026-09-30",
+     "link": "http://www.thevaluenews.co.kr/news/view.php?idx=201967"
     },
     {
-     "title": "텐마인즈, AI 슬립봇 스마트싱스 연동 완료… 11월 출시 예정",
-     "source": "lawissue.co.kr",
-     "date": "2026-09-29",
-     "link": "http://www.lawissue.co.kr/view.php?ud=202609290928045905204ead0791_12"
+     "title": "[가전 트렌드] 캐논코리아, 미니 포토프린터 '셀피' 포토앨범 증정 프로...",
+     "source": "ibabynews.com",
+     "date": "2026-09-30",
+     "link": "https://www.ibabynews.com/news/articleView.html?idxno=154859"
     },
     {
-     "title": "‘기록’에서 ‘제어’로…텐마인즈 AI 슬립봇, 삼성 스마트싱스 합류,...",
-     "source": "biz.heraldcorp.com",
-     "date": "2026-09-29",
-     "link": "https://n.news.naver.com/mnews/article/016/0002702899?sid=101"
+     "title": "‘동탄역 루센채’, 잔여호실 선착순 분양 중",
+     "source": "sentv.co.kr",
+     "date": "2026-09-30",
+     "link": "https://www.sentv.co.kr/article/view/sentv202609280200"
     },
     {
-     "title": "[민원평가 탑티어-삼성전자] 소비자 목소리에 전사적 협력 체제...선제적...",
-     "source": "consumernews.co.kr",
-     "date": "2026-09-29",
-     "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=764384"
+     "title": "텐마인즈 'AI 슬립봇', 삼성 스마트싱스 연동",
+     "source": "slist.kr",
+     "date": "2026-09-30",
+     "link": "https://www.slist.kr/news/articleView.html?idxno=769817"
+    },
+    {
+     "title": "텐마인즈, 잠들면 베개가 코골이에 반응하고 조명도 꺼진다…‘AI 슬립...",
+     "source": "venturesquare.net",
+     "date": "2026-09-30",
+     "link": "https://www.venturesquare.net/1116810/"
+    },
+    {
+     "title": "[더벨]삼성전자, 부진한 가전 사업 구원투수 ‘구독 사업’ 낙점",
+     "source": "thebell.co.kr",
+     "date": "2026-09-30",
+     "link": "https://www.thebell.co.kr/free/content/ArticleView.asp?key=202609281556413520107041"
+    },
+    {
+     "title": "[투데이온] 스마트싱스 '위치 추적' 10월 종료…스마트태그, '삼성 파인...",
+     "source": "the-today.com",
+     "date": "2026-09-30",
+     "link": "https://www.the-today.com/news/articleView.html?idxno=90967"
+    },
+    {
+     "title": "텐마인즈 AI 슬립봇, 스마트싱스 인증으로 삼성 생태계 합류",
+     "source": "서울경제",
+     "date": "2026-09-30",
+     "link": "https://n.news.naver.com/mnews/article/011/0004666623?sid=101"
+    },
+    {
+     "title": "‘프리미엄’ 쥔 中 로봇청소기 글로벌 독주…국내 가전업계 경종",
+     "source": "dnews.co.kr",
+     "date": "2026-09-30",
+     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202609291541382530780"
+    },
+    {
+     "title": "데님-타월류 등 소재따라 ‘고효율 건조’ 코스",
+     "source": "donga.com",
+     "date": "2026-09-30",
+     "link": "https://n.news.naver.com/mnews/article/020/0003751540?sid=101"
+    },
+    {
+     "title": "AI로 옷감과 오염도까지 분석해 ‘맞춤 세탁’",
+     "source": "donga.com",
+     "date": "2026-09-30",
+     "link": "https://n.news.naver.com/mnews/article/020/0003751539?sid=101"
     }
    ]
   },
@@ -662,20 +670,20 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77732,
+   "total": 77736,
    "sentiment": {
-    "pos": 14,
-    "neu": 44,
+    "pos": 15,
+    "neu": 43,
     "neg": 2
    },
    "keywords": [
     [
-     "ThinQ",
-     47
-    ],
-    [
      "LG전자",
      45
+    ],
+    [
+     "ThinQ",
+     43
     ],
     [
      "세탁기",
@@ -726,12 +734,12 @@
      15
     ],
     [
-     "아이워시",
+     "AI",
      14
     ],
     [
-     "서비스를",
-     13
+     "아이워시",
+     14
     ],
     [
      "고객",
@@ -748,8 +756,16 @@
      5
     ],
     [
+     "프리미엄",
+     3
+    ],
+    [
      "기대",
      2
+    ],
+    [
+     "글로벌",
+     1
     ],
     [
      "계약",
@@ -766,29 +782,51 @@
     [
      "최초",
      1
-    ],
-    [
-     "프리미엄",
-     1
-    ],
-    [
-     "1위",
-     1
     ]
    ],
    "related": [
-    "lg 씽큐",
     "lg 씽큐온",
     "lg 씽큐 세탁기",
+    "lg 씽큐 공유",
     "lg 씽큐 와이파이",
     "lg 씽큐 연결",
     "lg 씽큐 에어컨 연결",
-    "lg 씽큐 티비연결",
     "lg 씽큐 냉장고",
-    "lg 씽큐 공유",
+    "lg 씽큐 티비연결",
+    "lg 씽큐 에러",
     "lg 씽큐 스마트싱스"
    ],
    "recent": [
+    {
+     "title": "LG전자, '대화하는 가전' 어떻게 구현했나…'씽큐 온'에 대화형 AI 입혔...",
+     "source": "ajunews.com",
+     "date": "2026-09-30",
+     "link": "https://www.ajunews.com/view/20260930181925643"
+    },
+    {
+     "title": "[매지컬 MS] \"AI 음성 경쟁력은 잘 대화하는 것\"",
+     "source": "econovill.com",
+     "date": "2026-09-30",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=752324"
+    },
+    {
+     "title": "LG전자-MS, '사람처럼 대화하는' 씽큐온 만든다…끼어들기도 척척",
+     "source": "전자신문",
+     "date": "2026-09-30",
+     "link": "https://n.news.naver.com/mnews/article/030/0003471299?sid=105"
+    },
+    {
+     "title": "제품 대신 경험 판다⋯ 삼성·LG, 해외 B2B 쇼룸 경쟁 가속",
+     "source": "viva100.com",
+     "date": "2026-09-30",
+     "link": "https://www.viva100.com/article/20260929500566"
+    },
+    {
+     "title": "‘프리미엄’ 쥔 中 로봇청소기 글로벌 독주…국내 가전업계 경종",
+     "source": "dnews.co.kr",
+     "date": "2026-09-30",
+     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202609291541382530780"
+    },
     {
      "title": "“마감재만으론 계약 안 나와요”… 인테리어 디자이너들이 '스마트홈'...",
      "source": "전자신문",
@@ -848,36 +886,6 @@
      "source": "디지털타임스",
      "date": "2026-09-28",
      "link": "https://n.news.naver.com/mnews/article/029/0003050109?sid=101"
-    },
-    {
-     "title": "LG전자 ‘씽큐 클로’ 베타테스트 돌입…연내 출시",
-     "source": "biz.heraldcorp.com",
-     "date": "2026-09-28",
-     "link": "https://n.news.naver.com/mnews/article/016/0002702351?sid=101"
-    },
-    {
-     "title": "외부 AI에 문 여는 스마트홈…제미나이가 펫 돌보고, 챗GPT가 가전 제어",
-     "source": "전자신문",
-     "date": "2026-09-27",
-     "link": "https://n.news.naver.com/mnews/article/030/0003470094?sid=105"
-    },
-    {
-     "title": "LG전자, '전기 쿡탑 종주국' 美서 최고 평가",
-     "source": "nocutnews.co.kr",
-     "date": "2026-09-27",
-     "link": "https://n.news.naver.com/mnews/article/079/0004193064?sid=101"
-    },
-    {
-     "title": "주말 낮에 세탁기 돌렸더니...2달 간 전기요금 돌려줍니다 [자막뉴스]",
-     "source": "ytn.co.kr",
-     "date": "2026-09-27",
-     "link": "https://n.news.naver.com/mnews/article/052/0002411528?sid=101"
-    },
-    {
-     "title": "로청으로 한국 뚫더니…中 가전, 삼성·LG '안방' 넘본다",
-     "source": "newsway.co.kr",
-     "date": "2026-09-26",
-     "link": "https://www.newsway.co.kr/news/view?ud=2026092310324216753"
     }
    ]
   },
@@ -885,23 +893,19 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 75991,
+   "total": 76003,
    "sentiment": {
-    "pos": 15,
-    "neu": 38,
-    "neg": 7
+    "pos": 9,
+    "neu": 42,
+    "neg": 9
    },
    "keywords": [
     [
      "AI",
-     34
+     35
     ],
     [
      "화면",
-     10
-    ],
-    [
-     "글로벌",
      10
     ],
     [
@@ -909,11 +913,51 @@
      10
     ],
     [
-     "소드",
+     "기사의",
+     9
+    ],
+    [
+     "아래는",
      8
     ],
     [
-     "직접",
+     "기사를",
+     8
+    ],
+    [
+     "번역",
+     8
+    ],
+    [
+     "번역한",
+     8
+    ],
+    [
+     "전문",
+     8
+    ],
+    [
+     "입니다",
+     8
+    ],
+    [
+     "구글의",
+     7
+    ],
+    [
+     "구글코리아",
+     7
+    ],
+    [
+     "으로",
+     7
+    ],
+    [
+     "구글번역",
+     7
+    ],
+    [
+     "글로벌",
      7
     ],
     [
@@ -921,69 +965,21 @@
      7
     ],
     [
-     "아래는",
+     "직접",
      6
     ],
     [
-     "기사를",
-     6
-    ],
-    [
-     "번역",
-     6
-    ],
-    [
-     "번역한",
-     6
-    ],
-    [
-     "기사의",
-     6
-    ],
-    [
-     "구글코리아",
-     6
-    ],
-    [
-     "에이전트",
-     6
-    ],
-    [
-     "RPG",
-     6
-    ],
-    [
-     "스태프",
-     6
-    ],
-    [
-     "안드로이드",
-     5
-    ],
-    [
-     "으로",
+     "김범석",
      5
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     10
-    ],
-    [
-     "성장",
-     4
-    ],
-    [
-     "돌파",
-     3
+     7
     ],
     [
      "혁신",
-     2
-    ],
-    [
-     "확대",
      2
     ],
     [
@@ -991,11 +987,23 @@
      1
     ],
     [
+     "성장",
+     1
+    ],
+    [
      "투자",
      1
     ],
     [
+     "확대",
+     1
+    ],
+    [
      "공략",
+     1
+    ],
+    [
+     "돌파",
      1
     ]
    ],
@@ -1009,9 +1017,81 @@
     "구글 홈 연결",
     "구글 홈 어시스턴트",
     "구글 홈 미니 2세대",
-    "구글 홈 초기화"
+    "구글 홈버튼"
    ],
    "recent": [
+    {
+     "title": "배터리 790일 버티는데 아이폰 첫 지원…이 기업 위치추적기가 노린 것",
+     "source": "wikitree.co.kr",
+     "date": "2026-09-30",
+     "link": "https://www.wikitree.co.kr/articles/1163138"
+    },
+    {
+     "title": "이재용·최태원도 국감장 콜 받을까",
+     "source": "khan.co.kr",
+     "date": "2026-09-30",
+     "link": "https://n.news.naver.com/mnews/article/032/0003473540?sid=100"
+    },
+    {
+     "title": "이재용·최태원·김범석·박진영…‘국정감사 D-6’ 기업인 증인 누가 나...",
+     "source": "khan.co.kr",
+     "date": "2026-09-30",
+     "link": "https://n.news.naver.com/mnews/article/032/0003473457?sid=100"
+    },
+    {
+     "title": "\"일상 다시 잇는 대전의 장애인 자립\", 경남도가 배우러 왔다",
+     "source": "breaknews.com",
+     "date": "2026-09-30",
+     "link": "http://www.breaknews.com/1240154"
+    },
+    {
+     "title": "[가보니] 챗GPT에 피부 고민 물었더니 설화수가 뜬 이유는?",
+     "source": "연합뉴스",
+     "date": "2026-09-30",
+     "link": "https://n.news.naver.com/mnews/article/001/0016347372?sid=105"
+    },
+    {
+     "title": "차세대 무선 애플리케이션을 위한 초소형 프로토타이핑 플랫폼, nRF54L15 ...",
+     "source": "hellot.net",
+     "date": "2026-09-30",
+     "link": "https://www.hellot.net/news/article.html?no=115214"
+    },
+    {
+     "title": "캣츠아이, ‘2026 빅토리아 시크릿 패션쇼’ 출격..공연 아티스트 초청",
+     "source": "breaknews.com",
+     "date": "2026-09-30",
+     "link": "http://www.breaknews.com/1240035"
+    },
+    {
+     "title": "[똑똑한유통] 삼립 IR서 글로벌 확장 로드맵 발표·아워홈 영양사 공채...",
+     "source": "ekn.kr",
+     "date": "2026-09-30",
+     "link": "https://www.ekn.kr/web/view.php?key=20260930025000419"
+    },
+    {
+     "title": "[유통소식] 아이파크몰, 덕후 페스티벌 개최…\"덕업일치 선언\"",
+     "source": "4th.kr",
+     "date": "2026-09-30",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2118894"
+    },
+    {
+     "title": "현대차, 가정용 전기차 충전기 구독 서비스 ‘마이홈차저’ 선봬",
+     "source": "breaknews.com",
+     "date": "2026-09-30",
+     "link": "http://www.breaknews.com/1239913"
+    },
+    {
+     "title": "[오늘장특징주]마벨, 펩시코, 월마트",
+     "source": "이데일리",
+     "date": "2026-09-30",
+     "link": "https://n.news.naver.com/mnews/article/018/0006377332?sid=101"
+    },
+    {
+     "title": "미국증시 다우지수 '하락'...암젠·보잉 '활짝' vs 애플 '뚝'",
+     "source": "choicenews.co.kr",
+     "date": "2026-09-30",
+     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=171809"
+    },
     {
      "title": "원UI 9 업데이트했다면 먼저 써볼 기능 5가지... AI부터 멀미 방지까지",
      "source": "betanews.net",
@@ -1029,78 +1109,6 @@
      "source": "betanews.net",
      "date": "2026-09-29",
      "link": "https://www.betanews.net/article/view/beta202609290082"
-    },
-    {
-     "title": "안드로이드 11개 기능 개방…EU·구글, AI 권한 충돌",
-     "source": "tokenpost.kr",
-     "date": "2026-09-29",
-     "link": "https://www.tokenpost.kr/news/ai/415610"
-    },
-    {
-     "title": "KT, 마이케이티 앱 AI 중심 전면 개편",
-     "source": "breaknews.com",
-     "date": "2026-09-29",
-     "link": "http://www.breaknews.com/1239649"
-    },
-    {
-     "title": "10월 국정감사 앞두고 기업인 증인 채택 속속 : 정무위 단일종목 레버리...",
-     "source": "huffingtonpost.kr",
-     "date": "2026-09-29",
-     "link": "https://www.huffingtonpost.kr/article/260833"
-    },
-    {
-     "title": "작품 이름 몰라도 질문부터…구글, AI로 미술관 문턱 낮춘다",
-     "source": "coinreaders.com",
-     "date": "2026-09-29",
-     "link": "http://coinreaders.com/260605"
-    },
-    {
-     "title": "국감 기업인 줄소환 본격화…MBK 김병주·배민·강남언니 등 증인석 선다",
-     "source": "wemakenews.co.kr",
-     "date": "2026-09-28",
-     "link": "https://wemakenews.co.kr/news/view.php?no=26418"
-    },
-    {
-     "title": "전주월드컵경기장 '그린스타디움' 전국 2위",
-     "source": "breaknews.com",
-     "date": "2026-09-28",
-     "link": "http://www.breaknews.com/1239540"
-    },
-    {
-     "title": "“가을에 어디로 놀러 갈까?” 스마트폰 붙잡고 대화하는 사람 많다더니...",
-     "source": "biz.heraldcorp.com",
-     "date": "2026-09-28",
-     "link": "https://n.news.naver.com/mnews/article/016/0002702736?sid=105"
-    },
-    {
-     "title": "추석 지나 본격 가을 성수기… 광주신세계, '스트리트 패션 특집전' 개...",
-     "source": "breaknews.com",
-     "date": "2026-09-28",
-     "link": "http://www.breaknews.com/1239460"
-    },
-    {
-     "title": "[Interview] 폴 베지어 퓨라토스 글로벌 R&D 최고책임자 | “대량생산과...",
-     "source": "economychosun.com",
-     "date": "2026-09-28",
-     "link": "https://economychosun.com/site/data/html_dir/2026/09/20/2026092000017.html"
-    },
-    {
-     "title": "LG전자, 실행형 AI ‘씽큐 클로’ 베타테스트",
-     "source": "biz.heraldcorp.com",
-     "date": "2026-09-28",
-     "link": "https://n.news.naver.com/mnews/article/016/0002702504?sid=101"
-    },
-    {
-     "title": "챗봇 다음은 'AI 직원'… MS·오픈AI·구글·앤트로픽 붙었다",
-     "source": "the-biz.co.kr",
-     "date": "2026-09-28",
-     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=728409"
-    },
-    {
-     "title": "챗GPT vs 제미나이, 직접 써보니…음성 AI 승부 갈린 결정적 차이",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-09-28",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=703132"
     }
    ]
   }
