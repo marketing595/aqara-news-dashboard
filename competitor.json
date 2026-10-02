@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-02 00:29",
+ "generatedAt": "2026-10-02 23:46",
  "brands": [
   {
    "name": "아카라",
@@ -125,11 +125,11 @@
     "아카라",
     "아카라 k100",
     "아카라 홈캠",
-    "아카라카",
-    "아카라치",
     "아카라 스위치",
+    "아카라카",
     "명조 아카라이브",
-    "아카라이브 451"
+    "아카라이브 핫딜",
+    "메랜 아카라이브"
    ],
    "recent": [
     {
@@ -451,31 +451,31 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69039,
+   "total": 69044,
    "sentiment": {
-    "pos": 19,
-    "neu": 41,
+    "pos": 20,
+    "neu": 40,
     "neg": 0
    },
    "keywords": [
     [
      "갤럭시",
-     129
+     130
     ],
     [
      "스마트태그3",
-     65
+     66
     ],
     [
      "위치",
-     45
-    ],
-    [
-     "삼성전자가",
-     31
+     44
     ],
     [
      "태그",
+     31
+    ],
+    [
+     "삼성전자가",
      31
     ],
     [
@@ -488,7 +488,7 @@
     ],
     [
      "기존에는",
-     20
+     21
     ],
     [
      "파인드",
@@ -496,22 +496,26 @@
     ],
     [
      "iOS",
-     18
+     20
     ],
     [
      "공유가",
-     16
+     17
     ],
     [
      "위치를",
      16
     ],
     [
+     "제어",
+     15
+    ],
+    [
      "이어폰",
      15
     ],
     [
-     "IoT",
+     "가능했지만",
      14
     ],
     [
@@ -519,45 +523,41 @@
      14
     ],
     [
-     "제어",
+     "IoT",
      13
     ],
     [
-     "탐색",
-     13
-    ],
-    [
-     "가능했지만",
+     "1일",
      12
     ]
    ],
    "posWords": [
     [
      "강화",
-     6
+     7
     ],
     [
-     "글로벌",
-     4
+     "확대",
+     5
     ],
     [
      "프리미엄",
      4
     ],
     [
-     "확대",
-     4
+     "글로벌",
+     3
     ],
     [
      "최초",
      3
     ],
     [
-     "만족",
-     1
+     "개선",
+     2
     ],
     [
-     "개선",
+     "만족",
      1
     ]
    ],
@@ -565,15 +565,45 @@
     "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스",
-    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 업데이트",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 스위치"
+    "삼성 스마트싱스 에어컨"
    ],
    "recent": [
+    {
+     "title": "영국, 주택 에너지 효율 개선 본격화… 관련 시장 진출 기회 확대 전망",
+     "source": "dream.kotra.or.kr",
+     "date": "2026-10-02",
+     "link": "http://dream.kotra.or.kr/kotranews/cms/news/actionKotraBoardDetail.do?SITE_NO=3&MENU_ID=180&CONTENTS_NO=1&bbsGbn=243&bbsSn=243&pNttSn=244227"
+    },
+    {
+     "title": "삼성전자, 휴대·활용성 강화..'갤럭시 스마트태그3' 공개",
+     "source": "kpenews.com",
+     "date": "2026-10-02",
+     "link": "https://kpenews.com/View.aspx?No=4250412"
+    },
+    {
+     "title": "잃어버린 열쇠, 60m 밖에서도 찾는다… 삼성전자 '갤럭시 스마트태그3' ...",
+     "source": "kr.aving.net",
+     "date": "2026-10-02",
+     "link": "https://kr.aving.net/news/articleView.html?idxno=1814999"
+    },
+    {
+     "title": "삼성, 사운드 전용 앱 접고 스마트싱스로 오디오 제어 통합",
+     "source": "g-enews.com",
+     "date": "2026-10-02",
+     "link": "https://www.g-enews.com/view.php?ud=202610020733215035fbbec65dfb_1"
+    },
+    {
+     "title": "삼성전자, '갤럭시 스마트태그3' 공개 … 탐색거리 3배·iOS 호환으로 활...",
+     "source": "worktoday.co.kr",
+     "date": "2026-10-02",
+     "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=89978"
+    },
     {
      "title": "\"어디 있지?\" 찾던 시대 끝난다···삼성·애플의 '스마트태그' 경쟁",
      "source": "smartbizn.com",
@@ -633,36 +663,6 @@
      "source": "mediapen.com",
      "date": "2026-10-01",
      "link": "https://www.mediapen.com/news/view/1127144"
-    },
-    {
-     "title": "삼성전자, 포토샵 탑재한 '갤럭시 탭 S12' 선보여...귀 안막는 이어폰 '...",
-     "source": "consumernews.co.kr",
-     "date": "2026-10-01",
-     "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=765060"
-    },
-    {
-     "title": "삼성전자, 위치 확인 모바일 기기 '갤럭시 스마트태그3' 공개",
-     "source": "techholic.co.kr",
-     "date": "2026-10-01",
-     "link": "http://www.techholic.co.kr/news/articleView.html?idxno=223101"
-    },
-    {
-     "title": "삼성, 태블릿 고급화·클립형 이어폰 추가…갤럭시 생태계 확장",
-     "source": "전자신문",
-     "date": "2026-10-01",
-     "link": "https://n.news.naver.com/mnews/article/030/0003471665?sid=105"
-    },
-    {
-     "title": "삼성전자, '갤럭시 스마트태그3' 공개…탐색거리 3배 늘리고 iOS도 지원",
-     "source": "joongangenews.com",
-     "date": "2026-10-01",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=551782"
-    },
-    {
-     "title": "[써볼까]갤럭시 스마트태그3, 더 작게…최대 60m서 방향·거리 확인",
-     "source": "nspna.com",
-     "date": "2026-10-01",
-     "link": "https://www.nspna.com/news/?mode=view&newsid=830268"
     }
    ]
   },
@@ -787,13 +787,13 @@
    "related": [
     "lg 씽큐온",
     "lg 씽큐 세탁기",
+    "lg 씽큐 와이파이",
     "lg 씽큐 연결",
     "lg 씽큐 공유",
-    "lg 씽큐 냉장고",
     "lg 씽큐 에어컨 연결",
-    "lg 씽큐 와이파이",
-    "lg 씽큐 에러",
+    "lg 씽큐 냉장고",
     "lg 씽큐 스마트싱스",
+    "lg 씽큐 에러",
     "lg 씽큐 티비연결"
    ],
    "recent": [
@@ -893,84 +893,84 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76042,
+   "total": 76040,
    "sentiment": {
-    "pos": 10,
-    "neu": 33,
-    "neg": 17
+    "pos": 15,
+    "neu": 31,
+    "neg": 14
    },
    "keywords": [
+    [
+     "구글코리아",
+     26
+    ],
+    [
+     "윤구",
+     25
+    ],
     [
      "AI",
      24
     ],
     [
-     "구글코리아",
-     21
-    ],
-    [
-     "윤구",
-     18
-    ],
-    [
      "국감",
-     12
+     16
     ],
     [
      "정무위",
-     10
+     13
+    ],
+    [
+     "최주희",
+     11
     ],
     [
      "증인",
-     9
+     11
     ],
     [
-     "김용범",
-     9
-    ],
-    [
-     "아래는",
-     9
-    ],
-    [
-     "기사를",
-     9
-    ],
-    [
-     "으로",
-     9
-    ],
-    [
-     "번역한",
-     9
-    ],
-    [
-     "기사의",
-     9
-    ],
-    [
-     "전문",
-     9
-    ],
-    [
-     "입니다",
-     9
+     "티빙",
+     10
     ],
     [
      "CEO",
      9
     ],
     [
+     "구글의",
+     8
+    ],
+    [
+     "채택",
+     8
+    ],
+    [
+     "증인으로",
+     8
+    ],
+    [
+     "김용범",
+     8
+    ],
+    [
      "아마존",
-     9
-    ],
-    [
-     "번역",
      8
     ],
     [
-     "구글번역",
-     8
+     "대표와",
+     7
+    ],
+    [
+     "으로",
+     7
+    ],
+    [
+     "애플은",
+     7
+    ],
+    [
+     "기업",
+     7
     ]
    ],
    "posWords": [
@@ -979,31 +979,31 @@
      5
     ],
     [
+     "확대",
+     3
+    ],
+    [
      "투자",
+     3
+    ],
+    [
+     "협업",
      2
+    ],
+    [
+     "강화",
+     2
+    ],
+    [
+     "주목",
+     1
     ],
     [
      "흥행",
      1
     ],
     [
-     "협업",
-     1
-    ],
-    [
-     "강화",
-     1
-    ],
-    [
      "공략",
-     1
-    ],
-    [
-     "확대",
-     1
-    ],
-    [
-     "기대",
      1
     ]
    ],
@@ -1017,98 +1017,98 @@
     "구글 홈 연결",
     "구글 홈 어시스턴트",
     "구글 홈버튼",
-    "구글 홈 미니 2세대"
+    "구글 홈 화면 설정"
    ],
    "recent": [
     {
-     "title": "[국감] 정무위 증인 18명 채택…GS칼텍스 허세홍 등 정유4사 대표 포함",
-     "source": "4th.kr",
-     "date": "2026-10-01",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2119072"
+     "title": "[2026국감] 이재용·최태원 빠진 국감…재계 총수보다 '현안 책임자' 불...",
+     "source": "straightnews.co.kr",
+     "date": "2026-10-02",
+     "link": "https://www.straightnews.co.kr/news/articleView.html?idxno=312448"
     },
     {
-     "title": "정무위, 김용범 '레버리지 ETF' 국감증인 채택 무산",
-     "source": "매일경제",
-     "date": "2026-10-01",
-     "link": "https://n.news.naver.com/mnews/article/009/0005742943?sid=100"
-    },
-    {
-     "title": "[가전 트렌드] 쿠쿠, 한·중서 신제품 밥솥 잇달아 출시하며 흥행몰이 ...",
-     "source": "ibabynews.com",
-     "date": "2026-10-01",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=154901"
-    },
-    {
-     "title": "‘레버리지 ETF’ 김용범 빠진 정무위 증인 명단…野 반발 속 퇴장",
-     "source": "biz.heraldcorp.com",
-     "date": "2026-10-01",
-     "link": "https://n.news.naver.com/mnews/article/016/0002704554?sid=100"
-    },
-    {
-     "title": "국회 정무위, 김용범 증인채택 무산...국힘, 표결 전 퇴장",
-     "source": "ytn.co.kr",
-     "date": "2026-10-01",
-     "link": "https://n.news.naver.com/mnews/article/052/0002413595?sid=100"
-    },
-    {
-     "title": "정무위 국감, 김용범·박현주 증인 채택 불발…'맹탕 국감'",
-     "source": "news.einfomax.co.kr",
-     "date": "2026-10-01",
-     "link": "https://news.einfomax.co.kr/news/articleView.html?idxno=4437449"
-    },
-    {
-     "title": "정무위, 홈플러스 대표 등 국감 증인 채택…野 \"김용범 불러야\"",
-     "source": "연합뉴스",
-     "date": "2026-10-01",
-     "link": "https://n.news.naver.com/mnews/article/001/0016351892?sid=100"
-    },
-    {
-     "title": "충주시, '26 일자리박람회 현장 채용 및 상담 참여 기업 14일까지 접수",
+     "title": "강기윤 창원시장, 간부회의서 전 부서 쇄신 주문",
      "source": "breaknews.com",
-     "date": "2026-10-01",
-     "link": "http://www.breaknews.com/1240639"
+     "date": "2026-10-02",
+     "link": "http://www.breaknews.com/1240792"
     },
     {
-     "title": "한전KDN, 이젝스·엔콜에이아이와 AI 기반 지능형 에너지 안전 및 데이터...",
-     "source": "breaknews.com",
-     "date": "2026-10-01",
-     "link": "http://www.breaknews.com/1240623"
-    },
-    {
-     "title": "유튜브도 바뀐다... 요즘 '초개인화 UX'가 뜨는 이유",
+     "title": "메타 뮤즈로 살펴본 AI 에이전트 경험 디자인",
      "source": "ditoday.com",
-     "date": "2026-10-01",
-     "link": "https://ditoday.com/%ec%9c%a0%ed%8a%9c%eb%b8%8c%eb%8f%84-%eb%b0%94%eb%80%90%eb%8b%a4-%ec%9a%94%ec%a6%98-%ec%b4%88%ea%b0%9c%ec%9d%b8%ed%99%94-ux%ea%b0%80-%eb%9c%a8%eb%8a%94-%ec%9d%b4%ec%9c%a0/"
+     "date": "2026-10-02",
+     "link": "https://ditoday.com/%eb%a9%94%ed%83%80-%eb%ae%a4%ec%a6%88%eb%a1%9c-%ec%82%b4%ed%8e%b4%eb%b3%b8-ai-%ec%97%90%ec%9d%b4%ec%a0%84%ed%8a%b8-%ea%b2%bd%ed%97%98-%eb%94%94%ec%9e%90%ec%9d%b8/"
     },
     {
-     "title": "\"어디 있지?\" 찾던 시대 끝난다···삼성·애플의 '스마트태그' 경쟁",
-     "source": "smartbizn.com",
-     "date": "2026-10-01",
-     "link": "https://www.smartbizn.com/news/articleView.html?idxno=155410"
+     "title": "애플, 스마트홈 시장 정조준…아이폰 넘어 '집 안의 생태계' 키운다",
+     "source": "jemin.com",
+     "date": "2026-10-02",
+     "link": "https://www.jemin.com/news/articleView.html?idxno=843763"
     },
     {
-     "title": "김용범·박현주, 국감 증인 채택 불발…野 \"민주당 무엇이 두렵길래\"",
-     "source": "머니투데이",
-     "date": "2026-10-01",
-     "link": "https://n.news.naver.com/mnews/article/008/0005421256?sid=100"
+     "title": "“시리야, 에어컨 켜줘” 스마트홈 시장 뛰어드는 애플…구글·아마존에...",
+     "source": "khan.co.kr",
+     "date": "2026-10-02",
+     "link": "https://n.news.naver.com/mnews/article/032/0003473955?sid=105"
     },
     {
-     "title": "정무위, 정유4사·홈플·쿠팡 등 증인채택…김용범·박현주 또 불발",
-     "source": "news1.kr",
-     "date": "2026-10-01",
-     "link": "https://n.news.naver.com/mnews/article/421/0009204840?sid=100"
+     "title": "6일 국감 스타트 … 눈여겨볼 기업과 이슈는",
+     "source": "globalepic.co.kr",
+     "date": "2026-10-02",
+     "link": "http://www.globalepic.co.kr/view.php?ud=20261002152241845448439a4874_29"
     },
     {
-     "title": "김용범·박현주 빠진 정무위 국감…금융권 핵심 증인도 '실종'",
-     "source": "newspim.com",
-     "date": "2026-10-01",
-     "link": "https://www.newspim.com/news/view/20261001001348"
+     "title": "국회 정무위, 홈플러스·엘리엇·구글 국감 증인 채택...유동수 위원장...",
+     "source": "news2day.co.kr",
+     "date": "2026-10-02",
+     "link": "https://www.news2day.co.kr/article/20261002500183"
     },
     {
-     "title": "새벽네시, 글로벌 마케팅 컨퍼런스 ‘IMPACT 2026’ 개최",
-     "source": "joongang.co.kr",
-     "date": "2026-10-01",
-     "link": "https://n.news.naver.com/mnews/article/025/0003555176?sid=101"
+     "title": "국감 증·참고인 277명 중 기업인 102명…포스코·MBK·배민·약손명가까...",
+     "source": "thepublic.kr",
+     "date": "2026-10-02",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=320990"
+    },
+    {
+     "title": "﻿국회 정무위, 국감 증인 확정…쿠팡·홈플러스·네이버 경영진 대거 ...",
+     "source": "mdtoday.co.kr",
+     "date": "2026-10-02",
+     "link": "https://www.mdtoday.co.kr/news/articleView.html?idxno=617178"
+    },
+    {
+     "title": "[재계는 지금] 네이버, 해외여행 정보 탐색 경험 강화 外",
+     "source": "dealsite.co.kr",
+     "date": "2026-10-02",
+     "link": "https://dealsite.co.kr/articles/170051"
+    },
+    {
+     "title": "작품 이름 몰라도 질문부터…구글, AI로 미술관 문턱 낮춘다",
+     "source": "coinreaders.com",
+     "date": "2026-10-02",
+     "link": "http://coinreaders.com/261294"
+    },
+    {
+     "title": "국회 정무위 기업인 18명 국정감사 일반증인 채택 : 단일종목 레버리지...",
+     "source": "huffingtonpost.kr",
+     "date": "2026-10-02",
+     "link": "https://www.huffingtonpost.kr/article/260943"
+    },
+    {
+     "title": "배양육, '스테이크 혁명'서 펫푸드·소시지로 선회",
+     "source": "g-enews.com",
+     "date": "2026-10-02",
+     "link": "https://www.g-enews.com/view.php?ud=2026100210320535289a1f309431_1"
+    },
+    {
+     "title": "\"스마트라이프위크에 가면… AI와 만나는 서울의 미래 볼 수 있다\"",
+     "source": "asiatoday.co.kr",
+     "date": "2026-10-02",
+     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20261001010000519"
+    },
+    {
+     "title": "“우리 가족 얼굴 알아보는 AI”…거실로 돌아온 애플",
+     "source": "서울경제",
+     "date": "2026-10-02",
+     "link": "https://n.news.naver.com/mnews/article/011/0004667568?sid=104"
     }
    ]
   }
