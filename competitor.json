@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-02 23:46",
+ "generatedAt": "2026-10-03 22:27",
  "brands": [
   {
    "name": "아카라",
@@ -125,11 +125,11 @@
     "아카라",
     "아카라 k100",
     "아카라 홈캠",
-    "아카라 스위치",
     "아카라카",
+    "아카라 스위치",
     "명조 아카라이브",
     "아카라이브 핫딜",
-    "메랜 아카라이브"
+    "원신 아카라이브"
    ],
    "recent": [
     {
@@ -451,7 +451,7 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69044,
+   "total": 69045,
    "sentiment": {
     "pos": 20,
     "neu": 40,
@@ -563,17 +563,23 @@
    ],
    "related": [
     "삼성 스마트싱스 냉장고",
-    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스",
+    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 오류",
+    "삼성 스마트싱스 스테이션",
+    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 업데이트",
     "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 에어컨"
+    "삼성 스마트싱스 스위치"
    ],
    "recent": [
+    {
+     "title": "LG 판매 절반, 삼성 B2B까지…'구매의 종말' 가전 구독 판 커진다",
+     "source": "news1.kr",
+     "date": "2026-10-03",
+     "link": "https://n.news.naver.com/mnews/article/421/0009207679?sid=101"
+    },
     {
      "title": "영국, 주택 에너지 효율 개선 본격화… 관련 시장 진출 기회 확대 전망",
      "source": "dream.kotra.or.kr",
@@ -657,12 +663,6 @@
      "source": "thebigdata.co.kr",
      "date": "2026-10-01",
      "link": "https://www.thebigdata.co.kr/view.php?ud=202610011501028690bbceadc3c9_23"
-    },
-    {
-     "title": "\"아이폰 유저도 쓴다\"… 삼성, '포토샵 품은' 탭S12·스마트태그3·버즈...",
-     "source": "mediapen.com",
-     "date": "2026-10-01",
-     "link": "https://www.mediapen.com/news/view/1127144"
     }
    ]
   },
@@ -788,13 +788,13 @@
     "lg 씽큐온",
     "lg 씽큐 세탁기",
     "lg 씽큐 와이파이",
+    "lg 씽큐 에어컨 연결",
     "lg 씽큐 연결",
     "lg 씽큐 공유",
-    "lg 씽큐 에어컨 연결",
     "lg 씽큐 냉장고",
     "lg 씽큐 스마트싱스",
-    "lg 씽큐 에러",
-    "lg 씽큐 티비연결"
+    "lg 씽큐 티비연결",
+    "lg 씽큐 에러"
    ],
    "recent": [
     {
@@ -893,7 +893,7 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76040,
+   "total": 76041,
    "sentiment": {
     "pos": 15,
     "neu": 31,
@@ -910,7 +910,7 @@
     ],
     [
      "AI",
-     24
+     23
     ],
     [
      "국감",
@@ -933,12 +933,12 @@
      10
     ],
     [
-     "CEO",
+     "구글의",
      9
     ],
     [
-     "구글의",
-     8
+     "CEO",
+     9
     ],
     [
      "채택",
@@ -969,8 +969,8 @@
      7
     ],
     [
-     "기업",
-     7
+     "쿠팡",
+     6
     ]
    ],
    "posWords": [
@@ -1015,11 +1015,17 @@
     "구글 홈페이지",
     "구글 홈 미니 초기화",
     "구글 홈 연결",
-    "구글 홈 어시스턴트",
-    "구글 홈버튼",
-    "구글 홈 화면 설정"
+    "구글 홈 화면 설정",
+    "구글 홈 미니 2세대",
+    "구글 홈버튼"
    ],
    "recent": [
+    {
+     "title": "\"스마트폰 꺼낼 필요 없어\" AI 기기 늘리는 빅테크",
+     "source": "it.chosun.com",
+     "date": "2026-10-03",
+     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092171297"
+    },
     {
      "title": "[2026국감] 이재용·최태원 빠진 국감…재계 총수보다 '현안 책임자' 불...",
      "source": "straightnews.co.kr",
@@ -1081,16 +1087,16 @@
      "link": "https://dealsite.co.kr/articles/170051"
     },
     {
-     "title": "작품 이름 몰라도 질문부터…구글, AI로 미술관 문턱 낮춘다",
-     "source": "coinreaders.com",
-     "date": "2026-10-02",
-     "link": "http://coinreaders.com/261294"
-    },
-    {
      "title": "국회 정무위 기업인 18명 국정감사 일반증인 채택 : 단일종목 레버리지...",
      "source": "huffingtonpost.kr",
      "date": "2026-10-02",
      "link": "https://www.huffingtonpost.kr/article/260943"
+    },
+    {
+     "title": "작품 이름 몰라도 질문부터…구글, AI로 미술관 문턱 낮춘다",
+     "source": "coinreaders.com",
+     "date": "2026-10-02",
+     "link": "http://coinreaders.com/261294"
     },
     {
      "title": "배양육, '스테이크 혁명'서 펫푸드·소시지로 선회",
@@ -1103,12 +1109,6 @@
      "source": "asiatoday.co.kr",
      "date": "2026-10-02",
      "link": "https://www.asiatoday.co.kr/kn/view.php?key=20261001010000519"
-    },
-    {
-     "title": "“우리 가족 얼굴 알아보는 AI”…거실로 돌아온 애플",
-     "source": "서울경제",
-     "date": "2026-10-02",
-     "link": "https://n.news.naver.com/mnews/article/011/0004667568?sid=104"
     }
    ]
   }
