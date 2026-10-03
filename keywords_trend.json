@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-02 13:06",
+ "generatedAt": "2026-10-03 12:50",
  "period": "month",
  "startDate": "2024-08-01",
  "endDate": "2026-09-30",
@@ -46,9 +46,9 @@
     35.18
    ],
    "volPct": 5,
-   "qMonthly": 7660,
-   "qPc": 2690,
-   "qMobile": 4970
+   "qMonthly": 7640,
+   "qPc": 2680,
+   "qMobile": 4960
   },
   {
    "name": "아카라라이프",
@@ -86,8 +86,8 @@
     4.49
    ],
    "volPct": 1,
-   "qMonthly": 1000,
-   "qPc": 520,
+   "qMonthly": 990,
+   "qPc": 510,
    "qMobile": 480
   },
   {
@@ -126,9 +126,9 @@
     20.95
    ],
    "volPct": 3,
-   "qMonthly": 4800,
-   "qPc": 1040,
-   "qMobile": 3760
+   "qMonthly": 4750,
+   "qPc": 1020,
+   "qMobile": 3730
   },
   {
    "name": "매터",
@@ -198,9 +198,9 @@
     0.05
    ],
    "volPct": 0,
-   "qMonthly": 40,
+   "qMonthly": 50,
    "qPc": 20,
-   "qMobile": 20
+   "qMobile": 30
   },
   {
    "name": "스마트 도어락",
@@ -238,9 +238,9 @@
     18.55
    ],
    "volPct": 3,
-   "qMonthly": 3980,
-   "qPc": 810,
-   "qMobile": 3170
+   "qMonthly": 3870,
+   "qPc": 780,
+   "qMobile": 3090
   },
   {
    "name": "스마트 조명",
@@ -278,9 +278,9 @@
     8.62
    ],
    "volPct": 1,
-   "qMonthly": 1830,
-   "qPc": 400,
-   "qMobile": 1430
+   "qMonthly": 1810,
+   "qPc": 390,
+   "qMobile": 1420
   },
   {
    "name": "스마트 커튼",
@@ -318,9 +318,9 @@
     2.51
    ],
    "volPct": 0,
-   "qMonthly": 590,
+   "qMonthly": 580,
    "qPc": 120,
-   "qMobile": 470
+   "qMobile": 460
   },
   {
    "name": "스마트 스위치",
@@ -358,9 +358,9 @@
     73.62
    ],
    "volPct": 11,
-   "qMonthly": 16510,
-   "qPc": 7180,
-   "qMobile": 9330
+   "qMonthly": 16400,
+   "qPc": 7110,
+   "qMobile": 9290
   },
   {
    "name": "스마트 플러그",
@@ -398,8 +398,8 @@
     28.6
    ],
    "volPct": 4,
-   "qMonthly": 5940,
-   "qPc": 1980,
+   "qMonthly": 5910,
+   "qPc": 1950,
    "qMobile": 3960
   },
   {
@@ -438,9 +438,9 @@
     266.73
    ],
    "volPct": 38,
-   "qMonthly": 58100,
-   "qPc": 7700,
-   "qMobile": 50400
+   "qMonthly": 58140,
+   "qPc": 7640,
+   "qMobile": 50500
   },
   {
    "name": "재실센서",
@@ -478,8 +478,8 @@
     1.79
    ],
    "volPct": 0,
-   "qMonthly": 450,
-   "qPc": 180,
+   "qMonthly": 480,
+   "qPc": 210,
    "qMobile": 270
   },
   {
@@ -518,9 +518,9 @@
     38.38
    ],
    "volPct": 6,
-   "qMonthly": 8500,
-   "qPc": 1670,
-   "qMobile": 6830
+   "qMonthly": 8360,
+   "qPc": 1650,
+   "qMobile": 6710
   },
   {
    "name": "홈네트워크",
@@ -558,9 +558,9 @@
     2.73
    ],
    "volPct": 0,
-   "qMonthly": 610,
+   "qMonthly": 590,
    "qPc": 140,
-   "qMobile": 470
+   "qMobile": 450
   },
   {
    "name": "스마트홈 허브",
@@ -598,9 +598,9 @@
     0.31
    ],
    "volPct": 0,
-   "qMonthly": 180,
+   "qMonthly": 170,
    "qPc": 50,
-   "qMobile": 130
+   "qMobile": 120
   },
   {
    "name": "스마트 초인종",
@@ -638,8 +638,8 @@
     2.42
    ],
    "volPct": 0,
-   "qMonthly": 570,
-   "qPc": 180,
+   "qMonthly": 580,
+   "qPc": 190,
    "qMobile": 390
   },
   {
@@ -678,9 +678,9 @@
     0.65
    ],
    "volPct": 0,
-   "qMonthly": 200,
+   "qMonthly": 190,
    "qPc": 30,
-   "qMobile": 170
+   "qMobile": 160
   },
   {
    "name": "스마트 블라인드",
@@ -758,9 +758,9 @@
     1.72
    ],
    "volPct": 0,
-   "qMonthly": 420,
+   "qMonthly": 430,
    "qPc": 180,
-   "qMobile": 240
+   "qMobile": 250
   },
   {
    "name": "스마트 콘센트",
@@ -798,9 +798,9 @@
     8.69
    ],
    "volPct": 1,
-   "qMonthly": 1920,
-   "qPc": 520,
-   "qMobile": 1400
+   "qMonthly": 1900,
+   "qPc": 510,
+   "qMobile": 1390
   },
   {
    "name": "혼수 가전",
@@ -878,8 +878,8 @@
     1.59
    ],
    "volPct": 0,
-   "qMonthly": 390,
-   "qPc": 160,
+   "qMonthly": 380,
+   "qPc": 150,
    "qMobile": 230
   },
   {
@@ -918,9 +918,9 @@
     0.51
    ],
    "volPct": 0,
-   "qMonthly": 190,
+   "qMonthly": 200,
    "qPc": 40,
-   "qMobile": 150
+   "qMobile": 160
   },
   {
    "name": "스마트싱스",
@@ -958,9 +958,9 @@
     39.19
    ],
    "volPct": 6,
-   "qMonthly": 9090,
-   "qPc": 2120,
-   "qMobile": 6970
+   "qMonthly": 9030,
+   "qPc": 2110,
+   "qMobile": 6920
   },
   {
    "name": "LG 씽큐",
@@ -998,8 +998,8 @@
     2.62
    ],
    "volPct": 0,
-   "qMonthly": 620,
-   "qPc": 140,
+   "qMonthly": 610,
+   "qPc": 130,
    "qMobile": 480
   },
   {
@@ -1038,9 +1038,9 @@
     8.31
    ],
    "volPct": 1,
-   "qMonthly": 1780,
-   "qPc": 600,
-   "qMobile": 1180
+   "qMonthly": 1760,
+   "qPc": 590,
+   "qMobile": 1170
   },
   {
    "name": "애플 홈킷",
@@ -1078,9 +1078,9 @@
     4.97
    ],
    "volPct": 1,
-   "qMonthly": 890,
+   "qMonthly": 900,
    "qPc": 80,
-   "qMobile": 810
+   "qMobile": 820
   },
   {
    "name": "샤오미 스마트홈",
@@ -1190,9 +1190,9 @@
     201.29
    ],
    "volPct": 29,
-   "qMonthly": 43550,
-   "qPc": 8250,
-   "qMobile": 35300
+   "qMonthly": 42770,
+   "qPc": 8170,
+   "qMobile": 34600
   },
   {
    "name": "코맥스",
@@ -1230,9 +1230,9 @@
     44.18
    ],
    "volPct": 6,
-   "qMonthly": 10040,
-   "qPc": 3570,
-   "qMobile": 6470
+   "qMonthly": 10010,
+   "qPc": 3550,
+   "qMobile": 6460
   },
   {
    "name": "스레드",
@@ -1270,9 +1270,9 @@
     695.87
    ],
    "volPct": 100,
-   "qMonthly": 156100,
-   "qPc": 108400,
-   "qMobile": 47700
+   "qMonthly": 156200,
+   "qPc": 108300,
+   "qMobile": 47900
   },
   {
    "name": "지그비",
@@ -1310,9 +1310,9 @@
     5.58
    ],
    "volPct": 1,
-   "qMonthly": 1190,
-   "qPc": 380,
-   "qMobile": 810
+   "qMonthly": 1160,
+   "qPc": 360,
+   "qMobile": 800
   },
   {
    "name": "IoT 인테리어",
@@ -1444,8 +1444,8 @@
    ],
    "volPct": 1,
    "qMonthly": 1570,
-   "qPc": 220,
-   "qMobile": 1350
+   "qPc": 210,
+   "qMobile": 1360
   },
   {
    "name": "스마트홈 시공",
@@ -1498,9 +1498,9 @@
     125.92
    ],
    "volPct": 18,
-   "qMonthly": 27420,
-   "qPc": 7720,
-   "qMobile": 19700
+   "qMonthly": 27140,
+   "qPc": 7640,
+   "qMobile": 19500
   },
   {
    "name": "셀프인테리어",
@@ -1538,9 +1538,9 @@
     24.25
    ],
    "volPct": 3,
-   "qMonthly": 5040,
+   "qMonthly": 5020,
    "qPc": 1640,
-   "qMobile": 3400
+   "qMobile": 3380
   },
   {
    "name": "아파트 인테리어",
@@ -1578,9 +1578,9 @@
     17.0
    ],
    "volPct": 2,
-   "qMonthly": 3640,
+   "qMonthly": 3630,
    "qPc": 1280,
-   "qMobile": 2360
+   "qMobile": 2350
   },
   {
    "name": "리모델링",
@@ -1618,9 +1618,9 @@
     22.04
    ],
    "volPct": 3,
-   "qMonthly": 4840,
-   "qPc": 1480,
-   "qMobile": 3360
+   "qMonthly": 4790,
+   "qPc": 1460,
+   "qMobile": 3330
   },
   {
    "name": "집꾸미기",
@@ -1658,9 +1658,9 @@
     17.99
    ],
    "volPct": 3,
-   "qMonthly": 3890,
+   "qMonthly": 3870,
    "qPc": 1490,
-   "qMobile": 2400
+   "qMobile": 2380
   },
   {
    "name": "구경하는집",
@@ -1698,9 +1698,9 @@
     2.48
    ],
    "volPct": 0,
-   "qMonthly": 550,
+   "qMonthly": 560,
    "qPc": 120,
-   "qMobile": 430
+   "qMobile": 440
   },
   {
    "name": "신혼 인테리어",
