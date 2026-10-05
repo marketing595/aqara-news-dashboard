@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-04 23:07",
+ "generatedAt": "2026-10-06 02:11",
  "brands": [
   {
    "name": "아카라",
@@ -125,11 +125,11 @@
     "아카라",
     "아카라 k100",
     "아카라 홈캠",
-    "아카라카",
     "아카라 스위치",
+    "아카라카",
     "명조 아카라이브",
-    "원신 아카라이브",
-    "아카라이브 핫딜"
+    "이환 아카라이브",
+    "원신 아카라이브"
    ],
    "recent": [
     {
@@ -343,8 +343,8 @@
     ]
    ],
    "related": [
-    "헤이홈",
     "헤이홈 홈캠",
+    "헤이홈",
     "헤이홈 sd카드",
     "헤이홈 연결",
     "헤이홈 거치대",
@@ -352,7 +352,7 @@
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 스위치"
+    "헤이홈 홈캠거치대"
    ],
    "recent": [
     {
@@ -451,7 +451,7 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69047,
+   "total": 69050,
    "sentiment": {
     "pos": 18,
     "neu": 42,
@@ -460,15 +460,15 @@
    "keywords": [
     [
      "갤럭시",
-     125
+     121
     ],
     [
      "스마트태그3",
-     64
+     61
     ],
     [
      "위치",
-     43
+     41
     ],
     [
      "태그",
@@ -476,39 +476,43 @@
     ],
     [
      "삼성전자가",
-     29
+     28
     ],
     [
      "지원하는",
-     26
-    ],
-    [
-     "기기에서만",
      25
     ],
     [
+     "기기에서만",
+     24
+    ],
+    [
      "기존에는",
-     20
-    ],
-    [
-     "iOS",
-     20
-    ],
-    [
-     "파인드",
      19
     ],
     [
-     "공유가",
-     17
+     "iOS",
+     19
     ],
     [
-     "제어",
-     15
+     "파인드",
+     18
+    ],
+    [
+     "AI",
+     16
+    ],
+    [
+     "공유가",
+     16
     ],
     [
      "위치를",
      15
+    ],
+    [
+     "제어",
+     14
     ],
     [
      "가능했지만",
@@ -523,10 +527,6 @@
      14
     ],
     [
-     "IoT",
-     12
-    ],
-    [
      "1일",
      12
     ]
@@ -534,7 +534,7 @@
    "posWords": [
     [
      "강화",
-     6
+     7
     ],
     [
      "확대",
@@ -557,23 +557,45 @@
      2
     ],
     [
+     "공략",
+     1
+    ],
+    [
      "만족",
      1
     ]
    ],
    "related": [
+    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 오류",
     "삼성 스마트싱스",
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스 스위치"
+    "삼성 스마트싱스 스위치",
+    "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 에어컨"
    ],
    "recent": [
+    {
+     "title": "은퇴 후 ‘4도3촌’의 꿈 家볍게 이룬다",
+     "source": "donga.com",
+     "date": "2026-10-06",
+     "link": "https://n.news.naver.com/mnews/article/020/0003752840?sid=101"
+    },
+    {
+     "title": "삼성·LG 'AI홈' 영토 넓힌다…中 공세에 애플까지 가세",
+     "source": "metroseoul.co.kr",
+     "date": "2026-10-05",
+     "link": "http://www.metroseoul.co.kr/article/20261005500153"
+    },
+    {
+     "title": "애플도 AI 홈 허브 출격 … 삼성·LG '일상 읽는 AI' 경쟁 본격화",
+     "source": "biz.newdaily.co.kr",
+     "date": "2026-10-05",
+     "link": "https://biz.newdaily.co.kr/site/data/html/2026/10/02/2026100200085.html"
+    },
     {
      "title": "에이슬립, 현대건설·삼성전자와 '수면 오케스트라'…\"침실의 월패드 만...",
      "source": "이데일리",
@@ -645,24 +667,6 @@
      "source": "impacton.net",
      "date": "2026-10-01",
      "link": "https://www.impacton.net/news/articleView.html?idxno=30097"
-    },
-    {
-     "title": "더 쉬워진 위치 확인…삼성전자, '갤럭시 스마트태그3' 공개",
-     "source": "nocutnews.co.kr",
-     "date": "2026-10-01",
-     "link": "https://n.news.naver.com/mnews/article/079/0004194866?sid=101"
-    },
-    {
-     "title": "삼성전자, '갤럭시 스마트태그3' 공개…크기 무게 줄이고, 탐색거리는 ...",
-     "source": "sportschosun.com",
-     "date": "2026-10-01",
-     "link": "https://n.news.naver.com/mnews/article/076/0004451820?sid=101"
-    },
-    {
-     "title": "“내 가방, 반려견 어디 갔지?”…삼성, 아이폰 호환 ‘스마트태그3’ ...",
-     "source": "metroseoul.co.kr",
-     "date": "2026-10-01",
-     "link": "http://www.metroseoul.co.kr/article/20261001500409"
     }
    ]
   },
@@ -670,60 +674,64 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 77737,
+   "total": 77739,
    "sentiment": {
-    "pos": 14,
-    "neu": 45,
+    "pos": 15,
+    "neu": 44,
     "neg": 1
    },
    "keywords": [
     [
      "LG전자",
-     41
+     38
     ],
     [
      "ThinQ",
-     39
+     37
     ],
     [
      "LG전자는",
-     28
+     29
+    ],
+    [
+     "AI",
+     25
     ],
     [
      "세탁기",
-     27
+     24
     ],
     [
      "가전",
      23
     ],
     [
-     "에이아이돌",
-     23
-    ],
-    [
      "앱에서",
-     22
-    ],
-    [
-     "AI",
      20
     ],
     [
-     "걸그룹",
-     17
+     "에이아이돌",
+     20
     ],
     [
      "세탁기에",
-     17
+     16
+    ],
+    [
+     "걸그룹",
+     15
     ],
     [
      "종료음을",
-     16
+     15
     ],
     [
      "적용할",
-     16
+     15
+    ],
+    [
+     "서비스를",
+     14
     ],
     [
      "고객",
@@ -731,29 +739,25 @@
     ],
     [
      "데뷔",
-     14
-    ],
-    [
-     "서비스를",
-     13
+     12
     ],
     [
      "아이워시",
-     12
+     11
     ],
     [
      "내려받아",
-     12
+     11
     ],
     [
-     "티징",
-     11
+     "구독",
+     10
     ]
    ],
    "posWords": [
     [
      "확대",
-     5
+     6
     ],
     [
      "프리미엄",
@@ -788,15 +792,27 @@
     "lg 씽큐온",
     "lg 씽큐 세탁기",
     "lg 씽큐 와이파이",
-    "lg 씽큐 연결",
-    "lg 씽큐 에어컨 연결",
     "lg 씽큐 공유",
+    "lg 씽큐 연결",
+    "lg 씽큐 티비연결",
+    "lg 씽큐 에어컨 연결",
     "lg 씽큐 냉장고",
     "lg 씽큐 스마트싱스",
-    "lg 씽큐 티비연결",
-    "lg 씽큐 에러"
+    "lg 씽큐 에어컨"
    ],
    "recent": [
+    {
+     "title": "삼성·LG 'AI홈' 영토 넓힌다…中 공세에 애플까지 가세",
+     "source": "metroseoul.co.kr",
+     "date": "2026-10-05",
+     "link": "http://www.metroseoul.co.kr/article/20261005500153"
+    },
+    {
+     "title": "애플도 AI 홈 허브 출격 … 삼성·LG '일상 읽는 AI' 경쟁 본격화",
+     "source": "biz.newdaily.co.kr",
+     "date": "2026-10-05",
+     "link": "https://biz.newdaily.co.kr/site/data/html/2026/10/02/2026100200085.html"
+    },
     {
      "title": "구독 키우는 삼성·LG… 고객 확보 경쟁 치열",
      "source": "it.chosun.com",
@@ -874,18 +890,6 @@
      "source": "biz.newdaily.co.kr",
      "date": "2026-09-28",
      "link": "https://biz.newdaily.co.kr/site/data/html/2026/09/28/2026092800268.html"
-    },
-    {
-     "title": "LG전자, 서울경제진흥원과 손잡고 'LG 마이컵' 보급… 다회용컵 문화 확...",
-     "source": "mediapen.com",
-     "date": "2026-09-28",
-     "link": "https://www.mediapen.com/news/view/1126334"
-    },
-    {
-     "title": "中, 로청기 넘어 생활가전까지…삼성·LG, 'AI·보안'으로 안방 수성",
-     "source": "m-i.kr",
-     "date": "2026-09-28",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=1418545"
     }
    ]
   },
@@ -893,52 +897,64 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76043,
+   "total": 76049,
    "sentiment": {
-    "pos": 15,
-    "neu": 31,
+    "pos": 13,
+    "neu": 33,
     "neg": 14
    },
    "keywords": [
     [
      "구글코리아",
-     25
+     27
     ],
     [
      "윤구",
-     24
-    ],
-    [
-     "AI",
-     23
+     26
     ],
     [
      "국감",
-     17
+     21
+    ],
+    [
+     "AI",
+     21
     ],
     [
      "정무위",
-     13
+     15
     ],
     [
      "최주희",
+     12
+    ],
+    [
+     "증인",
      11
     ],
     [
      "티빙",
-     10
+     11
     ],
     [
-     "증인",
-     10
+     "애플은",
+     9
     ],
     [
-     "구글의",
+     "아마존",
      9
     ],
     [
      "CEO",
      9
+    ],
+    [
+     "홈플러스",
+     8
+    ],
+    [
+     "쿠팡",
+     8
     ],
     [
      "채택",
@@ -949,34 +965,22 @@
      8
     ],
     [
-     "아마존",
-     8
-    ],
-    [
-     "홈플러스",
+     "대표와",
      7
     ],
     [
-     "쿠팡",
-     7
-    ],
-    [
-     "애플은",
+     "국회",
      7
     ],
     [
      "증인으로",
      7
-    ],
-    [
-     "대표와",
-     6
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     5
+     4
     ],
     [
      "확대",
@@ -1011,15 +1015,51 @@
     "구글 홈 스피커",
     "구글 홈",
     "구글 홈 허브",
-    "구글 홈 미니",
     "구글 홈페이지",
+    "구글 홈 미니",
     "구글 홈 미니 초기화",
     "구글 홈 연결",
-    "구글 홈 미니 2세대",
-    "구글 홈 어시스턴트",
-    "구글 홈버튼"
+    "구글 홈 크롬캐스트",
+    "구글 홈버튼",
+    "구글 홈 어시스턴트"
    ],
    "recent": [
+    {
+     "title": "패스키 설정법, 8자리 암호 2주면 뚫려…구글 8억 계정 생체인증 전환",
+     "source": "imaeil.com",
+     "date": "2026-10-05",
+     "link": "https://n.news.naver.com/mnews/article/088/0001032280?sid=105"
+    },
+    {
+     "title": "\"공급망의 왕\" 애플의 위기…터너스의 애플은 어떤 모습일까",
+     "source": "magazine.hankyung.com",
+     "date": "2026-10-05",
+     "link": "https://n.news.naver.com/mnews/article/050/0000111634?sid=101"
+    },
+    {
+     "title": "증권사 CEO 증인 채택도 불발···'김빠진' 정무위 국감",
+     "source": "sisajournal-e.com",
+     "date": "2026-10-05",
+     "link": "https://www.sisajournal-e.com/news/articleView.html?idxno=424106"
+    },
+    {
+     "title": "의원 '호통' 소리만 남는 '국감'에, 기업잡는 세무조사…유통·식품업계...",
+     "source": "nocutnews.co.kr",
+     "date": "2026-10-05",
+     "link": "https://n.news.naver.com/mnews/article/079/0004195597?sid=101"
+    },
+    {
+     "title": "애플도 AI 홈 허브 출격 … 삼성·LG '일상 읽는 AI' 경쟁 본격화",
+     "source": "biz.newdaily.co.kr",
+     "date": "2026-10-05",
+     "link": "https://biz.newdaily.co.kr/site/data/html/2026/10/02/2026100200085.html"
+    },
+    {
+     "title": "[주간금융이슈] 금융권 비켜가나 했더니…신한·KB국민은행 해킹, 국감...",
+     "source": "newspim.com",
+     "date": "2026-10-05",
+     "link": "https://www.newspim.com/news/view/20261002001009"
+    },
     {
      "title": "[주간 유통 나침반] 국감 앞둔 유통·식품업계…홈플러스·쿠팡·담합 쟁...",
      "source": "joongangenews.com",
@@ -1073,42 +1113,6 @@
      "source": "globalepic.co.kr",
      "date": "2026-10-02",
      "link": "http://www.globalepic.co.kr/view.php?ud=20261002152241845448439a4874_29"
-    },
-    {
-     "title": "국회 정무위, 홈플러스·엘리엇·구글 국감 증인 채택...유동수 위원장...",
-     "source": "news2day.co.kr",
-     "date": "2026-10-02",
-     "link": "https://www.news2day.co.kr/article/20261002500183"
-    },
-    {
-     "title": "국감 증·참고인 277명 중 기업인 102명…포스코·MBK·배민·약손명가까...",
-     "source": "thepublic.kr",
-     "date": "2026-10-02",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=320990"
-    },
-    {
-     "title": "﻿국회 정무위, 국감 증인 확정…쿠팡·홈플러스·네이버 경영진 대거 ...",
-     "source": "mdtoday.co.kr",
-     "date": "2026-10-02",
-     "link": "https://www.mdtoday.co.kr/news/articleView.html?idxno=617178"
-    },
-    {
-     "title": "[재계는 지금] 네이버, 해외여행 정보 탐색 경험 강화 外",
-     "source": "dealsite.co.kr",
-     "date": "2026-10-02",
-     "link": "https://dealsite.co.kr/articles/170051"
-    },
-    {
-     "title": "국회 정무위 기업인 18명 국정감사 일반증인 채택 : 단일종목 레버리지...",
-     "source": "huffingtonpost.kr",
-     "date": "2026-10-02",
-     "link": "https://www.huffingtonpost.kr/article/260943"
-    },
-    {
-     "title": "작품 이름 몰라도 질문부터…구글, AI로 미술관 문턱 낮춘다",
-     "source": "coinreaders.com",
-     "date": "2026-10-02",
-     "link": "http://coinreaders.com/261294"
     }
    ]
   }
