@@ -39,7 +39,21 @@ function getCookie(req, name){
   return '';
 }
 
+// 학동 지도 전용 도메인(hakdongmap.kr) — 이 주소로 들어오면 학동 지도만 보여준다.
+//  - 첫 화면(/) → hakdong.html 을 주소 그대로 보여줌(?ref=qr 같은 쿼리도 유지)
+//  - 대시보드 등 다른 페이지는 이 도메인에서 열리지 않게 첫 화면으로 돌려보냄
+//  - 기존 주소(aqara-news-dashboard.vercel.app)는 아래 로그인 규칙 그대로
+const HAKDONG_HOSTS = ['hakdongmap.kr', 'www.hakdongmap.kr'];
+
 export default async function middleware(req){
+  const url0 = new URL(req.url);
+  if(HAKDONG_HOSTS.includes(url0.hostname)){
+    if(url0.pathname === '/'){
+      const dest = new URL('/hakdong.html' + url0.search, url0.origin);
+      return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
+    }
+    return Response.redirect(new URL('/' + url0.search, url0.origin).toString(), 302);
+  }
   const CID = process.env.GOOGLE_CLIENT_ID, SECRET = process.env.SESSION_SECRET;
   if(!CID || !SECRET) return;                 // 미설정 → 개방(설정 전 잠금 방지)
   const payload = await verifySession(getCookie(req,'__sess'), SECRET);
