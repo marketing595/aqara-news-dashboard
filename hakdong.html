@@ -93,7 +93,7 @@
     .search input:focus{border-color:var(--ink)}
     .search svg{position:absolute;left:3px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted)}
     /* 알약(pill)을 버리고 번호 매긴 텍스트 네비로 — 잡지 목차의 인덱스처럼 */
-    .cats{display:flex;gap:0;margin:0 -24px;padding:10px 24px 0;overflow-x:auto;scrollbar-width:none}
+    .cats{display:flex;flex-wrap:wrap;gap:0;margin:0 -24px;padding:10px 24px 0}   /* PC: 두 줄로 펼쳐 전부 보이게(가로 스크롤은 마우스 휠로 안 넘어감) */
     .cats::-webkit-scrollbar{display:none}
     .cat{flex:none;border:0;background:none;padding:9px 0 11px;margin-right:18px;display:flex;align-items:baseline;gap:6px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;border-bottom:2px solid transparent;transition:color .16s,border-color .16s}
     .cat .dot{width:7px;height:7px;border-radius:50%;background:var(--c);flex:none;align-self:center}
@@ -224,7 +224,7 @@
       .mapwrap{order:1}
       .hero-section{padding:24px 18px 20px}
       .tools{padding:14px 18px 0}
-      .cats{margin:0 -18px;padding:10px 18px 0}
+      .cats{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -18px;padding:10px 18px 0}   /* 모바일: 한 줄 + 손가락으로 밀기 */
       .sec{padding:22px 18px 11px}
       .spot{padding:15px 18px}
       .catdesc,.foot{padding-left:18px;padding-right:18px}
@@ -338,6 +338,11 @@
     paint(); paintMarkers();
   }
 
+  // 좁은 창에서 카테고리 줄이 한 줄 가로 스크롤일 때, 마우스 휠(위아래)로도 옆으로 넘어가게
+  document.getElementById('chips').addEventListener('wheel',e=>{
+    const el=e.currentTarget; if(el.scrollWidth<=el.clientWidth||Math.abs(e.deltaX)>Math.abs(e.deltaY)) return;
+    el.scrollLeft+=e.deltaY; e.preventDefault();
+  },{passive:false});
   function boot(){
     document.getElementById('ttl').textContent=DATA.title||'학동 스마트 인테리어 MAP';
     document.title=(DATA.title||'학동 스마트 인테리어 MAP')+' · AQARA LIFE';
@@ -425,6 +430,11 @@
     // 카테고리 네비 — 알약 대신 01·02… 번호를 단 텍스트 인덱스
     document.getElementById('chips').innerHTML=[`<button class="cat ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="dot" style="background:var(--ink)"></span><span class="no">ALL</span>전체<span class="n">${all.length}</span></button>`]
       .concat(CATS.map((c,i)=>`<button class="cat ${FILTER===c.id?'on':''}" style="--c:${c.color}" onclick="setFilter('${c.id}')"><span class="dot"></span><span class="no">${no2(i+1)}</span>${esc(c.ko)}<span class="n">${all.filter(s=>s.cat===c.id).length}</span></button>`)).join('');
+    // 한 줄로 밀어 넘기는 좁은 화면: 선택한 분류가 화면 밖에 있으면 보이는 곳으로 당겨온다
+    // (scrollIntoView는 페이지 전체가 위아래로 움직일 수 있어 줄 안에서만 scrollLeft로 맞춘다)
+    const chipBar=document.getElementById('chips'), chipOn=chipBar.querySelector('.cat.on');
+    if(chipOn&&chipBar.scrollWidth>chipBar.clientWidth){ const l=chipOn.offsetLeft-chipBar.offsetLeft, r=l+chipOn.offsetWidth;
+      if(l<chipBar.scrollLeft) chipBar.scrollLeft=l-18; else if(r>chipBar.scrollLeft+chipBar.clientWidth) chipBar.scrollLeft=r-chipBar.clientWidth+18; }
     const cd=document.getElementById('catdesc'), cc=CATS.find(c=>c.id===FILTER);
     cd.style.display=cc?'flex':'none'; if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b> · ${esc(cc.desc||'')}</span>`;
     const vs=visible(), box=document.getElementById('list'); let html='';
