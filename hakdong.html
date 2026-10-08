@@ -172,6 +172,23 @@
     .mapfab{position:absolute;left:14px;top:14px;z-index:500;display:inline-flex;align-items:center;gap:6px;border:0;background:#fff;color:var(--ink);border-radius:980px;padding:9px 14px 9px 12px;font-size:13px;font-weight:700;box-shadow:0 2px 10px -2px rgba(0,0,0,.3)}
     .mapfab svg{width:15px;height:15px;fill:var(--accent);stroke:#C99A00;stroke-width:1.8}
     .mapfab em{font-style:normal;background:var(--accent);color:var(--on-accent);border-radius:980px;min-width:20px;height:20px;display:inline-grid;place-items:center;padding:0 6px;font-size:11px}
+    /* 내 위치 — 네이버 지도처럼 우하단 동그라미 버튼. 파란 점은 지도 앱 공통 관례라 여기서만 파랑을 쓴다 */
+    .locbtn{position:absolute;right:14px;bottom:30px;z-index:500;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:var(--ink2);display:grid;place-items:center;box-shadow:0 2px 10px -2px rgba(0,0,0,.3);cursor:pointer;padding:0}
+    .locbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
+    .locbtn.on{color:#1A73E8}
+    .locbtn.follow{background:#1A73E8;color:#fff}
+    .locbtn.wait svg{animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .me{width:18px;height:18px;border-radius:50%;background:#1A73E8;border:3px solid #fff;box-sizing:border-box;animation:mepulse 2s ease-out infinite}
+    @keyframes mepulse{0%{box-shadow:0 0 0 0 rgba(26,115,232,.45),0 1px 5px rgba(0,0,0,.4)}100%{box-shadow:0 0 0 16px rgba(26,115,232,0),0 1px 5px rgba(0,0,0,.4)}}
+    .nextbar{position:absolute;left:14px;right:72px;bottom:28px;z-index:500;background:#fff;border-radius:12px;padding:10px 10px 10px 12px;display:none;align-items:center;gap:10px;box-shadow:0 4px 18px -6px rgba(0,0,0,.4);font-size:12px;color:var(--ink2);max-width:420px}
+    .nextbar.show{display:flex}
+    .nextbar .stepno{flex:none}
+    .nextbar div{flex:1;min-width:0}
+    .nextbar b{display:block;font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+    .nextbar .go{flex:none;background:var(--accent);color:var(--on-accent);border-radius:980px;padding:9px 14px;font-size:13px;font-weight:800;text-decoration:none}
+    .spot.done .stepno{background:var(--ink);color:#fff}
+    .spot.done .nm{opacity:.5}
     .cat.route .dot{background:var(--accent);box-shadow:0 0 0 1px var(--ink)}
     .rhead{padding:22px 24px 18px;border-bottom:1px solid var(--ink);background:var(--paper)}
     .rhead .ey{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
@@ -325,6 +342,8 @@
     <div class="mapwrap">
       <div id="map"></div>
       <button class="mapfab" id="mapfab" style="display:none" onclick="setFilter('route')"></button>
+      <button class="locbtn" id="locbtn" onclick="toggleLocate()" aria-label="내 위치" title="내 위치" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><path d="M12 1.5v3.2M12 19.3v3.2M1.5 12h3.2M19.3 12h3.2"/></svg></button>
+      <div class="nextbar" id="nextbar" aria-live="polite"></div>
       <div class="legend" id="legend"></div>
     </div>
   </div>
@@ -431,7 +450,7 @@
       ss.forEach((s,i)=>{ if(walkM(cur,s)<walkM(cur,ss[k])) k=i; }); out.push(ss.splice(k,1)[0]); }
     ROUTE=out.map(s=>s.id); saveRoute(); paint(); paintMarkers(); showToast('가까운 순서로 다시 짰어요'); }
   function clearRoute(){ if(!ROUTE.length||!confirm('담아둔 코스를 모두 지울까요?')) return;
-    ROUTE=[]; saveRoute(); syncSave(); paint(); paintMarkers(); }
+    ROUTE=[]; VISITED=[]; try{ sessionStorage.removeItem(VS_KEY); }catch(e){} saveRoute(); syncSave(); paint(); paintMarkers(); }
   function shareRoute(){ const ids=routeIds(); if(!ids.length) return;
     const url=location.origin+location.pathname+'?route='+ids.map(encodeURIComponent).join(',');
     const title='나의 학동 인테리어 투어 코스 ('+ids.length+'곳)';
@@ -439,7 +458,7 @@
     (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>showToast('코스 링크를 복사했어요')).catch(()=>prompt('코스 링크',url)); }
   function adoptShared(){ if(!SHARED) return; ROUTE=SHARED.slice(); SHARED=null; saveRoute(); syncSave(); paint(); paintMarkers(); showToast('이 코스를 내 코스로 저장했어요'); }
   function dropShared(){ SHARED=null; paint(); paintMarkers(); fitRoute(); }
-  function fitRoute(){ const ss=routeSpots(); if(!MAP||!ss.length) return;
+  function fitRoute(){ const ss=routeSpots(); if(!MAP||!ss.length) return; unfollow();
     if(ss.length===1) MAP.flyTo([+ss[0].lat,+ss[0].lng],16,{duration:.6});
     else MAP.fitBounds(L.latLngBounds(ss.map(s=>[+s.lat,+s.lng])).pad(0.2),{maxZoom:17}); }
   function routeHtml(){
@@ -448,21 +467,83 @@
     let h=`<div class="rhead"><div class="ey">My Tour Course</div><b>${ro?'공유받은 학동 투어 코스':'나의 학동 투어 코스'}</b>
       <p>${ss.length?`${ss.length}곳${ss.length>1?' · 전체 '+fmtWalk(total):''}`:'아직 담은 매장이 없어요'}</p>`;
     if(ro) h+=`<div class="shared"><span>친구가 보낸 코스예요. 저장하면 지금 내 코스 대신 이 코스가 담겨요.</span><button class="btn primary sm" onclick="adoptShared()">이 코스 저장</button><button class="btn sm" onclick="dropShared()">내 코스 보기</button></div>`;
-    else if(ss.length) h+=`<div class="acts">${ss.length>2?'<button class="btn sm" onclick="sortNearest()">가까운 순으로 정리</button>':''}<button class="btn sm" onclick="shareRoute()">코스 공유</button><button class="btn sm" onclick="clearRoute()">모두 지우기</button></div>`;
+    else if(ss.length) h+=`<div class="acts"><button class="btn primary sm" onclick="startNav()">내 위치로 따라가기</button>${ss.length>2?'<button class="btn sm" onclick="sortNearest()">가까운 순으로 정리</button>':''}<button class="btn sm" onclick="shareRoute()">코스 공유</button><button class="btn sm" onclick="clearRoute()">모두 지우기</button></div>`;
     h+='</div>';
     if(!ss.length) return h+`<p class="empty">목록이나 지도에서 <b>저장</b>을 누르면<br>여기에 담은 순서대로 코스가 만들어져요.</p>`;
-    ss.forEach((s,i)=>{ const c=catOf(s.cat);
+    ss.forEach((s,i)=>{ const c=catOf(s.cat), done=VISITED.includes(s.id);
       if(i) h+=`<div class="leg">↓ ${fmtWalk(walkM(ss[i-1],s))}</div>`;
-      h+=`<div class="spot ${ACTIVE===s.id?'active':''}" style="--c:${c.color}" data-id="${s.id}" onclick="focusSpot('${s.id}',true)" role="button" tabindex="0" aria-label="${i+1}번째 ${esc(s.n)} — 지도에서 보기">
-        <div class="num"><span class="stepno">${i+1}</span></div>
+      h+=`<div class="spot ${ACTIVE===s.id?'active':''} ${done?'done':''}" style="--c:${c.color}" data-id="${s.id}" onclick="focusSpot('${s.id}',true)" role="button" tabindex="0" aria-label="${i+1}번째 ${esc(s.n)} — 지도에서 보기">
+        <div class="num"><span class="stepno" title="${done?'다녀옴':''}">${done?'✓':i+1}</span></div>
         <div><span class="en">${esc(c.ko)}</span>
           <div class="nm">${esc(s.n)}${s.hl?'<span class="hqtag">웰컴 쿠폰</span>':''}</div>
           <div class="ad"><span>${esc(s.a||'')}</span>
             ${ro?'':`<span class="ctl" onclick="event.stopPropagation()"><button onclick="moveStep('${s.id}',-1)" ${i===0?'disabled':''} aria-label="앞으로">↑</button><button onclick="moveStep('${s.id}',1)" ${i===ss.length-1?'disabled':''} aria-label="뒤로">↓</button><button onclick="toggleSave('${s.id}')" aria-label="코스에서 빼기">✕</button></span>`}
-            <a class="nv" href="${naverUrl(s)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">네이버 ↗</a></div>
+            ${dirLink(s,'nv','길찾기 ↗')}</div>
         </div></div>`; });
     return h+footHtml();
   }
+
+  /* ───────── 내 위치 · 실시간 따라가기 ─────────
+     네이버 지도 동그라미 버튼처럼 — 누르면 내 위치를 잡고 따라간다 · 지도를 끌면 따라가기만 풀린다 ·
+     그때 다시 누르면 내 위치로 돌아온다 · 따라가는 중에 누르면 끈다.
+     골목을 따라 걷는 실제 경로는 무료 지도 API로 그릴 수 없어 '길안내'에서 네이버 지도 도보 길찾기로 넘긴다.
+     위치는 이 브라우저 안에서만 쓰고 어디에도 보내거나 저장하지 않는다(방문 표시만 이 탭 sessionStorage). */
+  const VS_KEY='aqaraHakdongVisited';
+  let ME=null, ME_MK=null, ME_ACC=null, ME_LINE=null, WATCH=null, FOLLOW=false, LOC_WAIT=false, VISITED=[];
+  try{ const v=JSON.parse(sessionStorage.getItem(VS_KEY)||'[]'); if(Array.isArray(v)) VISITED=v; }catch(e){}
+  function toggleLocate(){
+    if(!navigator.geolocation){ showToast('이 브라우저에서는 위치를 쓸 수 없어요'); return; }
+    if(WATCH===null){ FOLLOW=true; LOC_WAIT=true; updLoc();
+      WATCH=navigator.geolocation.watchPosition(onPos,onPosErr,{enableHighAccuracy:true,maximumAge:5000,timeout:20000}); return; }
+    if(!FOLLOW){ FOLLOW=true; if(ME) MAP.flyTo([ME.lat,ME.lng],Math.max(MAP.getZoom(),17),{duration:.6}); updLoc(); return; }
+    stopLocate();
+  }
+  function stopLocate(){ if(WATCH!==null) navigator.geolocation.clearWatch(WATCH);
+    WATCH=null; FOLLOW=false; LOC_WAIT=false; ME=null;
+    [ME_MK,ME_ACC].forEach(l=>{ if(l) MAP.removeLayer(l); }); ME_MK=ME_ACC=null; updLoc(); }
+  function startNav(){ if(window.innerWidth<=860) setMobileView('map');
+    if(WATCH===null) toggleLocate(); else { FOLLOW=true; if(ME) MAP.flyTo([ME.lat,ME.lng],17,{duration:.6}); updLoc(); } }
+  function onPos(p){ const first=!ME; LOC_WAIT=false;
+    ME={lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy||0}; const ll=[ME.lat,ME.lng];
+    if(!ME_MK){ ME_ACC=L.circle(ll,{radius:ME.acc,color:'#1A73E8',weight:1,opacity:.35,fillColor:'#1A73E8',fillOpacity:.1,interactive:false}).addTo(MAP);
+      ME_MK=L.marker(ll,{icon:L.divIcon({className:'',html:'<div class="me"></div>',iconSize:[18,18],iconAnchor:[9,9]}),zIndexOffset:2000,interactive:false,keyboard:false}).addTo(MAP); }
+    else { ME_MK.setLatLng(ll); ME_ACC.setLatLng(ll).setRadius(ME.acc); }
+    if(FOLLOW){ if(first) MAP.flyTo(ll,17,{duration:.8}); else MAP.panTo(ll,{animate:true}); }
+    if(first&&DATA&&DATA.hq&&distM(ME,DATA.hq)>5000) showToast('학동에서 멀리 계시네요 · 거리는 어림값이에요');
+    checkArrive(); updLoc(); }
+  function onPosErr(e){ if(ME&&e.code!==1) return;   // 이미 잡은 뒤 잠깐 끊긴 건 조용히 다음 신호를 기다린다
+    stopLocate(); showToast(e.code===1?'위치 권한이 꺼져 있어요 · 브라우저 설정에서 허용해 주세요':'위치를 잡지 못했어요 · 잠시 뒤 다시 눌러 주세요'); }
+  const nextStop=()=>routeSpots().find(s=>!VISITED.includes(s.id));
+  // 코스 매장 근처(40~80m, GPS 오차만큼 여유)에 들어서면 방문으로 표시하고 다음 매장을 알려준다
+  function checkArrive(){ if(!ME) return;
+    routeSpots().forEach(s=>{ if(VISITED.includes(s.id)||distM(ME,{lat:+s.lat,lng:+s.lng})>Math.max(40,Math.min(ME.acc,80))) return;
+      VISITED.push(s.id); try{ sessionStorage.setItem(VS_KEY,JSON.stringify(VISITED)); }catch(e){}
+      const nx=nextStop(); showToast(`${s.n} 도착!`+(nx?` 다음은 ${nx.n}`:' 코스를 다 돌았어요'));
+      if(FILTER==='route') paint(); }); }
+  // 네이버 지도 웹 길찾기 주소는 좌표를 웹 메르카토르(EPSG:3857) 미터로 받는다
+  const merc=(lat,lng)=>[lng*20037508.34/180,Math.log(Math.tan((90+lat)*Math.PI/360))/(Math.PI/180)*20037508.34/180].map(v=>v.toFixed(4)).join(',');
+  function dirUrl(s){
+    const to=merc(+s.lat,+s.lng)+','+encodeURIComponent(naverName(s))+','+(s.np||'')+','+(s.np?'PLACE_POI':'ADDRESS_POI');
+    const from=ME?merc(ME.lat,ME.lng)+','+encodeURIComponent('내 위치')+',,ADDRESS_POI':'-';
+    return 'https://map.naver.com/p/directions/'+from+'/'+to+'/-/walk'; }
+  // 휴대폰이면 네이버 지도 앱 도보 길안내(출발 = 앱이 잡는 실시간 내 위치)로, 앱이 없으면 웹 길찾기로 넘어간다
+  function goDir(id){ const s=SPOTS.find(x=>x.id===id); if(!s||!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return true;
+    const web=dirUrl(s), t=setTimeout(()=>{ if(!document.hidden) location.href=web; },1600);
+    document.addEventListener('visibilitychange',()=>{ if(document.hidden) clearTimeout(t); },{once:true});
+    location.href=`nmap://route/walk?dlat=${s.lat}&dlng=${s.lng}&dname=${encodeURIComponent(naverName(s))}&appname=kr.aqara.hakdong`;
+    return false; }
+  const dirLink=(s,cls,label)=>`<a class="${cls}" href="${dirUrl(s)}" target="_blank" rel="noopener" onclick="event.stopPropagation();return goDir('${s.id}')">${label}</a>`;
+  // 버튼 상태 · 코스 보기 중이면 '다음 매장' 바와 내 위치→다음 매장 점선
+  function updLoc(){
+    const b=document.getElementById('locbtn');
+    if(b){ b.classList.toggle('on',WATCH!==null); b.classList.toggle('follow',WATCH!==null&&FOLLOW&&!!ME); b.classList.toggle('wait',LOC_WAIT); b.setAttribute('aria-pressed',WATCH!==null); }
+    if(ME_LINE&&MAP){ MAP.removeLayer(ME_LINE); ME_LINE=null; }
+    const bar=document.getElementById('nextbar'), nx=(ME&&FILTER==='route')?nextStop():null;
+    if(!bar) return; if(!nx){ bar.classList.remove('show'); return; }
+    ME_LINE=L.polyline([[ME.lat,ME.lng],[+nx.lat,+nx.lng]],{color:'#1A73E8',weight:3,opacity:.7,dashArray:'1 7',lineCap:'round',interactive:false}).addTo(MAP);
+    bar.innerHTML=`<span class="stepno">${routeIds().indexOf(nx.id)+1}</span><div>다음 매장 · ${fmtWalk(walkM(ME,nx))}<b>${esc(nx.n)}</b></div>${dirLink(nx,'go','길안내')}`;
+    bar.classList.add('show'); }
+  function unfollow(){ if(FOLLOW){ FOLLOW=false; updLoc(); } }
 
   fetch('hakdong.json?_='+Date.now()).then(r=>r.json()).then(d=>{ DATA=d; CATS=d.categories; boot(); })
     .catch(()=>{ document.getElementById('list').innerHTML='<p style="padding:30px;text-align:center;color:#382D18">자료를 불러오지 못했어요. 새로고침해 주세요.</p>'; });
@@ -509,6 +590,7 @@
     // 대신 CSS 필터로 무채색·저채도로 눌러 Positron에 가까운 톤을 만든다(.leaflet-tile-pane)
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(MAP);
     MAP.on('popupclose',()=>{ setActive(null,false); });
+    MAP.on('dragstart',unfollow);   // 손으로 지도를 옮기면 내 위치 따라가기만 푼다(위치 표시는 계속)
   }
   function pinHtml(s){ const c=catOf(s.cat);
     if(FILTER==='route'){ const k=routeIds().indexOf(s.id); if(k>-1) return `<div class="pin step">${k+1}</div>`; }
@@ -529,8 +611,9 @@
       const m=L.marker([+s.lat,+s.lng],{icon,zIndexOffset:big?1000:0,riseOnHover:true}).addTo(MAP).bindPopup(popupHtml(s),{maxWidth:300});
       m.on('click',()=>setActive(s.id,true)); MARK[s.id]=m;
     });
+    updLoc();   // 코스 보기로 들어오고 나갈 때 '다음 매장' 바도 같이 켜고 끈다
   }
-  function focusSpot(id,fromList){ const s=SPOTS.find(x=>x.id===id); if(!s) return;
+  function focusSpot(id,fromList){ const s=SPOTS.find(x=>x.id===id); if(!s) return; unfollow();
     if(!MARK[id]){ FILTER='all'; paint(); paintMarkers(); }
     const mm=MARK[id]; if(!mm) return;
     if(window.innerWidth<=860) setMobileView('map');   // 목록만 보던 중이면 지도로 되돌린다
@@ -547,7 +630,7 @@
   });
 
   /* 헤더 내비 — 이 페이지에 실제로 있는 곳으로만 보낸다 */
-  function fitAll(){ const vs=visible(); if(!MAP||!vs.length) return;
+  function fitAll(){ const vs=visible(); if(!MAP||!vs.length) return; unfollow();
     MAP.fitBounds(L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])).pad(0.15),{maxZoom:16}); }
   function navMap(){ if(window.innerWidth<=860) setMobileView('map'); setActive(null,false); fitAll(); }
 
