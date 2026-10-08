@@ -86,7 +86,7 @@
     .hero-subtitle{font-size:13px;font-weight:400;color:var(--muted);margin:0;letter-spacing:-0.01em}
 
     /* ─── 도구 : 검색 + 번호 매긴 카테고리 네비 ─── */
-    .tools{padding:16px 24px 0;border-bottom:1px solid var(--line);background:var(--paper)}
+    .tools{padding:16px 24px 0;border-bottom:1px solid var(--line);background:#F0F0ED}   /* 카테고리 영역은 흰 목록과 구분되는 웜그레이 */
     .search{position:relative}
     .search input{width:100%;border:0;border-bottom:1px solid var(--line2);background:transparent;padding:9px 4px 9px 26px;font-size:13px;font-family:inherit;outline:none;color:var(--ink);transition:border-color .16s}
     .search input::placeholder{color:var(--muted)}
@@ -105,7 +105,7 @@
     .cat.on .no,.cat.on .n{color:var(--ink)}
 
     /* 카테고리 설명 — 한 줄, 박스 없이 */
-    .catdesc{padding:11px 24px;font-size:12px;color:var(--ink2);background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:flex-start;line-height:1.5}
+    .catdesc{padding:11px 24px 11px 21px;border-left:3px solid var(--c,var(--ink));font-size:12px;color:var(--ink2);background:color-mix(in srgb,var(--c,#888) 11%,#fff);border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:flex-start;line-height:1.5}
     .catdesc .dot{width:7px;height:7px;border-radius:50%;flex:none;margin-top:6px}
     .catdesc b{display:block;color:var(--ink)}   /* 1줄: 영문 분류명 / 2줄: 한글 설명 */
     .catdesc .ko{display:block;margin-top:2px}
@@ -120,7 +120,7 @@
     .sec i{flex:1}
     .sec .cnt{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
 
-    .spot{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:16px 24px;border-bottom:1px solid var(--line);cursor:pointer;position:relative;transition:background .16s}
+    .spot{display:grid;grid-template-columns:34px 1fr auto;gap:12px;padding:16px 24px;border-bottom:1px solid var(--line);cursor:pointer;position:relative;transition:background .16s}
     .spot:before{content:'';position:absolute;left:0;top:-1px;bottom:-1px;width:2px;background:var(--accent);opacity:0;transition:opacity .16s}
     .spot:hover{background:#FAFAF9}
     .spot.active{background:var(--accent-soft)}
@@ -150,6 +150,28 @@
     .save.on svg{fill:var(--accent);stroke:var(--ink)}
     .pp .save{font-size:12px;border:1px solid var(--line2);border-radius:980px;padding:5px 12px}
     .pp .save.on{border-color:var(--ink)}
+    /* 카카오맵 참고: 장소 행 오른쪽의 별(즐겨찾기) 버튼 — 담기면 옐로 별 */
+    .save.big{align-self:start;flex-direction:column;gap:2px;border:0;padding:2px 0 0;min-width:40px;font-size:10px;font-weight:700;color:var(--muted2);background:none}
+    .save.big svg{width:24px;height:24px;stroke-width:1.6;stroke:#9A9AA0;transition:transform .15s}
+    .save.big:hover{color:var(--ink)}
+    .save.big:hover svg{stroke:var(--ink);transform:scale(1.08)}
+    .save.big.on{color:var(--ink)}
+    .save.big.on svg{fill:var(--accent);stroke:#C99A00}
+    .pp .save.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+    .pp .save.on svg{fill:var(--ink);stroke:var(--ink)}
+    /* 카카오맵 참고: 패널 상단 탭 — 매장 찾기 / 내 코스 */
+    .mytabs{display:grid;grid-template-columns:1fr 1fr;background:var(--paper);border-bottom:1px solid var(--line2)}
+    .mytabs button{border:0;background:none;padding:14px 8px 12px;font-size:14px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px;border-bottom:3px solid transparent;margin-bottom:-1px;transition:.16s}
+    .mytabs button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
+    .mytabs button em{font-style:normal;font-size:11px;font-weight:800;min-width:20px;height:19px;padding:0 6px;border-radius:980px;display:inline-grid;place-items:center;background:var(--bg);color:var(--muted2)}
+    .mytabs button:hover{color:var(--ink)}
+    .mytabs button.on{color:var(--ink);border-bottom-color:var(--ink)}
+    .mytabs button.on em{background:var(--ink);color:#fff}
+    .mytabs button.route.on svg{fill:var(--accent);stroke:#C99A00}
+    .mytabs button.route.has em{background:var(--accent);color:var(--on-accent)}
+    .mapfab{position:absolute;left:14px;top:14px;z-index:500;display:inline-flex;align-items:center;gap:6px;border:0;background:#fff;color:var(--ink);border-radius:980px;padding:9px 14px 9px 12px;font-size:13px;font-weight:700;box-shadow:0 2px 10px -2px rgba(0,0,0,.3)}
+    .mapfab svg{width:15px;height:15px;fill:var(--accent);stroke:#C99A00;stroke-width:1.8}
+    .mapfab em{font-style:normal;background:var(--accent);color:var(--on-accent);border-radius:980px;min-width:20px;height:20px;display:inline-grid;place-items:center;padding:0 6px;font-size:11px}
     .cat.route .dot{background:var(--accent);box-shadow:0 0 0 1px var(--ink)}
     .rhead{padding:22px 24px 18px;border-bottom:1px solid var(--ink);background:var(--paper)}
     .rhead .ey{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
@@ -288,6 +310,7 @@
         <h1 class="hero-title" id="ttl">학동 스마트 인테리어 MAP</h1>
         <p class="hero-subtitle">Hakdong Interior Showroom Map</p>
       </div>
+      <nav class="mytabs" id="mybar" aria-label="보기 전환"></nav>
       <div class="tools">
         <div class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -301,6 +324,7 @@
     </aside>
     <div class="mapwrap">
       <div id="map"></div>
+      <button class="mapfab" id="mapfab" style="display:none" onclick="setFilter('route')"></button>
       <div class="legend" id="legend"></div>
     </div>
   </div>
@@ -362,7 +386,7 @@
   let ROUTE=[], SHARED=null, ROUTE_LINE=null, TOAST_T=null;
   try{ const r=JSON.parse(localStorage.getItem(RT_KEY)||'[]'); if(Array.isArray(r)) ROUTE=r.filter(x=>typeof x==='string'); }catch(e){}
   function saveRoute(){ try{ localStorage.setItem(RT_KEY,JSON.stringify(ROUTE)); }catch(e){} }
-  const BM='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>';
+  const BM='<svg viewBox="0 0 24 24" aria-hidden="true"><path stroke-linejoin="round" d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg>';   // 카카오맵처럼 별 = 저장
   const saveBtn=(id,cls)=>{ const on=ROUTE.includes(id);
     return `<button class="save ${cls||''} ${on?'on':''}" data-save="${esc(id)}" onclick="event.stopPropagation();toggleSave('${esc(id)}')" aria-pressed="${on}">${BM}<span>${on?'저장됨':'저장'}</span></button>`; };
   function toggleSave(id){
@@ -378,8 +402,16 @@
     document.querySelectorAll('[data-save]').forEach(b=>{ const on=ROUTE.includes(b.dataset.save);
       b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); const t=b.querySelector('span'); if(t) t.textContent=on?'저장됨':'저장'; });
     const c=document.getElementById('rtCnt'); if(c) c.textContent=ROUTE.length?'· '+ROUTE.length:'';
-    const ch=document.querySelector('#chips .cat.route .n'); if(ch) ch.textContent=ROUTE.length;
+    renderMyBar();
     Object.keys(MARK).forEach(id=>{ const p=MARK[id].getPopup(); if(p) p.setContent(popupHtml(SPOTS.find(x=>x.id===id)||{})); });
+  }
+  // 카카오맵 패널처럼 맨 위 탭으로 '매장 찾기 / 내 코스'를 나눈다 — 내 코스는 카테고리와 섞지 않는다
+  function renderMyBar(){
+    const bar=document.getElementById('mybar'), fab=document.getElementById('mapfab'), n=ROUTE.length, rt=FILTER==='route';
+    if(bar) bar.innerHTML=`<button class="${rt?'':'on'}" onclick="setFilter('all')" aria-pressed="${!rt}">매장 찾기 <em>${SPOTS.length}</em></button>`
+      +`<button class="route ${rt?'on':''} ${n?'has':''}" onclick="setFilter('route')" aria-pressed="${rt}">${BM}내 코스 <em>${n}</em></button>`;
+    const tools=document.querySelector('.tools'); if(tools) tools.style.display=rt?'none':'';   // 코스 탭에서는 검색·카테고리를 접는다
+    if(fab){ fab.style.display=(n&&!rt)?'':'none'; fab.innerHTML=`${BM}내 코스 <em>${n}</em>`; }
   }
   function showToast(m){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=m;
     t.classList.add('show'); clearTimeout(TOAST_T); TOAST_T=setTimeout(hideToast,2600); }
@@ -546,7 +578,7 @@
   function paint(){
     const all=numbered();
     // 카테고리 네비 — 알약 대신 01·02… 번호를 단 텍스트 인덱스
-    document.getElementById('chips').innerHTML=[`<button class="cat ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="dot" style="background:var(--ink)"></span><span class="no">ALL</span>전체<span class="n">${all.length}</span></button>`,`<button class="cat route ${FILTER==='route'?'on':''}" onclick="setFilter('route')"><span class="dot"></span><span class="no">MY</span>내 코스<span class="n">${ROUTE.length}</span></button>`]
+    document.getElementById('chips').innerHTML=[`<button class="cat ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="dot" style="background:var(--ink)"></span><span class="no">ALL</span>전체<span class="n">${all.length}</span></button>`]
       .concat(CATS.map((c,i)=>`<button class="cat ${FILTER===c.id?'on':''}" style="--c:${c.color}" onclick="setFilter('${c.id}')"><span class="dot"></span><span class="no">${no2(i+1)}</span>${esc(c.ko)}<span class="n">${all.filter(s=>s.cat===c.id).length}</span></button>`)).join('');
     // 한 줄로 밀어 넘기는 좁은 화면: 선택한 분류가 화면 밖에 있으면 보이는 곳으로 당겨온다
     // (scrollIntoView는 페이지 전체가 위아래로 움직일 수 있어 줄 안에서만 scrollLeft로 맞춘다)
@@ -554,7 +586,8 @@
     if(chipOn&&chipBar.scrollWidth>chipBar.clientWidth){ const l=chipOn.offsetLeft-chipBar.offsetLeft, r=l+chipOn.offsetWidth;
       if(l<chipBar.scrollLeft) chipBar.scrollLeft=l-18; else if(r>chipBar.scrollLeft+chipBar.clientWidth) chipBar.scrollLeft=r-chipBar.clientWidth+18; }
     const cd=document.getElementById('catdesc'), cc=CATS.find(c=>c.id===FILTER);
-    cd.style.display=cc?'flex':'none'; if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b>${cc.desc?`<span class="ko">${esc(cc.desc)}</span>`:''}</span>`;
+    renderMyBar();
+    cd.style.display=cc?'flex':'none'; if(cc) cd.style.setProperty('--c',cc.color); if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b>${cc.desc?`<span class="ko">${esc(cc.desc)}</span>`:''}</span>`;
     if(FILTER==='route'){ cd.style.display='none'; document.getElementById('list').innerHTML=routeHtml(); return; }
     const vs=visible(), box=document.getElementById('list'); let html='';
     CATS.forEach((c,ci)=>{ const g=vs.filter(s=>s.cat===c.id); if(!g.length) return;   // 아카라 쇼룸(hl)도 일반 행으로 함께 보여준다
@@ -564,8 +597,8 @@
         <div><span class="en">${esc(s.en||'')}</span>
           <div class="nm">${esc(s.n)}${s.hl?'<span class="hqtag">웰컴 쿠폰</span>':''}${s.check?`<span class="chk">· ${esc(s.check)}</span>`:''}</div>
           <div class="ds">${esc(s.d||'')}</div>
-          <div class="ad"><span>${esc(s.a||'')}</span>${saveBtn(s.id)}<a class="nv" href="${naverUrl(s)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">네이버 ↗</a></div>
-        </div></div>`).join('');
+          <div class="ad"><span>${esc(s.a||'')}</span><a class="nv" href="${naverUrl(s)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">네이버 ↗</a></div>
+        </div>${saveBtn(s.id,'big')}</div>`).join('');
     });
     box.innerHTML=html?html+footHtml()
       :'<p class="empty">검색 결과가 없어요.<br>다른 단어로 찾아보세요.</p>';
