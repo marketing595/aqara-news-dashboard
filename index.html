@@ -6599,8 +6599,8 @@
          geo/cal/<YYYY-MM>/<i>          콘텐츠 캘린더(채널·CEP·제목·주차) — 붙여넣으면 중복 생성 방지에 쓰인다
          geo/snap/<YYYY-MM>             월 스냅샷(점수·SoM·인용 점유·발행·액션 완료율)
          geo/data/*                     (구버전 메모·체크) 읽기만 유지                                        */
-    let GEO=null, GEOS=null, GEOM=null, GE={}, GEO_ERR='', GEO_LOADING=false, geRefOn=false, GE_FBERR='';
-    let geSec='overview', geYM='', geMForm=null, geActFilter={ch:'',cep:'',gap:'',st:''}, geScoreOpen=false;
+    let GEO=null, GEOS=null, GEOM=null, GEOD=null, GEOMM={}, GEOMM_PEND={}, GE={}, GEO_ERR='', GEO_LOADING=false, geRefOn=false, GE_FBERR='';
+    let geSec='overview', geYM='', geDay='', gePer='day', geMForm=null, geActFilter={ch:'',cep:'',gap:'',st:''}, geScoreOpen=false;
 
     const GE_GAPS={
       wrong:{n:'오답',      c:'#BF5332', d:'AI가 우리 제품을 틀리게 설명함 — 최우선'},
@@ -6641,17 +6641,51 @@
       for(let i=0;i<parts.length;i++){ o=o&&o[parts[i]]; if(o==null) return def==null?'':def; }
       return (o===''||o==null)?(def==null?'':def):o; }
     function geEdit(el){ const k=el.dataset.gk; if(!k) return; geSet(k,(el.innerText||'').trim()); }
-    function geYMNow(){ const d=new Date(); return new Date(d.getTime()+9*3600*1000).toISOString().slice(0,7); }
+    function geYMNow(){ return geToday().slice(0,7); }
+    function geToday(){ return new Date(Date.now()+9*3600*1000).toISOString().slice(0,10); }
+    function geAddDays(ds,n){ const d=new Date(ds+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
+    /* 측정 기간 — 기준일(geDay) + 범위(gePer: day 하루 / 7d 최근 7일 / 30d 최근 30일 / month 그 달 전체) */
+    function geRange(){ const d=geDay||geToday();
+      if(gePer==='7d') return {from:geAddDays(d,-6), to:d};
+      if(gePer==='30d') return {from:geAddDays(d,-29), to:d};
+      if(gePer==='month') return {from:d.slice(0,7)+'-01', to:d.slice(0,7)+'-31'};
+      return {from:d, to:d}; }
+    function geRangeYMs(){ const r=geRange(), out=[]; let ym=r.from.slice(0,7);
+      while(ym<=r.to.slice(0,7)){ out.push(ym); const y=+ym.slice(0,4), m=+ym.slice(5,7); ym=(m===12?(y+1)+'-01':y+'-'+String(m+1).padStart(2,'0')); }
+      return out; }
+    function geInRange(ds){ const r=geRange(); return !!ds && ds>=r.from && ds<=r.to; }
+    function gePerLabel(){ const r=geRange();
+      return gePer==='day'?r.from:(gePer==='month'?r.from.slice(0,7):(r.from+' ~ '+r.to)); }
+    function geRunDate(r){ if(r.date) return r.date; const t=+r.ts; if(t) return new Date(t+9*3600*1000).toISOString().slice(0,10); return (r.ym||'')+'-01'; }
     function geLoad(force){
       if(GEO&&GEOS&&!force) return;
       if(GEO_LOADING) return; GEO_LOADING=true; let pend=3;
-      const fin=()=>{ if(--pend<=0){ GEO_LOADING=false; renderGeo(); } };
+      const fin=()=>{ if(--pend<=0){ GEO_LOADING=false;
+        // 기준일 기본값 = 자동 측정이 있는 가장 최근 날(없으면 오늘)
+        if(!geDay){ const ds=Object.keys(((GEOD||{}).days)||{}).sort(); geDay=ds.length?ds[ds.length-1]:geToday(); geYM=geDay.slice(0,7); }
+        geLoadMonths(); renderGeo(); } };
       fetch('geo.json?_='+Date.now()).then(r=>r.json()).then(d=>{ GEO=d; }).catch(e=>{ GEO_ERR=(e&&e.message)||'geo.json 실패'; }).then(fin);
       fetch('geo_seed.json?_='+Date.now()).then(r=>r.json()).then(d=>{ GEOS=d; }).catch(e=>{ GEO_ERR=(e&&e.message)||'geo_seed.json 실패'; }).then(fin);
-      // 자동 측정 결과 — 사람이 붙여넣지 않아도 되는 몫(웹 검색 근거 · Gemini 검색)
-      fetch('geo_measure.json?_='+Date.now()).then(r=>r.ok?r.json():null).then(d=>{ GEOM=d||{runs:[]}; }).catch(()=>{ GEOM={runs:[]}; }).then(fin);
+      // 데일리 요약(날짜 × 엔진) + 엔진 상태(키 미등록 등)
+      fetch('geo_daily.json?_='+Date.now()).then(r=>r.ok?r.json():null).then(d=>{ GEOD=d||{days:{},engines:{}}; }).catch(()=>{ GEOD={days:{},engines:{}}; }).then(fin);
     }
-    function renderGeoTab(){ if(!geYM) geYM=geYMNow(); geStart(); geLoad(); renderGeo();
+    /* 자동 측정 회차는 월 파일(geo_measure/<YYYY-MM>.json)로 나뉘어 있다 — 보는 기간에 걸친 달만 불러온다 */
+    function geLoadMonths(){
+      geRangeYMs().forEach(ym=>{
+        if(GEOMM[ym]||GEOMM_PEND[ym]) return; GEOMM_PEND[ym]=1;
+        fetch('geo_measure/'+ym+'.json?_='+Date.now()).then(r=>r.ok?r.json():null)
+          .then(d=>{ if(d) return d;
+            // 데일리 전환 전 단일 파일(geo_measure.json) — 첫 데일리 측정 때 월 파일로 옮겨진다
+            return fetch('geo_measure.json?_='+Date.now()).then(r=>r.ok?r.json():null)
+              .then(o=>({runs:((o||{}).runs||[]).filter(x=>geRunDate(x).slice(0,7)===ym)})).catch(()=>({runs:[]})); })
+          .catch(()=>({runs:[]}))
+          .then(d=>{ GEOMM[ym]=(d&&d.runs)||[]; delete GEOMM_PEND[ym]; renderGeo(); });
+      }); }
+    function geMonthsLoading(){ return geRangeYMs().some(ym=>!GEOMM[ym]); }
+    function geSetDay(v){ if(v){ geDay=v; geYM=v.slice(0,7); } geLoadMonths(); renderGeo(); }
+    function geSetPer(v){ gePer=v||'day'; geLoadMonths(); renderGeo(); }
+    function geShiftDay(n){ geSetDay(geAddDays(geDay||geToday(),n)); }
+    function renderGeoTab(){ if(!geYM) geYM=(geDay||geToday()).slice(0,7); geStart(); geLoad(); renderGeo();
       if(typeof loadOwned==='function' && !(OWNED&&OWNED.generatedAt)){ try{ loadOwned(); }catch(e){} } }
 
     /* ---------- 기준 데이터 접근(운영자 수정 반영) ---------- */
@@ -6668,15 +6702,29 @@
     function geW(){ return (((GEOS||{}).scoring||{}).weights)||{som:40,asset:20,page:20,site:10,ops:10}; }
 
     /* ---------- 측정 ---------- */
-    /* 측정 = 사람이 넣은 기록(Firebase) + 자동 측정(geo_measure.json) 합집합 */
-    function geAutoRuns(ym){ return (((GEOM||{}).runs)||[]).filter(r=>(r.ym||'')===(ym||geYM))
-      .map((r,i)=>Object.assign({id:'auto'+i, auto:1}, r)); }
-    function geRuns(pid,eng,ym){ const m=GV2('m/'+(ym||geYM)+'/'+pid+'/'+eng,{});
-      const manual=Object.keys(m||{}).map(id=>Object.assign({id:id},m[id]||{}));
-      return manual.concat(geAutoRuns(ym).filter(r=>r.pid===pid&&r.eng===eng)); }
+    /* 측정 = 사람이 넣은 기록(Firebase geo/m/<YYYY-MM>) + 자동 측정(geo_measure/<YYYY-MM>.json) 합집합, 보는 기간으로 거른다 */
+    let GE_AUTO_IDX=null, GE_AUTO_KEY='';
+    function geAutoIdx(){
+      const r=geRange(), yms=geRangeYMs(), key=r.from+'|'+r.to+'|'+yms.map(ym=>ym+':'+((GEOMM[ym]||[]).length)).join(',');
+      if(GE_AUTO_IDX&&GE_AUTO_KEY===key) return GE_AUTO_IDX;
+      const all=[], by={};
+      yms.forEach(ym=>(GEOMM[ym]||[]).forEach((x,i)=>{ const d=geRunDate(x); if(!geInRange(d)) return;
+        const o=Object.assign({id:'auto'+ym+'_'+i, auto:1, date:d}, x); all.push(o);
+        (by[o.pid+'|'+o.eng]=by[o.pid+'|'+o.eng]||[]).push(o); }));
+      GE_AUTO_KEY=key; GE_AUTO_IDX={all:all, by:by}; return GE_AUTO_IDX; }
+    function geAutoRuns(){ return geAutoIdx().all; }
+    function geManualRuns(pid,eng){ const out=[];
+      geRangeYMs().forEach(ym=>{ const m=GV2('m/'+ym,{})||{};
+        Object.keys(m).forEach(p=>{ if(pid&&p!==pid) return;
+          Object.keys(m[p]||{}).forEach(e=>{ if(eng&&e!==eng) return;
+            Object.keys(m[p][e]||{}).forEach(rid=>{ const x=m[p][e][rid]||{}, d=geRunDate(x);
+              if(geInRange(d)) out.push(Object.assign({pid:p,eng:e,id:rid,ym:ym,date:d},x)); }); }); }); });
+      return out; }
+    function geRuns(pid,eng){
+      return geManualRuns(pid,eng).concat(geAutoIdx().by[pid+'|'+eng]||[]); }
     function geSom(pid,eng,ym){ const r=geRuns(pid,eng,ym), n=r.length;
       const men=r.filter(x=>+x.mention===1).length;
-      const cited=r.filter(x=>(x.cites||[]).some(c=>geIsOurs(c.domain||c))).length;
+      const cited=r.filter(x=>(x.cites||[]).some(c=>geIsOurs((c.url||"")+" "+(c.domain||c)))).length;
       const err=r.filter(x=>+x.err===1).length;
       return {n:n, men:men, cited:cited, err:err,
               som:n?Math.round(men/n*100):-1, cite:n?Math.round(cited/n*100):-1}; }
@@ -6706,7 +6754,7 @@
         const hit=(+r.mention===1);
         if(hit) men++;
         const cs=(r.cites||[]);
-        if(cs.some(c=>geIsOurs(c.domain||c))) cited++;
+        if(cs.some(c=>geIsOurs((c.url||"")+" "+(c.domain||c)))) cited++;
         else if(cs.length) other++;
         if(+r.err===1) err++;
         if((r.comp||[]).length && !hit) comp++;                 // 우리는 없고 경쟁사만 나온 회차
@@ -6824,10 +6872,7 @@
       return Math.round(ps.reduce((a,p)=>a+p.v*p.w,0)/tw); }
     function geGrade(v){ return v<0?{t:'미측정',c:'#8E8E93'}:(v>=80?{t:'좋음',c:'#5E7350'}:(v>=50?{t:'보통',c:'#D68134'}:{t:'미흡',c:'#BF5332'})); }
 
-    function geAllRuns(ym){ const m=GV2('m/'+(ym||geYM),{}); const out=[];
-      Object.keys(m||{}).forEach(pid=>Object.keys(m[pid]||{}).forEach(eng=>
-        Object.keys(m[pid][eng]||{}).forEach(rid=>out.push(Object.assign({pid:pid,eng:eng,id:rid},m[pid][eng][rid]||{})))));
-      return out.concat(geAutoRuns(ym)); }
+    function geAllRuns(){ return geManualRuns().concat(geAutoRuns()); }
 
     /* ---------- 측정 입력 (개선 1) ---------- */
     function geMOpen(pid,eng){ geMForm={pid:pid||gePrompts()[0].id, eng:eng||geEngines()[0].k, raw:'', rank:'', err:0, errNote:'', senti:'neu'};
@@ -6852,14 +6897,14 @@
         mention:p.mention, rank:(geMForm.rank?+geMForm.rank:0), cites:p.cites, comp:p.comp,
         err:+geMForm.err?1:0, errNote:(geMForm.errNote||'').slice(0,300), senti:geMForm.senti||'neu',
         raw:raw.replace(/\s+/g,' ').slice(0,1200)};
-      geSet('m/'+geYM+'/'+geMForm.pid+'/'+geMForm.eng+'/'+rid, rec);
+      rec.date=geToday(); geSet('m/'+geYMNow()+'/'+geMForm.pid+'/'+geMForm.eng+'/'+rid, rec);   // 오늘 날짜로 기록
       const keep={pid:geMForm.pid, eng:geMForm.eng};
       geMForm={pid:keep.pid, eng:keep.eng, raw:'', rank:'', err:0, errNote:'', senti:'neu'};
       geGenActions(true);                       // 측정 직후 액션 재생성
       renderGeo();
       const el=document.getElementById('geMRaw'); if(el){ el.value=''; el.focus(); }
     }
-    function geMDel(pid,eng,rid){ if(!confirm('이 측정 기록을 지울까요?')) return; geSet('m/'+geYM+'/'+pid+'/'+eng+'/'+rid,null); renderGeo(); }
+    function geMDel(pid,eng,rid){ if(!confirm('이 측정 기록을 지울까요?')) return; geRangeYMs().forEach(ym=>{ if(GV2('m/'+ym+'/'+pid+'/'+eng+'/'+rid,null)) geSet('m/'+ym+'/'+pid+'/'+eng+'/'+rid,null); }); renderGeo(); }
 
     /* ---------- 콘텐츠 액션 자동 생성 (개선 6) ---------- */
     function geActs(){ const m=GV2('act',{}); return Object.keys(m||{}).map(id=>Object.assign({id:id},m[id]||{})); }
@@ -6975,6 +7020,54 @@
       alert(geYM+' 스냅샷을 저장했습니다.'); }
     function geSnaps(){ const m=GV2('snap',{}); return Object.keys(m||{}).sort().map(k=>m[k]); }
 
+    /* 한 질문 × 한 엔진의 실제 답변(자동·수동) — 최신순 */
+    function geRunList(pid,eng){
+      const rs=geRuns(pid,eng).slice().sort((a,b)=>(+b.ts||0)-(+a.ts||0));
+      if(!rs.length) return `<p class="text-[11.5px] text-slate-400 mt-3">${gePerLabel()}에 이 질문 × ${esc(geEngName(eng))} 기록이 없습니다.</p>`;
+      return `<div class="mt-4 border-t border-[#EFEFEC] pt-3">
+        <p class="text-[12px] font-extrabold text-ink mb-2">${esc(geEngName(eng))} 답변 ${rs.length}건 <span class="font-normal text-slate-400">(${gePerLabel()})</span></p>
+        ${rs.slice(0,20).map(r=>`<div class="rounded-lg border border-[#EFEFEC] p-2.5 mb-2">
+          <p class="text-[11px] text-slate-500 mb-1"><b class="text-ink">${esc(geRunDate(r))}</b> · ${esc(r.by||'')}
+            · ${+r.mention===1?'<b class="text-agreen">아카라 언급'+((+r.rank||0)?(' '+r.rank+'번째'):'')+'</b>':'<b class="text-ared">미언급</b>'}
+            ${(r.comp||[]).length?' · 경쟁사 '+esc((r.comp||[]).join(', ')):''}</p>
+          ${r.raw?`<p class="text-[12px] text-slate-700 leading-relaxed">${esc(r.raw)}${String(r.raw).length>=790?'…':''}</p>`:''}
+          ${(r.cites||[]).length?`<p class="text-[11px] mt-1">${(r.cites||[]).slice(0,8).map(c=>{ const d=esc(c.domain||''), ours=geIsOurs((c.url||'')+' '+(c.domain||''));
+            return c.url?`<a href="${esc(c.url)}" target="_blank" rel="noopener" class="mr-2 ${ours?'font-bold text-agreen':'text-slate-500'} hover:underline">${d}</a>`:`<span class="mr-2 ${ours?'font-bold text-agreen':'text-slate-500'}">${d}</span>`; }).join('')}</p>`:''}
+        </div>`).join('')}</div>`; }
+
+    /* ---------- 데일리 자동 측정: 엔진 상태 · 일별 추이 ---------- */
+    const GE_AUTO_ENG=['gemini','chatgpt','ppx','claude','search'];
+    function geEngName(k){ return ((geEngines().filter(e=>e.k===k)[0])||{}).short||k; }
+    function geEngineStatus(){
+      const st=((GEOD||{}).engines)||{};
+      const chips=GE_AUTO_ENG.map(k=>{ const s=st[k];
+        if(!s) return `<span class="text-[11.5px] px-2 py-1 rounded-lg border border-[#E6E6E3] text-slate-400">${geEngName(k)} · 첫 측정 대기</span>`;
+        if(s.status==='ok') return `<span class="text-[11.5px] px-2 py-1 rounded-lg" style="background:#EDF5E9;color:#4F6B3A" title="${esc(s.warn||'')}">🟢 ${geEngName(k)} · ${esc(s.model||'')} · ${esc(s.at||'')} ${s.n||0}건${s.warn?' ⚠':''}</span>`;
+        if(s.status==='nokey') return `<span class="text-[11.5px] px-2 py-1 rounded-lg" style="background:#FFF8E7;color:#8A6A00" title="${esc(s.msg||'')}">🔑 ${geEngName(k)} · 키 미등록(${esc(s.secret||'')})</span>`;
+        return `<span class="text-[11.5px] px-2 py-1 rounded-lg" style="background:#FDECEA;color:#BF5332" title="${esc(s.msg||'')}">⚠️ ${geEngName(k)} · 실패 ${esc(s.at||'')}</span>`; }).join('');
+      const bad=GE_AUTO_ENG.map(k=>[k,st[k]]).filter(x=>x[1]&&x[1].status==='error');
+      return `<div class="flex flex-wrap gap-1.5 mb-2">${chips}</div>
+        ${bad.map(x=>`<p class="text-[11px] text-ared mb-1">⚠️ ${geEngName(x[0])}: ${esc(String(x[1].msg||'').slice(0,240))}</p>`).join('')}
+        ${GE_AUTO_ENG.some(k=>st[k]&&st[k].status==='nokey')?`<p class="text-[11px] text-[#8A6A00] mb-2">🔑 키 미등록 엔진은 GitHub 저장소 → Settings → Secrets and variables → Actions 에 해당 이름으로 API 키를 등록하면 다음 날부터 측정됩니다.</p>`:''}`; }
+    function geDailyTrend(){
+      const days=((GEOD||{}).days)||{}, end=geDay||geToday(), cols=[];
+      for(let i=13;i>=0;i--) cols.push(geAddDays(end,-i));
+      if(!Object.keys(days).length) return '<p class="text-[12px] text-slate-400 mb-3">일별 추이: 데일리 측정이 쌓이면 여기에 날짜별 노출률이 나옵니다.</p>';
+      const cell=(v,tip,bold)=>{ if(!v||!v.n) return `<td class="px-1 py-1 text-center text-slate-300">·</td>`;
+        const p=Math.round(v.m/v.n*100), col=p>=50?'#5E7350':(p>0?'#D68134':'#BF5332');
+        return `<td class="px-1 py-1 text-center num ${bold?'font-extrabold':'font-bold'}" style="color:${col}" title="${tip} · ${v.m}/${v.n}회">${p}</td>`; };
+      const engs=GE_AUTO_ENG.filter(k=>cols.some(d=>(days[d]||{})[k]));
+      const rows=engs.map(k=>`<tr class="border-b border-[#F2EFE9]"><td class="px-2 py-1 font-semibold text-ink whitespace-nowrap">${geEngName(k)}</td>
+        ${cols.map(d=>{ const v=(days[d]||{})[k]; return cell(v?{m:v.gmen,n:v.gn}:null, d+' '+geEngName(k)); }).join('')}</tr>`).join('');
+      const tot=cols.map(d=>{ let m=0,n=0; engs.forEach(k=>{ const v=(days[d]||{})[k]; if(v){ m+=v.gmen; n+=v.gn; } }); return {m:m,n:n}; });
+      return `<div class="rounded-xl border border-[#E6E6E3] p-3 mb-3">
+        <p class="text-[12.5px] font-extrabold text-ink mb-1">일별 노출률 추이 <span class="text-[11px] font-normal text-slate-400">(최근 14일 · 브랜드 질문 제외 · 아카라 언급 %) — 날짜를 누르면 그날로 이동</span></p>
+        <div class="overflow-x-auto"><table class="w-full min-w-[640px] text-[11.5px]">
+          <thead><tr class="text-[10.5px] text-slate-400"><th class="px-2 py-1 text-left">엔진</th>
+            ${cols.map(d=>`<th class="px-1 py-1 text-center"><button onclick="gePer='day';geSetDay('${d}')" class="hover:underline ${d===end?'text-ink font-extrabold':''}">${d.slice(5).replace('-','/')}</button></th>`).join('')}</tr></thead>
+          <tbody>${rows}<tr class="bg-[#FAFAF9]"><td class="px-2 py-1 font-extrabold text-ink">전체</td>${tot.map((v,i)=>cell(v,cols[i]+' 전체',true)).join('')}</tr></tbody>
+        </table></div></div>`; }
+
     /* ===================== GEO 화면 ===================== */
     const GE_SECS=[{k:'overview',n:'요약·점수'},{k:'measure',n:'AI 답변 측정'},{k:'gap',n:'갭 진단'},
                    {k:'action',n:'액션(무슨 글을 쓸까)'},{k:'channel',n:'채널·엔진 도달'},{k:'page',n:'페이지·사이트'}];
@@ -7001,9 +7094,14 @@
               <span class="text-[13px] font-semibold text-slate-400">AI 답변에 나오는가 → 안 나오면 무슨 글을 쓸까</span></h2>
             <p class="text-[12px] text-slate-400 mt-1">크롤 ${esc(String(GEO.generatedAt||'').slice(0,16).replace('T',' '))} · 기준 데이터 ${esc((GEOS||{}).version||'')} · ${conn}</p>
           </div>
-          <div class="flex items-center gap-2">
-            <label class="text-[11.5px] font-bold text-slate-500">측정 월</label>
-            <input type="month" value="${geYM}" onchange="geSetYM(this.value)" class="text-[12.5px] border border-[#E6E6E3] rounded-lg px-2 py-1" />
+          <div class="flex flex-wrap items-center gap-1.5">
+            <label class="text-[11.5px] font-bold text-slate-500">측정일</label>
+            <button onclick="geShiftDay(-1)" class="text-[12px] border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2 py-1" title="전날">◀</button>
+            <input type="date" value="${geDay}" max="${geToday()}" onchange="geSetDay(this.value)" class="text-[12.5px] border border-[#E6E6E3] rounded-lg px-2 py-1" />
+            <button onclick="geShiftDay(1)" ${geDay>=geToday()?'disabled':''} class="text-[12px] border border-[#E6E6E3] hover:bg-[#FAFAF9] rounded-lg px-2 py-1 disabled:opacity-30" title="다음날">▶</button>
+            <select onchange="geSetPer(this.value)" class="text-[12.5px] border border-[#E6E6E3] rounded-lg px-2 py-1">
+              ${[['day','그날 하루'],['7d','최근 7일'],['30d','최근 30일'],['month','그 달 전체']].map(o=>`<option value="${o[0]}" ${gePer===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select>
+            ${geMonthsLoading()?'<span class="text-[11px] text-slate-400">불러오는 중…</span>':''}
           </div>
         </div>
         <div class="flex flex-wrap gap-1.5 mt-3">${nav}</div>
@@ -7030,6 +7128,12 @@
         <p class="text-[11.5px] text-slate-500 mt-1.5 leading-snug">${s}</p></div>`;
       return `
       <div class="card p-5 mb-4">
+        <h3 class="accent font-extrabold text-ink mb-2">AI 답변 데일리 측정</h3>
+        ${geEngineStatus()}
+        ${geDailyTrend()}
+      </div>
+
+      <div class="card p-5 mb-4">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div class="min-w-0 flex-1">
             <h3 class="accent font-extrabold text-ink mb-1">종합 GEO 점수</h3>
@@ -7045,7 +7149,7 @@
                 <td class="px-2 py-1.5 text-right num">${geBadge(p.v,'점')}</td>
                 <td class="px-2 py-1.5 text-right num text-slate-400">${p.w}</td>
                 <td class="px-2 py-1.5 text-right num">${p.v<0?'<span class="text-ared font-bold">제외</span>':Math.round(p.v*p.w/100)+'점'}</td>
-                <td class="px-2 py-1.5 text-slate-500">${({som:'프롬프트 35개 × 엔진 5개 측정에서 우리 브랜드 언급 비율',
+                <td class="px-2 py-1.5 text-slate-500">${({som:'선택 기간, 브랜드 질문을 뺀 프롬프트 × 엔진 '+geEngines().length+'개 측정에서 우리 브랜드 언급 비율',
                   asset:'자산별 (크롤 허용·구조화 데이터·최근 갱신·실제 인용) 4요소 평균',
                   page:'페이지별 7개 통과 항목 비율의 평균',
                   site:'robots·sitemap·/guide 색인·llms.txt·기준 문서 운영 5개',
@@ -7060,8 +7164,8 @@
       </div>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-        ${kpi('AI 답변 측정', runs?(runs+'회'):'미측정', runs?(geYM+' 기록 · SoM '+geBadge(geSomScore(),'%')):'아래 [AI 답변 측정]에서 기록을 시작하세요', runs?'#26282A':'#BF5332')}
-        ${kpi('갭이 있는 CEP×엔진', (75-(gaps.ok||0)-(gaps.na||0))+'건', '오답 '+(gaps.wrong||0)+' · 미언급 '+(gaps.none||0)+' · 경쟁사 '+(gaps.comp||0)+' · 미측정 '+(gaps.na||0), '#D68134')}
+        ${kpi('AI 답변 측정', runs?(runs+'회'):'미측정', runs?(gePerLabel()+' 기록 · SoM '+geBadge(geSomScore(),'%')):'아래 [AI 답변 측정]에서 기록을 시작하세요', runs?'#26282A':'#BF5332')}
+        ${kpi('갭이 있는 CEP×엔진', (geCeps().length*geEngines().length-(gaps.ok||0)-(gaps.na||0))+'건', '오답 '+(gaps.wrong||0)+' · 미언급 '+(gaps.none||0)+' · 경쟁사 '+(gaps.comp||0)+' · 미측정 '+(gaps.na||0), '#D68134')}
         ${kpi('콘텐츠 액션', acts.length?(done+'/'+acts.length):'0', acts.length?'완료/전체':'[액션] 탭에서 생성하세요', '#5B44C7')}
         ${kpi('AI가 읽을 수 있는 자사 글', (((GEO.guide||{}).posts||0)+(((GEO.boards||{})).newsroomPosts||0))+'건', '/guide '+((GEO.guide||{}).posts||0)+' · 뉴스룸 '+((GEO.boards||{}).newsroomPosts||0), '#5E7350')}
       </div>
@@ -7104,20 +7208,20 @@
       const f=geMForm;
       return `
       <div class="card p-5 mb-4">
-        <h3 class="accent font-extrabold text-ink mb-1">AI 답변 측정 <span class="text-[11px] font-normal text-slate-400">${geYM} · 프롬프트 35개 × 엔진 5개</span></h3>
+        <h3 class="accent font-extrabold text-ink mb-1">AI 답변 측정 <span class="text-[11px] font-normal text-slate-400">${gePerLabel()} · 프롬프트 ${ps.length}개 × 엔진 ${eng.length}개</span></h3>
         ${(()=>{ const a=geAutoRuns(), byEng={}; a.forEach(r=>{ byEng[r.eng]=(byEng[r.eng]||0)+1; });
-          const men=a.filter(r=>+r.mention===1).length, diag=((GEOM||{}).diag||{});
+          const men=a.filter(r=>+r.mention===1).length;
           return `<div class="rounded-xl p-3 mb-3" style="background:${a.length?'#F3F8F0':'#FDECEA'};border:1px solid ${a.length?'#CFE3C4':'#F0C9C0'}">
             <p class="text-[13px] font-extrabold" style="color:${a.length?'#4F6B3A':'#BF5332'}">
-              ${a.length?`✅ 이번 달 자동 측정 ${a.length}건 완료 — 아카라 언급 ${men}건 (${Math.round(men/a.length*100)}%)`
-                        :'⚠️ 이번 달 자동 측정 결과가 아직 없습니다'}</p>
+              ${a.length?`✅ ${gePerLabel()} 자동 측정 ${a.length}건 — 아카라 언급 ${men}건 (${Math.round(men/a.length*100)}%)`
+                        :(geMonthsLoading()?'자동 측정 결과를 불러오는 중…':`⚠️ ${gePerLabel()} 자동 측정 결과가 없습니다`)}</p>
             <p class="text-[12px] text-slate-600 mt-1">
-              ${a.length?`<b>손으로 넣을 게 없습니다.</b> 매월 1일·15일에 35개 질문을 자동으로 돌립니다(${Object.keys(byEng).map(k=>((geEngines().filter(e=>e.k===k)[0]||{}).short||k)+' '+byEng[k]+'건').join(' · ')}).
-                 아래 표에서 <b class="text-agreen">초록 열이 자동</b>, 나머지는 <b>보고 싶을 때만</b> 손으로 넣는 칸입니다 — 비워 둬도 됩니다.`
-                        :'자동 측정 파일(geo_measure.json)을 읽지 못했거나 이번 달 기록이 없습니다.'}</p>
-            ${diag.gemini?`<p class="text-[11.5px] text-[#8A6A00] mt-1">⚠️ ${esc(diag.gemini)}</p>`:''}
+              <b>매일 09:30</b>에 질문 ${ps.length}개를 Gemini·ChatGPT·Perplexity·Claude(전부 검색 켠 상태)와 네이버 검색에 자동으로 묻습니다${a.length?` (${Object.keys(byEng).map(k=>((geEngines().filter(e=>e.k===k)[0]||{}).short||k)+' '+byEng[k]+'건').join(' · ')})`:''}.
+              아래 표에서 <b class="text-agreen">초록 열이 자동</b>, 나머지(Google AI 개요·네이버 AI 브리핑)는 <b>보고 싶을 때만</b> 손으로 넣는 칸입니다.</p>
           </div>`; })()}
-        <p class="text-[11.5px] text-slate-400 mb-3">질문당 <b>월 ${minRuns}회 이상</b>이면 노출률로 씁니다. 손으로 넣을 때 ChatGPT·Gemini는 <b>검색(그라운딩) 켠 상태</b>의 답변만 써 주세요 — 검색이 꺼진 답변에는 근거 URL이 없어 측정에 쓸 수 없습니다.</p>
+        ${geEngineStatus()}
+        ${geDailyTrend()}
+        <p class="text-[11.5px] text-slate-400 mb-3">선택 기간에 질문당 <b>${minRuns}회 이상</b>이면 노출률로 믿을 만합니다(하루만 보면 엔진당 1회라 들쭉날쭉 — 추세는 '최근 7일·30일'로 보세요). 손으로 넣을 때는 <b>검색(그라운딩) 켠 상태</b>의 답변만 써 주세요.</p>
         ${f?`
         <div class="rounded-xl border-2 border-ink p-4 mb-4">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 mb-2.5">
@@ -7145,6 +7249,7 @@
             <button onclick="geMClose()" class="text-[12.5px] border border-[#E6E6E3] hover:bg-[#FAFAF9] px-3.5 py-2 rounded-lg">닫기</button>
             <button onclick="geMSave()" class="text-[12.5px] font-bold bg-ink text-white hover:brightness-125 px-4 py-2 rounded-lg">기록 저장(계속 입력)</button>
           </div>
+          ${geRunList(f.pid,f.eng)}
         </div>`:`<button onclick="geMOpen()" class="text-[13px] font-bold bg-ink text-white hover:brightness-125 px-3.5 py-2 rounded-lg mb-4">＋ 측정 기록 추가</button>`}
 
         <div class="overflow-x-auto">
@@ -7195,7 +7300,7 @@
       const eng=geEngines(), ceps=geCeps();
       return `
       <div class="card p-5 mb-4">
-        <h3 class="accent font-extrabold text-ink mb-1">CEP × 엔진 갭 <span class="text-[11px] font-normal text-slate-400">(${geYM} 측정 기준)</span></h3>
+        <h3 class="accent font-extrabold text-ink mb-1">CEP × 엔진 갭 <span class="text-[11px] font-normal text-slate-400">(${gePerLabel()} 측정 기준)</span></h3>
         <p class="text-[12.5px] text-slate-500 mb-3">${GE_GAP_ORDER.filter(k=>k!=='na').map(k=>gePill(k)+' <span class="text-[11px] text-slate-400 mr-2">'+GE_GAPS[k].d+'</span>').join('')}</p>
         <div class="overflow-x-auto">
           <table class="w-full min-w-[820px] text-[12px]">

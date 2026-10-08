@@ -1,11 +1,12 @@
 name: GEO Measure
 
-# 진단 프롬프트 35개를 AI·검색에 자동으로 돌려 노출률을 측정한다 → geo_measure.json
-# 매월 1일과 15일 한국시간 09:30 (한 달에 두 번 = 질문당 반복 회차를 쌓는다)
-# 손으로 더 돌리고 싶으면 Actions에서 Run workflow.
+# 진단 프롬프트 35개를 AI 엔진(Gemini·ChatGPT·Perplexity·Claude, 전부 검색 켠 상태)과 네이버 검색에
+# 매일 자동으로 물어 노출률을 측정한다 → geo_measure/<YYYY-MM>.json + geo_daily.json
+# 키(Secret)가 없는 엔진은 건너뛰고, 대시보드에 '키 미등록'으로 표시된다.
+# 손으로 더 돌리고 싶으면 Actions에서 Run workflow (같은 날 회차가 더 쌓인다).
 on:
   schedule:
-    - cron: '30 0 1,15 * *'   # 09:30 KST
+    - cron: '30 0 * * *'   # 매일 09:30 KST
   workflow_dispatch: {}
   push:
     paths:
@@ -22,21 +23,34 @@ concurrency:
 jobs:
   measure:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install
+        run: pip install --quiet anthropic
       - name: Measure
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           NAVER_ID: ${{ secrets.NAVER_ID }}
           NAVER_SECRET: ${{ secrets.NAVER_SECRET }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+          PPX_MODEL: ${{ vars.PPX_MODEL }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
         run: python crawler/geo_measure.py
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add geo_measure.json
-          git diff --staged --quiet || git commit -m "geo_measure.json 자동 측정"
-          git push
+          git add -A geo_measure geo_daily.json
+          git add -A geo_measure.json 2>/dev/null || true
+          git diff --staged --quiet && exit 0
+          git commit -m "GEO 데일리 측정 자동 갱신"
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
+          exit 1
