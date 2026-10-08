@@ -1,0 +1,60 @@
+{
+ "generatedAt": "2026-10-08T13:23:02+09:00",
+ "note": "날짜 × 엔진 요약. n=측정 회차, men=아카라 언급, cited=자사 문서 인용, gn/gmen=브랜드 질문 제외",
+ "engines": {
+  "chatgpt": {
+   "status": "nokey",
+   "secret": "OPENAI_API_KEY",
+   "at": "2026-10-08",
+   "msg": "GitHub Secret OPENAI_API_KEY 미등록 — 이 엔진은 측정하지 않음"
+  },
+  "ppx": {
+   "status": "nokey",
+   "secret": "PERPLEXITY_API_KEY",
+   "at": "2026-10-08",
+   "msg": "GitHub Secret PERPLEXITY_API_KEY 미등록 — 이 엔진은 측정하지 않음"
+  },
+  "claude": {
+   "status": "nokey",
+   "secret": "ANTHROPIC_API_KEY",
+   "at": "2026-10-08",
+   "msg": "GitHub Secret ANTHROPIC_API_KEY 미등록 — 이 엔진은 측정하지 않음"
+  },
+  "gemini": {
+   "status": "error",
+   "model": "",
+   "at": "2026-10-08",
+   "n": 0,
+   "msg": "측정 0건 — gemini-3.8-flash HTTP Error 429: Too Many Requests {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usag / gemini-3.7-flash HTTP Error 429: Too Many Requests {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usag / gemini-3.6-flash HTTP Error 429: Too Many Requests {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usag",
+   "warn": ""
+  },
+  "search": {
+   "status": "ok",
+   "model": "naver-openapi",
+   "at": "2026-10-08",
+   "n": 35,
+   "msg": "",
+   "warn": ""
+  }
+ },
+ "days": {
+  "2026-10-01": {
+   "search": {
+    "n": 35,
+    "men": 10,
+    "cited": 5,
+    "gn": 30,
+    "gmen": 5
+   }
+  },
+  "2026-10-08": {
+   "search": {
+    "n": 35,
+    "men": 9,
+    "cited": 5,
+    "gn": 30,
+    "gmen": 4
+   }
+  }
+ }
+}
