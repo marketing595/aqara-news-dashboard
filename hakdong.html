@@ -140,6 +140,32 @@
     .spot .ad span{flex:1;min-width:0}
     .spot .ad .nv{color:var(--muted2);font-weight:600;white-space:nowrap;flex:none;border-bottom:1px solid var(--line2);transition:.16s}
     .spot .ad .nv:hover{color:var(--ink);border-color:var(--ink)}
+    /* ─── 저장 · 나의 투어 코스 ─── */
+    .save{border:0;background:none;padding:0;font-size:11px;font-weight:600;color:var(--muted2);display:inline-flex;align-items:center;gap:3px;white-space:nowrap;flex:none;border-bottom:1px solid var(--line2);transition:.16s}
+    .save svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.2}
+    .save:hover{color:var(--ink);border-color:var(--ink)}
+    .save.on{color:var(--ink);border-color:var(--ink)}
+    .save.on svg{fill:var(--accent);stroke:var(--ink)}
+    .pp .save{font-size:12px;border:1px solid var(--line2);border-radius:980px;padding:5px 12px}
+    .pp .save.on{border-color:var(--ink)}
+    .cat.route .dot{background:var(--accent);box-shadow:0 0 0 1px var(--ink)}
+    .rhead{padding:22px 24px 18px;border-bottom:1px solid var(--ink);background:var(--paper)}
+    .rhead .ey{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+    .rhead b{display:block;font-size:17px;font-weight:800;letter-spacing:-0.03em;margin:4px 0 4px}
+    .rhead p{margin:0;font-size:12px;color:var(--ink2)}
+    .rhead .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:13px}
+    .shared{margin-top:12px;padding:10px 12px;background:var(--accent-soft);border-radius:4px;font-size:12px;color:var(--ink);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .shared span{flex:1;min-width:160px}
+    .stepno{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:11px;font-weight:800;font-variant-numeric:tabular-nums}
+    .ctl{display:inline-flex;gap:2px;flex:none}
+    .ctl button{border:1px solid var(--line2);background:#fff;color:var(--ink2);width:24px;height:22px;border-radius:4px;font-size:11px;line-height:1;padding:0}
+    .ctl button:hover:not(:disabled){border-color:var(--ink);color:var(--ink)}
+    .ctl button:disabled{opacity:.35;cursor:default}
+    .leg{padding:7px 24px 7px 70px;font-size:11px;color:var(--muted2);border-bottom:1px solid var(--line);background:var(--bg);font-variant-numeric:tabular-nums}
+    .pin.step{background:var(--accent);color:var(--on-accent);border-color:var(--ink);width:27px;height:27px;font-size:11px;font-weight:800}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:2000;background:var(--dark);color:#fff;border-radius:980px;padding:10px 10px 10px 18px;font-size:13px;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);transition:.25s ease;white-space:nowrap}
+    .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+    .toast button{border:0;background:var(--accent);color:var(--on-accent);border-radius:980px;padding:6px 12px;font-size:12px;font-weight:700}
     .empty{margin:0;padding:52px 24px;text-align:center;font-size:13px;color:var(--muted);line-height:1.8}
     .empty b{color:var(--ink)}
 
@@ -240,6 +266,7 @@
       <nav class="hdr-nav">
         <button class="nav-link" onclick="navMap()">지도 전체 보기</button>
         <button class="nav-link" onclick="flyHQ()">아카라라이프 쇼룸</button>
+        <button class="nav-link" onclick="setFilter('route')">내 코스 <span id="rtCnt"></span></button>
         <button class="btn primary sm" onclick="openBenefit()">웰컴 쿠폰 받기</button>
       </nav>
     </div>
@@ -275,6 +302,8 @@
       <div class="legend" id="legend"></div>
     </div>
   </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button onclick="hideToast();setFilter('route')">코스 보기</button></div>
 
   <!-- 혜택 모달 -->
   <div class="ov" id="ov" onclick="if(event.target===this)closeBenefit()">
@@ -324,6 +353,83 @@
   const naverName=s=>(s.n||'').replace(/\s*\([^)]*\)/g,'').replace(/\s*(플래그십|브랜드)?\s*(쇼룸|갤러리|스토어 서울)$/,'').trim()||s.n;
   const no2=n=>String(n).length<2?'0'+n:String(n);   // 카탈로그 목차처럼 01, 02 … 두 자리로
 
+  /* ───────── 저장 · 나의 투어 코스 ─────────
+     저장한 매장 id를 담은 순서대로 이 브라우저(localStorage)에만 둔다 — 로그인·개인정보 없음.
+     ?route=id,id,… 링크로 남에게 코스를 넘길 수 있다(받은 쪽은 '이 코스 저장'을 눌러야 자기 코스가 바뀐다) */
+  const RT_KEY='aqaraHakdongRoute';
+  let ROUTE=[], SHARED=null, ROUTE_LINE=null, TOAST_T=null;
+  try{ const r=JSON.parse(localStorage.getItem(RT_KEY)||'[]'); if(Array.isArray(r)) ROUTE=r.filter(x=>typeof x==='string'); }catch(e){}
+  function saveRoute(){ try{ localStorage.setItem(RT_KEY,JSON.stringify(ROUTE)); }catch(e){} }
+  const BM='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>';
+  const saveBtn=(id,cls)=>{ const on=ROUTE.includes(id);
+    return `<button class="save ${cls||''} ${on?'on':''}" data-save="${esc(id)}" onclick="event.stopPropagation();toggleSave('${esc(id)}')" aria-pressed="${on}">${BM}<span>${on?'저장됨':'저장'}</span></button>`; };
+  function toggleSave(id){
+    const i=ROUTE.indexOf(id); if(i>-1) ROUTE.splice(i,1); else ROUTE.push(id);
+    saveRoute();
+    const s=SPOTS.find(x=>x.id===id);
+    if(i<0) showToast(`내 코스에 담았어요 · ${ROUTE.length}곳`); else showToast(`${s?s.n:'매장'}을(를) 코스에서 뺐어요`);
+    syncSave();
+    if(FILTER==='route'){ paint(); paintMarkers(); }
+  }
+  // 목록·팝업에 흩어진 저장 버튼과 헤더 숫자를 한꺼번에 맞춘다
+  function syncSave(){
+    document.querySelectorAll('[data-save]').forEach(b=>{ const on=ROUTE.includes(b.dataset.save);
+      b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); const t=b.querySelector('span'); if(t) t.textContent=on?'저장됨':'저장'; });
+    const c=document.getElementById('rtCnt'); if(c) c.textContent=ROUTE.length?'· '+ROUTE.length:'';
+    const ch=document.querySelector('#chips .cat.route .n'); if(ch) ch.textContent=ROUTE.length;
+    Object.keys(MARK).forEach(id=>{ const p=MARK[id].getPopup(); if(p) p.setContent(popupHtml(SPOTS.find(x=>x.id===id)||{})); });
+  }
+  function showToast(m){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=m;
+    t.classList.add('show'); clearTimeout(TOAST_T); TOAST_T=setTimeout(hideToast,2600); }
+  function hideToast(){ document.getElementById('toast').classList.remove('show'); }
+  const routeIds=()=>SHARED||ROUTE;
+  const routeSpots=()=>routeIds().map(id=>SPOTS.find(s=>s.id===id)).filter(Boolean);
+  // 두 지점 직선거리(m). 실제 걷는 길은 골목을 돌아가므로 ×1.3, 걸음은 분당 67m(시속 4km)로 어림한다
+  function distM(a,b){ const R=6371000, r=Math.PI/180, dLa=(b.lat-a.lat)*r, dLo=(b.lng-a.lng)*r;
+    const h=Math.sin(dLa/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLo/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
+  const walkM=(a,b)=>distM({lat:+a.lat,lng:+a.lng},{lat:+b.lat,lng:+b.lng})*1.3;
+  const fmtWalk=m=>`도보 약 ${Math.max(1,Math.round(m/67))}분 · ${m<1000?Math.round(m/10)*10+'m':(m/1000).toFixed(1)+'km'}`;
+  function moveStep(id,d){ const i=ROUTE.indexOf(id), j=i+d; if(i<0||j<0||j>=ROUTE.length) return;
+    [ROUTE[i],ROUTE[j]]=[ROUTE[j],ROUTE[i]]; saveRoute(); paint(); paintMarkers(); }
+  // 첫 매장은 그대로 두고, 남은 곳은 '지금 위치에서 가장 가까운 곳'부터 차례로 잇는다
+  function sortNearest(){ const ss=routeSpots(); if(ss.length<3) return;
+    const out=[ss.shift()]; while(ss.length){ const cur=out[out.length-1]; let k=0;
+      ss.forEach((s,i)=>{ if(walkM(cur,s)<walkM(cur,ss[k])) k=i; }); out.push(ss.splice(k,1)[0]); }
+    ROUTE=out.map(s=>s.id); saveRoute(); paint(); paintMarkers(); showToast('가까운 순서로 다시 짰어요'); }
+  function clearRoute(){ if(!ROUTE.length||!confirm('담아둔 코스를 모두 지울까요?')) return;
+    ROUTE=[]; saveRoute(); syncSave(); paint(); paintMarkers(); }
+  function shareRoute(){ const ids=routeIds(); if(!ids.length) return;
+    const url=location.origin+location.pathname+'?route='+ids.map(encodeURIComponent).join(',');
+    const title='나의 학동 인테리어 투어 코스 ('+ids.length+'곳)';
+    if(navigator.share&&window.innerWidth<=860){ navigator.share({title,url}).catch(()=>{}); return; }
+    (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>showToast('코스 링크를 복사했어요')).catch(()=>prompt('코스 링크',url)); }
+  function adoptShared(){ if(!SHARED) return; ROUTE=SHARED.slice(); SHARED=null; saveRoute(); syncSave(); paint(); paintMarkers(); showToast('이 코스를 내 코스로 저장했어요'); }
+  function dropShared(){ SHARED=null; paint(); paintMarkers(); fitRoute(); }
+  function fitRoute(){ const ss=routeSpots(); if(!MAP||!ss.length) return;
+    if(ss.length===1) MAP.flyTo([+ss[0].lat,+ss[0].lng],16,{duration:.6});
+    else MAP.fitBounds(L.latLngBounds(ss.map(s=>[+s.lat,+s.lng])).pad(0.2),{maxZoom:17}); }
+  function routeHtml(){
+    const ss=routeSpots(), ro=!!SHARED;
+    let total=0; for(let i=1;i<ss.length;i++) total+=walkM(ss[i-1],ss[i]);
+    let h=`<div class="rhead"><div class="ey">My Tour Course</div><b>${ro?'공유받은 학동 투어 코스':'나의 학동 투어 코스'}</b>
+      <p>${ss.length?`${ss.length}곳${ss.length>1?' · 전체 '+fmtWalk(total):''}`:'아직 담은 매장이 없어요'}</p>`;
+    if(ro) h+=`<div class="shared"><span>친구가 보낸 코스예요. 저장하면 지금 내 코스 대신 이 코스가 담겨요.</span><button class="btn primary sm" onclick="adoptShared()">이 코스 저장</button><button class="btn sm" onclick="dropShared()">내 코스 보기</button></div>`;
+    else if(ss.length) h+=`<div class="acts">${ss.length>2?'<button class="btn sm" onclick="sortNearest()">가까운 순으로 정리</button>':''}<button class="btn sm" onclick="shareRoute()">코스 공유</button><button class="btn sm" onclick="clearRoute()">모두 지우기</button></div>`;
+    h+='</div>';
+    if(!ss.length) return h+`<p class="empty">목록이나 지도에서 <b>저장</b>을 누르면<br>여기에 담은 순서대로 코스가 만들어져요.</p>`;
+    ss.forEach((s,i)=>{ const c=catOf(s.cat);
+      if(i) h+=`<div class="leg">↓ ${fmtWalk(walkM(ss[i-1],s))}</div>`;
+      h+=`<div class="spot ${ACTIVE===s.id?'active':''}" style="--c:${c.color}" data-id="${s.id}" onclick="focusSpot('${s.id}',true)" role="button" tabindex="0" aria-label="${i+1}번째 ${esc(s.n)} — 지도에서 보기">
+        <div class="num"><span class="stepno">${i+1}</span></div>
+        <div><span class="en">${esc(c.ko)}</span>
+          <div class="nm">${esc(s.n)}${s.hl?'<span class="hqtag">웰컴 쿠폰</span>':''}</div>
+          <div class="ad"><span>${esc(s.a||'')}</span>
+            ${ro?'':`<span class="ctl" onclick="event.stopPropagation()"><button onclick="moveStep('${s.id}',-1)" ${i===0?'disabled':''} aria-label="앞으로">↑</button><button onclick="moveStep('${s.id}',1)" ${i===ss.length-1?'disabled':''} aria-label="뒤로">↓</button><button onclick="toggleSave('${s.id}')" aria-label="코스에서 빼기">✕</button></span>`}
+            <a class="nv" href="${naverUrl(s)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">네이버 ↗</a></div>
+        </div></div>`; });
+    return h+footHtml();
+  }
+
   fetch('hakdong.json?_='+Date.now()).then(r=>r.json()).then(d=>{ DATA=d; CATS=d.categories; boot(); })
     .catch(()=>{ document.getElementById('list').innerHTML='<p style="padding:30px;text-align:center;color:#382D18">자료를 불러오지 못했어요. 새로고침해 주세요.</p>'; });
 
@@ -352,7 +458,10 @@
     document.getElementById('hqAddr').innerHTML=`아카라라이프 쇼룸 · ${esc(hq.a||'')}<br>${esc(DATA.note||'')}<br>쿠폰은 발급일로부터 30일간 유효해요. 다른 혜택과 중복 적용되지 않을 수 있으며, 증정·할인 혜택의 상세 조건은 쇼룸에서 안내드려요.`;
     initMap(); applyOver();
     const p=new URLSearchParams(location.search);
-    if(p.get('cat')) setFilter(p.get('cat'));
+    if(p.get('route')){ const ids=p.get('route').split(',').map(x=>x.trim()).filter(id=>SPOTS.some(s=>s.id===id));
+      if(ids.length){ if(!ROUTE.length||ids.join()===ROUTE.join()){ ROUTE=ids; saveRoute(); } else SHARED=ids; setFilter('route'); } }
+    else if(p.get('cat')) setFilter(p.get('cat'));
+    syncSave();
     if(p.get('spot')) setTimeout(()=>focusSpot(p.get('spot')),400);
     if(p.get('benefit')==='1') openBenefit();
   }
@@ -368,17 +477,22 @@
     MAP.on('popupclose',()=>{ setActive(null,false); });
   }
   function pinHtml(s){ const c=catOf(s.cat);
+    if(FILTER==='route'){ const k=routeIds().indexOf(s.id); if(k>-1) return `<div class="pin step">${k+1}</div>`; }
     return s.hl?`<div class="hqpin"><span class="wc">Welcome Coupon</span><div class="core">AQARA</div></div>`:`<div class="pin" style="--c:${c.color}">${no2(s._no)}</div>`; }
   function popupHtml(s){ const c=catOf(s.cat);
     return `<div class="pp" style="--c:${c.color}">${s.hl?'<span class="badge-hl">웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${esc(s.en||'')}</span>
       <div class="nm">${esc(s.n)}</div>
       <div class="ds">${esc(s.d||'')}</div><div class="ad">${esc(s.a||'')}</div>
-      <div class="acts">${s.hl?`<button class="btn primary sm" onclick="openBenefit()">웰컴 쿠폰</button>`:''}<a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div>`; }
+      <div class="acts">${s.hl?`<button class="btn primary sm" onclick="openBenefit()">웰컴 쿠폰</button>`:''}${s.id?saveBtn(s.id):''}<a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div>`; }
   function paintMarkers(){
     Object.values(MARK).forEach(m=>MAP.removeLayer(m)); MARK={};
+    if(ROUTE_LINE){ MAP.removeLayer(ROUTE_LINE); ROUTE_LINE=null; }
+    document.getElementById('legend').style.display=FILTER==='route'?'none':'';   // 코스 보기의 핀은 분류색이 아니라 순번이라 범례를 숨긴다
+    if(FILTER==='route'){ const ss=routeSpots(); if(ss.length>1) ROUTE_LINE=L.polyline(ss.map(s=>[+s.lat,+s.lng]),{color:'#1D1D1F',weight:3,opacity:.75,dashArray:'2 7',lineCap:'round'}).addTo(MAP); }
     visible().forEach(s=>{
-      const icon=L.divIcon({className:'',html:pinHtml(s),iconSize:s.hl?[48,48]:[26,26],iconAnchor:s.hl?[24,24]:[13,13],popupAnchor:[0,s.hl?-44:-14]});
-      const m=L.marker([+s.lat,+s.lng],{icon,zIndexOffset:s.hl?1000:0,riseOnHover:true}).addTo(MAP).bindPopup(popupHtml(s),{maxWidth:300});
+      const big=s.hl&&FILTER!=='route';   // 코스 보기에서는 아카라 쇼룸도 순번 핀으로
+      const icon=L.divIcon({className:'',html:pinHtml(s),iconSize:big?[48,48]:[28,28],iconAnchor:big?[24,24]:[14,14],popupAnchor:[0,big?-44:-14]});
+      const m=L.marker([+s.lat,+s.lng],{icon,zIndexOffset:big?1000:0,riseOnHover:true}).addTo(MAP).bindPopup(popupHtml(s),{maxWidth:300});
       m.on('click',()=>setActive(s.id,true)); MARK[s.id]=m;
     });
   }
@@ -422,13 +536,15 @@
   /* ───────── 목록·필터 ───────── */
   function numbered(){ let n=0; return SPOTS.map(s=>Object.assign(s,{_no:s.hl?'A':(++n)})); }
   function visible(){ const q=(document.getElementById('q').value||'').trim().toLowerCase();
+    if(FILTER==='route'){ numbered(); return routeSpots(); }
     return numbered().filter(s=>(FILTER==='all'||s.cat===FILTER)&&(!q||[s.n,s.en,s.d,s.a,catOf(s.cat).ko,catOf(s.cat).en].join(' ').toLowerCase().includes(q))); }
-  function setFilter(id){ FILTER=CATS.some(c=>c.id===id)?id:'all'; paint(); paintMarkers();
+  function setFilter(id){ FILTER=id==='route'?'route':CATS.some(c=>c.id===id)?id:'all'; paint(); paintMarkers();
+    if(FILTER==='route'){ fitRoute(); return; }
     const vs=visible(); if(vs.length&&FILTER!=='all'){ const b=L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])); MAP.fitBounds(b.pad(0.25),{maxZoom:16}); } }
   function paint(){
     const all=numbered();
     // 카테고리 네비 — 알약 대신 01·02… 번호를 단 텍스트 인덱스
-    document.getElementById('chips').innerHTML=[`<button class="cat ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="dot" style="background:var(--ink)"></span><span class="no">ALL</span>전체<span class="n">${all.length}</span></button>`]
+    document.getElementById('chips').innerHTML=[`<button class="cat ${FILTER==='all'?'on':''}" onclick="setFilter('all')"><span class="dot" style="background:var(--ink)"></span><span class="no">ALL</span>전체<span class="n">${all.length}</span></button>`,`<button class="cat route ${FILTER==='route'?'on':''}" onclick="setFilter('route')"><span class="dot"></span><span class="no">MY</span>내 코스<span class="n">${ROUTE.length}</span></button>`]
       .concat(CATS.map((c,i)=>`<button class="cat ${FILTER===c.id?'on':''}" style="--c:${c.color}" onclick="setFilter('${c.id}')"><span class="dot"></span><span class="no">${no2(i+1)}</span>${esc(c.ko)}<span class="n">${all.filter(s=>s.cat===c.id).length}</span></button>`)).join('');
     // 한 줄로 밀어 넘기는 좁은 화면: 선택한 분류가 화면 밖에 있으면 보이는 곳으로 당겨온다
     // (scrollIntoView는 페이지 전체가 위아래로 움직일 수 있어 줄 안에서만 scrollLeft로 맞춘다)
@@ -437,6 +553,7 @@
       if(l<chipBar.scrollLeft) chipBar.scrollLeft=l-18; else if(r>chipBar.scrollLeft+chipBar.clientWidth) chipBar.scrollLeft=r-chipBar.clientWidth+18; }
     const cd=document.getElementById('catdesc'), cc=CATS.find(c=>c.id===FILTER);
     cd.style.display=cc?'flex':'none'; if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b> · ${esc(cc.desc||'')}</span>`;
+    if(FILTER==='route'){ cd.style.display='none'; document.getElementById('list').innerHTML=routeHtml(); return; }
     const vs=visible(), box=document.getElementById('list'); let html='';
     CATS.forEach((c,ci)=>{ const g=vs.filter(s=>s.cat===c.id); if(!g.length) return;   // 아카라 쇼룸(hl)도 일반 행으로 함께 보여준다
       html+=`<div class="sec" style="--c:${c.color}"><span class="no">${no2(ci+1)}</span><div><b>${esc(c.ko)}</b><em>${esc(c.en)}</em></div><i></i><span class="cnt">${g.length}곳</span></div>`;
@@ -445,7 +562,7 @@
         <div><span class="en">${esc(s.en||'')}</span>
           <div class="nm">${esc(s.n)}${s.hl?'<span class="hqtag">웰컴 쿠폰</span>':''}${s.check?`<span class="chk">· ${esc(s.check)}</span>`:''}</div>
           <div class="ds">${esc(s.d||'')}</div>
-          <div class="ad"><span>${esc(s.a||'')}</span><a class="nv" href="${naverUrl(s)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">네이버 ↗</a></div>
+          <div class="ad"><span>${esc(s.a||'')}</span>${saveBtn(s.id)}<a class="nv" href="${naverUrl(s)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">네이버 ↗</a></div>
         </div></div>`).join('');
     });
     box.innerHTML=html?html+footHtml()
