@@ -107,6 +107,8 @@
     /* 카테고리 설명 — 한 줄, 박스 없이 */
     .catdesc{padding:11px 24px;font-size:12px;color:var(--ink2);background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:flex-start;line-height:1.5}
     .catdesc .dot{width:7px;height:7px;border-radius:50%;flex:none;margin-top:6px}
+    .catdesc b{display:block;color:var(--ink)}   /* 1줄: 영문 분류명 / 2줄: 한글 설명 */
+    .catdesc .ko{display:block;margin-top:2px}
 
     /* ─── 목록 ─── */
     .list{overflow:auto;flex:1;min-height:0;padding:0 0 32px;scroll-behavior:smooth;background:var(--paper)}
@@ -552,7 +554,7 @@
     if(chipOn&&chipBar.scrollWidth>chipBar.clientWidth){ const l=chipOn.offsetLeft-chipBar.offsetLeft, r=l+chipOn.offsetWidth;
       if(l<chipBar.scrollLeft) chipBar.scrollLeft=l-18; else if(r>chipBar.scrollLeft+chipBar.clientWidth) chipBar.scrollLeft=r-chipBar.clientWidth+18; }
     const cd=document.getElementById('catdesc'), cc=CATS.find(c=>c.id===FILTER);
-    cd.style.display=cc?'flex':'none'; if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b> · ${esc(cc.desc||'')}</span>`;
+    cd.style.display=cc?'flex':'none'; if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b>${cc.desc?`<span class="ko">${esc(cc.desc)}</span>`:''}</span>`;
     if(FILTER==='route'){ cd.style.display='none'; document.getElementById('list').innerHTML=routeHtml(); return; }
     const vs=visible(), box=document.getElementById('list'); let html='';
     CATS.forEach((c,ci)=>{ const g=vs.filter(s=>s.cat===c.id); if(!g.length) return;   // 아카라 쇼룸(hl)도 일반 행으로 함께 보여준다
