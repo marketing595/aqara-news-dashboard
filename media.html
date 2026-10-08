@@ -126,7 +126,7 @@
     list.forEach(function(c){
       var items=(c.items||[]).filter(function(it){ return !q || (it.title||'').toLowerCase().indexOf(q)>-1; });
       n+=items.length;
-      var folderUrl='https://drive.google.com/drive/folders/'+esc(c.folderId);
+      var folderUrl=c.url?esc(c.url):'https://drive.google.com/drive/folders/'+esc(c.folderId);   // url 이 있으면 외부 사이트로 연결
 
       if(!items.length){
         if(q) return;                       // 검색 중이면 빈 카테고리는 숨김
@@ -137,7 +137,7 @@
           +'<span class="block">'+meta(c, null)+'</span>'
           +(c.desc?'<span class="block mt-2 text-[12px] text-muted leading-snug">'+esc(c.desc)+'</span>':'')
           +'<span class="mt-auto pt-4 flex items-center justify-between gap-2">'
-          +'<span class="text-[12px] font-semibold text-muted group-hover:text-brand-ink transition">드라이브에서 다운로드</span>'
+          +'<span class="text-[12px] font-semibold text-muted group-hover:text-brand-ink transition">'+(c.url?'사이트에서 보기':'드라이브에서 다운로드')+'</span>'
           +'<span class="text-[13px] text-[#C9C9C4] group-hover:text-brand-ink group-hover:translate-x-0.5 transition">↗</span>'
           +'</span></a></div>');
         return;
