@@ -5438,7 +5438,8 @@
           <li><b>회색 버블 · Paid 미디어 · Owned 콘텐츠 · 단계 배치</b> — 아카라 제품·시장 맥락으로 작성한 <b>전략 초안(편집 가능)</b>입니다. 검색·측정 데이터가 아니므로 담당자 검증·보완이 필요합니다.</li>
         </ul>`; }
     }
-    function todayStr(){ return (typeof reportToday==='function')?reportToday():new Date().toISOString().slice(0,10); }
+    // 실제 오늘(KST). 예전엔 마지막 수집 데이터 날짜를 썼는데, 수집이 멈추면 TASKS·주간보고 '이번 주'가 지난주로 밀렸다.
+    function todayStr(){ return kstToday(); }
 
     // ===== 브랜드 이슈 캘린더 =====
     const CAL_COLOR={'보도자료':'#8A6A00','캠페인':'#BF5332','전시·행사':'#7C5CFF','제품·출시':'#5E7350','이슈':'#C13584','기타':'#5E85A6'};
