@@ -6051,6 +6051,21 @@
         if(!items.length){
           if(!marked){ out+=FOLDER_ROW_MARK; marked=true; }
           // 폴더 전용 카테고리 → 컴팩트 카드(한 줄에 최대 3개)
+          if(c.url && c.folderId){   // 사이트 + 드라이브 둘 다 → 버튼 2개
+            const lk='text-[12px] font-semibold text-muted hover:text-brand-ink border border-[#E6E6E3] hover:border-[#C9C9C4] rounded-lg px-2.5 py-1 transition whitespace-nowrap';
+            buf.push(`<div class="group relative flex flex-col rounded-2xl border ${c.pinned?'border-[#EADFB4]':'border-[#E6E6E3]'} bg-white shadow-card hover:border-[#C9C9C4] hover:shadow-cardhover transition p-5">
+              <a href="${esc(c.url)}" target="_blank" rel="noopener" class="block">
+                <span class="block pr-7">${libMeta(c, null)}</span>
+                ${c.desc?`<span class="block mt-2 text-[12px] text-muted leading-snug">${esc(c.desc)}</span>`:''}
+              </a>
+              <span class="mt-auto pt-4 flex flex-wrap items-center gap-2">
+                <a href="${esc(c.url)}" target="_blank" rel="noopener" class="${lk}">사이트에서 보기 ↗</a>
+                <a href="https://drive.google.com/drive/folders/${esc(c.folderId)}" target="_blank" rel="noopener" class="${lk}">드라이브에서 다운받기 ↗</a>
+              </span>
+              <button onclick="libShare('${esc(c.name).replace(/'/g,"\\'")}')" title="이 카테고리만 담긴 외부 공유 링크 복사" class="absolute top-3 right-3 text-[11px] text-muted hover:text-ink border border-transparent hover:border-[#E6E6E3] bg-white/80 rounded-lg px-1.5 py-0.5 transition">🔗</button>
+            </div>`);
+            return;
+          }
           buf.push(`<div class="group relative rounded-2xl border ${c.pinned?'border-[#EADFB4]':'border-[#E6E6E3]'} bg-white shadow-card hover:border-[#C9C9C4] hover:shadow-cardhover transition">
             <a href="${folderUrl}" target="_blank" rel="noopener" class="flex flex-col h-full p-5">
               <span class="block pr-7">${libMeta(c, null)}</span>
