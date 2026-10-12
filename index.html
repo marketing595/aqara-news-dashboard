@@ -6094,7 +6094,9 @@
         </section>`;
       });
       // 모아둔 폴더 블록을 한 줄로 만들어 표시해 둔 자리에 넣는다(제목에 $ 가 있어도 안전하게 함수로)
-      const folderRow = buf.length ? `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">${buf.join('')}</div>` : '';
+      // 4개처럼 3으로 안 나눠떨어지는 짝수면 2열(2+2)로 — 마지막 줄에 카드 하나만 남지 않게
+      const lgCols = (buf.length%3!==0 && buf.length%2===0) ? 'lg:grid-cols-2' : 'lg:grid-cols-3';
+      const folderRow = buf.length ? `<div class="grid grid-cols-1 sm:grid-cols-2 ${lgCols} gap-4 mb-6">${buf.join('')}</div>` : '';
       out = out.replace(FOLDER_ROW_MARK, () => folderRow);
       grid.innerHTML=out||'<div class="text-center py-16 text-slate-400"><div class="text-4xl mb-2">📁</div>등록된 카테고리가 없습니다.</div>';
     }
