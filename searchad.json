@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-14 01:56",
+ "generatedAt": "2026-10-14 23:30",
  "source": "네이버 검색광고 API",
  "defaultPeriod": "30d",
  "periods": {
@@ -1372,6 +1372,14 @@
   {
    "campaign": "B2C 브랜드검색",
    "type": "브랜드검색",
+   "headline": "B2C_PC_CJ온스타일 웜다크실버_10/16~25",
+   "desc": null,
+   "url": null,
+   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acf238c98e1dd45a0a2aabd.png"
+  },
+  {
+   "campaign": "B2C 브랜드검색",
+   "type": "브랜드검색",
    "headline": "B2C_PC_상시소재",
    "desc": null,
    "url": null,
@@ -1400,6 +1408,14 @@
    "desc": null,
    "url": null,
    "image": "https://ad-creative.gfa.naver.com/preview/202608/6a7e9f07bf2744e99888874e.png"
+  },
+  {
+   "campaign": "B2C 브랜드검색",
+   "type": "브랜드검색",
+   "headline": "B2C_MO_CJ온스타일 웜다크실버_10/16~25",
+   "desc": null,
+   "url": null,
+   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acf242a8631cabeb5dd78c3.png"
   },
   {
    "campaign": "B2B 브랜드검색",
@@ -1540,10 +1556,18 @@
   {
    "campaign": "B2B 브랜드검색",
    "type": "브랜드검색",
+   "headline": "B2B_PC_상시소재_10/15",
+   "desc": null,
+   "url": null,
+   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acf2465e682ed967d135399.png"
+  },
+  {
+   "campaign": "B2B 브랜드검색",
+   "type": "브랜드검색",
    "headline": "B2B_PC_상시소재_10/18",
    "desc": null,
    "url": null,
-   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acc6e82c662fb4fd8256d95.png"
+   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acf2482e682ed967d13539b.png"
   },
   {
    "campaign": "B2B 브랜드검색",
@@ -1551,7 +1575,7 @@
    "headline": "B2B_PC_상시소재_10/16~10/25",
    "desc": null,
    "url": null,
-   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acc6e32a1e9189e0a48bb90.png"
+   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acf24975e6d05da6f782ed9.png"
   },
   {
    "campaign": "B2B 브랜드검색",
@@ -1564,30 +1588,6 @@
   {
    "campaign": "B2B 브랜드검색",
    "type": "브랜드검색",
-   "headline": "B2B_PC_상시소재_10/15",
-   "desc": null,
-   "url": null,
-   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acc6e63b815c160e6d079a1.png"
-  },
-  {
-   "campaign": "B2B 브랜드검색",
-   "type": "브랜드검색",
-   "headline": "B2B_MO_상시소재_10/16~10/17",
-   "desc": null,
-   "url": null,
-   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acc6f9b6ace2d1f7e02f254.png"
-  },
-  {
-   "campaign": "B2B 브랜드검색",
-   "type": "브랜드검색",
-   "headline": "B2B_MO_상시소재_10/15",
-   "desc": null,
-   "url": null,
-   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acc6f738442f0ecb93d0a09.png"
-  },
-  {
-   "campaign": "B2B 브랜드검색",
-   "type": "브랜드검색",
    "headline": "B2B_MO_상시소재(9/7~9/13)",
    "desc": null,
    "url": null,
@@ -1596,10 +1596,26 @@
   {
    "campaign": "B2B 브랜드검색",
    "type": "브랜드검색",
+   "headline": "B2B_MO_상시소재_10/16~10/25",
+   "desc": null,
+   "url": null,
+   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acf24dfce96fd108bb128b2.png"
+  },
+  {
+   "campaign": "B2B 브랜드검색",
+   "type": "브랜드검색",
+   "headline": "B2B_MO_상시소재_10/15",
+   "desc": null,
+   "url": null,
+   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acf24c35e6d05da6f782edb.png"
+  },
+  {
+   "campaign": "B2B 브랜드검색",
+   "type": "브랜드검색",
    "headline": "B2B_MO_상시소재_10/18",
    "desc": null,
    "url": null,
-   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acc6f82a1e9189e0a48bbb1.png"
+   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acf24d4740b264a5070c46d.png"
   },
   {
    "campaign": "B2B 브랜드검색",
