@@ -1,14 +1,14 @@
 {
- "generatedAt": "2026-10-14 22:47",
+ "generatedAt": "2026-10-15 22:29",
  "brands": [
   {
    "name": "아카라",
    "me": true,
    "query": "아카라 스마트홈",
-   "total": 1540,
+   "total": 1542,
    "sentiment": {
-    "pos": 22,
-    "neu": 38,
+    "pos": 24,
+    "neu": 36,
     "neg": 0
    },
    "keywords": [
@@ -21,20 +21,24 @@
      28
     ],
     [
-     "AIoT",
-     26
+     "도어락",
+     24
     ],
     [
-     "도어락",
-     23
+     "AIoT",
+     24
     ],
     [
      "인테리어",
-     20
+     22
     ],
     [
      "공간디자인",
      17
+    ],
+    [
+     "전문기업",
+     15
     ],
     [
      "AX",
@@ -43,10 +47,6 @@
     [
      "가톨릭대",
      14
-    ],
-    [
-     "전문기업",
-     13
     ],
     [
      "공간",
@@ -69,6 +69,10 @@
      11
     ],
     [
+     "이상헌",
+     10
+    ],
+    [
      "실습실",
      10
     ],
@@ -79,16 +83,16 @@
     [
      "디바이스",
      9
-    ],
-    [
-     "이상헌",
-     9
     ]
    ],
    "posWords": [
     [
      "혁신",
      8
+    ],
+    [
+     "협업",
+     4
     ],
     [
      "프리미엄",
@@ -113,10 +117,6 @@
     [
      "확대",
      2
-    ],
-    [
-     "주목",
-     2
     ]
    ],
    "related": [
@@ -125,13 +125,25 @@
     "아카라",
     "아카라 k100",
     "아카라 홈캠",
-    "아카라카",
     "아카라 스위치",
+    "아카라카",
     "아카라이브 핫딜",
     "명조 아카라이브",
     "니케 아카라이브"
    ],
    "recent": [
+    {
+     "title": "아카라라이프, CJ온스타일과 협업.. 'K100' 신규 컬러 한정판 출시",
+     "source": "머니투데이",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/008/0005427034?sid=101"
+    },
+    {
+     "title": "아카라라이프, 스마트 도어락 'K100 웜다크실버' 한정판 출시",
+     "source": "beyondpost.co.kr",
+     "date": "2026-10-15",
+     "link": "http://www.beyondpost.co.kr/view.php?ud=20261015100631188946a9e4dd7f_30"
+    },
     {
      "title": "아카라라이프, '프로안심 서비스' 평가 만족도 4.9점…\"앱 연결도 기사...",
      "source": "bizwnews.com",
@@ -209,18 +221,6 @@
      "source": "머니투데이",
      "date": "2026-09-14",
      "link": "https://n.news.naver.com/mnews/article/008/0005413511?sid=101"
-    },
-    {
-     "title": "아카라라이프, 국내 바닥난방 연동 지원하는 '스마트 온도 조절기 W400' ...",
-     "source": "enetnews.co.kr",
-     "date": "2026-09-14",
-     "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=54369"
-    },
-    {
-     "title": "\"스마트홈, 이젠 공간 디자인의 영역\"…아카라라이프·KOSID, 11월 코엑스...",
-     "source": "bizwnews.com",
-     "date": "2026-09-14",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=145814"
     }
    ]
   },
@@ -346,8 +346,8 @@
     "헤이홈",
     "헤이홈 홈캠",
     "헤이홈 sd카드",
-    "헤이홈 거치대",
     "헤이홈 연결",
+    "헤이홈 거치대",
     "헤이홈 중국",
     "헤이홈 오프라인",
     "헤이홈 공유",
@@ -451,206 +451,218 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69257,
+   "total": 69346,
    "sentiment": {
-    "pos": 9,
-    "neu": 51,
+    "pos": 25,
+    "neu": 35,
     "neg": 0
    },
    "keywords": [
     [
      "AI",
-     140
+     75
     ],
     [
-     "모듈러",
-     106
+     "동남아",
+     55
     ],
     [
-     "가전과",
-     77
+     "가전",
+     55
     ],
     [
-     "주거",
-     67
-    ],
-    [
-     "공장에서",
+     "B2B",
      53
     ],
     [
-     "솔루션을",
-     50
-    ],
-    [
-     "모듈을",
-     45
-    ],
-    [
-     "결합한",
-     45
-    ],
-    [
-     "기반",
-     44
-    ],
-    [
-     "제작한",
-     43
-    ],
-    [
-     "현장에서",
-     37
-    ],
-    [
-     "모델이다",
-     37
+     "프로",
+     48
     ],
     [
      "에너지",
-     37
+     41
     ],
     [
-     "삼성전자의",
-     32
+     "시연했다",
+     38
     ],
     [
-     "저탄소",
-     31
+     "상태와",
+     34
     ],
     [
-     "홈은",
+     "공조",
+     33
+    ],
+    [
+     "사업장의",
+     33
+    ],
+    [
+     "기기",
+     33
+    ],
+    [
+     "플랫폼",
+     33
+    ],
+    [
+     "IoT",
      30
     ],
     [
-     "주택",
+     "사용량을",
      29
     ],
     [
-     "사전",
-     29
+     "여러",
+     28
+    ],
+    [
+     "관리하는",
+     25
+    ],
+    [
+     "에어컨과",
+     25
+    ],
+    [
+     "이상직",
+     25
     ]
    ],
    "posWords": [
     [
-     "확대",
-     5
-    ],
-    [
      "공략",
-     3
+     18
     ],
     [
-     "협업",
-     2
+     "확대",
+     7
+    ],
+    [
+     "강화",
+     6
     ],
     [
      "글로벌",
+     3
+    ],
+    [
+     "성장",
+     2
+    ],
+    [
+     "혁신",
+     1
+    ],
+    [
+     "주목",
      1
     ]
    ],
    "related": [
-    "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스 오류",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스 업데이트"
+    "삼성 스마트싱스 업데이트",
+    "삼성 스마트싱스 허브 5세대",
+    "삼성 스마트싱스 아이폰"
    ],
    "recent": [
     {
-     "title": "삼성전자, 기후에너지환경부 장관에 AI 모듈러 홈 저탄소 솔루션 소개",
-     "source": "newstnt.com",
-     "date": "2026-10-14",
-     "link": "https://www.newstnt.com/news/articleView.html?idxno=722999"
+     "title": "[뉴스인사이드 뉴스톡톡] '검은 목요일'…코스피·코스닥, 7% 폭락 外",
+     "source": "newsinside.kr",
+     "date": "2026-10-15",
+     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025238"
     },
     {
-     "title": "LG, 애플과 AI홈 ‘맞손’…글로벌 스마트홈 시장 판 흔든다",
-     "source": "sentv.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.sentv.co.kr/article/view/sentv202610140068"
+     "title": "삼성전자, 동남아 AI가전·공조 공략…B2B 매출 20%↑",
+     "source": "newsinside.kr",
+     "date": "2026-10-15",
+     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025234"
     },
     {
-     "title": "삼성전자, 고효율·저탄소 주거 솔루션 제시",
-     "source": "kfenews.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=666292"
+     "title": "아크메르 동탄, 삼성전자 '무풍 시스템에어컨 인피니트 라인' 유상옵션...",
+     "source": "ppss.kr",
+     "date": "2026-10-15",
+     "link": "https://www.ppss.kr/news/articleView.html?idxno=315736"
     },
     {
-     "title": "민관이 함께 그리는 미래주거…삼성·LG, ‘AI 주택’으로 K-GX 이끈다(종...",
-     "source": "이데일리",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/018/0006388037?sid=101"
+     "title": "삼성전자, 베트남서 AI 가전·공조 기술 선봬…동남아 B2B 시장 공략",
+     "source": "biztribune.co.kr",
+     "date": "2026-10-15",
+     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=360721"
     },
     {
-     "title": "LG전자·애플 AI홈 12월 美 출시... 가전업계-빅테크, AI 매개 협업 커진...",
-     "source": "hankookilbo.com",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/469/0000959492?sid=105"
+     "title": "[오늘 뭐했니?] 삼성전자",
+     "source": "financialreview.co.kr",
+     "date": "2026-10-15",
+     "link": "http://www.financialreview.co.kr/news/articleView.html?idxno=45532"
     },
     {
-     "title": "삼성·LG 김성환 기후부 장관에게 'AI 모듈러 주택' 선보여, K-GX 연계 가...",
+     "title": "삼성전자, 동남아 AI 가전 공략 확대… 가정부터 상업시설까지 겨냥",
+     "source": "mediapen.com",
+     "date": "2026-10-15",
+     "link": "https://www.mediapen.com/news/view/1130187"
+    },
+    {
+     "title": "삼성전자, 동남아 AI 가전 시장 공략-맞춤형 냉방·스마트홈 기술 공개",
+     "source": "mediafine.co.kr",
+     "date": "2026-10-15",
+     "link": "https://www.mediafine.co.kr/news/articleView.html?idxno=92704"
+    },
+    {
+     "title": "삼성전자, 동남아 AI 가전·공조 솔루션 확대…B2B 사업 강화",
+     "source": "thebigdata.co.kr",
+     "date": "2026-10-15",
+     "link": "https://www.thebigdata.co.kr/view.php?ud=202610151510431710ecbf9426b_23"
+    },
+    {
+     "title": "삼성전자, 베트남서 ‘가전 테크세미나’…AI 가전·공조 솔루션 공개",
+     "source": "donga.com",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/020/0003755200?sid=101"
+    },
+    {
+     "title": "김성환 장관, 히트펌프·태양광·가전 갖춘 삼성 모듈러 홈 둘러봐",
+     "source": "e2news.com",
+     "date": "2026-10-15",
+     "link": "http://www.e2news.com/news/articleView.html?idxno=335115"
+    },
+    {
+     "title": "환경부 장관 만난 삼성·LG⋯ AI 가전·에너지 결합 ‘미래 주거 청사진...",
+     "source": "viva100.com",
+     "date": "2026-10-15",
+     "link": "https://www.viva100.com/article/20261015500733"
+    },
+    {
+     "title": "삼성전자, 베트남서 동남아 가전 테크세미나...AI 홈·통합 공조 선보여",
+     "source": "businessplus.kr",
+     "date": "2026-10-15",
+     "link": "https://www.businessplus.kr/news/articleView.html?idxno=118220"
+    },
+    {
+     "title": "삼성전자, 동남아서 AI 가전·B2B 솔루션 선보여",
+     "source": "fntimes.com",
+     "date": "2026-10-15",
+     "link": "https://www.fntimes.com/html/view.php?ud=2026101513574757147de3572ddd_18"
+    },
+    {
+     "title": "[전자는 지금] 삼성전자, 동남아 시장에 AI 가전·공조 솔루션 선봬 外",
+     "source": "dealsite.co.kr",
+     "date": "2026-10-15",
+     "link": "https://dealsite.co.kr/articles/170732"
+    },
+    {
+     "title": "삼성전자 베트남서 가전 테크세미나 개최, AI 홈·B2B 설루션 선보여",
      "source": "businesspost.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=449360"
-    },
-    {
-     "title": "삼성전자, 기후부 장관에 '삼성 AI 모듈러 홈' 고효율·저탄소 주거환경...",
-     "source": "sisacast.kr",
-     "date": "2026-10-14",
-     "link": "http://www.sisacast.kr/news/articleView.html?idxno=100996"
-    },
-    {
-     "title": "삼성전자, 김성환 장관에 'AI 모듈러 홈' 소개…\"저탄소 주거 솔루션\"",
-     "source": "paxetv.com",
-     "date": "2026-10-14",
-     "link": "http://www.paxetv.com/news/articleView.html?idxno=284161"
-    },
-    {
-     "title": "삼성전자·LG전자, ‘한국형 녹색전환’ 가능성 점검",
-     "source": "theviewers.co.kr",
-     "date": "2026-10-14",
-     "link": "https://theviewers.co.kr/View.aspx?No=4263637"
-    },
-    {
-     "title": "삼성전자, 김성환 장관에 'AI 모듈러 홈' 공개…히트펌프로 친환경 주거...",
-     "source": "joongangenews.com",
-     "date": "2026-10-14",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=554912"
-    },
-    {
-     "title": "삼성전자, 히트펌프·태양광·AI 묶어 주거 에너지 관리…국내 사업 확...",
-     "source": "pointdaily.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=322307"
-    },
-    {
-     "title": "삼성전자, 주택 에너지 자립 모델 국내 현장서 선봬",
-     "source": "datasom.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.datasom.co.kr/news/articleView.html?idxno=210339"
-    },
-    {
-     "title": "[TOP's Pick] [전자·IT] 삼성전자, 고효율·저탄소 주거 솔루션 제시 外",
-     "source": "topdaily.kr",
-     "date": "2026-10-14",
-     "link": "https://www.topdaily.kr/articles/112338"
-    },
-    {
-     "title": "삼성전자, AI 모듈러 홈 앞세워 고효율·저탄소 주거 솔루션 확대",
-     "source": "thetracker.co.kr",
-     "date": "2026-10-14",
-     "link": "https://thetracker.co.kr/View.aspx?No=4263579"
-    },
-    {
-     "title": "삼성전자, '삼성 AI 모듈러 홈'서 고효율·저탄소 주거 솔루션 제시",
-     "source": "shinailbo.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5071888"
+     "date": "2026-10-15",
+     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=449421"
     }
    ]
   },
@@ -658,94 +670,106 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78031,
+   "total": 78046,
    "sentiment": {
-    "pos": 16,
-    "neu": 43,
+    "pos": 17,
+    "neu": 42,
     "neg": 1
    },
    "keywords": [
     [
      "AI홈",
-     64
+     55
     ],
     [
      "LG전자",
-     52
+     41
     ],
     [
      "기기",
-     51
-    ],
-    [
-     "LG전자의",
-     37
-    ],
-    [
-     "플랫폼",
-     37
+     40
     ],
     [
      "AI",
+     35
+    ],
+    [
+     "플랫폼",
      31
     ],
     [
-     "ThinQ",
-     27
-    ],
-    [
-     "아이패드",
-     27
+     "LG전자의",
+     29
     ],
     [
      "IoT",
-     27
+     23
     ],
     [
      "아이폰",
-     25
+     23
     ],
     [
      "제어할",
-     22
+     21
     ],
     [
-     "애플과",
-     22
+     "ThinQ",
+     20
     ],
     [
-     "7종",
-     22
+     "아이패드",
+     20
     ],
     [
      "신제품은",
-     20
-    ],
-    [
-     "터치",
-     20
-    ],
-    [
-     "상태를",
      19
     ],
     [
-     "확인하고",
+     "애플과",
      18
     ],
     [
-     "번으로",
-     17
+     "상태를",
+     18
+    ],
+    [
+     "제품은",
+     16
+    ],
+    [
+     "가전",
+     16
+    ],
+    [
+     "7종",
+     16
+    ],
+    [
+     "허브",
+     15
     ]
    ],
    "posWords": [
     [
      "확대",
-     7
+     5
     ],
     [
      "글로벌",
      5
+    ],
+    [
+     "강화",
+     4
+    ],
+    [
+     "공략",
+     3
+    ],
+    [
+     "프리미엄",
+     2
     ],
     [
      "협업",
@@ -756,124 +780,112 @@
      2
     ],
     [
-     "공략",
-     2
-    ],
-    [
-     "강화",
-     2
-    ],
-    [
      "주목",
-     1
-    ],
-    [
-     "혁신",
      1
     ]
    ],
    "related": [
-    "lg 씽큐",
     "lg 씽큐온",
+    "lg 씽큐",
     "lg 씽큐 와이파이",
-    "lg 씽큐 세탁기",
     "lg 씽큐 티비연결",
     "lg 씽큐 연결",
+    "lg 씽큐 세탁기",
+    "lg 씽큐 에어컨",
     "lg 씽큐 냉장고",
     "lg 씽큐 에어컨 연결",
-    "lg 씽큐온 사용방법",
-    "lg 씽큐 허브"
+    "lg 씽큐온 사용방법"
    ],
    "recent": [
     {
-     "title": "[뉴스인사이드 뉴스톡톡] 현대차, 인도 푸네 신공장 준공…155억달러 투...",
-     "source": "newsinside.kr",
-     "date": "2026-10-14",
-     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5024324"
+     "title": "'AI가전' 전쟁인 줄 알았더니 '구독' 전쟁···삼성·LG의 진짜 승부처",
+     "source": "enetnews.co.kr",
+     "date": "2026-10-15",
+     "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=55289"
     },
     {
-     "title": "[단독] LG 스마트TV '루트 권한 탈취' 취약점 노출…룸앤TV 등 포함",
-     "source": "the-today.com",
-     "date": "2026-10-14",
-     "link": "https://www.the-today.com/news/articleView.html?idxno=91698"
+     "title": "LG, 애플과 부품 동맹 넘어 AI홈 기기 공동 개발",
+     "source": "sidae.com",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/417/0001161038?sid=101"
     },
     {
-     "title": "LG·애플 ‘스마트홈’ 기기 동맹…AI로 시간대·날씨 분석, 냉난방 제어",
-     "source": "khan.co.kr",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/032/0003476335?sid=101"
+     "title": "삼성 vs LG, AI로 '가전기능·사내업무' 고도화…광범위 AX 대전",
+     "source": "shinailbo.co.kr",
+     "date": "2026-10-15",
+     "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5071918"
     },
     {
-     "title": "LG, 애플과 AI홈 ‘맞손’…글로벌 스마트홈 시장 판 흔든다",
-     "source": "sentv.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.sentv.co.kr/article/view/sentv202610140068"
+     "title": "\"가전 넘어 주택으로\"…삼성·LG '모듈러'에 꽂힌 이유",
+     "source": "news.bizwatch.co.kr",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/648/0000051619?sid=101"
     },
     {
-     "title": "LG전자·애플, 출입·냉난방 자동화…AI홈 기기 7종 공개",
-     "source": "m-i.kr",
-     "date": "2026-10-14",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=2006025"
+     "title": "LG전자, 애플과 공동 개발 차세대 IoT 기기 7종 발표…'씽큐' 등 양사 AI...",
+     "source": "econonews.co.kr",
+     "date": "2026-10-15",
+     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=445753"
     },
     {
-     "title": "LG전자·애플이 뭉쳤다… AI홈 기기 대공개",
-     "source": "파이낸셜뉴스",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/014/0005589284?sid=101"
+     "title": "[다가온 AI 홈 시대 ①] 삼성·LG가 그리는 미래의 집...\"집안일은 AI에게...",
+     "source": "banronbodo.com",
+     "date": "2026-10-15",
+     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33172"
     },
     {
-     "title": "LG전자·애플, IoT 7종 공동 개발",
-     "source": "kfenews.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=666231"
+     "title": "기후부, 삼성·LG 모듈러 주택서 녹색전환 접점 모색",
+     "source": "hansbiz.co.kr",
+     "date": "2026-10-15",
+     "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=872957"
     },
     {
-     "title": "“AI홈·데이터센터 동시 확장”…LG의 빅 피처",
-     "source": "서울경제",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/011/0004671290?sid=101"
+     "title": "LG·애플, 더 강화된 연대..아이폰 넘어 AI홈 기기까지",
+     "source": "newstopkorea.com",
+     "date": "2026-10-15",
+     "link": "https://www.newstopkorea.com/news/articleView.html?idxno=48189"
     },
     {
-     "title": "LG전자·애플 AI홈 12월 美 출시... 가전업계-빅테크, AI 매개 협업 커진...",
-     "source": "hankookilbo.com",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/469/0000959492?sid=105"
+     "title": "[구독경제의 확장/③]AI로 관리 비용 줄이고 기업 고객까지…구독, '운영...",
+     "source": "businessplus.kr",
+     "date": "2026-10-15",
+     "link": "https://www.businessplus.kr/news/articleView.html?idxno=118183"
     },
     {
-     "title": "LG전자, 애플과 AI홈 동맹…신제품 7종 연내 출시",
-     "source": "news.tvchosun.com",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/448/0000644881?sid=101"
+     "title": "LG전자·애플, AI 가전·스마트홈 ‘동맹’",
+     "source": "segye.com",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/022/0004166828?sid=101"
     },
     {
-     "title": "[산업 뉴스브리핑] 애플과 손잡은 LG전자…차세대 IoT 기기로 AI홈 확장",
-     "source": "asiatime.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.asiatime.co.kr/article/20261014500402"
+     "title": "LG전자, 북미 프리미엄 가전·AI홈 사업 확대…데이터센터 냉각기술도 ...",
+     "source": "webeconomy.co.kr",
+     "date": "2026-10-15",
+     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2334333"
     },
     {
-     "title": "LG전자, 애플 '홈'에 기기 공급…카메라·도어락 등 7종 출시",
-     "source": "kdfnews.com",
-     "date": "2026-10-14",
-     "link": "http://www.kdfnews.com/news/articleView.html?idxno=189288"
+     "title": "[모듈러주택 녹색전환] 스마트홈과 모듈러의 결합…정부, 삼성·LG 손잡...",
+     "source": "cbci.co.kr",
+     "date": "2026-10-15",
+     "link": "https://www.cbci.co.kr/news/articleView.html?idxno=615433"
     },
     {
-     "title": "삼성·LG 김성환 기후부 장관에게 'AI 모듈러 주택' 선보여, K-GX 연계 가...",
-     "source": "businesspost.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=449360"
+     "title": "“문 열지마” LG·애플 ‘AI홈’ 손 잡았다",
+     "source": "kmib.co.kr",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/005/0001878769?sid=101"
     },
     {
-     "title": "LG전자, KES 2026서 '라이프 레이어' 공개… 가전부터 모빌리티·산업 AI...",
-     "source": "lkp.news",
-     "date": "2026-10-14",
-     "link": "http://www.lkp.news/news/articleView.html?idxno=84957"
+     "title": "애플워치 차고 집 가까워지면, AI가 난방 켜준다",
+     "source": "donga.com",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/020/0003755039?sid=101"
     },
     {
-     "title": "기후부, 삼성·LG 모듈러 주택서 저탄소 주거 해법 모색",
-     "source": "yonhapnewstv.co.kr",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/422/0000915612?sid=101"
+     "title": "AI홈 공략 손잡았다, LG·애플 ‘7가지 무기’",
+     "source": "joongang.co.kr",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/025/0003557985?sid=101"
     }
    ]
   },
@@ -881,113 +893,113 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76216,
+   "total": 76236,
    "sentiment": {
-    "pos": 33,
-    "neu": 26,
-    "neg": 1
+    "pos": 24,
+    "neu": 32,
+    "neg": 4
    },
    "keywords": [
     [
      "AI",
-     34
+     44
     ],
     [
      "iM증권",
-     32
-    ],
-    [
-     "MTS",
-     25
-    ],
-    [
-     "LG전자",
      19
     ],
     [
-     "전체",
-     18
-    ],
-    [
-     "AI홈",
-     16
-    ],
-    [
-     "애플은",
-     16
-    ],
-    [
-     "메뉴",
+     "아마존",
      15
     ],
     [
-     "최신",
-     15
-    ],
-    [
-     "시장에서",
-     15
-    ],
-    [
-     "개편된",
+     "홈뷰",
      14
     ],
     [
-     "플레이스토어에서",
+     "애플은",
      13
+    ],
+    [
+     "LG전자",
+     13
+    ],
+    [
+     "MTS",
+     12
+    ],
+    [
+     "구글이",
+     11
+    ],
+    [
+     "네스트",
+     9
+    ],
+    [
+     "전체",
+     9
+    ],
+    [
+     "개편된",
+     9
+    ],
+    [
+     "플레이스토어에서",
+     9
     ],
     [
      "MTS를",
-     13
+     9
+    ],
+    [
+     "최신",
+     9
     ],
     [
      "업데이트하면",
-     13
+     9
     ],
     [
-     "아마존",
-     13
+     "글로벌",
+     9
     ],
     [
-     "앱스토어와",
-     12
+     "시장에서",
+     9
     ],
     [
-     "버전으로",
-     12
-    ],
-    [
-     "애플과",
-     12
+     "메뉴",
+     8
     ]
    ],
    "posWords": [
     [
      "투자",
-     16
-    ],
-    [
-     "글로벌",
      11
     ],
     [
-     "공략",
-     7
+     "글로벌",
+     9
     ],
     [
      "강화",
-     6
+     5
     ],
     [
-     "개선",
-     2
+     "돌파",
+     4
+    ],
+    [
+     "공략",
+     3
     ],
     [
      "확대",
      2
     ],
     [
-     "돌파",
+     "개선",
      2
     ],
     [
@@ -1003,100 +1015,100 @@
     "구글 홈페이지",
     "구글 홈 미니 초기화",
     "구글 홈 크롬캐스트",
-    "구글 홈버튼",
     "구글 홈 미니 1세대",
-    "구글 홈 미니 2세대"
+    "구글 홈 미니 2세대",
+    "구글 홈 초기화"
    ],
    "recent": [
     {
-     "title": "iM증권, MTS 홈·전체 메뉴 개편…투자자 편의성 강화",
-     "source": "news.dealsitetv.com",
-     "date": "2026-10-14",
-     "link": "https://news.dealsitetv.com/articles/176971"
-    },
-    {
-     "title": "[월드 e-브리핑] 일본 GDP, 내년 세계 6위 전망…인도·영국에 추월",
-     "source": "obsnews.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.obsnews.co.kr/news/articleView.html?idxno=1540531"
-    },
-    {
-     "title": "LG, 애플과 AI홈 ‘맞손’…글로벌 스마트홈 시장 판 흔든다",
-     "source": "sentv.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.sentv.co.kr/article/view/sentv202610140068"
-    },
-    {
-     "title": "하나증권, DLB 총 2종 모집 外",
-     "source": "rcast.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.rcast.co.kr/news/articleView.html?idxno=31816"
-    },
-    {
-     "title": "대전 유명 빵집 돌고 축구 응원까지…대전시, ‘빵빵투어’ 선보여",
+     "title": "서천군, 근로자 맞춤형 통증 관리 프로그램 운영",
      "source": "breaknews.com",
-     "date": "2026-10-14",
-     "link": "http://www.breaknews.com/1243006"
+     "date": "2026-10-15",
+     "link": "http://www.breaknews.com/1243335"
     },
     {
-     "title": "스포츠 중계 업고…치지직 다운로드 ‘1000만’",
-     "source": "서울경제",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/011/0004671329?sid=105"
+     "title": "비싸도 사는 고객…애플 시총 5조달러 만든 브랜드의 힘[종합]",
+     "source": "아이뉴스24",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/031/0001066476?sid=105"
     },
     {
-     "title": "LG전자·애플 AI홈 12월 美 출시... 가전업계-빅테크, AI 매개 협업 커진...",
-     "source": "hankookilbo.com",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/469/0000959492?sid=105"
-    },
-    {
-     "title": "애플, AI 홈 허브 '홈뷰' 공개",
-     "source": "news.tvchosun.com",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/448/0000644880?sid=101"
-    },
-    {
-     "title": "'AI 동맹' LG·애플…\"스마트홈으로 승부\"",
-     "source": "매일경제",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/009/0005748589?sid=105"
-    },
-    {
-     "title": "[데일리픽] 애플, 스마트홈 제품군 공개…XRP 레저 반등할까",
+     "title": "[데일리픽] 달러·비트코인 동반 강세 가능?…오픈AI 직원 도청 혐의 체...",
      "source": "digitaltoday.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=707106"
+     "date": "2026-10-15",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=707415"
     },
     {
-     "title": "iM증권, MTS 개편으로 투자자 편의성 제고",
-     "source": "fetv.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.fetv.co.kr/news/articleView.html?idxno=311758"
+     "title": "경남도, AI 기반 '통합복지플랫폼' 정식 개통…맞춤형 복지책 안내 최적...",
+     "source": "enewstoday.co.kr",
+     "date": "2026-10-15",
+     "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2480497"
     },
     {
-     "title": "가전 넘어 보안ㆍ구독까지⋯LG전자 AI홈 새 먹거리 키운다 [LGㆍ애플, 동...",
-     "source": "etoday.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.etoday.co.kr/news/view/2635648"
+     "title": "299달러 애플 ‘홈뷰’의 배신…2년 전 완성해 놓고 ‘시리 AI 지연’ 탓...",
+     "source": "ddaily.co.kr",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/138/0002244814?sid=105"
     },
     {
-     "title": "LG전자ㆍ애플, 1998년 인연에서 AIㆍ스마트홈 동맹으로 진화 [LGㆍ애플, ...",
-     "source": "etoday.co.kr",
-     "date": "2026-10-14",
-     "link": "https://www.etoday.co.kr/news/view/2635645"
+     "title": "나스닥 울상인데 혼자 웃은 ‘애플’…시총 5조달러",
+     "source": "매일경제",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/024/0000108928?sid=101"
     },
     {
-     "title": "中 부품 빼고 북미 공략…LG전자, 애플과 공동 개발 스마트홈 기기 7종 ...",
-     "source": "donga.com",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/020/0003754955?sid=105"
+     "title": "[뉴스레터K] 중산층 부담 키우는 ‘스텔스’증세 얼마나?",
+     "source": "news.kbs.co.kr",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/056/0012274152?sid=100"
     },
     {
-     "title": "\"스마트폰 접길 잘했네\"…LG전자에 찾아온 뜻밖의 기회",
-     "source": "wowtv.co.kr",
-     "date": "2026-10-14",
-     "link": "https://n.news.naver.com/mnews/article/215/0001269156?sid=101"
+     "title": "구글, 웨어러블 겨냥 저전력 AI칩 공개 … 온디바이스 생태계 구축",
+     "source": "newdaily.co.kr",
+     "date": "2026-10-15",
+     "link": "https://www.newdaily.co.kr/site/data/html/2026/10/15/2026101500100.html"
+    },
+    {
+     "title": "\"쿠팡, 미국 의원들이 예민한 지점 정확히 건드렸다\"",
+     "source": "ohmynews.com",
+     "date": "2026-10-15",
+     "link": "https://m.entertain.naver.com/article/047/0002532254"
+    },
+    {
+     "title": "[다가온 AI 홈 시대 ①] 삼성·LG가 그리는 미래의 집...\"집안일은 AI에게...",
+     "source": "banronbodo.com",
+     "date": "2026-10-15",
+     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33172"
+    },
+    {
+     "title": "[기고]AI 추론의 시대, 한국 시스템반도체 도약의 골든타임",
+     "source": "한국경제",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/015/0005342727?sid=101"
+    },
+    {
+     "title": "세종신용보증재단·한국부동산원, 소상공인 법률·금융지원 맞손",
+     "source": "breaknews.com",
+     "date": "2026-10-15",
+     "link": "http://www.breaknews.com/1243100"
+    },
+    {
+     "title": "마이크로소프트 10월 패치로 취약점 1,411건 수정…이미 악용된 제로데...",
+     "source": "wikitree.co.kr",
+     "date": "2026-10-15",
+     "link": "https://www.wikitree.co.kr/articles/1166322"
+    },
+    {
+     "title": "애플 시총 5조달러 돌파⋯美 상장사 두 번째",
+     "source": "아이뉴스24",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/031/0001066142?sid=104"
+    },
+    {
+     "title": "애플 시총 5조달러 돌파…엔비디아 이어 두 번째",
+     "source": "디지털타임스",
+     "date": "2026-10-15",
+     "link": "https://n.news.naver.com/mnews/article/029/0003053220?sid=104"
     }
    ]
   }
