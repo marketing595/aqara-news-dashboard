@@ -1306,6 +1306,7 @@
              <button id="mktBtn-weekly" onclick="mktSub('weekly')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">주간보고</button>
              <button id="mktBtn-calendar" onclick="mktSub('calendar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">이슈 캘린더</button>
              <button id="mktBtn-rnr" onclick="mktSub('rnr')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">TASKS</button>
+             <button id="mktBtn-cdb" onclick="mktSub('cdb')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🗂 DB</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">프로젝트</p>
@@ -1338,6 +1339,7 @@
        <div id="view-lanseon" class="hidden"><div id="lnBody"></div></div>
        <div id="view-hakmap" class="hidden"><div id="hkBody"></div></div>
        <div id="view-rnr" class="hidden"><div id="rrBody"></div></div>
+       <div id="view-cdb" class="hidden"><div id="cdbBody"></div></div>
        <div id="mktKpiSlot"></div>
        <div id="mktAdSlot"></div>
        <div id="mktReportSlot"></div>
@@ -6278,6 +6280,233 @@
       return L.join('\n');
     }
 
+    /* ===== ONLY MKT > DB (고객 DB 취합) =====
+       개인정보라 Firebase에 직접 붙지 않고 /api/db(서버 비밀키 + @aqara.kr 세션 확인)만 거친다.
+       파일은 브라우저에서 SheetJS로 읽고, 원본 열 그대로(cols+rows 배열) 저장 → 표준 열은 map으로 화면에서 계산. */
+    const CDB_F=[
+      ['name','이름',['이름','성명','고객명','name','fullname','displayname','신청자','신청자명']],
+      ['last','성',['성','lastname','성씨']],
+      ['company','회사',['회사명','회사','업체명','업체','상호','상호명','company','companyname','기관명','소속','참가사명']],
+      ['title','직함',['직함','직급','직책','제목','title','jobtitle','position','부서']],
+      ['phone','전화',['전화번호','연락처','휴대폰','핸드폰','휴대전화','휴대폰번호','핸드폰번호','phone','mobile','tel','전화']],
+      ['email','이메일',['이메일','email','e-mail','메일','이메일주소']],
+      ['date','일자',['일자','날짜','등록일','접수일','신청일','작성일','유입일','방문일','date','firsttime']],
+      ['src','유입',['유입경로','유입','출처','채널','source','경로']],
+      ['owner','담당',['db스캔담당자','담당자','담당','영업담당']],
+      ['interest','관심',['productsofinterest','관심제품','관심상품','관심분야','productsandservices']],
+      ['tag','태그',['고객관리태그','태그','tag','tags']],
+      ['grade','등급',['등급','grade','rank']],
+      ['type','유형',['참관객유형','고객유형','유형','type']],
+      ['memo','메모',['기재사항','메모','비고','문의내용','요청사항','memo','note','notes']],
+      ['addr','주소',['주소','주소1','주소2','주소3','address','도시명','시도','지역']],
+    ];
+    const CDB_LABEL=Object.fromEntries(CDB_F.map(f=>[f[0],f[1]]));
+    let CDB={st:null, files:null, rows:{}, loading:false, q:'', fid:'', merge:true, show:200, open:-1, pending:null, busy:''};
+    const cdbNorm=s=>String(s||'').toLowerCase().replace(/[\s_\-\.\/()·:]/g,'');
+    function cdbApi(op,body){
+      const o=body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({op},body))}:{};
+      return fetch('/api/db'+(body?'':'?op='+op),o).then(r=>r.json().catch(()=>({ok:false,error:'HTTP '+r.status})));
+    }
+    // 헤더 → 표준 열 자동 매칭 (주소는 여러 열을 이어 붙임)
+    function cdbAutoMap(cols){
+      const n=cols.map(cdbNorm), map={}, used=new Set();
+      CDB_F.forEach(([k,,syn])=>{ if(k==='addr') return; for(const s of syn){ const i=n.findIndex((h,j)=>!used.has(j)&&h===s); if(i>-1){ map[k]=i; used.add(i); break; } } });
+      CDB_F.forEach(([k,,syn])=>{ if(k==='addr'||k==='last'||map[k]!=null) return;
+        const i=n.findIndex((h,j)=>!used.has(j)&&h&&syn.some(s=>s.length>=2&&h.includes(s))); if(i>-1){ map[k]=i; used.add(i); } });
+      const ad=[]; n.forEach((h,j)=>{ if(!used.has(j)&&(h.startsWith('주소')||h==='address'||h==='도시명'||h==='시도')) ad.push(j); });
+      if(ad.length) map.addr=ad;
+      return map;
+    }
+    function cdbPhone(v){ let d=String(v||'').replace(/\D/g,''); if(d.startsWith('82')&&d.length>=11) d='0'+d.slice(2); if(/^1[0-9]{9}$/.test(d)) d='0'+d; return d; }
+    function cdbPhoneFmt(d){ if(!d) return ''; if(d.length===11) return d.slice(0,3)+'-'+d.slice(3,7)+'-'+d.slice(7); if(d.length===10) return d.startsWith('02')?d.slice(0,2)+'-'+d.slice(2,6)+'-'+d.slice(6):d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6); return d; }
+    // 저장된 원본 행 → 표준 레코드
+    function cdbRecords(){
+      const out=[]; const files=CDB.files||{};
+      Object.keys(files).sort((a,b)=>(files[a].at||0)-(files[b].at||0)).forEach(fid=>{
+        const f=files[fid], m=f.map||{}, rows=CDB.rows[fid]; if(!rows) return;
+        const g=(r,k)=>{ const i=m[k]; if(i==null) return ''; if(Array.isArray(i)) return i.map(x=>String(r[x]||'').trim()).filter(Boolean).join(' '); return String(r[i]==null?'':r[i]).trim(); };
+        rows.forEach((r,ri)=>{
+          const rec={fid, ri, file:f.label||f.name, raw:r};
+          CDB_F.forEach(([k])=>{ if(k!=='last') rec[k]=g(r,k); });
+          const last=g(r,'last'); if(last&&!rec.name.startsWith(last)) rec.name=(last+rec.name).trim();
+          rec.ph=cdbPhone(rec.phone); rec.em=rec.email.toLowerCase();
+          rec.key=rec.ph.length>=9?'p'+rec.ph:(rec.em.includes('@')?'e'+rec.em:'n'+cdbNorm(rec.name)+'|'+cdbNorm(rec.company));
+          if(rec.key==='n|') rec.key='r'+fid+ri;
+          out.push(rec);
+        });
+      });
+      return out;
+    }
+    function cdbLoad(){
+      if(CDB.loading) return; CDB.loading=true;
+      cdbApi('status').then(st=>{ CDB.st=st;
+        if(!st.ok||!st.secret){ CDB.loading=false; CDB.files={}; renderCdb(); return; }
+        return cdbApi('files').then(r=>{ CDB.files=(r&&r.ok&&r.files)||{}; if(r&&!r.ok) CDB.st.err=r.error;
+          const ids=Object.keys(CDB.files).filter(id=>!CDB.rows[id]);
+          return Promise.all(ids.map(id=>cdbApi('rows&fid='+encodeURIComponent(id)).then(x=>{ CDB.rows[id]=[].concat(...((x&&x.chunks)||[])); })));
+        }).then(()=>{ CDB.loading=false; renderCdb(); });
+      }).catch(e=>{ CDB.loading=false; CDB.st={ok:false,error:String(e)}; renderCdb(); });
+    }
+    function cdbReload(){ CDB.files=null; CDB.rows={}; CDB.st=null; renderCdb(); }
+    const CDB_RULES=`{
+  "rules": {
+    "customerDb": { ".read": false, ".write": false },
+    "$other": { ".read": "auth != null", ".write": "auth != null" }
+  }
+}`;
+    function cdbCopyRules(){ navigator.clipboard.writeText(CDB_RULES).then(()=>alert('규칙을 복사했습니다. Firebase 콘솔 > Realtime Database > 규칙에 통째로 붙여넣고 [게시]를 누르세요.')); }
+    function cdbSetup(st){
+      const step=(ok,t,d)=>`<li class="flex gap-2 py-1.5"><span class="${ok?'text-agreen':'text-ared'} font-bold">${ok?'✔':'✖'}</span><div><b class="text-ink">${t}</b>${ok?'':`<div class="text-[12px] text-slate-500 mt-0.5">${d}</div>`}</div></li>`;
+      return `<div class="card p-5 mb-4 border-l-4" style="border-left-color:#BF5332">
+        <h3 class="font-extrabold text-ink mb-1">보안 설정이 끝나야 고객 DB를 올릴 수 있어요</h3>
+        <p class="text-[12px] text-slate-500 mb-2">전화번호·이메일이 들어가므로, 아래 두 가지가 모두 ✔일 때만 업로드가 열립니다.</p>
+        <ul class="text-[13px]">
+          ${step(st.secret,'Vercel 환경변수 FIREBASE_DB_SECRET','Firebase 콘솔 ⚙ 프로젝트 설정 > 서비스 계정 > <b>데이터베이스 비밀번호</b>(Database secrets) > 표시 → 값 복사 → Vercel > Settings > Environment Variables에 <code>FIREBASE_DB_SECRET</code>로 추가 → Deployments에서 Redeploy')}
+          ${step(st.locked===true,'Firebase 규칙이 customerDb를 차단',`지금은 익명 로그인으로도 customerDb가 열립니다. Firebase 콘솔 > Realtime Database > <b>규칙</b> 탭의 내용을 아래로 <b>통째로 바꾸고</b> [게시].
+            <pre class="bg-slate-50 border border-slate-200 rounded-lg p-3 mt-2 text-[12px] text-ink overflow-x-auto">${esc(CDB_RULES)}</pre>
+            <button onclick="cdbCopyRules()" class="mt-2 text-[12px] font-semibold bg-ink text-white rounded-lg px-3 py-1.5">규칙 복사</button>
+            <div class="mt-1">※ 기존 규칙(로그인하면 전부 허용)은 <code>$other</code> 줄로 그대로 유지되므로 다른 탭은 영향 없습니다.</div>`)}
+        </ul>
+        <button onclick="cdbReload()" class="mt-3 text-[12px] font-semibold border border-slate-300 rounded-lg px-3 py-1.5 hover:bg-slate-50">다시 확인</button>
+      </div>`;
+    }
+    function renderCdb(){
+      const box=document.getElementById('cdbBody'); if(!box) return;
+      if(!CDB.st||CDB.files===null){ box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">고객 DB 불러오는 중…</p>'; cdbLoad(); return; }
+      const st=CDB.st;
+      if(!st.ok){ box.innerHTML=`<div class="card p-6 text-sm text-ared">${esc(st.error||'불러오지 못했습니다.')}${/로그인/.test(st.error||'')?'<div class="text-slate-500 mt-1">@aqara.kr 구글 계정으로 다시 로그인해 주세요.</div>':''}</div>`; return; }
+      const ready=st.secret&&st.locked===true;
+      const recs=cdbRecords(), files=CDB.files||{};
+      const grp={}; recs.forEach(r=>{ (grp[r.key]=grp[r.key]||[]).push(r); });
+      const dupKeys=Object.keys(grp).filter(k=>grp[k].length>1).length;
+      const q=CDB.q.trim().toLowerCase();
+      let list=recs.filter(r=>(!CDB.fid||r.fid===CDB.fid));
+      if(q) list=list.filter(r=>[r.name,r.company,r.title,r.phone,r.ph,r.email,r.src,r.memo,r.tag,r.interest,r.type,r.owner,r.addr].join(' ').toLowerCase().includes(q));
+      if(CDB.merge){ const seen=new Set(); list=list.slice().reverse().filter(r=>seen.has(r.key)?false:(seen.add(r.key),true)).reverse(); }
+      CDB.view=list;
+      const fileOpts=Object.keys(files).map(id=>`<option value="${id}" ${CDB.fid===id?'selected':''}>${esc(files[id].label||files[id].name)} (${files[id].rows})</option>`).join('');
+      const kpi=(t,v,s)=>`<div class="card p-4"><div class="text-[12px] text-slate-500">${t}</div><div class="text-2xl font-extrabold text-ink mt-1">${v}</div>${s?`<div class="text-[11px] text-slate-400 mt-0.5">${s}</div>`:''}</div>`;
+      const cols=['file','date','name','company','title','phone','email','src','type','grade','memo'];
+      const head={file:'출처',phone:'전화'};
+      const cell=(r,k)=>k==='phone'?esc(cdbPhoneFmt(r.ph)||r.phone):esc(r[k]);
+      const rowsHtml=list.slice(0,CDB.show).map((r,i)=>{ const n=grp[r.key].length;
+        return `<tr class="border-t border-slate-100 hover:bg-[#F7F5FF] cursor-pointer" onclick="cdbToggle(${i})">${cols.map(k=>`<td class="px-2 py-1.5 align-top ${k==='memo'?'max-w-[220px] truncate':'whitespace-nowrap'}">${cell(r,k)}${k==='name'&&n>1?` <span class="text-[10px] font-bold text-[#7C5CFF] bg-[#EDE9FF] rounded px-1">${n}건</span>`:''}</td>`).join('')}</tr>`
+          +(CDB.open===i?`<tr><td colspan="${cols.length}" class="bg-slate-50 px-3 py-3">${cdbDetail(r,grp[r.key])}</td></tr>`:''); }).join('');
+      box.innerHTML=`
+      <div class="card px-4 py-3 mb-3 border-l-4 flex flex-wrap items-center gap-2" style="border-left-color:#7C5CFF">
+        <b class="text-ink">🗂 고객 DB 취합</b>
+        <span class="text-[12px] text-slate-500">여러 엑셀을 올리면 열을 자동으로 맞춰 한 목록으로 합칩니다 · 전화번호(없으면 이메일) 기준 중복 정리</span>
+        <span class="ml-auto text-[11px] text-slate-400">🔒 @aqara.kr 로그인 전용 · ${esc(st.email)}</span>
+      </div>
+      ${ready?'':cdbSetup(st)}
+      ${st.err?`<div class="card p-3 mb-3 text-[12px] text-ared">${esc(st.err)}</div>`:''}
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+        ${kpi('전체 행',recs.length.toLocaleString(),'파일 '+Object.keys(files).length+'개')}
+        ${kpi('고유 고객',Object.keys(grp).length.toLocaleString(),'전화·이메일 기준')}
+        ${kpi('중복 고객',dupKeys.toLocaleString(),'2개 이상 행에 등장')}
+        ${kpi('지금 보는 목록',list.length.toLocaleString(),CDB.merge?'중복 합침':'전체 행')}
+      </div>
+      <div class="card p-4 mb-4">
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <h3 class="font-extrabold text-ink text-[15px]">파일</h3>
+          <label class="ml-auto text-[13px] font-semibold rounded-lg px-3 py-1.5 ${ready?'bg-[#7C5CFF] text-white cursor-pointer':'bg-slate-200 text-slate-400 cursor-not-allowed'}">
+            ＋ 엑셀 올리기<input type="file" accept=".xlsx,.xls,.csv" multiple class="hidden" ${ready?'':'disabled'} onchange="cdbPick(this.files);this.value=''"></label>
+        </div>
+        ${CDB.busy?`<p class="text-[12px] text-[#5B44C7] mb-2">${esc(CDB.busy)}</p>`:''}
+        ${CDB.pending?cdbPendingHtml():''}
+        ${Object.keys(files).length?`<table class="w-full text-[13px]"><thead><tr class="text-left text-[11px] text-slate-400"><th class="py-1">출처 이름</th><th>파일</th><th>행</th><th>열 매칭</th><th>올린 사람</th><th>올린 날</th><th></th></tr></thead><tbody>
+          ${Object.keys(files).map(id=>{ const f=files[id]; return `<tr class="border-t border-slate-100"><td class="py-1.5 font-semibold text-ink">${esc(f.label||f.name)}</td><td class="text-slate-500">${esc(f.name)}${f.sheet?' · '+esc(f.sheet):''}</td><td>${f.rows}</td>
+            <td class="text-[11px] text-slate-500">${Object.keys(f.map||{}).map(k=>CDB_LABEL[k]).filter(Boolean).join(', ')}</td><td class="text-slate-500">${esc((f.by||'').split('@')[0])}</td><td class="text-slate-500">${f.at?new Date(f.at).toLocaleDateString('ko-KR'):''}</td>
+            <td class="text-right"><button onclick="cdbDelete('${id}')" class="text-[12px] text-slate-400 hover:text-ared">삭제</button></td></tr>`; }).join('')}</tbody></table>`
+          :'<p class="text-[13px] text-slate-400 py-4 text-center">아직 올린 파일이 없습니다.</p>'}
+      </div>
+      <div class="card p-4">
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <input value="${esc(CDB.q)}" oninput="CDB.q=this.value;CDB.show=200;CDB.open=-1;clearTimeout(window._cdbT);window._cdbT=setTimeout(renderCdb,250)" placeholder="이름·회사·전화·이메일·메모 검색" class="text-[13px] border border-slate-200 rounded-lg px-3 py-1.5 w-64">
+          <select onchange="CDB.fid=this.value;CDB.show=200;CDB.open=-1;renderCdb()" class="text-[13px] border border-slate-200 rounded-lg px-2 py-1.5"><option value="">모든 파일</option>${fileOpts}</select>
+          <label class="text-[13px] text-slate-600 flex items-center gap-1"><input type="checkbox" ${CDB.merge?'checked':''} onchange="CDB.merge=this.checked;CDB.open=-1;renderCdb()"> 중복 합치기</label>
+          <button onclick="cdbCsv()" class="ml-auto text-[13px] font-semibold border border-slate-300 rounded-lg px-3 py-1.5 hover:bg-slate-50">⬇ 지금 목록 엑셀(CSV)</button>
+        </div>
+        <div class="overflow-x-auto"><table class="w-full text-[12.5px]"><thead><tr class="text-left text-[11px] text-slate-400">${cols.map(k=>`<th class="px-2 py-1 whitespace-nowrap">${head[k]||CDB_LABEL[k]}</th>`).join('')}</tr></thead>
+          <tbody>${rowsHtml||`<tr><td colspan="${cols.length}" class="text-center text-slate-400 py-8">표시할 고객이 없습니다.</td></tr>`}</tbody></table></div>
+        ${list.length>CDB.show?`<div class="text-center mt-3"><button onclick="CDB.show+=500;renderCdb()" class="text-[13px] font-semibold text-[#5B44C7]">더 보기 (${(list.length-CDB.show).toLocaleString()}명 남음)</button></div>`:''}
+      </div>`;
+    }
+    function cdbToggle(i){ CDB.open=CDB.open===i?-1:i; renderCdb(); }
+    function cdbDetail(r,same){
+      const f=(CDB.files||{})[r.fid]||{}, cols=f.cols||[];
+      const raw=cols.map((c,j)=>r.raw[j]?`<div><span class="text-slate-400">${esc(c)}</span> <span class="text-ink">${esc(r.raw[j])}</span></div>`:'').join('');
+      const others=same.length>1?`<div class="mt-2 pt-2 border-t border-slate-200 text-[12px]"><b class="text-[#5B44C7]">같은 고객 ${same.length}건</b> — ${same.map(s=>esc(s.file)+(s.date?' ('+esc(s.date)+')':'')).join(' · ')}</div>`:'';
+      return `<div class="text-[11px] text-slate-400 mb-1">원본: ${esc(f.name||'')} ${r.ri+1}번째 행</div><div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-1 text-[12px]">${raw}</div>${others}`;
+    }
+    function cdbXlsx(cb){
+      if(window.XLSX) return cb();
+      const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      s.onload=cb; s.onerror=()=>alert('엑셀 읽기 라이브러리를 불러오지 못했습니다.'); document.head.appendChild(s);
+    }
+    // 파일 선택 → 시트별로 헤더 행을 찾아 미리보기(매칭 확인) 상태로
+    function cdbPick(fl){
+      const arr=[...fl]; if(!arr.length) return;
+      CDB.busy='파일 읽는 중…'; renderCdb();
+      cdbXlsx(()=>{
+        Promise.all(arr.map(file=>file.arrayBuffer().then(buf=>{
+          const wb=XLSX.read(buf,{type:'array',cellDates:false});
+          return wb.SheetNames.map(sn=>{
+            const aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:false,defval:''});
+            let hi=0,best=0; aoa.slice(0,10).forEach((r,i)=>{ const c=r.filter(v=>String(v).trim()).length; if(c>best){best=c;hi=i;} });
+            const cols=(aoa[hi]||[]).map((c,j)=>String(c).trim()||('열'+(j+1)));
+            const rows=aoa.slice(hi+1).filter(r=>r.some(v=>String(v).trim())).map(r=>cols.map((_,j)=>String(r[j]==null?'':r[j]).trim()));
+            return {name:file.name, sheet:wb.SheetNames.length>1?sn:'', label:file.name.replace(/\.[^.]+$/,'')+(wb.SheetNames.length>1?' · '+sn:''), cols, rows, map:cdbAutoMap(cols)};
+          }).filter(s=>s.rows.length);
+        }))).then(x=>{ CDB.pending=[].concat(...x); CDB.busy=''; renderCdb(); })
+          .catch(e=>{ CDB.busy=''; alert('파일을 읽지 못했습니다: '+e); renderCdb(); });
+      });
+    }
+    function cdbPendingHtml(){
+      return `<div class="border border-[#E1DBFF] bg-[#F7F5FF] rounded-xl p-3 mb-3">
+        <p class="text-[13px] font-bold text-[#5B44C7] mb-2">올리기 전 확인 — 열 매칭이 맞는지 봐 주세요 (틀리면 고르기)</p>
+        ${CDB.pending.map((p,pi)=>`<div class="bg-white rounded-lg p-3 mb-2">
+          <div class="flex flex-wrap items-center gap-2 mb-2"><input value="${esc(p.label)}" onchange="CDB.pending[${pi}].label=this.value" class="text-[13px] font-semibold border border-slate-200 rounded px-2 py-1 w-60" title="출처 이름">
+            <span class="text-[12px] text-slate-500">${esc(p.name)}${p.sheet?' · '+esc(p.sheet):''} · ${p.rows.length.toLocaleString()}행 · 열 ${p.cols.length}개</span>
+            <button onclick="CDB.pending.splice(${pi},1);if(!CDB.pending.length)CDB.pending=null;renderCdb()" class="ml-auto text-[12px] text-slate-400 hover:text-ared">빼기</button></div>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-[12px]">${CDB_F.filter(f=>f[0]!=='addr').map(([k,l])=>`<label class="flex items-center gap-1"><span class="w-10 text-slate-500 shrink-0">${l}</span>
+            <select onchange="cdbSetMap(${pi},'${k}',this.value)" class="flex-1 min-w-0 border border-slate-200 rounded px-1 py-0.5 ${p.map[k]!=null?'text-ink':'text-slate-300'}"><option value="">—</option>${p.cols.map((c,j)=>`<option value="${j}" ${p.map[k]===j?'selected':''}>${esc(c)}</option>`).join('')}</select></label>`).join('')}
+            <div class="col-span-2 md:col-span-5 text-slate-500">주소: ${p.map.addr?p.map.addr.map(j=>esc(p.cols[j])).join(' + '):'—'}</div></div>
+        </div>`).join('')}
+        <div class="flex gap-2 justify-end"><button onclick="CDB.pending=null;renderCdb()" class="text-[13px] border border-slate-300 rounded-lg px-3 py-1.5">취소</button>
+          <button onclick="cdbUpload()" class="text-[13px] font-semibold bg-[#7C5CFF] text-white rounded-lg px-4 py-1.5">${CDB.pending.length}개 올리기</button></div>
+      </div>`;
+    }
+    function cdbSetMap(pi,k,v){ const m=CDB.pending[pi].map; if(v==='') delete m[k]; else m[k]=+v; renderCdb(); }
+    async function cdbUpload(){
+      const list=CDB.pending||[]; CDB.pending=null;
+      try{
+        for(const p of list){
+          const fid=Date.now().toString(36)+Math.random().toString(36).slice(2,7), N=500, chunks=Math.ceil(p.rows.length/N);
+          CDB.busy=`올리는 중: ${p.label} (0/${p.rows.length})`; renderCdb();
+          let r=await cdbApi('meta',{fid, meta:{name:p.name, sheet:p.sheet, label:p.label, cols:p.cols, map:p.map, rows:p.rows.length, chunks}});
+          if(!r.ok) throw new Error(r.error);
+          for(let i=0;i<chunks;i++){
+            r=await cdbApi('chunk',{fid, i, rows:p.rows.slice(i*N,(i+1)*N)});
+            if(!r.ok){ await cdbApi('delete',{fid}); throw new Error(r.error); }
+            CDB.busy=`올리는 중: ${p.label} (${Math.min((i+1)*N,p.rows.length)}/${p.rows.length})`; renderCdb();
+          }
+        }
+        CDB.busy=''; cdbReload();
+      }catch(e){ CDB.busy=''; alert('업로드 실패: '+(e.message||e)); cdbReload(); }
+    }
+    function cdbDelete(fid){
+      const f=(CDB.files||{})[fid]; if(!f||!confirm(`'${f.label||f.name}' (${f.rows}행)을 DB에서 삭제할까요? 되돌릴 수 없습니다.`)) return;
+      cdbApi('delete',{fid}).then(r=>{ if(!r.ok) alert(r.error); cdbReload(); });
+    }
+    function cdbCsv(){
+      const v=CDB.view||[]; if(!v.length) return alert('내보낼 고객이 없습니다.');
+      const ks=['file','date','name','company','title','phone','email','src','owner','interest','tag','grade','type','memo','addr'];
+      const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
+      const lines=[ks.map(k=>q(k==='file'?'출처':CDB_LABEL[k])).join(',')].concat(v.map(r=>ks.map(k=>q(k==='phone'?(cdbPhoneFmt(r.ph)||r.phone):r[k])).join(',')));
+      const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}));
+      a.download='고객DB_취합_'+new Date().toISOString().slice(0,10)+'.csv'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+    }
     function renderLanseon(){
       const box=document.getElementById('lnBody'); if(!box) return;
       if(!LN){
@@ -8663,6 +8892,7 @@
       const lnv=document.getElementById('view-lanseon'); if(lnv) lnv.classList.toggle('hidden', s!=='lanseon');
       const hkv=document.getElementById('view-hakmap'); if(hkv) hkv.classList.toggle('hidden', s!=='hakmap');
       const rrv=document.getElementById('view-rnr'); if(rrv) rrv.classList.toggle('hidden', s!=='rnr');
+      const cdv=document.getElementById('view-cdb'); if(cdv) cdv.classList.toggle('hidden', s!=='cdb');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
       document.getElementById('mktSec-blog').classList.toggle('hidden', s!=='blog');
       document.getElementById('mktSec-thumb').classList.toggle('hidden', s!=='thumb');
@@ -8671,7 +8901,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','rnr','insta','blog','thumb','prpitch','ad','seminar','brandbook','lanseon','hakmap','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
+      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','seminar','brandbook','lanseon','hakmap','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -8685,6 +8915,7 @@
       if(s==='lanseon'){ renderLanseon(); }
       if(s==='hakmap'){ renderHakmap(); }
       if(s==='rnr'){ renderRnr(); }
+      if(s==='cdb'){ renderCdb(); }
       if(s==='report'){ mktReportSub(mktRptView); }
 
     }

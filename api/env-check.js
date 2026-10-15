@@ -5,6 +5,7 @@ const WATCH = [
   'GEMINI_API_KEY',
   'IMWEB_CLIENT_ID', 'IMWEB_CLIENT_SECRET', 'IMWEB_REFRESH_TOKEN', 'IMWEB_UNIT_CODE',
   'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'SESSION_SECRET',
+  'FIREBASE_DB_SECRET',
 ];
 
 module.exports = (req, res) => {
@@ -15,7 +16,7 @@ module.exports = (req, res) => {
 
   // 오타 잡기용 — 비슷한 이름의 변수 '이름만' 나열(값 노출 없음)
   const similar = Object.keys(process.env)
-    .filter((k) => /GEMINI|IMWEB|GOOGLE|SESSION|API|KEY|TOKEN|SECRET/i.test(k))
+    .filter((k) => /GEMINI|IMWEB|GOOGLE|SESSION|FIREBASE|API|KEY|TOKEN|SECRET/i.test(k))
     .filter((k) => !/^(AWS|VERCEL_OIDC)/i.test(k))
     .sort();
 
