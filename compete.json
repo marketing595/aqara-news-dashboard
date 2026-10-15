@@ -1,84 +1,72 @@
 {
- "generatedAt": "2026-10-14",
+ "generatedAt": "2026-10-15",
  "year": 2026,
  "basis": "keywords",
  "items": [
   {
    "name": "아카라",
    "query": "아카라 스마트홈",
-   "ytd": 115,
+   "ytd": 117,
    "capped": false,
    "analyzed": 200,
    "topKw": [
     {
      "kw": "카메라",
-     "n": 209,
+     "n": 206,
      "title": "삼성전자가 적용한 매터 인증, 보안카메라까지 확대",
      "link": "https://www.etnews.com/20260827000234"
     },
     {
      "kw": "스마트",
-     "n": 187,
-     "title": "아카라라이프, '프로안심 서비스' 평가 만족도 4.9점…\"앱 연결도 기사...",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=148609"
+     "n": 188,
+     "title": "아카라라이프, CJ온스타일과 협업.. 'K100' 신규 컬러 한정판 출시",
+     "link": "https://www.mt.co.kr/future/2026/10/15/2026101514262366938"
     },
     {
      "kw": "삼성전자",
-     "n": 181,
+     "n": 177,
      "title": "삼성전자가 적용한 매터 인증, 보안카메라까지 확대",
      "link": "https://www.etnews.com/20260827000234"
     },
     {
      "kw": "매터",
-     "n": 168,
+     "n": 164,
      "title": "신형기기 절반 '매터' 지원…스마트홈 통합표준 확산 가속",
      "link": "https://www.etnews.com/20260831000269"
     },
     {
      "kw": "표준",
-     "n": 157,
+     "n": 154,
      "title": "아카라라이프, 대전·충청 스마트홈 세미나 성료…지역 전문가 네트워크...",
      "link": "https://www.businesskorea.co.kr/news/articleView.html?idxno=269359"
     },
     {
      "kw": "스마트싱스",
-     "n": 124,
+     "n": 122,
      "title": "“마감재만으론 계약 안 나와요”… 인테리어 디자이너들이 '스마트홈'...",
      "link": "https://www.etnews.com/20260929000325"
     },
     {
      "kw": "협업해",
-     "n": 111,
+     "n": 107,
      "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
      "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
     },
     {
      "kw": "IoT",
-     "n": 100,
+     "n": 98,
      "title": "아카라라이프, 스마트홈 설치부터 앱 설정까지 ‘프로안심 서비스’ 호...",
      "link": "https://www.asiatime.co.kr/article/20261012500039"
     },
     {
      "kw": "기기",
-     "n": 79,
+     "n": 76,
      "title": "아카라라이프, 스마트홈 설치부터 앱 설정까지 ‘프로안심 서비스’ 호...",
      "link": "https://www.asiatime.co.kr/article/20261012500039"
     },
     {
      "kw": "이브",
-     "n": 72,
-     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
-    },
-    {
-     "kw": "울티캠",
-     "n": 69,
-     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
-    },
-    {
-     "kw": "등과",
-     "n": 68,
+     "n": 70,
      "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
      "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
     },
@@ -89,20 +77,26 @@
      "link": "http://www.bizwnews.com/news/articleView.html?idxno=147033"
     },
     {
-     "kw": "다양한",
+     "kw": "울티캠",
+     "n": 67,
+     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
+    },
+    {
+     "kw": "등과",
      "n": 66,
+     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
+    },
+    {
+     "kw": "다양한",
+     "n": 64,
      "title": "아카라라이프, 부담 없는 스마트 도어락 입문형 'L100 SE' 출시",
      "link": "https://www.abcn.kr/news/articleView.html?idxno=90997"
     },
     {
      "kw": "알로",
-     "n": 65,
-     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
-    },
-    {
-     "kw": "업체들",
-     "n": 53,
+     "n": 63,
      "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
      "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
     },
@@ -113,10 +107,16 @@
      "link": "https://www.etnews.com/20260929000325"
     },
     {
-     "kw": "Hue",
-     "n": 45,
-     "title": "[기획 리포트] 오픈 생태계의 ‘삼성’ vs 가전 장인의 ‘LG’… 스마트...",
-     "link": "https://www.dailyt.co.kr/newsView/dlt202607070013"
+     "kw": "업체들",
+     "n": 51,
+     "title": "삼성전자 스마트싱스, 업계 최초 매터 1.5 카메라 표준 지원",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=722719"
+    },
+    {
+     "kw": "AI",
+     "n": 44,
+     "title": "“마감재만으론 계약 안 나와요”… 인테리어 디자이너들이 '스마트홈'...",
+     "link": "https://www.etnews.com/20260929000325"
     }
    ],
    "me": true
@@ -130,45 +130,69 @@
    "topKw": [
     {
      "kw": "AI",
-     "n": 527,
-     "title": "삼성전자, 기후에너지환경부 장관에 AI 모듈러 홈 저탄소 솔루션 소개",
-     "link": "https://www.newstnt.com/news/articleView.html?idxno=722999"
+     "n": 446,
+     "title": "[뉴스인사이드 뉴스톡톡] '검은 목요일'…코스피·코스닥, 7% 폭락 外",
+     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025238"
     },
     {
      "kw": "가전",
-     "n": 228,
-     "title": "삼성전자, 기후에너지환경부 장관에 AI 모듈러 홈 저탄소 솔루션 소개",
-     "link": "https://www.newstnt.com/news/articleView.html?idxno=722999"
-    },
-    {
-     "kw": "갤럭시",
-     "n": 190,
-     "title": "LG, 애플과 AI홈 ‘맞손’…글로벌 스마트홈 시장 판 흔든다",
-     "link": "https://www.sentv.co.kr/article/view/sentv202610140068"
-    },
-    {
-     "kw": "구독",
-     "n": 168,
-     "title": "삼성·LG전자, '초프리미엄·가전 구독' 투트랙 전략 가속...불황 정면 돌...",
-     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=266151"
-    },
-    {
-     "kw": "모듈러",
-     "n": 166,
-     "title": "삼성전자, 기후에너지환경부 장관에 AI 모듈러 홈 저탄소 솔루션 소개",
-     "link": "https://www.newstnt.com/news/articleView.html?idxno=722999"
+     "n": 275,
+     "title": "삼성전자, 베트남서 AI 가전·공조 기술 선봬…동남아 B2B 시장 공략",
+     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=360721"
     },
     {
      "kw": "솔루션",
-     "n": 148,
-     "title": "삼성전자, 기후에너지환경부 장관에 AI 모듈러 홈 저탄소 솔루션 소개",
-     "link": "https://www.newstnt.com/news/articleView.html?idxno=722999"
+     "n": 187,
+     "title": "삼성전자, 동남아 AI 가전·공조 솔루션 확대…B2B 사업 강화",
+     "link": "https://www.thebigdata.co.kr/view.php?ud=202610151510431710ecbf9426b_23"
+    },
+    {
+     "kw": "갤럭시",
+     "n": 183,
+     "title": "[트랜트 톡] 갤럭시, '아재폰' 벗고 아이폰 추격…젊은 소비자 마음 움...",
+     "link": "http://www.newsian.co.kr/news/articleView.html?idxno=97104"
+    },
+    {
+     "kw": "모듈러",
+     "n": 174,
+     "title": "김성환 장관, 히트펌프·태양광·가전 갖춘 삼성 모듈러 홈 둘러봐",
+     "link": "http://www.e2news.com/news/articleView.html?idxno=335115"
+    },
+    {
+     "kw": "기기",
+     "n": 169,
+     "title": "삼성전자, 동남아 AI가전·공조 공략…B2B 매출 20%↑",
+     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025234"
+    },
+    {
+     "kw": "에너지",
+     "n": 150,
+     "title": "[뉴스인사이드 뉴스톡톡] '검은 목요일'…코스피·코스닥, 7% 폭락 外",
+     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025238"
+    },
+    {
+     "kw": "플랫폼",
+     "n": 135,
+     "title": "[오늘 뭐했니?] 삼성전자",
+     "link": "http://www.financialreview.co.kr/news/articleView.html?idxno=45532"
     },
     {
      "kw": "주거",
-     "n": 116,
-     "title": "삼성전자, 고효율·저탄소 주거 솔루션 제시",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=666292"
+     "n": 121,
+     "title": "김성환 장관, 히트펌프·태양광·가전 갖춘 삼성 모듈러 홈 둘러봐",
+     "link": "http://www.e2news.com/news/articleView.html?idxno=335115"
+    },
+    {
+     "kw": "상태",
+     "n": 113,
+     "title": "삼성전자, 동남아 AI가전·공조 공략…B2B 매출 20%↑",
+     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025234"
+    },
+    {
+     "kw": "냉난방",
+     "n": 109,
+     "title": "삼성전자, 베트남서 AI 가전·공조 기술 선봬…동남아 B2B 시장 공략",
+     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=360721"
     },
     {
      "kw": "스마트태그3",
@@ -177,64 +201,40 @@
      "link": "https://kbench.com/?q=node/282403"
     },
     {
-     "kw": "냉난방",
-     "n": 105,
-     "title": "삼성전자, 'AI 모듈러 홈' 공개… 에너지 생산·저장·소비 통합 관리",
-     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=360627"
+     "kw": "프로",
+     "n": 98,
+     "title": "[뉴스인사이드 뉴스톡톡] '검은 목요일'…코스피·코스닥, 7% 폭락 外",
+     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025238"
     },
     {
      "kw": "모듈",
-     "n": 94,
-     "title": "삼성전자, 기후에너지환경부 장관에 AI 모듈러 홈 저탄소 솔루션 소개",
-     "link": "https://www.newstnt.com/news/articleView.html?idxno=722999"
+     "n": 98,
+     "title": "김성환 장관, 히트펌프·태양광·가전 갖춘 삼성 모듈러 홈 둘러봐",
+     "link": "http://www.e2news.com/news/articleView.html?idxno=335115"
     },
     {
      "kw": "주택",
-     "n": 93,
-     "title": "삼성전자, 기후에너지환경부 장관에 AI 모듈러 홈 저탄소 솔루션 소개",
-     "link": "https://www.newstnt.com/news/articleView.html?idxno=722999"
+     "n": 98,
+     "title": "김성환 장관, 히트펌프·태양광·가전 갖춘 삼성 모듈러 홈 둘러봐",
+     "link": "http://www.e2news.com/news/articleView.html?idxno=335115"
+    },
+    {
+     "kw": "히트펌프",
+     "n": 95,
+     "title": "김성환 장관, 히트펌프·태양광·가전 갖춘 삼성 모듈러 홈 둘러봐",
+     "link": "http://www.e2news.com/news/articleView.html?idxno=335115"
+    },
+    {
+     "kw": "공장",
+     "n": 95,
+     "title": "김성환 장관, 히트펌프·태양광·가전 갖춘 삼성 모듈러 홈 둘러봐",
+     "link": "http://www.e2news.com/news/articleView.html?idxno=335115"
     },
     {
      "kw": "위치",
      "n": 92,
      "title": "LG전자·애플 AI홈 12월 美 출시... 가전업계-빅테크, AI 매개 협업 커진...",
      "link": "https://www.hankookilbo.com/news/article/A2026101416410005475?did=NA"
-    },
-    {
-     "kw": "공장",
-     "n": 91,
-     "title": "삼성전자, 기후에너지환경부 장관에 AI 모듈러 홈 저탄소 솔루션 소개",
-     "link": "https://www.newstnt.com/news/articleView.html?idxno=722999"
-    },
-    {
-     "kw": "히트펌프",
-     "n": 90,
-     "title": "삼성전자, 기후에너지환경부 장관에 AI 모듈러 홈 저탄소 솔루션 소개",
-     "link": "https://www.newstnt.com/news/articleView.html?idxno=722999"
-    },
-    {
-     "kw": "에너지",
-     "n": 87,
-     "title": "삼성전자, 고효율·저탄소 주거 솔루션 제시",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=666292"
-    },
-    {
-     "kw": "기기",
-     "n": 85,
-     "title": "삼성전자, 주택 에너지 자립 모델 국내 현장서 선봬",
-     "link": "https://www.datasom.co.kr/news/articleView.html?idxno=210339"
-    },
-    {
-     "kw": "설치",
-     "n": 84,
-     "title": "민관이 함께 그리는 미래주거…삼성·LG, ‘AI 주택’으로 K-GX 이끈다(종...",
-     "link": "https://www.edaily.co.kr/News/Read?newsId=04808486645612920&mediaCodeNo=257&utm_source=naver&utm_medium=referral&utm_campaign=news_syndication&utm_content=original_article"
-    },
-    {
-     "kw": "태양광",
-     "n": 83,
-     "title": "삼성전자, 기후부 장관에 '삼성 AI 모듈러 홈' 고효율·저탄소 주거환경...",
-     "link": "http://www.sisacast.kr/news/articleView.html?idxno=100996"
     }
    ]
   },
@@ -247,111 +247,111 @@
    "topKw": [
     {
      "kw": "LG전자",
-     "n": 563,
-     "title": "[뉴스인사이드 뉴스톡톡] 현대차, 인도 푸네 신공장 준공…155억달러 투...",
-     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5024324"
+     "n": 557,
+     "title": "LG, 애플과 부품 동맹 넘어 AI홈 기기 공동 개발",
+     "link": "https://www.sidae.com/article/2026101512023784317"
     },
     {
      "kw": "애플",
-     "n": 380,
-     "title": "[뉴스인사이드 뉴스톡톡] 현대차, 인도 푸네 신공장 준공…155억달러 투...",
-     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5024324"
+     "n": 399,
+     "title": "LG, 애플과 부품 동맹 넘어 AI홈 기기 공동 개발",
+     "link": "https://www.sidae.com/article/2026101512023784317"
     },
     {
      "kw": "AI홈",
-     "n": 349,
-     "title": "LG, 애플과 AI홈 ‘맞손’…글로벌 스마트홈 시장 판 흔든다",
-     "link": "https://www.sentv.co.kr/article/view/sentv202610140068"
+     "n": 359,
+     "title": "'AI가전' 전쟁인 줄 알았더니 '구독' 전쟁···삼성·LG의 진짜 승부처",
+     "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=55289"
     },
     {
      "kw": "기기",
-     "n": 324,
-     "title": "[단독] LG 스마트TV '루트 권한 탈취' 취약점 노출…룸앤TV 등 포함",
-     "link": "https://www.the-today.com/news/articleView.html?idxno=91698"
+     "n": 336,
+     "title": "LG, 애플과 부품 동맹 넘어 AI홈 기기 공동 개발",
+     "link": "https://www.sidae.com/article/2026101512023784317"
     },
     {
      "kw": "AI",
-     "n": 309,
-     "title": "LG·애플 ‘스마트홈’ 기기 동맹…AI로 시간대·날씨 분석, 냉난방 제어",
-     "link": "https://www.khan.co.kr/article/202610142057005"
+     "n": 301,
+     "title": "삼성 vs LG, AI로 '가전기능·사내업무' 고도화…광범위 AX 대전",
+     "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5071918"
     },
     {
      "kw": "가전",
-     "n": 237,
-     "title": "LG전자·애플, 출입·냉난방 자동화…AI홈 기기 7종 공개",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=2006025"
+     "n": 244,
+     "title": "'AI가전' 전쟁인 줄 알았더니 '구독' 전쟁···삼성·LG의 진짜 승부처",
+     "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=55289"
     },
     {
      "kw": "차량",
-     "n": 177,
-     "title": "LG전자, KES 2026서 '라이프 레이어' 공개… 가전부터 모빌리티·산업 AI...",
-     "link": "http://www.lkp.news/news/articleView.html?idxno=84957"
+     "n": 181,
+     "title": "'AI가전' 전쟁인 줄 알았더니 '구독' 전쟁···삼성·LG의 진짜 승부처",
+     "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=55289"
     },
     {
      "kw": "생태계",
-     "n": 160,
-     "title": "LG전자·애플, IoT 7종 공동 개발",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=666231"
+     "n": 165,
+     "title": "LG전자, 애플과 공동 개발 차세대 IoT 기기 7종 발표…'씽큐' 등 양사 AI...",
+     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=445753"
     },
     {
      "kw": "플랫폼",
-     "n": 158,
-     "title": "LG·애플 ‘스마트홈’ 기기 동맹…AI로 시간대·날씨 분석, 냉난방 제어",
-     "link": "https://www.khan.co.kr/article/202610142057005"
+     "n": 163,
+     "title": "LG전자, 애플과 공동 개발 차세대 IoT 기기 7종 발표…'씽큐' 등 양사 AI...",
+     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=445753"
     },
     {
      "kw": "7종",
-     "n": 146,
-     "title": "LG전자·애플, 출입·냉난방 자동화…AI홈 기기 7종 공개",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=2006025"
+     "n": 147,
+     "title": "LG전자, 애플과 공동 개발 차세대 IoT 기기 7종 발표…'씽큐' 등 양사 AI...",
+     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=445753"
     },
     {
      "kw": "아이폰",
-     "n": 128,
-     "title": "LG전자·애플, IoT 7종 공동 개발",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=666231"
+     "n": 135,
+     "title": "LG전자, 애플과 공동 개발 차세대 IoT 기기 7종 발표…'씽큐' 등 양사 AI...",
+     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=445753"
     },
     {
      "kw": "허브",
-     "n": 127,
-     "title": "LG전자·애플 AI홈 12월 美 출시... 가전업계-빅테크, AI 매개 협업 커진...",
-     "link": "https://www.hankookilbo.com/news/article/A2026101416410005475?did=NA"
+     "n": 132,
+     "title": "'AI가전' 전쟁인 줄 알았더니 '구독' 전쟁···삼성·LG의 진짜 승부처",
+     "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=55289"
     },
     {
      "kw": "아이패드",
-     "n": 120,
-     "title": "LG·애플 ‘스마트홈’ 기기 동맹…AI로 시간대·날씨 분석, 냉난방 제어",
-     "link": "https://www.khan.co.kr/article/202610142057005"
+     "n": 123,
+     "title": "LG전자, 애플과 공동 개발 차세대 IoT 기기 7종 발표…'씽큐' 등 양사 AI...",
+     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=445753"
     },
     {
      "kw": "IoT",
-     "n": 112,
-     "title": "LG전자·애플이 뭉쳤다… AI홈 기기 대공개",
-     "link": "https://www.fnnews.com/news/202610141811575572"
-    },
-    {
-     "kw": "원격",
-     "n": 93,
-     "title": "LG전자, KES 2026서 '라이프 레이어' 공개… 가전부터 모빌리티·산업 AI...",
-     "link": "http://www.lkp.news/news/articleView.html?idxno=84957"
-    },
-    {
-     "kw": "상태",
-     "n": 91,
-     "title": "LG·애플 ‘스마트홈’ 기기 동맹…AI로 시간대·날씨 분석, 냉난방 제어",
-     "link": "https://www.khan.co.kr/article/202610142057005"
+     "n": 116,
+     "title": "\"가전 넘어 주택으로\"…삼성·LG '모듈러'에 꽂힌 이유",
+     "link": "https://news.bizwatch.co.kr/article/industry/2026/10/15/0009"
     },
     {
      "kw": "제어할",
-     "n": 83,
-     "title": "LG·애플 ‘스마트홈’ 기기 동맹…AI로 시간대·날씨 분석, 냉난방 제어",
-     "link": "https://www.khan.co.kr/article/202610142057005"
+     "n": 86,
+     "title": "\"가전 넘어 주택으로\"…삼성·LG '모듈러'에 꽂힌 이유",
+     "link": "https://news.bizwatch.co.kr/article/industry/2026/10/15/0009"
     },
     {
-     "kw": "산업",
+     "kw": "원격",
+     "n": 83,
+     "title": "삼성 vs LG, AI로 '가전기능·사내업무' 고도화…광범위 AX 대전",
+     "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5071918"
+    },
+    {
+     "kw": "상태",
      "n": 82,
-     "title": "[산업 뉴스브리핑] 애플과 손잡은 LG전자…차세대 IoT 기기로 AI홈 확장",
-     "link": "https://www.asiatime.co.kr/article/20261014500402"
+     "title": "삼성 vs LG, AI로 '가전기능·사내업무' 고도화…광범위 AX 대전",
+     "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5071918"
+    },
+    {
+     "kw": "모바일",
+     "n": 82,
+     "title": "LG전자, 애플과 공동 개발 차세대 IoT 기기 7종 발표…'씽큐' 등 양사 AI...",
+     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=445753"
     }
    ]
   },
@@ -475,45 +475,51 @@
   {
    "name": "애플 홈킷",
    "query": "애플 홈킷",
-   "ytd": 71,
+   "ytd": 74,
    "capped": false,
    "analyzed": 100,
    "topKw": [
     {
      "kw": "AI",
-     "n": 61,
-     "title": "LG전자ㆍ애플, 1998년 인연에서 AIㆍ스마트홈 동맹으로 진화 [LGㆍ애플, ...",
-     "link": "https://www.etoday.co.kr/news/view/2635645"
+     "n": 64,
+     "title": "애플, AI 스마트홈 허브 '홈뷰' 공개…얼굴 인식부터 집안 보안까지 한...",
+     "link": "https://www.aitimes.kr/news/articleView.html?idxno=42316"
     },
     {
      "kw": "기기",
      "n": 43,
-     "title": "1000조 'AI 홈' 전쟁…애플·LG 첫 합작품 나왔다",
-     "link": "https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202610140085&t=NNv"
+     "title": "LG·애플, 더 강화된 연대..아이폰 넘어 AI홈 기기까지",
+     "link": "https://www.newstopkorea.com/news/articleView.html?idxno=48189"
     },
     {
      "kw": "LG전자",
-     "n": 40,
-     "title": "LG전자ㆍ애플, 1998년 인연에서 AIㆍ스마트홈 동맹으로 진화 [LGㆍ애플, ...",
-     "link": "https://www.etoday.co.kr/news/view/2635645"
-    },
-    {
-     "kw": "구글",
-     "n": 34,
-     "title": "LG전자ㆍ애플, 1998년 인연에서 AIㆍ스마트홈 동맹으로 진화 [LGㆍ애플, ...",
-     "link": "https://www.etoday.co.kr/news/view/2635645"
+     "n": 41,
+     "title": "애플, AI 스마트홈 허브 '홈뷰' 공개…얼굴 인식부터 집안 보안까지 한...",
+     "link": "https://www.aitimes.kr/news/articleView.html?idxno=42316"
     },
     {
      "kw": "카메라",
-     "n": 29,
-     "title": "1000조 'AI 홈' 전쟁…애플·LG 첫 합작품 나왔다",
-     "link": "https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202610140085&t=NNv"
+     "n": 30,
+     "title": "애플, AI 스마트홈 허브 '홈뷰' 공개…얼굴 인식부터 집안 보안까지 한...",
+     "link": "https://www.aitimes.kr/news/articleView.html?idxno=42316"
     },
     {
-     "kw": "보안",
-     "n": 25,
-     "title": "애플은 설계, LG는 제조…AI홈 판 흔드는 '빅딜'",
-     "link": "https://www.newsway.co.kr/news/view?ud=2026101211595255103"
+     "kw": "구글",
+     "n": 30,
+     "title": "LG전자ㆍ애플, 1998년 인연에서 AIㆍ스마트홈 동맹으로 진화 [LGㆍ애플, ...",
+     "link": "https://www.etoday.co.kr/news/view/2635645"
+    },
+    {
+     "kw": "아이폰",
+     "n": 24,
+     "title": "LG·애플, 더 강화된 연대..아이폰 넘어 AI홈 기기까지",
+     "link": "https://www.newstopkorea.com/news/articleView.html?idxno=48189"
+    },
+    {
+     "kw": "허브",
+     "n": 23,
+     "title": "애플, AI 스마트홈 허브 '홈뷰' 공개…얼굴 인식부터 집안 보안까지 한...",
+     "link": "https://www.aitimes.kr/news/articleView.html?idxno=42316"
     },
     {
      "kw": "4K",
@@ -522,28 +528,22 @@
      "link": "https://kbench.com/?q=node/282527"
     },
     {
-     "kw": "허브",
+     "kw": "보안",
      "n": 22,
-     "title": "애플 스마트홈 허브 베일 벗었다…\"시리야, 우리 집 관리해줘\"",
-     "link": "https://zdnet.co.kr/view/?no=20261014082501"
+     "title": "애플, AI 스마트홈 허브 '홈뷰' 공개…얼굴 인식부터 집안 보안까지 한...",
+     "link": "https://www.aitimes.kr/news/articleView.html?idxno=42316"
     },
     {
-     "kw": "아이폰",
-     "n": 21,
-     "title": "집안 온도 조절하고 택배 확인…AI홈, LG전자·애플 손잡았다",
-     "link": "https://www.donga.com/news/Economy/article/all/20261014/134839378/1"
+     "kw": "LG",
+     "n": 20,
+     "title": "애플, AI 스마트홈 허브 '홈뷰' 공개…얼굴 인식부터 집안 보안까지 한...",
+     "link": "https://www.aitimes.kr/news/articleView.html?idxno=42316"
     },
     {
      "kw": "스마트",
      "n": 19,
      "title": "LG·애플 동맹, 스마트홈으로 확장",
      "link": "https://www.sedaily.com/article/20099193?ref=naver"
-    },
-    {
-     "kw": "LG",
-     "n": 18,
-     "title": "LG전자ㆍ애플, 1998년 인연에서 AIㆍ스마트홈 동맹으로 진화 [LGㆍ애플, ...",
-     "link": "https://www.etoday.co.kr/news/view/2635645"
     },
     {
      "kw": "시리",
@@ -576,16 +576,16 @@
      "link": "https://www.etoday.co.kr/news/view/2635645"
     },
     {
-     "kw": "플랫폼",
-     "n": 15,
-     "title": "1000조 'AI 홈' 전쟁…애플·LG 첫 합작품 나왔다",
-     "link": "https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202610140085&t=NNv"
-    },
-    {
      "kw": "생태계",
      "n": 15,
      "title": "LG전자·애플, ‘생태계 연동’…아이폰으로 AI홈 누린다",
      "link": "http://www.newstomato.com/ReadNews.aspx?no=1316612&inflow=N"
+    },
+    {
+     "kw": "신형",
+     "n": 15,
+     "title": "애플, 신형 애플TV 4K 공개…A19 칩 탑재 50% 더 빨라졌다",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=706928"
     }
    ]
   },
@@ -598,81 +598,87 @@
    "topKw": [
     {
      "kw": "AI",
-     "n": 443,
-     "title": "LG전자·애플 AI홈 12월 美 출시... 가전업계-빅테크, AI 매개 협업 커진...",
-     "link": "https://www.hankookilbo.com/news/article/A2026101416410005475?did=NA"
+     "n": 437,
+     "title": "경남도, AI 기반 '통합복지플랫폼' 정식 개통…맞춤형 복지책 안내 최적...",
+     "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2480497"
     },
     {
      "kw": "애플",
-     "n": 314,
-     "title": "[월드 e-브리핑] 일본 GDP, 내년 세계 6위 전망…인도·영국에 추월",
-     "link": "https://www.obsnews.co.kr/news/articleView.html?idxno=1540531"
+     "n": 326,
+     "title": "비싸도 사는 고객…애플 시총 5조달러 만든 브랜드의 힘[종합]",
+     "link": "http://www.inews24.com/view/2015554"
     },
     {
      "kw": "아마존",
-     "n": 131,
-     "title": "[월드 e-브리핑] 일본 GDP, 내년 세계 6위 전망…인도·영국에 추월",
-     "link": "https://www.obsnews.co.kr/news/articleView.html?idxno=1540531"
+     "n": 135,
+     "title": "비싸도 사는 고객…애플 시총 5조달러 만든 브랜드의 힘[종합]",
+     "link": "http://www.inews24.com/view/2015554"
     },
     {
      "kw": "기기",
-     "n": 123,
-     "title": "LG, 애플과 AI홈 ‘맞손’…글로벌 스마트홈 시장 판 흔든다",
-     "link": "https://www.sentv.co.kr/article/view/sentv202610140068"
+     "n": 125,
+     "title": "구글, 웨어러블 겨냥 저전력 AI칩 공개 … 온디바이스 생태계 구축",
+     "link": "https://www.newdaily.co.kr/site/data/html/2026/10/15/2026101500100.html"
     },
     {
      "kw": "스마트",
-     "n": 112,
-     "title": "애플, AI 홈 허브 '홈뷰' 공개",
-     "link": "https://news.tvchosun.com/site/data/html_dir/2026/10/14/2026101490208.html"
+     "n": 115,
+     "title": "299달러 애플 ‘홈뷰’의 배신…2년 전 완성해 놓고 ‘시리 AI 지연’ 탓...",
+     "link": "https://www.ddaily.co.kr/page/view/2026101511510283632"
     },
     {
      "kw": "LG전자",
-     "n": 109,
-     "title": "LG, 애플과 AI홈 ‘맞손’…글로벌 스마트홈 시장 판 흔든다",
-     "link": "https://www.sentv.co.kr/article/view/sentv202610140068"
+     "n": 108,
+     "title": "나스닥 울상인데 혼자 웃은 ‘애플’…시총 5조달러",
+     "link": "https://www.mk.co.kr/article/12176580"
     },
     {
      "kw": "스마트폰",
-     "n": 95,
-     "title": "\"스마트폰 접길 잘했네\"…LG전자에 찾아온 뜻밖의 기회",
-     "link": "http://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202610140127&t=NN"
+     "n": 94,
+     "title": "경남도, AI 기반 '통합복지플랫폼' 정식 개통…맞춤형 복지책 안내 최적...",
+     "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2480497"
     },
     {
      "kw": "가전",
-     "n": 71,
-     "title": "가전 넘어 보안ㆍ구독까지⋯LG전자 AI홈 새 먹거리 키운다 [LGㆍ애플, 동...",
-     "link": "https://www.etoday.co.kr/news/view/2635648"
+     "n": 69,
+     "title": "[다가온 AI 홈 시대 ①] 삼성·LG가 그리는 미래의 집...\"집안일은 AI에게...",
+     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33172"
     },
     {
      "kw": "삼성전자",
      "n": 64,
-     "title": "LG전자·애플 AI홈 12월 美 출시... 가전업계-빅테크, AI 매개 협업 커진...",
-     "link": "https://www.hankookilbo.com/news/article/A2026101416410005475?did=NA"
-    },
-    {
-     "kw": "제미나",
-     "n": 64,
-     "title": "집안 온도 조절하고 택배 확인…AI홈, LG전자·애플 손잡았다",
-     "link": "https://www.donga.com/news/Economy/article/all/20261014/134839378/1"
+     "title": "[다가온 AI 홈 시대 ①] 삼성·LG가 그리는 미래의 집...\"집안일은 AI에게...",
+     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33172"
     },
     {
      "kw": "생태계",
-     "n": 63,
-     "title": "애플, AI 홈 허브 '홈뷰' 공개",
-     "link": "https://news.tvchosun.com/site/data/html_dir/2026/10/14/2026101490208.html"
+     "n": 62,
+     "title": "구글, 웨어러블 겨냥 저전력 AI칩 공개 … 온디바이스 생태계 구축",
+     "link": "https://www.newdaily.co.kr/site/data/html/2026/10/15/2026101500100.html"
+    },
+    {
+     "kw": "제미나",
+     "n": 62,
+     "title": "[다가온 AI 홈 시대 ①] 삼성·LG가 그리는 미래의 집...\"집안일은 AI에게...",
+     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33172"
     },
     {
      "kw": "LG",
      "n": 53,
-     "title": "LG, 애플과 AI홈 ‘맞손’…글로벌 스마트홈 시장 판 흔든다",
-     "link": "https://www.sentv.co.kr/article/view/sentv202610140068"
+     "title": "[다가온 AI 홈 시대 ①] 삼성·LG가 그리는 미래의 집...\"집안일은 AI에게...",
+     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33172"
     },
     {
      "kw": "시리",
-     "n": 49,
-     "title": "애플, 시리 AI 탑재 디스플레이 '홈뷰' 등 스마트 홈 제품 대거 공개",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=216243"
+     "n": 51,
+     "title": "299달러 애플 ‘홈뷰’의 배신…2년 전 완성해 놓고 ‘시리 AI 지연’ 탓...",
+     "link": "https://www.ddaily.co.kr/page/view/2026101511510283632"
+    },
+    {
+     "kw": "허브",
+     "n": 45,
+     "title": "비싸도 사는 고객…애플 시총 5조달러 만든 브랜드의 힘[종합]",
+     "link": "http://www.inews24.com/view/2015554"
     },
     {
      "kw": "TV",
@@ -681,28 +687,22 @@
      "link": "https://www.donga.com/news/It/article/all/20261014/134841587/1"
     },
     {
-     "kw": "로봇",
-     "n": 45,
-     "title": "[리포트] TV와 대화하고 로봇이 빨래까지···삼성·LG, 'AI 홈' 각축전",
-     "link": "http://www.paxetv.com/news/articleView.html?idxno=284128"
-    },
-    {
-     "kw": "허브",
-     "n": 42,
-     "title": "애플, AI 홈 허브 '홈뷰' 공개",
-     "link": "https://news.tvchosun.com/site/data/html_dir/2026/10/14/2026101490208.html"
+     "kw": "네스트",
+     "n": 43,
+     "title": "299달러 애플 ‘홈뷰’의 배신…2년 전 완성해 놓고 ‘시리 AI 지연’ 탓...",
+     "link": "https://www.ddaily.co.kr/page/view/2026101511510283632"
     },
     {
      "kw": "제미나이",
-     "n": 42,
-     "title": "[리포트] TV와 대화하고 로봇이 빨래까지···삼성·LG, 'AI 홈' 각축전",
-     "link": "http://www.paxetv.com/news/articleView.html?idxno=284128"
+     "n": 43,
+     "title": "애플 홈뷰, 카플레이 영상 앱은 수정 없이 작동…유튜브·넷플릭스는 아...",
+     "link": "https://www.wikitree.co.kr/articles/1166302"
     },
     {
-     "kw": "플랫폼",
+     "kw": "기술",
      "n": 41,
-     "title": "LG전자·애플 AI홈 12월 美 출시... 가전업계-빅테크, AI 매개 협업 커진...",
-     "link": "https://www.hankookilbo.com/news/article/A2026101416410005475?did=NA"
+     "title": "[다가온 AI 홈 시대 ①] 삼성·LG가 그리는 미래의 집...\"집안일은 AI에게...",
+     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33172"
     }
    ]
   }
