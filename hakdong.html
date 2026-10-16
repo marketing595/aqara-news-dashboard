@@ -577,7 +577,7 @@
     document.getElementById('legend').innerHTML=CATS.map(c=>`<div><span class="dot" style="background:${c.color}"></span>${esc(c.ko)}</div>`).join('');
     document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map((b,i)=>`<div class="bn"><div class="ic">${no2(i+1)}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}</div></div>`).join('');
     const hq=DATA.spots.find(s=>s.hl)||DATA.spots.find(s=>s.cat==='iot')||{};
-    document.getElementById('hqAddr').innerHTML=`아카라라이프 쇼룸 · ${esc(hq.a||'')}<br>${esc(DATA.note||'')}<br>쿠폰은 발급일로부터 30일간 유효해요. 다른 혜택과 중복 적용되지 않을 수 있으며, 견적·기프트 혜택의 상세 조건은 쇼룸에서 안내드려요.`;
+    document.getElementById('hqAddr').innerHTML=`아카라라이프 쇼룸 · ${esc(hq.a||'')}<br>견적·기프트 혜택의 상세 조건은 쇼룸에서 안내드려요.`;
     initMap(); applyOver();
     const p=new URLSearchParams(location.search);
     if(p.get('route')){ const ids=p.get('route').split(',').map(x=>x.trim()).filter(id=>SPOTS.some(s=>s.id===id));
@@ -728,7 +728,6 @@
   let CP_WATCH=null;
   function watchCoupon(){ const c=getCoupon(); if(!c||!DB||!AUTH_OK||CP_WATCH===c.code) return; CP_WATCH=c.code;
     const ref=DB.ref('hakdong/coupons/'+c.code);
-    ref.once('value').then(s=>{ if(!s.exists()) ref.set({ts:c.ts,exp:c.exp,src:c.src||'web',mobile:window.innerWidth<=860?1:0}); }).catch(()=>{});   // 발급 때 오프라인이었으면 지금이라도 기록
     ref.child('used').on('value',s=>{ const u=s.val(); const cur=getCoupon(); if(!cur||cur.code!==c.code) return;
       if((u||null)!==(cur.used||null)){ cur.used=u||null; try{ localStorage.setItem('aqaraHakdongCoupon',JSON.stringify(cur)); }catch(e){} if(document.getElementById('ov').classList.contains('show')) renderCoupon(); } });
   }
@@ -744,7 +743,7 @@
   function openRedeem(){ const ov=document.getElementById('ov');
     if(!MD_ORIG) MD_ORIG=[ov.querySelector('.hd').innerHTML,ov.querySelector('.bd').innerHTML];
     ov.querySelector('.hd').innerHTML=`<button class="x" onclick="closeBenefit()" aria-label="닫기">×</button><div class="ey">STAFF ONLY · 쇼룸 스태프 전용</div><h2 id="mdTitle">웰컴 쿠폰 사용 처리</h2><p>손님 쿠폰 QR을 찍으면 열리는 화면이에요. 혜택을 드린 뒤 아래 버튼을 눌러주세요.</p>`;
-    ov.querySelector('.bd').innerHTML=`<div class="coupon"><div class="eyebrow">Welcome Coupon</div><div class="code">${esc(REDEEM)}</div><div id="rdBody" class="meta" style="margin-top:10px">쿠폰 정보를 불러오는 중…</div></div>`;
+    ov.querySelector('.bd').innerHTML=`<div class="coupon"><div class="eyebrow">Welcome Coupon</div><div class="meta" style="margin-top:6px">${esc(REDEEM)}</div><div id="rdBody" class="meta" style="margin-top:10px">쿠폰 정보를 불러오는 중…</div></div>`;
     ov.classList.add('show'); document.body.style.overflow='hidden';
     if(AUTH_OK) loadRedeem(); else if(!DB) document.getElementById('rdBody').textContent='서버에 연결할 수 없어요. 인터넷 연결을 확인해 주세요.'; }
   function loadRedeem(){ const box=document.getElementById('rdBody'); if(!box||!DB) return;
@@ -760,14 +759,13 @@
 
   function renderCoupon(){ const box=document.getElementById('cpBody'), c=getCoupon();
     watchCoupon();
-    if(c&&c.used){ box.innerHTML=`<div class="code" style="opacity:.35;text-decoration:line-through">${esc(c.code)}</div><div class="used-stamp">사용 완료</div>
+    if(c&&c.used){ box.innerHTML=`<div class="used-stamp">사용 완료</div>
       <div class="how">${fmtDT(c.used)} 쇼룸에서 사용하셨어요. 방문해 주셔서 감사합니다!</div>`; return; }
     if(!c){ box.innerHTML=`<p style="font-size:13px;color:#5E625F;margin:6px 0 12px">버튼을 누르면 이 휴대폰에 웰컴 쿠폰이 발급돼요. 쇼룸에서 쿠폰 화면만 보여주시면 끝!</p>
       <button class="btn primary" style="font-size:14px;padding:11px 22px" onclick="issueCoupon()">웰컴 쿠폰 발급받기</button>`; return; }
-    const d=new Date(c.ts), e=new Date(c.exp), f=x=>x.getFullYear()+'.'+String(x.getMonth()+1).padStart(2,'0')+'.'+String(x.getDate()).padStart(2,'0');
-    box.innerHTML=`<div class="code">${esc(c.code)}</div><div class="meta">발급 ${f(d)} · ${f(e)}까지 사용 가능 · 웰컴 음료 + 스마트홈 인테리어 상담·무료 견적 + 후기 인증 시 웰컴 기프트</div>
-      <div id="qr"></div><div class="how">쇼룸 방문 시 이 화면(코드 또는 QR)을 스태프에게 보여주세요.<br><b>아카라라이프 쇼룸</b> · 학동역 도보 3분 · 논현로127길 13-11</div>
-      <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap"><button class="btn sm" onclick="copyCode('${esc(c.code)}')">코드 복사</button><button class="btn sm" onclick="closeBenefit();flyHQ()">쇼룸 위치 보기</button><a class="btn sm" href="https://map.naver.com/p/search/${encodeURIComponent('아카라라이프')}" target="_blank" rel="noopener">길찾기 ↗</a></div>`;
+    // 스태프가 QR만 찍으면 되므로 코드·발급일 문구는 보여주지 않는다(코드는 QR 주소 안에 들어 있음)
+    box.innerHTML=`<div id="qr"></div><div class="how">쇼룸 방문 시 이 QR을 스태프에게 보여주세요.<br><b>아카라라이프 쇼룸</b> · 학동역 도보 3분 · 논현로127길 13-11</div>
+      <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap"><button class="btn sm" onclick="closeBenefit();flyHQ()">쇼룸 위치 보기</button><a class="btn sm" href="https://map.naver.com/p/search/${encodeURIComponent('아카라라이프')}" target="_blank" rel="noopener">길찾기 ↗</a></div>`;
     try{ new QRCode(document.getElementById('qr'),{text:PAGE_URL+'?redeem='+c.code,width:112,height:112,colorDark:'#382D18',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const q=document.getElementById('qr'); if(q) q.style.display='none'; }
   }
   function copyCode(t){ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('쿠폰 코드가 복사됐어요: '+t)).catch(()=>prompt('쿠폰 코드',t)); }
