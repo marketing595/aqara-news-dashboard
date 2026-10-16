@@ -45,6 +45,17 @@
       -webkit-font-smoothing:antialiased;letter-spacing:-0.01em;word-break:keep-all}
     a{color:inherit;text-decoration:none}
     button{font-family:inherit;cursor:pointer;color:inherit}
+    /* 첫 방문 튜토리얼 */
+    .tour{position:fixed;inset:0;z-index:10000}   /* 헤더(9999)보다 위 */
+    .tour-hole{position:fixed;border-radius:12px;box-shadow:0 0 0 9999px rgba(20,20,18,.58);transition:left .25s ease,top .25s ease,width .25s ease,height .25s ease}
+    .tour-card{position:fixed;width:min(320px,calc(100vw - 24px));background:var(--paper);border-radius:14px;padding:18px 18px 14px;box-shadow:0 16px 40px -12px rgba(0,0,0,.45);transition:left .25s ease,top .25s ease}
+    .tour-card .tour-step{margin:0 0 6px;font-size:12px;font-weight:600;color:var(--muted2);font-variant-numeric:tabular-nums}
+    .tour-card h3{margin:0 0 6px;font-size:17px;font-weight:700;letter-spacing:-0.03em}
+    .tour-card p{margin:0;font-size:14px;color:var(--ink2);line-height:1.6}
+    .tour-acts{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+    .tour-skip{border:0;background:none;padding:8px 4px;font-size:13px;color:var(--muted2)}
+    .tour-skip:hover{color:var(--ink)}
+    .logo{height:1.05em;width:auto;vertical-align:-0.12em;display:inline-block}
     iconify-icon{display:inline-block;width:1em;height:1em;flex:none;vertical-align:-0.125em}
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     :focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
@@ -353,7 +364,7 @@
     <div class="md" role="dialog" aria-modal="true" aria-labelledby="mdTitle">
       <div class="hd">
         <button class="x" onclick="closeBenefit()" aria-label="닫기">×</button>
-        <div class="ey">AqaraLife SHOWROOM · 학동역 도보 3분</div>
+        <div class="ey"><img class="logo" src="aqaralife-logo-black.png" alt="AqaraLife"> SHOWROOM · 학동역 도보 3분</div>
         <h2 id="mdTitle">학동 쇼룸 투어 웰컴 쿠폰</h2>
         <p>학동 인테리어 거리를 돌아보시는 분들께 드려요. 쿠폰 받고 아카라라이프 쇼룸에서 쉬었다 가세요.</p>
       </div>
@@ -394,6 +405,7 @@
   // 네이버지도는 '상호+주소'를 같이 넣으면 '조건에 맞는 업체가 없습니다'가 뜬다 → 업체명만 검색(괄호 속 영문 표기는 제거)
   const naverUrl=s=>s.np?('https://map.naver.com/p/entry/place/'+encodeURIComponent(s.np)):('https://map.naver.com/p/search/'+encodeURIComponent(naverName(s)));   // np = 네이버 플레이스 ID(검증 완료분) → 바로 그 업체로
   const naverName=s=>(s.n||'').replace(/\s*\([^)]*\)/g,'').replace(/\s*(플래그십|브랜드)?\s*(쇼룸|갤러리|스토어 서울)$/,'').trim()||s.n;
+  const brandHtml=t=>esc(t||'').replace('AqaraLife','<img class="logo" src="aqaralife-logo-black.png" alt="AqaraLife">');   // 브랜드명은 글자 대신 로고 이미지로
   const no2=n=>String(n).length<2?'0'+n:String(n);   // 카탈로그 목차처럼 01, 02 … 두 자리로
 
   /* ───────── 저장 · 나의 투어 코스 ─────────
@@ -578,6 +590,7 @@
     if(p.get('spot')) setTimeout(()=>focusSpot(p.get('spot')),400);
     if(REDEEM) openRedeem();
     else if(p.get('benefit')==='1') openBenefit();
+    maybeTour();
   }
 
   /* ───────── 지도 ───────── */
@@ -595,7 +608,7 @@
     if(FILTER==='route'){ const k=routeIds().indexOf(s.id); if(k>-1) return `<div class="pin step">${k+1}</div>`; }
     return s.hl?`<div class="hqpin"><span class="wc">Welcome Coupon</span><div class="core">AQARA</div></div>`:`<div class="pin" style="--c:${c.color}">${no2(s._no)}</div>`; }
   function popupHtml(s){ const c=catOf(s.cat);
-    return `<div class="pp" style="--c:${c.color}">${s.hl?'<span class="badge-hl">웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${esc(s.en||'')}</span>
+    return `<div class="pp" style="--c:${c.color}">${s.hl?'<span class="badge-hl">웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${brandHtml(s.en)}</span>
       <div class="nm">${esc(s.n)}</div>
       <div class="ds">${esc(s.d||'')}</div><div class="ad">${esc(s.a||'')}</div>
       <div class="acts">${s.hl?`<button class="btn primary sm" onclick="openBenefit()">웰컴 쿠폰</button>`:''}${s.id?saveBtn(s.id):''}<a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div>`; }
@@ -685,7 +698,7 @@
   }
   function footHtml(){ const hq=(DATA.spots||[]).find(s=>s.hl)||{};
     return `<footer class="foot">
-      <div class="ft">AqaraLife SHOWROOM</div>
+      <div class="ft"><img class="logo" src="aqaralife-logo-black.png" alt="AqaraLife"> SHOWROOM</div>
       <b>아카라라이프 쇼룸</b>
       <p>${esc(hq.a||'')}${hq.a?' · 학동역 도보 3분':''}</p>
       <div class="fa"><a class="btn sm" href="https://map.naver.com/p/search/${encodeURIComponent('아카라라이프')}" target="_blank" rel="noopener">길찾기 ↗</a></div>
@@ -760,6 +773,49 @@
     try{ new QRCode(document.getElementById('qr'),{text:PAGE_URL+'?redeem='+c.code,width:112,height:112,colorDark:'#382D18',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const q=document.getElementById('qr'); if(q) q.style.display='none'; }
   }
   function copyCode(t){ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('쿠폰 코드가 복사됐어요: '+t)).catch(()=>prompt('쿠폰 코드',t)); }
+
+  /* ───────── 첫 방문 튜토리얼 ─────────
+     처음 연 사람에게만 4단계로 화면 요소를 비춰 준다(localStorage aqaraHakdongTour). ?tour=1 이면 다시 보기.
+     구멍(spot) = 대상 위치에 맞춘 투명 상자 + 바깥을 어둡게 덮는 큰 그림자 */
+  const TOUR_KEY='aqaraHakdongTour';
+  const TOUR=[
+    {sel:'.tools', t:'보고 싶은 쇼룸 찾기', d:'브랜드나 품목으로 검색하거나, 카테고리를 눌러 원하는 쇼룸만 골라 보세요.'},
+    {sel:'.list .spot:not(.hq)', t:'번호는 지도 핀과 같아요', d:'목록에서 매장을 누르면 지도에서 바로 위치를 보여 드려요. 번호와 색이 지도 핀과 같아요.'},
+    {sel:'.list .spot:not(.hq) .save', t:'별을 눌러 내 코스에 담기', d:'가고 싶은 매장을 담아 두면 내 코스에서 걷는 순서와 도보 시간을 알려 드려요.'},
+    {sel:'.hdr-nav .btn.primary', t:'쇼룸에 들러 웰컴 쿠폰 쓰기', d:'쿠폰을 받아 아카라라이프 쇼룸에 들르면 음료, 무료 견적, 후기 기프트를 드려요.'}
+  ];
+  let TI=-1;
+  function startTour(){ if(document.getElementById('tour')) return;
+    const el=document.createElement('div'); el.id='tour'; el.className='tour';
+    el.innerHTML=`<div class="tour-hole"></div><div class="tour-card" role="dialog" aria-modal="true" aria-labelledby="tourT"><p class="tour-step" id="tourS"></p><h3 id="tourT"></h3><p id="tourD"></p><div class="tour-acts"><button class="tour-skip" onclick="endTour()">건너뛰기</button><button class="btn primary" id="tourN" onclick="tourGo(TI+1)">다음</button></div></div>`;
+    document.body.appendChild(el); TI=-1; tourGo(0); }
+  function tourGo(i){ if(i>=TOUR.length) return endTour();
+    let k=i; while(k<TOUR.length&&!visibleEl(document.querySelector(TOUR[k].sel))) k++;   // 화면에 없는 단계는 건너뛴다(모바일 등)
+    if(k>=TOUR.length) return endTour(); TI=k;
+    const s=TOUR[k], tgt=document.querySelector(s.sel);
+    tgt.scrollIntoView({block:'nearest'});
+    document.getElementById('tourS').textContent=(k+1)+' / '+TOUR.length;
+    document.getElementById('tourT').textContent=s.t; document.getElementById('tourD').textContent=s.d;
+    document.getElementById('tourN').textContent=k===TOUR.length-1?'시작하기':'다음';
+    placeTour(); document.getElementById('tourN').focus(); }
+  function visibleEl(e){ if(!e) return false; const r=e.getBoundingClientRect(); return r.width>0&&r.height>0; }
+  function placeTour(){ const box=document.getElementById('tour'); if(!box||TI<0) return;
+    const tgt=document.querySelector(TOUR[TI].sel); if(!tgt) return;
+    const r=tgt.getBoundingClientRect(), pad=6, hole=box.querySelector('.tour-hole'), card=box.querySelector('.tour-card');
+    Object.assign(hole.style,{left:(r.left-pad)+'px',top:(r.top-pad)+'px',width:(r.width+pad*2)+'px',height:(r.height+pad*2)+'px'});
+    const cw=card.offsetWidth, ch=card.offsetHeight, vw=innerWidth, vh=innerHeight, gap=14;
+    let top=r.bottom+pad+gap; if(top+ch>vh-12) top=Math.max(12,r.top-pad-gap-ch);
+    let left=Math.min(Math.max(12,r.left),vw-cw-12);
+    card.style.left=left+'px'; card.style.top=top+'px'; }
+  function endTour(){ const b=document.getElementById('tour'); if(b) b.remove(); TI=-1;
+    try{ localStorage.setItem(TOUR_KEY,'1'); }catch(e){} }
+  addEventListener('resize',placeTour); addEventListener('scroll',placeTour,true);
+  document.addEventListener('keydown',e=>{ if(TI<0) return; if(e.key==='Escape') endTour(); else if(e.key==='ArrowRight'||e.key==='Enter'&&e.target.id!=='tourN') tourGo(TI+1); });
+  function maybeTour(){ const p=new URLSearchParams(location.search);
+    if(REDEEM||p.get('benefit')==='1'||p.get('route')) return;
+    let seen=false; try{ seen=localStorage.getItem(TOUR_KEY)==='1'; }catch(e){}
+    if(seen&&p.get('tour')!=='1') return;
+    setTimeout(startTour,700); }
 </script>
 </body>
 </html>
