@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-11T09:11:12+09:00",
+ "generatedAt": "2026-10-16T10:44:45+09:00",
  "bots": [
   "GPTBot",
   "OAI-SearchBot",
@@ -95,20 +95,10 @@
    "host": "n.news.naver.com",
    "own": false,
    "area": "PR",
-   "blocked": [
-    "GPTBot",
-    "OAI-SearchBot",
-    "PerplexityBot",
-    "ClaudeBot",
-    "Claude-SearchBot",
-    "Google-Extended",
-    "CCBot",
-    "meta-externalagent",
-    "Applebot-Extended"
-   ],
+   "blocked": [],
    "partial": [],
-   "robots": true,
-   "status": 200
+   "robots": false,
+   "status": 0
   }
  ],
  "media": [
@@ -117,7 +107,7 @@
    "label": "전자신문",
    "blocked": [],
    "partial": [],
-   "robots": false
+   "robots": true
   },
   {
    "host": "www.mt.co.kr",
@@ -157,9 +147,19 @@
    "host": "biz.chosun.com",
    "label": "조선비즈",
    "blocked": [
-    "GPTBot"
+    "GPTBot",
+    "ClaudeBot",
+    "Google-Extended",
+    "CCBot",
+    "meta-externalagent",
+    "Applebot-Extended"
    ],
-   "partial": [],
+   "partial": [
+    "OAI-SearchBot",
+    "ChatGPT-User",
+    "PerplexityBot",
+    "Claude-SearchBot"
+   ],
    "robots": true
   },
   {
@@ -241,7 +241,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9857,
+   "chars": 8958,
    "canonical": "http://www.aqaralife.kr/",
    "updated": ""
   },
@@ -268,7 +268,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 10111,
+   "chars": 9955,
    "canonical": "http://www.aqaralife.kr/aqaralife",
    "updated": ""
   },
@@ -295,7 +295,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 10111,
+   "chars": 9955,
    "canonical": "http://www.aqaralife.kr/aqaralife",
    "updated": ""
   },
@@ -322,7 +322,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9215,
+   "chars": 9059,
    "canonical": "http://www.aqaralife.kr/smarthome",
    "updated": ""
   },
@@ -349,7 +349,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9949,
+   "chars": 9776,
    "canonical": "http://www.aqaralife.kr/smarthome-bible",
    "updated": ""
   },
@@ -384,7 +384,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 7683,
+   "chars": 8195,
    "canonical": "http://www.aqaralife.kr/blog",
    "updated": ""
   },
@@ -411,9 +411,9 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9230,
+   "chars": 9226,
    "canonical": "http://www.aqaralife.kr/newsroom",
-   "updated": "2026-06-30"
+   "updated": "2026-10-02"
   },
   {
    "label": "뉴스레터",
@@ -438,7 +438,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8189,
+   "chars": 8033,
    "canonical": "http://www.aqaralife.kr/newsletter",
    "updated": ""
   },
@@ -447,162 +447,48 @@
    "path": "/door-lock",
    "kind": "product",
    "url": "https://www.aqaralife.kr/door-lock",
-   "status": 200,
-   "ok": true,
-   "title": "아카라라이프 Aqaralife",
-   "desc": "아카라라이프와 함께 쉽고 안정적으로 스마트홈을 구축할 수 있는 가장 완성된 솔루션 &#039;스마트홈 바이블&#039;을 만나보세요.",
-   "descLen": 74,
-   "h1": 0,
-   "h2": 0,
-   "ld": [
-    "DefinedRegion",
-    "ImageObject",
-    "MerchantReturnPolicy",
-    "MonetaryAmount",
-    "OnlineStore",
-    "PostalAddress",
-    "ShippingConditions",
-    "ShippingService"
-   ],
-   "contentLd": [],
-   "chars": 7911,
-   "canonical": "http://www.aqaralife.kr/door-lock",
-   "updated": ""
+   "status": 0,
+   "ok": false
   },
   {
    "label": "센서",
    "path": "/sensor",
    "kind": "product",
    "url": "https://www.aqaralife.kr/sensor",
-   "status": 200,
-   "ok": true,
-   "title": "아카라라이프 Aqaralife",
-   "desc": "아카라라이프와 함께 쉽고 안정적으로 스마트홈을 구축할 수 있는 가장 완성된 솔루션 &#039;스마트홈 바이블&#039;을 만나보세요.",
-   "descLen": 74,
-   "h1": 0,
-   "h2": 0,
-   "ld": [
-    "DefinedRegion",
-    "ImageObject",
-    "MerchantReturnPolicy",
-    "MonetaryAmount",
-    "OnlineStore",
-    "PostalAddress",
-    "ShippingConditions",
-    "ShippingService"
-   ],
-   "contentLd": [],
-   "chars": 8121,
-   "canonical": "http://www.aqaralife.kr/sensor",
-   "updated": ""
+   "status": 0,
+   "ok": false
   },
   {
    "label": "허브·카메라",
    "path": "/hub-camera",
    "kind": "product",
    "url": "https://www.aqaralife.kr/hub-camera",
-   "status": 200,
-   "ok": true,
-   "title": "아카라라이프 Aqaralife",
-   "desc": "아카라라이프와 함께 쉽고 안정적으로 스마트홈을 구축할 수 있는 가장 완성된 솔루션 &#039;스마트홈 바이블&#039;을 만나보세요.",
-   "descLen": 74,
-   "h1": 0,
-   "h2": 0,
-   "ld": [
-    "DefinedRegion",
-    "ImageObject",
-    "MerchantReturnPolicy",
-    "MonetaryAmount",
-    "OnlineStore",
-    "PostalAddress",
-    "ShippingConditions",
-    "ShippingService"
-   ],
-   "contentLd": [],
-   "chars": 8131,
-   "canonical": "http://www.aqaralife.kr/hub-camera",
-   "updated": ""
+   "status": 0,
+   "ok": false
   },
   {
    "label": "조명",
    "path": "/lightings",
    "kind": "product",
    "url": "https://www.aqaralife.kr/lightings",
-   "status": 200,
-   "ok": true,
-   "title": "아카라라이프 조명",
-   "desc": "아카라라이프 조명",
-   "descLen": 9,
-   "h1": 0,
-   "h2": 0,
-   "ld": [
-    "DefinedRegion",
-    "ImageObject",
-    "MerchantReturnPolicy",
-    "MonetaryAmount",
-    "OnlineStore",
-    "PostalAddress",
-    "ShippingConditions",
-    "ShippingService"
-   ],
-   "contentLd": [],
-   "chars": 8206,
-   "canonical": "http://www.aqaralife.kr/lightings",
-   "updated": ""
+   "status": 0,
+   "ok": false
   },
   {
    "label": "스위치·패드",
    "path": "/switch-pad",
    "kind": "product",
    "url": "https://www.aqaralife.kr/switch-pad",
-   "status": 200,
-   "ok": true,
-   "title": "아카라라이프 Aqaralife",
-   "desc": "아카라라이프와 함께 쉽고 안정적으로 스마트홈을 구축할 수 있는 가장 완성된 솔루션 &#039;스마트홈 바이블&#039;을 만나보세요.",
-   "descLen": 74,
-   "h1": 0,
-   "h2": 0,
-   "ld": [
-    "DefinedRegion",
-    "ImageObject",
-    "MerchantReturnPolicy",
-    "MonetaryAmount",
-    "OnlineStore",
-    "PostalAddress",
-    "ShippingConditions",
-    "ShippingService"
-   ],
-   "contentLd": [],
-   "chars": 8509,
-   "canonical": "http://www.aqaralife.kr/switch-pad",
-   "updated": ""
+   "status": 0,
+   "ok": false
   },
   {
    "label": "블라인드",
    "path": "/shadings",
    "kind": "product",
    "url": "https://www.aqaralife.kr/shadings",
-   "status": 200,
-   "ok": true,
-   "title": "아카라라이프 커튼·블라인드",
-   "desc": "아카라라이프 커튼·블라인드",
-   "descLen": 14,
-   "h1": 0,
-   "h2": 0,
-   "ld": [
-    "DefinedRegion",
-    "ImageObject",
-    "MerchantReturnPolicy",
-    "MonetaryAmount",
-    "OnlineStore",
-    "PostalAddress",
-    "ShippingConditions",
-    "ShippingService"
-   ],
-   "contentLd": [],
-   "chars": 7883,
-   "canonical": "http://www.aqaralife.kr/shadings",
-   "updated": ""
+   "status": 0,
+   "ok": false
   },
   {
    "label": "시공 서비스",
@@ -627,7 +513,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 10258,
+   "chars": 10102,
    "canonical": "http://www.aqaralife.kr/si_service",
    "updated": ""
   },
@@ -654,7 +540,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8054,
+   "chars": 7898,
    "canonical": "http://www.aqaralife.kr/case",
    "updated": ""
   },
@@ -681,7 +567,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9846,
+   "chars": 9690,
    "canonical": "http://www.aqaralife.kr/company-platform",
    "updated": ""
   },
@@ -708,7 +594,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 13979,
+   "chars": 13823,
    "canonical": "http://www.aqaralife.kr/inrequest",
    "updated": ""
   },
@@ -735,7 +621,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8798,
+   "chars": 8642,
    "canonical": "http://www.aqaralife.kr/partnership",
    "updated": ""
   }
@@ -746,12 +632,12 @@
   "llms": "nonstandard",
   "llmsBody": "User-agent: * \r\nAllow: /  \r\nCommercial-use: allowed\r\nResearch-use: allowed",
   "sitemap": true,
-  "sitemapUrls": 59,
+  "sitemapUrls": 53,
   "sitemapHasPosts": false,
-  "sitemapHttp": 59
+  "sitemapHttp": 53
  },
  "boards": {
-  "blogPosts": 1,
+  "blogPosts": 10,
   "newsroomPosts": 10,
   "note": "게시판 1페이지 기준 · 글 상세 링크(idx) 개수"
  },
