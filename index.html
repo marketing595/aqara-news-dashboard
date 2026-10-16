@@ -7092,8 +7092,10 @@
         const id=(c.host||'').replace(/.*\//,'');
         const b=blogs.filter(x=>((x.id||x.url||'').indexOf(id)>-1))[0]||null;
         const recent=b?geRecentCount(b,30):-1;
+        const ca=geActs().filter(a=>a.kind!=='tech'&&a.ch===c.k), p1=ca.filter(a=>a.pri==='P1').length;
         return {k:c.k, n:c.n, host:c.host, total:b?(b.total||0):-1, recent:recent, last:b?(b.latest||''):'',
-                target:target, rate: recent>=0?Math.round(recent/target*100):-1}; }); }
+                target:target, rate: recent>=0?Math.round(recent/target*100):-1,
+                acts:ca.length, p1:p1, p1rate:ca.length?Math.round(p1/ca.length*100):-1}; }); }
     function geRecentCount(b,days){ const arr=(b.posts||[]); if(!arr.length) return -1;
       const lim=Date.now()-days*864e5;
       return arr.filter(p=>{ const d=new Date((p.date||p.d||'').toString().replace(/\./g,'-')); return !isNaN(d)&&d.getTime()>=lim; }).length; }
@@ -7211,7 +7213,22 @@
       }
       if(chKey==='nofficial') return '['+kw+'] 시공 사례와 설치 방법 정리';
       return '['+kw+'] '+(type==='실험기'?'직접 연동해 본 기록':'한 달 써 본 기록')+' (제품 제공 표기)'; }
-    function geActSet(id,f,v){ geSet('act/'+id+'/'+f,v); }
+    function geActSet(id,f,v){ geSet('act/'+id+'/'+f,v);
+      if(f==='st'&&v==='done'&&!GV2('act/'+id+'/doneAt','')) geSet('act/'+id+'/doneAt',geToday()); }   // 재측정 기준일
+    /* 발행 전·후 SoM — 같은 CEP의 일반·조건 질문, 보는 기간 안의 측정만 */
+    function geActDelta(a){
+      const d=a.doneAt||''; if(a.st!=='done'||!d) return null;
+      const pids={}; gePrompts().filter(p=>p.cep===+a.cep&&p.type!=='branded').forEach(p=>{ pids[p.id]=1; });
+      const rs=geAllRuns().filter(r=>pids[r.pid]);
+      const pre=rs.filter(r=>r.date<d), post=rs.filter(r=>r.date>=d);
+      const som=x=>x.length?Math.round(x.filter(r=>+r.mention===1).length/x.length*100):-1;
+      return {b:som(pre), a:som(post), nb:pre.length, na:post.length}; }
+    function geActDeltaCell(a){
+      const x=geActDelta(a); if(!x) return '<span class="text-slate-300">—</span>';
+      if(x.na<5) return `<span class="text-[10.5px] text-slate-400" title="발행일 ${esc(a.doneAt)} 이후 측정 ${x.na}회">측정 대기<br>(${x.na}/5회)</span>`;
+      if(x.b<0) return `<span class="num font-bold">${x.a}%</span><span class="block text-[10px] text-slate-400">발행 전 기록 없음</span>`;
+      const dlt=x.a-x.b, col=dlt>0?'#5E7350':(dlt<0?'#BF5332':'#8E8E93');
+      return `<span class="num font-bold" style="color:${col}">${dlt>0?'+':''}${dlt}%p</span><span class="block text-[10px] text-slate-400 num">${x.b}%→${x.a}% · n ${x.nb}/${x.na}</span>`; }
     function geActDel(id){ if(!confirm('이 액션을 지울까요?')) return; geSet('act/'+id,null); renderGeo(); }
     function geActAdd(){ const id='a'+Date.now().toString(36);
       geSet('act/'+id,{kind:'content', ch:'own', cep:1, type:'기준 문서', title:'', kws:'', gap:'none',
@@ -7539,8 +7556,42 @@
             <p class="text-[12px] text-slate-600">${esc(r.errNote||'내용 미기재')}</p></div>`).join('')
             :'<p class="text-[12.5px] text-slate-400">기록된 오답이 없습니다.</p>'}
         </div>
-      </div>`;
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">${geSovCard(runs)}${geExtCiteCard(runs)}</div>`;
     }
+    /* AI 답변 속 브랜드 점유 — 측정 회차 중 각 브랜드가 나온 비율(네이버 검색 결과는 제외) */
+    const GE_BRANDS=[['아카라',null],['삼성 스마트싱스',['삼성','스마트싱스','SmartThings']],['LG 씽큐',['LG','씽큐','ThinQ']],
+      ['샤오미',['샤오미','Xiaomi']],['헤이홈',['헤이홈']],['구글 홈',['구글 홈','Google Home']],['애플 홈',['애플 홈','HomeKit']],
+      ['필립스 휴',['필립스','Hue']],['이케아',['이케아']],['투야',['투야','Tuya']]];
+    function geSovCard(runs){
+      const rs=runs.filter(r=>r.eng!=='search'), n=rs.length;
+      const rows=GE_BRANDS.map(([name,al])=>{ const c=al?rs.filter(r=>(r.comp||[]).some(x=>al.indexOf(x)>-1)).length
+                                                        :rs.filter(r=>+r.mention===1).length;
+        return {name:name, c:c, pct:n?Math.round(c/n*100):0}; }).filter(x=>x.c||x.name==='아카라').sort((a,b)=>b.c-a.c);
+      return `<div class="card p-5">
+        <h3 class="accent font-extrabold text-ink mb-1">AI 답변 속 브랜드 점유 <span class="text-[11px] font-normal text-slate-400">(AI 답변 ${n}회 중 등장 비율)</span></h3>
+        <p class="text-[11.5px] text-slate-400 mb-2">같은 질문에 누가 함께·대신 추천되는지. 경쟁사가 아카라보다 높은 CEP는 '경쟁사 우위' 갭으로 액션이 생깁니다.</p>
+        ${n?rows.map(x=>{ const ours=x.name==='아카라';
+          return `<div class="mb-1.5"><div class="flex justify-between text-[12px]"><span class="${ours?'font-bold text-ink':'text-slate-500'}">${esc(x.name)}</span><span class="num">${x.c}회 · ${x.pct}%</span></div>
+            <div class="h-2 rounded bg-slate-100 overflow-hidden"><div class="h-2 rounded" style="width:${x.pct}%;background:${ours?'#FBC400':'#C7C7C4'}"></div></div></div>`; }).join('')
+          :'<p class="text-[12.5px] text-slate-400">AI 엔진 측정이 아직 없습니다 — 네이버 검색 결과만으로는 계산하지 않습니다.</p>'}
+      </div>`; }
+    /* AI가 우리 대신 인용하는 외부 문서 — 이 문서들이 답한 질문을 /guide로 가져오거나, 해당 매체·커뮤니티에 정확한 정보가 실리게 한다 */
+    function geExtCiteCard(runs){
+      const m={};
+      runs.filter(r=>r.eng!=='search').forEach(r=>(r.cites||[]).forEach(c=>{ const u=(c.url||'').replace(/[?#].*$/,''), d=c.domain||'';
+        if(!u||geIsOurs(u+' '+d)) return;
+        const p=gePrompts().filter(x=>x.id===r.pid)[0]||{};
+        const o=m[u]=m[u]||{u:u, d:d, t:c.title||'', n:0, ceps:{}, engs:{}}; o.n++; if(p.cep) o.ceps[p.cep]=1; o.engs[r.eng]=1; }));
+      const top=Object.keys(m).map(k=>m[k]).sort((a,b)=>b.n-a.n).slice(0,10);
+      return `<div class="card p-5">
+        <h3 class="accent font-extrabold text-ink mb-1">AI가 우리 대신 인용하는 문서 Top 10</h3>
+        <p class="text-[11.5px] text-slate-400 mb-2">이 문서가 답한 질문을 /guide에 더 정확하게 쓰면 '타채널 인용' 갭이 줄어듭니다. 커뮤니티·리뷰 글은 오정보가 있으면 정정 댓글·자료 제공 대상.</p>
+        ${top.length?top.map(x=>`<div class="border-b border-[#F2EFE9] py-1.5">
+            <a href="${esc(x.u)}" target="_blank" rel="noopener" class="lnk text-[12px] text-ink">${esc((x.t||x.u).slice(0,60))}</a>
+            <p class="text-[10.5px] text-slate-400">${esc(geDomainBucket(x.d||x.u))} · ${esc(x.d)} · <b class="text-slate-500">${x.n}회</b> · CEP ${Object.keys(x.ceps).join(', ')||'—'} · ${Object.keys(x.engs).map(geEngName).join('/')}</p></div>`).join('')
+          :'<p class="text-[12.5px] text-slate-400">AI 엔진 측정이 쌓이면 표시됩니다.</p>'}
+      </div>`; }
 
     /* ---------- ③ 갭 진단 ---------- */
     function geSecGap(){
@@ -7628,7 +7679,8 @@
               <th class="px-2 py-2 text-left">우선</th><th class="px-2 py-2 text-left">채널</th><th class="px-2 py-2 text-left">CEP</th>
               <th class="px-2 py-2 text-left">소재</th><th class="px-2 py-2 text-left">제목 초안</th><th class="px-2 py-2 text-left">타깃 키워드</th>
               <th class="px-2 py-2 text-left">갭·근거</th><th class="px-2 py-2 text-left">담당</th><th class="px-2 py-2 text-left">목표일</th>
-              <th class="px-2 py-2 text-left">상태</th><th class="px-2 py-2 text-left">발행 URL</th><th class="px-2 py-2"></th></tr></thead>
+              <th class="px-2 py-2 text-left">상태</th><th class="px-2 py-2 text-left">발행 URL</th>
+              <th class="px-2 py-2 text-right" title="발행일 전후로 같은 CEP 질문의 아카라 언급률 비교(보는 기간 기준, 발행 후 5회 이상 측정되면 표시)">발행 후 SoM</th><th class="px-2 py-2"></th></tr></thead>
             <tbody>${acts.length?acts.map(a=>`<tr class="border-b border-[#F2EFE9] hover:bg-[#FAFAF9]">
               <td class="px-2 py-1.5"><select onchange="geActSet('${a.id}','pri',this.value)" class="text-[11px] border border-[#E6E6E3] rounded px-1 py-0.5">
                 ${['P1','P2','P3'].map(p=>`<option ${a.pri===p?'selected':''}>${p}</option>`).join('')}</select></td>
@@ -7646,8 +7698,9 @@
                 <option value="todo" ${a.st==='todo'?'selected':''}>대기</option><option value="doing" ${a.st==='doing'?'selected':''}>작성 중</option>
                 <option value="done" ${a.st==='done'?'selected':''}>발행</option></select></td>
               <td class="px-2 py-1.5 min-w-[120px]"><div class="focus:outline-none border border-transparent focus:border-ink rounded px-1 text-[11px] text-slate-500" contenteditable="true" data-gk="act/${a.id}/url" onblur="geEdit(this)">${esc(a.url||'')}</div></td>
+              <td class="px-2 py-1.5 text-right whitespace-nowrap">${geActDeltaCell(a)}</td>
               <td class="px-2 py-1.5"><button onclick="geActDel('${a.id}')" class="text-[11px] text-slate-300 hover:text-ared">✕</button></td></tr>`).join('')
-              :'<tr><td colspan="12" class="px-2 py-6 text-center text-slate-400 text-[12.5px]">아직 액션이 없습니다 — [측정 결과로 액션 생성]을 눌러 초기 백로그를 만드세요.</td></tr>'}</tbody>
+              :'<tr><td colspan="13" class="px-2 py-6 text-center text-slate-400 text-[12.5px]">아직 액션이 없습니다 — [측정 결과로 액션 생성]을 눌러 초기 백로그를 만드세요.</td></tr>'}</tbody>
           </table>
         </div>
         <p class="text-[11px] text-slate-400 mt-2">※ 페르소나 블로그(수니집·미니멀·하다)는 <b>자사 가이드 문장 복사 금지 · 제품 제공 표기 필수</b>. 1인칭 실사용 기록으로만 씁니다.</p>
@@ -7715,13 +7768,15 @@
           <thead><tr class="bg-[#FAFAF9] text-[11px] font-bold text-slate-500">
             <th class="px-2 py-2 text-left">블로그</th><th class="px-2 py-2 text-right">전체 글</th>
             <th class="px-2 py-2 text-right">최근 30일</th><th class="px-2 py-2 text-right">목표 대비</th>
-            <th class="px-2 py-2 text-left">마지막 발행</th></tr></thead>
+            <th class="px-2 py-2 text-left">마지막 발행</th>
+            <th class="px-2 py-2 text-right" title="이 채널에 배정된 콘텐츠 액션 중 P1(오답·Generic 미언급) 비율">P1 비율</th></tr></thead>
           <tbody>${ops.map(o=>`<tr class="border-b border-[#F2EFE9]">
             <td class="px-2 py-2 font-semibold text-ink">${esc(o.n)}<span class="block text-[10.5px] text-slate-400">${esc(o.host)}</span></td>
             <td class="px-2 py-2 text-right num">${o.total<0?'—':o.total}</td>
             <td class="px-2 py-2 text-right num">${o.recent<0?'<span class="text-slate-400">확인 필요</span>':o.recent}</td>
             <td class="px-2 py-2 text-right num" style="color:${o.rate<0?'#8E8E93':(o.rate>=100?'#5E7350':(o.rate>=50?'#D68134':'#BF5332'))}">${o.rate<0?'—':(o.rate+'%')}</td>
-            <td class="px-2 py-2 text-slate-500">${esc(o.last||'—')}</td></tr>`).join('')}</tbody></table></div>
+            <td class="px-2 py-2 text-slate-500">${esc(o.last||'—')}</td>
+            <td class="px-2 py-2 text-right num">${o.p1rate<0?'<span class="text-slate-400">액션 없음</span>':`<b style="color:${o.p1rate>=50?'#BF5332':'#26282A'}">${o.p1rate}%</b><span class="block text-[10px] text-slate-400">${o.p1}/${o.acts}건</span>`}</td></tr>`).join('')}</tbody></table></div>
         <p class="text-[11px] text-slate-400 mt-2">※ 발행 수는 온드미디어 데이터(owned.json)를 씁니다. 날짜가 없는 블로그는 '확인 필요'로 둡니다.</p>
       </div>`;
     }

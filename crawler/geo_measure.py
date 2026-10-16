@@ -163,19 +163,32 @@ class Gemini(Engine):
         ver = lambda n: float(re.search(r'gemini-(\d+(?:\.\d+)?)', n).group(1))
         names.sort(key=ver, reverse=True)
         env = (os.environ.get('GEMINI_MODEL') or '').strip()
-        return ([env] if env else []) + names + ['gemini-flash-latest']
+        # 최신 프리뷰(3.7·3.8 등)는 무료 할당량이 거의 없어 매일 429로 0건이었다(2026-10 실측).
+        # 브리핑에서 잘 도는 별칭 gemini-flash-latest를 먼저 쓰고, 나머지는 예비로 둔다.
+        head = ([env] if env else []) + ['gemini-flash-latest']
+        return head + [n for n in names if n not in head]
 
     def ask(self, q):
-        for model in self.models:
+        for model in list(self.models):
             url = ('https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s'
                    % (model, self.k))
             payload = {'contents': [{'parts': [{'text': q}]}], 'tools': [{'google_search': {}}]}
-            try:
-                d = http(url, payload)
-            except Exception as e:
-                self.note('%s %s' % (model, err_text(e)))
-                if getattr(e, 'code', 0) in (400, 403, 404):
-                    self.models = [m for m in self.models if m != model] or self.models
+            d = None
+            for attempt in range(2):
+                try:
+                    d = http(url, payload)
+                    break
+                except Exception as e:
+                    msg = err_text(e)
+                    code = getattr(e, 'code', 0)
+                    if code == 429 and attempt == 0 and 'PerDay' not in msg:
+                        time.sleep(35)               # 분당 제한 — 잠깐 쉬고 한 번 더
+                        continue
+                    self.note('%s %s' % (model, msg))
+                    if code in (400, 403, 404, 429):   # 하루 할당량 소진·미지원 모델은 이번 실행에서 뺀다
+                        self.models = [m for m in self.models if m != model] or self.models
+                    break
+            if d is None:
                 continue
             cand = (d.get('candidates') or [{}])[0]
             text = ''.join(p.get('text', '') for p in ((cand.get('content') or {}).get('parts') or []))
@@ -446,7 +459,7 @@ def main():
                         'err': 0, 'errNote': '', 'senti': 'neu',
                         'raw': re.sub(r'\s+', ' ', text).strip()[:RAW_MAX] if e.key != 'search' else ''})
             print('· %-8s %s %s' % (e.key, p['id'], '언급' if mention else '-'))
-            time.sleep(1)
+            time.sleep(7 if e.key == 'gemini' else 1)   # Gemini 무료 등급은 분당 10회 안팎
         return e, out
 
     runs = []
