@@ -15,293 +15,284 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
   <!-- Firebase: ONLY MKT에서 고친 스팟 정보(hakdong/spots) 반영 + 쿠폰 발급 집계(hakdong/coupons). 연결 안 돼도 페이지는 동작 -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <style>
     /* ─────────────────────────────────────────────────────────────────
-       학동 스마트 인테리어 MAP
-         톤     : 흑백 중심의 가라앉은 프리미엄 미니멀. 색은 '포인트'로만 쓴다
-         구조   : 좌 = 다크 헤로 + 번호 인덱싱된 카탈로그 목록 / 우 = 지도(본체)
-         기억점 : 01·02… 인덱스가 카테고리 네비 → 섹션 → 지도 핀까지 하나로 이어진다
-       규칙
-         - 카드 안에 카드 금지. 목록은 박스가 아니라 구분선 행이다
-         - 지도 위에 띄우는 것은 범례뿐
-         - 옐로(#FBC400)는 채움 전용. 밝은 배경 위 글자색으로 쓰지 않는다
-         - 카테고리 색은 '작은 점·인덱스'에만. 면으로 칠하지 않는다
+       학동 스마트 인테리어 MAP — 2026-10-16 재설계
+         레이아웃 : 에어비앤비·네이버 지도식 split-screen. 좌 = 필터·목록 패널 / 우 = 전체 지도
+         기억점   : '자재 샘플 칩'. 학동은 타일·마루·수전 쇼룸 거리라, 카테고리·목록 번호·지도 핀을
+                    모두 같은 작은 사각 칩으로 그린다 → 목록 번호와 지도 핀이 한눈에 이어진다
+         규칙     : 폰트는 Pretendard 하나, 아이콘은 Iconify(lucide) 하나.
+                    대문자 영문 라벨·장식용 번호·가운뎃점 메타 줄·화살표 링크 금지.
+                    옐로(#FBC400)는 채움 전용(버튼·아카라 핀·선택 표시). 밝은 배경 위 글자색 금지
        ───────────────────────────────────────────────────────────────── */
     :root{
-      /* 애플 스타일 뉴트럴 — 텍스트·보더는 무채색, 포인트만 아카라 옐로 */
-      --bg:#F7F7F7; --paper:#FFFFFF;
-      --ink:#1D1D1F; --ink2:#424245; --muted:#86868B; --muted2:#6E6E73;   /* muted2 = 흰 배경에서 4.5:1을 넘는 보조 회색 */
-      --line:rgba(0,0,0,.10); --line2:rgba(0,0,0,.16);
-      --accent:#FBC400; --accent-soft:#FFF8E2; --on-accent:#1D1D1F;   /* 액센트는 브랜드 옐로 유지(애플 블루 대신) */
-      --dark:#1D1D1F;
-      /* 애플 시스템 폰트를 먼저 두되, 한글은 Pretendard가 받는다(-apple-system은 한글 커버가 약하다) */
-      --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Pretendard Variable",Pretendard,"Helvetica Neue",Helvetica,Arial,"Malgun Gothic",sans-serif;
-      --hdr:48px;
+      --paper:#FFFFFF; --ground:#F4F4F2;
+      --ink:#1A1A1A; --ink2:#55554F; --muted:#8A8A84; --muted2:#6B6B66;   /* muted2 = 흰 배경 4.5:1 이상 */
+      --line:#E7E6E2; --line2:#D6D5D0;
+      --accent:#FBC400; --accent-soft:#FFF7DB; --on-accent:#1A1A1A;
+      --dark:#1A1A1A;
+      --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Malgun Gothic",sans-serif;
+      --hdr:56px; --pad:20px; --chip:6px;
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%}
-    body{background:var(--bg);color:var(--ink);font-family:var(--font);
-      -webkit-font-smoothing:antialiased;letter-spacing:-0.01em;line-height:1.55;word-break:keep-all;font-feature-settings:"tnum" 1}
+    body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.55;
+      -webkit-font-smoothing:antialiased;letter-spacing:-0.01em;word-break:keep-all}
     a{color:inherit;text-decoration:none}
-    button{font-family:inherit;cursor:pointer}
-    /* 화면에는 안 보이지만 스크린리더는 읽는 라벨 */
+    button{font-family:inherit;cursor:pointer;color:inherit}
+    iconify-icon{display:inline-block;width:1em;height:1em;flex:none;vertical-align:-0.125em}
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    /* 키보드 포커스 — 마우스 클릭에는 안 뜨고 탭 이동에만 뜬다 */
-    :focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
-    .hero-section :focus-visible,.foot :focus-visible{outline-color:var(--accent)}
-    /* 움직임을 줄이도록 설정한 사용자에게는 애니메이션을 끈다 */
+    :focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
     @media (prefers-reduced-motion:reduce){
       *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
     }
 
-    /* ─── 헤더 : 애플 글로벌 내비 (반투명 + 블러) ─── */
-    header{position:sticky;top:0;z-index:9999;height:var(--hdr);background:rgba(255,255,255,.8);
-      backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
-      border-bottom:1px solid var(--line2);display:flex;align-items:center}
-    .hdr-in{width:100%;padding:0 22px;display:flex;justify-content:flex-end;align-items:center;gap:16px}
-    .hdr-nav{display:flex;gap:24px;align-items:center}
-    .nav-link{font-size:12px;font-weight:400;color:var(--ink);opacity:.8;background:none;border:0;padding:0;transition:opacity .3s ease;white-space:nowrap;letter-spacing:-0.01em}
-    .nav-link:hover{opacity:1}
+    /* ─── 헤더 : 왼쪽 서비스 이름, 오른쪽 이동 + 쿠폰 ─── */
+    header{position:sticky;top:0;z-index:9999;height:var(--hdr);background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center}
+    .hdr-in{width:100%;padding:0 24px;display:flex;justify-content:flex-end;align-items:center;gap:16px}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}
+    .brand .mark{width:28px;height:28px;border-radius:var(--chip);background:var(--accent);display:grid;place-items:center;font-size:16px;color:var(--on-accent);flex:none}
+    .brand h1{margin:0;font-size:17px;font-weight:700;letter-spacing:-0.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .brand span{font-size:13px;color:var(--muted2);white-space:nowrap}
+    .hdr-nav{display:flex;gap:4px;align-items:center}
+    .nav-link{font-size:14px;font-weight:500;background:none;border:0;padding:8px 12px;border-radius:980px;white-space:nowrap;transition:background .15s}
+    .nav-link:hover{background:var(--ground)}
 
-    /* 캡슐 버튼 */
-    .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:980px;padding:7px 16px;font-size:12px;font-weight:500;transition:all .2s ease;white-space:nowrap;line-height:1.2}
+    /* 버튼 */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line2);background:var(--paper);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;transition:border-color .15s,background .15s;white-space:nowrap;line-height:1.2}
     .btn:hover{border-color:var(--ink)}
-    .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
     .btn.primary:hover{background:#FFD22E;border-color:#FFD22E}
     .btn.dark{background:var(--dark);border-color:var(--dark);color:#fff}
-    .btn.dark:hover{background:#3A3A3C;border-color:#3A3A3C}
-    .btn.sm{padding:5px 13px;font-size:12px}
+    .btn.sm{padding:7px 12px;font-size:13px}
+    .hdr-nav .btn{margin-left:8px;padding:9px 16px;font-size:14px}
 
     /* ─── 레이아웃 ─── */
-    .wrap{display:grid;grid-template-columns:400px 1fr;height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr))}
+    .wrap{display:grid;grid-template-columns:420px 1fr;height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr))}
     aside{background:var(--paper);display:flex;flex-direction:column;min-height:0;min-width:0;border-right:1px solid var(--line)}
 
-    /* ─── 애플 스타일 미니멀 히어로 : 제목 + 영문 부제만 ─── */
-    .hero-section{padding:32px 24px 24px;background-color:var(--dark);color:#fff}
-    .hero-title{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:0 0 4px}
-    .hero-subtitle{font-size:13px;font-weight:400;color:var(--muted);margin:0;letter-spacing:-0.01em}
+    /* 상단 타이틀 — 어두운 띠 대신 흰 바탕 위 타이포 위계로 */
+    .hero-section{padding:24px var(--pad) 18px;background:var(--paper)}
+    .hero-title{font-size:24px;font-weight:800;letter-spacing:-0.04em;line-height:1.25;margin:0 0 4px}
+    .hero-subtitle{font-size:13px;color:var(--muted2);margin:0}
 
-    /* ─── 도구 : 검색 + 번호 매긴 카테고리 네비 ─── */
-    .tools{padding:16px 24px 0;border-bottom:1px solid var(--line);background:#F0F0ED}   /* 카테고리 영역은 흰 목록과 구분되는 웜그레이 */
+    /* 탭 : 매장 찾기 / 내 코스 */
+    .mytabs{display:flex;gap:24px;padding:0 var(--pad);border-bottom:1px solid var(--line)}
+    .mytabs button{border:0;background:none;padding:16px 0 13px;font-size:15px;font-weight:600;color:var(--muted2);display:flex;align-items:center;gap:6px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s}
+    .mytabs button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
+    .mytabs button em{font-style:normal;font-size:13px;font-weight:500;color:var(--muted)}
+    .mytabs button:hover{color:var(--ink)}
+    .mytabs button.on{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
+    .mytabs button.route.on svg,.mytabs button.route.has svg{fill:var(--accent);stroke:#B98F00}
+
+    /* 검색 + 카테고리 필터 */
+    .tools{padding:14px var(--pad) 12px;border-bottom:1px solid var(--line)}
     .search{position:relative}
-    .search input{width:100%;border:0;border-bottom:1px solid var(--line2);background:transparent;padding:9px 4px 9px 26px;font-size:13px;font-family:inherit;outline:none;color:var(--ink);transition:border-color .16s}
+    .search input{width:100%;height:44px;border:1px solid var(--line2);border-radius:980px;background:var(--paper);padding:0 16px 0 42px;font-size:14px;font-family:inherit;outline:none;color:var(--ink);transition:border-color .15s,box-shadow .15s}
     .search input::placeholder{color:var(--muted)}
-    .search input:focus{border-color:var(--ink)}
-    .search svg{position:absolute;left:3px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted)}
-    /* 알약(pill)을 버리고 번호 매긴 텍스트 네비로 — 잡지 목차의 인덱스처럼 */
-    .cats{display:flex;flex-wrap:wrap;gap:0;margin:0 -24px;padding:10px 24px 0}   /* PC: 두 줄로 펼쳐 전부 보이게(가로 스크롤은 마우스 휠로 안 넘어감) */
+    .search input:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(26,26,26,.06)}
+    .search iconify-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:17px;color:var(--muted2)}
+    .cats{display:flex;flex-wrap:wrap;gap:6px 5px;margin-top:12px}
     .cats::-webkit-scrollbar{display:none}
-    .cat{flex:none;border:0;background:none;padding:9px 0 11px;margin-right:18px;display:flex;align-items:baseline;gap:6px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;border-bottom:2px solid transparent;transition:color .16s,border-color .16s}
-    .cat .dot{width:7px;height:7px;border-radius:50%;background:var(--c);flex:none;align-self:center}
-    .cat .no{font-size:10px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--muted2);transition:color .16s}
-    .cat .n{font-size:10px;font-variant-numeric:tabular-nums;color:var(--muted2)}
-    .cat:hover{color:var(--ink)}
-    .cat:hover .no{color:var(--muted)}
-    .cat.on{color:var(--ink);font-weight:800;border-bottom-color:var(--accent)}
-    .cat.on .no,.cat.on .n{color:var(--ink)}
+    .cat{flex:none;border:1px solid var(--line2);background:var(--paper);height:32px;padding:0 11px;border-radius:980px;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500;white-space:nowrap;transition:border-color .15s,background .15s}
+    .cat .dot{width:10px;height:10px;border-radius:2px;background:var(--c);flex:none}
+    .cat .no{font-size:11px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+    .cat.on .no{color:rgba(255,255,255,.6)}
+    .cat .n{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .cat:hover{border-color:var(--ink)}
+    .cat.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+    .cat.on .n{color:rgba(255,255,255,.7)}
+    .cat.on .dot{box-shadow:0 0 0 1.5px #fff}
 
-    /* 카테고리 설명 — 한 줄, 박스 없이 */
-    .catdesc{padding:11px 24px 11px 21px;border-left:3px solid #1F5C7A;font-size:12px;color:var(--ink2);background:#E4ECF0;   /* 설명 띠는 카테고리와 상관없이 블루그레이로 통일 */border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:flex-start;line-height:1.5}
-    .catdesc .dot{width:7px;height:7px;border-radius:50%;flex:none;margin-top:6px}
-    .catdesc b{display:block;color:var(--ink)}   /* 1줄: 영문 분류명 / 2줄: 한글 설명 */
-    .catdesc .ko{display:block;margin-top:2px}
+    /* 카테고리 설명 한 줄 (사용자 요청: 블루그레이 띠 유지) */
+    .catdesc{padding:11px var(--pad);font-size:13px;color:#24495C;background:#E4ECF0;border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:flex-start;line-height:1.5}
+    .catdesc .dot{width:10px;height:10px;border-radius:2px;flex:none;margin-top:5px}
+    .catdesc b{display:block;color:#173A4C;font-weight:700}
+    .catdesc .ko{display:block}
 
     /* ─── 목록 ─── */
-    .list{overflow:auto;flex:1;min-height:0;padding:0 0 32px;scroll-behavior:smooth;background:var(--paper)}
-    /* 섹션 = 잡지의 '챕터' */
-    .sec{display:flex;align-items:flex-start;gap:12px;padding:26px 24px 12px;background:var(--paper);border-bottom:1px solid var(--ink)}
-    .sec .no{font-size:11px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--c);padding-top:3px}
-    .sec b{display:block;font-size:14px;font-weight:800;letter-spacing:-0.03em;line-height:1.3}
-    .sec em{display:block;font-style:normal;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+    .list{overflow:auto;flex:1;min-height:0;padding:0 0 24px;scroll-behavior:smooth}
+    .sec{display:flex;align-items:center;gap:8px;padding:22px var(--pad) 8px;position:sticky;top:0;background:var(--paper);z-index:2}
     .sec i{flex:1}
-    .sec .cnt{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
+    .sec .no{font-size:12px;font-weight:700;color:var(--c);font-variant-numeric:tabular-nums}
+    .sec em{font-style:normal;font-size:12px;color:var(--muted);margin-left:6px}
+    .sec div{display:flex;align-items:baseline}
+    .sec b{font-size:13px;font-weight:700;color:var(--ink2)}
+    .sec .cnt{font-size:13px;color:var(--muted)}
 
-    .spot{display:grid;grid-template-columns:34px 1fr auto;gap:12px;padding:16px 24px;border-bottom:1px solid var(--line);cursor:pointer;position:relative;transition:background .16s}
-    .spot:before{content:'';position:absolute;left:0;top:-1px;bottom:-1px;width:2px;background:var(--accent);opacity:0;transition:opacity .16s}
-    .spot:hover{background:#FAFAF9}
-    .spot.active{background:var(--accent-soft)}
-    .spot.active:before{opacity:1}
-    .spot .num{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--muted2);font-variant-numeric:tabular-nums;line-height:1.7;transition:color .16s}
-    .spot:hover .num{color:var(--muted)}
-    .spot.active .num{color:var(--ink)}
-    .spot .en{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:700}
-    .spot .nm{font-size:15px;font-weight:700;letter-spacing:-0.03em;line-height:1.35;margin:3px 0 6px;transition:color .16s}
-    .spot:hover .nm{color:#000}
-    .spot .chk{font-size:11px;color:var(--ink2);font-weight:600;margin-left:6px}
-    /* 아카라 쇼룸 행 — 카드로 감싸지 않고 옐로 바와 작은 배지로만 구분한다 */
+    .spot{display:grid;grid-template-columns:28px 1fr auto;column-gap:12px;row-gap:3px;padding:14px var(--pad);cursor:pointer;position:relative;transition:background .15s}
+    .spot + .spot{border-top:1px solid var(--line)}
+    .spot:hover{background:#FAFAF8}
+    .spot.active{background:var(--ground)}
+    /* 번호 = 지도 핀과 같은 샘플 칩 */
+    .spot .num{width:24px;height:24px;border-radius:var(--chip);background:var(--c);color:#fff;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;display:grid;place-items:center;align-self:center}
+    .spot.hq .num{background:var(--accent);color:var(--on-accent)}
     .spot.hq{background:var(--accent-soft)}
-    .spot.hq:before{opacity:1}
-    .spot.hq .num{color:var(--ink)}
-    .hqtag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.02em;background:var(--accent);color:var(--on-accent);padding:2px 7px;border-radius:980px;margin-left:7px;vertical-align:2px;white-space:nowrap}
-    .spot .ds{font-size:13px;color:var(--ink2);line-height:1.6}
-    /* 매장 목록 행: [번호 이름 ……… 별] 한 줄 + 아래 소개 한 줄. 번호와 이름은 같은 줄 높이로 맞춘다 */
-    .spot .nm1{font-size:15px;font-weight:700;letter-spacing:-0.03em;line-height:22px;align-self:center;min-width:0;transition:color .16s}
-    .spot:hover .nm1{color:#000}
-    .spot .num:has(+ .nm1){line-height:22px;align-self:center}
-    .spot .ds1{grid-column:2;font-size:13px;color:var(--ink2);line-height:1.55;margin-top:-7px}
+    .spot.hq:hover{background:#FFF2C6}
+    .spot .nm1{font-size:15px;font-weight:700;letter-spacing:-0.025em;line-height:24px;align-self:center;min-width:0}
+    .spot .ds1{grid-column:2;font-size:13px;color:var(--ink2);line-height:1.55}
     .spot > .save.big{grid-column:3;grid-row:1 / span 2;align-self:center}
-    .spot .ad{font-size:11px;color:var(--muted2);margin-top:8px;display:flex;gap:8px;align-items:baseline}
+    .spot .chk{font-size:12px;color:var(--muted2);font-weight:500;margin-left:6px}
+    .hqtag{display:inline-block;font-size:11px;font-weight:700;background:var(--accent);color:var(--on-accent);padding:2px 7px;border-radius:4px;margin-left:7px;vertical-align:2px;white-space:nowrap;letter-spacing:0}
+    /* 코스 탭 행 */
+    .spot .en{display:block;font-size:12px;color:var(--muted2)}
+    .spot .nm{font-size:15px;font-weight:700;letter-spacing:-0.025em;line-height:1.35;margin:1px 0 4px}
+    .spot .ds{font-size:13px;color:var(--ink2);line-height:1.55}
+    .spot .ad{font-size:12px;color:var(--muted2);margin-top:6px;display:flex;gap:8px;align-items:center}
     .spot .ad span{flex:1;min-width:0}
-    .spot .ad .nv{color:var(--muted2);font-weight:600;white-space:nowrap;flex:none;border-bottom:1px solid var(--line2);transition:.16s}
-    .spot .ad .nv:hover{color:var(--ink);border-color:var(--ink)}
-    /* ─── 저장 · 나의 투어 코스 ─── */
-    .save{border:0;background:none;padding:0;font-size:11px;font-weight:600;color:var(--muted2);display:inline-flex;align-items:center;gap:3px;white-space:nowrap;flex:none;border-bottom:1px solid var(--line2);transition:.16s}
-    .save svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.2}
-    .save:hover{color:var(--ink);border-color:var(--ink)}
-    .save.on{color:var(--ink);border-color:var(--ink)}
-    .save.on svg{fill:var(--accent);stroke:var(--ink)}
-    .pp .save{font-size:12px;border:1px solid var(--line2);border-radius:980px;padding:5px 12px}
-    .pp .save.on{border-color:var(--ink)}
-    /* 카카오맵 참고: 장소 행 오른쪽의 별(즐겨찾기) 버튼 — 담기면 옐로 별 */
-    .save.big{align-self:start;flex-direction:column;gap:2px;border:0;padding:2px 0 0;min-width:40px;font-size:10px;font-weight:700;color:var(--muted2);background:none}
-    .save.big svg{width:24px;height:24px;stroke-width:1.6;stroke:#9A9AA0;transition:transform .15s}
-    .save.big:hover{color:var(--ink)}
-    .save.big:hover svg{stroke:var(--ink);transform:scale(1.08)}
-    .save.big.on{color:var(--ink)}
-    .save.big.on svg{fill:var(--accent);stroke:#C99A00}
-    .pp .save.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-    .pp .save.on svg{fill:var(--ink);stroke:var(--ink)}
-    /* 카카오맵 참고: 패널 상단 탭 — 매장 찾기 / 내 코스 */
-    .mytabs{display:grid;grid-template-columns:1fr 1fr;background:var(--paper);border-bottom:1px solid var(--line2)}
-    .mytabs button{border:0;background:none;padding:14px 8px 12px;font-size:14px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px;border-bottom:3px solid transparent;margin-bottom:-1px;transition:.16s}
-    .mytabs button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
-    .mytabs button em{font-style:normal;font-size:11px;font-weight:800;min-width:20px;height:19px;padding:0 6px;border-radius:980px;display:inline-grid;place-items:center;background:var(--bg);color:var(--muted2)}
-    .mytabs button:hover{color:var(--ink)}
-    .mytabs button.on{color:var(--ink);border-bottom-color:var(--ink)}
-    .mytabs button.on em{background:var(--ink);color:#fff}
-    .mytabs button.route.on svg{fill:var(--accent);stroke:#C99A00}
-    .mytabs button.route.has em{background:var(--accent);color:var(--on-accent)}
-    .mapfab{position:absolute;left:14px;top:14px;z-index:500;display:inline-flex;align-items:center;gap:6px;border:0;background:#fff;color:var(--ink);border-radius:980px;padding:9px 14px 9px 12px;font-size:13px;font-weight:700;box-shadow:0 2px 10px -2px rgba(0,0,0,.3)}
-    .mapfab svg{width:15px;height:15px;fill:var(--accent);stroke:#C99A00;stroke-width:1.8}
-    .mapfab em{font-style:normal;background:var(--accent);color:var(--on-accent);border-radius:980px;min-width:20px;height:20px;display:inline-grid;place-items:center;padding:0 6px;font-size:11px}
-    /* 내 위치 — 네이버 지도처럼 우하단 동그라미 버튼. 파란 점은 지도 앱 공통 관례라 여기서만 파랑을 쓴다 */
-    .locbtn{position:absolute;right:14px;bottom:30px;z-index:500;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:var(--ink2);display:grid;place-items:center;box-shadow:0 2px 10px -2px rgba(0,0,0,.3);cursor:pointer;padding:0}
-    .locbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
+    .spot .ad .nv{color:var(--ink);font-weight:600;white-space:nowrap;flex:none;display:inline-flex;align-items:center;gap:3px;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line2)}
+    .spot .ad .nv:hover{text-decoration-color:var(--ink)}
+
+    /* 저장(별) */
+    .save{border:0;background:none;padding:0;font-size:12px;font-weight:600;color:var(--muted2);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex:none}
+    .save svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.2}
+    .save.on svg{fill:var(--accent);stroke:#B98F00}
+    .pp .save{font-size:13px;border:1px solid var(--line2);border-radius:8px;padding:7px 12px;color:var(--ink)}
+    .pp .save:hover{border-color:var(--ink)}
+    .pp .save.on{background:var(--accent-soft);border-color:#E9C24A}
+    .save.big{flex-direction:column;gap:1px;min-width:44px;padding:4px 2px;justify-content:center;border-radius:10px;transition:background .15s}
+    .save.big span{font-size:11px;font-weight:600;color:var(--muted2)}
+    .save.big svg{width:22px;height:22px;stroke-width:1.7;stroke:#9C9C96}
+    .save.big:hover{background:var(--ground)}
+    .save.big:hover svg{stroke:var(--ink)}
+    .save.big.on svg{fill:var(--accent);stroke:#B98F00}
+
+    /* 지도 위 컨트롤 — 흰 원·알약 + 옅은 그림자, 네이버·에어비앤비 지도 공통 문법 */
+    .mapfab{position:absolute;left:16px;top:16px;z-index:500;display:inline-flex;align-items:center;gap:6px;border:0;background:var(--paper);border-radius:980px;padding:10px 16px 10px 13px;font-size:14px;font-weight:600;box-shadow:0 2px 12px rgba(0,0,0,.16)}
+    .mapfab svg{width:16px;height:16px;fill:var(--accent);stroke:#B98F00;stroke-width:1.8}
+    .mapfab em{font-style:normal;color:var(--muted2);font-weight:500}
+    .locbtn{position:absolute;right:16px;bottom:32px;z-index:500;width:44px;height:44px;border-radius:50%;border:0;background:var(--paper);color:var(--ink2);display:grid;place-items:center;box-shadow:0 2px 12px rgba(0,0,0,.16);padding:0;font-size:21px}
     .locbtn.on{color:#1A73E8}
     .locbtn.follow{background:#1A73E8;color:#fff}
-    .locbtn.wait svg{animation:spin 1s linear infinite}
+    .locbtn.wait iconify-icon{animation:spin 1s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
     .me{width:18px;height:18px;border-radius:50%;background:#1A73E8;border:3px solid #fff;box-sizing:border-box;animation:mepulse 2s ease-out infinite}
     @keyframes mepulse{0%{box-shadow:0 0 0 0 rgba(26,115,232,.45),0 1px 5px rgba(0,0,0,.4)}100%{box-shadow:0 0 0 16px rgba(26,115,232,0),0 1px 5px rgba(0,0,0,.4)}}
-    .nextbar{position:absolute;left:14px;right:72px;bottom:28px;z-index:500;background:#fff;border-radius:12px;padding:10px 10px 10px 12px;display:none;align-items:center;gap:10px;box-shadow:0 4px 18px -6px rgba(0,0,0,.4);font-size:12px;color:var(--ink2);max-width:420px}
+    .nextbar{position:absolute;left:16px;right:76px;bottom:30px;z-index:500;background:var(--paper);border-radius:12px;padding:10px 10px 10px 12px;display:none;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.18);font-size:12px;color:var(--ink2);max-width:420px}
     .nextbar.show{display:flex}
     .nextbar .stepno{flex:none}
     .nextbar div{flex:1;min-width:0}
     .nextbar b{display:block;font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-    .nextbar .go{flex:none;background:var(--accent);color:var(--on-accent);border-radius:980px;padding:9px 14px;font-size:13px;font-weight:800;text-decoration:none}
+    .nextbar .go{flex:none;background:var(--accent);color:var(--on-accent);border-radius:8px;padding:9px 14px;font-size:13px;font-weight:700}
+
+    /* 코스 탭 */
     .spot.done .stepno{background:var(--ink);color:#fff}
     .spot.done .nm{opacity:.5}
-    .cat.route .dot{background:var(--accent);box-shadow:0 0 0 1px var(--ink)}
-    .rhead{padding:22px 24px 18px;border-bottom:1px solid var(--ink);background:var(--paper)}
-    .rhead .ey{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
-    .rhead b{display:block;font-size:17px;font-weight:800;letter-spacing:-0.03em;margin:4px 0 4px}
-    .rhead p{margin:0;font-size:12px;color:var(--ink2)}
-    .rhead .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:13px}
-    .shared{margin-top:12px;padding:10px 12px;background:var(--accent-soft);border-radius:4px;font-size:12px;color:var(--ink);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .rhead{padding:20px var(--pad) 18px;border-bottom:1px solid var(--line)}
+    .rhead .ey{font-size:12px;font-weight:600;color:var(--muted2);margin-bottom:4px}
+    .rhead b{display:block;font-size:18px;font-weight:700;letter-spacing:-0.03em;margin-bottom:2px}
+    .rhead p{margin:0;font-size:13px;color:var(--ink2)}
+    .rhead .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+    .shared{margin-top:12px;padding:10px 12px;background:var(--accent-soft);border-radius:8px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     .shared span{flex:1;min-width:160px}
-    .stepno{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:11px;font-weight:800;font-variant-numeric:tabular-nums}
+    .stepno{width:24px;height:24px;border-radius:var(--chip);background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+    .spot .num .stepno{margin:0}
+    .spot .num:has(.stepno){background:none}
     .ctl{display:inline-flex;gap:2px;flex:none}
-    .ctl button{border:1px solid var(--line2);background:#fff;color:var(--ink2);width:24px;height:22px;border-radius:4px;font-size:11px;line-height:1;padding:0}
+    .ctl button{border:1px solid var(--line2);background:var(--paper);color:var(--ink2);width:26px;height:24px;border-radius:6px;font-size:11px;line-height:1;padding:0}
     .ctl button:hover:not(:disabled){border-color:var(--ink);color:var(--ink)}
     .ctl button:disabled{opacity:.35;cursor:default}
-    .leg{padding:7px 24px 7px 70px;font-size:11px;color:var(--muted2);border-bottom:1px solid var(--line);background:var(--bg);font-variant-numeric:tabular-nums}
-    .pin.step{background:var(--accent);color:var(--on-accent);border-color:var(--ink);width:27px;height:27px;font-size:11px;font-weight:800}
-    .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:2000;background:var(--dark);color:#fff;border-radius:980px;padding:10px 10px 10px 18px;font-size:13px;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);transition:.25s ease;white-space:nowrap}
+    .leg{padding:6px var(--pad) 6px 60px;font-size:12px;color:var(--muted2);background:var(--ground);font-variant-numeric:tabular-nums}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:2000;background:var(--dark);color:#fff;border-radius:12px;padding:10px 10px 10px 16px;font-size:14px;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);transition:.22s ease;white-space:nowrap}
     .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-    .toast button{border:0;background:var(--accent);color:var(--on-accent);border-radius:980px;padding:6px 12px;font-size:12px;font-weight:700}
-    .empty{margin:0;padding:52px 24px;text-align:center;font-size:13px;color:var(--muted);line-height:1.8}
+    .toast button{border:0;background:var(--accent);color:var(--on-accent);border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+    .empty{margin:0;padding:56px var(--pad);text-align:center;font-size:14px;color:var(--muted2);line-height:1.8}
     .empty b{color:var(--ink)}
 
-    /* ─── 푸터 : 영업 정보 정리 ─── */
-    .foot{padding:26px 24px 16px;background:var(--dark);color:#fff}
-    .foot .ft{font-size:10px;font-weight:800;letter-spacing:.24em;color:var(--accent)}
-    .foot b{display:block;font-size:14px;font-weight:800;letter-spacing:-0.03em;margin:6px 0 3px}
-    .foot p{margin:0;font-size:11px;color:#A1A1A6;line-height:1.6}
-    .foot .fa{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 13px}
-    .foot .fn{font-size:11px;color:#86868B;line-height:1.6;padding-top:13px;border-top:1px solid rgba(255,255,255,.12)}
+    /* 목록 맨 아래 쇼룸 안내 */
+    .foot{margin:16px var(--pad) 0;padding:18px;border-radius:12px;background:var(--ground)}
+    .foot .ft{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted2);margin-bottom:6px}
+    .foot b{display:block;font-size:15px;font-weight:700;letter-spacing:-0.025em}
+    .foot p{margin:2px 0 0;font-size:13px;color:var(--ink2);line-height:1.6}
+    .foot .fa{margin-top:12px}
+    .foot .fn{font-size:12px;color:var(--muted2);margin-top:10px}
+    .foot .fn:empty{display:none}
 
     /* ─── 지도 ─── */
-    .mapwrap{position:relative;min-height:0;min-width:0;background:#F2F2F0}
-    #map{position:absolute;inset:0;background:#F2F2F0}
-    /* OSM 기본 타일을 Positron풍 무채색으로 — 채도를 죽이고 밝기를 올려 글자·도로를 눌러준다 */
-    .leaflet-tile-pane{filter:saturate(.8) brightness(1.03)}   /* 2026-10-08 컬러 지도로 변경(흑백 필터 제거). 채도만 살짝 낮춰 핀이 묻히지 않게 */
-    .leaflet-container{font-family:inherit;background:#F2F2F0}
-    .leaflet-control-attribution{font-size:10px;background:rgba(255,255,255,.7);color:var(--muted)}
+    .mapwrap{position:relative;min-height:0;min-width:0;background:var(--ground)}
+    #map{position:absolute;inset:0;background:var(--ground)}
+    .leaflet-tile-pane{filter:saturate(.8) brightness(1.03)}   /* 사용자 요청: 컬러 지도. 채도만 살짝 낮춰 핀이 묻히지 않게 */
+    .leaflet-container{font-family:inherit;background:var(--ground)}
+    .leaflet-control-attribution{font-size:10px;background:rgba(255,255,255,.75);color:var(--muted)}
     .leaflet-control-attribution a{color:var(--ink2)}
-    .leaflet-bar a{border-radius:0;color:var(--ink);border-bottom-color:var(--line)}
-    .pin{width:25px;height:25px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;border:2px solid #fff;box-shadow:0 2px 8px -1px rgba(0,0,0,.35);transition:transform .16s}
-    .pin.on{transform:scale(1.3);border-color:var(--ink);box-shadow:0 5px 14px -3px rgba(0,0,0,.45)}
+    .leaflet-bar{border:0!important;border-radius:10px!important;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.16)!important}
+    .leaflet-bar a{width:36px!important;height:36px!important;line-height:36px!important;color:var(--ink);border-bottom-color:var(--line)!important}
+    .leaflet-top.leaflet-right{margin:6px 6px 0 0}
+    /* 핀 = 자재 샘플 칩 */
+    .pin{width:26px;height:26px;border-radius:var(--chip);background:var(--c);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.28);transition:transform .15s}
+    .pin.on{transform:scale(1.25);box-shadow:0 0 0 2px var(--ink),0 6px 14px rgba(0,0,0,.3)}
+    .pin.step{background:var(--accent);color:var(--on-accent);border-color:#fff;box-shadow:0 0 0 1.5px var(--ink),0 2px 6px rgba(0,0,0,.28)}
     .hqpin{position:relative;width:46px;height:46px}
-    .hqpin .core{position:absolute;inset:0;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:10px;font-weight:900;letter-spacing:.04em;border:3px solid #fff;box-shadow:0 0 0 6px rgba(251,196,0,.26),0 6px 18px -5px rgba(0,0,0,.45);animation:pulse 2.4s ease-out infinite}
-    .hqpin .wc{position:absolute;left:50%;top:-21px;transform:translateX(-50%);background:var(--dark);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:3px;white-space:nowrap;box-shadow:0 4px 12px -4px rgba(0,0,0,.45)}
-    .hqpin .wc:after{content:'';position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--dark);border-bottom:0}
-    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(251,196,0,.5),0 6px 18px -5px rgba(0,0,0,.45)}100%{box-shadow:0 0 0 20px rgba(251,196,0,0),0 6px 18px -5px rgba(0,0,0,.45)}}
-    .leaflet-popup-content-wrapper{border-radius:4px;box-shadow:0 16px 44px -20px rgba(0,0,0,.4);padding:2px}
-    .leaflet-popup-content{margin:13px 15px;font-size:13px;line-height:1.55;min-width:226px}
-    .pp .en{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700}
-    .pp .nm{font-size:15px;font-weight:700;letter-spacing:-0.03em;margin:3px 0 5px}
+    .hqpin .core{position:absolute;inset:0;border-radius:10px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:10px;font-weight:800;letter-spacing:.02em;border:3px solid #fff;box-shadow:0 6px 18px -5px rgba(0,0,0,.45);animation:pulse 2.4s ease-out infinite}
+    .hqpin .wc{position:absolute;left:50%;top:-24px;transform:translateX(-50%);background:var(--dark);color:#fff;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(251,196,0,.55),0 6px 18px -5px rgba(0,0,0,.45)}100%{box-shadow:0 0 0 18px rgba(251,196,0,0),0 6px 18px -5px rgba(0,0,0,.45)}}
+    .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:0}
+    .leaflet-popup-content{margin:16px 18px;font-size:13px;line-height:1.55;min-width:240px}
+    .pp .en{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--muted2)}
+    .pp .nm{font-size:16px;font-weight:700;letter-spacing:-0.03em;margin:0 0 4px}
     .pp .ds{color:var(--ink2)}
-    .pp .ad{color:var(--muted);font-size:11px;margin-top:5px}
-    .pp .acts{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap}
-    .badge-hl{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;background:var(--accent);color:var(--on-accent);padding:3px 7px;border-radius:3px;margin-bottom:5px}
-    .legend{position:absolute;left:14px;bottom:14px;z-index:400;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border-radius:4px;padding:11px 13px;font-size:11px;display:grid;gap:5px;box-shadow:0 4px 16px -8px rgba(0,0,0,.3)}
-    .legend div{display:flex;align-items:center;gap:8px;color:var(--ink2);font-weight:600}
-    .legend .dot{width:9px;height:9px;border-radius:50%;flex:none}
+    .pp .ad{color:var(--muted2);font-size:12px;margin-top:6px}
+    .pp .acts{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+    .badge-hl{display:inline-block;font-size:11px;font-weight:700;background:var(--accent);color:var(--on-accent);padding:2px 7px;border-radius:4px;margin-bottom:6px}
+    .legend{position:absolute;left:16px;bottom:16px;z-index:400;background:rgba(255,255,255,.94);border-radius:10px;padding:10px 12px;font-size:12px;display:grid;gap:5px;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+    .legend div{display:flex;align-items:center;gap:8px;color:var(--ink2)}
+    .legend .dot{width:10px;height:10px;border-radius:2px;flex:none}
 
-    /* 모바일 전용 지도↔목록 전환 */
+    /* 모바일 지도↔목록 전환 */
     .mtoggle{display:none;position:sticky;top:var(--hdr);z-index:30;background:var(--paper);border-bottom:1px solid var(--line);padding:0 16px}
-    .mtoggle .seg{display:flex;flex:1;gap:22px}
-    .mtoggle button{border:0;background:none;padding:12px 0;font-size:13px;font-weight:600;color:var(--muted);letter-spacing:-0.01em;border-bottom:2px solid transparent;transition:.16s}
-    .mtoggle button.on{color:var(--ink);font-weight:800;border-bottom-color:var(--accent)}
+    .mtoggle .seg{display:flex;flex:1;gap:24px}
+    .mtoggle button{border:0;background:none;padding:12px 0;font-size:14px;font-weight:600;color:var(--muted2);border-bottom:2px solid transparent;transition:.15s}
+    .mtoggle button.on{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
 
     /* ─── 쿠폰 모달 ─── */
-    .ov{position:fixed;inset:0;background:rgba(38,35,29,.6);backdrop-filter:blur(5px);z-index:1000;display:none;align-items:center;justify-content:center;padding:18px}
+    .ov{position:fixed;inset:0;background:rgba(20,20,18,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:18px}
     .ov.show{display:flex}
-    .md{background:var(--paper);border-radius:6px;width:min(600px,100%);max-height:calc(100vh - 36px);overflow:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);position:relative}
-    .md .hd{background:var(--dark);color:#fff;padding:28px 28px 24px;position:relative;overflow:hidden}
-    .md .hd .ey{font-size:10px;font-weight:800;letter-spacing:.24em;color:var(--accent);text-transform:uppercase}
-    .md .hd h2{margin:11px 0 7px;font-size:22px;font-weight:800;letter-spacing:-0.045em;line-height:1.15}
-    .md .hd p{margin:0;font-size:13px;color:#A1A1A6}
-    .md .x{position:absolute;right:14px;top:12px;background:rgba(255,255,255,.12);border:0;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;line-height:1;z-index:1}
-    .md .bd{padding:20px 28px 28px}
-    .bn{display:grid;grid-template-columns:40px 1fr;gap:13px;align-items:start;padding:15px 0;border-bottom:1px solid var(--line)}
-    .bn:last-of-type{border-bottom:0}
-    .bn .ic{width:40px;height:40px;border-radius:4px;background:var(--accent-soft);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--on-accent);font-variant-numeric:tabular-nums}
-    .bn .k{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
-    .bn b{font-size:14px;font-weight:700;letter-spacing:-0.03em;display:block;margin-top:3px}
-    .bn p{margin:4px 0 0;font-size:13px;color:var(--ink2)}
-    .bn .tg{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--on-accent);background:var(--accent-soft);border-radius:3px;padding:3px 7px;margin-top:7px}
-    .coupon{margin-top:16px;border:1px solid var(--line2);border-radius:4px;padding:20px;background:var(--bg);text-align:center}
-    .coupon .eyebrow{font-size:10px;font-weight:800;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
-    .coupon .code{font-size:28px;font-weight:800;letter-spacing:.14em;margin:8px 0 3px;color:var(--ink)}
-    .coupon .meta{font-size:11px;color:var(--muted)}
-    .coupon #qr{display:inline-block;margin:13px auto 4px;padding:8px;background:#fff;border-radius:4px;border:1px solid var(--line)}
+    .md{background:var(--paper);border-radius:16px;width:min(520px,100%);max-height:calc(100vh - 36px);overflow:auto;box-shadow:0 24px 64px -16px rgba(0,0,0,.4);position:relative}
+    .md .hd{padding:28px 28px 4px;position:relative}
+    .md .hd .ey{font-size:12px;font-weight:600;color:var(--muted2);margin-bottom:8px;letter-spacing:.02em}
+    .md .hd h2{margin:0 0 6px;font-size:22px;font-weight:700;letter-spacing:-0.035em;line-height:1.3;padding-right:36px}
+    .md .hd p{margin:0;font-size:14px;color:var(--ink2)}
+    .md .x{position:absolute;right:16px;top:16px;background:none;border:0;width:36px;height:36px;border-radius:50%;font-size:20px;display:grid;place-items:center;z-index:1;color:var(--ink)}
+    .md .x:hover{background:var(--ground)}
+    .md .x:focus-visible{outline-offset:-2px}
+    .md .bd{padding:12px 28px 28px}
+    .bn{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;padding:14px 0}
+    .bn + .bn{border-top:1px solid var(--line)}
+    .bn .ic{width:40px;height:40px;border-radius:10px;background:var(--ground);display:grid;place-items:center;font-size:20px;color:var(--ink)}
+    .bn .k{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--muted2);text-transform:uppercase;margin-bottom:2px}
+    .bn .tg{display:inline-block;font-size:12px;font-weight:600;color:#7A5B00;background:var(--accent-soft);border-radius:6px;padding:3px 8px;margin-top:8px}
+    .bn b{font-size:15px;font-weight:700;letter-spacing:-0.025em;display:block}
+    .bn p{margin:3px 0 0;font-size:13px;color:var(--ink2)}
+    .coupon{margin-top:12px;border-radius:12px;padding:22px 20px 18px;background:var(--ground);text-align:center}
+    .coupon .eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--muted2);text-transform:uppercase;margin-bottom:12px}
+    .coupon .code{font-size:15px;font-weight:600;color:var(--ink2)}
+    .coupon .meta{font-size:13px;color:var(--muted2)}
+    .coupon #qr{display:inline-block;padding:10px;background:#fff;border-radius:10px}
     .coupon #qr img,.coupon #qr canvas{display:block}
-    .coupon .used-stamp{display:inline-block;margin:12px auto 2px;padding:6px 16px;border:2px solid #B3261E;border-radius:4px;color:#B3261E;font-size:18px;font-weight:800;letter-spacing:.12em;transform:rotate(-4deg)}
-    .coupon .how{font-size:12px;color:var(--ink2);margin-top:9px;line-height:1.6}
-    .fine{font-size:11px;color:var(--muted);margin-top:16px;line-height:1.6}
+    .coupon .used-stamp{display:inline-block;margin:6px auto 2px;padding:6px 16px;border:2px solid #B3261E;border-radius:6px;color:#B3261E;font-size:18px;font-weight:800;letter-spacing:.08em;transform:rotate(-4deg)}
+    .coupon .how{font-size:13px;color:var(--ink2);margin-top:12px;line-height:1.6}
+    .fine{font-size:12px;color:var(--muted2);margin:16px 0 0;line-height:1.6}
 
     /* ─── 모바일 ─── */
     @media (max-width:860px){
-      :root{--hdr:52px}
-      .hdr-in{padding:0 14px;gap:10px}
-      .hdr-nav{gap:0}
-      .hdr-nav .nav-link{display:none}   /* 모바일은 아래 지도/목록 탭이 대신한다 */
-      .wrap{grid-template-columns:1fr;grid-template-rows:38vh minmax(0,1fr);height:auto;min-height:calc(100dvh - var(--hdr))}
+      :root{--hdr:52px;--pad:16px}
+      .hdr-in{padding:0 16px;gap:10px}
+      .brand span{display:none}
+      .brand h1{font-size:16px}
+      .hdr-nav .nav-link{display:none}
+      .hdr-nav .btn{margin-left:0;padding:8px 13px;font-size:13px}
+      .wrap{grid-template-columns:1fr;grid-template-rows:40vh minmax(0,1fr);height:auto;min-height:calc(100dvh - var(--hdr))}
       .wrap.list-only{grid-template-rows:0 minmax(0,1fr)}
       .wrap.list-only .mapwrap{display:none}
       aside{order:2;border-right:0}
       .mapwrap{order:1}
-      .hero-section{padding:24px 18px 20px}
-      .tools{padding:14px 18px 0}
-      .cats{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -18px;padding:10px 18px 0}   /* 모바일: 한 줄 + 손가락으로 밀기 */
-      .sec{padding:22px 18px 11px}
-      .spot{padding:15px 18px}
-      .catdesc,.foot{padding-left:18px;padding-right:18px}
+      .cats{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:12px calc(var(--pad) * -1) 0;padding:0 var(--pad)}
+      .sec{top:calc(var(--hdr) + 45px)}
       .list{overflow:visible}
       .legend{display:none}
       .mtoggle{display:flex}
@@ -337,7 +328,7 @@
       <nav class="mytabs" id="mybar" aria-label="보기 전환"></nav>
       <div class="tools">
         <div class="search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <iconify-icon icon="lucide:search" aria-hidden="true"></iconify-icon>
           <label for="q" class="sr-only">쇼룸 검색</label>
           <input id="q" type="search" aria-label="쇼룸 검색" placeholder="브랜드 · 타일 · 주방 · 소파 … 검색" oninput="paint()" />
         </div>
@@ -349,7 +340,7 @@
     <div class="mapwrap">
       <div id="map"></div>
       <button class="mapfab" id="mapfab" style="display:none" onclick="setFilter('route')"></button>
-      <button class="locbtn" id="locbtn" onclick="toggleLocate()" aria-label="내 위치" title="내 위치" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><path d="M12 1.5v3.2M12 19.3v3.2M1.5 12h3.2M19.3 12h3.2"/></svg></button>
+      <button class="locbtn" id="locbtn" onclick="toggleLocate()" aria-label="내 위치" title="내 위치" aria-pressed="false"><iconify-icon icon="lucide:locate-fixed" aria-hidden="true"></iconify-icon></button>
       <div class="nextbar" id="nextbar" aria-live="polite"></div>
       <div class="legend" id="legend"></div>
     </div>
