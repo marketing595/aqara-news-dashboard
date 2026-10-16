@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-15 22:29",
+ "generatedAt": "2026-10-16 22:18",
  "brands": [
   {
    "name": "아카라",
@@ -346,13 +346,13 @@
     "헤이홈",
     "헤이홈 홈캠",
     "헤이홈 sd카드",
-    "헤이홈 연결",
     "헤이홈 거치대",
+    "헤이홈 연결",
     "헤이홈 중국",
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 스위치"
+    "헤이홈캠"
    ],
    "recent": [
     {
@@ -451,218 +451,222 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69346,
+   "total": 69446,
    "sentiment": {
-    "pos": 25,
-    "neu": 35,
+    "pos": 16,
+    "neu": 44,
     "neg": 0
    },
    "keywords": [
     [
      "AI",
-     75
+     88
     ],
     [
-     "동남아",
-     55
+     "발명품",
+     50
     ],
     [
-     "가전",
-     55
+     "냉장고",
+     50
     ],
     [
-     "B2B",
-     53
+     "타임",
+     47
     ],
     [
-     "프로",
-     48
+     "최고의",
+     46
     ],
     [
-     "에너지",
-     41
+     "식재료",
+     42
     ],
     [
-     "시연했다",
-     38
+     "푸드매니저",
+     35
     ],
     [
-     "상태와",
-     34
+     "선정",
+     32
     ],
     [
-     "공조",
-     33
+     "유통기한",
+     27
     ],
     [
-     "사업장의",
-     33
-    ],
-    [
-     "기기",
-     33
-    ],
-    [
-     "플랫폼",
-     33
-    ],
-    [
-     "IoT",
-     30
-    ],
-    [
-     "사용량을",
-     29
-    ],
-    [
-     "여러",
-     28
-    ],
-    [
-     "관리하는",
+     "삼성전자는",
      25
     ],
     [
-     "에어컨과",
-     25
+     "맞춤형",
+     24
     ],
     [
-     "이상직",
-     25
+     "2024년",
+     23
+    ],
+    [
+     "목록을",
+     23
+    ],
+    [
+     "울트라",
+     22
+    ],
+    [
+     "3개",
+     22
+    ],
+    [
+     "확인할",
+     22
+    ],
+    [
+     "관리와",
+     22
+    ],
+    [
+     "갤럭시",
+     21
     ]
    ],
    "posWords": [
     [
-     "공략",
-     18
+     "개선",
+     8
     ],
     [
-     "확대",
-     7
-    ],
-    [
-     "강화",
+     "혁신",
      6
     ],
     [
      "글로벌",
-     3
-    ],
-    [
-     "성장",
      2
     ],
     [
-     "혁신",
+     "공략",
+     2
+    ],
+    [
+     "강화",
+     2
+    ],
+    [
+     "프리미엄",
      1
     ],
     [
-     "주목",
+     "돌파",
+     1
+    ],
+    [
+     "수상",
      1
     ]
    ],
    "related": [
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 업데이트",
     "삼성 스마트싱스 허브 5세대",
-    "삼성 스마트싱스 아이폰"
+    "삼성 스마트싱스 사용법"
    ],
    "recent": [
     {
-     "title": "[뉴스인사이드 뉴스톡톡] '검은 목요일'…코스피·코스닥, 7% 폭락 外",
+     "title": "삼성전자 갤S26 울트라 등 3종, 美 타임지 ‘올해 최고의 발명품’ 선정",
+     "source": "economist.co.kr",
+     "date": "2026-10-16",
+     "link": "https://n.news.naver.com/mnews/article/243/0000104320?sid=101"
+    },
+    {
+     "title": "삼성전자, 타임 '2026 최고의 발명품' 3개 제품 선정…LG유플러스, '네트...",
+     "source": "sisaon.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=205218"
+    },
+    {
+     "title": "삼성·LG전자, 美 타임 '2026년 최고의 발명품' 선정",
      "source": "newsinside.kr",
-     "date": "2026-10-15",
-     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025238"
+     "date": "2026-10-16",
+     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025893"
     },
     {
-     "title": "삼성전자, 동남아 AI가전·공조 공략…B2B 매출 20%↑",
-     "source": "newsinside.kr",
-     "date": "2026-10-15",
-     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025234"
-    },
-    {
-     "title": "아크메르 동탄, 삼성전자 '무풍 시스템에어컨 인피니트 라인' 유상옵션...",
-     "source": "ppss.kr",
-     "date": "2026-10-15",
-     "link": "https://www.ppss.kr/news/articleView.html?idxno=315736"
-    },
-    {
-     "title": "삼성전자, 베트남서 AI 가전·공조 기술 선봬…동남아 B2B 시장 공략",
-     "source": "biztribune.co.kr",
-     "date": "2026-10-15",
-     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=360721"
-    },
-    {
-     "title": "[오늘 뭐했니?] 삼성전자",
-     "source": "financialreview.co.kr",
-     "date": "2026-10-15",
-     "link": "http://www.financialreview.co.kr/news/articleView.html?idxno=45532"
-    },
-    {
-     "title": "삼성전자, 동남아 AI 가전 공략 확대… 가정부터 상업시설까지 겨냥",
+     "title": "\"중국산, 가성비 높아봐야\"… 삼성·LG, 프리미엄 가전 전략 '신뢰와 보...",
      "source": "mediapen.com",
-     "date": "2026-10-15",
-     "link": "https://www.mediapen.com/news/view/1130187"
+     "date": "2026-10-16",
+     "link": "https://www.mediapen.com/news/view/1130467"
     },
     {
-     "title": "삼성전자, 동남아 AI 가전 시장 공략-맞춤형 냉방·스마트홈 기술 공개",
-     "source": "mediafine.co.kr",
-     "date": "2026-10-15",
-     "link": "https://www.mediafine.co.kr/news/articleView.html?idxno=92704"
+     "title": "[가전 트렌드] 삼성전자, 베트남서 동남아 가전 테크세미나 개최…AI 가...",
+     "source": "ibabynews.com",
+     "date": "2026-10-16",
+     "link": "https://www.ibabynews.com/news/articleView.html?idxno=155295"
     },
     {
-     "title": "삼성전자, 동남아 AI 가전·공조 솔루션 확대…B2B 사업 강화",
-     "source": "thebigdata.co.kr",
-     "date": "2026-10-15",
-     "link": "https://www.thebigdata.co.kr/view.php?ud=202610151510431710ecbf9426b_23"
+     "title": "삼성 제품 3종, 美 타임 '2026 최고 발명품'···LG·망고슬래브도 선정",
+     "source": "newsfreezone.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.newsfreezone.co.kr/news/articleView.html?idxno=714353"
     },
     {
-     "title": "삼성전자, 베트남서 ‘가전 테크세미나’…AI 가전·공조 솔루션 공개",
-     "source": "donga.com",
-     "date": "2026-10-15",
-     "link": "https://n.news.naver.com/mnews/article/020/0003755200?sid=101"
+     "title": "[이슈] 美 타임 '2026 최고의 발명품'에 삼성 3종·LG 1종 선정",
+     "source": "startuptoday.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.startuptoday.co.kr/news/articleView.html?idxno=816152"
     },
     {
-     "title": "김성환 장관, 히트펌프·태양광·가전 갖춘 삼성 모듈러 홈 둘러봐",
-     "source": "e2news.com",
-     "date": "2026-10-15",
-     "link": "http://www.e2news.com/news/articleView.html?idxno=335115"
+     "title": "삼성전자 3개 제품, 美 타임지 '2026 최고의 발명품' 선정",
+     "source": "news.tvchosun.com",
+     "date": "2026-10-16",
+     "link": "https://n.news.naver.com/mnews/article/448/0000645268?sid=101"
     },
     {
-     "title": "환경부 장관 만난 삼성·LG⋯ AI 가전·에너지 결합 ‘미래 주거 청사진...",
-     "source": "viva100.com",
-     "date": "2026-10-15",
-     "link": "https://www.viva100.com/article/20261015500733"
+     "title": "삼성전자, AI 가전 앞세워 해외시장 공략…실적 부진 돌파구 찾는다",
+     "source": "polinews.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.polinews.co.kr/news/articleView.html?idxno=745944"
     },
     {
-     "title": "삼성전자, 베트남서 동남아 가전 테크세미나...AI 홈·통합 공조 선보여",
-     "source": "businessplus.kr",
-     "date": "2026-10-15",
-     "link": "https://www.businessplus.kr/news/articleView.html?idxno=118220"
+     "title": "[삼성 최고발명] \"갤S26 울트라·AI 냉장고·6K 모니터\"…삼성 3총사, 美...",
+     "source": "cbci.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.cbci.co.kr/news/articleView.html?idxno=616135"
     },
     {
-     "title": "삼성전자, 동남아서 AI 가전·B2B 솔루션 선보여",
-     "source": "fntimes.com",
-     "date": "2026-10-15",
-     "link": "https://www.fntimes.com/html/view.php?ud=2026101513574757147de3572ddd_18"
+     "title": "삼성·LG 혁신 제품 4종, 美 타임 ‘올해 최고 발명품’ 선정(종합)",
+     "source": "이데일리",
+     "date": "2026-10-16",
+     "link": "https://n.news.naver.com/mnews/article/018/0006389374?sid=101"
     },
     {
-     "title": "[전자는 지금] 삼성전자, 동남아 시장에 AI 가전·공조 솔루션 선봬 外",
-     "source": "dealsite.co.kr",
-     "date": "2026-10-15",
-     "link": "https://dealsite.co.kr/articles/170732"
+     "title": "[재계 투데이] 삼성전자 3개 제품, 타임 '최고 발명품' 선정 外",
+     "source": "news.dealsitetv.com",
+     "date": "2026-10-16",
+     "link": "https://news.dealsitetv.com/articles/177071"
     },
     {
-     "title": "삼성전자 베트남서 가전 테크세미나 개최, AI 홈·B2B 설루션 선보여",
-     "source": "businesspost.co.kr",
-     "date": "2026-10-15",
-     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=449421"
+     "title": "[위클리오늘] 삼성전자 3개 제품, 美 타임 '2026년 최고의 발명품' 선정...",
+     "source": "weeklytoday.com",
+     "date": "2026-10-16",
+     "link": "http://www.weeklytoday.com/news/articleView.html?idxno=798385"
+    },
+    {
+     "title": "삼성 '갤S26 울트라' 등 3개 제품, 美 타임 '올해 최고의 발명품' 선정",
+     "source": "전자신문",
+     "date": "2026-10-16",
+     "link": "https://n.news.naver.com/mnews/article/030/0003475824?sid=105"
+    },
+    {
+     "title": "사생활 지키고 식재료 관리하는 AI..삼성 3종, 타임 ‘최고의 발명품’...",
+     "source": "kpenews.com",
+     "date": "2026-10-16",
+     "link": "https://kpenews.com/View.aspx?No=4266706"
     }
    ]
   },
@@ -670,68 +674,72 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78046,
+   "total": 78053,
    "sentiment": {
-    "pos": 17,
-    "neu": 42,
+    "pos": 13,
+    "neu": 46,
     "neg": 1
    },
    "keywords": [
     [
      "AI홈",
-     55
-    ],
-    [
-     "LG전자",
-     41
-    ],
-    [
-     "기기",
-     40
+     58
     ],
     [
      "AI",
+     38
+    ],
+    [
+     "기기",
      35
     ],
     [
-     "플랫폼",
-     31
+     "LG전자",
+     34
     ],
     [
-     "LG전자의",
+     "플랫폼",
      29
     ],
     [
-     "IoT",
-     23
+     "LG전자의",
+     28
     ],
     [
-     "아이폰",
-     23
+     "IoT",
+     20
     ],
     [
      "제어할",
-     21
+     20
     ],
     [
-     "ThinQ",
+     "아이폰",
      20
+    ],
+    [
+     "허브",
+     18
     ],
     [
      "아이패드",
-     20
+     18
     ],
     [
      "신제품은",
-     19
+     17
     ],
     [
-     "애플과",
-     18
+     "ThinQ",
+     17
+    ],
+    [
+     "확인하고",
+     16
     ],
     [
      "상태를",
-     18
+     16
     ],
     [
      "제품은",
@@ -739,29 +747,21 @@
     ],
     [
      "가전",
-     16
+     14
     ],
     [
-     "7종",
-     16
-    ],
-    [
-     "허브",
-     15
+     "애플과",
+     14
     ]
    ],
    "posWords": [
     [
-     "확대",
-     5
-    ],
-    [
-     "글로벌",
-     5
-    ],
-    [
      "강화",
-     4
+     3
+    ],
+    [
+     "확대",
+     3
     ],
     [
      "공략",
@@ -772,15 +772,15 @@
      2
     ],
     [
-     "협업",
+     "글로벌",
      2
+    ],
+    [
+     "협업",
+     1
     ],
     [
      "성장",
-     2
-    ],
-    [
-     "주목",
      1
     ]
    ],
@@ -788,15 +788,57 @@
     "lg 씽큐온",
     "lg 씽큐",
     "lg 씽큐 와이파이",
+    "lg 씽큐 세탁기",
     "lg 씽큐 티비연결",
     "lg 씽큐 연결",
-    "lg 씽큐 세탁기",
-    "lg 씽큐 에어컨",
-    "lg 씽큐 냉장고",
     "lg 씽큐 에어컨 연결",
+    "lg 씽큐 냉장고",
+    "lg 씽큐 에어컨",
     "lg 씽큐온 사용방법"
    ],
    "recent": [
+    {
+     "title": "[KES 2026] AI와 인간…삼성은 예술로, LG는 생활과 산업으로 연결했다",
+     "source": "kpinews.kr",
+     "date": "2026-10-16",
+     "link": "https://www.kpinews.kr/newsView/1065596025514082"
+    },
+    {
+     "title": "[A 주간 서머리] 경제·산업계 \"국내 증시 7%대 폭락에 금융당국 긴급회...",
+     "source": "asiaa.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=266542"
+    },
+    {
+     "title": "10년 늦은 애플 '홈뷰', LG와 판 흔들까…관건은 '시리 AI'",
+     "source": "sisaon.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=205211"
+    },
+    {
+     "title": "애플과 연결 넓힌 LG전자…'AI홈' 영토 넓힌다",
+     "source": "asiatime.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.asiatime.co.kr/article/20261016500266"
+    },
+    {
+     "title": "[KES2026] 삼성은 체험, LG는 산업 AI 확장",
+     "source": "kfenews.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=666382"
+    },
+    {
+     "title": "LG·애플 스마트홈, 한국 출시 검토...'압구정급' 재건축 단지 타깃",
+     "source": "newspim.com",
+     "date": "2026-10-16",
+     "link": "https://www.newspim.com/news/view/20261016000607"
+    },
+    {
+     "title": "[다가온 AI 홈 시대 ②] 건설업계, AI 홈 확장…주거 넘어 '일상'까지 챙...",
+     "source": "banronbodo.com",
+     "date": "2026-10-16",
+     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33186"
+    },
     {
      "title": "'AI가전' 전쟁인 줄 알았더니 '구독' 전쟁···삼성·LG의 진짜 승부처",
      "source": "enetnews.co.kr",
@@ -844,48 +886,6 @@
      "source": "newstopkorea.com",
      "date": "2026-10-15",
      "link": "https://www.newstopkorea.com/news/articleView.html?idxno=48189"
-    },
-    {
-     "title": "[구독경제의 확장/③]AI로 관리 비용 줄이고 기업 고객까지…구독, '운영...",
-     "source": "businessplus.kr",
-     "date": "2026-10-15",
-     "link": "https://www.businessplus.kr/news/articleView.html?idxno=118183"
-    },
-    {
-     "title": "LG전자·애플, AI 가전·스마트홈 ‘동맹’",
-     "source": "segye.com",
-     "date": "2026-10-15",
-     "link": "https://n.news.naver.com/mnews/article/022/0004166828?sid=101"
-    },
-    {
-     "title": "LG전자, 북미 프리미엄 가전·AI홈 사업 확대…데이터센터 냉각기술도 ...",
-     "source": "webeconomy.co.kr",
-     "date": "2026-10-15",
-     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2334333"
-    },
-    {
-     "title": "[모듈러주택 녹색전환] 스마트홈과 모듈러의 결합…정부, 삼성·LG 손잡...",
-     "source": "cbci.co.kr",
-     "date": "2026-10-15",
-     "link": "https://www.cbci.co.kr/news/articleView.html?idxno=615433"
-    },
-    {
-     "title": "“문 열지마” LG·애플 ‘AI홈’ 손 잡았다",
-     "source": "kmib.co.kr",
-     "date": "2026-10-15",
-     "link": "https://n.news.naver.com/mnews/article/005/0001878769?sid=101"
-    },
-    {
-     "title": "애플워치 차고 집 가까워지면, AI가 난방 켜준다",
-     "source": "donga.com",
-     "date": "2026-10-15",
-     "link": "https://n.news.naver.com/mnews/article/020/0003755039?sid=101"
-    },
-    {
-     "title": "AI홈 공략 손잡았다, LG·애플 ‘7가지 무기’",
-     "source": "joongang.co.kr",
-     "date": "2026-10-15",
-     "link": "https://n.news.naver.com/mnews/article/025/0003557985?sid=101"
     }
    ]
   },
@@ -893,106 +893,106 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76236,
+   "total": 76244,
    "sentiment": {
-    "pos": 24,
-    "neu": 32,
-    "neg": 4
+    "pos": 23,
+    "neu": 31,
+    "neg": 6
    },
    "keywords": [
     [
      "AI",
-     44
+     47
     ],
     [
      "iM증권",
-     19
-    ],
-    [
-     "아마존",
-     15
+     17
     ],
     [
      "홈뷰",
      14
     ],
     [
-     "애플은",
-     13
-    ],
-    [
-     "LG전자",
-     13
-    ],
-    [
-     "MTS",
-     12
+     "아마존",
+     14
     ],
     [
      "구글이",
      11
     ],
     [
-     "네스트",
-     9
+     "애플은",
+     10
     ],
     [
-     "전체",
-     9
+     "LG전자",
+     10
     ],
     [
-     "개편된",
-     9
-    ],
-    [
-     "플레이스토어에서",
-     9
-    ],
-    [
-     "MTS를",
-     9
+     "MTS",
+     10
     ],
     [
      "최신",
      9
     ],
     [
-     "업데이트하면",
-     9
-    ],
-    [
      "글로벌",
      9
     ],
     [
-     "시장에서",
-     9
+     "디스플레이",
+     8
     ],
     [
      "메뉴",
+     8
+    ],
+    [
+     "전체",
+     8
+    ],
+    [
+     "개편된",
+     8
+    ],
+    [
+     "플레이스토어에서",
+     8
+    ],
+    [
+     "MTS를",
+     8
+    ],
+    [
+     "업데이트하면",
+     8
+    ],
+    [
+     "이용할",
      8
     ]
    ],
    "posWords": [
     [
      "투자",
-     11
+     10
     ],
     [
      "글로벌",
      9
     ],
     [
-     "강화",
-     5
-    ],
-    [
      "돌파",
      4
     ],
     [
-     "공략",
+     "강화",
      3
+    ],
+    [
+     "프리미엄",
+     2
     ],
     [
      "확대",
@@ -1003,8 +1003,8 @@
      2
     ],
     [
-     "협업",
-     1
+     "공략",
+     2
     ]
    ],
    "related": [
@@ -1020,6 +1020,54 @@
     "구글 홈 초기화"
    ],
    "recent": [
+    {
+     "title": "'폰 따로, 에이전트 따로' vs '폰이 곧 에이전트'",
+     "source": "ohmynews.com",
+     "date": "2026-10-16",
+     "link": "https://n.news.naver.com/mnews/article/047/0002532484?sid=101"
+    },
+    {
+     "title": "삼성·LG·코웨이 제품, 美 타임 '2026 최고의 발명품' 선정",
+     "source": "industrynews.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.industrynews.co.kr/news/articleView.html?idxno=87702"
+    },
+    {
+     "title": "10년 늦은 애플 '홈뷰', LG와 판 흔들까…관건은 '시리 AI'",
+     "source": "sisaon.co.kr",
+     "date": "2026-10-16",
+     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=205211"
+    },
+    {
+     "title": "코스피, 7거래일 연속 하락 종료...KB증권 \"7월 이어 두 번째 저점\"",
+     "source": "coinreaders.com",
+     "date": "2026-10-16",
+     "link": "http://coinreaders.com/263579"
+    },
+    {
+     "title": "챌린지클래스 알파남 대표, 구글 클라우드 ‘Build with Gemini Seoul’ 초...",
+     "source": "hbnpress.com",
+     "date": "2026-10-16",
+     "link": "https://hbnpress.com/news/view/1065594156213522"
+    },
+    {
+     "title": "[강릉 24시] 강릉시 '미래 교통부터 문화까지' ITS 세계총회",
+     "source": "sisajournal.com",
+     "date": "2026-10-16",
+     "link": "https://n.news.naver.com/mnews/article/586/0000140096?sid=102"
+    },
+    {
+     "title": "안전자산 선호에 국채 금리 하락…뉴욕 증시, 방어주 중심 반등 [데일리...",
+     "source": "서울경제",
+     "date": "2026-10-16",
+     "link": "https://n.news.naver.com/mnews/article/011/0004671838?sid=104"
+    },
+    {
+     "title": "[美증시] 생산자물가 악재에도 3대 지수 상승 '턱걸이'…반도체는 조정...",
+     "source": "mediapen.com",
+     "date": "2026-10-16",
+     "link": "https://www.mediapen.com/news/view/1130352"
+    },
     {
      "title": "서천군, 근로자 맞춤형 통증 관리 프로그램 운영",
      "source": "breaknews.com",
@@ -1061,54 +1109,6 @@
      "source": "news.kbs.co.kr",
      "date": "2026-10-15",
      "link": "https://n.news.naver.com/mnews/article/056/0012274152?sid=100"
-    },
-    {
-     "title": "구글, 웨어러블 겨냥 저전력 AI칩 공개 … 온디바이스 생태계 구축",
-     "source": "newdaily.co.kr",
-     "date": "2026-10-15",
-     "link": "https://www.newdaily.co.kr/site/data/html/2026/10/15/2026101500100.html"
-    },
-    {
-     "title": "\"쿠팡, 미국 의원들이 예민한 지점 정확히 건드렸다\"",
-     "source": "ohmynews.com",
-     "date": "2026-10-15",
-     "link": "https://m.entertain.naver.com/article/047/0002532254"
-    },
-    {
-     "title": "[다가온 AI 홈 시대 ①] 삼성·LG가 그리는 미래의 집...\"집안일은 AI에게...",
-     "source": "banronbodo.com",
-     "date": "2026-10-15",
-     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33172"
-    },
-    {
-     "title": "[기고]AI 추론의 시대, 한국 시스템반도체 도약의 골든타임",
-     "source": "한국경제",
-     "date": "2026-10-15",
-     "link": "https://n.news.naver.com/mnews/article/015/0005342727?sid=101"
-    },
-    {
-     "title": "세종신용보증재단·한국부동산원, 소상공인 법률·금융지원 맞손",
-     "source": "breaknews.com",
-     "date": "2026-10-15",
-     "link": "http://www.breaknews.com/1243100"
-    },
-    {
-     "title": "마이크로소프트 10월 패치로 취약점 1,411건 수정…이미 악용된 제로데...",
-     "source": "wikitree.co.kr",
-     "date": "2026-10-15",
-     "link": "https://www.wikitree.co.kr/articles/1166322"
-    },
-    {
-     "title": "애플 시총 5조달러 돌파⋯美 상장사 두 번째",
-     "source": "아이뉴스24",
-     "date": "2026-10-15",
-     "link": "https://n.news.naver.com/mnews/article/031/0001066142?sid=104"
-    },
-    {
-     "title": "애플 시총 5조달러 돌파…엔비디아 이어 두 번째",
-     "source": "디지털타임스",
-     "date": "2026-10-15",
-     "link": "https://n.news.naver.com/mnews/article/029/0003053220?sid=104"
     }
    ]
   }
