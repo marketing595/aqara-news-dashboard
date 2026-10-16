@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>학동 스마트 인테리어 MAP · AQARA LIFE</title>
+  <title>학동 스마트 인테리어 MAP · AqaraLife</title>
   <meta name="description" content="학동역~도산대로 인테리어 거리, 발품 파는 분들을 위한 쇼룸 가이드 지도. 타일·주방·스위치·가구 쇼룸 + 아카라라이프 쇼룸 웰컴 쿠폰." />
-  <meta property="og:title" content="학동 스마트 인테리어 MAP · AQARA LIFE" />
+  <meta property="og:title" content="학동 스마트 인테리어 MAP · AqaraLife" />
   <meta property="og:description" content="쇼룸 투어 필수 지도 · 학동 인테리어 발품 길잡이. 아카라라이프 쇼룸에서 커피 한 잔 쉬어가세요." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="/favicon-hakdong.png?v=1" type="image/png" />
@@ -353,7 +353,7 @@
     <div class="md" role="dialog" aria-modal="true" aria-labelledby="mdTitle">
       <div class="hd">
         <button class="x" onclick="closeBenefit()" aria-label="닫기">×</button>
-        <div class="ey">AQARA LIFE SHOWROOM · 학동역 도보 3분</div>
+        <div class="ey">AqaraLife SHOWROOM · 학동역 도보 3분</div>
         <h2 id="mdTitle">학동 쇼룸 투어 웰컴 쿠폰</h2>
         <p>학동 인테리어 거리를 돌아보시는 분들께 드려요. 쿠폰 받고 아카라라이프 쇼룸에서 쉬었다 가세요.</p>
       </div>
@@ -564,7 +564,7 @@
   },{passive:false});
   function boot(){
     document.getElementById('ttl').textContent=DATA.title||'학동 스마트 인테리어 MAP';
-    document.title=(DATA.title||'학동 스마트 인테리어 MAP')+' · AQARA LIFE';
+    document.title=(DATA.title||'학동 스마트 인테리어 MAP')+' · AqaraLife';
     document.getElementById('legend').innerHTML=CATS.map(c=>`<div><span class="dot" style="background:${c.color}"></span>${esc(c.ko)}</div>`).join('');
     document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map((b,i)=>`<div class="bn"><div class="ic">${no2(i+1)}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}</div></div>`).join('');
     const hq=DATA.spots.find(s=>s.hl)||DATA.spots.find(s=>s.cat==='iot')||{};
@@ -685,7 +685,7 @@
   }
   function footHtml(){ const hq=(DATA.spots||[]).find(s=>s.hl)||{};
     return `<footer class="foot">
-      <div class="ft">AQARA LIFE SHOWROOM</div>
+      <div class="ft">AqaraLife SHOWROOM</div>
       <b>아카라라이프 쇼룸</b>
       <p>${esc(hq.a||'')}${hq.a?' · 학동역 도보 3분':''}</p>
       <div class="fa"><a class="btn sm" href="https://map.naver.com/p/search/${encodeURIComponent('아카라라이프')}" target="_blank" rel="noopener">길찾기 ↗</a></div>
