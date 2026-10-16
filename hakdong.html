@@ -393,7 +393,7 @@
     if(typeof firebase!=='undefined'){
       firebase.initializeApp(FIREBASE_CONFIG); DB=firebase.database();
       firebase.auth().signInAnonymously().catch(()=>{});
-      firebase.auth().onAuthStateChanged(u=>{ AUTH_OK=!!u; if(u){ watchOverrides(); watchCoupon(); if(REDEEM) loadRedeem(); } });
+      firebase.auth().onAuthStateChanged(u=>{ AUTH_OK=!!u; if(u){ watchOverrides(); watchCoupon(); countVisit(); if(REDEEM) loadRedeem(); } });
     }
   }catch(e){ DB=null; }
 
@@ -733,6 +733,13 @@
       if((u||null)!==(cur.used||null)){ cur.used=u||null; try{ localStorage.setItem('aqaraHakdongCoupon',JSON.stringify(cur)); }catch(e){} if(document.getElementById('ov').classList.contains('show')) renderCoupon(); } });
   }
   const fmtDT=t=>{ const x=new Date(t); return x.getFullYear()+'.'+String(x.getMonth()+1).padStart(2,'0')+'.'+String(x.getDate()).padStart(2,'0')+' '+String(x.getHours()).padStart(2,'0')+':'+String(x.getMinutes()).padStart(2,'0'); };
+  /* 방문 카운트: hakdong/stats/<KST 날짜>/{view, qr} — 리플릿·스탠드 QR(?ref=qr)로 들어온 횟수를 따로 센다.
+     같은 탭에서 새로고침해도 한 번만(sessionStorage), 스태프 쿠폰 처리 화면(?redeem)은 세지 않는다 */
+  function countVisit(){ if(!DB||REDEEM) return;
+    try{ if(sessionStorage.getItem('aqaraHakdongCounted')) return; sessionStorage.setItem('aqaraHakdongCounted','1'); }catch(e){}
+    const day=new Date(Date.now()+9*36e5).toISOString().slice(0,10), ref=DB.ref('hakdong/stats/'+day);
+    const inc=k=>ref.child(k).transaction(n=>(n||0)+1).catch(()=>{});
+    inc('view'); if((new URLSearchParams(location.search).get('ref')||'')==='qr') inc('qr'); }
   let MD_ORIG=null;   // 스태프 화면을 닫으면 원래 혜택 모달로 되돌린다
   function openRedeem(){ const ov=document.getElementById('ov');
     if(!MD_ORIG) MD_ORIG=[ov.querySelector('.hd').innerHTML,ov.querySelector('.bd').innerHTML];

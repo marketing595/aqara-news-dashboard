@@ -8795,13 +8795,14 @@
        공개 페이지 = /hakdong.html (로그인 없이 열림, 일반 소비자용 쇼룸 투어 지도 + 웰컴 쿠폰).
        원본 데이터 = hakdong.json / 팀 수정분 = Firebase `hakdong/spots/<id>`(필드 단위 덮어쓰기, hide=숨김)
        쿠폰 발급 로그 = Firebase `hakdong/coupons/<code>`. 여기서 고치면 공개 페이지에 즉시 반영된다.     */
-    let HK=null, HK_LOADING=false, HK_OVER={}, HK_CP={}, hkRefOn=false, HK_FBERR='', HK_DIRTY=false;
+    let HK=null, HK_LOADING=false, HK_OVER={}, HK_CP={}, HK_ST={}, hkRefOn=false, HK_FBERR='', HK_DIRTY=false;
     function hkRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('hakdong'):null; }
     function hkStart(){ if(hkRefOn) return; const ref=hkRef(); if(!ref) return; hkRefOn=true;
       ref.child('spots').on('value',s=>{ HK_OVER=s.val()||{}; if(mktSection!=='hakmap'||!HK) return;
         const t=document.getElementById('hkTable'); if(t&&t.contains(document.activeElement)){ HK_DIRTY=true; return; }   // 입력 중엔 표를 다시 그리지 않는다
         hkPaintTable(); hkPaintStats(); });
-      ref.child('coupons').on('value',s=>{ HK_CP=s.val()||{}; if(mktSection==='hakmap'&&HK) hkPaintStats(); }); }
+      ref.child('coupons').on('value',s=>{ HK_CP=s.val()||{}; if(mktSection==='hakmap'&&HK) hkPaintStats(); });
+      ref.child('stats').on('value',s=>{ HK_ST=s.val()||{}; if(mktSection==='hakmap'&&HK) hkPaintStats(); }); }
     function hkCatOf(id){ return (HK.categories||[]).find(c=>c.id===id)||{color:'#888',ko:'',en:''}; }
     function hkSpots(){ const seed=(HK.spots||[]).map(s=>Object.assign({_seed:true},s,HK_OVER[s.id]||{}));
       Object.keys(HK_OVER).forEach(id=>{ if(!(HK.spots||[]).some(s=>s.id===id)&&HK_OVER[id]&&HK_OVER[id].n) seed.push(Object.assign({id,_seed:false},HK_OVER[id])); });
@@ -8844,13 +8845,20 @@
       const cToday=cps.filter(c=>kd(c.ts)===today).length, cMonth=cps.filter(c=>kd(c.ts).slice(0,7)===today.slice(0,7)).length, cQr=cps.filter(c=>c.src==='qr').length;
       const used=cps.filter(c=>c.used), uMonth=used.filter(c=>kd(c.used).slice(0,7)===today.slice(0,7)).length, uToday=used.filter(c=>kd(c.used)===today).length;   // 사용 완료 = 쇼룸 QR 스캔 처리 = 학동 지도 경유 방문
       const tile=(l,v,s)=>`<div class="rounded-xl border border-[#E6E6E3] bg-white p-3"><p class="text-[11px] text-slate-400">${l}</p><p class="text-[22px] font-extrabold text-ink num leading-tight">${v}</p>${s?`<p class="text-[11px] text-slate-400 mt-0.5">${s}</p>`:''}</div>`;
-      el.innerHTML=`<div class="grid grid-cols-2 md:grid-cols-6 gap-2">
+      // 방문 카운트(hakdong/stats/<날짜>/{view,qr}) — 공개 페이지가 탭당 1회 올린다
+      const st=Object.entries(HK_ST), sum=(k,f)=>st.filter(([d])=>f(d)).reduce((a,[,v])=>a+((v&&v[k])||0),0);
+      const all=()=>true, mon=d=>d.slice(0,7)===today.slice(0,7), tdy=d=>d===today;
+      const fun=(l,tot,m,t,s)=>`<div class="rounded-xl border border-[#E6E6E3] bg-white p-3"><p class="text-[11px] text-slate-400">${l}</p><p class="text-[22px] font-extrabold text-ink num leading-tight">${tot}</p><p class="text-[11px] text-slate-400 mt-0.5">이번 달 ${m} · 오늘 ${t}${s?' · '+s:''}</p></div>`;
+      const arrow='<div class="hidden md:grid place-items-center text-slate-300 text-[18px]">→</div>';
+      el.innerHTML=`<p class="text-[12px] font-bold text-ink mb-1.5">학동 지도 성과 <span class="font-normal text-slate-400">· 2026-10-16부터 집계</span></p>
+        <div class="grid grid-cols-2 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] gap-2">
+        ${fun('① 배포용 QR 스캔',sum('qr',all)+'회',sum('qr',mon),sum('qr',tdy),'리플릿·스탠드')}${arrow}
+        ${fun('② 지도 페이지 방문',sum('view',all)+'회',sum('view',mon),sum('view',tdy))}${arrow}
+        ${fun('③ 웰컴 쿠폰 발급',cps.length+'건',cMonth,cToday,'QR 경유 '+cQr)}${arrow}
+        ${fun('④ 쇼룸 방문 · 쿠폰 사용',used.length+'명',uMonth,uToday,cps.length?'사용률 '+Math.round(used.length/cps.length*100)+'%':'')}</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
         ${tile('공개 중인 스팟',shown.length+'곳',(HK.categories||[]).map(c=>`<span style="color:${c.color}">●</span>${shown.filter(s=>s.cat===c.id).length}`).join(' '))}
-        ${tile('쇼룸 방문 · 쿠폰 사용',used.length+'명',`이번 달 ${uMonth} · 오늘 ${uToday}${cps.length?` · 사용률 ${Math.round(used.length/cps.length*100)}%`:''}`)}
-        ${tile('숨긴 스팟',sp.filter(s=>s.hide).length+'곳','표에서 다시 켤 수 있어요')}
-        ${tile('웰컴 쿠폰 · 누적',cps.length+'건','QR 유입 '+cQr+'건')}
-        ${tile('쿠폰 · 이번 달',cMonth+'건',today.slice(0,7))}
-        ${tile('쿠폰 · 오늘',cToday+'건',today)}</div>
+        ${tile('숨긴 스팟',sp.filter(s=>s.hide).length+'곳','표에서 다시 켤 수 있어요')}</div>
         ${cps.length?`<details class="mt-2"><summary class="text-[12px] text-slate-500 cursor-pointer">최근 발급 쿠폰 ${Math.min(cps.length,15)}건 보기</summary>
           <div class="mt-1 flex flex-wrap gap-1.5">${cps.slice(0,15).map(c=>`<span class="text-[11px] rounded-md border border-[#E6E6E3] bg-white px-2 py-0.5 num" title="${esc(kd(c.ts))} · ${esc(c.src||'web')}${c.mobile?' · 모바일':''}">${esc(c.code)} <span class="text-slate-400">${esc(kd(c.ts).slice(5))}</span>${c.used?` <b class="text-[#B3261E]">사용 ${esc(kd(c.used).slice(5))}</b>`:''}</span>`).join('')}</div>
           <p class="text-[11px] text-slate-400 mt-1">쿠폰은 방문객 휴대폰에 발급되며 여기엔 코드·발급/사용 시각·유입경로만 기록됩니다(개인정보 없음). 쇼룸에서 손님 쿠폰 QR을 휴대폰 카메라로 찍으면 '사용 완료 처리' 화면이 열리고, 처리하면 여기 방문 수에 잡힙니다.</p></details>`:''}`; }
