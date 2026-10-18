@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-17 21:14",
+ "generatedAt": "2026-10-18 21:38",
  "brands": [
   {
    "name": "아카라",
@@ -128,8 +128,8 @@
     "아카라 스위치",
     "아카라카",
     "명조 아카라이브",
-    "메랜 아카라이브",
-    "아카라이브 핫딜"
+    "니케 아카라이브",
+    "메랜 아카라이브"
    ],
    "recent": [
     {
@@ -352,7 +352,7 @@
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 고정형"
+    "헤이홈 프로"
    ],
    "recent": [
     {
@@ -451,84 +451,84 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69456,
+   "total": 69461,
    "sentiment": {
-    "pos": 14,
+    "pos": 13,
     "neu": 43,
-    "neg": 3
+    "neg": 4
    },
    "keywords": [
     [
      "AI",
-     80
-    ],
-    [
-     "냉장고",
-     46
-    ],
-    [
-     "타임",
-     41
+     76
     ],
     [
      "발명품",
-     41
+     38
+    ],
+    [
+     "냉장고",
+     38
+    ],
+    [
+     "타임",
+     38
     ],
     [
      "최고의",
-     40
+     34
     ],
     [
      "식재료",
-     36
+     33
     ],
     [
      "푸드매니저",
-     30
-    ],
-    [
-     "선정",
      27
     ],
     [
-     "유통기한",
+     "선정",
      26
     ],
     [
      "삼성전자는",
-     25
-    ],
-    [
-     "맞춤형",
      24
     ],
     [
+     "맞춤형",
+     22
+    ],
+    [
+     "유통기한",
+     22
+    ],
+    [
      "갤럭시",
-     21
-    ],
-    [
-     "울트라",
      20
-    ],
-    [
-     "관리와",
-     20
-    ],
-    [
-     "목록을",
-     19
-    ],
-    [
-     "2024년",
-     19
-    ],
-    [
-     "식재료를",
-     18
     ],
     [
      "삼성전자의",
+     19
+    ],
+    [
+     "3개",
      18
+    ],
+    [
+     "울트라",
+     18
+    ],
+    [
+     "보안",
+     17
+    ],
+    [
+     "미국",
+     17
+    ],
+    [
+     "목록을",
+     17
     ]
    ],
    "posWords": [
@@ -537,11 +537,11 @@
      6
     ],
     [
-     "개선",
-     6
+     "강화",
+     5
     ],
     [
-     "강화",
+     "개선",
      5
     ],
     [
@@ -566,18 +566,48 @@
     ]
    ],
    "related": [
-    "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 스테이션",
+    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 허브 5세대",
-    "삼성 스마트싱스 업데이트",
-    "삼성 스마트싱스 세탁기 예약"
+    "삼성 스마트싱스 세탁기 원격",
+    "삼성 스마트싱스 아이폰"
    ],
    "recent": [
+    {
+     "title": "삼성전자, 하노이서 AI 가전·상업용 냉방 시연",
+     "source": "vegannews.co.kr",
+     "date": "2026-10-18",
+     "link": "https://www.vegannews.co.kr/news/article.html?no=394076"
+    },
+    {
+     "title": "80년대 PC통신 시절부터 … 이건희 'AI반도체 제국' 준비했다",
+     "source": "매일경제",
+     "date": "2026-10-18",
+     "link": "https://n.news.naver.com/mnews/article/009/0005750271?sid=101"
+    },
+    {
+     "title": "\"우리 집 냉장고도 해킹될까?\"…프랑스 사태에 커지는 불안",
+     "source": "tjb.co.kr",
+     "date": "2026-10-18",
+     "link": "https://www.tjb.co.kr/news05/bodo/view/id/104968"
+    },
+    {
+     "title": "美 타임지가 꼽은 '올해 최고의 발명품'…삼성전자 3개 제품 선정",
+     "source": "thepublic.kr",
+     "date": "2026-10-18",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=322608"
+    },
+    {
+     "title": "설계부터 '가전·냉난방·에너지' 심는다…삼성·LG, 모듈러 주택 승부수",
+     "source": "thebigdata.co.kr",
+     "date": "2026-10-18",
+     "link": "https://www.thebigdata.co.kr/view.php?ud=2026101614594260330ecbf9426b_23"
+    },
     {
      "title": "우리집 냉장고는 안전할까?…프랑스 냉장설비 해킹에 커지는 불안감",
      "source": "jasm.co.kr",
@@ -637,36 +667,6 @@
      "source": "ttlnews.com",
      "date": "2026-10-16",
      "link": "http://www.ttlnews.com/news/articleView.html?idxno=3152513"
-    },
-    {
-     "title": "삼성전자 갤S26 울트라 등 3종, 美 타임지 ‘올해 최고의 발명품’ 선정",
-     "source": "economist.co.kr",
-     "date": "2026-10-16",
-     "link": "https://n.news.naver.com/mnews/article/243/0000104320?sid=101"
-    },
-    {
-     "title": "삼성전자, 타임 '2026 최고의 발명품' 3개 제품 선정…LG유플러스, '네트...",
-     "source": "sisaon.co.kr",
-     "date": "2026-10-16",
-     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=205218"
-    },
-    {
-     "title": "삼성·LG전자, 美 타임 '2026년 최고의 발명품' 선정",
-     "source": "newsinside.kr",
-     "date": "2026-10-16",
-     "link": "https://www.newsinside.kr/news/articleView.html?idxno=5025893"
-    },
-    {
-     "title": "\"중국산, 가성비 높아봐야\"… 삼성·LG, 프리미엄 가전 전략 '신뢰와 보...",
-     "source": "mediapen.com",
-     "date": "2026-10-16",
-     "link": "https://www.mediapen.com/news/view/1130467"
-    },
-    {
-     "title": "[가전 트렌드] 삼성전자, 베트남서 동남아 가전 테크세미나 개최…AI 가...",
-     "source": "ibabynews.com",
-     "date": "2026-10-16",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=155295"
     }
    ]
   },
@@ -674,7 +674,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78060,
+   "total": 78063,
    "sentiment": {
     "pos": 11,
     "neu": 44,
@@ -683,7 +683,7 @@
    "keywords": [
     [
      "AI홈",
-     46
+     44
     ],
     [
      "AI",
@@ -691,30 +691,30 @@
     ],
     [
      "LG전자",
-     30
+     28
     ],
     [
      "기기",
-     27
+     26
     ],
     [
      "플랫폼",
-     25
+     26
     ],
     [
      "LG전자의",
-     24
+     23
     ],
     [
      "허브",
      18
     ],
     [
-     "IoT",
+     "보안",
      16
     ],
     [
-     "보안",
+     "ThinQ",
      15
     ],
     [
@@ -722,11 +722,7 @@
      15
     ],
     [
-     "제어할",
-     15
-    ],
-    [
-     "신제품은",
+     "IoT",
      15
     ],
     [
@@ -734,30 +730,34 @@
      15
     ],
     [
-     "아이패드",
-     14
+     "제어할",
+     13
     ],
     [
-     "ThinQ",
-     14
+     "신제품은",
+     13
+    ],
+    [
+     "아이패드",
+     13
     ],
     [
      "제품은",
-     14
+     13
     ],
     [
-     "기기를",
+     "생태계에",
      12
     ],
     [
-     "터치",
-     12
+     "7종",
+     11
     ]
    ],
    "posWords": [
     [
      "강화",
-     6
+     7
     ],
     [
      "프리미엄",
@@ -787,16 +787,34 @@
    "related": [
     "lg 씽큐온",
     "lg 씽큐",
-    "lg 씽큐 와이파이",
     "lg 씽큐 세탁기",
     "lg 씽큐 티비연결",
-    "lg 씽큐 연결",
+    "lg 씽큐 와이파이",
     "lg 씽큐 냉장고",
-    "lg 씽큐 허브",
+    "lg 씽큐 연결",
     "lg 씽큐온 사용방법",
+    "lg 씽큐 허브",
     "lg 씽큐 에어컨 연결"
    ],
    "recent": [
+    {
+     "title": "LG 손끝에 애플 감성 더했다… 집 지키는 스마트홈 기기 7종 첫선",
+     "source": "ggilbo.com",
+     "date": "2026-10-18",
+     "link": "https://www.ggilbo.com/news/articleView.html?idxno=1186695"
+    },
+    {
+     "title": "\"우리 집 냉장고도 해킹될까?\"…프랑스 사태에 커지는 불안",
+     "source": "tjb.co.kr",
+     "date": "2026-10-18",
+     "link": "https://www.tjb.co.kr/news05/bodo/view/id/104968"
+    },
+    {
+     "title": "설계부터 '가전·냉난방·에너지' 심는다…삼성·LG, 모듈러 주택 승부수",
+     "source": "thebigdata.co.kr",
+     "date": "2026-10-18",
+     "link": "https://www.thebigdata.co.kr/view.php?ud=2026101614594260330ecbf9426b_23"
+    },
     {
      "title": "우리집 냉장고는 안전할까?…프랑스 냉장설비 해킹에 커지는 불안감",
      "source": "jasm.co.kr",
@@ -868,24 +886,6 @@
      "source": "kfenews.co.kr",
      "date": "2026-10-16",
      "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=666382"
-    },
-    {
-     "title": "LG·애플 스마트홈, 한국 출시 검토...'압구정급' 재건축 단지 타깃",
-     "source": "newspim.com",
-     "date": "2026-10-16",
-     "link": "https://www.newspim.com/news/view/20261016000607"
-    },
-    {
-     "title": "[다가온 AI 홈 시대 ②] 건설업계, AI 홈 확장…주거 넘어 '일상'까지 챙...",
-     "source": "banronbodo.com",
-     "date": "2026-10-16",
-     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33186"
-    },
-    {
-     "title": "'AI가전' 전쟁인 줄 알았더니 '구독' 전쟁···삼성·LG의 진짜 승부처",
-     "source": "enetnews.co.kr",
-     "date": "2026-10-15",
-     "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=55289"
     }
    ]
   },
@@ -893,19 +893,23 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76256,
+   "total": 76262,
    "sentiment": {
-    "pos": 20,
-    "neu": 34,
-    "neg": 6
+    "pos": 17,
+    "neu": 36,
+    "neg": 7
    },
    "keywords": [
     [
      "AI",
-     52
+     47
     ],
     [
      "구단",
+     16
+    ],
+    [
+     "아마존",
      14
     ],
     [
@@ -913,39 +917,35 @@
      12
     ],
     [
-     "아마존",
-     12
-    ],
-    [
-     "구글이",
-     11
-    ],
-    [
      "키즈",
      10
     ],
     [
-     "애플은",
+     "구글이",
      10
     ],
     [
-     "모델",
+     "애플은",
      9
-    ],
-    [
-     "iM증권",
-     9
-    ],
-    [
-     "시장에서",
-     8
-    ],
-    [
-     "구글과",
-     8
     ],
     [
      "현대모비스",
+     8
+    ],
+    [
+     "기기",
+     7
+    ],
+    [
+     "네스트",
+     7
+    ],
+    [
+     "모델",
+     7
+    ],
+    [
+     "구글과",
      7
     ],
     [
@@ -953,34 +953,30 @@
      7
     ],
     [
-     "글로벌",
+     "iM증권",
      7
     ],
     [
-     "구글은",
+     "시장에서",
      6
     ],
     [
-     "구글의",
+     "플랫폼",
      6
     ],
     [
-     "시리",
+     "허브",
      6
     ],
     [
-     "디스플레이",
+     "25일까지",
      6
     ]
    ],
    "posWords": [
     [
      "투자",
-     8
-    ],
-    [
-     "글로벌",
-     7
+     6
     ],
     [
      "강화",
@@ -991,8 +987,8 @@
      5
     ],
     [
-     "확대",
-     2
+     "글로벌",
+     5
     ],
     [
      "개선",
@@ -1005,6 +1001,10 @@
     [
      "혁신",
      1
+    ],
+    [
+     "첨단",
+     1
     ]
    ],
    "related": [
@@ -1015,11 +1015,47 @@
     "구글 홈페이지",
     "구글 홈 크롬캐스트",
     "구글 홈 미니 초기화",
+    "구글 홈 화면 삭제",
     "구글 홈 미니 2세대",
-    "구글 홈 미니 1세대",
-    "구글 홈 어시스턴트"
+    "구글 홈 초기화"
    ],
    "recent": [
+    {
+     "title": "LG 손끝에 애플 감성 더했다… 집 지키는 스마트홈 기기 7종 첫선",
+     "source": "ggilbo.com",
+     "date": "2026-10-18",
+     "link": "https://www.ggilbo.com/news/articleView.html?idxno=1186695"
+    },
+    {
+     "title": "갤럭시S24 확 달라졌다... 원UI 9 업데이트 후 꼭 써봐야 할 이 기능",
+     "source": "betanews.net",
+     "date": "2026-10-18",
+     "link": "https://www.betanews.net/article/view/beta202610180003"
+    },
+    {
+     "title": "[주간 유통 나침반] 식품업계 담합 조사·배달앱 국감 질타·홈플러스 정...",
+     "source": "joongangenews.com",
+     "date": "2026-10-18",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=554999"
+    },
+    {
+     "title": "용인특례시 읍면동, ‘이웃 사랑·주민 화합’으로 물든 따스한 한 주",
+     "source": "breaknews.com",
+     "date": "2026-10-18",
+     "link": "http://www.breaknews.com/1243721"
+    },
+    {
+     "title": "‘별까루 마킹’ 유니폼 소장 욕구UP!…현대모비스, 25일까지 ‘도전! 피...",
+     "source": "sportsseoul.com",
+     "date": "2026-10-18",
+     "link": "https://m.sports.naver.com/basketball/article/468/0001273242"
+    },
+    {
+     "title": "299달러 애플 홈뷰, 벽걸이 모델엔 충전기·케이블도 뺐다",
+     "source": "ddaily.co.kr",
+     "date": "2026-10-18",
+     "link": "https://n.news.naver.com/mnews/article/138/0002245089?sid=105"
+    },
     {
      "title": "‘별걸 다 조사하는 美’…유령 목격·귀신호텔 다 따져봤다..‘가장 으...",
      "source": "munhwa.com",
@@ -1073,42 +1109,6 @@
      "source": "topstarnews.net",
      "date": "2026-10-17",
      "link": "https://www.topstarnews.net/news/articleView.html?idxno=16249615"
-    },
-    {
-     "title": "[공유경제 ③] 플랫폼 협동조합 10년 ... 뉴욕의 실패와 서울의 우회",
-     "source": "eroun.net",
-     "date": "2026-10-17",
-     "link": "https://www.eroun.net/news/articleView.html?idxno=92677"
-    },
-    {
-     "title": "구글 AI 프로 체험판, 120달러 가치 광고했지만 제미나이 4 아르곤은 못...",
-     "source": "wikitree.co.kr",
-     "date": "2026-10-17",
-     "link": "https://www.wikitree.co.kr/articles/1166917"
-    },
-    {
-     "title": "[현장] 토마토 알아보는 냉장고, 문자 보내는 차창…삼성·LG의 AI 신기술",
-     "source": "ekn.kr",
-     "date": "2026-10-17",
-     "link": "https://www.ekn.kr/web/view.php?key=20261016021357304"
-    },
-    {
-     "title": "'폰 따로, 에이전트 따로' vs '폰이 곧 에이전트'",
-     "source": "ohmynews.com",
-     "date": "2026-10-16",
-     "link": "https://n.news.naver.com/mnews/article/047/0002532484?sid=101"
-    },
-    {
-     "title": "삼성·LG·코웨이 제품, 美 타임 '2026 최고의 발명품' 선정",
-     "source": "industrynews.co.kr",
-     "date": "2026-10-16",
-     "link": "https://www.industrynews.co.kr/news/articleView.html?idxno=87702"
-    },
-    {
-     "title": "10년 늦은 애플 '홈뷰', LG와 판 흔들까…관건은 '시리 AI'",
-     "source": "sisaon.co.kr",
-     "date": "2026-10-16",
-     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=205211"
     }
    ]
   }
