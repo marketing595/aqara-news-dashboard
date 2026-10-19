@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-16T10:44:45+09:00",
+ "generatedAt": "2026-10-19T10:18:10+09:00",
  "bots": [
   "GPTBot",
   "OAI-SearchBot",
@@ -95,10 +95,20 @@
    "host": "n.news.naver.com",
    "own": false,
    "area": "PR",
-   "blocked": [],
+   "blocked": [
+    "GPTBot",
+    "OAI-SearchBot",
+    "PerplexityBot",
+    "ClaudeBot",
+    "Claude-SearchBot",
+    "Google-Extended",
+    "CCBot",
+    "meta-externalagent",
+    "Applebot-Extended"
+   ],
    "partial": [],
-   "robots": false,
-   "status": 0
+   "robots": true,
+   "status": 200
   }
  ],
  "media": [
@@ -226,8 +236,8 @@
    "status": 200,
    "ok": true,
    "title": "아카라라이프 Aqaralife",
-   "desc": "아카라라이프와 함께 쉽고 안정적으로 스마트홈을 구축할 수 있는 가장 완성된 솔루션 &#039;스마트홈 바이블&#039;을 만나보세요.",
-   "descLen": 74,
+   "desc": "나다운 공간을 완성하는 스마트홈 인테리어, 아카라라이프입니다.",
+   "descLen": 34,
    "h1": 0,
    "h2": 3,
    "ld": [
@@ -241,7 +251,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8958,
+   "chars": 8956,
    "canonical": "http://www.aqaralife.kr/",
    "updated": ""
   },
@@ -268,7 +278,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9955,
+   "chars": 9953,
    "canonical": "http://www.aqaralife.kr/aqaralife",
    "updated": ""
   },
@@ -295,7 +305,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9955,
+   "chars": 9953,
    "canonical": "http://www.aqaralife.kr/aqaralife",
    "updated": ""
   },
@@ -322,7 +332,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9059,
+   "chars": 9057,
    "canonical": "http://www.aqaralife.kr/smarthome",
    "updated": ""
   },
@@ -349,7 +359,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9776,
+   "chars": 9765,
    "canonical": "http://www.aqaralife.kr/smarthome-bible",
    "updated": ""
   },
@@ -384,9 +394,9 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8195,
+   "chars": 8223,
    "canonical": "http://www.aqaralife.kr/blog",
-   "updated": ""
+   "updated": "2026-10-16"
   },
   {
    "label": "뉴스룸",
@@ -411,7 +421,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9226,
+   "chars": 9149,
    "canonical": "http://www.aqaralife.kr/newsroom",
    "updated": "2026-10-02"
   },
@@ -438,7 +448,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8033,
+   "chars": 8031,
    "canonical": "http://www.aqaralife.kr/newsletter",
    "updated": ""
   },
@@ -513,7 +523,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 10102,
+   "chars": 10100,
    "canonical": "http://www.aqaralife.kr/si_service",
    "updated": ""
   },
@@ -540,7 +550,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 7898,
+   "chars": 7896,
    "canonical": "http://www.aqaralife.kr/case",
    "updated": ""
   },
@@ -552,8 +562,8 @@
    "status": 200,
    "ok": true,
    "title": "아카라라이프 Aqaralife",
-   "desc": "아카라라이프와 함께 쉽고 안정적으로 스마트홈을 구축할 수 있는 가장 완성된 솔루션 &#039;스마트홈 바이블&#039;을 만나보세요.",
-   "descLen": 74,
+   "desc": "나다운 공간을 완성하는 스마트홈 인테리어, 아카라라이프입니다.",
+   "descLen": 34,
    "h1": 0,
    "h2": 0,
    "ld": [
@@ -564,10 +574,13 @@
     "OnlineStore",
     "PostalAddress",
     "ShippingConditions",
-    "ShippingService"
+    "ShippingService",
+    "VideoObject"
    ],
-   "contentLd": [],
-   "chars": 9690,
+   "contentLd": [
+    "VideoObject"
+   ],
+   "chars": 10319,
    "canonical": "http://www.aqaralife.kr/company-platform",
    "updated": ""
   },
@@ -594,7 +607,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 13823,
+   "chars": 13821,
    "canonical": "http://www.aqaralife.kr/inrequest",
    "updated": ""
   },
@@ -606,8 +619,8 @@
    "status": 200,
    "ok": true,
    "title": "아카라라이프 Aqaralife",
-   "desc": "아카라라이프와 함께 쉽고 안정적으로 스마트홈을 구축할 수 있는 가장 완성된 솔루션 &#039;스마트홈 바이블&#039;을 만나보세요.",
-   "descLen": 74,
+   "desc": "나다운 공간을 완성하는 스마트홈 인테리어, 아카라라이프입니다.",
+   "descLen": 34,
    "h1": 0,
    "h2": 0,
    "ld": [
@@ -621,7 +634,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8642,
+   "chars": 8640,
    "canonical": "http://www.aqaralife.kr/partnership",
    "updated": ""
   }
