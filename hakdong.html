@@ -242,13 +242,14 @@
     .hqpin .core{position:absolute;inset:0;border-radius:10px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:10px;font-weight:800;letter-spacing:.02em;border:3px solid #fff;box-shadow:0 6px 18px -5px rgba(0,0,0,.45);animation:pulse 2.4s ease-out infinite}
     .hqpin .wc{position:absolute;left:50%;top:-24px;transform:translateX(-50%);background:var(--dark);color:#fff;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(251,196,0,.55),0 6px 18px -5px rgba(0,0,0,.45)}100%{box-shadow:0 0 0 18px rgba(251,196,0,0),0 6px 18px -5px rgba(0,0,0,.45)}}
-    .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:0}
-    .leaflet-popup-content{margin:16px 18px;font-size:13px;line-height:1.55;min-width:240px}
+    .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:22px 20px 20px}   /* 여백은 wrapper의 padding으로 — content의 margin은 위아래로 겹쳐(margin collapse) 흰 면 밖으로 빠져나간다 */
+    .leaflet-popup-content{margin:0;font-size:13px;line-height:1.55;min-width:240px}
     .pp .en{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--muted2)}
-    .pp .nm{font-size:16px;font-weight:700;letter-spacing:-0.03em;margin:0 0 4px}
+    .pp .nm{font-size:16px;font-weight:700;letter-spacing:-0.03em;margin:4px 0 8px}
     .pp .ds{color:var(--ink2)}
     .pp .ad{color:var(--muted2);font-size:12px;margin-top:6px}
-    .pp .acts{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+    .pp .acts{display:flex;gap:6px;margin-top:20px;flex-wrap:wrap}
+    .pp .acts .btn,.pp .acts .save{padding-top:9px;padding-bottom:9px}
     .badge-hl{display:inline-block;font-size:11px;font-weight:700;background:var(--accent);color:var(--on-accent);padding:2px 7px;border-radius:4px;margin-bottom:6px}
     .legend{position:absolute;left:16px;bottom:16px;z-index:400;background:rgba(255,255,255,.94);border-radius:10px;padding:10px 12px;font-size:12px;display:grid;gap:5px;box-shadow:0 2px 12px rgba(0,0,0,.12)}
     .legend div{display:flex;align-items:center;gap:8px;color:var(--ink2)}
