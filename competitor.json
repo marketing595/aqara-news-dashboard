@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20 00:41",
+ "generatedAt": "2026-10-20 22:36",
  "brands": [
   {
    "name": "아카라",
@@ -127,9 +127,9 @@
     "아카라 홈캠",
     "아카라 스위치",
     "아카라카",
-    "니케 아카라이브",
+    "명조 아카라이브",
     "메랜 아카라이브",
-    "아카라이브 핫딜"
+    "니케 아카라이브"
    ],
    "recent": [
     {
@@ -347,8 +347,8 @@
     "헤이홈 홈캠",
     "헤이홈 sd카드",
     "헤이홈 거치대",
-    "헤이홈 연결",
     "헤이홈 중국",
+    "헤이홈 연결",
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
@@ -451,47 +451,39 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69467,
+   "total": 69475,
    "sentiment": {
-    "pos": 16,
-    "neu": 40,
+    "pos": 17,
+    "neu": 39,
     "neg": 4
    },
    "keywords": [
     [
      "AI",
-     73
+     70
     ],
     [
      "냉장고",
-     33
-    ],
-    [
-     "발명품",
-     32
-    ],
-    [
-     "식재료",
-     30
+     29
     ],
     [
      "타임",
-     30
+     28
     ],
     [
-     "최고의",
-     26
+     "발명품",
+     27
+    ],
+    [
+     "식재료",
+     25
     ],
     [
      "삼성전자는",
-     24
+     22
     ],
     [
-     "푸드매니저",
-     23
-    ],
-    [
-     "선정",
+     "최고의",
      21
     ],
     [
@@ -499,11 +491,11 @@
      20
     ],
     [
-     "맞춤형",
+     "푸드매니저",
      19
     ],
     [
-     "유통기한",
+     "선정",
      19
     ],
     [
@@ -511,33 +503,45 @@
      18
     ],
     [
+     "가전",
+     17
+    ],
+    [
+     "맞춤형",
+     17
+    ],
+    [
      "삼성전자의",
-     18
+     17
     ],
     [
      "3개",
-     17
-    ],
-    [
-     "울트라",
-     17
-    ],
-    [
-     "기능을",
      16
     ],
     [
-     "확인할",
+     "유통기한",
      15
+    ],
+    [
+     "울트라",
+     14
+    ],
+    [
+     "미국",
+     13
     ]
    ],
    "posWords": [
     [
-     "혁신",
+     "글로벌",
      6
     ],
     [
      "강화",
+     5
+    ],
+    [
+     "혁신",
      5
     ],
     [
@@ -550,10 +554,6 @@
     ],
     [
      "프리미엄",
-     2
-    ],
-    [
-     "글로벌",
      2
     ],
     [
@@ -573,11 +573,59 @@
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 오류",
-    "삼성 스마트싱스 세탁기 원격",
+    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 허브 5세대",
-    "삼성 스마트싱스 아이폰"
+    "삼성 스마트싱스 세탁기 원격"
    ],
    "recent": [
+    {
+     "title": "쌓이는 건강 데이터 어떻게 활용할까…\"답은 정해졌다\"",
+     "source": "doctorsnews.co.kr",
+     "date": "2026-10-20",
+     "link": "http://www.doctorsnews.co.kr/news/articleView.html?idxno=166865"
+    },
+    {
+     "title": "세계가 삼성전자에 반했다…AI 가전서도 빛난 '초격차'",
+     "source": "financialpost.co.kr",
+     "date": "2026-10-20",
+     "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=281421"
+    },
+    {
+     "title": "삼성전자, 글로벌 가전 테크세미나 더 브리프 개최",
+     "source": "news.bbsi.co.kr",
+     "date": "2026-10-20",
+     "link": "https://news.bbsi.co.kr/news/articleView.html?idxno=4113472"
+    },
+    {
+     "title": "웨어러블 건강정보를 실제 진료로…삼성이 그리는 미래 의료",
+     "source": "docdocdoc.co.kr",
+     "date": "2026-10-20",
+     "link": "http://www.docdocdoc.co.kr/news/articleView.html?idxno=3043777"
+    },
+    {
+     "title": "\"폰이 몇개야?\" 무심코 탔다가 깜짝…택시기사의 '갤럭시 덕질'",
+     "source": "한국경제",
+     "date": "2026-10-20",
+     "link": "https://n.news.naver.com/mnews/article/015/0005344362?sid=101"
+    },
+    {
+     "title": "지역별 살림법까지 읽는 AI 가전… 삼성전자, 글로벌 5개 권역서 '더 브...",
+     "source": "kr.aving.net",
+     "date": "2026-10-20",
+     "link": "https://kr.aving.net/news/articleView.html?idxno=1815775"
+    },
+    {
+     "title": "삼성전자, 글로벌 5개 권역서 '각양각색' AI 가전 체험 행사",
+     "source": "이데일리",
+     "date": "2026-10-20",
+     "link": "https://n.news.naver.com/mnews/article/018/0006391954?sid=101"
+    },
+    {
+     "title": "‘적수 없다’⋯ 삼성·LG ‘스마트폰·TV·주방가전’, 美서 기술·경쟁...",
+     "source": "viva100.com",
+     "date": "2026-10-20",
+     "link": "https://www.viva100.com/article/20261019500601"
+    },
     {
      "title": "\"똑똑할수록 무섭다\"…佛 해킹사태가 韓 가전업계에 남긴 과제는?",
      "source": "뉴시스",
@@ -619,54 +667,6 @@
      "source": "vegannews.co.kr",
      "date": "2026-10-18",
      "link": "https://www.vegannews.co.kr/news/article.html?no=394076"
-    },
-    {
-     "title": "80년대 PC통신 시절부터 … 이건희 'AI반도체 제국' 준비했다",
-     "source": "매일경제",
-     "date": "2026-10-18",
-     "link": "https://n.news.naver.com/mnews/article/009/0005750271?sid=101"
-    },
-    {
-     "title": "\"우리 집 냉장고도 해킹될까?\"…프랑스 사태에 커지는 불안",
-     "source": "tjb.co.kr",
-     "date": "2026-10-18",
-     "link": "https://www.tjb.co.kr/news05/bodo/view/id/104968"
-    },
-    {
-     "title": "美 타임지가 꼽은 '올해 최고의 발명품'…삼성전자 3개 제품 선정",
-     "source": "thepublic.kr",
-     "date": "2026-10-18",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=322608"
-    },
-    {
-     "title": "설계부터 '가전·냉난방·에너지' 심는다…삼성·LG, 모듈러 주택 승부수",
-     "source": "thebigdata.co.kr",
-     "date": "2026-10-18",
-     "link": "https://www.thebigdata.co.kr/view.php?ud=2026101614594260330ecbf9426b_23"
-    },
-    {
-     "title": "우리집 냉장고는 안전할까?…프랑스 냉장설비 해킹에 커지는 불안감",
-     "source": "jasm.co.kr",
-     "date": "2026-10-17",
-     "link": "https://www.jasm.co.kr/news/view/321920/?sc=Naver"
-    },
-    {
-     "title": "프랑스 슈퍼마켓 냉장설비 해킹, 우리 집 냉장고도 안전한가?",
-     "source": "gokorea.kr",
-     "date": "2026-10-17",
-     "link": "https://www.gokorea.kr/news/articleView.html?idxno=881762"
-    },
-    {
-     "title": "삼성전자·LG전자, 냉장설비 해킹 여파에 '스마트 가전 보안' 강화…우...",
-     "source": "cwn.kr",
-     "date": "2026-10-17",
-     "link": "https://www.cwn.kr/news/articleView.html?idxno=59591"
-    },
-    {
-     "title": "냉장고 온도가 50도 '펄펄'…무차별 해킹에 업계 비상",
-     "source": "wowtv.co.kr",
-     "date": "2026-10-17",
-     "link": "https://n.news.naver.com/mnews/article/215/0001269468?sid=105"
     }
    ]
   },
@@ -674,23 +674,23 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78071,
+   "total": 78072,
    "sentiment": {
-    "pos": 14,
-    "neu": 40,
+    "pos": 13,
+    "neu": 41,
     "neg": 6
    },
    "keywords": [
     [
      "AI홈",
-     47
-    ],
-    [
-     "AI",
-     31
+     48
     ],
     [
      "LG전자",
+     31
+    ],
+    [
+     "AI",
      31
     ],
     [
@@ -699,30 +699,30 @@
     ],
     [
      "LG전자의",
-     22
-    ],
-    [
-     "기기",
      21
     ],
     [
      "보안",
-     18
+     19
     ],
     [
      "가전",
-     18
+     19
+    ],
+    [
+     "기기",
+     19
     ],
     [
      "허브",
      17
     ],
     [
-     "ThinQ",
-     14
+     "LG전자는",
+     13
     ],
     [
-     "신제품은",
+     "ThinQ",
      13
     ],
     [
@@ -730,28 +730,28 @@
      13
     ],
     [
-     "LG전자는",
+     "신제품은",
      12
-    ],
-    [
-     "제품은",
-     12
-    ],
-    [
-     "아이폰",
-     12
-    ],
-    [
-     "생태계에",
-     11
     ],
     [
      "모두",
      11
     ],
     [
-     "아이패드",
+     "제품은",
      11
+    ],
+    [
+     "아이폰",
+     11
+    ],
+    [
+     "생태계에",
+     10
+    ],
+    [
+     "제어할",
+     10
     ]
    ],
    "posWords": [
@@ -760,19 +760,19 @@
      7
     ],
     [
+     "확대",
+     5
+    ],
+    [
      "프리미엄",
      5
     ],
     [
-     "확대",
-     4
+     "글로벌",
+     2
     ],
     [
      "공략",
-     3
-    ],
-    [
-     "글로벌",
      2
     ],
     [
@@ -792,15 +792,21 @@
     "lg 씽큐온",
     "lg 씽큐",
     "lg 씽큐 세탁기",
-    "lg 씽큐 티비연결",
     "lg 씽큐 와이파이",
-    "lg 씽큐 냉장고",
-    "lg 씽큐 연결",
-    "lg 씽큐온 사용방법",
+    "lg 씽큐 티비연결",
     "lg 씽큐 에어컨 연결",
-    "lg 씽큐 허브"
+    "lg 씽큐 연결",
+    "lg 씽큐 냉장고",
+    "lg 씽큐 허브",
+    "lg 씽큐온 사용방법"
    ],
    "recent": [
+    {
+     "title": "LG전자 'AI홈' 해킹되면 어쩌나… 우리 집 '보안' 괜찮을까",
+     "source": "economytalk.kr",
+     "date": "2026-10-20",
+     "link": "http://www.economytalk.kr/news/articleView.html?idxno=424744"
+    },
     {
      "title": "“경쟁자이자 큰손 고객”… 애플 파이 커질수록 삼성·LG ‘조용히’ 웃...",
      "source": "kmib.co.kr",
@@ -884,12 +890,6 @@
      "source": "gokorea.kr",
      "date": "2026-10-17",
      "link": "https://www.gokorea.kr/news/articleView.html?idxno=881762"
-    },
-    {
-     "title": "[숏폼] '냉장고 온도가 50도?' 프랑스 해킹 피습에 우리집은 안전할까?",
-     "source": "newsprime.co.kr",
-     "date": "2026-10-17",
-     "link": "http://www.newsprime.co.kr/news/article.html?no=751346"
     }
    ]
   },
@@ -897,43 +897,35 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76276,
+   "total": 76289,
    "sentiment": {
-    "pos": 9,
-    "neu": 39,
-    "neg": 12
+    "pos": 11,
+    "neu": 36,
+    "neg": 13
    },
    "keywords": [
     [
      "AI",
-     48
+     41
     ],
     [
      "구단",
-     19
+     20
     ],
     [
-     "아마존",
-     12
+     "모델",
+     16
     ],
     [
      "키즈",
      12
     ],
     [
-     "홈뷰",
-     11
-    ],
-    [
-     "모델",
+     "제미나이",
      10
     ],
     [
      "으로",
-     9
-    ],
-    [
-     "애플은",
      9
     ],
     [
@@ -961,19 +953,27 @@
      8
     ],
     [
-     "구글은",
-     8
-    ],
-    [
-     "제미나이",
-     8
-    ],
-    [
      "현대모비스",
      8
     ],
     [
+     "홈뷰",
+     8
+    ],
+    [
+     "구글폼을",
+     7
+    ],
+    [
+     "마케팅",
+     7
+    ],
+    [
      "입니다",
+     7
+    ],
+    [
+     "구글번역",
      7
     ]
    ],
@@ -983,31 +983,31 @@
      5
     ],
     [
-     "강화",
+     "글로벌",
      3
     ],
     [
-     "돌파",
+     "확대",
      2
     ],
     [
-     "글로벌",
+     "강화",
+     2
+    ],
+    [
+     "기대",
+     1
+    ],
+    [
+     "최초",
+     1
+    ],
+    [
+     "돌파",
      1
     ],
     [
      "혁신",
-     1
-    ],
-    [
-     "첨단",
-     1
-    ],
-    [
-     "확대",
-     1
-    ],
-    [
-     "개선",
      1
     ]
    ],
@@ -1020,10 +1020,88 @@
     "구글 홈 미니 초기화",
     "구글 홈 화면 삭제",
     "구글 홈 크롬캐스트",
-    "구글 홈 초기화",
-    "구글 홈 미니 2세대"
+    "구글 홈 미니 2세대",
+    "구글 홈 어시스턴트"
    ],
    "recent": [
+    {
+     "title": "싱클리, 영상 기반 소셜 데이터 분석 방법 발표",
+     "source": "hansbiz.co.kr",
+     "date": "2026-10-20",
+     "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=874584"
+    },
+    {
+     "title": "\"소중한 친구 심정지까지\"…'인천 흉기난동' 피해자 여전히 중태",
+     "source": "이데일리",
+     "date": "2026-10-20",
+     "link": "https://n.news.naver.com/mnews/article/018/0006392445?sid=102"
+    },
+    {
+     "title": "딥블루닷 싱클리, 콘텐츠 마케팅 서밋 2026 참가…영상 속 소비자 반응...",
+     "source": "venturesquare.net",
+     "date": "2026-10-20",
+     "link": "https://www.venturesquare.net/1121436/"
+    },
+    {
+     "title": "서원대 교육학과, 선후배 교류장 ‘제4회 동문 홈커밍데이’ 개최",
+     "source": "breaknews.com",
+     "date": "2026-10-20",
+     "link": "http://www.breaknews.com/1244369"
+    },
+    {
+     "title": "[데일리픽] XRP 2달러 기대 '솔솔'…앤트로픽, 새 AI 모델 출시 준비",
+     "source": "digitaltoday.co.kr",
+     "date": "2026-10-20",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=708498"
+    },
+    {
+     "title": "영상 속 고객반응까지 체크…딥블루닷, 소셜 마케팅 전략 공개",
+     "source": "머니투데이",
+     "date": "2026-10-20",
+     "link": "https://n.news.naver.com/mnews/article/008/0005428968?sid=101"
+    },
+    {
+     "title": "삼성전자·메타·구글, 빅테크 기업들 '패션' 품다 : AI 안경 기술 넘어...",
+     "source": "huffingtonpost.kr",
+     "date": "2026-10-20",
+     "link": "https://www.huffingtonpost.kr/article/261352"
+    },
+    {
+     "title": "글로벌 AI, 상시 에이전트 경쟁 격화…안전·저작권도 시험대",
+     "source": "epnc.co.kr",
+     "date": "2026-10-20",
+     "link": "https://www.epnc.co.kr/news/articleView.html?idxno=408343"
+    },
+    {
+     "title": "‘싱클리’, ‘콘텐츠 마케팅 서밋 2026’ 참여",
+     "source": "byline.network",
+     "date": "2026-10-20",
+     "link": "https://byline.network/?p=9004111222623873"
+    },
+    {
+     "title": "싱클리,'콘텐츠 마케팅 서밋 2026' 참여… AI 기반 영상 소셜 마케팅 전...",
+     "source": "public25.com",
+     "date": "2026-10-20",
+     "link": "https://www.public25.com/news/articleView.html?idxno=56800"
+    },
+    {
+     "title": "야구 열기 속...삼성증권, '연금 가입했닭' 이벤트 진행",
+     "source": "choicenews.co.kr",
+     "date": "2026-10-20",
+     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=172379"
+    },
+    {
+     "title": "딥블루닷이 영상 소셜 리스닝으로 CMS 2026 연단에 서는 이유는?",
+     "source": "econovill.com",
+     "date": "2026-10-20",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=754170"
+    },
+    {
+     "title": "현대모비스 ‘도전! 피버스 키즈 모델’ 참가자 모집",
+     "source": "sportsworldi.com",
+     "date": "2026-10-20",
+     "link": "https://m.sports.naver.com/basketball/article/396/0000758407"
+    },
     {
      "title": "\"김연아 얼굴 변했잖아! 박력 사라졌네\" 日 매체, 어떻게 이런 말을…'한...",
      "source": "xportsnews.com",
@@ -1035,84 +1113,6 @@
      "source": "breaknews.com",
      "date": "2026-10-19",
      "link": "http://www.breaknews.com/1244032"
-    },
-    {
-     "title": "수원시의회, 생활체육 축구대회 응원",
-     "source": "breaknews.com",
-     "date": "2026-10-19",
-     "link": "http://www.breaknews.com/1243986"
-    },
-    {
-     "title": "애플 ‘홈뷰’ 상위 모델 나온다… 로봇 팔로 화면 자동 회전",
-     "source": "biz.chosun.com",
-     "date": "2026-10-19",
-     "link": "https://n.news.naver.com/mnews/article/366/0001198891?sid=105"
-    },
-    {
-     "title": "김현정 민주당 의원 “금감원 넘긴 MBK 부정발행 1조 8,903억원, 검찰 16...",
-     "source": "breaknews.com",
-     "date": "2026-10-19",
-     "link": "http://www.breaknews.com/1243963"
-    },
-    {
-     "title": "美빅테크, AI 패권 경쟁에 '합종연횡'…앙숙과 손잡고, 우군과 충돌",
-     "source": "seouleconews.com",
-     "date": "2026-10-19",
-     "link": "http://www.seouleconews.com/news/articleView.html?idxno=94425"
-    },
-    {
-     "title": "네이버 파파고, 방한 외국인용 '트렌드' 서비스 출시",
-     "source": "breaknews.com",
-     "date": "2026-10-19",
-     "link": "http://www.breaknews.com/1243889"
-    },
-    {
-     "title": "[다가온 AI 홈 시대 ③] 글로벌 빅테크 '스마트홈' 경쟁 가속...생활 가...",
-     "source": "banronbodo.com",
-     "date": "2026-10-19",
-     "link": "https://www.banronbodo.com/news/articleView.html?idxno=33196"
-    },
-    {
-     "title": "애플, 스스로 화면 360도 회전하는 가정용 AI 기기 개발... 이르면 내년...",
-     "source": "chosun.com",
-     "date": "2026-10-19",
-     "link": "https://n.news.naver.com/mnews/article/023/0004004607?sid=105"
-    },
-    {
-     "title": "신세계, ‘대한민국 시그니처 세일’ 쓱데이 10월 30일 개막",
-     "source": "breaknews.com",
-     "date": "2026-10-19",
-     "link": "http://www.breaknews.com/1243807"
-    },
-    {
-     "title": "AI 에이전트 경쟁 서막 연 메타 ‘뮤즈’, 오픈AI ‘닷츠’",
-     "source": "weekly.donga.com",
-     "date": "2026-10-19",
-     "link": "https://n.news.naver.com/mnews/article/037/0000039002?sid=101"
-    },
-    {
-     "title": "엔터·뷰티서 AI까지 'K컬처×테크' 주역 다 모인다",
-     "source": "sidae.com",
-     "date": "2026-10-19",
-     "link": "https://n.news.naver.com/mnews/article/417/0001161276?sid=105"
-    },
-    {
-     "title": "픽셀 11에만 열린 제미나이 ‘램블러’, 비공식 픽셀보드로 타사폰에도...",
-     "source": "wikitree.co.kr",
-     "date": "2026-10-19",
-     "link": "https://www.wikitree.co.kr/articles/1167210"
-    },
-    {
-     "title": "현대모비스피버스농구단 키즈 모델 모집",
-     "source": "ulsanpress.net",
-     "date": "2026-10-18",
-     "link": "https://www.ulsanpress.net/news/articleView.html?idxno=584925"
-    },
-    {
-     "title": "LG 손끝에 애플 감성 더했다… 집 지키는 스마트홈 기기 7종 첫선",
-     "source": "ggilbo.com",
-     "date": "2026-10-18",
-     "link": "https://www.ggilbo.com/news/articleView.html?idxno=1186695"
     }
    ]
   }
