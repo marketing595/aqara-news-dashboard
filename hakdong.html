@@ -730,7 +730,7 @@
   }
 
   /* ───────── 목록·필터 ───────── */
-  function numbered(){ let n=0; return SPOTS.map(s=>Object.assign(s,{_no:s.hl?'A':(++n)})); }
+  function numbered(){ let n=1; return SPOTS.map(s=>Object.assign(s,{_no:s.hl?1:(++n)})); }   // 아카라라이프 쇼룸이 01, 나머지는 02부터
   function visible(){ const q=(document.getElementById('q').value||'').trim().toLowerCase();
     if(FILTER==='route'){ numbered(); return routeSpots(); }
     return numbered().filter(s=>(FILTER==='all'||s.cat===FILTER)&&inArea(s)&&(!q||[s.n,s.en,s.d,s.a,catOf(s.cat).ko,catOf(s.cat).en].join(' ').toLowerCase().includes(q))); }
@@ -757,7 +757,7 @@
     CATS.forEach((c,ci)=>{ const g=vs.filter(s=>s.cat===c.id); if(!g.length) return;   // 아카라 쇼룸(hl)도 일반 행으로 함께 보여준다
       html+=`<div class="sec" style="--c:${c.color}"><span class="no">${no2(ci+1)}</span><div><b>${esc(c.ko)}</b><em>${esc(c.en)}</em></div><i></i><span class="cnt">${g.length}곳</span></div>`;
       html+=g.map(s=>`<div class="spot ${s.hl?'hq':''} ${ACTIVE===s.id?'active':''}" style="--c:${c.color}" data-id="${s.id}" onclick="focusSpot('${s.id}',true)" role="button" tabindex="0" aria-label="${esc(s.n)} — 지도에서 보기">
-        <div class="num">${s.hl?'00':no2(s._no)}</div>
+        <div class="num">${no2(s._no)}</div>
         <div class="nm1">${esc(s.n)}${s.hl?'<span class="hqtag">웰컴 쿠폰</span>':''}${s.check?`<span class="chk">· ${esc(s.check)}</span>`:''}</div>
         ${saveBtn(s.id,'big')}
         <div class="ds1">${esc(s.d||'')}</div></div>`).join('');   // 목록은 번호·이름·한 줄 소개만 — 영문명·주소·네이버 링크는 지도 팝업에서
