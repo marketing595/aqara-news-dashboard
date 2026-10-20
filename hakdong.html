@@ -92,11 +92,13 @@
     .hero-title{font-size:24px;font-weight:800;letter-spacing:-0.04em;line-height:1.25;margin:0 0 4px}
     .hero-subtitle{font-size:13px;color:var(--muted2);margin:0}
 
-    /* 탭 : 매장 찾기 / 내 코스 */
-    .mytabs{display:flex;gap:24px;padding:0 var(--pad);border-bottom:1px solid var(--line)}
-    .mytabs button{border:0;background:none;padding:16px 0 13px;font-size:15px;font-weight:600;color:var(--muted2);display:flex;align-items:center;gap:6px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s}
-    .mytabs button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
-    .mytabs button em{font-style:normal;font-size:13px;font-weight:500;color:var(--muted)}
+    /* 카카오맵식 아이콘 메뉴 : 아이콘 위, 글자 아래. 4칸을 같은 폭으로 */
+    .mytabs{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:0 8px;border-bottom:1px solid var(--line)}
+    .mytabs button{border:0;background:none;padding:12px 0 10px;font-size:12px;font-weight:600;color:var(--muted2);display:flex;flex-direction:column;align-items:center;gap:5px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;position:relative}
+    .mytabs button svg,.mytabs button iconify-icon{width:22px;height:22px;font-size:22px}
+    .mytabs button svg{fill:none;stroke:currentColor;stroke-width:1.8}
+    .mytabs button em{position:absolute;top:6px;left:calc(50% + 8px);font-style:normal;font-size:10px;font-weight:700;line-height:16px;min-width:16px;padding:0 4px;border-radius:8px;background:var(--line);color:var(--ink2);font-variant-numeric:tabular-nums}
+    .mytabs button.route.has em{background:var(--accent);color:var(--on-accent)}
     .mytabs button:hover{color:var(--ink)}
     .mytabs button.on{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
     .mytabs button.route.on svg,.mytabs button.route.has svg{fill:var(--accent);stroke:#B98F00}
@@ -177,7 +179,26 @@
     .mapfab{position:absolute;left:16px;top:16px;z-index:500;display:inline-flex;align-items:center;gap:6px;border:0;background:var(--paper);border-radius:980px;padding:10px 16px 10px 13px;font-size:14px;font-weight:600;box-shadow:0 2px 12px rgba(0,0,0,.16)}
     .mapfab svg{width:16px;height:16px;fill:var(--accent);stroke:#B98F00;stroke-width:1.8}
     .mapfab em{font-style:normal;color:var(--muted2);font-weight:500}
-    .locbtn{position:absolute;right:16px;bottom:32px;z-index:500;width:44px;height:44px;border-radius:50%;border:0;background:var(--paper);color:var(--ink2);display:grid;place-items:center;box-shadow:0 2px 12px rgba(0,0,0,.16);padding:0;font-size:21px}
+    /* 카카오맵식 오른쪽 컨트롤 기둥 : 지도/스카이뷰 → 확대·축소 → 내 위치를 한 줄로 */
+    .mapctl{position:absolute;right:16px;top:16px;z-index:500;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+    .maptype{display:flex;background:var(--paper);border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.16);overflow:hidden}
+    .maptype button{border:0;background:none;padding:0 13px;height:36px;font-size:13px;font-weight:600;color:var(--muted2)}
+    .maptype button + button{border-left:1px solid var(--line)}
+    .maptype button.on{background:var(--ink);color:#fff}
+    .zoombox{display:flex;flex-direction:column;background:var(--paper);border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.16);overflow:hidden}
+    .zoombox button{border:0;background:none;width:40px;height:40px;display:grid;place-items:center;font-size:18px;color:var(--ink);padding:0}
+    .zoombox button + button{border-top:1px solid var(--line)}
+    .zoombox button:hover,.maptype button:not(.on):hover{background:var(--ground)}
+    .locbtn{width:40px;height:40px;border-radius:8px;border:0;background:var(--paper);color:var(--ink2);display:grid;place-items:center;box-shadow:0 2px 12px rgba(0,0,0,.16);padding:0;font-size:20px}
+    /* 이 지역 재검색 : 지도를 직접 움직였을 때만 아래 가운데에 뜬다 */
+    .research{position:absolute;left:50%;bottom:28px;transform:translate(-50%,8px);z-index:500;border:0;background:var(--ink);color:#fff;border-radius:980px;padding:0 18px 0 14px;height:40px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;white-space:nowrap}
+    .research.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+    .research iconify-icon{font-size:15px}
+    .areabar{padding:10px var(--pad);font-size:13px;color:var(--ink2);background:var(--ground);border-bottom:1px solid var(--line);display:none;align-items:center;gap:8px}
+    .areabar.show{display:flex}
+    .areabar span{flex:1}
+    .areabar b{color:var(--ink)}
+    .areabar button{border:0;background:none;padding:4px 0;font-size:13px;font-weight:600;color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line2)}
     .locbtn.on{color:#1A73E8}
     .locbtn.follow{background:#1A73E8;color:#fff}
     .locbtn.wait iconify-icon{animation:spin 1s linear infinite}
@@ -228,6 +249,7 @@
     .mapwrap{position:relative;min-height:0;min-width:0;background:var(--ground)}
     #map{position:absolute;inset:0;background:var(--ground)}
     .leaflet-tile-pane{filter:saturate(.8) brightness(1.03)}   /* 사용자 요청: 컬러 지도. 채도만 살짝 낮춰 핀이 묻히지 않게 */
+    #map.sky .leaflet-tile-pane{filter:none}
     .leaflet-container{font-family:inherit;background:var(--ground)}
     .leaflet-control-attribution{font-size:10px;background:rgba(255,255,255,.75);color:var(--muted)}
     .leaflet-control-attribution a{color:var(--ink2)}
@@ -347,12 +369,24 @@
         <nav class="cats" id="chips"></nav>
       </div>
       <div class="catdesc" id="catdesc"></div>
+      <div class="areabar" id="areabar"></div>
       <div class="list" id="list" aria-live="polite"><p class="empty">쇼룸 목록을 불러오는 중…</p></div>
     </aside>
     <div class="mapwrap">
       <div id="map"></div>
       <button class="mapfab" id="mapfab" style="display:none" onclick="setFilter('route')"></button>
-      <button class="locbtn" id="locbtn" onclick="toggleLocate()" aria-label="내 위치" title="내 위치" aria-pressed="false"><iconify-icon icon="lucide:locate-fixed" aria-hidden="true"></iconify-icon></button>
+      <div class="mapctl">
+        <div class="maptype" role="group" aria-label="지도 종류">
+          <button id="mtRoad" class="on" onclick="setMapType('road')" aria-pressed="true">지도</button>
+          <button id="mtSky" onclick="setMapType('sky')" aria-pressed="false">스카이뷰</button>
+        </div>
+        <div class="zoombox">
+          <button onclick="zoomBy(1)" aria-label="확대" title="확대"><iconify-icon icon="lucide:plus" aria-hidden="true"></iconify-icon></button>
+          <button onclick="zoomBy(-1)" aria-label="축소" title="축소"><iconify-icon icon="lucide:minus" aria-hidden="true"></iconify-icon></button>
+        </div>
+        <button class="locbtn" id="locbtn" onclick="toggleLocate()" aria-label="내 위치" title="내 위치" aria-pressed="false"><iconify-icon icon="lucide:locate-fixed" aria-hidden="true"></iconify-icon></button>
+      </div>
+      <button class="research" id="research" onclick="searchArea()"><iconify-icon icon="lucide:rotate-cw" aria-hidden="true"></iconify-icon>이 지역 재검색</button>
       <div class="nextbar" id="nextbar" aria-live="polite"></div>
       <div class="legend" id="legend"></div>
     </div>
@@ -438,8 +472,11 @@
   // 카카오맵 패널처럼 맨 위 탭으로 '매장 찾기 / 내 코스'를 나눈다 — 내 코스는 카테고리와 섞지 않는다
   function renderMyBar(){
     const bar=document.getElementById('mybar'), fab=document.getElementById('mapfab'), n=ROUTE.length, rt=FILTER==='route';
-    if(bar) bar.innerHTML=`<button class="${rt?'':'on'}" onclick="setFilter('all')" aria-pressed="${!rt}">매장 찾기 <em>${SPOTS.length}</em></button>`
-      +`<button class="route ${rt?'on':''} ${n?'has':''}" onclick="setFilter('route')" aria-pressed="${rt}">${BM}내 코스 <em>${n}</em></button>`;
+    // 카카오맵 상단 메뉴처럼 아이콘 + 글자. 앞의 둘은 보기 전환, 뒤의 둘은 바로가기
+    if(bar) bar.innerHTML=`<button class="${rt?'':'on'}" onclick="setFilter('all')" aria-pressed="${!rt}"><iconify-icon icon="lucide:search" aria-hidden="true"></iconify-icon>매장 찾기</button>`
+      +`<button class="route ${rt?'on':''} ${n?'has':''}" onclick="setFilter('route')" aria-pressed="${rt}">${BM}내 코스${n?`<em>${n}</em>`:''}</button>`
+      +`<button onclick="flyHQ()"><iconify-icon icon="lucide:store" aria-hidden="true"></iconify-icon>아카라 쇼룸</button>`
+      +`<button onclick="openBenefit()"><iconify-icon icon="lucide:ticket" aria-hidden="true"></iconify-icon>웰컴 쿠폰</button>`;
     const tools=document.querySelector('.tools'); if(tools) tools.style.display=rt?'none':'';   // 코스 탭에서는 검색·카테고리를 접는다
     if(fab){ fab.style.display=(n&&!rt)?'':'none'; fab.innerHTML=`${BM}내 코스 <em>${n}</em>`; }
   }
@@ -598,13 +635,31 @@
   function initMap(){
     const hq=DATA.hq||{lat:37.5145,lng:127.031};
     MAP=L.map('map',{zoomControl:false,scrollWheelZoom:true,attributionControl:true}).setView([hq.lat+0.005,hq.lng+0.009],15);
-    L.control.zoom({position:'topright'}).addTo(MAP);
-    // 타일은 OSM 기본(키 불필요). CARTO Positron은 2026년부터 API 키를 요구해 쓸 수 없다.
-    // 대신 CSS 필터로 무채색·저채도로 눌러 Positron에 가까운 톤을 만든다(.leaflet-tile-pane)
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(MAP);
+    // 확대·축소는 오른쪽 컨트롤 기둥(.mapctl)의 자체 버튼으로. 타일은 OSM 기본(키 불필요) — CARTO Positron은 2026년부터 API 키 필수
+    TILE.road=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(MAP);
+    // 스카이뷰 = Esri 위성사진 + 도로·지명 라벨(키 불필요). 네이버 지도 API로 옮기면 네이버 위성(HYBRID)으로 바꾼다
+    const esri='https://server.arcgisonline.com/ArcGIS/rest/services/';
+    TILE.sky=L.layerGroup([
+      L.tileLayer(esri+'World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:19,attribution:'Tiles &copy; Esri, Maxar, Earthstar Geographics'}),
+      L.tileLayer(esri+'Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:18,opacity:.8}),
+      L.tileLayer(esri+'Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:18})]);
     MAP.on('popupclose',()=>{ setActive(null,false); });
-    MAP.on('dragstart',unfollow);   // 손으로 지도를 옮기면 내 위치 따라가기만 푼다(위치 표시는 계속)
+    MAP.on('dragstart',()=>{ unfollow(); USER_MOVE=true; });   // 손으로 지도를 옮기면 내 위치 따라가기만 푼다(위치 표시는 계속)
+    // '이 지역 재검색'은 사용자가 직접 움직였을 때만 — flyTo·fitBounds 같은 자동 이동에는 띄우지 않는다
+    MAP.getContainer().addEventListener('wheel',()=>{ USER_MOVE=true; },{passive:true});
+    MAP.getContainer().addEventListener('touchstart',e=>{ if(e.touches.length>1) USER_MOVE=true; },{passive:true});
+    MAP.on('dblclick',()=>{ USER_MOVE=true; });
+    MAP.on('moveend',()=>{ if(USER_MOVE&&FILTER!=='route') showResearch(true); USER_MOVE=false; });
   }
+  let TILE={}, USER_MOVE=false, AREA=null;   // AREA = '이 지역 재검색'으로 고정한 지도 범위(LatLngBounds)
+  function zoomBy(d){ if(!MAP) return; USER_MOVE=true; MAP.setZoom(MAP.getZoom()+d); }
+  function setMapType(t){ if(!MAP) return; const sky=t==='sky';
+    if(sky){ MAP.removeLayer(TILE.road); TILE.sky.addTo(MAP); } else { MAP.removeLayer(TILE.sky); TILE.road.addTo(MAP); }
+    document.getElementById('map').classList.toggle('sky',sky);
+    [['mtRoad',!sky],['mtSky',sky]].forEach(([id,on])=>{ const b=document.getElementById(id); b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); }); }
+  function showResearch(on){ const b=document.getElementById('research'); if(b) b.classList.toggle('show',!!on); }
+  function searchArea(){ if(!MAP) return; AREA=MAP.getBounds(); showResearch(false); setActive(null,false); MAP.closePopup(); paint(); paintMarkers(); }
+  function clearArea(){ AREA=null; paint(); paintMarkers(); }
   function pinHtml(s){ const c=catOf(s.cat);
     if(FILTER==='route'){ const k=routeIds().indexOf(s.id); if(k>-1) return `<div class="pin step">${k+1}</div>`; }
     return s.hl?`<div class="hqpin"><span class="wc">Welcome Coupon</span><div class="core">AQARA</div></div>`:`<div class="pin" style="--c:${c.color}">${no2(s._no)}</div>`; }
@@ -627,7 +682,7 @@
     updLoc();   // 코스 보기로 들어오고 나갈 때 '다음 매장' 바도 같이 켜고 끈다
   }
   function focusSpot(id,fromList){ const s=SPOTS.find(x=>x.id===id); if(!s) return; unfollow();
-    if(!MARK[id]){ FILTER='all'; paint(); paintMarkers(); }
+    if(!MARK[id]){ FILTER='all'; AREA=null; paint(); paintMarkers(); }
     const mm=MARK[id]; if(!mm) return;
     if(window.innerWidth<=860) setMobileView('map');   // 목록만 보던 중이면 지도로 되돌린다
     MAP.flyTo([+s.lat,+s.lng],17,{duration:.7}); setTimeout(()=>mm.openPopup(),520); setActive(id,!fromList);
@@ -645,7 +700,7 @@
   /* 헤더 내비 — 이 페이지에 실제로 있는 곳으로만 보낸다 */
   function fitAll(){ const vs=visible(); if(!MAP||!vs.length) return; unfollow();
     MAP.fitBounds(L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])).pad(0.15),{maxZoom:16}); }
-  function navMap(){ if(window.innerWidth<=860) setMobileView('map'); setActive(null,false); fitAll(); }
+  function navMap(){ if(window.innerWidth<=860) setMobileView('map'); setActive(null,false); if(AREA){ AREA=null; paint(); paintMarkers(); } showResearch(false); fitAll(); }
 
   /* 모바일에서 지도↔목록 전환 — 지도가 화면 절반을 먹어 목록을 보려면 스크롤해야 하는 문제 해결 */
   function setMobileView(v){
@@ -667,10 +722,10 @@
   function numbered(){ let n=0; return SPOTS.map(s=>Object.assign(s,{_no:s.hl?'A':(++n)})); }
   function visible(){ const q=(document.getElementById('q').value||'').trim().toLowerCase();
     if(FILTER==='route'){ numbered(); return routeSpots(); }
-    return numbered().filter(s=>(FILTER==='all'||s.cat===FILTER)&&(!q||[s.n,s.en,s.d,s.a,catOf(s.cat).ko,catOf(s.cat).en].join(' ').toLowerCase().includes(q))); }
-  function setFilter(id){ FILTER=id==='route'?'route':CATS.some(c=>c.id===id)?id:'all'; paint(); paintMarkers();
+    return numbered().filter(s=>(FILTER==='all'||s.cat===FILTER)&&(!AREA||AREA.contains([+s.lat,+s.lng]))&&(!q||[s.n,s.en,s.d,s.a,catOf(s.cat).ko,catOf(s.cat).en].join(' ').toLowerCase().includes(q))); }
+  function setFilter(id){ FILTER=id==='route'?'route':CATS.some(c=>c.id===id)?id:'all'; if(FILTER==='route') showResearch(false); paint(); paintMarkers();
     if(FILTER==='route'){ fitRoute(); return; }
-    const vs=visible(); if(vs.length&&FILTER!=='all'){ const b=L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])); MAP.fitBounds(b.pad(0.25),{maxZoom:16}); } }
+    const vs=visible(); if(vs.length&&FILTER!=='all'&&!AREA){ const b=L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])); MAP.fitBounds(b.pad(0.25),{maxZoom:16}); } }
   function paint(){
     const all=numbered();
     // 카테고리 네비 — 알약 대신 01·02… 번호를 단 텍스트 인덱스
@@ -683,6 +738,8 @@
       if(l<chipBar.scrollLeft) chipBar.scrollLeft=l-18; else if(r>chipBar.scrollLeft+chipBar.clientWidth) chipBar.scrollLeft=r-chipBar.clientWidth+18; }
     const cd=document.getElementById('catdesc'), cc=CATS.find(c=>c.id===FILTER);
     renderMyBar();
+    const ab=document.getElementById('areabar'), inArea=!!AREA&&FILTER!=='route';   // '이 지역 재검색' 결과임을 목록 위에 알린다
+    ab.classList.toggle('show',inArea); if(inArea) ab.innerHTML=`<iconify-icon icon="lucide:map-pinned" aria-hidden="true"></iconify-icon><span>지금 지도 안의 매장 <b>${visible().length}곳</b></span><button onclick="clearArea()">전체 보기</button>`;
     cd.style.display=cc?'flex':'none'; if(cc) cd.style.setProperty('--c',cc.color); if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b>${cc.desc?`<span class="ko">${esc(cc.desc)}</span>`:''}</span>`;
     if(FILTER==='route'){ cd.style.display='none'; document.getElementById('list').innerHTML=routeHtml(); return; }
     const vs=visible(), box=document.getElementById('list'); let html='';
