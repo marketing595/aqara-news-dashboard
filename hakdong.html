@@ -12,6 +12,9 @@
   <link rel="apple-touch-icon" href="/favicon-hakdong.png?v=1" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -26,7 +29,9 @@
          레이아웃 : 에어비앤비·네이버 지도식 split-screen. 좌 = 필터·목록 패널 / 우 = 전체 지도
          기억점   : '자재 샘플 칩'. 학동은 타일·마루·수전 쇼룸 거리라, 카테고리·목록 번호·지도 핀을
                     모두 같은 작은 사각 칩으로 그린다 → 목록 번호와 지도 핀이 한눈에 이어진다
-         규칙     : 폰트는 Pretendard 하나, 아이콘은 Iconify(lucide) 하나.
+         규칙     : 폰트는 3벌 — 제목 Noto Serif KR(카탈로그 표제), 번호·라벨 IBM Plex Mono(자재 품번), 본문 Pretendard.
+                    system-ui·Inter·Roboto·Arial 폴백 금지. 아이콘은 Iconify(lucide) 하나.
+                    크림·베이지 면 금지(뉴트럴 그레이 + 옐로 한 점), 번지는 그림자 대신 얇은 선 + 짧은 그림자.
                     대문자 영문 라벨·장식용 번호·가운뎃점 메타 줄·화살표 링크 금지.
                     옐로(#FBC400)는 채움 전용(버튼·아카라 핀·선택 표시). 밝은 배경 위 글자색 금지
        ───────────────────────────────────────────────────────────────── */
@@ -34,10 +39,14 @@
       --paper:#FFFFFF; --ground:#F4F4F2;
       --ink:#1A1A1A; --ink2:#55554F; --muted:#8A8A84; --muted2:#6B6B66;   /* muted2 = 흰 배경 4.5:1 이상 */
       --line:#E7E6E2; --line2:#D6D5D0;
-      --accent:#FBC400; --accent-soft:#FFF7DB; --on-accent:#1A1A1A;
+      --accent:#FBC400; --accent-soft:#F1F1EE; --on-accent:#1A1A1A;
       --dark:#1A1A1A;
-      --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Malgun Gothic",sans-serif;
-      --hdr:56px; --pad:20px; --chip:6px;
+      --font:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+      --serif:"Noto Serif KR","Nanum Myeongjo",serif;
+      --mono:"IBM Plex Mono","Pretendard Variable",Pretendard,monospace;
+      --edge:0 0 0 1px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.08);   /* 지도 위 컨트롤 공통: 선 + 짧은 그림자 */
+      --hdr:56px; --pad:24px; --chip:6px;   /* 8px 그리드: 여백은 8·16·24·32 */
+      --fs-xs:11px; --fs-s:13px; --fs-m:15px; --fs-l:20px; --fs-xl:28px;   /* 타입 스케일 */
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%}
@@ -288,6 +297,52 @@
     .coupon .used-stamp{display:inline-block;margin:6px auto 2px;padding:6px 16px;border:2px solid #B3261E;border-radius:6px;color:#B3261E;font-size:18px;font-weight:800;letter-spacing:.08em;transform:rotate(-4deg)}
     .coupon .how{font-size:13px;color:var(--ink2);margin-top:12px;line-height:1.6}
     .fine{font-size:12px;color:var(--muted2);margin:16px 0 0;line-height:1.6}
+
+    /* ─── 에디토리얼 레이어 (2026-10-20) ─────────────────────────────
+       자재 카탈로그 문법: 표제는 세리프, 품번·수량·라벨은 모노, 나머지는 Pretendard.
+       틀·텍스트는 그대로 두고 서체·면·그림자만 바꾼다 ─── */
+    /* 표제 */
+    .hero-section{padding:32px var(--pad) 24px;border-top:3px solid var(--ink)}
+    .hero-title{font-family:var(--serif);font-size:var(--fs-xl);font-weight:700;letter-spacing:-0.045em;line-height:1.2;margin:0 0 8px}
+    .hero-subtitle{font-family:var(--mono);font-size:var(--fs-xs);font-weight:500;letter-spacing:.06em;color:var(--muted2);display:flex;align-items:center;gap:8px}
+    .hero-subtitle::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--accent);flex:none}
+    .hero-subtitle::after{content:"";flex:1;height:1px;background:var(--line2)}
+    .md .hd h2,.tour-card h3,.rhead b,.foot b,.pp .nm{font-family:var(--serif);font-weight:700;letter-spacing:-0.04em}
+    .spot .nm1,.spot .nm{font-family:var(--serif);font-weight:600;letter-spacing:-0.035em}
+    .spot .nm1{font-size:var(--fs-m)}
+    .hqtag,.badge-hl{font-family:var(--font);letter-spacing:0}
+    .spot{padding:16px var(--pad)}
+    .sec{padding-top:24px}
+    .md .hd h2{font-size:var(--fs-l)}
+    /* 품번·수량·라벨 = 모노 */
+    .spot .num,.pin,.stepno,.cat .no,.cat .n,.sec .no,.sec .cnt,.sec em,.leg,.tour-card .tour-step,
+    .md .hd .ey,.rhead .ey,.foot .ft,.coupon .eyebrow,.bn .k,.pp .en,.spot .en,.mytabs button em,.coupon .code{font-family:var(--mono);letter-spacing:0}
+    .sec .no,.cat .no{font-weight:600}
+    .md .hd .ey,.rhead .ey,.foot .ft,.coupon .eyebrow,.bn .k,.pp .en{font-size:11px;font-weight:500;letter-spacing:.06em}
+    .sec{padding-bottom:9px;background:linear-gradient(var(--ink),var(--ink)) var(--pad) 100% / calc(100% - var(--pad) * 2) 1px no-repeat,var(--paper)}   /* 목차 밑줄 — sticky라 margin 대신 배경 선 */
+    .sec b{color:var(--ink)}
+    /* 면: 크림 대신 뉴트럴 + 옐로 한 줄 */
+    .spot.hq{background:var(--paper);box-shadow:inset 3px 0 0 var(--accent)}
+    .spot.hq:hover{background:#FAFAF8}
+    .pp .save.on{border-color:var(--ink)}
+    .bn .tg{color:var(--ink);font-family:var(--mono);font-weight:500;letter-spacing:0;border-radius:3px}
+    .coupon,.foot{border-radius:6px}
+    .bn .ic{border-radius:6px}
+    /* 그림자: 번지는 그림자 대신 선 + 짧은 그림자 */
+    .mapfab,.locbtn,.legend,.nextbar{box-shadow:var(--edge)}
+    .leaflet-bar{box-shadow:var(--edge)!important;border-radius:8px!important}
+    .legend{background:var(--paper)}
+    .leaflet-popup-content-wrapper{border-radius:8px;box-shadow:0 0 0 1px rgba(0,0,0,.12),0 6px 16px -6px rgba(0,0,0,.18)}
+    .md{border-radius:10px;box-shadow:0 0 0 1px rgba(0,0,0,.08),0 18px 40px -20px rgba(0,0,0,.35)}
+    .tour-card{border-radius:10px;box-shadow:0 0 0 1px rgba(0,0,0,.08),0 12px 28px -14px rgba(0,0,0,.4)}
+    .toast{box-shadow:0 6px 18px -8px rgba(0,0,0,.4)}
+    .pin{box-shadow:0 1px 2px rgba(0,0,0,.3)}
+    .pin.on{box-shadow:0 0 0 2px var(--ink),0 2px 4px rgba(0,0,0,.25)}
+    .pin.step{box-shadow:0 0 0 1.5px var(--ink),0 1px 2px rgba(0,0,0,.3)}
+    .hqpin .core{font-family:var(--mono);box-shadow:0 0 0 1.5px var(--ink),0 2px 4px rgba(0,0,0,.3);animation-name:pulse2;animation-iteration-count:4}   /* 모션: 처음 몇 번만 눈길을 끌고 멈춘다(무한 반복은 지도 읽기를 방해) */
+    .hqpin .wc{font-family:var(--mono);font-weight:500;border-radius:3px}
+    @keyframes pulse2{0%{box-shadow:0 0 0 1.5px var(--ink),0 0 0 0 rgba(251,196,0,.7)}100%{box-shadow:0 0 0 1.5px var(--ink),0 0 0 16px rgba(251,196,0,0)}}
+    .search input:focus{box-shadow:none}
 
     /* ─── 모바일 ─── */
     @media (max-width:860px){
