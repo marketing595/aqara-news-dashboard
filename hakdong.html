@@ -834,7 +834,7 @@
     watchCoupon();
     if(c&&c.used){ box.innerHTML=`<div class="used-stamp">사용 완료</div>
       <div class="how">${fmtDT(c.used)} 쇼룸에서 사용하셨어요. 방문해 주셔서 감사합니다!</div>`; return; }
-    if(!c){ box.innerHTML=`<p style="font-size:13px;color:#5E625F;margin:6px 0 12px">버튼을 누르면 이 휴대폰에 웰컴 쿠폰이 발급돼요. 쇼룸에서 쿠폰 화면만 보여주시면 끝!</p>
+    if(!c){ box.innerHTML=`<p style="font-size:13px;color:#5E625F;margin:6px 0 12px">버튼을 누르면 이 휴대폰에 웰컴 쿠폰이 발급돼요.<br>쇼룸에서 쿠폰 화면만 보여주시면 끝!</p>
       <button class="btn primary" style="font-size:14px;padding:11px 22px" onclick="issueCoupon()">웰컴 쿠폰 발급받기</button>`; return; }
     // 스태프가 QR만 찍으면 되므로 코드·발급일 문구는 보여주지 않는다(코드는 QR 주소 안에 들어 있음)
     box.innerHTML=`<div id="qr"></div><div class="how">쇼룸 방문 시 이 QR을 스태프에게 보여주세요.<br><b>아카라라이프 쇼룸</b> · 학동역 도보 3분 · 논현로127길 13-11</div>
