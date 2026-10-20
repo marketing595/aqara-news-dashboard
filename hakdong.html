@@ -89,12 +89,12 @@
     aside{background:var(--paper);display:flex;flex-direction:column;min-height:0;min-width:0;border-right:1px solid var(--line)}
 
     /* 상단 타이틀 — 어두운 띠 대신 흰 바탕 위 타이포 위계로 */
-    .hero-section{padding:24px var(--pad) 18px;background:var(--paper)}
-    .hero-title{font-size:24px;font-weight:800;letter-spacing:-0.04em;line-height:1.25;margin:0 0 4px}
-    .hero-subtitle{font-size:13px;color:var(--muted2);margin:0}
+    .hero-section{padding:28px var(--pad) 24px;background:#F3F4F6;border-bottom:1px solid #E5E7EB}   /* 흰 패널과 구분되는 연회색 띠 + 경계선 */
+    .hero-title{font-size:28px;font-weight:700;letter-spacing:-0.04em;line-height:1.2;margin:0 0 8px;color:#111827}
+    .hero-subtitle{font-size:13px;font-weight:500;color:#4B5563;margin:0;letter-spacing:0}   /* 연회색 위 대비 7:1 */
 
     /* 카카오맵식 아이콘 메뉴 : 아이콘 위, 글자 아래. 4칸을 같은 폭으로 */
-    .mytabs{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:0 8px;border-bottom:1px solid var(--line)}
+    .mytabs{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:6px 8px 0;border-bottom:1px solid var(--line)}
     .mytabs button{border:0;background:none;padding:12px 0 10px;font-size:12px;font-weight:600;color:var(--muted2);display:flex;flex-direction:column;align-items:center;gap:5px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;position:relative}
     .mytabs button svg,.mytabs button iconify-icon{width:22px;height:22px;font-size:22px}
     .mytabs button svg{fill:none;stroke:currentColor;stroke-width:1.8}
@@ -310,6 +310,72 @@
     .coupon .how{font-size:13px;color:var(--ink2);margin-top:12px;line-height:1.6}
     .fine{font-size:12px;color:var(--muted2);margin:16px 0 0;line-height:1.6}
 
+    /* ─── Clean & Modern 레이어 (2026-10-20) ─────────────────────────
+       여백 1.5배, 면은 회색 한 단계(#F3F4F6), 포인트는 옐로 하나, 그림자는 넓고 옅게.
+       텍스트·구조는 그대로 두고 스타일만 바꾼다 ─── */
+    :root{--pad:28px;--g50:#F9FAFB;--g100:#F3F4F6;--g200:#E5E7EB;--g500:#6B7280;--g600:#4B5563;--g700:#374151;--g900:#111827;
+      --soft:0 1px 2px rgba(17,24,39,.04),0 6px 24px rgba(17,24,39,.08)}
+    .wrap{grid-template-columns:440px 1fr}
+    aside{border-right-color:var(--g200)}
+    /* 검색·카테고리 : 회색 면 + 깔끔한 글자 */
+    .tools{padding:20px var(--pad) 20px;border-bottom-color:var(--g200)}
+    .search input{height:46px;background:var(--g100);border-color:transparent;color:var(--g900)}
+    .search input::placeholder{color:var(--g500)}
+    .search input:focus{background:var(--paper);border-color:var(--g900);box-shadow:none}
+    .cats{gap:8px;margin-top:16px}
+    .cat{height:34px;padding:0 14px;gap:7px;background:var(--g100);border-color:transparent;color:var(--g700);font-weight:500}
+    .cat:hover{border-color:transparent;background:var(--g200)}
+    .cat .dot{width:8px;height:8px;border-radius:50%}
+    .cat .no,.cat .n{color:var(--g500)}
+    .cat.on{background:var(--g900);color:#fff}
+    .cat.on .dot{box-shadow:none}
+    .catdesc{padding:14px var(--pad);background:var(--g50);color:var(--g600);border-bottom-color:var(--g200)}
+    .catdesc b{color:var(--g900)}
+    .areabar{padding:12px var(--pad);background:var(--g50);border-bottom-color:var(--g200)}
+    /* 탭 메뉴 : 타이틀과의 경계는 타이틀 쪽 선 하나로, 아래는 회색 선 */
+    .mytabs{border-bottom-color:var(--g200);padding:8px 12px 0}
+    .mytabs button{padding:12px 0 12px;color:var(--g500)}
+    .mytabs button.on{color:var(--g900);border-bottom-color:var(--g900)}
+    /* 목록 : 제목 > 설명 > 위치·시간 위계, 행 여백 1.5배 */
+    .sec{padding:28px var(--pad) 10px}
+    .sec b{color:var(--g900)}
+    .sec .no,.sec em,.sec .cnt{color:var(--g500)}
+    .spot{column-gap:16px;row-gap:6px;padding:20px var(--pad)}
+    .spot + .spot{border-top-color:var(--g100)}
+    .spot:hover{background:var(--g50)}
+    .spot.active{background:var(--g100)}
+    .spot .nm1{font-size:16px;font-weight:700;line-height:24px;color:var(--g900)}
+    .spot .ds1{font-size:13.5px;line-height:1.6;color:var(--g600)}
+    .spot .nm{font-size:16px;color:var(--g900)}
+    .spot .ds{font-size:13.5px;line-height:1.6;color:var(--g600)}
+    .spot .ad,.spot .en{color:var(--g500)}
+    .spot.hq,.spot.hq:hover{background:var(--paper)}   /* 아카라 행도 흰 바탕 — 옐로는 번호 칩·쿠폰 태그에만 */
+    .spot.hq.active{background:var(--g100)}
+    .save.big svg{stroke:#9CA3AF}
+    .leg{background:var(--g50);color:var(--g500)}
+    .foot{margin:24px var(--pad) 0;padding:24px;background:var(--g50);border-radius:16px}
+    .rhead{padding:24px var(--pad) 22px}
+    /* 지도 위 : 그림자 넓고 옅게, 모서리 통일(12px · 알약) */
+    .nwin{box-shadow:var(--soft);border-radius:16px;padding:24px 22px 22px}
+    .hqpin .wc{box-shadow:0 2px 10px rgba(17,24,39,.12)}
+    .pin{box-shadow:0 1px 4px rgba(17,24,39,.18)}
+    .mapctl{right:20px;top:20px;gap:10px}
+    .maptype{border-radius:980px;box-shadow:var(--soft);padding:3px;gap:2px}
+    .maptype button{height:32px;padding:0 14px;border-radius:980px}
+    .maptype button + button{border-left:0}
+    .maptype button.on{background:var(--g900)}
+    .zoombox{border-radius:12px;box-shadow:var(--soft)}
+    .zoombox button + button{border-top-color:var(--g100)}
+    .locbtn{border-radius:12px;box-shadow:var(--soft)}
+    .mapfab{left:20px;top:20px;box-shadow:var(--soft)}
+    .nextbar{box-shadow:var(--soft);border-radius:14px}
+    .research{top:20px;bottom:auto;transform:translate(-50%,-8px);box-shadow:0 6px 20px rgba(17,24,39,.18)}   /* 범례가 아래 왼쪽을 쓰므로 위 가운데로 */
+    /* 범례 : 지도 아래 왼쪽의 작은 플로팅 칩 한 줄 */
+    .legend{left:20px;bottom:20px;display:flex;flex-wrap:wrap;gap:4px 12px;max-width:calc(100% - 220px);padding:8px 14px;border-radius:980px;background:rgba(255,255,255,.92);-webkit-backdrop-filter:saturate(180%) blur(12px);backdrop-filter:saturate(180%) blur(12px);box-shadow:var(--soft);font-size:11.5px}
+    .legend div{gap:6px;color:var(--g600);white-space:nowrap}
+    .legend .dot{width:8px;height:8px;border-radius:50%}
+    /* 헤더 쿠폰 버튼 = 지도/스카이뷰와 같은 알약·높이 */
+    .hdr-nav .btn{height:38px;padding:0 18px;border-radius:980px}
     /* ─── 모바일 ─── */
     @media (max-width:860px){
       :root{--hdr:52px;--pad:16px}
