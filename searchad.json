@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20 01:27",
+ "generatedAt": "2026-10-20 23:18",
  "source": "네이버 검색광고 API",
  "defaultPeriod": "30d",
  "periods": {
@@ -1412,6 +1412,14 @@
   {
    "campaign": "B2C 브랜드검색",
    "type": "브랜드검색",
+   "headline": "B2C_MO_CJ온스타일 웜다크실버_10/22",
+   "desc": null,
+   "url": null,
+   "image": "https://ad-creative.gfa.naver.com/preview/202610/6ad6fb8998e1dd45a0a3a3d1.png"
+  },
+  {
+   "campaign": "B2C 브랜드검색",
+   "type": "브랜드검색",
    "headline": "B2C_MO_상시소재",
    "desc": null,
    "url": null,
@@ -1440,14 +1448,6 @@
    "desc": null,
    "url": null,
    "image": "https://ad-creative.gfa.naver.com/preview/202608/6a7e9f07bf2744e99888874e.png"
-  },
-  {
-   "campaign": "B2C 브랜드검색",
-   "type": "브랜드검색",
-   "headline": "B2C_MO_CJ온스타일 웜다크실버_10/16~25",
-   "desc": null,
-   "url": null,
-   "image": "https://ad-creative.gfa.naver.com/preview/202610/6acf242a8631cabeb5dd78c3.png"
   },
   {
    "campaign": "B2B 브랜드검색",
