@@ -12,8 +12,9 @@
   <link rel="apple-touch-icon" href="/favicon-hakdong.png?v=1" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <!-- 네이버 지도 API v3 (네이버 클라우드 Maps · Dynamic Map). Client ID는 등록한 사이트 주소에서만 동작한다 -->
+  <script>window.navermap_authFailure=function(){ window.NAVER_AUTH_FAIL=true; var m=document.getElementById("map"); if(m) m.innerHTML="<p class=\"mapfail\">지도를 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.</p>"; };</script>
+  <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=lol15vdpcd"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
   <!-- Firebase: ONLY MKT에서 고친 스팟 정보(hakdong/spots) 반영 + 쿠폰 발급 집계(hakdong/coupons). 연결 안 돼도 페이지는 동작 -->
@@ -247,15 +248,8 @@
 
     /* ─── 지도 ─── */
     .mapwrap{position:relative;min-height:0;min-width:0;background:var(--ground)}
-    #map{position:absolute;inset:0;background:var(--ground)}
-    .leaflet-tile-pane{filter:saturate(.8) brightness(1.03)}   /* 사용자 요청: 컬러 지도. 채도만 살짝 낮춰 핀이 묻히지 않게 */
-    #map.sky .leaflet-tile-pane{filter:none}
-    .leaflet-container{font-family:inherit;background:var(--ground)}
-    .leaflet-control-attribution{font-size:10px;background:rgba(255,255,255,.75);color:var(--muted)}
-    .leaflet-control-attribution a{color:var(--ink2)}
-    .leaflet-bar{border:0!important;border-radius:10px!important;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.16)!important}
-    .leaflet-bar a{width:36px!important;height:36px!important;line-height:36px!important;color:var(--ink);border-bottom-color:var(--line)!important}
-    .leaflet-top.leaflet-right{margin:6px 6px 0 0}
+    #map{position:absolute!important;inset:0;width:100%;height:100%;background:var(--ground)}   /* 네이버 지도가 컨테이너에 position:relative를 넣어 높이가 0이 되는 걸 막는다 */
+    .mapfail{position:absolute;inset:0;margin:0;display:grid;place-items:center;font-size:14px;color:var(--muted2);text-align:center;padding:24px}
     /* 핀 = 자재 샘플 칩 */
     .pin{width:26px;height:26px;border-radius:var(--chip);background:var(--c);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.28);transition:transform .15s}
     .pin.on{transform:scale(1.25);box-shadow:0 0 0 2px var(--ink),0 6px 14px rgba(0,0,0,.3)}
@@ -264,8 +258,12 @@
     .hqpin .core{position:absolute;inset:0;border-radius:10px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:10px;font-weight:800;letter-spacing:.02em;border:3px solid #fff;box-shadow:0 6px 18px -5px rgba(0,0,0,.45);animation:pulse 2.4s ease-out infinite}
     .hqpin .wc{position:absolute;left:50%;top:-24px;transform:translateX(-50%);background:var(--dark);color:#fff;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(251,196,0,.55),0 6px 18px -5px rgba(0,0,0,.45)}100%{box-shadow:0 0 0 18px rgba(251,196,0,0),0 6px 18px -5px rgba(0,0,0,.45)}}
-    .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:22px 20px 20px}   /* 여백은 wrapper의 padding으로 — content의 margin은 위아래로 겹쳐(margin collapse) 흰 면 밖으로 빠져나간다 */
-    .leaflet-popup-content{margin:0;font-size:13px;line-height:1.55;min-width:240px}
+    /* 정보 카드 = 네이버 InfoWindow 안에 그리는 흰 카드. 여백은 카드의 padding으로 */
+    .nwin{position:relative;width:280px;background:var(--paper);border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:22px 20px 20px;font-size:13px;line-height:1.55;color:var(--ink);font-family:var(--font);letter-spacing:-0.01em;word-break:keep-all}
+    .nwin .x{position:absolute;right:8px;top:8px;width:32px;height:32px;border:0;background:none;border-radius:50%;font-size:18px;color:var(--muted2);display:grid;place-items:center;padding:0}
+    .nwin .x:hover{background:var(--ground);color:var(--ink)}
+    .nwin .pp .nm{padding-right:24px}
+    .nwin::after{content:"";position:absolute;left:50%;bottom:-6px;width:14px;height:14px;background:var(--paper);transform:translateX(-50%) rotate(45deg);border-radius:0 0 3px 0}   /* 핀을 가리키는 꼬리 */
     .pp .en{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--muted2)}
     .pp .nm{font-size:16px;font-weight:700;letter-spacing:-0.03em;margin:4px 0 8px}
     .pp .ds{color:var(--ink2)}
@@ -467,7 +465,7 @@
       b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); const t=b.querySelector('span'); if(t) t.textContent=on?'저장됨':'저장'; });
     const c=document.getElementById('rtCnt'); if(c) c.textContent=ROUTE.length?'· '+ROUTE.length:'';
     renderMyBar();
-    Object.keys(MARK).forEach(id=>{ const p=MARK[id].getPopup(); if(p) p.setContent(popupHtml(SPOTS.find(x=>x.id===id)||{})); });
+    if(INFO_ID&&INFO) INFO.setContent(winHtml(SPOTS.find(x=>x.id===INFO_ID)||{}));   // 열린 정보 카드의 저장 버튼도 맞춘다
   }
   // 카카오맵 패널처럼 맨 위 탭으로 '매장 찾기 / 내 코스'를 나눈다 — 내 코스는 카테고리와 섞지 않는다
   function renderMyBar(){
@@ -507,8 +505,7 @@
   function adoptShared(){ if(!SHARED) return; ROUTE=SHARED.slice(); SHARED=null; saveRoute(); syncSave(); paint(); paintMarkers(); showToast('이 코스를 내 코스로 저장했어요'); }
   function dropShared(){ SHARED=null; paint(); paintMarkers(); fitRoute(); }
   function fitRoute(){ const ss=routeSpots(); if(!MAP||!ss.length) return; unfollow();
-    if(ss.length===1) MAP.flyTo([+ss[0].lat,+ss[0].lng],16,{duration:.6});
-    else MAP.fitBounds(L.latLngBounds(ss.map(s=>[+s.lat,+s.lng])).pad(0.2),{maxZoom:17}); }
+    fitSpots(ss,70,17); }
   function routeHtml(){
     const ss=routeSpots(), ro=!!SHARED;
     let total=0; for(let i=1;i<ss.length;i++) total+=walkM(ss[i-1],ss[i]);
@@ -543,20 +540,20 @@
     if(!navigator.geolocation){ showToast('이 브라우저에서는 위치를 쓸 수 없어요'); return; }
     if(WATCH===null){ FOLLOW=true; LOC_WAIT=true; updLoc();
       WATCH=navigator.geolocation.watchPosition(onPos,onPosErr,{enableHighAccuracy:true,maximumAge:5000,timeout:20000}); return; }
-    if(!FOLLOW){ FOLLOW=true; if(ME) MAP.flyTo([ME.lat,ME.lng],Math.max(MAP.getZoom(),17),{duration:.6}); updLoc(); return; }
+    if(!FOLLOW){ FOLLOW=true; if(ME) flyTo(ME.lat,ME.lng,Math.max(MAP.getZoom(),17)); updLoc(); return; }
     stopLocate();
   }
   function stopLocate(){ if(WATCH!==null) navigator.geolocation.clearWatch(WATCH);
     WATCH=null; FOLLOW=false; LOC_WAIT=false; ME=null;
-    [ME_MK,ME_ACC].forEach(l=>{ if(l) MAP.removeLayer(l); }); ME_MK=ME_ACC=null; updLoc(); }
+    [ME_MK,ME_ACC].forEach(drop); ME_MK=ME_ACC=null; updLoc(); }
   function startNav(){ if(window.innerWidth<=860) setMobileView('map');
-    if(WATCH===null) toggleLocate(); else { FOLLOW=true; if(ME) MAP.flyTo([ME.lat,ME.lng],17,{duration:.6}); updLoc(); } }
+    if(WATCH===null) toggleLocate(); else { FOLLOW=true; if(ME) flyTo(ME.lat,ME.lng,17); updLoc(); } }
   function onPos(p){ const first=!ME; LOC_WAIT=false;
-    ME={lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy||0}; const ll=[ME.lat,ME.lng];
-    if(!ME_MK){ ME_ACC=L.circle(ll,{radius:ME.acc,color:'#1A73E8',weight:1,opacity:.35,fillColor:'#1A73E8',fillOpacity:.1,interactive:false}).addTo(MAP);
-      ME_MK=L.marker(ll,{icon:L.divIcon({className:'',html:'<div class="me"></div>',iconSize:[18,18],iconAnchor:[9,9]}),zIndexOffset:2000,interactive:false,keyboard:false}).addTo(MAP); }
-    else { ME_MK.setLatLng(ll); ME_ACC.setLatLng(ll).setRadius(ME.acc); }
-    if(FOLLOW){ if(first) MAP.flyTo(ll,17,{duration:.8}); else MAP.panTo(ll,{animate:true}); }
+    ME={lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy||0}; const ll=LL(ME.lat,ME.lng);
+    if(!ME_MK){ ME_ACC=new naver.maps.Circle({map:MAP,center:ll,radius:ME.acc,strokeColor:'#1A73E8',strokeWeight:1,strokeOpacity:.35,fillColor:'#1A73E8',fillOpacity:.1,clickable:false});
+      ME_MK=new naver.maps.Marker({map:MAP,position:ll,icon:{content:'<div class="me"></div>',anchor:new naver.maps.Point(9,9)},zIndex:2000,clickable:false}); }
+    else { ME_MK.setPosition(ll); ME_ACC.setCenter(ll); ME_ACC.setRadius(ME.acc); }
+    if(FOLLOW){ if(first) flyTo(ME.lat,ME.lng,17,800); else MAP.panTo(ll); }
     if(first&&DATA&&DATA.hq&&distM(ME,DATA.hq)>5000) showToast('학동에서 멀리 계시네요 · 거리는 어림값이에요');
     checkArrive(); updLoc(); }
   function onPosErr(e){ if(ME&&e.code!==1) return;   // 이미 잡은 뒤 잠깐 끊긴 건 조용히 다음 신호를 기다린다
@@ -585,10 +582,10 @@
   function updLoc(){
     const b=document.getElementById('locbtn');
     if(b){ b.classList.toggle('on',WATCH!==null); b.classList.toggle('follow',WATCH!==null&&FOLLOW&&!!ME); b.classList.toggle('wait',LOC_WAIT); b.setAttribute('aria-pressed',WATCH!==null); }
-    if(ME_LINE&&MAP){ MAP.removeLayer(ME_LINE); ME_LINE=null; }
+    drop(ME_LINE); ME_LINE=null;
     const bar=document.getElementById('nextbar'), nx=(ME&&FILTER==='route')?nextStop():null;
     if(!bar) return; if(!nx){ bar.classList.remove('show'); return; }
-    ME_LINE=L.polyline([[ME.lat,ME.lng],[+nx.lat,+nx.lng]],{color:'#1A73E8',weight:3,opacity:.7,dashArray:'1 7',lineCap:'round',interactive:false}).addTo(MAP);
+    ME_LINE=new naver.maps.Polyline({map:MAP,path:[LL(ME.lat,ME.lng),LL(nx.lat,nx.lng)],strokeColor:'#1A73E8',strokeWeight:3,strokeOpacity:.7,strokeStyle:'shortdot',strokeLineCap:'round',clickable:false});
     bar.innerHTML=`<span class="stepno">${routeIds().indexOf(nx.id)+1}</span><div>다음 매장 · ${fmtWalk(walkM(ME,nx))}<b>${esc(nx.n)}</b></div>${dirLink(nx,'go','길안내')}`;
     bar.classList.add('show'); }
   function unfollow(){ if(FOLLOW){ FOLLOW=false; updLoc(); } }
@@ -631,61 +628,75 @@
     maybeTour();
   }
 
-  /* ───────── 지도 ───────── */
+  /* ───────── 지도 (네이버 지도 API v3) ───────── */
+  const LL=(lat,lng)=>new naver.maps.LatLng(+lat,+lng);
+  const drop=o=>{ if(o) o.setMap(null); };   // 지도에서 걷어내기
+  function flyTo(lat,lng,z,ms){ MAP.morph(LL(lat,lng),z,{duration:ms||600,easing:'easeOutCubic'}); }
+  // 여러 매장이 한 화면에 들어오게. 너무 가까이 붙어 있으면 maxZ 이상으로는 당기지 않는다
+  function fitSpots(ss,pad,maxZ){ if(!MAP||!ss.length) return;
+    if(ss.length===1){ flyTo(ss[0].lat,ss[0].lng,Math.min(16,maxZ)); return; }
+    const b=new naver.maps.LatLngBounds(LL(ss[0].lat,ss[0].lng),LL(ss[0].lat,ss[0].lng)); ss.forEach(s=>b.extend(LL(s.lat,s.lng)));
+    MAP.fitBounds(b,{top:pad,right:pad,bottom:pad,left:pad}); if(MAP.getZoom()>maxZ) MAP.setZoom(maxZ,false); }
+  let INFO=null, INFO_ID=null, USER_MOVE=false, AREA=null;   // AREA = '이 지역 재검색'으로 고정한 지도 범위(LatLngBounds)
   function initMap(){
     const hq=DATA.hq||{lat:37.5145,lng:127.031};
-    MAP=L.map('map',{zoomControl:false,scrollWheelZoom:true,attributionControl:true}).setView([hq.lat+0.005,hq.lng+0.009],15);
-    // 확대·축소는 오른쪽 컨트롤 기둥(.mapctl)의 자체 버튼으로. 타일은 OSM 기본(키 불필요) — CARTO Positron은 2026년부터 API 키 필수
-    TILE.road=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(MAP);
-    // 스카이뷰 = Esri 위성사진 + 도로·지명 라벨(키 불필요). 네이버 지도 API로 옮기면 네이버 위성(HYBRID)으로 바꾼다
-    const esri='https://server.arcgisonline.com/ArcGIS/rest/services/';
-    TILE.sky=L.layerGroup([
-      L.tileLayer(esri+'World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:19,attribution:'Tiles &copy; Esri, Maxar, Earthstar Geographics'}),
-      L.tileLayer(esri+'Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:18,opacity:.8}),
-      L.tileLayer(esri+'Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:18})]);
-    MAP.on('popupclose',()=>{ setActive(null,false); });
-    MAP.on('dragstart',()=>{ unfollow(); USER_MOVE=true; });   // 손으로 지도를 옮기면 내 위치 따라가기만 푼다(위치 표시는 계속)
-    // '이 지역 재검색'은 사용자가 직접 움직였을 때만 — flyTo·fitBounds 같은 자동 이동에는 띄우지 않는다
-    MAP.getContainer().addEventListener('wheel',()=>{ USER_MOVE=true; },{passive:true});
-    MAP.getContainer().addEventListener('touchstart',e=>{ if(e.touches.length>1) USER_MOVE=true; },{passive:true});
-    MAP.on('dblclick',()=>{ USER_MOVE=true; });
-    MAP.on('moveend',()=>{ if(USER_MOVE&&FILTER!=='route') showResearch(true); USER_MOVE=false; });
+    if(typeof naver==='undefined'||!naver.maps||window.NAVER_AUTH_FAIL){ document.getElementById('map').innerHTML='<p class="mapfail">지도를 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.</p>'; return; }
+    // 네이버 기본 컨트롤은 끄고, 오른쪽 컨트롤 기둥(.mapctl)의 자체 버튼을 쓴다. 로고·저작권 표기는 약관상 남기고 오른쪽 아래로(왼쪽 아래는 범례 자리)
+    MAP=new naver.maps.Map('map',{center:LL(hq.lat+0.005,hq.lng+0.009),zoom:15,minZoom:7,
+      zoomControl:false,mapTypeControl:false,scaleControl:false,
+      logoControlOptions:{position:naver.maps.Position.BOTTOM_RIGHT},mapDataControlOptions:{position:naver.maps.Position.BOTTOM_RIGHT}});
+    INFO=new naver.maps.InfoWindow({content:'',backgroundColor:'transparent',borderWidth:0,disableAnchor:true,pixelOffset:new naver.maps.Point(0,-18)});
+    naver.maps.Event.addListener(MAP,'click',closeInfo);   // 빈 곳을 누르면 정보 카드를 닫는다
+    naver.maps.Event.addListener(MAP,'dragstart',()=>{ unfollow(); USER_MOVE=true; });   // 손으로 지도를 옮기면 내 위치 따라가기만 푼다(위치 표시는 계속)
+    // '이 지역 재검색'은 사용자가 직접 움직였을 때만 — morph·fitBounds 같은 자동 이동에는 띄우지 않는다
+    const el=document.getElementById('map');
+    el.addEventListener('wheel',()=>{ USER_MOVE=true; },{passive:true});
+    el.addEventListener('touchstart',e=>{ if(e.touches.length>1) USER_MOVE=true; },{passive:true});
+    naver.maps.Event.addListener(MAP,'dblclick',()=>{ USER_MOVE=true; });
+    naver.maps.Event.addListener(MAP,'idle',()=>{ if(USER_MOVE&&FILTER!=='route') showResearch(true); USER_MOVE=false; });
   }
-  let TILE={}, USER_MOVE=false, AREA=null;   // AREA = '이 지역 재검색'으로 고정한 지도 범위(LatLngBounds)
-  function zoomBy(d){ if(!MAP) return; USER_MOVE=true; MAP.setZoom(MAP.getZoom()+d); }
+  function zoomBy(d){ if(!MAP) return; USER_MOVE=true; MAP.setZoom(MAP.getZoom()+d,true); }
+  // 스카이뷰 = 네이버 위성사진 + 도로·지명(HYBRID)
   function setMapType(t){ if(!MAP) return; const sky=t==='sky';
-    if(sky){ MAP.removeLayer(TILE.road); TILE.sky.addTo(MAP); } else { MAP.removeLayer(TILE.sky); TILE.road.addTo(MAP); }
-    document.getElementById('map').classList.toggle('sky',sky);
+    MAP.setMapTypeId(sky?naver.maps.MapTypeId.HYBRID:naver.maps.MapTypeId.NORMAL);
     [['mtRoad',!sky],['mtSky',sky]].forEach(([id,on])=>{ const b=document.getElementById(id); b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); }); }
   function showResearch(on){ const b=document.getElementById('research'); if(b) b.classList.toggle('show',!!on); }
-  function searchArea(){ if(!MAP) return; AREA=MAP.getBounds(); showResearch(false); setActive(null,false); MAP.closePopup(); paint(); paintMarkers(); }
+  function searchArea(){ if(!MAP) return; AREA=MAP.getBounds(); showResearch(false); closeInfo(); paint(); paintMarkers(); }
   function clearArea(){ AREA=null; paint(); paintMarkers(); }
+  const inArea=s=>!AREA||AREA.hasLatLng(LL(s.lat,s.lng));
   function pinHtml(s){ const c=catOf(s.cat);
-    if(FILTER==='route'){ const k=routeIds().indexOf(s.id); if(k>-1) return `<div class="pin step">${k+1}</div>`; }
-    return s.hl?`<div class="hqpin"><span class="wc">Welcome Coupon</span><div class="core">AQARA</div></div>`:`<div class="pin" style="--c:${c.color}">${no2(s._no)}</div>`; }
+    if(FILTER==='route'){ const k=routeIds().indexOf(s.id); if(k>-1) return `<div class="pin step" data-pid="${s.id}">${k+1}</div>`; }
+    return s.hl?`<div class="hqpin"><span class="wc">Welcome Coupon</span><div class="core">AQARA</div></div>`:`<div class="pin" data-pid="${s.id}" style="--c:${c.color}">${no2(s._no)}</div>`; }
   function popupHtml(s){ const c=catOf(s.cat);
     return `<div class="pp" style="--c:${c.color}">${s.hl?'<span class="badge-hl">웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${brandHtml(s.en)}</span>
       <div class="nm">${esc(s.n)}</div>
       <div class="ds">${esc(s.d||'')}</div><div class="ad">${esc(s.a||'')}</div>
       <div class="acts">${s.hl?`<button class="btn primary sm" onclick="openBenefit()">웰컴 쿠폰</button>`:''}${s.id?saveBtn(s.id):''}<a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div>`; }
-  function paintMarkers(){
-    Object.values(MARK).forEach(m=>MAP.removeLayer(m)); MARK={};
-    if(ROUTE_LINE){ MAP.removeLayer(ROUTE_LINE); ROUTE_LINE=null; }
+  const winHtml=s=>`<div class="nwin"><button class="x" onclick="closeInfo()" aria-label="닫기">×</button>${popupHtml(s)}</div>`;
+  function openInfo(id){ const s=SPOTS.find(x=>x.id===id); if(!s||!MAP) return;
+    const big=s.hl&&FILTER!=='route'; INFO_ID=id;
+    INFO.setOptions({content:winHtml(s),pixelOffset:new naver.maps.Point(0,big?-34:-20)});
+    INFO.open(MAP,LL(s.lat,s.lng)); }
+  function closeInfo(){ if(INFO&&INFO.getMap()) INFO.close(); if(INFO_ID){ INFO_ID=null; setActive(null,false); } }
+  function paintMarkers(){ if(!MAP) return;
+    Object.values(MARK).forEach(drop); MARK={};
+    drop(ROUTE_LINE); ROUTE_LINE=null;
+    if(INFO_ID&&!visible().some(s=>s.id===INFO_ID)) closeInfo();
     document.getElementById('legend').style.display=FILTER==='route'?'none':'';   // 코스 보기의 핀은 분류색이 아니라 순번이라 범례를 숨긴다
-    if(FILTER==='route'){ const ss=routeSpots(); if(ss.length>1) ROUTE_LINE=L.polyline(ss.map(s=>[+s.lat,+s.lng]),{color:'#1D1D1F',weight:3,opacity:.75,dashArray:'2 7',lineCap:'round'}).addTo(MAP); }
+    if(FILTER==='route'){ const ss=routeSpots(); if(ss.length>1) ROUTE_LINE=new naver.maps.Polyline({map:MAP,path:ss.map(s=>LL(s.lat,s.lng)),strokeColor:'#1D1D1F',strokeWeight:3,strokeOpacity:.75,strokeStyle:'shortdash',strokeLineCap:'round'}); }
     visible().forEach(s=>{
       const big=s.hl&&FILTER!=='route';   // 코스 보기에서는 아카라 쇼룸도 순번 핀으로
-      const icon=L.divIcon({className:'',html:pinHtml(s),iconSize:big?[48,48]:[28,28],iconAnchor:big?[24,24]:[14,14],popupAnchor:[0,big?-44:-14]});
-      const m=L.marker([+s.lat,+s.lng],{icon,zIndexOffset:big?1000:0,riseOnHover:true}).addTo(MAP).bindPopup(popupHtml(s),{maxWidth:300});
-      m.on('click',()=>setActive(s.id,true)); MARK[s.id]=m;
+      const m=new naver.maps.Marker({map:MAP,position:LL(s.lat,s.lng),zIndex:big?1000:100,
+        icon:{content:pinHtml(s),anchor:new naver.maps.Point(big?23:14,big?23:14)}});
+      naver.maps.Event.addListener(m,'click',()=>{ openInfo(s.id); setActive(s.id,true); }); MARK[s.id]=m;
     });
     updLoc();   // 코스 보기로 들어오고 나갈 때 '다음 매장' 바도 같이 켜고 끈다
   }
   function focusSpot(id,fromList){ const s=SPOTS.find(x=>x.id===id); if(!s) return; unfollow();
     if(!MARK[id]){ FILTER='all'; AREA=null; paint(); paintMarkers(); }
-    const mm=MARK[id]; if(!mm) return;
+    if(!MARK[id]) return;
     if(window.innerWidth<=860) setMobileView('map');   // 목록만 보던 중이면 지도로 되돌린다
-    MAP.flyTo([+s.lat,+s.lng],17,{duration:.7}); setTimeout(()=>mm.openPopup(),520); setActive(id,!fromList);
+    flyTo(s.lat,s.lng,17,700); setTimeout(()=>openInfo(id),520); setActive(id,!fromList);
   }
   function flyHQ(){ const s=SPOTS.find(x=>x.hl)||SPOTS.find(x=>x.cat==='iot'); if(s) focusSpot(s.id,true); }
 
@@ -699,7 +710,7 @@
 
   /* 헤더 내비 — 이 페이지에 실제로 있는 곳으로만 보낸다 */
   function fitAll(){ const vs=visible(); if(!MAP||!vs.length) return; unfollow();
-    MAP.fitBounds(L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])).pad(0.15),{maxZoom:16}); }
+    fitSpots(vs,50,16); }
   function navMap(){ if(window.innerWidth<=860) setMobileView('map'); setActive(null,false); if(AREA){ AREA=null; paint(); paintMarkers(); } showResearch(false); fitAll(); }
 
   /* 모바일에서 지도↔목록 전환 — 지도가 화면 절반을 먹어 목록을 보려면 스크롤해야 하는 문제 해결 */
@@ -709,12 +720,12 @@
     const a=document.getElementById('mtMap'), b=document.getElementById('mtList');
     if(a) a.classList.toggle('on',!listOnly); if(b) b.classList.toggle('on',listOnly);
     window.scrollTo({top:0,behavior:'smooth'});
-    if(!listOnly&&MAP) setTimeout(()=>MAP.invalidateSize(),60);
+    if(!listOnly&&MAP) setTimeout(()=>{ const m=document.getElementById('map'); MAP.setSize(new naver.maps.Size(m.offsetWidth,m.offsetHeight)); },60);   // 숨겼던 지도를 다시 보이면 크기를 다시 잡는다
   }
   function setActive(id,scroll){ ACTIVE=id;
     document.querySelectorAll('.spot').forEach(el=>el.classList.toggle('active',el.dataset.id===id));
     document.querySelectorAll('.pin').forEach(el=>el.classList.remove('on'));
-    if(id&&MARK[id]){ const el=MARK[id].getElement(); if(el){ const p=el.querySelector('.pin'); if(p) p.classList.add('on'); } }
+    if(id){ const p=document.querySelector('#map .pin[data-pid="'+id+'"]'); if(p) p.classList.add('on'); }
     if(id&&scroll){ const el=document.querySelector(`.spot[data-id="${id}"]`); if(el) el.scrollIntoView({block:'center',behavior:'smooth'}); }
   }
 
@@ -722,10 +733,10 @@
   function numbered(){ let n=0; return SPOTS.map(s=>Object.assign(s,{_no:s.hl?'A':(++n)})); }
   function visible(){ const q=(document.getElementById('q').value||'').trim().toLowerCase();
     if(FILTER==='route'){ numbered(); return routeSpots(); }
-    return numbered().filter(s=>(FILTER==='all'||s.cat===FILTER)&&(!AREA||AREA.contains([+s.lat,+s.lng]))&&(!q||[s.n,s.en,s.d,s.a,catOf(s.cat).ko,catOf(s.cat).en].join(' ').toLowerCase().includes(q))); }
+    return numbered().filter(s=>(FILTER==='all'||s.cat===FILTER)&&inArea(s)&&(!q||[s.n,s.en,s.d,s.a,catOf(s.cat).ko,catOf(s.cat).en].join(' ').toLowerCase().includes(q))); }
   function setFilter(id){ FILTER=id==='route'?'route':CATS.some(c=>c.id===id)?id:'all'; if(FILTER==='route') showResearch(false); paint(); paintMarkers();
     if(FILTER==='route'){ fitRoute(); return; }
-    const vs=visible(); if(vs.length&&FILTER!=='all'&&!AREA){ const b=L.latLngBounds(vs.map(s=>[+s.lat,+s.lng])); MAP.fitBounds(b.pad(0.25),{maxZoom:16}); } }
+    const vs=visible(); if(vs.length&&FILTER!=='all'&&!AREA)fitSpots(vs,60,16); }
   function paint(){
     const all=numbered();
     // 카테고리 네비 — 알약 대신 01·02… 번호를 단 텍스트 인덱스
