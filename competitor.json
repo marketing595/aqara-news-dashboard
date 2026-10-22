@@ -1,11 +1,11 @@
 {
- "generatedAt": "2026-10-21 22:52",
+ "generatedAt": "2026-10-22 22:51",
  "brands": [
   {
    "name": "아카라",
    "me": true,
    "query": "아카라 스마트홈",
-   "total": 1542,
+   "total": 1543,
    "sentiment": {
     "pos": 24,
     "neu": 36,
@@ -25,11 +25,11 @@
      24
     ],
     [
-     "AIoT",
-     24
+     "인테리어",
+     22
     ],
     [
-     "인테리어",
+     "AIoT",
      22
     ],
     [
@@ -129,9 +129,15 @@
     "아카라카",
     "명조 아카라이브",
     "메랜 아카라이브",
-    "아카라이브 핫딜"
+    "니케 아카라이브"
    ],
    "recent": [
+    {
+     "title": "[현장] \"인플루언서 팬덤을 상품 매출로\", CJ온스타일 힘 싣는 '크리에이...",
+     "source": "businesspost.co.kr",
+     "date": "2026-10-22",
+     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=450025"
+    },
     {
      "title": "아카라라이프, CJ온스타일과 협업.. 'K100' 신규 컬러 한정판 출시",
      "source": "머니투데이",
@@ -215,12 +221,6 @@
      "source": "전자신문",
      "date": "2026-09-16",
      "link": "https://n.news.naver.com/mnews/article/030/0003467381?sid=105"
-    },
-    {
-     "title": "아카라라이프, 바닥난방 연동 '스마트 온도 조절기 W400' 출시",
-     "source": "머니투데이",
-     "date": "2026-09-14",
-     "link": "https://n.news.naver.com/mnews/article/008/0005413511?sid=101"
     }
    ]
   },
@@ -228,10 +228,10 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 976,
+   "total": 979,
    "sentiment": {
-    "pos": 20,
-    "neu": 40,
+    "pos": 17,
+    "neu": 43,
     "neg": 0
    },
    "keywords": [
@@ -296,16 +296,16 @@
      19
     ],
     [
-     "밤부베베",
+     "오이스터",
      18
     ],
     [
-     "스마트폰과",
+     "에이블",
      18
     ],
     [
-     "모니터링이",
-     17
+     "베이비브레짜",
+     18
     ]
    ],
    "posWords": [
@@ -315,7 +315,7 @@
     ],
     [
      "인기",
-     4
+     3
     ],
     [
      "확대",
@@ -351,10 +351,28 @@
     "헤이홈 연결",
     "헤이홈 오프라인",
     "헤이홈 공유",
-    "헤이홈 카메라",
-    "헤이홈 케어"
+    "헤이홈 홈캠 거치대",
+    "헤이홈 카메라"
    ],
    "recent": [
+    {
+     "title": "'코엑스 코베 베이비페어' 10월 29일부터 나흘간 개최",
+     "source": "babytimes.co.kr",
+     "date": "2026-10-22",
+     "link": "http://www.babytimes.co.kr/news/articleView.html?idxno=74439"
+    },
+    {
+     "title": "육아 브랜드 총집합…'코엑스 코베 베이비페어' 10월 29일부터 나흘간 ...",
+     "source": "sisunnews.co.kr",
+     "date": "2026-10-22",
+     "link": "http://www.sisunnews.co.kr/news/articleView.html?idxno=248206"
+    },
+    {
+     "title": "'코엑스 코베 베이비페어' 10월 29일 개막…육아·유아교육 브랜드 한자...",
+     "source": "gokorea.kr",
+     "date": "2026-10-22",
+     "link": "https://www.gokorea.kr/news/articleView.html?idxno=882346"
+    },
     {
      "title": "일산 킨텍스 코베 베이비페어 개최…400여 개 육아 브랜드·임신출산 정...",
      "source": "gosiweek.com",
@@ -426,24 +444,6 @@
      "source": "kbsm.net",
      "date": "2026-08-27",
      "link": "https://www.kbsm.net/news/view.php?idx=531955"
-    },
-    {
-     "title": "대구 베이비&키즈페어, 27일 엑스코 개막...출산·육아용품 전시",
-     "source": "beyondpost.co.kr",
-     "date": "2026-08-22",
-     "link": "http://www.beyondpost.co.kr/view.php?ud=2026082117415714739aeda69934_30"
-    },
-    {
-     "title": "제49회 대구 베이비&키즈페어, 27일 엑스코서 개막",
-     "source": "gokorea.kr",
-     "date": "2026-08-21",
-     "link": "https://www.gokorea.kr/news/articleView.html?idxno=875916"
-    },
-    {
-     "title": "대구 엑스코, 27일부터 나흘간 '2026 베이비&키즈페어' 개최",
-     "source": "kbsm.net",
-     "date": "2026-08-21",
-     "link": "https://www.kbsm.net/news/view.php?idx=531120"
     }
    ]
   },
@@ -451,36 +451,36 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69479,
+   "total": 69483,
    "sentiment": {
-    "pos": 17,
-    "neu": 39,
+    "pos": 16,
+    "neu": 40,
     "neg": 4
    },
    "keywords": [
     [
      "AI",
-     68
+     65
     ],
     [
      "냉장고",
-     26
+     27
     ],
     [
      "타임",
-     25
-    ],
-    [
-     "삼성전자는",
-     23
-    ],
-    [
-     "식재료",
-     23
+     24
     ],
     [
      "발명품",
      22
+    ],
+    [
+     "삼성전자는",
+     21
+    ],
+    [
+     "식재료",
+     21
     ],
     [
      "갤럭시",
@@ -491,61 +491,57 @@
      19
     ],
     [
-     "보안",
-     18
-    ],
-    [
      "가전",
-     17
+     18
     ],
     [
      "푸드매니저",
      17
     ],
     [
-     "기능을",
+     "보안",
      16
     ],
     [
      "맞춤형",
-     16
-    ],
-    [
-     "삼성전자의",
-     16
-    ],
-    [
-     "선정",
-     16
-    ],
-    [
-     "유통기한",
      15
     ],
     [
-     "울트라",
+     "삼성전자의",
+     15
+    ],
+    [
+     "선정",
+     15
+    ],
+    [
+     "기능을",
      14
     ],
     [
-     "관리",
+     "유통기한",
+     14
+    ],
+    [
+     "3개",
+     13
+    ],
+    [
+     "울트라",
      13
     ]
    ],
    "posWords": [
     [
+     "글로벌",
+     7
+    ],
+    [
      "확대",
      6
     ],
     [
-     "글로벌",
-     6
-    ],
-    [
      "강화",
-     5
-    ],
-    [
-     "혁신",
      4
     ],
     [
@@ -561,23 +557,51 @@
      2
     ],
     [
+     "혁신",
+     2
+    ],
+    [
      "계약",
      1
     ]
    ],
    "related": [
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 스위치",
-    "삼성 스마트싱스 허브 5세대",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 세탁기 원격"
+    "삼성 스마트싱스 연결"
    ],
    "recent": [
+    {
+     "title": "헤리트 주관 '기축 공동주택 에너지 연구단', 3차년도 실증 성과 공유",
+     "source": "electimes.com",
+     "date": "2026-10-22",
+     "link": "https://www.electimes.com/news/articleView.html?idxno=373797"
+    },
+    {
+     "title": "5가지 스마트센서를 하나로... '티피링크 타포 T150 재실센서'",
+     "source": "ilovepc.co.kr",
+     "date": "2026-10-22",
+     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=61064"
+    },
+    {
+     "title": "LG·삼성, AI 패권전쟁…LG·애플 AI홈 '연합군' vs 삼성 '스마트싱스 프...",
+     "source": "ezyeconomy.com",
+     "date": "2026-10-22",
+     "link": "https://www.ezyeconomy.com/news/articleView.html?idxno=241105"
+    },
+    {
+     "title": "인지검사부터 청진기까지···2026 바이오헬스케어산업전, AI 더한 솔루...",
+     "source": "it.donga.com",
+     "date": "2026-10-22",
+     "link": "https://it.donga.com/109751/"
+    },
     {
      "title": "LH, 모듈러주택 2030년까지 1만6천가구 발주...삼성전자·LG전자와 'AI 모...",
      "source": "livebiz.today",
@@ -643,30 +667,6 @@
      "source": "이데일리",
      "date": "2026-10-20",
      "link": "https://n.news.naver.com/mnews/article/018/0006391954?sid=101"
-    },
-    {
-     "title": "‘적수 없다’⋯ 삼성·LG ‘스마트폰·TV·주방가전’, 美서 기술·경쟁...",
-     "source": "viva100.com",
-     "date": "2026-10-20",
-     "link": "https://www.viva100.com/article/20261019500601"
-    },
-    {
-     "title": "\"똑똑할수록 무섭다\"…佛 해킹사태가 韓 가전업계에 남긴 과제는?",
-     "source": "뉴시스",
-     "date": "2026-10-19",
-     "link": "https://n.news.naver.com/mnews/article/003/0014263883?sid=101"
-    },
-    {
-     "title": "[기획]中 OLED·프리미엄 가전 공세에 삼성·LG도 긴장",
-     "source": "m-i.kr",
-     "date": "2026-10-19",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=2007534"
-    },
-    {
-     "title": "[분석] 제품에서 공간으로 ··· 삼성과 LG의 '스마트홈' 경쟁",
-     "source": "datasom.co.kr",
-     "date": "2026-10-19",
-     "link": "https://www.datasom.co.kr/news/articleView.html?idxno=210396"
     }
    ]
   },
@@ -674,64 +674,68 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78073,
+   "total": 78075,
    "sentiment": {
-    "pos": 13,
-    "neu": 41,
+    "pos": 11,
+    "neu": 43,
     "neg": 6
    },
    "keywords": [
     [
      "AI홈",
-     46
+     44
     ],
     [
      "AI",
-     33
+     32
     ],
     [
      "LG전자",
-     30
+     29
     ],
     [
      "플랫폼",
      27
     ],
     [
+     "가전",
+     20
+    ],
+    [
      "LG전자의",
-     21
+     20
     ],
     [
      "보안",
      19
     ],
     [
-     "가전",
-     19
-    ],
-    [
      "허브",
-     18
+     17
     ],
     [
      "기기",
-     18
-    ],
-    [
-     "ThinQ",
-     13
-    ],
-    [
-     "LG전자는",
-     13
+     17
     ],
     [
      "IoT",
      12
     ],
     [
-     "신제품은",
+     "아이폰",
      12
+    ],
+    [
+     "ThinQ",
+     12
+    ],
+    [
+     "LG전자는",
+     12
+    ],
+    [
+     "신제품은",
+     11
     ],
     [
      "모두",
@@ -742,15 +746,11 @@
      11
     ],
     [
-     "아이폰",
-     11
-    ],
-    [
      "생태계에",
      10
     ],
     [
-     "제어할",
+     "아이패드",
      10
     ]
    ],
@@ -760,12 +760,12 @@
      7
     ],
     [
-     "확대",
+     "프리미엄",
      5
     ],
     [
-     "프리미엄",
-     5
+     "확대",
+     4
     ],
     [
      "글로벌",
@@ -782,25 +782,33 @@
     [
      "협업",
      1
-    ],
-    [
-     "성장",
-     1
     ]
    ],
    "related": [
     "lg 씽큐온",
     "lg 씽큐",
-    "lg 씽큐 와이파이",
     "lg 씽큐 세탁기",
+    "lg 씽큐 와이파이",
     "lg 씽큐 에어컨 연결",
+    "lg 씽큐 티비연결",
     "lg 씽큐 냉장고",
     "lg 씽큐 연결",
     "lg 씽큐온 사용방법",
-    "lg 씽큐 허브",
     "lg씽큐앱"
    ],
    "recent": [
+    {
+     "title": "헤리트 주관 '기축 공동주택 에너지 연구단', 3차년도 실증 성과 공유",
+     "source": "electimes.com",
+     "date": "2026-10-22",
+     "link": "https://www.electimes.com/news/articleView.html?idxno=373797"
+    },
+    {
+     "title": "LG·삼성, AI 패권전쟁…LG·애플 AI홈 '연합군' vs 삼성 '스마트싱스 프...",
+     "source": "ezyeconomy.com",
+     "date": "2026-10-22",
+     "link": "https://www.ezyeconomy.com/news/articleView.html?idxno=241105"
+    },
     {
      "title": "LH, 모듈러주택 2030년까지 1만6천가구 발주...삼성전자·LG전자와 'AI 모...",
      "source": "livebiz.today",
@@ -878,18 +886,6 @@
      "source": "tjb.co.kr",
      "date": "2026-10-18",
      "link": "https://www.tjb.co.kr/news05/bodo/view/id/104968"
-    },
-    {
-     "title": "설계부터 '가전·냉난방·에너지' 심는다…삼성·LG, 모듈러 주택 승부수",
-     "source": "thebigdata.co.kr",
-     "date": "2026-10-18",
-     "link": "https://www.thebigdata.co.kr/view.php?ud=2026101614594260330ecbf9426b_23"
-    },
-    {
-     "title": "우리집 냉장고는 안전할까?…프랑스 냉장설비 해킹에 커지는 불안감",
-     "source": "jasm.co.kr",
-     "date": "2026-10-17",
-     "link": "https://www.jasm.co.kr/news/view/321920/?sc=Naver"
     }
    ]
   },
@@ -897,39 +893,27 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76308,
+   "total": 76321,
    "sentiment": {
-    "pos": 10,
-    "neu": 39,
+    "pos": 11,
+    "neu": 38,
     "neg": 11
    },
    "keywords": [
     [
      "AI",
-     41
-    ],
-    [
-     "구단",
-     20
+     43
     ],
     [
      "갤럭시",
      19
     ],
     [
-     "모델",
-     16
-    ],
-    [
-     "키즈",
+     "시리즈",
      12
     ],
     [
-     "시리즈",
-     11
-    ],
-    [
-     "으로",
+     "모델",
      10
     ],
     [
@@ -942,6 +926,10 @@
     ],
     [
      "번역",
+     9
+    ],
+    [
+     "으로",
      9
     ],
     [
@@ -961,20 +949,28 @@
      8
     ],
     [
-     "구글번역",
+     "마케팅",
      8
     ],
     [
-     "있습니다",
-     8
+     "S26",
+     7
     ],
     [
      "Google",
-     8
+     7
     ],
     [
-     "마케팅",
-     8
+     "제미나이",
+     7
+    ],
+    [
+     "구글번역",
+     7
+    ],
+    [
+     "있습니다",
+     7
     ]
    ],
    "posWords": [
@@ -985,6 +981,10 @@
     [
      "확대",
      3
+    ],
+    [
+     "강화",
+     1
     ],
     [
      "성장",
@@ -1013,9 +1013,87 @@
     "구글 홈 화면 삭제",
     "구글 홈 크롬캐스트",
     "구글 홈화면빼는법",
-    "구글 홈 미니 2세대"
+    "구글 홈 연결"
    ],
    "recent": [
+    {
+     "title": "5가지 스마트센서를 하나로... '티피링크 타포 T150 재실센서'",
+     "source": "ilovepc.co.kr",
+     "date": "2026-10-22",
+     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=61064"
+    },
+    {
+     "title": "[게임뉴스] 플레이위드코리아 및 넥써쓰 소식 외",
+     "source": "gamevu.co.kr",
+     "date": "2026-10-22",
+     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=61663"
+    },
+    {
+     "title": "원UI 9 올리면 다 똑같을까? 갤럭시S24·S25·S26 차이 비교해보니...",
+     "source": "betanews.net",
+     "date": "2026-10-22",
+     "link": "https://www.betanews.net/article/view/beta202610220163"
+    },
+    {
+     "title": "LG·삼성, AI 패권전쟁…LG·애플 AI홈 '연합군' vs 삼성 '스마트싱스 프...",
+     "source": "ezyeconomy.com",
+     "date": "2026-10-22",
+     "link": "https://www.ezyeconomy.com/news/articleView.html?idxno=241105"
+    },
+    {
+     "title": "넥슨, ‘메이플스토리’ 가을 2차 업데이트..메이플 이스케이프 시작",
+     "source": "breaknews.com",
+     "date": "2026-10-22",
+     "link": "http://www.breaknews.com/1245020"
+    },
+    {
+     "title": "\"느려진 TV, 클로드에게 맡겨볼까\"…광고 덜고 속도 높이는 AI 활용법",
+     "source": "aitimes.com",
+     "date": "2026-10-22",
+     "link": "https://www.aitimes.com/news/articleView.html?idxno=216547"
+    },
+    {
+     "title": "엑스지미, 4K 초단초점 프로젝터 ‘MIRA 시리즈’ 출시",
+     "source": "sentv.co.kr",
+     "date": "2026-10-22",
+     "link": "https://www.sentv.co.kr/article/view/sentv202610220043"
+    },
+    {
+     "title": "플랜비보험, 암진단비보험 정보 담은 앱 개편…계산·상담 메뉴 구분",
+     "source": "woodkorea.co.kr",
+     "date": "2026-10-22",
+     "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92033"
+    },
+    {
+     "title": "VR 헤드셋 쓰고 로그인하기 어렵네…메타의 해법은 [어센티케이트 2026]",
+     "source": "it.chosun.com",
+     "date": "2026-10-22",
+     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092172511"
+    },
+    {
+     "title": "미국증시 다우지수 '상승'..IBM·엔비디아·GS·3M·애플 '활짝'",
+     "source": "choicenews.co.kr",
+     "date": "2026-10-22",
+     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=172447"
+    },
+    {
+     "title": "[여성계 게시판] 성매매 여성 비범죄화·구매자 처벌 강화…‘성평등 모...",
+     "source": "womennews.co.kr",
+     "date": "2026-10-22",
+     "link": "https://n.news.naver.com/mnews/article/310/0000141028?sid=102"
+    },
+    {
+     "title": "AI가 찾아낸 치명적 결함…유럽 정부 웹사이트 줄줄이 셧다운",
+     "source": "newspim.com",
+     "date": "2026-10-22",
+     "link": "https://www.newspim.com/news/view/20261022000009"
+    },
+    {
+     "title": "스마트TV 광고 떼는 클로드 코드 열풍…조회 620만 속 벽돌 된 TV도 나왔...",
+     "source": "wikitree.co.kr",
+     "date": "2026-10-21",
+     "link": "https://www.wikitree.co.kr/articles/1168141"
+    },
     {
      "title": "시냅틱스, 구글 '코랄' 기반 엣지 AI 칩 공개...웨어러블·산업용 기기 ...",
      "source": "aitimes.com",
@@ -1027,84 +1105,6 @@
      "source": "news2day.co.kr",
      "date": "2026-10-21",
      "link": "https://www.news2day.co.kr/article/20261015500001"
-    },
-    {
-     "title": "[이슈플러스]車부터 AI 가전까지 정보수집 확대…제품 검증·사후관리 ...",
-     "source": "전자신문",
-     "date": "2026-10-21",
-     "link": "https://n.news.naver.com/mnews/article/030/0003477358?sid=105"
-    },
-    {
-     "title": "대형 프랜차이즈·급식업체, 알고보니 산재 온실?..맥도날드 ‘최다’",
-     "source": "breaknews.com",
-     "date": "2026-10-21",
-     "link": "http://www.breaknews.com/1244629"
-    },
-    {
-     "title": "매출 15배 뛰었는데 807억달러 적자…앤트로픽, 상장 앞두고 드러난 민...",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-10-21",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=708851"
-    },
-    {
-     "title": "삼성전자, 글로벌 프로모션 삼성위크 2026 개최",
-     "source": "news.bbsi.co.kr",
-     "date": "2026-10-21",
-     "link": "https://news.bbsi.co.kr/news/articleView.html?idxno=4113752"
-    },
-    {
-     "title": "삼성전자, 전 세계 63개국서 '삼성위크 2026'...AI 제품 글로벌 프로모션",
-     "source": "businessplus.kr",
-     "date": "2026-10-21",
-     "link": "https://www.businessplus.kr/news/articleView.html?idxno=118501"
-    },
-    {
-     "title": "[오늘 뭐했니?] 카카오",
-     "source": "financialreview.co.kr",
-     "date": "2026-10-21",
-     "link": "http://www.financialreview.co.kr/news/articleView.html?idxno=45686"
-    },
-    {
-     "title": "삼성전자, 창립 기념 글로벌 프로모션 '삼성위크 2026' 실시",
-     "source": "kihoilbo.co.kr",
-     "date": "2026-10-21",
-     "link": "https://www.kihoilbo.co.kr/news/articleView.html?idxno=3038316"
-    },
-    {
-     "title": "삼성전자, 63개국서 '삼성위크' 돌입… 국내는 11월 한 달간 진행",
-     "source": "the-pr.co.kr",
-     "date": "2026-10-21",
-     "link": "https://www.the-pr.co.kr/news/articleView.html?idxno=62977"
-    },
-    {
-     "title": "[통신 풍향계] 덱스터 '시체스영화제 특수 분장상'·KT '의료 표준화 모...",
-     "source": "newsworks.co.kr",
-     "date": "2026-10-21",
-     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=900150"
-    },
-    {
-     "title": "삼성전자, 전 세계 63개국서 '삼성위크 2026' 개최…AI 제품 구매 혜택 ...",
-     "source": "ebn.co.kr",
-     "date": "2026-10-21",
-     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1728576"
-    },
-    {
-     "title": "삼성전자, 63개국서 최대 프로모션 ‘삼성위크’…韓 내달 1~30일",
-     "source": "view.asiae.co.kr",
-     "date": "2026-10-21",
-     "link": "https://n.news.naver.com/mnews/article/277/0005831331?sid=101"
-    },
-    {
-     "title": "이마트, 초저가 생황용품 전문점 ‘와우샵’ 본격 운영",
-     "source": "breaknews.com",
-     "date": "2026-10-21",
-     "link": "http://www.breaknews.com/1244489"
-    },
-    {
-     "title": "삼성전자 할인행사 '삼성위크'…11월 한 달간 삼성닷컴 구매 혜택",
-     "source": "kizmom.com",
-     "date": "2026-10-21",
-     "link": "https://www.kizmom.com/news/articleView.html?idxno=113432"
     }
    ]
   }
