@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-22 22:51",
+ "generatedAt": "2026-10-23 22:31",
  "brands": [
   {
    "name": "아카라",
@@ -124,12 +124,12 @@
     "아카라 도어락",
     "아카라",
     "아카라 k100",
-    "아카라 홈캠",
     "아카라 스위치",
-    "아카라카",
+    "아카라 홈캠",
     "명조 아카라이브",
-    "메랜 아카라이브",
-    "니케 아카라이브"
+    "아카라카",
+    "니케 아카라이브",
+    "메랜 아카라이브"
    ],
    "recent": [
     {
@@ -351,8 +351,8 @@
     "헤이홈 연결",
     "헤이홈 오프라인",
     "헤이홈 공유",
-    "헤이홈 홈캠 거치대",
-    "헤이홈 카메라"
+    "헤이홈 카메라",
+    "헤이홈캠"
    ],
    "recent": [
     {
@@ -451,27 +451,19 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69483,
+   "total": 69487,
    "sentiment": {
-    "pos": 16,
-    "neu": 40,
+    "pos": 15,
+    "neu": 41,
     "neg": 4
    },
    "keywords": [
     [
      "AI",
-     65
+     58
     ],
     [
      "냉장고",
-     27
-    ],
-    [
-     "타임",
-     24
-    ],
-    [
-     "발명품",
      22
     ],
     [
@@ -479,27 +471,35 @@
      21
     ],
     [
-     "식재료",
-     21
-    ],
-    [
-     "갤럭시",
-     19
-    ],
-    [
-     "최고의",
-     19
+     "타임",
+     20
     ],
     [
      "가전",
+     19
+    ],
+    [
+     "발명품",
+     19
+    ],
+    [
+     "식재료",
      18
     ],
     [
-     "푸드매니저",
-     17
+     "기능을",
+     16
+    ],
+    [
+     "갤럭시",
+     16
     ],
     [
      "보안",
+     16
+    ],
+    [
+     "최고의",
      16
     ],
     [
@@ -507,28 +507,28 @@
      15
     ],
     [
-     "삼성전자의",
-     15
+     "푸드매니저",
+     13
     ],
     [
      "선정",
-     15
-    ],
-    [
-     "기능을",
-     14
+     13
     ],
     [
      "유통기한",
-     14
+     12
+    ],
+    [
+     "삼성전자의",
+     12
+    ],
+    [
+     "관리와",
+     11
     ],
     [
      "3개",
-     13
-    ],
-    [
-     "울트라",
-     13
+     11
     ]
    ],
    "posWords": [
@@ -546,7 +546,7 @@
     ],
     [
      "개선",
-     4
+     3
     ],
     [
      "프리미엄",
@@ -568,16 +568,40 @@
    "related": [
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스",
-    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 스테이션",
+    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 에어컨",
     "삼성 스마트싱스 스위치",
-    "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 업데이트",
     "삼성 스마트싱스 연결"
    ],
    "recent": [
+    {
+     "title": "티피링크 타포, 스마트 재실 센서 'T150' 출시…미세 움직임까지 감지 스...",
+     "source": "epnc.co.kr",
+     "date": "2026-10-23",
+     "link": "https://www.epnc.co.kr/news/articleView.html?idxno=408654"
+    },
+    {
+     "title": "티피링크 타포, 스마트 재실 센서 'Tapo T150'으로 스마트 홈 자동화 구...",
+     "source": "boannews.com",
+     "date": "2026-10-23",
+     "link": "https://www.boannews.com/news/articleView.html?idxno=146666"
+    },
+    {
+     "title": "티피링크, 미세 움직임까지 감지 ··· 스마트 재실 센서 '타포 T150' 출...",
+     "source": "datanet.co.kr",
+     "date": "2026-10-23",
+     "link": "https://www.datanet.co.kr/news/articleView.html?idxno=215296"
+    },
+    {
+     "title": "삼성 스마트싱스 vs LG·애플 연합…AI홈 플랫폼 대전",
+     "source": "ebn.co.kr",
+     "date": "2026-10-23",
+     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1728783"
+    },
     {
      "title": "헤리트 주관 '기축 공동주택 에너지 연구단', 3차년도 실증 성과 공유",
      "source": "electimes.com",
@@ -643,30 +667,6 @@
      "source": "news.bbsi.co.kr",
      "date": "2026-10-20",
      "link": "https://news.bbsi.co.kr/news/articleView.html?idxno=4113472"
-    },
-    {
-     "title": "웨어러블 건강정보를 실제 진료로…삼성이 그리는 미래 의료",
-     "source": "docdocdoc.co.kr",
-     "date": "2026-10-20",
-     "link": "http://www.docdocdoc.co.kr/news/articleView.html?idxno=3043777"
-    },
-    {
-     "title": "\"폰이 몇개야?\" 무심코 탔다가 깜짝…택시기사의 '갤럭시 덕질'",
-     "source": "한국경제",
-     "date": "2026-10-20",
-     "link": "https://n.news.naver.com/mnews/article/015/0005344362?sid=101"
-    },
-    {
-     "title": "지역별 살림법까지 읽는 AI 가전… 삼성전자, 글로벌 5개 권역서 '더 브...",
-     "source": "kr.aving.net",
-     "date": "2026-10-20",
-     "link": "https://kr.aving.net/news/articleView.html?idxno=1815775"
-    },
-    {
-     "title": "삼성전자, 글로벌 5개 권역서 '각양각색' AI 가전 체험 행사",
-     "source": "이데일리",
-     "date": "2026-10-20",
-     "link": "https://n.news.naver.com/mnews/article/018/0006391954?sid=101"
     }
    ]
   },
@@ -674,7 +674,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78075,
+   "total": 78076,
    "sentiment": {
     "pos": 11,
     "neu": 43,
@@ -683,26 +683,26 @@
    "keywords": [
     [
      "AI홈",
-     44
+     46
     ],
     [
      "AI",
      32
     ],
     [
+     "플랫폼",
+     29
+    ],
+    [
      "LG전자",
      29
     ],
     [
-     "플랫폼",
-     27
+     "LG전자의",
+     21
     ],
     [
      "가전",
-     20
-    ],
-    [
-     "LG전자의",
      20
     ],
     [
@@ -715,7 +715,15 @@
     ],
     [
      "기기",
-     17
+     16
+    ],
+    [
+     "ThinQ",
+     13
+    ],
+    [
+     "신제품은",
+     12
     ],
     [
      "IoT",
@@ -726,15 +734,11 @@
      12
     ],
     [
-     "ThinQ",
-     12
-    ],
-    [
      "LG전자는",
      12
     ],
     [
-     "신제품은",
+     "생태계에",
      11
     ],
     [
@@ -742,16 +746,12 @@
      11
     ],
     [
-     "제품은",
+     "아이패드",
      11
     ],
     [
-     "생태계에",
-     10
-    ],
-    [
-     "아이패드",
-     10
+     "제품은",
+     11
     ]
    ],
    "posWords": [
@@ -785,18 +785,24 @@
     ]
    ],
    "related": [
-    "lg 씽큐온",
     "lg 씽큐",
+    "lg 씽큐온",
     "lg 씽큐 세탁기",
     "lg 씽큐 와이파이",
-    "lg 씽큐 에어컨 연결",
     "lg 씽큐 티비연결",
     "lg 씽큐 냉장고",
+    "lg 씽큐 에어컨 연결",
     "lg 씽큐 연결",
     "lg 씽큐온 사용방법",
     "lg씽큐앱"
    ],
    "recent": [
+    {
+     "title": "삼성 스마트싱스 vs LG·애플 연합…AI홈 플랫폼 대전",
+     "source": "ebn.co.kr",
+     "date": "2026-10-23",
+     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1728783"
+    },
     {
      "title": "헤리트 주관 '기축 공동주택 에너지 연구단', 3차년도 실증 성과 공유",
      "source": "electimes.com",
@@ -880,12 +886,6 @@
      "source": "ggilbo.com",
      "date": "2026-10-18",
      "link": "https://www.ggilbo.com/news/articleView.html?idxno=1186695"
-    },
-    {
-     "title": "\"우리 집 냉장고도 해킹될까?\"…프랑스 사태에 커지는 불안",
-     "source": "tjb.co.kr",
-     "date": "2026-10-18",
-     "link": "https://www.tjb.co.kr/news05/bodo/view/id/104968"
     }
    ]
   },
@@ -893,16 +893,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76321,
+   "total": 76332,
    "sentiment": {
-    "pos": 11,
-    "neu": 38,
+    "pos": 12,
+    "neu": 37,
     "neg": 11
    },
    "keywords": [
     [
      "AI",
-     43
+     34
     ],
     [
      "갤럭시",
@@ -913,74 +913,90 @@
      12
     ],
     [
-     "모델",
-     10
-    ],
-    [
-     "아래는",
+     "글로벌",
      9
-    ],
-    [
-     "기사를",
-     9
-    ],
-    [
-     "번역",
-     9
-    ],
-    [
-     "으로",
-     9
-    ],
-    [
-     "번역한",
-     9
-    ],
-    [
-     "기사의",
-     9
-    ],
-    [
-     "전문",
-     9
-    ],
-    [
-     "입니다",
-     8
     ],
     [
      "마케팅",
+     9
+    ],
+    [
+     "6개월",
      8
     ],
     [
-     "S26",
-     7
-    ],
-    [
      "Google",
+     8
+    ],
+    [
+     "으로",
+     8
+    ],
+    [
+     "모델",
+     8
+    ],
+    [
+     "구매",
      7
     ],
     [
-     "제미나이",
+     "한국",
      7
     ],
     [
-     "구글번역",
+     "아래는",
      7
     ],
     [
-     "있습니다",
+     "기사를",
+     7
+    ],
+    [
+     "번역",
+     7
+    ],
+    [
+     "번역한",
+     7
+    ],
+    [
+     "기사의",
+     7
+    ],
+    [
+     "전문",
+     7
+    ],
+    [
+     "입니다",
      7
     ]
    ],
    "posWords": [
     [
      "글로벌",
-     7
+     9
     ],
     [
      "확대",
      3
+    ],
+    [
+     "돌파",
+     2
+    ],
+    [
+     "공략",
+     1
+    ],
+    [
+     "수상",
+     1
+    ],
+    [
+     "흥행",
+     1
     ],
     [
      "강화",
@@ -989,33 +1005,87 @@
     [
      "성장",
      1
-    ],
-    [
-     "기대",
-     1
-    ],
-    [
-     "최초",
-     1
-    ],
-    [
-     "돌파",
-     1
     ]
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈",
     "구글 홈 허브",
+    "구글 홈",
     "구글 홈 미니",
     "구글 홈페이지",
-    "구글 홈 미니 초기화",
     "구글 홈 화면 삭제",
+    "구글 홈 미니 초기화",
     "구글 홈 크롬캐스트",
     "구글 홈화면빼는법",
     "구글 홈 연결"
    ],
    "recent": [
+    {
+     "title": "새벽네시, 글로벌 마케팅 콘퍼런스 ‘IMPACT 2026’ 개최…참석자 96% 재...",
+     "source": "venturesquare.net",
+     "date": "2026-10-23",
+     "link": "https://www.venturesquare.net/1122376/"
+    },
+    {
+     "title": "[신제품 오늘 리뷰] 삼립·아워홈·웅진식품·SKT·소니코리아",
+     "source": "financialreview.co.kr",
+     "date": "2026-10-23",
+     "link": "http://www.financialreview.co.kr/news/articleView.html?idxno=45786"
+    },
+    {
+     "title": "미국 연말 쇼핑, 사상 첫 1조 달러 돌파 전망…AI가 바꾸는 소비자 구매...",
+     "source": "dream.kotra.or.kr",
+     "date": "2026-10-23",
+     "link": "http://dream.kotra.or.kr/kotranews/cms/news/actionKotraBoardDetail.do?SITE_NO=3&MENU_ID=180&CONTENTS_NO=1&bbsGbn=243&bbsSn=243&pNttSn=244807"
+    },
+    {
+     "title": "고려아연, MBK·영풍 추가 의혹 제기에 반격…\"짜맞추기식 여론전 중단...",
+     "source": "joongangenews.com",
+     "date": "2026-10-23",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=557826"
+    },
+    {
+     "title": "티피링크 타포, 스마트 재실 센서 'T150' 출시…미세 움직임까지 감지 스...",
+     "source": "epnc.co.kr",
+     "date": "2026-10-23",
+     "link": "https://www.epnc.co.kr/news/articleView.html?idxno=408654"
+    },
+    {
+     "title": "광주도시공사, 사회공헌대축전 ‘종합대상’ 수상… 통산 3번째 쾌거",
+     "source": "breaknews.com",
+     "date": "2026-10-23",
+     "link": "http://www.breaknews.com/1245182"
+    },
+    {
+     "title": "티피링크 타포, 스마트 재실 센서 'Tapo T150'으로 스마트 홈 자동화 구...",
+     "source": "boannews.com",
+     "date": "2026-10-23",
+     "link": "https://www.boannews.com/news/articleView.html?idxno=146666"
+    },
+    {
+     "title": "티피링크, 미세 움직임까지 감지 ··· 스마트 재실 센서 '타포 T150' 출...",
+     "source": "datanet.co.kr",
+     "date": "2026-10-23",
+     "link": "https://www.datanet.co.kr/news/articleView.html?idxno=215296"
+    },
+    {
+     "title": "[넷플릭스 한국 10년⑥] 제작사 80곳과 일군 생태계 \"글로벌 회원 80%가 ...",
+     "source": "econovill.com",
+     "date": "2026-10-23",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=754558"
+    },
+    {
+     "title": "[넷플릭스 한국 10년⑤] 불꽃같은 흥행작보다 더 깊은 여운 남기는 것",
+     "source": "econovill.com",
+     "date": "2026-10-23",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=754442"
+    },
+    {
+     "title": "외신 \"갤S26 울트라 초기화 주의…설정 오류로 사용 불능 우려\"",
+     "source": "kpinews.kr",
+     "date": "2026-10-23",
+     "link": "https://www.kpinews.kr/newsView/1065565040940841"
+    },
     {
      "title": "5가지 스마트센서를 하나로... '티피링크 타포 T150 재실센서'",
      "source": "ilovepc.co.kr",
@@ -1039,72 +1109,6 @@
      "source": "ezyeconomy.com",
      "date": "2026-10-22",
      "link": "https://www.ezyeconomy.com/news/articleView.html?idxno=241105"
-    },
-    {
-     "title": "넥슨, ‘메이플스토리’ 가을 2차 업데이트..메이플 이스케이프 시작",
-     "source": "breaknews.com",
-     "date": "2026-10-22",
-     "link": "http://www.breaknews.com/1245020"
-    },
-    {
-     "title": "\"느려진 TV, 클로드에게 맡겨볼까\"…광고 덜고 속도 높이는 AI 활용법",
-     "source": "aitimes.com",
-     "date": "2026-10-22",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=216547"
-    },
-    {
-     "title": "엑스지미, 4K 초단초점 프로젝터 ‘MIRA 시리즈’ 출시",
-     "source": "sentv.co.kr",
-     "date": "2026-10-22",
-     "link": "https://www.sentv.co.kr/article/view/sentv202610220043"
-    },
-    {
-     "title": "플랜비보험, 암진단비보험 정보 담은 앱 개편…계산·상담 메뉴 구분",
-     "source": "woodkorea.co.kr",
-     "date": "2026-10-22",
-     "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92033"
-    },
-    {
-     "title": "VR 헤드셋 쓰고 로그인하기 어렵네…메타의 해법은 [어센티케이트 2026]",
-     "source": "it.chosun.com",
-     "date": "2026-10-22",
-     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092172511"
-    },
-    {
-     "title": "미국증시 다우지수 '상승'..IBM·엔비디아·GS·3M·애플 '활짝'",
-     "source": "choicenews.co.kr",
-     "date": "2026-10-22",
-     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=172447"
-    },
-    {
-     "title": "[여성계 게시판] 성매매 여성 비범죄화·구매자 처벌 강화…‘성평등 모...",
-     "source": "womennews.co.kr",
-     "date": "2026-10-22",
-     "link": "https://n.news.naver.com/mnews/article/310/0000141028?sid=102"
-    },
-    {
-     "title": "AI가 찾아낸 치명적 결함…유럽 정부 웹사이트 줄줄이 셧다운",
-     "source": "newspim.com",
-     "date": "2026-10-22",
-     "link": "https://www.newspim.com/news/view/20261022000009"
-    },
-    {
-     "title": "스마트TV 광고 떼는 클로드 코드 열풍…조회 620만 속 벽돌 된 TV도 나왔...",
-     "source": "wikitree.co.kr",
-     "date": "2026-10-21",
-     "link": "https://www.wikitree.co.kr/articles/1168141"
-    },
-    {
-     "title": "시냅틱스, 구글 '코랄' 기반 엣지 AI 칩 공개...웨어러블·산업용 기기 ...",
-     "source": "aitimes.com",
-     "date": "2026-10-21",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=216493"
-    },
-    {
-     "title": "[직장 돋보기 분석] 하이브, 역대 최대 분기 실적…이재상 대표의 ‘투...",
-     "source": "news2day.co.kr",
-     "date": "2026-10-21",
-     "link": "https://www.news2day.co.kr/article/20261015500001"
     }
    ]
   }
