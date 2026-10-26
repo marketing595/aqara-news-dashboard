@@ -14,8 +14,8 @@ export const config = {
   //   페이지 자체에 noindex와 대외비 경고를 넣어두었다. 갱신: tools/build-campaign-share.sh
   // hakdong.html / hakdong.json = 학동 스마트 인테리어 MAP(일반 소비자용 공개 지도 + 웰컴 쿠폰). 쇼룸 QR로 배포되므로 공개.
   //   팀 수정분·쿠폰 로그는 Firebase(hakdong/*)에 있고 개인정보는 담지 않는다.
-  //   aqaralife-logo*.png = 학동 지도에 쓰는 로고. 빠지면 비로그인·hakdongmap.kr에서 이미지가 깨진다.
-  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json|campaign-l100.html|hakdong.html|hakdong.json|aqaralife-logo).*)'],
+  //   aqaralife-logo*.png·hakdong-*.png = 학동 지도에 쓰는 로고·예약 QR. 빠지면 비로그인·hakdongmap.kr에서 이미지가 깨진다.
+  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json|campaign-l100.html|hakdong.html|hakdong.json|aqaralife-logo|hakdong-).*)'],
 };
 
 function fromB64url(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; return atob(s); }

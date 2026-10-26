@@ -282,9 +282,9 @@
     .mtoggle button.on{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
 
     /* ─── 쿠폰 모달 ─── */
-    .ov{position:fixed;inset:0;background:rgba(20,20,18,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:18px}
+    .ov{position:fixed;inset:0;background:rgba(20,20,18,.5);z-index:10001;display:none;align-items:center;justify-content:center;padding:18px}   /* 헤더(9999)보다 위 — 아래면 키 낮은 화면에서 팝업 윗부분이 헤더에 가려진다 */
     .ov.show{display:flex}
-    .md{background:var(--paper);border-radius:16px;width:min(520px,100%);max-height:calc(100vh - 36px);overflow:auto;box-shadow:0 24px 64px -16px rgba(0,0,0,.4);position:relative}
+    .md{background:var(--paper);border-radius:16px;width:min(520px,100%);max-height:calc(100vh - 36px);max-height:calc(100dvh - 36px);overflow:auto;box-shadow:0 24px 64px -16px rgba(0,0,0,.4);position:relative}
     .md .hd{padding:28px 28px 4px;position:relative}
     .md .hd .ey{font-size:12px;font-weight:600;color:var(--muted2);margin-bottom:8px;letter-spacing:.02em}
     .md .hd h2{margin:0 0 6px;font-size:22px;font-weight:700;letter-spacing:-0.035em;line-height:1.3;padding-right:36px}
@@ -300,6 +300,10 @@
     .bn .tg{display:inline-block;font-size:12px;font-weight:600;color:#7A5B00;background:var(--accent-soft);border-radius:6px;padding:3px 8px;margin-top:8px}
     .bn b{font-size:15px;font-weight:700;letter-spacing:-0.025em;display:block}
     .bn p{margin:3px 0 0;font-size:13px;color:var(--ink2)}
+    .bn.has-qr{grid-template-columns:40px 1fr 96px}
+    .bn .qr{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:var(--muted2);font-size:11px;font-weight:600}
+    .bn .qr img{width:96px;height:96px;border:1px solid var(--line);border-radius:8px;padding:4px;background:#fff}
+    @media (max-width:420px){ .bn.has-qr{grid-template-columns:40px 1fr 76px} .bn .qr img{width:76px;height:76px} }
     .coupon{margin-top:12px;border-radius:12px;padding:22px 20px 18px;background:var(--ground);text-align:center}
     .coupon .eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--muted2);text-transform:uppercase;margin-bottom:12px}
     .coupon .code{font-size:15px;font-weight:600;color:var(--ink2)}
@@ -679,7 +683,7 @@
     document.getElementById('ttl').textContent=DATA.title||'학동 스마트 인테리어 MAP';
     document.title=(DATA.title||'학동 스마트 인테리어 MAP')+' · AqaraLife';
     document.getElementById('legend').innerHTML=CATS.map(c=>`<div><span class="dot" style="background:${c.color}"></span>${esc(c.ko)}</div>`).join('');
-    document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map((b,i)=>`<div class="bn"><div class="ic">${no2(i+1)}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}</div></div>`).join('');
+    document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map((b,i)=>`<div class="bn${b.qr?' has-qr':''}"><div class="ic">${no2(i+1)}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}</div>${b.qr?`<a class="qr" href="${esc(b.qrUrl||'#')}" target="_blank" rel="noopener"><img src="${esc(b.qr)}" alt="쇼룸 예약 QR">쇼룸 예약</a>`:''}</div>`).join('');
     const hq=DATA.spots.find(s=>s.hl)||DATA.spots.find(s=>s.cat==='iot')||{};
     document.getElementById('hqAddr').innerHTML=`아카라라이프 쇼룸 · ${esc(hq.a||'')}`;
     initMap(); applyOver();
