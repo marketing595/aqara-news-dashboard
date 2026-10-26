@@ -94,7 +94,7 @@
     .hero-subtitle{font-size:13px;font-weight:500;color:#4B5563;margin:0;letter-spacing:0}   /* 연회색 위 대비 7:1 */
 
     /* 카카오맵식 아이콘 메뉴 : 아이콘 위, 글자 아래. 4칸을 같은 폭으로 */
-    .mytabs{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:6px 8px 0;border-bottom:1px solid var(--line)}
+    .mytabs{display:grid;grid-template-columns:repeat(5,1fr);gap:0;padding:6px 8px 0;border-bottom:1px solid var(--line)}
     .mytabs button{border:0;background:none;padding:12px 0 10px;font-size:12px;font-weight:600;color:var(--muted2);display:flex;flex-direction:column;align-items:center;gap:5px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;position:relative}
     .mytabs button svg,.mytabs button iconify-icon{width:22px;height:22px;font-size:22px}
     .mytabs button svg{fill:none;stroke:currentColor;stroke-width:1.8}
@@ -230,6 +230,18 @@
     .ctl button{border:1px solid var(--line2);background:var(--paper);color:var(--ink2);width:26px;height:24px;border-radius:6px;font-size:11px;line-height:1;padding:0}
     .ctl button:hover:not(:disabled){border-color:var(--ink);color:var(--ink)}
     .ctl button:disabled{opacity:.35;cursor:default}
+    /* 주차장 탭 — 주차 표지 관례대로 파란 P (채도 높은 색은 옐로 하나라는 규칙의 예외, 내 위치 파랑과 같은 이유) */
+    .prow{display:grid;grid-template-columns:28px 1fr;column-gap:12px;row-gap:3px;padding:16px var(--pad);cursor:pointer;transition:background .15s}
+    .prow + .prow{border-top:1px solid var(--line)}
+    .prow:hover{background:#FAFAF8}
+    .prow.active{background:var(--ground)}
+    .prow .pk{width:24px;height:24px;border-radius:var(--chip);background:#1A5FD0;color:#fff;font-size:13px;font-weight:800;display:grid;place-items:center;grid-row:span 3}
+    .prow .nm{font-size:15px;font-weight:700;letter-spacing:-0.02em}
+    .prow .ty{font-size:11px;font-weight:600;color:var(--muted2);margin-left:6px}
+    .prow .wk{font-size:13px;font-weight:600;color:var(--ink)}
+    .prow .fee{font-size:13px;color:var(--ink2)}
+    .pnote{margin:0;padding:16px var(--pad) 24px;font-size:12px;color:var(--muted2);line-height:1.6;border-top:1px solid var(--line)}
+    .pin.ppin{font-size:14px;font-weight:800}
     .leg{padding:6px var(--pad) 6px 60px;font-size:12px;color:var(--muted2);background:var(--ground);font-variant-numeric:tabular-nums}
     .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:2000;background:var(--dark);color:#fff;border-radius:12px;padding:10px 10px 10px 16px;font-size:14px;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);transition:.22s ease;white-space:nowrap}
     .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
@@ -532,18 +544,19 @@
       b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); const t=b.querySelector('span'); if(t) t.textContent=on?'저장됨':'저장'; });
     const c=document.getElementById('rtCnt'); if(c) c.textContent=ROUTE.length?'· '+ROUTE.length:'';
     renderMyBar();
-    if(INFO_ID&&INFO) INFO.setContent(winHtml(SPOTS.find(x=>x.id===INFO_ID)||{}));   // 열린 정보 카드의 저장 버튼도 맞춘다
+    if(INFO_ID&&INFO&&!isPark(INFO_ID)) INFO.setContent(winHtml(SPOTS.find(x=>x.id===INFO_ID)||{}));   // 열린 정보 카드의 저장 버튼도 맞춘다
   }
   // 카카오맵 패널처럼 맨 위 탭으로 '매장 찾기 / 내 코스'를 나눈다 — 내 코스는 카테고리와 섞지 않는다
   function renderMyBar(){
-    const bar=document.getElementById('mybar'), fab=document.getElementById('mapfab'), n=ROUTE.length, rt=FILTER==='route';
-    // 카카오맵 상단 메뉴처럼 아이콘 + 글자. 앞의 둘은 보기 전환, 뒤의 둘은 바로가기
-    if(bar) bar.innerHTML=`<button class="${rt?'':'on'}" onclick="setFilter('all')" aria-pressed="${!rt}"><iconify-icon icon="lucide:search" aria-hidden="true"></iconify-icon>매장 찾기</button>`
+    const bar=document.getElementById('mybar'), fab=document.getElementById('mapfab'), n=ROUTE.length, rt=FILTER==='route', pk=FILTER==='park', find=!rt&&!pk;
+    // 카카오맵 상단 메뉴처럼 아이콘 + 글자. 앞의 셋은 보기 전환, 뒤의 둘은 바로가기
+    if(bar) bar.innerHTML=`<button class="${find?'on':''}" onclick="setFilter('all')" aria-pressed="${find}"><iconify-icon icon="lucide:search" aria-hidden="true"></iconify-icon>매장 찾기</button>`
       +`<button class="route ${rt?'on':''} ${n?'has':''}" onclick="setFilter('route')" aria-pressed="${rt}">${BM}내 코스${n?`<em>${n}</em>`:''}</button>`
+      +`<button class="${pk?'on':''}" onclick="setFilter('park')" aria-pressed="${pk}"><iconify-icon icon="lucide:square-parking" aria-hidden="true"></iconify-icon>주차장</button>`
       +`<button onclick="flyHQ()"><iconify-icon icon="lucide:store" aria-hidden="true"></iconify-icon>아카라 쇼룸</button>`
       +`<button onclick="openBenefit()"><iconify-icon icon="lucide:ticket" aria-hidden="true"></iconify-icon>웰컴 쿠폰</button>`;
-    const tools=document.querySelector('.tools'); if(tools) tools.style.display=rt?'none':'';   // 코스 탭에서는 검색·카테고리를 접는다
-    if(fab){ fab.style.display=(n&&!rt)?'':'none'; fab.innerHTML=`${BM}내 코스 <em>${n}</em>`; }
+    const tools=document.querySelector('.tools'); if(tools) tools.style.display=find?'':'none';   // 코스·주차장 탭에서는 검색·카테고리를 접는다
+    if(fab){ fab.style.display=(n&&find)?'':'none'; fab.innerHTML=`${BM}내 코스 <em>${n}</em>`; }
   }
   function showToast(m){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=m;
     t.classList.add('show'); clearTimeout(TOAST_T); TOAST_T=setTimeout(hideToast,2600); }
@@ -718,7 +731,7 @@
     el.addEventListener('wheel',()=>{ USER_MOVE=true; },{passive:true});
     el.addEventListener('touchstart',e=>{ if(e.touches.length>1) USER_MOVE=true; },{passive:true});
     naver.maps.Event.addListener(MAP,'dblclick',()=>{ USER_MOVE=true; });
-    naver.maps.Event.addListener(MAP,'idle',()=>{ if(USER_MOVE&&FILTER!=='route') showResearch(true); USER_MOVE=false; });
+    naver.maps.Event.addListener(MAP,'idle',()=>{ if(USER_MOVE&&FILTER!=='route'&&FILTER!=='park') showResearch(true); USER_MOVE=false; });
   }
   function zoomBy(d){ if(!MAP) return; USER_MOVE=true; MAP.setZoom(MAP.getZoom()+d,true); }
   // 스카이뷰 = 네이버 위성사진 + 도로·지명(HYBRID)
@@ -746,8 +759,12 @@
   function paintMarkers(){ if(!MAP) return;
     Object.values(MARK).forEach(drop); MARK={};
     drop(ROUTE_LINE); ROUTE_LINE=null;
-    if(INFO_ID&&!visible().some(s=>s.id===INFO_ID)) closeInfo();
-    document.getElementById('legend').style.display=FILTER==='route'?'none':'';   // 코스 보기의 핀은 분류색이 아니라 순번이라 범례를 숨긴다
+    if(INFO_ID&&!(FILTER==='park'&&isPark(INFO_ID))&&!visible().some(s=>s.id===INFO_ID)) closeInfo();
+    document.getElementById('legend').style.display=(FILTER==='route'||FILTER==='park')?'none':'';   // 코스·주차장 보기의 핀은 분류색이 아니라서 범례를 숨긴다
+    if(FILTER==='park') parkList().forEach(p=>{
+      const m=new naver.maps.Marker({map:MAP,position:LL(p.lat,p.lng),zIndex:100,
+        icon:{content:`<div class="pin ppin" data-pid="${p.id}" style="--c:#1A5FD0">P</div>`,anchor:new naver.maps.Point(14,14)}});
+      naver.maps.Event.addListener(m,'click',()=>{ openPark(p.id); setActive(p.id,true); }); MARK[p.id]=m; });
     if(FILTER==='route'){ const ss=routeSpots(); if(ss.length>1) ROUTE_LINE=new naver.maps.Polyline({map:MAP,path:ss.map(s=>LL(s.lat,s.lng)),strokeColor:'#1D1D1F',strokeWeight:3,strokeOpacity:.75,strokeStyle:'shortdash',strokeLineCap:'round'}); }
     visible().forEach(s=>{
       const big=s.hl&&FILTER!=='route';   // 코스 보기에서는 아카라 쇼룸도 순번 핀으로
@@ -765,12 +782,41 @@
   }
   function flyHQ(){ const s=SPOTS.find(x=>x.hl)||SPOTS.find(x=>x.cat==='iot'); if(s) focusSpot(s.id,true); }
 
+  /* ───────── 주차장 탭 ─────────
+     쇼룸 주변 공영주차장만 따로 보여준다(매장 핀은 숨기고 아카라 쇼룸 핀만 기준점으로 남긴다).
+     걷는 시간은 매장 간 거리와 같은 어림값(직선 ×1.3, 분당 67m), 요금은 hakdong.json parking[].fee */
+  const isPark=id=>String(id||'').startsWith('pk-');
+  const hqPoint=()=>SPOTS.find(s=>s.hl)||DATA.hq;
+  const parkList=()=>{ const hq=hqPoint(); return (DATA.parking||[]).map(p=>Object.assign({},p,{_w:walkM(p,hq)})).sort((a,b)=>a._w-b._w); };
+  const parkFee=p=>p.fee?esc(p.fee):'요금은 현장 안내판을 확인해 주세요';
+  const parkPlace=p=>'https://map.naver.com/p/entry/place/'+p.np;
+  const parkDrive=p=>'https://map.naver.com/p/directions/-/'+merc(+p.lat,+p.lng)+','+encodeURIComponent(p.n)+','+p.np+',PLACE_POI/-/car';
+  function parkHtml(){ const ps=parkList();
+    let h=`<div class="rhead"><div class="ey">Parking</div><b>쇼룸 주변 공영주차장</b><p>아카라라이프 쇼룸까지 걷는 시간이 짧은 순이에요 · ${ps.length}곳</p></div>`;
+    h+=ps.map(p=>`<div class="prow ${ACTIVE===p.id?'active':''}" data-id="${p.id}" onclick="focusPark('${p.id}')" role="button" tabindex="0" aria-label="${esc(p.n)} — 지도에서 보기">
+      <div class="pk">P</div>
+      <div class="nm">${esc(p.n)}<span class="ty">${esc(p.type||'')}</span></div>
+      <div class="wk">쇼룸까지 ${fmtWalk(p._w)}</div>
+      <div class="fee">${parkFee(p)}</div></div>`).join('');
+    return h+(DATA.parkingNote?`<p class="pnote">${esc(DATA.parkingNote)}</p>`:'')+footHtml(); }
+  function openPark(id){ const p=parkList().find(x=>x.id===id); if(!p||!MAP) return; INFO_ID=id;
+    INFO.setOptions({content:`<div class="nwin"><button class="x" onclick="closeInfo()" aria-label="닫기">×</button><div class="pp" style="--c:#1A5FD0"><span class="en">${esc(p.type||'')} 공영주차장</span>
+      <div class="nm">${esc(p.n)}</div><div class="ds">아카라라이프 쇼룸까지 ${fmtWalk(p._w)}</div><div class="ad">${parkFee(p)}</div>
+      <div class="acts"><a class="btn primary sm" href="${parkDrive(p)}" target="_blank" rel="noopener">길찾기 ↗</a><a class="btn sm" href="${parkPlace(p)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div></div>`,
+      pixelOffset:new naver.maps.Point(0,-20)});
+    INFO.open(MAP,LL(p.lat,p.lng)); }
+  function focusPark(id){ const p=(DATA.parking||[]).find(x=>x.id===id); if(!p) return; unfollow();
+    if(FILTER!=='park') setFilter('park');
+    if(window.innerWidth<=860) setMobileView('map');
+    flyTo(p.lat,p.lng,17,700); setTimeout(()=>openPark(id),520); setActive(id,false); }
+  function fitPark(){ if(!MAP) return; unfollow(); fitSpots((DATA.parking||[]).concat([hqPoint()]),60,16); }
+
   /* 목록 행은 div라서 클릭만으로는 키보드에서 열리지 않는다 → Enter·Space를 클릭과 똑같이 받는다 */
   document.addEventListener('keydown',e=>{
     if(e.key!=='Enter'&&e.key!==' ') return;
-    const row=e.target.closest&&e.target.closest('.spot[data-id]');
+    const row=e.target.closest&&e.target.closest('.spot[data-id],.prow[data-id]');
     if(!row) return;
-    e.preventDefault(); focusSpot(row.dataset.id,true);
+    e.preventDefault(); if(row.classList.contains('prow')) focusPark(row.dataset.id); else focusSpot(row.dataset.id,true);
   });
 
   /* 헤더 내비 — 이 페이지에 실제로 있는 곳으로만 보낸다 */
@@ -788,19 +834,21 @@
     if(!listOnly&&MAP) setTimeout(()=>{ const m=document.getElementById('map'); MAP.setSize(new naver.maps.Size(m.offsetWidth,m.offsetHeight)); },60);   // 숨겼던 지도를 다시 보이면 크기를 다시 잡는다
   }
   function setActive(id,scroll){ ACTIVE=id;
-    document.querySelectorAll('.spot').forEach(el=>el.classList.toggle('active',el.dataset.id===id));
+    document.querySelectorAll('.spot,.prow').forEach(el=>el.classList.toggle('active',el.dataset.id===id));
     document.querySelectorAll('.pin').forEach(el=>el.classList.remove('on'));
     if(id){ const p=document.querySelector('#map .pin[data-pid="'+id+'"]'); if(p) p.classList.add('on'); }
-    if(id&&scroll){ const el=document.querySelector(`.spot[data-id="${id}"]`); if(el) el.scrollIntoView({block:'center',behavior:'smooth'}); }
+    if(id&&scroll){ const el=document.querySelector(`.spot[data-id="${id}"],.prow[data-id="${id}"]`); if(el) el.scrollIntoView({block:'center',behavior:'smooth'}); }
   }
 
   /* ───────── 목록·필터 ───────── */
   function numbered(){ let n=1; return SPOTS.map(s=>Object.assign(s,{_no:s.hl?1:(++n)})); }   // 아카라라이프 쇼룸이 01, 나머지는 02부터
   function visible(){ const q=(document.getElementById('q').value||'').trim().toLowerCase();
     if(FILTER==='route'){ numbered(); return routeSpots(); }
+    if(FILTER==='park') return numbered().filter(s=>s.hl);   // 주차장 탭: 매장 중엔 아카라 쇼룸만 기준점으로
     return numbered().filter(s=>(FILTER==='all'||s.cat===FILTER)&&inArea(s)&&(!q||[s.n,s.en,s.d,s.a,catOf(s.cat).ko,catOf(s.cat).en].join(' ').toLowerCase().includes(q))); }
-  function setFilter(id){ FILTER=id==='route'?'route':CATS.some(c=>c.id===id)?id:'all'; if(FILTER==='route') showResearch(false); paint(); paintMarkers();
+  function setFilter(id){ FILTER=(id==='route'||id==='park')?id:CATS.some(c=>c.id===id)?id:'all'; if(FILTER==='route'||FILTER==='park') showResearch(false); paint(); paintMarkers();
     if(FILTER==='route'){ fitRoute(); return; }
+    if(FILTER==='park'){ fitPark(); return; }
     const vs=visible(); if(vs.length&&FILTER!=='all'&&!AREA)fitSpots(vs,60,16); }
   function paint(){
     const all=numbered();
@@ -814,10 +862,11 @@
       if(l<chipBar.scrollLeft) chipBar.scrollLeft=l-18; else if(r>chipBar.scrollLeft+chipBar.clientWidth) chipBar.scrollLeft=r-chipBar.clientWidth+18; }
     const cd=document.getElementById('catdesc'), cc=CATS.find(c=>c.id===FILTER);
     renderMyBar();
-    const ab=document.getElementById('areabar'), inArea=!!AREA&&FILTER!=='route';   // '이 지역 재검색' 결과임을 목록 위에 알린다
+    const ab=document.getElementById('areabar'), inArea=!!AREA&&FILTER!=='route'&&FILTER!=='park';   // '이 지역 재검색' 결과임을 목록 위에 알린다
     ab.classList.toggle('show',inArea); if(inArea) ab.innerHTML=`<iconify-icon icon="lucide:map-pinned" aria-hidden="true"></iconify-icon><span>지금 지도 안의 매장 <b>${visible().length}곳</b></span><button onclick="clearArea()">전체 보기</button>`;
     cd.style.display=cc?'flex':'none'; if(cc) cd.style.setProperty('--c',cc.color); if(cc) cd.innerHTML=`<span class="dot" style="background:${cc.color}"></span><span><b>${esc(cc.en)}</b>${cc.desc?`<span class="ko">${esc(cc.desc)}</span>`:''}</span>`;
     if(FILTER==='route'){ cd.style.display='none'; document.getElementById('list').innerHTML=routeHtml(); return; }
+    if(FILTER==='park'){ cd.style.display='none'; document.getElementById('list').innerHTML=parkHtml(); return; }
     const vs=visible(), box=document.getElementById('list'); let html='';
     CATS.forEach((c,ci)=>{ const g=vs.filter(s=>s.cat===c.id); if(!g.length) return;   // 아카라 쇼룸(hl)도 일반 행으로 함께 보여준다
       html+=`<div class="sec" style="--c:${c.color}"><span class="no">${no2(ci+1)}</span><div><b>${esc(c.ko)}</b><em>${esc(c.en)}</em></div><i></i><span class="cnt">${g.length}곳</span></div>`;
