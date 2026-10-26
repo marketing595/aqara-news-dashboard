@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T10:18:10+09:00",
+ "generatedAt": "2026-10-26T10:12:45+09:00",
  "bots": [
   "GPTBot",
   "OAI-SearchBot",
@@ -332,8 +332,8 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9057,
-   "canonical": "http://www.aqaralife.kr/smarthome",
+   "chars": 9274,
+   "canonical": "http://www.aqaralife.kr/111",
    "updated": ""
   },
   {
@@ -394,7 +394,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8223,
+   "chars": 8332,
    "canonical": "http://www.aqaralife.kr/blog",
    "updated": "2026-10-16"
   },
@@ -421,9 +421,9 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9149,
+   "chars": 9233,
    "canonical": "http://www.aqaralife.kr/newsroom",
-   "updated": "2026-10-02"
+   "updated": "2026-10-16"
   },
   {
    "label": "뉴스레터",
@@ -448,7 +448,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8031,
+   "chars": 8101,
    "canonical": "http://www.aqaralife.kr/newsletter",
    "updated": ""
   },
@@ -550,7 +550,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 7896,
+   "chars": 7966,
    "canonical": "http://www.aqaralife.kr/case",
    "updated": ""
   },
@@ -634,7 +634,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8640,
+   "chars": 8725,
    "canonical": "http://www.aqaralife.kr/partnership",
    "updated": ""
   }
@@ -647,7 +647,7 @@
   "sitemap": true,
   "sitemapUrls": 53,
   "sitemapHasPosts": false,
-  "sitemapHttp": 53
+  "sitemapHttp": 0
  },
  "boards": {
   "blogPosts": 10,
