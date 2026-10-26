@@ -259,6 +259,30 @@
         .ln-edit:hover{ background:#F7F4FF; border-bottom-color:#7C5CFF; }
         .ln-edit:focus{ background:#F7F4FF; border-bottom:1px solid #7C5CFF; border-radius:3px; padding:0 2px; }
         div.ln-edit{ display:block; width:100%; min-height:1.4em; }
+        /* 💰 마케팅 예산 표 */
+        .bud-tbl{ border-collapse:separate; border-spacing:0; font-size:12px; }
+        .bud-tbl th,.bud-tbl td{ border-bottom:1px solid #EFEDE8; padding:0; white-space:nowrap; }
+        .bud-tbl th{ background:#FAFAF8; font-weight:700; color:#6E6E73; font-size:11px; padding:6px 4px; position:sticky; top:0; z-index:2; }
+        .bud-tbl .bud-stk{ position:sticky; left:0; z-index:1; background:#fff; box-shadow:1px 0 0 #EFEDE8; }
+        .bud-tbl th.bud-stk{ z-index:3; background:#FAFAF8; }
+        .bud-tbl td.bud-fut,.bud-tbl th.bud-fut{ background:#FBFBF9; }
+        .bud-tbl th.bud-cur{ background:#EDE9FF; color:#5B44C7; }
+        .bud-tbl td.bud-cur{ background:#FAF8FF; }
+        .bud-num{ width:84px; text-align:right; background:transparent; padding:5px 6px; border-radius:4px; outline:none; font-variant-numeric:tabular-nums; color:#1D1D1F; }
+        .bud-num::placeholder{ color:#D4D2CC; }
+        .bud-num:hover{ background:#F4F1FF; }
+        .bud-num:focus{ background:#fff; box-shadow:inset 0 0 0 1.5px #7C5CFF; }
+        .bud-num.bud-over{ color:#BF5332; font-weight:700; }
+        .bud-tbl tr.bud-plan .bud-num{ color:#8A8A8E; }
+        .bud-tbl tr.bud-sub td{ background:#F7F6F2; font-weight:700; }
+        .bud-tbl tr.bud-grp td{ background:#EFEDE7; font-weight:800; }
+        .bud-tbl tr.bud-grand td{ background:#1D1D1F; color:#fff; font-weight:800; }
+        .bud-tbl .bud-sum{ text-align:right; padding:5px 6px; font-variant-numeric:tabular-nums; }
+        .bud-tbl tr.bud-item:hover td{ background:#FDFCFA; }
+        .bud-tbl tr.bud-item:hover td.bud-stk{ background:#FDFCFA; }
+        .bud-tbl td.bud-hn{ position:relative; }
+        .bud-tbl td.bud-hn::after{ content:''; position:absolute; top:0; right:0; border-top:7px solid #F2A900; border-left:7px solid transparent; pointer-events:none; }
+        .bud-tbl td.bud-sel{ box-shadow:inset 0 0 0 1.5px #7C5CFF; }
         /* 레퍼런스 대표이미지를 못 불러온 경우 대신 보여줄 아이콘 */
         .bb-noimg::after{ content:'🔗'; font-size:22px; opacity:.35; }
         #mhBody details>summary{ list-style:none; } #mhBody details>summary::-webkit-details-marker{ display:none; }
@@ -1316,6 +1340,10 @@
              <button id="mktBtn-hakmap" onclick="mktSub('hakmap')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🗺 학동 인테리어 지도</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
+             <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">예산</p>
+             <button id="mktBtn-budget" onclick="mktSub('budget')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">💰 2026 마케팅 예산</button>
+           </div>
+           <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">언론홍보</p>
              <button id="mktBtn-medialist" onclick="mktSub('medialist')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">미디어리스트</button>
              <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
@@ -1338,6 +1366,7 @@
        <div id="view-brandbook" class="hidden"><div id="bbBody"></div></div>
        <div id="view-lanseon" class="hidden"><div id="lnBody"></div></div>
        <div id="view-hakmap" class="hidden"><div id="hkBody"></div></div>
+       <div id="view-budget" class="hidden"><div id="budBody"></div></div>
        <div id="view-rnr" class="hidden"><div id="rrBody"></div></div>
        <div id="view-cdb" class="hidden"><div id="cdbBody"></div></div>
        <div id="mktKpiSlot"></div>
@@ -6103,6 +6132,365 @@
       grid.innerHTML=out||'<div class="text-center py-16 text-slate-400"><div class="text-4xl mb-2">📁</div>등록된 카테고리가 없습니다.</div>';
     }
 
+    /* ===================== 💰 2026 마케팅 예산 =====================
+       원본 = budget.json(★ 2026 MKT Master › BG 시트에서 추출) / 편집 오버라이드 = Firebase `budget/data`(랜선집들이와 같은 방식).
+       키: it.<i>.p.<월0~11> 예산 · it.<i>.a.<월> 집행 · it.<i>.n/acct/memo · 추가 항목 itx.<n>(인덱스 500+, it.<i>.g/s에 소속) · 삭제 itdel.<i> · notes/vat/updated */
+    let BUD=null, BUD_LOADING=false, BUD_OVER={}, budRefOn=false, BUD_FBERR='', BUD_PENDING=false, BUD_CHART=null, BUD_TRY=0;
+    let BUD_VIEW='both', BUD_UNIT=1, BUD_FILTER='';
+    try{ const s=JSON.parse(localStorage.getItem('aqaraBudgetUi')||'{}'); if(s.v) BUD_VIEW=s.v; if(s.u) BUD_UNIT=+s.u; if(s.f!=null) BUD_FILTER=s.f; }catch(e){}
+    function budUiSave(){ try{ localStorage.setItem('aqaraBudgetUi',JSON.stringify({v:BUD_VIEW,u:BUD_UNIT,f:BUD_FILTER})); }catch(e){} }
+    function budRef(){ return (typeof wkUseFB==='function'&&wkUseFB())?WK_DB.ref('budget/data'):null; }
+    function budKey(k){ return k.replace(/[.#$/\[\]]/g,'_'); }
+    // 빈 문자열도 '지운 값'으로 존중한다(메모를 지우면 원본 메모가 되살아나면 안 되므로)
+    function BUV(k,def){ const v=BUD_OVER[budKey(k)]; return v==null?(def==null?'':def):v; }
+    function budStart(){
+      if(budRefOn) return; const ref=budRef();
+      if(!ref){   // 익명 로그인이 늦게 끝나는 경우가 있어 잠깐 기다렸다 다시 붙는다
+        try{ BUD_OVER=Object.assign(JSON.parse(localStorage.getItem('aqaraBudget')||'{}'),BUD_OVER); }catch(e){}
+        if(BUD_TRY++<8) setTimeout(()=>{ if(!budRefOn&&budRef()){ budStart(); } },1500);
+        return; }
+      budRefOn=true;
+      ref.on('value',s=>{ BUD_OVER=s.val()||{};
+        if(!BUD||mktSection!=='budget') return;
+        // 내 저장도 여기로 바로 들어온다 — blur 도중에 표를 갈아엎으면 Tab으로 옮긴 칸이 사라지니 한 박자 늦춘다
+        clearTimeout(window.__budRT); window.__budRT=setTimeout(()=>{ if(budEditing()) BUD_PENDING=true; else renderBudget(); },0); });
+    }
+    function budEditing(){ const a=document.activeElement; return !!(a&&a.dataset&&a.dataset.bk&&a.closest&&a.closest('#budBody')); }
+    function budSaved(err){ const el=document.getElementById('budSave'); if(!el) return;
+      el.innerHTML=err?'<span class="text-ared font-semibold">저장 실패</span>':'<span class="text-agreen font-semibold">✓ 저장됨</span>';
+      clearTimeout(window.__budST); window.__budST=setTimeout(()=>{ const e2=document.getElementById('budSave'); if(e2) e2.innerHTML=''; },2200); }
+    function budSave(k,v){ BUD_OVER[budKey(k)]=v;
+      const ref=budRef();
+      if(ref) ref.child(budKey(k)).set(v).then(()=>budSaved()).catch(e=>{ BUD_FBERR=(e&&e.message)||'쓰기 거부'; budSaved(1); budPaintConn(); });
+      else { try{ localStorage.setItem('aqaraBudget',JSON.stringify(BUD_OVER)); }catch(e){} budSaved(); }
+    }
+    function budPaintConn(){ const el=document.getElementById('budConn'); if(!el) return;
+      const on=(typeof wkUseFB==='function'&&wkUseFB());
+      if(on&&!BUD_FBERR){ el.className='text-[11.5px] font-semibold text-agreen'; el.textContent='🟢 실시간 공동편집 중 — 고치는 즉시 팀원 화면에 반영됩니다'; return; }
+      el.className='text-[11.5px] font-semibold text-ared';
+      el.textContent=BUD_FBERR
+        ? ('⚠️ 서버 저장이 거부됐습니다('+BUD_FBERR+') — 지금 수정은 공유되지 않습니다. 관리자에게 알려주세요.')
+        : '⚠️ 서버에 연결되지 않아 이 브라우저에만 저장됩니다 — 지금 수정은 팀원에게 보이지 않습니다.';
+    }
+    const budSum=a=>a.reduce((x,y)=>x+(+y||0),0);
+    // 기준 월: 2026년이면 이번 달, 그 이후 해엔 12월까지 전부 '지난 달'
+    function budCurM(){ const d=new Date(), y=d.getFullYear(); return y<2026?-1:(y>2026?11:d.getMonth()); }
+    function budItem(i,s){
+      const num=(k,d)=>{ const v=BUD_OVER[budKey(k)]; return (v==null||v==='')?(+d||0):(+v||0); };
+      const p=[],a=[]; for(let m=0;m<12;m++){ p.push(num('it.'+i+'.p.'+m,(s.plan||[])[m])); a.push(num('it.'+i+'.a.'+m,(s.act||[])[m])); }
+      // 셀 메모(시트의 노트·댓글) — cn['a.9'] = 10월 집행 칸 메모
+      const cn={}; ['p','a'].forEach(k=>{ for(let m=0;m<12;m++){ const v=BUV('it.'+i+'.cn.'+k+'.'+m,(s.cn||{})[k+'.'+m]||''); if(v) cn[k+'.'+m]=v; } });
+      return { i, g:s.g||'', s:s.s||'', n:BUV('it.'+i+'.n',s.n||''), pn:s.pn||'', acct:BUV('it.'+i+'.acct',s.acct||''),
+        memo:BUV('it.'+i+'.memo',s.memo||''), nn:BUV('it.'+i+'.nn',s.nn||''), cn, p, a, pt:budSum(p), at:budSum(a) };
+    }
+    /* 셀 메모 창 — 금액 칸을 클릭하면 그 칸의 메모를 보고/고치고/새로 단다 */
+    let BUD_SEL=null;
+    function budSelLabel(sel){ const x=budItems().find(z=>z.i===sel.i); return x?{x, lab:x.g.replace(' 마케팅','')+' › '+x.s+' › '+x.n, cell:(sel.m+1)+'월 '+(sel.k==='p'?'예산':'집행')}:null; }
+    function budNoteBox(){
+      if(!BUD_SEL) return '';
+      const L=budSelLabel(BUD_SEL); if(!L) return '';
+      const key='it.'+BUD_SEL.i+'.cn.'+BUD_SEL.k+'.'+BUD_SEL.m, v=L.x.cn[BUD_SEL.k+'.'+BUD_SEL.m]||'', amt=(BUD_SEL.k==='p'?L.x.p:L.x.a)[BUD_SEL.m];
+      return `<div class="fixed right-4 bottom-4 z-[60] w-[340px] max-w-[calc(100vw-32px)] rounded-xl bg-white border border-[#E6E3DC] shadow-[0_12px_32px_-12px_rgba(0,0,0,.28)] p-3">
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0"><p class="text-[11px] text-slate-400 truncate">${esc(L.lab)}</p>
+            <p class="text-[13px] font-extrabold text-ink">📝 ${L.cell} 메모 <span class="font-semibold text-slate-400 tabular-nums">${amt?budWon(amt):''}</span></p></div>
+          <button onclick="BUD_SEL=null;budPaintNote()" class="text-slate-400 hover:text-ink text-[15px] leading-none px-1" title="닫기">×</button></div>
+        <textarea data-bk="${budKey(key)}" data-o="${esc(v)}" rows="5" placeholder="이 칸에 메모를 남기세요 (품의번호, 결제 내역, 업체명 등)"
+          class="mt-2 w-full text-[12.5px] leading-relaxed border border-[#E6E3DC] rounded-lg p-2 outline-none focus:border-[#7C5CFF] resize-y"
+          oninput="budNoteIn(this)" onblur="budNoteIn(this,1)">${esc(v)}</textarea>
+        <p class="text-[10.5px] text-slate-400 mt-1">입력하면 자동 저장 · 다 지우면 메모 삭제</p></div>`;
+    }
+    function budPaintNote(){ const el=document.getElementById('budNote'); if(el) el.innerHTML=budNoteBox(); }
+    function budNoteIn(el,blur){ const k=el.dataset.bk.replace(/_/g,'.'), v=(el.value||'').trim();
+      clearTimeout(window.__budNT);
+      if(v===el.dataset.o){ if(blur) budAfterEdit(false); return; }
+      if(blur){ el.dataset.o=v; budSave(k,v); budAfterEdit(true); } else window.__budNT=setTimeout(()=>{ el.dataset.o=v; budSave(k,v); },700);
+    }
+    // 메모 모아보기에서 누르면 그 칸으로 이동
+    function budGoCell(i,k,m){
+      if(BUD_VIEW!=='both'&&BUD_VIEW!==(k==='p'?'plan':'act')) BUD_VIEW='both';
+      const x=budItems().find(z=>z.i===i); if(x&&BUD_FILTER&&BUD_FILTER!==x.g) BUD_FILTER='';
+      BUD_SEL={i,k,m}; budUiSave(); renderBudget();
+      const el=document.querySelector('#budBody [data-bk="'+budKey('it.'+i+'.'+k+'.'+m)+'"]');
+      if(el){ el.scrollIntoView({block:'center',inline:'center'}); el.focus(); }
+    }
+    function budItems(){
+      const out=[];
+      (BUD.items||[]).forEach((s,i)=>{ if(!BUV('itdel.'+i,'')) out.push(budItem(i,s)); });
+      Object.keys(BUD_OVER).forEach(k=>{ const m=k.match(/^itx_(\d+)$/); if(!m||!BUD_OVER[k]) return;
+        const i=500+(+m[1]); if(!BUV('itdel.'+i,'')) out.push(budItem(i,{g:BUV('it.'+i+'.g'),s:BUV('it.'+i+'.s')})); });
+      return out;
+    }
+    // 구분1 → 구분2 → 항목 (구분 순서는 원본 순서, 추가 항목은 같은 구분2의 맨 끝)
+    function budTree(items){
+      const order=(BUD.groups||[]).slice(); items.forEach(x=>{ if(order.indexOf(x.g)<0) order.push(x.g); });
+      return order.map(g=>{ const its=items.filter(x=>x.g===g), subs=[];
+        its.forEach(x=>{ let s=subs.find(z=>z.s===x.s); if(!s){ s={s:x.s,items:[]}; subs.push(s); } s.items.push(x); });
+        subs.forEach(s=>s.items.sort((a,b)=>a.i-b.i));
+        return {g, subs, items:its}; }).filter(t=>t.items.length);
+    }
+    function budAgg(items){ const p=Array(12).fill(0), a=Array(12).fill(0);
+      items.forEach(x=>{ for(let m=0;m<12;m++){ p[m]+=x.p[m]; a[m]+=x.a[m]; } }); return {p,a,pt:budSum(p),at:budSum(a)}; }
+    function budFmt(v){ if(!v) return ''; if(BUD_UNIT===1) return Math.round(v).toLocaleString();
+      if(BUD_UNIT===1000) return Math.round(v/1000).toLocaleString(); return (v/1e6).toLocaleString(undefined,{maximumFractionDigits:1}); }
+    const budWon=v=>Math.round(v||0).toLocaleString()+'원';
+    function budBig(v){ const a=Math.abs(v||0); if(a>=1e8) return (v/1e8).toFixed(2).replace(/\.?0+$/,'')+'억'; if(a>=1e4) return Math.round(v/1e4).toLocaleString()+'만'; return Math.round(v||0).toLocaleString(); }
+    const budPct=(a,p)=>p?Math.round(a/p*1000)/10:(a?null:0);
+    function budBar(a,p,h){ const r=p?Math.min(a/p,1.0):(a?1:0), over=p?a>p:a>0;
+      return `<div class="w-full rounded-full bg-[#EFEDE8] overflow-hidden" style="height:${h||6}px"><div style="width:${(r*100).toFixed(1)}%;height:100%;background:${over?'#BF5332':'#7C5CFF'}"></div></div>`; }
+
+    /* 숫자 칸: 화면엔 선택 단위로, 클릭하면 원 단위 원본 숫자로 */
+    function budNumIn(k,v,over,title){ return `<input class="bud-num${over?' bud-over':''}" data-bk="${budKey(k)}" data-raw="${v||0}" value="${budFmt(v)}" placeholder="–"
+      inputmode="numeric" ${title?`title="${esc(title)}"`:''} onfocus="budNumFocus(this)" onblur="budNumBlur(this)" onkeydown="budNumKey(event,this)">`; }
+    function budNumFocus(el){ const r=+el.dataset.raw||0; el.value=r?String(r):''; setTimeout(()=>{ try{ el.select(); }catch(e){} },0);
+      const m=(el.dataset.bk||'').match(/^it_(\d+)_([pa])_(\d+)$/);
+      if(m){ const s={i:+m[1],k:m[2],m:+m[3]}; if(!BUD_SEL||BUD_SEL.i!==s.i||BUD_SEL.k!==s.k||BUD_SEL.m!==s.m){ BUD_SEL=s; budPaintNote();
+        document.querySelectorAll('#budBody td.bud-sel').forEach(td=>td.classList.remove('bud-sel')); if(el.parentElement) el.parentElement.classList.add('bud-sel'); } } }
+    function budNumKey(e,el){ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } else if(e.key==='Escape'){ el.value=el.dataset.raw==='0'?'':el.dataset.raw; el.blur(); } }
+    function budParse(s){ s=String(s||'').replace(/[\s,원]/g,''); if(!s) return 0;
+      let mul=1; if(/억$/.test(s)){ mul=1e8; s=s.slice(0,-1); } else if(/만$/.test(s)){ mul=1e4; s=s.slice(0,-1); } else if(/천$/.test(s)){ mul=1e3; s=s.slice(0,-1); }
+      // 간단한 계산식 허용 (예: 3000000+120000)
+      if(!/^[\d.+\-*/()]+$/.test(s)) return NaN;
+      try{ const v=Function('"use strict";return ('+s+')')(); return isFinite(v)?Math.round(v*mul):NaN; }catch(e){ return NaN; } }
+    function budNumBlur(el){
+      const v=budParse(el.value), old=+el.dataset.raw||0;
+      if(isNaN(v)){ el.value=budFmt(old); alert('숫자로 입력해주세요. 예) 3000000 · 300만 · 1.5억 · 3000000+120000'); return; }
+      if(v!==old){ el.dataset.raw=v; budSave(el.dataset.bk.replace(/_/g,'.'),String(v)); }
+      el.value=budFmt(v);
+      budAfterEdit(v!==old);
+    }
+    // 칸을 옮겨 다니는 중(Tab)이면 포커스를 되살리면서 합계만 다시 그린다
+    function budAfterEdit(changed){
+      setTimeout(()=>{
+        if(!changed&&!BUD_PENDING) return;
+        const a=document.activeElement, k=(a&&a.dataset&&a.closest&&a.closest('#budBody'))?a.dataset.bk:'';
+        const y=window.scrollY, sc=document.getElementById('budScroll'), sx=sc?sc.scrollLeft:0;
+        BUD_PENDING=false; renderBudget();
+        const sc2=document.getElementById('budScroll'); if(sc2) sc2.scrollLeft=sx; window.scrollTo(0,y);
+        if(k){ const el=document.querySelector('#budBody [data-bk="'+k+'"]'); if(el){ el.focus(); } }
+      },0);
+    }
+    // 글자 칸(항목명·계정·메모)
+    function budTxt(k,def,cls,multi){ const tag=multi?'div':'span';
+      const v=esc(BUV(k,def));
+      return `<${tag} class="ln-edit ${cls||''}" data-bk="${budKey(k)}" data-o="${v}" contenteditable="true" spellcheck="false"
+        oninput="budTxtIn(this)" onblur="budTxtIn(this,1)">${v}</${tag}>`; }
+    function budTxtIn(el,blur){ const k=el.dataset.bk.replace(/_/g,'.');
+      const v=(el.innerText||'').replace(/ /g,' ').trim();
+      clearTimeout(window.__budIT);
+      if(v===el.dataset.o){ if(blur) budAfterEdit(false); return; }
+      if(blur){ el.dataset.o=v; budSave(k,v); budAfterEdit(false); } else window.__budIT=setTimeout(()=>{ el.dataset.o=v; budSave(k,v); },700);
+    }
+    function budAdd(g,s){ let n=0; while(BUD_OVER[budKey('itx.'+n)]) n++; const i=500+n;
+      budSave('it.'+i+'.g',g); budSave('it.'+i+'.s',s); budSave('it.'+i+'.n','새 항목'); budSave('itx.'+n,'1'); renderBudget(); }
+    function budDel(i){ const x=budItems().find(z=>z.i===i), n=x?x.n:'';
+      if(!confirm('"'+n+'" 항목을 삭제할까요?\n(예산·집행 금액도 합계에서 빠집니다)')) return; budSave('itdel.'+i,'1'); renderBudget(); }
+    function budSetView(v){ BUD_VIEW=v; budUiSave(); renderBudget(); }
+    function budSetUnit(u){ BUD_UNIT=u; budUiSave(); renderBudget(); }
+    function budSetFilter(f){ BUD_FILTER=f; budUiSave(); renderBudget(); }
+    function budReload(){ BUD=null; renderBudget(); }
+
+    function budCsv(){
+      const items=budItems(), q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
+      const M=Array.from({length:12},(_,m)=>(m+1)+'월');
+      const L=[['구분1','구분2','항목','비용 계정','구분'].concat(M,['합계','메모','셀 메모']).map(q).join(',')];
+      const cm=(x,k)=>Array.from({length:12},(_,m)=>x.cn[k+'.'+m]?('['+(m+1)+'월] '+x.cn[k+'.'+m]):'').filter(Boolean).join('\n');
+      budTree(items).forEach(t=>t.subs.forEach(s=>s.items.forEach(x=>{
+        L.push([t.g,s.s,x.n,x.acct,'예산'].concat(x.p,[x.pt,[x.memo,x.nn].filter(Boolean).join('\n'),cm(x,'p')]).map(q).join(','));
+        L.push([t.g,s.s,x.n,x.acct,'집행'].concat(x.a,[x.at,'',cm(x,'a')]).map(q).join(','));
+      })));
+      const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+L.join('\r\n')],{type:'text/csv;charset=utf-8'}));
+      a.download='2026_마케팅예산_'+new Date().toISOString().slice(0,10)+'.csv'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+    }
+
+    function budPaintChart(all){
+      const cv=document.getElementById('budChart'); if(!cv||typeof Chart==='undefined') return;
+      if(BUD_CHART){ try{ BUD_CHART.destroy(); }catch(e){} BUD_CHART=null; }
+      const cur=budCurM(), cp=[], ca=[]; let sp=0, sa=0;
+      for(let m=0;m<12;m++){ sp+=all.p[m]; sa+=all.a[m]; cp.push(sp); ca.push(sa); }
+      BUD_CHART=new Chart(cv,{ type:'bar', data:{ labels:Array.from({length:12},(_,m)=>(m+1)+'월'), datasets:[
+          {type:'bar', label:'예산', data:all.p, backgroundColor:'#DCD5FF', borderRadius:4, yAxisID:'y', order:3},
+          {type:'bar', label:'집행', data:all.a, backgroundColor:all.a.map((_,m)=>m>cur?'rgba(124,92,255,.38)':'#7C5CFF'), borderRadius:4, yAxisID:'y', order:2},
+          {type:'line', label:'예산 누적', data:cp, borderColor:'#A9A9AE', borderDash:[5,4], borderWidth:1.5, pointRadius:0, tension:.25, yAxisID:'y2', order:1},
+          {type:'line', label:'집행 누적', data:ca, borderColor:'#1D1D1F', borderWidth:2, pointRadius:2, tension:.25, yAxisID:'y2', order:0} ]},
+        options:{ responsive:true, maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
+          plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, font:{size:11} } },
+            tooltip:{ callbacks:{ label:c=>' '+c.dataset.label+' '+budWon(c.raw)+((c.dataset.label==='집행'&&c.dataIndex>cur)?' (예정)':'') } } },
+          scales:{ x:{ grid:{display:false}, ticks:{font:{size:11}} },
+            y:{ beginAtZero:true, ticks:{ font:{size:10}, callback:v=>budBig(v) }, grid:{color:'#F1EFEA'} },
+            y2:{ position:'right', beginAtZero:true, ticks:{ font:{size:10}, callback:v=>budBig(v) }, grid:{display:false} } } } });
+    }
+
+    function renderBudget(){
+      const box=document.getElementById('budBody'); if(!box) return;
+      if(!BUD){
+        box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">예산표를 불러오는 중…</p>';
+        if(BUD_LOADING) return; BUD_LOADING=true;
+        fetch('budget.json?_='+Date.now()).then(r=>r.json()).then(d=>{ BUD=d; BUD_LOADING=false; renderBudget(); })
+          .catch(()=>{ BUD_LOADING=false; box.innerHTML='<p class="text-sm text-ared py-16 text-center">예산표를 불러오지 못했습니다.</p>'; });
+        return;
+      }
+      budStart();
+      const cur=budCurM(), MN=Array.from({length:12},(_,m)=>(m+1)+'월');
+      const items=budItems(), tree=budTree(items), all=budAgg(items);
+      const shown=BUD_FILTER?tree.filter(t=>t.g===BUD_FILTER):tree;
+      const toP=budSum(all.p.slice(0,cur+1)), toA=budSum(all.a.slice(0,cur+1)), futA=all.at-toA;
+      const over=items.filter(x=>x.at>x.pt);
+      const curP=cur>=0?all.p[cur]:0, curA=cur>=0?all.a[cur]:0;
+      const pr=budPct(all.at,all.pt);
+      // 셀 메모 목록 (부문 필터 따라감) — 표 순서대로, 같은 항목은 월 순
+      const noteList=[]; shown.forEach(t=>t.subs.forEach(s=>s.items.forEach(x=>{
+        for(let m=0;m<12;m++) ['p','a'].forEach(k=>{ const v=x.cn[k+'.'+m]; if(v) noteList.push({x,k,m,t:v}); }); })));
+
+      const tile=(lab,big,sub,col)=>`<div class="rounded-xl border border-[#ECE9E1] bg-white p-4">
+        <p class="text-[11.5px] font-bold text-slate-500">${lab}</p>
+        <p class="text-[22px] font-extrabold leading-tight mt-1 tabular-nums" style="color:${col||'#1D1D1F'}">${big}</p>
+        <div class="text-[11.5px] text-slate-400 mt-1">${sub}</div></div>`;
+
+      // 부문별 카드
+      const grpCards=tree.map(t=>{ const g=budAgg(t.items), r=budPct(g.at,g.pt);
+        const subs=t.subs.map(s=>{ const a=budAgg(s.items), sr=budPct(a.at,a.pt);
+          return `<div class="py-1.5">
+            <div class="flex items-baseline justify-between gap-2 text-[12px]"><span class="text-slate-600 truncate">${esc(s.s)}</span>
+              <span class="tabular-nums shrink-0 ${a.at>a.pt?'text-ared font-bold':'text-slate-500'}">${budBig(a.at)} / ${budBig(a.pt)}${sr==null?' · 예산 없음':' · '+sr+'%'}</span></div>
+            <div class="mt-1">${budBar(a.at,a.pt,4)}</div></div>`; }).join('');
+        const note=(BUD.groupNote||{})[t.g];
+        return `<div class="rounded-xl border border-[#ECE9E1] p-4 cursor-pointer hover:border-[#7C5CFF] transition ${BUD_FILTER===t.g?'ring-2 ring-[#7C5CFF]':''}" onclick="budSetFilter(BUD_FILTER==='${esc(t.g)}'?'':'${esc(t.g)}')">
+          <div class="flex items-baseline justify-between gap-2"><p class="text-[14px] font-extrabold text-ink">${esc(t.g)}</p>
+            <p class="text-[12px] font-bold tabular-nums ${g.at>g.pt?'text-ared':'text-[#5B44C7]'}">${r==null?'-':r+'%'}</p></div>
+          <p class="text-[12px] text-slate-500 tabular-nums mt-0.5">집행 <b class="text-ink">${budWon(g.at)}</b> / 예산 ${budWon(g.pt)}</p>
+          <div class="mt-2 mb-2">${budBar(g.at,g.pt,7)}</div>
+          ${note?`<p class="text-[11px] text-slate-400 mb-1">${esc(note)}</p>`:''}
+          <div class="border-t border-[#F1EFEA] pt-1">${subs}</div></div>`; }).join('');
+
+      // 표
+      const both=BUD_VIEW==='both';
+      const mcls=m=>(m===cur?'bud-cur':(m>cur?'bud-fut':''));
+      const head=`<tr><th class="bud-stk text-left" style="min-width:260px">항목</th><th class="text-left">계정</th>${both?'<th></th>':''}
+        ${MN.map((n,m)=>`<th class="${mcls(m)} text-right">${n}${m===cur?'<div class="text-[9.5px] font-bold">이번 달</div>':(m>cur?'<div class="text-[9.5px] font-medium text-slate-400">예정</div>':'')}</th>`).join('')}
+        <th class="text-right">합계</th><th class="text-right">집행률</th><th class="text-left" style="min-width:180px">메모</th></tr>`;
+      const sumCells=(arr,tot)=>arr.map((v,m)=>`<td class="bud-sum ${mcls(m)}">${budFmt(v)}</td>`).join('')+`<td class="bud-sum">${budFmt(tot)}</td>`;
+      const rateCell=(a,p)=>{ const r=budPct(a,p); return `<td class="bud-sum ${a>p?'text-ared':''}">${(!a&&!p)?'<span class="text-slate-300">–</span>':(r==null?'<span class="text-[10.5px] font-bold">예산 외</span>':r+'%')}</td>`; };
+      const sumRows=(cls,label,agg,lead)=>{
+        if(!both){ const arr=BUD_VIEW==='plan'?agg.p:agg.a, tot=BUD_VIEW==='plan'?agg.pt:agg.at;
+          return `<tr class="${cls}"><td class="bud-stk px-3 py-1.5">${lead||''}${label}</td><td></td>${sumCells(arr,tot)}${rateCell(agg.at,agg.pt)}<td></td></tr>`; }
+        return `<tr class="${cls}"><td class="bud-stk px-3 py-1.5" rowspan="2">${lead||''}${label}</td><td rowspan="2"></td><td class="px-1.5 text-[10.5px] opacity-70">예산</td>${sumCells(agg.p,agg.pt)}<td class="bud-sum" rowspan="2">${(()=>{ const r=budPct(agg.at,agg.pt); return r==null?'예산 외':r+'%'; })()}</td><td rowspan="2"></td></tr>
+          <tr class="${cls}"><td class="px-1.5 text-[10.5px] opacity-70">집행</td>${sumCells(agg.a,agg.at)}</tr>`;
+      };
+      const itemRows=x=>{
+        const nm=`<div class="flex items-start gap-1.5 px-3 py-1.5 whitespace-normal">
+            <button onclick="budDel(${x.i})"class="text-slate-300 hover:text-ared text-[12px] leading-5 shrink-0" title="항목 삭제">×</button>
+            <div class="min-w-0">${budTxt('it.'+x.i+'.n',x.n,'text-[12.5px] font-semibold text-ink')}
+              ${x.pn&&x.pn!==x.n?`<div class="text-[10.5px] text-slate-400 mt-0.5">예산안 명칭: ${esc(x.pn)}</div>`:''}
+              ${x.nn?`<div class="flex gap-1 text-[10.5px] text-[#8A6A00] mt-0.5"><span>📝</span>${budTxt('it.'+x.i+'.nn',x.nn,'whitespace-pre-wrap',1)}</div>`:''}</div></div>`;
+        const ac=`<td class="px-2 text-[11.5px] text-slate-500">${budTxt('it.'+x.i+'.acct',x.acct,'')}</td>`;
+        const memo=`<td class="px-2 text-[11.5px] text-slate-500 whitespace-normal" style="min-width:180px">${budTxt('it.'+x.i+'.memo',x.memo,'')}</td>`;
+        const cells=(kind)=>{ const arr=kind==='p'?x.p:x.a;
+          return arr.map((v,m)=>{ const note=x.cn[kind+'.'+m]||'', sel=BUD_SEL&&BUD_SEL.i===x.i&&BUD_SEL.k===kind&&BUD_SEL.m===m;
+            const tip=[kind==='a'&&x.p[m]?('예산 '+budWon(x.p[m])):'', note?('📝 '+note):''].filter(Boolean).join('\n\n');
+            return `<td class="${mcls(m)}${note?' bud-hn':''}${sel?' bud-sel':''}">${budNumIn('it.'+x.i+'.'+kind+'.'+m, v, kind==='a'&&v>x.p[m]&&x.p[m]>0, tip)}</td>`; }).join(''); };
+        const tot=(kind)=>{ const t=kind==='p'?x.pt:x.at; return `<td class="bud-sum ${kind==='a'&&x.at>x.pt?'text-ared font-bold':(kind==='p'?'text-slate-500':'font-semibold')}">${budFmt(t)}</td>`; };
+        if(!both){ const k=BUD_VIEW==='plan'?'p':'a';
+          return `<tr class="bud-item ${k==='p'?'':''}"><td class="bud-stk">${nm}</td>${ac}${cells(k)}${tot(k)}${rateCell(x.at,x.pt)}${memo}</tr>`; }
+        return `<tr class="bud-item bud-plan"><td class="bud-stk align-top" rowspan="2">${nm}</td>${ac.replace('<td','<td rowspan="2"')}
+            <td class="px-1.5 text-[10.5px] text-slate-400">예산</td>${cells('p')}${tot('p')}
+            ${rateCell(x.at,x.pt).replace('<td','<td rowspan="2"')}${memo.replace('<td','<td rowspan="2"')}</tr>
+          <tr class="bud-item"><td class="px-1.5 text-[10.5px] font-bold text-[#5B44C7]">집행</td>${cells('a')}${tot('a')}</tr>`;
+      };
+      let body='';
+      shown.forEach(t=>{
+        t.subs.forEach(s=>{
+          const desc=(BUD.subDesc||{})[t.g+'|'+s.s];
+          body+=sumRows('bud-sub', esc(s.s)+(desc?` <span class="font-medium text-slate-400 text-[11px]">· ${esc(desc)}</span>`:''), budAgg(s.items), `<span class="text-slate-400 font-medium">${esc(t.g)} › </span>`);
+          s.items.forEach(x=>{ body+=itemRows(x); });
+          body+=`<tr><td class="bud-stk px-3 py-1"><button onclick="budAdd('${esc(t.g)}','${esc(s.s)}')" class="text-[11.5px] font-semibold text-[#7C5CFF] hover:underline">+ ${esc(s.s)}에 항목 추가</button></td><td colspan="${(both?3:2)+14}"></td></tr>`;
+        });
+        body+=sumRows('bud-grp', esc(t.g)+' 소계', budAgg(t.items));
+      });
+      body+=sumRows('bud-grand', BUD_FILTER?esc(BUD_FILTER)+' 합계':'GRAND TOTAL', BUD_FILTER?budAgg(shown.reduce((a,t)=>a.concat(t.items),[])):all);
+
+      const seg=(cur0,opts,fn)=>`<div class="inline-flex rounded-lg border border-[#E6E3DC] bg-white p-0.5">${opts.map(o=>`<button onclick="${fn}(${typeof o[0]==='string'?`'${o[0]}'`:o[0]})" class="px-2.5 py-1 rounded-md text-[12px] font-semibold ${cur0===o[0]?'bg-ink text-white':'text-slate-500 hover:text-ink'}">${o[1]}</button>`).join('')}</div>`;
+      const chips=[['','전체']].concat(tree.map(t=>[t.g,t.g])).map(o=>`<button onclick="budSetFilter('${esc(o[0])}')" class="px-3 py-1 rounded-full text-[12px] font-semibold border ${BUD_FILTER===o[0]?'bg-[#7C5CFF] border-[#7C5CFF] text-white':'border-[#E6E3DC] text-slate-600 hover:border-[#7C5CFF]'}">${esc(o[1])}</button>`).join('');
+
+      box.innerHTML=`
+      <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#7C5CFF">
+        <p class="text-[12.5px] text-slate-500">각 칸을 클릭해 바로 고치세요. 금액은 <b>원 단위</b>로 넣으면 되고 <b>300만 · 1.5억 · 3000000+120000</b>처럼 적어도 됩니다. 합계·집행률은 자동 계산돼요.</p>
+        <p id="budConn" class="mt-1"></p>
+      </div>
+
+      <div class="card p-5 sm:p-6 mb-4">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0">
+            <p class="text-[11px] font-extrabold tracking-wider text-brand-ink">ONLY MKT · BUDGET</p>
+            <h2 class="text-[22px] sm:text-[26px] font-extrabold text-ink leading-tight mt-0.5">💰 ${budTxt('title',BUD.title)}</h2>
+            <p class="text-[12px] text-slate-500 mt-1">기준 ${budTxt('updated',BUD.updated)} 업데이트 · 원본 ${esc(BUD.source||'')}</p>
+            <p class="text-[11.5px] text-slate-400 mt-0.5">※ ${budTxt('vat',BUD.vat)}</p>
+          </div>
+          <div class="text-right shrink-0">
+            <div class="text-[11px] h-4" id="budSave"></div>
+            <div class="flex gap-1.5 mt-1.5">
+              <button onclick="budReload()" class="text-[12px] font-semibold border border-[#E6E3DC] hover:border-ink px-3 py-2 rounded-lg">🔄 새로고침</button>
+              <button onclick="budCsv()" class="text-[12px] font-bold bg-ink text-white hover:brightness-125 px-3 py-2 rounded-lg">⬇ 엑셀(CSV) 내려받기</button>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mt-4">
+          ${tile('연간 예산', budBig(all.pt)+'<span class="text-[13px] text-slate-400 font-bold">원</span>', budWon(all.pt))}
+          ${tile('집행 (예정 포함)', budBig(all.at)+'<span class="text-[13px] text-slate-400 font-bold">원</span>', `<div class="mb-1">${budBar(all.at,all.pt,6)}</div>연간 예산의 <b class="text-[#5B44C7]">${pr==null?'-':pr+'%'}</b>`, '#5B44C7')}
+          ${tile('남은 예산', budBig(all.pt-all.at)+'<span class="text-[13px] text-slate-400 font-bold">원</span>', budWon(all.pt-all.at), all.pt-all.at<0?'#BF5332':'#5E7350')}
+          ${tile((cur+1)+'월까지 진도', (budPct(toA,toP)==null?'-':budPct(toA,toP)+'%'), `${(cur+1)}월까지 예산 ${budBig(toP)} 중 ${budBig(toA)} 집행${futA?`<br>이후 예정 ${budBig(futA)}`:''}`)}
+          ${tile('예산 초과 항목', over.length+'<span class="text-[13px] text-slate-400 font-bold">개</span>', over.length?over.slice(0,3).map(x=>esc(x.g.replace(' 마케팅',''))+' '+esc(x.n.length>12?x.n.slice(0,12)+'…':x.n)).join('<br>')+(over.length>3?'<br>외 '+(over.length-3)+'개':''):'없음', over.length?'#BF5332':'#5E7350')}
+        </div>
+        ${cur>=0?`<p class="text-[12px] text-slate-500 mt-3">이번 달(${cur+1}월) 예산 <b class="text-ink tabular-nums">${budWon(curP)}</b> · 집행 <b class="tabular-nums ${curA>curP?'text-ared':'text-[#5B44C7]'}">${budWon(curA)}</b></p>`:''}
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
+        <div class="card p-5 lg:col-span-3">
+          <div class="flex items-baseline justify-between"><h3 class="text-[15px] font-extrabold text-ink">월별 예산 vs 집행</h3><span class="text-[11px] text-slate-400">연한 막대 = 이번 달 이후 예정분</span></div>
+          <div class="mt-3" style="height:260px"><canvas id="budChart"></canvas></div>
+        </div>
+        <div class="card p-5 lg:col-span-2">
+          <div class="flex items-baseline justify-between"><h3 class="text-[15px] font-extrabold text-ink">부문별 집행률</h3><span class="text-[11px] text-slate-400">카드를 누르면 아래 표가 그 부문만</span></div>
+          <div class="grid grid-cols-1 gap-3 mt-3">${grpCards}</div>
+        </div>
+      </div>
+
+      <div class="card p-4 sm:p-5 mb-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex flex-wrap items-center gap-1.5"><h3 class="text-[15px] font-extrabold text-ink mr-2">상세 예산표</h3>${chips}</div>
+          <div class="flex flex-wrap items-center gap-2">
+            ${seg(BUD_VIEW,[['both','예산+집행'],['plan','예산만'],['act','집행만']],'budSetView')}
+            ${seg(BUD_UNIT,[[1,'원'],[1000,'천원'],[1000000,'백만원']],'budSetUnit')}
+          </div>
+        </div>
+        <div id="budScroll" class="overflow-auto rounded-lg border border-[#EFEDE8]" style="max-height:75vh">
+          <table class="bud-tbl w-max min-w-full">${head}${body}</table>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2"><span class="inline-block align-middle w-0 h-0 border-t-[7px] border-l-[7px] border-t-[#F2A900] border-l-transparent mr-1"></span>노란 모서리 = 메모가 달린 칸(마우스를 올리면 보이고, 클릭하면 오른쪽 아래에서 고칠 수 있어요) · 빨간 숫자 = 그 달 예산보다 많이 쓴 칸 · 집행률 '예산 외' = 예산 없이 집행된 항목 · 표시 단위를 바꿔도 입력은 항상 원 단위</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
+        <div class="card p-5 lg:col-span-3">
+          <div class="flex items-baseline justify-between mb-2"><h3 class="text-[15px] font-extrabold text-ink">📌 셀 메모 모아보기 <span class="text-slate-400 font-bold text-[13px]">${noteList.length}</span></h3>
+            <span class="text-[11px] text-slate-400">${BUD_FILTER?esc(BUD_FILTER)+'만 · ':''}누르면 표의 그 칸으로 이동</span></div>
+          <div class="max-h-[520px] overflow-auto divide-y divide-[#F1EFEA]">
+            ${noteList.length?noteList.map(o=>`<button onclick="budGoCell(${o.x.i},'${o.k}',${o.m})" class="w-full text-left py-2.5 px-1 hover:bg-[#FAF8FF] rounded">
+              <div class="flex items-baseline gap-2 text-[11.5px]"><span class="font-bold ${o.k==='a'?'text-[#5B44C7]':'text-slate-500'} shrink-0">${o.m+1}월 ${o.k==='p'?'예산':'집행'}</span>
+                <span class="text-slate-400 truncate">${esc(o.x.g.replace(' 마케팅',''))} › ${esc(o.x.n)}</span>
+                <span class="ml-auto tabular-nums text-slate-500 shrink-0">${(o.k==='p'?o.x.p:o.x.a)[o.m]?budWon((o.k==='p'?o.x.p:o.x.a)[o.m]):''}</span></div>
+              <div class="text-[12.5px] text-slate-700 whitespace-pre-wrap mt-0.5 leading-relaxed">${esc(o.t)}</div></button>`).join('')
+              :'<p class="text-[12px] text-slate-400 py-6 text-center">메모가 없습니다. 금액 칸을 클릭해 메모를 남겨보세요.</p>'}
+          </div>
+        </div>
+        <div class="card p-5 lg:col-span-2">
+          <h3 class="text-[15px] font-extrabold text-ink mb-2">📝 메모 · 확인할 것</h3>
+          ${budTxt('notes',BUD.notes,'text-[12.5px] text-slate-600 leading-relaxed whitespace-pre-wrap',1)}
+        </div>
+      </div>
+      <div id="budNote">${budNoteBox()}</div>`;
+      budPaintConn(); budPaintChart(all);
+    }
+
     /* ===================== 🏠 랜선집들이 · 팀 공동 콘텐츠 전략 =====================
        원본 = lanseon.json / 편집 오버라이드 = Firebase `lanseon/data`(세미나 탭과 같은 방식).
        목적: 팀원이 Claude·ChatGPT와 나눈 전략 논의의 '결론'을 여기에 축적하고,
@@ -8956,6 +9344,7 @@
       const bbv=document.getElementById('view-brandbook'); if(bbv) bbv.classList.toggle('hidden', s!=='brandbook');
       const lnv=document.getElementById('view-lanseon'); if(lnv) lnv.classList.toggle('hidden', s!=='lanseon');
       const hkv=document.getElementById('view-hakmap'); if(hkv) hkv.classList.toggle('hidden', s!=='hakmap');
+      const buv=document.getElementById('view-budget'); if(buv) buv.classList.toggle('hidden', s!=='budget');
       const rrv=document.getElementById('view-rnr'); if(rrv) rrv.classList.toggle('hidden', s!=='rnr');
       const cdv=document.getElementById('view-cdb'); if(cdv) cdv.classList.toggle('hidden', s!=='cdb');
       document.getElementById('mktSec-insta').classList.toggle('hidden', s!=='insta');
@@ -8966,7 +9355,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','seminar','brandbook','lanseon','hakmap','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
+      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','seminar','brandbook','lanseon','hakmap','budget','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -8979,6 +9368,7 @@
       if(s==='brandbook'){ renderBrandbook(); }
       if(s==='lanseon'){ renderLanseon(); }
       if(s==='hakmap'){ renderHakmap(); }
+      if(s==='budget'){ renderBudget(); }
       if(s==='rnr'){ renderRnr(); }
       if(s==='cdb'){ renderCdb(); }
       if(s==='report'){ mktReportSub(mktRptView); }
