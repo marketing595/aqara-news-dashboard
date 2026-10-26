@@ -465,7 +465,7 @@
         <button class="x" onclick="closeBenefit()" aria-label="닫기">×</button>
         <div class="ey"><img class="logo" src="/aqaralife-logo-black-v2.png" alt="AqaraLife"> SHOWROOM · 학동역 도보 3분</div>
         <h2 id="mdTitle">학동 쇼룸 투어 웰컴 쿠폰</h2>
-        <p>학동 인테리어 거리를 돌아보시는 분들께 드려요. 쿠폰 받고 아카라라이프 쇼룸에서 쉬었다 가세요.</p>
+        <p>학동 인테리어 거리를 방문하신 고객님을 위한 특별한 혜택!<br>아카라라이프 쇼룸에 편안히 들러 휴식과 함께 스마트홈의 매력을 경험해보세요.</p>
       </div>
       <div class="bd">
         <div id="bnList"></div>
@@ -681,7 +681,7 @@
     document.getElementById('legend').innerHTML=CATS.map(c=>`<div><span class="dot" style="background:${c.color}"></span>${esc(c.ko)}</div>`).join('');
     document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map((b,i)=>`<div class="bn"><div class="ic">${no2(i+1)}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}</div></div>`).join('');
     const hq=DATA.spots.find(s=>s.hl)||DATA.spots.find(s=>s.cat==='iot')||{};
-    document.getElementById('hqAddr').innerHTML=`아카라라이프 쇼룸 · ${esc(hq.a||'')}<br>견적·기프트 혜택의 상세 조건은 쇼룸에서 안내드려요.`;
+    document.getElementById('hqAddr').innerHTML=`아카라라이프 쇼룸 · ${esc(hq.a||'')}`;
     initMap(); applyOver();
     const p=new URLSearchParams(location.search);
     if(p.get('route')){ const ids=p.get('route').split(',').map(x=>x.trim()).filter(id=>SPOTS.some(s=>s.id===id));
