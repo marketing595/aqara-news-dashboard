@@ -475,7 +475,6 @@
           <div class="eyebrow">Welcome Coupon</div>
           <div id="cpBody"></div>
         </div>
-        <p class="fine" id="hqAddr"></p>
       </div>
     </div>
   </div>
@@ -682,8 +681,6 @@
     document.title=(DATA.title||'학동 스마트 인테리어 MAP')+' · AqaraLife';
     document.getElementById('legend').innerHTML=CATS.map(c=>`<div><span class="dot" style="background:${c.color}"></span>${esc(c.ko)}</div>`).join('');
     document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map((b,i)=>`<div class="bn"><div class="ic">${no2(i+1)}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}${b.link?`<a class="bk" href="${esc(b.link)}" target="_blank" rel="noopener">${esc(b.linkLabel||'바로가기')} →</a>`:''}</div></div>`).join('');
-    const hq=DATA.spots.find(s=>s.hl)||DATA.spots.find(s=>s.cat==='iot')||{};
-    document.getElementById('hqAddr').innerHTML=`아카라라이프 쇼룸 · ${esc(hq.a||'')}`;
     initMap(); applyOver();
     const p=new URLSearchParams(location.search);
     if(p.get('route')){ const ids=p.get('route').split(',').map(x=>x.trim()).filter(id=>SPOTS.some(s=>s.id===id));
