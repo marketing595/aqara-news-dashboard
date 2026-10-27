@@ -1335,6 +1335,7 @@
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">프로젝트</p>
              <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">11월 세미나</button>
+             <button id="mktBtn-raffle" onclick="mktSub('raffle')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🎁 세미나 경품 추첨</button>
              <button id="mktBtn-brandbook" onclick="mktSub('brandbook')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">📕 브랜드북</button>
              <button id="mktBtn-lanseon" onclick="mktSub('lanseon')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🏠 랜선집들이</button>
              <button id="mktBtn-hakmap" onclick="mktSub('hakmap')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🗺 학동 인테리어 지도</button>
@@ -1363,6 +1364,7 @@
          </div>
        </div>
        <div id="mktSeminarSlot"></div>
+       <div id="view-raffle" class="hidden"><div id="rfBody"></div></div>
        <div id="view-brandbook" class="hidden"><div id="bbBody"></div></div>
        <div id="view-lanseon" class="hidden"><div id="lnBody"></div></div>
        <div id="view-hakmap" class="hidden"><div id="hkBody"></div></div>
@@ -9267,6 +9269,15 @@
             <div class="mt-1">${s._seed?(mod?`<button onclick="hkReset('${s.id}')" class="text-[10.5px] text-slate-400 hover:text-ared">원본으로</button>`:''):`<button onclick="hkRemove('${s.id}')" class="text-[10.5px] text-slate-400 hover:text-ared">삭제</button>`}</div></td></tr>`; }).join('');
       box.innerHTML=`<table class="w-full text-[12px]"><thead><tr class="text-[11px] text-slate-400 text-left"><th class="px-2 py-1.5 text-center">#</th><th class="px-2 py-1.5">이름 · 영문</th><th class="px-2 py-1.5">카테고리</th><th class="px-2 py-1.5">주소</th><th class="px-2 py-1.5">한 줄 소개</th><th class="px-2 py-1.5">좌표(위도, 경도)</th><th class="px-2 py-1.5">네이버 ID</th><th class="px-2 py-1.5 text-center">공개</th></tr></thead><tbody>${rows}</tbody></table>`;
       box.onfocusout=()=>{ setTimeout(()=>{ if(HK_DIRTY&&!box.contains(document.activeElement)){ hkPaintTable(); hkPaintStats(); } },80); }; }
+    /* ===== 🎁 세미나 경품 추첨 (raffle.html 임베드 — 설정·당첨 이력은 브라우저 localStorage에 저장되므로 행사 당일엔 발표 PC에서 실행) ===== */
+    function renderRaffle(){ const box=document.getElementById('rfBody'); if(!box||box.dataset.ok) return; box.dataset.ok='1';
+      box.innerHTML=`<div class="flex items-center justify-between gap-3 flex-wrap mb-3">
+          <div><h2 class="text-[18px] font-extrabold text-ink">🎁 세미나 경품 추첨</h2>
+            <p class="text-[12px] text-slate-500 mt-0.5">SMART HOME INTERIOR 2026 번호표 추첨기 · 설정과 당첨 이력은 이 브라우저에만 저장돼요. 행사 당일엔 발표 PC에서 <b>새 창으로 열기</b> → 전체화면으로 쓰세요.</p></div>
+          <a href="/raffle.html" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-[#7C5CFF] text-white text-[13px] font-bold hover:brightness-110 whitespace-nowrap">새 창으로 열기 ↗</a>
+        </div>
+        <iframe src="/raffle.html" title="세미나 경품 추첨" allow="fullscreen" allowfullscreen class="w-full rounded-2xl border border-slate-200 bg-white" style="height:min(80vh,860px);min-height:520px"></iframe>`;
+    }
     function renderHakmap(){ const box=document.getElementById('hkBody'); if(!box) return;
       if(!HK){ box.innerHTML='<p class="text-sm text-slate-400 py-16 text-center">학동 지도 데이터를 불러오는 중…</p>';
         if(HK_LOADING) return; HK_LOADING=true;
@@ -9341,6 +9352,7 @@
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       const adv=document.getElementById('view-ad'); if(adv) adv.classList.toggle('hidden', s!=='ad');
       const sem=document.getElementById('view-seminar'); if(sem) sem.classList.toggle('hidden', s!=='seminar');
+      const rfv=document.getElementById('view-raffle'); if(rfv) rfv.classList.toggle('hidden', s!=='raffle');
       const bbv=document.getElementById('view-brandbook'); if(bbv) bbv.classList.toggle('hidden', s!=='brandbook');
       const lnv=document.getElementById('view-lanseon'); if(lnv) lnv.classList.toggle('hidden', s!=='lanseon');
       const hkv=document.getElementById('view-hakmap'); if(hkv) hkv.classList.toggle('hidden', s!=='hakmap');
@@ -9355,7 +9367,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','seminar','brandbook','lanseon','hakmap','budget','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
+      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','seminar','raffle','brandbook','lanseon','hakmap','budget','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -9365,6 +9377,7 @@
       if(s==='prpitch'){ renderMktPr(); }
       if(s==='ad'){ loadAd(); }
       if(s==='seminar'){ renderSeminar(); }
+      if(s==='raffle'){ renderRaffle(); }
       if(s==='brandbook'){ renderBrandbook(); }
       if(s==='lanseon'){ renderLanseon(); }
       if(s==='hakmap'){ renderHakmap(); }

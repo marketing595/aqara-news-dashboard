@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="orange">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMART HOME INTERIOR 2026 · 경품 추첨</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+/* KV 3종: 오렌지(R) · 블랙(B) · 라이트(main) */
+:root,[data-theme="orange"]{
+  --bg:#ff4b00; --tx:#f3f7fd; --tx2:rgba(243,247,253,.78); --tx3:rgba(243,247,253,.55);
+  --blob:#000; --ghost:#22110a; --win:#000; --winTx:#f3f7fd; --line:rgba(243,247,253,.45);
+  --btn:#f3f7fd; --btnTx:#ff4b00; --chip:rgba(0,0,0,.14);
+}
+[data-theme="black"]{
+  --bg:#000; --tx:#f3f7fd; --tx2:rgba(243,247,253,.75); --tx3:rgba(243,247,253,.5);
+  --blob:#f3f7fd; --ghost:#2b2b2b; --win:#f3f7fd; --winTx:#000; --line:rgba(243,247,253,.4);
+  --btn:#ff4b00; --btnTx:#f3f7fd; --chip:rgba(255,255,255,.08);
+}
+[data-theme="light"]{
+  --bg:#f1f6fc; --tx:#ff4b00; --tx2:#263340; --tx3:rgba(38,51,64,.55);
+  --blob:#ff4b00; --ghost:#d8dee7; --win:#ff4b00; --winTx:#263340; --line:rgba(38,51,64,.3);
+  --btn:#263340; --btnTx:#f1f6fc; --chip:rgba(38,51,64,.07);
+}
+:root{
+  --pbg:#15161a; --pcard:#202229; --pline:#33363f; --ptx:#f3f5f9; --ptx2:#a3a8b5; --ptx3:#6c717e;
+  --acc:#ff4b00; --err:#ff6b6b; --ok:#3ccf91;
+  --f:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--f);color:var(--tx);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background .3s}
+button,input{font-family:inherit}
+
+/* 배경 체인 */
+#deco{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#deco .main{fill:var(--blob);transition:fill .3s}
+#deco .ghost{fill:var(--ghost);transition:fill .3s}
+
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
+
+/* 상단 바 */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:clamp(10px,2.2vh,22px) 32px}
+.logo{display:flex;align-items:center;color:var(--tx)}
+[data-theme="light"] .logo{color:#263340}
+.logo svg{height:clamp(22px,2.2vw,32px);width:auto;display:block}
+.top .tools{display:flex;align-items:center;gap:8px}
+.ibtn{height:38px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);color:var(--tx2);font-size:14px;font-weight:700;cursor:pointer}
+.ibtn:hover{color:var(--tx);border-color:var(--tx)}
+[data-theme="light"] .ibtn{color:var(--tx2)}
+.ibtn.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.themes{display:flex;gap:6px;margin-right:6px}
+.th{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
+.th.on{outline:2px solid var(--tx);outline-offset:2px}
+.th[data-t="orange"]{background:#ff4b00}.th[data-t="black"]{background:#000}.th[data-t="light"]{background:#f1f6fc}
+
+/* 무대 */
+.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:safe center;padding:0 32px clamp(12px,2.6vh,28px);text-align:center;min-height:0}
+.event{font-size:clamp(15px,1.5vw,22px);font-weight:800;letter-spacing:.02em;color:var(--tx2)}
+.ptabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:clamp(6px,1.4vh,14px) 0 clamp(8px,2.2vh,26px)}
+.ptab{display:flex;align-items:center;gap:8px;height:40px;padding:0 18px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--tx2);font-size:15px;font-weight:800;cursor:pointer}
+.ptab .cnt{font-size:13px;font-weight:700;opacity:.75;font-variant-numeric:tabular-nums}
+.ptab.cur{background:var(--tx);border-color:var(--tx);color:var(--bg)}
+[data-theme="light"] .ptab.cur{background:var(--tx2);border-color:var(--tx2);color:#fff}
+.ptab.done:not(.cur){border-style:dashed}
+.rank{font-size:clamp(36px,min(7vw,10.5vh),104px);font-weight:900;letter-spacing:-.045em;line-height:1}
+.pname{margin-top:clamp(6px,1vh,12px);font-size:clamp(18px,min(2.8vw,4.4vh),42px);font-weight:800;letter-spacing:-.03em;color:var(--tx)}
+[data-theme="light"] .pname{color:var(--tx2)}
+.pname small{font-size:.58em;font-weight:700;color:var(--tx3);margin-left:10px}
+
+.reels{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:clamp(14px,1.8vw,28px);margin:clamp(10px,3.2vh,40px) 0}
+.slot{display:flex;flex-direction:column;align-items:center;gap:clamp(6px,1.2vh,10px)}
+.reel{--w:clamp(130px,min(22vw,31vh),300px);width:var(--w);height:var(--w);border-radius:50%;border:4px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:background .25s,border-color .25s}
+.reels.many .reel{--w:clamp(90px,min(12.5vw,20vh),190px);border-width:3px}
+.reel .num{font-size:calc(var(--w)*.36);font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.05em;line-height:1;color:var(--tx3)}
+.reel.spin{border-color:var(--tx)}
+.reel.spin .num{color:var(--tx);filter:blur(1.5px);animation:jit .08s linear infinite}
+.reel.win{background:var(--win);border-color:var(--win)}
+.reel.win .num{color:var(--winTx);filter:none}
+.reel.win.fresh{animation:pop .55s cubic-bezier(.3,1.6,.5,1)}
+@keyframes jit{0%{transform:translateY(-8%)}100%{transform:translateY(8%)}}
+@keyframes pop{0%{transform:scale(.7)}100%{transform:scale(1)}}
+
+.absent{height:clamp(26px,4vh,32px);padding:0 16px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--tx2);font-size:14px;font-weight:700;cursor:pointer}
+.absent:hover{color:var(--tx);border-color:var(--tx)}
+.absent.ph{visibility:hidden}
+body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
+
+.draw{height:clamp(50px,7.5vh,80px);min-width:min(440px,90vw);padding:0 44px;border:none;border-radius:999px;background:var(--btn);color:var(--btnTx);font-size:clamp(18px,min(2.3vw,3.6vh),29px);font-weight:900;letter-spacing:-.03em;cursor:pointer;transition:transform .15s}
+.draw:hover{transform:translateY(-2px)}
+.draw:active{transform:scale(.98)}
+.draw:disabled{opacity:.5;cursor:default;transform:none}
+.draw.next{background:transparent;color:var(--tx);border:2.5px solid var(--tx)}
+[data-theme="light"] .draw.next{color:var(--tx2);border-color:var(--tx2)}
+.redrawAll{margin-top:clamp(6px,1.4vh,12px);height:34px;padding:0 18px;border-radius:999px;border:1.5px solid var(--line);background:none;color:var(--tx2);font-size:14px;font-weight:700;cursor:pointer}
+.redrawAll:hover{color:var(--tx);border-color:var(--tx)}
+.redrawAll[hidden]{display:none}
+.voided{font-weight:800;color:var(--tx2)}
+.msg:empty{display:none}
+.foot{margin-top:clamp(6px,1.2vh,12px);font-size:13px;font-weight:600;color:var(--tx3)}
+.foot b{font-weight:800;border:1.5px solid var(--line);border-radius:6px;padding:0 6px}
+.msg{margin-top:6px;min-height:20px;font-size:16px;font-weight:800;color:var(--tx)}
+
+/* 사이드 패널 (테마와 상관없이 어두운 운영자용) */
+.panel{position:fixed;top:0;right:0;height:100%;width:min(440px,100vw);background:var(--pbg);color:var(--ptx);border-left:1px solid var(--pline);transform:translateX(100%);transition:transform .25s;z-index:20;display:flex;flex-direction:column}
+.panel.open{transform:none}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--pline);font-size:18px;font-weight:800}
+.panel .ibtn{color:var(--ptx2);border-color:var(--pline)}
+.panel .ibtn:hover{color:var(--ptx);border-color:var(--ptx3)}
+.pb{flex:1;overflow-y:auto;padding:18px 20px}
+.field{margin-bottom:20px}
+.field>label{display:block;font-size:13px;font-weight:700;color:var(--ptx2);margin-bottom:6px}
+.field .row{display:flex;align-items:center;gap:8px;color:var(--ptx2);font-weight:600}
+.in{width:100%;height:44px;padding:0 12px;border-radius:12px;border:1px solid var(--pline);background:var(--pcard);color:var(--ptx);font-size:16px;font-weight:600}
+.in:focus{outline:none;border-color:var(--acc)}
+.in.n{width:96px;text-align:center}
+.sub{font-size:12px;color:var(--ptx3);margin-top:6px;line-height:1.5}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ptx);cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--acc)}
+.prow,.phead{display:grid;grid-template-columns:28px 64px 1fr 58px 30px;gap:6px;align-items:center}
+.prow{margin-bottom:8px}
+.phead{font-size:11px;color:var(--ptx3);margin-bottom:4px}
+.prow .in{height:40px;font-size:14px;padding:0 8px}
+.prow .in.c{text-align:center}
+.prow .ord{display:flex;flex-direction:column}
+.mini{border:none;background:none;color:var(--ptx3);cursor:pointer;font-size:12px;line-height:1.2;padding:1px}
+.mini:hover{color:var(--ptx)}
+.mini.del:hover{color:var(--err)}
+.addp{width:100%;height:38px;border-radius:10px;border:1px dashed var(--pline);background:none;color:var(--ptx2);font-size:14px;font-weight:600;cursor:pointer}
+.addp:hover{color:var(--ptx);border-color:var(--acc)}
+.hist{list-style:none}
+.hi{padding:12px 0;border-bottom:1px solid var(--pline)}
+.hi .h1{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--ptx3)}
+.hi .h1 b{color:var(--acc);font-weight:700}
+.hi .nums{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:8px;background:var(--pcard);border:1px solid var(--pline);font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.tag.void{color:var(--ptx3);text-decoration:line-through}
+.tag button{border:none;background:none;color:var(--ptx3);font-size:12px;cursor:pointer;padding:0 0 0 2px}
+.tag button:hover{color:var(--err)}
+.empty{color:var(--ptx3);font-size:14px;padding:20px 0;text-align:center}
+.pf{display:flex;flex-wrap:wrap;gap:8px;padding:14px 20px;border-top:1px solid var(--pline)}
+.pf .ibtn{flex:1}
+.panel .ibtn.danger:hover{color:var(--err);border-color:var(--err)}
+
+#fx{position:fixed;inset:0;pointer-events:none;z-index:10}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 20px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;transition:opacity .2s;z-index:30;pointer-events:none}
+.toast.show{opacity:1}
+
+@media (max-width:700px){.top{padding:14px 16px}.stage{padding:0 16px 20px}.themes{display:none}}
+</style>
+</head>
+<body>
+
+<!-- KV 체인 모티프 (goo 필터로 원끼리 매끄럽게 이어짐) -->
+<svg id="deco" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <filter id="goo" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="16"/>
+      <feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 36 -16"/>
+    </filter>
+  </defs>
+  <g class="ghost" filter="url(#goo)">
+    <circle cx="-30" cy="830" r="74"/><circle cx="115" cy="830" r="74"/><circle cx="260" cy="830" r="74"/>
+    <circle cx="260" cy="975" r="74"/>
+  </g>
+  <g class="main" filter="url(#goo)">
+    <circle cx="1480" cy="185" r="74"/><circle cx="1625" cy="185" r="74"/>
+    <circle cx="1480" cy="330" r="74"/><circle cx="1480" cy="475" r="74"/><circle cx="1625" cy="620" r="74"/>
+    <circle cx="1480" cy="620" r="74"/><circle cx="1480" cy="765" r="74"/><circle cx="1480" cy="910" r="74"/>
+  </g>
+</svg>
+
+<div class="app">
+  <div class="top">
+    <div class="logo" aria-label="Aqara Life"><svg fill="currentColor" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1242.96 231.15"><path d="M918.63,167.1h-70.65c-5.43,0-9.84-4.4-9.84-9.84V6.9c0-.86-.7-1.57-1.57-1.57h-24.94c-.86,0-1.57.7-1.57,1.57v148.9c0,20.62,16.72,37.34,37.34,37.34h71.22c.86,0,1.57-.7,1.57-1.57v-22.91c0-.86-.7-1.57-1.57-1.57Z"/><path d="M1079.4,25.47c.89.05,1.63-.68,1.63-1.57V1.72c0-.83-.66-1.54-1.49-1.58-37.51-2.11-61.62,20.91-61.62,54.95v9.66h-18.32c-.87,0-1.57.7-1.57,1.57v23.35c0,.88.71,1.59,1.59,1.59h18.3v100.49c0,.87.71,1.57,1.57,1.57h23.36c.87,0,1.57-.7,1.57-1.57v-100.49h35.02c.87,0,1.57-.7,1.57-1.57v-23.36c0-.87-.7-1.57-1.57-1.57h-35.02v-9.66c0-22.74,20.19-30.46,34.97-29.62Z"/><path d="M956.89.22c-11.03,0-19.97,8.94-19.97,19.97s8.94,19.97,19.97,19.97,20.36-8.94,20.36-19.97S967.92.22,956.89.22Z"/><rect x="943.63" y="64.74" width="26.51" height="128.57" rx="1.57" ry="1.57"/><path d="M1144.7,124.78c0,2.59,2.09,4.68,4.68,4.68h82.7c6.01,0,10.88-4.87,10.88-10.88h0c0-19.96-7.46-39.38-21.5-53.56-14.58-14.73-34.08-22.59-54.78-22.12-19.13.46-37.19,8.22-50.83,21.86-13.64,13.64-20.6,31.73-21.86,50.83-2.04,31.03,21.96,76.27,74.47,76.27,28.45,0,55.56-15.79,68.41-36.03.51-.81.16-1.89-.72-2.27l-19.86-8.61c-.65-.28-1.39-.09-1.83.46-11.99,14.61-32.23,22.25-46,22.25s-26.42-5.38-35.97-15.15c-6.37-6.51-10.74-14.41-12.85-23.03-1.05-4.29-1.55-8.76-1.43-13.32.09-3.7.57-7.34,1.46-10.89,2.18-8.75,6.74-16.81,13.31-23.38,9.21-9.22,21.39-14.47,34.26-14.77h.38c9.11-.24,18.19,1.9,26,6.59,12.28,7.39,20.5,18.68,23.68,31.56h-67.89c-2.58,0-4.67,2.09-4.68,4.67-.01,4.28-.03,10.58-.03,14.86Z"/><g><path d="M87.38,93.11c-13.87,0-25.15,11.28-25.15,25.15s11.28,25.15,25.15,25.15,25.15-11.28,25.15-25.15-11.28-25.15-25.15-25.15Z"/><path d="M633.21,94.01c-7.5,24.11-3.53,49.18,10.89,68.78,14.17,19.26,36.89,30.75,60.77,30.75,15.54,0,30.7-4.82,43.33-13.69.83-.59,1.66-1.19,2.47-1.81.22-.17.53-.41.86-.68,1.03-.83,2.57-.1,2.57,1.23v13.37c0,.87.71,1.58,1.58,1.58h23c.87,0,1.58-.71,1.58-1.58v-73.47c.01-.12.02-.24.02-.35,0-23.88-11.5-46.59-30.75-60.77-19.6-14.43-44.67-18.4-68.77-10.89-22.7,7.07-40.48,24.84-47.54,47.54ZM659.42,98.57c4.63-11.83,14.07-21.26,25.89-25.89,6.42-2.51,13.01-3.78,19.58-3.78,9.93,0,19.49,2.95,27.67,8.53,13.1,8.95,21.16,23.71,21.54,39.51v1.78c-.32,26.84-22.4,48.67-49.23,48.67-16.28,0-31.49-8.06-40.7-21.55-9.39-13.75-11.12-30.97-4.75-47.25Z"/><path d="M212.46,94.01c-7.5,24.11-3.53,49.17,10.89,68.77,14.17,19.26,36.89,30.75,60.77,30.75,15.56,0,30.74-4.84,43.38-13.73.62-.43,1.23-.88,1.83-1.33.14-.1.75-.59,1.46-1.15,1.04-.82,2.56-.08,2.56,1.24v50.99c0,.87.71,1.58,1.58,1.58h23c.87,0,1.58-.71,1.58-1.58v-111.09c.01-.12.01-.23.01-.34,0-23.88-11.5-46.59-30.75-60.77-19.6-14.43-44.67-18.4-68.77-10.89-22.7,7.07-40.48,24.84-47.54,47.54ZM238.68,98.57c4.63-11.83,14.07-21.26,25.89-25.89,6.42-2.51,13.01-3.78,19.58-3.78,9.93,0,19.49,2.95,27.67,8.53,13.1,8.95,21.16,23.71,21.54,39.51v1.76c-.31,26.85-22.39,48.68-49.23,48.68-16.28,0-31.49-8.06-40.7-21.55-9.38-13.75-11.11-30.97-4.75-47.25Z"/><path d="M382.04,94.01c-7.5,24.11-3.53,49.18,10.89,68.78,14.17,19.26,36.89,30.75,60.77,30.75,15.54,0,30.7-4.82,43.33-13.69.83-.59,1.66-1.19,2.47-1.81.22-.17.53-.41.86-.68,1.03-.83,2.57-.1,2.57,1.23v13.37c0,.87.71,1.58,1.58,1.58h23c.87,0,1.58-.71,1.58-1.58v-73.47c.01-.12.02-.24.02-.35,0-23.88-11.5-46.59-30.75-60.77-19.6-14.43-44.67-18.4-68.77-10.89-22.7,7.07-40.48,24.84-47.54,47.54ZM408.25,98.57c4.63-11.83,14.07-21.26,25.89-25.89,6.42-2.51,13.01-3.78,19.58-3.78,9.93,0,19.49,2.95,27.67,8.53,13.1,8.95,21.16,23.71,21.54,39.51v1.78c-.32,26.84-22.4,48.67-49.23,48.67-16.28,0-31.49-8.06-40.7-21.55-9.39-13.75-11.12-30.97-4.75-47.25Z"/><path d="M210.97,191.18l-56.72-150.83c-7.17-21.27-26.32-35.02-48.79-35.02-22.45,0-41.6,13.74-48.77,34.96L2.23,184.43l-2.07,5.47c-.62,1.65.6,3.42,2.36,3.42h22.44c1.05,0,1.99-.65,2.36-1.63l19.71-52.16.85-2.26,1.73-4.57c.31-.83.31-1.73.05-2.57-1.18-3.75-1.82-7.73-1.82-11.86,0-14.32,7.66-26.88,19.1-33.82.75-.45,1.34-1.13,1.65-1.95l1.02-2.71s0,0,0,0l.84-2.23.64-1.68,10.05-26.58c.06-.16.12-.32.18-.49,4.27-12.84,15.27-17.42,24.15-17.42,8.88,0,19.88,4.58,24.15,17.43.05.16.11.33.17.48l50.08,133.2,3.47,9.2c.37.98,1.31,1.63,2.36,1.63h23.79c1.1,0,1.87-1.1,1.48-2.14Z"/><path d="M622.52,42.76c-41.28.42-74.61,34.01-74.61,75.39,0,.24.02,63.05.02,73.83,0,.87.7,1.56,1.57,1.56h23.01c.87,0,1.57-.7,1.57-1.57v-74.08c.14-26.73,21.57-48.42,48.2-48.96.03,0,.12,0,.25,0,.87,0,1.57-.7,1.57-1.57v-23.02c0-.87-.71-1.59-1.58-1.58Z"/></g></svg></div>
+    <div class="tools">
+      <div class="themes" title="테마">
+        <button class="th" data-t="orange" title="오렌지"></button>
+        <button class="th" data-t="black" title="블랙"></button>
+        <button class="th" data-t="light" title="라이트"></button>
+      </div>
+      <button class="ibtn" id="btnSet">설정</button>
+      <button class="ibtn" id="btnHist">당첨 이력 <span id="histCnt"></span></button>
+      <button class="ibtn" id="btnFull">전체화면</button>
+    </div>
+  </div>
+
+  <main class="stage">
+    <div class="event" id="eventTitle"></div>
+    <div class="ptabs" id="ptabs"></div>
+    <div class="rank" id="rankView"></div>
+    <div class="pname" id="nameView"></div>
+    <div class="reels" id="reels"></div>
+    <button class="draw" id="btnDraw">추첨하기</button>
+    <button class="redrawAll" id="btnRedrawAll" hidden>전원 불참 · 이 경품 처음부터 다시 뽑기</button>
+    <div class="foot"><span class="voided" id="voidedView"></span><span id="leftView"></span> · <b>Space</b> 로 진행</div>
+    <div class="msg" id="msg" role="alert"></div>
+  </main>
+</div>
+
+<!-- 설정 패널 -->
+<aside class="panel" id="pSet">
+  <div class="ph">추첨 설정 <button class="ibtn" data-close>닫기</button></div>
+  <div class="pb">
+    <div class="field">
+      <label>행사명 (화면 상단)</label>
+      <input class="in" id="inEvent" maxlength="40">
+    </div>
+    <div class="field">
+      <label>경품 (위에서부터 추첨 순서)</label>
+      <div class="phead"><span></span><span>등수</span><span>경품명</span><span>인원</span><span></span></div>
+      <div id="prizeRows"></div>
+      <button class="addp" id="btnAddPrize">+ 경품 추가</button>
+      <div class="sub">보통 3등 → 2등 → 1등 순서로 뽑아요. ▲▼ 로 순서를 바꿀 수 있어요.</div>
+    </div>
+    <div class="field">
+      <label>번호표 범위</label>
+      <div class="row"><input class="in n" type="number" id="inStart" min="0"> ~ <input class="in n" type="number" id="inEnd" min="0"> 번</div>
+    </div>
+    <div class="field">
+      <label>제외할 번호 (불참·미배부 번호표)</label>
+      <input class="in" id="inExclude" placeholder="예: 7, 13, 400-440">
+      <div class="sub">쉼표로 구분하고, 범위는 400-440처럼 입력하세요.</div>
+    </div>
+    <div class="field">
+      <label class="chk"><input type="checkbox" id="inSound"> 효과음</label>
+      <div class="sub">이미 당첨된 번호(불참 포함)는 다른 경품에서도 다시 뽑히지 않아요. 당첨자가 자리에 없으면 번호 아래 [불참]을 누르세요. 그 자리만 비고, 버튼을 누르면 빈자리 인원만큼 재추첨해요. 잘못 눌렀으면 당첨 이력에서 ↺ 로 되돌릴 수 있어요.</div>
+    </div>
+  </div>
+</aside>
+
+<!-- 이력 패널 -->
+<aside class="panel" id="pHist">
+  <div class="ph">당첨 이력 <button class="ibtn" data-close>닫기</button></div>
+  <div class="pb"><ul class="hist" id="histList"></ul></div>
+  <div class="pf">
+    <button class="ibtn" id="btnCopy">복사</button>
+    <button class="ibtn" id="btnCsv">엑셀(CSV) 저장</button>
+    <button class="ibtn danger" id="btnReset">전체 초기화</button>
+  </div>
+</aside>
+
+<canvas id="fx"></canvas>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var KEY = 'aqara.seminar.draw.v2';
+
+  var S = {
+    event:'SMART HOME INTERIOR 2026', start:1, end:440, exclude:'', sound:true, cur:0, hist:[], theme:'orange',
+    prizes:[
+      {id:'p3', rank:'3등', name:'스마트 도어락 L100', count:5},
+      {id:'p2', rank:'2등', name:'디바이스 50% 할인', count:2},
+      {id:'p1', rank:'1등', name:'디바이스 70% 할인', count:1}
+    ]
+  };
+  try { var saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved) for (var k in saved) S[k] = saved[k]; } catch(e){}
+  if (S.event === 'Aqara 세미나 경품 추첨') S.event = 'SMART HOME INTERIOR 2026';
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+
+  var spinning = false;
+
+  /* ── 테마 ── */
+  function setTheme(t){
+    S.theme = t; document.documentElement.setAttribute('data-theme', t);
+    document.querySelectorAll('.th').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-t') === t); });
+    save();
+  }
+  document.querySelectorAll('.th').forEach(function(b){ b.onclick = function(){ setTheme(b.getAttribute('data-t')); }; });
+  setTheme(S.theme || 'orange');
+
+  /* ── 공정한 난수 (crypto, 편향 제거) ── */
+  function rnd(max){
+    if (window.crypto && crypto.getRandomValues){
+      var b = new Uint32Array(1), lim = Math.floor(0x100000000 / max) * max;
+      do { crypto.getRandomValues(b); } while (b[0] >= lim);
+      return b[0] % max;
+    }
+    return Math.floor(Math.random() * max);
+  }
+
+  function parseExclude(str){
+    var set = {};
+    String(str || '').split(/[,\s]+/).forEach(function(p){
+      if (!p) return;
+      var m = p.match(/^(\d+)-(\d+)$/);
+      if (m){ var a=+m[1], b=+m[2]; if (a>b){var t=a;a=b;b=t;} for (var i=a;i<=b && i-a<100000;i++) set[i]=1; }
+      else if (/^\d+$/.test(p)) set[+p] = 1;
+    });
+    return set;
+  }
+
+  /* 지금 뽑을 수 있는 번호 (제외 번호·이미 뽑힌 번호(무효 포함) 빼고) */
+  function pool(){
+    var ex = parseExclude(S.exclude);
+    S.hist.forEach(function(h){ h.nums.forEach(function(n){ ex[n.n] = 1; }); });
+    var out = [];
+    for (var i = S.start; i <= S.end; i++) if (!ex[i]) out.push(i);
+    return out;
+  }
+
+  function pick(arr, n){
+    var a = arr.slice(), out = [];
+    for (var i = 0; i < n; i++){ var j = rnd(a.length); out.push(a[j]); a.splice(j,1); }
+    return out;
+  }
+
+  function prize(){ if (S.cur >= S.prizes.length) S.cur = 0; return S.prizes[S.cur]; }
+  /* 경품별 유효 당첨 번호 / 불참 번호 */
+  function nums(p, isVoid){
+    var out = [];
+    S.hist.slice().reverse().forEach(function(h){ if (h.pid === p.id) h.nums.forEach(function(n){ if (!!n.v === isVoid) out.push(n.n); }); });
+    return out;
+  }
+  function won(p){ return nums(p, false); }
+  function voided(p){ return nums(p, true); }
+  function remain(p){ return Math.max(0, (p.count|0) - won(p).length); }
+
+  /* ── 화면 ── */
+  function buildReels(fixed, blanks){
+    var box = $('reels'); box.innerHTML = '';
+    box.classList.toggle('many', fixed.length + blanks > 3);
+    function slot(cls, txt, n){
+      var s = document.createElement('div'); s.className = 'slot';
+      var r = document.createElement('div'); r.className = 'reel ' + cls;
+      r.innerHTML = '<span class="num"></span>'; r.firstChild.textContent = txt;
+      var b = document.createElement('button'); b.className = 'absent' + (n == null ? ' ph' : ''); b.textContent = '불참';
+      if (n != null) b.onclick = function(){ markAbsent(n); };
+      s.appendChild(r); s.appendChild(b); box.appendChild(s);
+    }
+    fixed.forEach(function(n){ slot('win', n, n); });
+    for (var i = 0; i < blanks; i++) slot('blank', '?', null);
+  }
+  /* 새로 멈춘 칸에 불참 버튼 연결 */
+  function armSlot(reel, n){
+    var b = reel.parentNode.querySelector('.absent');
+    b.classList.remove('ph'); b.onclick = function(){ markAbsent(n); };
+  }
+
+  function voidNum(p, num){
+    S.hist.forEach(function(h){ if (h.pid === p.id) h.nums.forEach(function(x){ if (x.n === num) x.v = true; }); });
+  }
+  function markAbsent(num){
+    if (spinning) return;
+    var p = prize();
+    if (!confirm(num + '번 불참 처리할까요?\n이 자리는 재추첨하게 돼요.')) return;
+    voidNum(p, num); save(); paint(true);
+    toast(num + '번 불참 → ' + p.rank + ' ' + remain(p) + '명 재추첨 가능');
+  }
+  function absentAll(){
+    if (spinning) return;
+    var p = prize(), w = won(p);
+    if (!w.length) return;
+    if (!confirm(p.rank + ' 당첨자 ' + w.length + '명(' + w.join(', ') + '번)을 모두 불참 처리하고\n' + p.rank + ' 전체를 다시 뽑을까요?')) return;
+    w.forEach(function(n){ voidNum(p, n); }); save(); paint(true);
+  }
+
+  function paintTabs(){
+    var box = $('ptabs'); box.innerHTML = '';
+    S.prizes.forEach(function(p, i){
+      var w = won(p).length, done = w >= p.count;
+      var b = document.createElement('button');
+      b.className = 'ptab' + (i === S.cur ? ' cur' : '') + (done ? ' done' : '');
+      b.innerHTML = '<span></span><span class="cnt"></span>';
+      b.firstChild.textContent = (done ? '✓ ' : '') + p.rank;
+      b.lastChild.textContent = w + '/' + p.count;
+      b.onclick = function(){ if (spinning) return; S.cur = i; save(); paint(true); };
+      box.appendChild(b);
+    });
+  }
+
+  function nextOpen(){
+    for (var k = 1; k <= S.prizes.length; k++){
+      var i = (S.cur + k) % S.prizes.length;
+      if (remain(S.prizes[i]) > 0) return i;
+    }
+    return -1;
+  }
+  function paintButton(){
+    var p = prize(), r = remain(p), w = won(p).length, btn = $('btnDraw');
+    btn.classList.remove('next');
+    $('btnRedrawAll').hidden = !w;
+    var vd = voided(p);
+    $('voidedView').textContent = vd.length ? '불참 ' + vd.map(function(n){ return n + '번'; }).join(', ') + ' · ' : '';
+    if (r > 0) btn.textContent = p.rank + ' ' + r + '명 ' + (vd.length ? '재추첨' : w ? '추가 추첨' : '추첨하기');
+    else {
+      var nx = nextOpen();
+      btn.classList.add('next');
+      btn.textContent = nx >= 0 ? '다음 경품 · ' + S.prizes[nx].rank + ' →' : '모든 추첨 완료';
+    }
+  }
+
+  /* resetReels: 경품을 바꿨거나 당첨 상태가 바뀌었을 때 슬롯을 다시 그림 */
+  function paint(resetReels){
+    var p = prize();
+    $('eventTitle').textContent = S.event || '';
+    $('rankView').textContent = p.rank;
+    $('nameView').innerHTML = '';
+    $('nameView').appendChild(document.createTextNode(p.name));
+    var sm = document.createElement('small'); sm.textContent = p.count + '명'; $('nameView').appendChild(sm);
+    $('leftView').textContent = '추첨 대상 ' + pool().length + '명 남음 (번호 ' + S.start + '~' + S.end + ')';
+    var total = 0; S.hist.forEach(function(h){ h.nums.forEach(function(n){ if(!n.v) total++; }); });
+    $('histCnt').textContent = total ? '(' + total + ')' : '';
+    paintTabs(); paintButton(); paintHist();
+    if (resetReels && !spinning){ showMsg(''); buildReels(won(p), remain(p)); }
+  }
+
+  function paintHist(){
+    var ul = $('histList'); ul.innerHTML = '';
+    if (!S.hist.length){ ul.innerHTML = '<li class="empty">아직 당첨 이력이 없어요</li>'; return; }
+    S.hist.forEach(function(h, hi){
+      var li = document.createElement('li'); li.className = 'hi';
+      var top = document.createElement('div'); top.className = 'h1';
+      var t = document.createElement('b'); t.textContent = '#' + (S.hist.length - hi) + ' ' + h.rank + ' · ' + h.name;
+      var tm = document.createElement('span'); tm.textContent = h.time;
+      top.appendChild(t); top.appendChild(tm);
+      var box = document.createElement('div'); box.className = 'nums';
+      h.nums.forEach(function(n){
+        var tg = document.createElement('span'); tg.className = 'tag' + (n.v ? ' void' : '');
+        tg.appendChild(document.createTextNode(n.n + '번'));
+        var x = document.createElement('button');
+        x.textContent = n.v ? '↺' : '✕';
+        x.title = n.v ? '불참 취소' : '불참 처리';
+        x.onclick = function(){
+          if (spinning) return;
+          if (n.v){ var p = S.prizes.filter(function(q){ return q.id === h.pid; })[0]; if (p && remain(p) <= 0){ toast('이미 인원이 다 차서 되돌릴 수 없어요'); return; } }
+          n.v = !n.v; save(); paint(true);
+        };
+        tg.appendChild(x); box.appendChild(tg);
+      });
+      li.appendChild(top); li.appendChild(box); ul.appendChild(li);
+    });
+  }
+
+  function showMsg(m){ $('msg').textContent = m || ''; }
+  var tt; function toast(m){ var e=$('toast'); e.textContent=m; e.classList.add('show'); clearTimeout(tt); tt=setTimeout(function(){e.classList.remove('show');},1800); }
+
+  /* ── 효과음 (WebAudio, 파일 없이) ── */
+  var AC = null;
+  function beep(f, d, type, vol){
+    if (!S.sound) return;
+    try {
+      AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+      var o = AC.createOscillator(), g = AC.createGain();
+      o.type = type || 'square'; o.frequency.value = f;
+      g.gain.setValueAtTime(vol || .04, AC.currentTime);
+      g.gain.exponentialRampToValueAtTime(.0001, AC.currentTime + d);
+      o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime + d);
+    } catch(e){}
+  }
+  function fanfare(){ [523,659,784,1047].forEach(function(f,i){ setTimeout(function(){ beep(f,.35,'triangle',.08); }, i*110); }); }
+
+  /* ── 추첨 ── */
+  function act(){
+    if (spinning) return;
+    var p = prize();
+    if (remain(p) > 0) return draw(p);
+    var nx = nextOpen();
+    if (nx >= 0){ S.cur = nx; save(); paint(true); }
+  }
+
+  function draw(p){
+    showMsg('');
+    var pl = pool(), n = remain(p);
+    if (S.end < S.start){ showMsg('번호표 범위를 확인해 주세요.'); return; }
+    if (!pl.length){ showMsg('추첨할 수 있는 번호가 남아있지 않아요.'); return; }
+    if (n > pl.length){ showMsg('남은 인원(' + pl.length + '명)보다 많이 뽑을 수 없어요.'); return; }
+
+    var winners = pick(pl, n);
+    var prev = won(p);
+    buildReels(prev, n);
+    spinning = true; $('btnDraw').disabled = true; document.body.classList.add('spinning');
+
+    var all = $('reels').querySelectorAll('.reel'), reels = [];
+    for (var i = prev.length; i < all.length; i++){ all[i].classList.remove('blank'); all[i].classList.add('spin'); reels.push(all[i]); }
+    var BASE = 2200, GAP = n > 3 ? 500 : 800;
+    if (n === 1 && /1/.test(p.rank)) BASE = 3500;   // 1등은 조금 더 길게
+    var t0 = performance.now(), lastTick = reels.map(function(){ return 0; }), done = 0;
+
+    function frame(now){
+      var el = now - t0;
+      for (var i = 0; i < n; i++){
+        var r = reels[i]; if (r.classList.contains('win')) continue;
+        var stopAt = BASE + GAP * i;
+        if (el >= stopAt){
+          r.classList.remove('spin'); r.classList.add('win', 'fresh');
+          r.firstChild.textContent = winners[i];
+          armSlot(r, winners[i]);
+          beep(880, .18, 'square', .06);
+          done++; continue;
+        }
+        // 멈출 시점이 가까울수록 느려짐
+        var rem = stopAt - el;
+        var interval = rem < 900 ? 60 + (900 - rem) * 0.25 : 45;
+        if (now - lastTick[i] >= interval){
+          lastTick[i] = now;
+          r.firstChild.textContent = pl[rnd(pl.length)];
+          if (i === done) beep(300 + rnd(200), .03, 'square', .02);
+        }
+      }
+      if (done < n) requestAnimationFrame(frame);
+      else finish();
+    }
+    requestAnimationFrame(frame);
+
+    function finish(){
+      var d = new Date();
+      S.hist.unshift({ pid: p.id, rank: p.rank, name: p.name,
+        time: d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}), date: d.toLocaleDateString('ko-KR'),
+        nums: winners.map(function(w){ return {n:w, v:false}; }) });
+      spinning = false; $('btnDraw').disabled = false; document.body.classList.remove('spinning');
+      save(); paint(false);
+      fanfare(); confetti();
+    }
+  }
+
+  /* ── 꽃가루 (KV 컬러, 동그라미) ── */
+  var cv = $('fx'), cx = cv.getContext('2d'), parts = [], raf = 0;
+  function resize(){ cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
+  addEventListener('resize', resize); resize();
+  function confetti(){
+    var cols = { orange:['#000','#f3f7fd','#22110a','#ffb08a'], black:['#ff4b00','#f3f7fd','#8a8a8a'], light:['#ff4b00','#263340','#d8dee7','#ffb08a'] }[S.theme] || ['#ff4b00','#000','#fff'];
+    for (var i = 0; i < 200; i++){
+      var fromLeft = i % 2 === 0;
+      parts.push({ x: fromLeft ? 0 : innerWidth, y: innerHeight * .75,
+        vx: (fromLeft ? 1 : -1) * (4 + Math.random()*9), vy: -(9 + Math.random()*11),
+        s: 5 + Math.random()*9, round: i % 3 === 0, r: Math.random()*6, vr: (Math.random()-.5)*.4,
+        c: cols[i % cols.length], life: 0 });
+    }
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  function tick(){
+    cx.clearRect(0,0,innerWidth,innerHeight);
+    parts = parts.filter(function(p){ return p.y < innerHeight + 30 && p.life < 400; });
+    parts.forEach(function(p){
+      p.vy += .28; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr; p.life++;
+      cx.save(); cx.translate(p.x,p.y); cx.rotate(p.r); cx.fillStyle = p.c;
+      if (p.round){ cx.beginPath(); cx.arc(0,0,p.s/2,0,Math.PI*2); cx.fill(); }
+      else cx.fillRect(-p.s/2, -p.s/4, p.s, p.s/2);
+      cx.restore();
+    });
+    raf = parts.length ? requestAnimationFrame(tick) : 0;
+    if (!raf) cx.clearRect(0,0,innerWidth,innerHeight);
+  }
+
+  /* ── 설정 바인딩 ── */
+  function bind(id, key, num){
+    var el = $(id);
+    if (el.type === 'checkbox'){ el.checked = !!S[key]; el.onchange = function(){ S[key] = el.checked; save(); paint(false); }; }
+    else { el.value = S[key]; el.oninput = function(){ S[key] = num ? (parseInt(el.value,10) || 0) : el.value; save(); paint(false); }; }
+  }
+  bind('inEvent','event'); bind('inStart','start',1); bind('inEnd','end',1); bind('inExclude','exclude'); bind('inSound','sound');
+
+  /* 경품 편집 */
+  function prizeRows(){
+    var box = $('prizeRows'); box.innerHTML = '';
+    S.prizes.forEach(function(p, i){
+      var row = document.createElement('div'); row.className = 'prow';
+      row.innerHTML = '<div class="ord"><button class="mini" title="위로">▲</button><button class="mini" title="아래로">▼</button></div>'
+        + '<input class="in" maxlength="8"><input class="in" maxlength="30"><input class="in c" type="number" min="1" max="20">'
+        + '<button class="mini del" title="삭제">✕</button>';
+      var ins = row.querySelectorAll('input');
+      ins[0].value = p.rank; ins[1].value = p.name; ins[2].value = p.count;
+      ins[0].oninput = function(){ p.rank = this.value; save(); paint(false); };
+      ins[1].oninput = function(){ p.name = this.value; save(); paint(false); };
+      ins[2].oninput = function(){ p.count = Math.max(1, Math.min(20, parseInt(this.value,10) || 1)); save(); paint(true); };
+      var b = row.querySelectorAll('button');
+      b[0].onclick = function(){ move(i, -1); };
+      b[1].onclick = function(){ move(i, 1); };
+      b[2].onclick = function(){
+        if (S.prizes.length <= 1) return;
+        if (won(p).length && !confirm('이미 당첨자가 있는 경품이에요. 삭제할까요? (당첨 이력은 남아요)')) return;
+        S.prizes.splice(i, 1); if (S.cur >= S.prizes.length) S.cur = 0;
+        save(); prizeRows(); paint(true);
+      };
+      box.appendChild(row);
+    });
+  }
+  function move(i, d){
+    var j = i + d; if (j < 0 || j >= S.prizes.length || spinning) return;
+    var curId = prize().id;
+    var t = S.prizes[i]; S.prizes[i] = S.prizes[j]; S.prizes[j] = t;
+    S.prizes.forEach(function(p, k){ if (p.id === curId) S.cur = k; });
+    save(); prizeRows(); paint(false);
+  }
+  $('btnAddPrize').onclick = function(){
+    S.prizes.push({ id:'p' + Date.now(), rank:'특별상', name:'경품명', count:1 });
+    save(); prizeRows(); paint(false);
+  };
+
+  /* ── 패널 ── */
+  function toggle(id){
+    ['pSet','pHist'].forEach(function(p){ if (p !== id) $(p).classList.remove('open'); });
+    $(id).classList.toggle('open');
+    $('btnSet').classList.toggle('on', $('pSet').classList.contains('open'));
+    $('btnHist').classList.toggle('on', $('pHist').classList.contains('open'));
+  }
+  $('btnSet').onclick = function(){ toggle('pSet'); };
+  $('btnHist').onclick = function(){ toggle('pHist'); };
+  document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick = function(){ b.closest('.panel').classList.remove('open'); $('btnSet').classList.remove('on'); $('btnHist').classList.remove('on'); }; });
+
+  $('btnFull').onclick = function(){
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  };
+
+  /* ── 이력 내보내기 ── */
+  function rows(){
+    var out = [['회차','등수','경품','번호','상태','날짜','시간']];
+    S.hist.slice().reverse().forEach(function(h, i){
+      h.nums.forEach(function(n){ out.push([i+1, h.rank, h.name, n.n, n.v ? '불참' : '당첨', h.date || '', h.time]); });
+    });
+    return out;
+  }
+  $('btnCopy').onclick = function(){
+    var txt = rows().map(function(r){ return r.join('\t'); }).join('\n');
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function(){ toast('복사했어요 · 엑셀에 붙여넣기 가능'); }, function(){
+      var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast('복사했어요');
+    });
+  };
+  $('btnCsv').onclick = function(){
+    var csv = '﻿' + rows().map(function(r){ return r.map(function(c){ return '"' + String(c).replace(/"/g,'""') + '"'; }).join(','); }).join('\r\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+    var d = new Date(); a.download = '경품추첨_' + d.getFullYear() + ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2) + '.csv';
+    a.click(); toast('CSV 저장');
+  };
+  $('btnReset').onclick = function(){
+    if (spinning) return;
+    if (!confirm('당첨 이력을 모두 지울까요? (경품·번호 설정은 유지돼요)')) return;
+    S.hist = []; S.cur = 0; save(); paint(true);
+  };
+
+  /* ── 키보드 ── */
+  $('btnDraw').onclick = act;
+  $('btnRedrawAll').onclick = absentAll;
+  document.addEventListener('keydown', function(e){
+    if (/INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    if (e.code === 'Space' || e.key === 'Enter'){ e.preventDefault(); act(); }
+    if (e.key === 'Escape'){ document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('open'); }); }
+  });
+
+  prizeRows();
+  paint(true);
+})();
+</script>
+</body>
+</html>
