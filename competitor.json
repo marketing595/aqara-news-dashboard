@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-27 23:35",
+ "generatedAt": "2026-10-29 00:10",
  "brands": [
   {
    "name": "아카라",
@@ -127,8 +127,8 @@
     "아카라 스위치",
     "아카라 홈캠",
     "명조 아카라이브",
-    "아카라카",
     "아카라이브 핫딜",
+    "니케 아카라이브",
     "메랜 아카라이브"
    ],
    "recent": [
@@ -228,7 +228,7 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 979,
+   "total": 980,
    "sentiment": {
     "pos": 16,
     "neu": 44,
@@ -314,8 +314,8 @@
      5
     ],
     [
-     "인기",
-     3
+     "글로벌",
+     2
     ],
     [
      "확대",
@@ -326,8 +326,8 @@
      2
     ],
     [
-     "글로벌",
-     1
+     "인기",
+     2
     ],
     [
      "계약",
@@ -347,14 +347,20 @@
     "헤이홈 홈캠",
     "헤이홈 sd카드",
     "헤이홈 거치대",
-    "헤이홈 연결",
     "헤이홈 중국",
+    "헤이홈 연결",
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 케어"
+    "헤이홈 스위치"
    ],
    "recent": [
+    {
+     "title": "'제8회 글로벌 베이비페어', 11월 19일 코엑스서 개최… 130개 브랜드 참...",
+     "source": "kids.donga.com",
+     "date": "2026-10-28",
+     "link": "https://kids.donga.com/news/articleView.html?idxno=170150"
+    },
     {
      "title": "육아 브랜드 총집합…전국 최대 규모 ‘코엑스 코베 베이비페어’ 10월...",
      "source": "ibabynews.com",
@@ -438,12 +444,6 @@
      "source": "beyondpost.co.kr",
      "date": "2026-09-10",
      "link": "http://www.beyondpost.co.kr/view.php?ud=2026090917382440709aeda69934_30"
-    },
-    {
-     "title": "제49회 대구 베이비&키즈페어 개막...출산·육아·유아교육 한자리",
-     "source": "beyondpost.co.kr",
-     "date": "2026-08-27",
-     "link": "http://www.beyondpost.co.kr/view.php?ud=2026082718015294069aeda69934_30"
     }
    ]
   },
@@ -451,51 +451,47 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69487,
+   "total": 69499,
    "sentiment": {
-    "pos": 13,
-    "neu": 43,
+    "pos": 22,
+    "neu": 34,
     "neg": 4
    },
    "keywords": [
     [
      "AI",
-     44
+     43
     ],
     [
      "삼성전자는",
-     22
+     26
     ],
     [
      "가전",
-     21
+     22
     ],
     [
      "보안",
      15
     ],
     [
-     "기능을",
-     12
-    ],
-    [
-     "갤럭시",
-     12
-    ],
-    [
-     "냉장고",
-     12
+     "에너지",
+     14
     ],
     [
      "SmartThings",
-     10
-    ],
-    [
-     "최고의",
-     10
+     11
     ],
     [
      "관리",
+     10
+    ],
+    [
+     "기능을",
+     10
+    ],
+    [
+     "기기",
      9
     ],
     [
@@ -503,23 +499,7 @@
      9
     ],
     [
-     "맞춤형",
-     9
-    ],
-    [
-     "LG전자는",
-     9
-    ],
-    [
-     "발명품",
-     9
-    ],
-    [
-     "기반으로",
-     8
-    ],
-    [
-     "삼성전자의",
+     "삼성전자가",
      8
     ],
     [
@@ -527,41 +507,61 @@
      8
     ],
     [
-     "에너지",
+     "LG전자는",
      8
+    ],
+    [
+     "연결하는",
+     8
+    ],
+    [
+     "연속",
+     7
+    ],
+    [
+     "부문",
+     7
+    ],
+    [
+     "한국품질만족지수",
+     7
+    ],
+    [
+     "KS",
+     7
     ]
    ],
    "posWords": [
     [
      "확대",
-     8
+     10
     ],
     [
-     "글로벌",
+     "만족",
+     7
+    ],
+    [
+     "1위",
      6
     ],
     [
      "강화",
-     4
+     5
     ],
     [
-     "프리미엄",
-     2
+     "글로벌",
+     5
     ],
     [
      "투자",
+     2
+    ],
+    [
+     "기대",
      1
     ],
     [
-     "계약",
-     1
-    ],
-    [
-     "협업",
-     1
-    ],
-    [
-     "공략",
+     "프리미엄",
      1
     ]
    ],
@@ -572,12 +572,84 @@
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 세탁기",
+    "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스 허브 4세대",
     "삼성 스마트싱스 스위치",
-    "삼성 스마트싱스 에어컨",
-    "삼성 스마트싱스 세탁기 원격"
+    "삼성 스마트싱스 허브 5세대"
    ],
    "recent": [
+    {
+     "title": "삼성 인피니트 라인 시스템에어컨 적용 '아크메르 동탄'",
+     "source": "ikld.kr",
+     "date": "2026-10-28",
+     "link": "http://www.ikld.kr/news/articleView.html?idxno=343114"
+    },
+    {
+     "title": "삼성전자 브랜드가치 1052억달러 '역대 최고'…7년 연속 세계 5위",
+     "source": "4th.kr",
+     "date": "2026-10-28",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2120587"
+    },
+    {
+     "title": "스마트홈 테마주 희비…삼성전자 오르고 코콤·HDC랩스 '흔들'",
+     "source": "pinpointnews.co.kr",
+     "date": "2026-10-28",
+     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=499260"
+    },
+    {
+     "title": "쿠팡·알리에 안방 내줄라···삼성·LG, '가전 유통 사수戰'",
+     "source": "newsfreezone.co.kr",
+     "date": "2026-10-28",
+     "link": "https://www.newsfreezone.co.kr/news/articleView.html?idxno=716358"
+    },
+    {
+     "title": "삼성전자, 난방 효율 높이고 혹한기에도 안정적",
+     "source": "매일경제",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/009/0005755003?sid=101"
+    },
+    {
+     "title": "삼성전자, AI가 생활 패턴 읽고 맞춤 냉방",
+     "source": "매일경제",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/009/0005755004?sid=101"
+    },
+    {
+     "title": "삼성전자, 세탁·헹굼·탈수까지 특성에 맞춰 관리",
+     "source": "매일경제",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/009/0005755001?sid=101"
+    },
+    {
+     "title": "삼성전자, AI로 맞춤 건조부터 에너지 절약까지",
+     "source": "매일경제",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/009/0005755000?sid=101"
+    },
+    {
+     "title": "삼성전자, 세탁부터 의류 관리까지 한 번에",
+     "source": "매일경제",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/009/0005755002?sid=101"
+    },
+    {
+     "title": "삼성전자, 끓어 넘치기 전에 화력 조절…AI로 똑똑해진 인덕션",
+     "source": "매일경제",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/009/0005754956?sid=101"
+    },
+    {
+     "title": "삼성전자, 주름·냄새 관리하고 AI로 건조시간 조절",
+     "source": "매일경제",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/009/0005754942?sid=101"
+    },
+    {
+     "title": "삼성전자, AI로 식재료 관리부터 맞춤 냉각까지",
+     "source": "매일경제",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/009/0005754939?sid=101"
+    },
     {
      "title": "[TIW 2026] AI 데이터센터發 '새 일감' 찾아 나선 韓 제조업, '열관리'가...",
      "source": "hellot.net",
@@ -595,78 +667,6 @@
      "source": "파이낸셜뉴스",
      "date": "2026-10-27",
      "link": "https://n.news.naver.com/mnews/article/014/0005595036?sid=101"
-    },
-    {
-     "title": "칼테라 \"UWB, 거리 측정 넘어 센싱으로\"…차량용 반도체 확장",
-     "source": "epnc.co.kr",
-     "date": "2026-10-27",
-     "link": "https://www.epnc.co.kr/news/articleView.html?idxno=408792"
-    },
-    {
-     "title": "폭염에 전력 수요 증가·탄소 감축까지…'전기 아끼는 건물' 뜬다",
-     "source": "econovill.com",
-     "date": "2026-10-26",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=754925"
-    },
-    {
-     "title": "삼성 AI 가전, 호텔 진출 잰걸음…B2B 수익원 확장",
-     "source": "newsway.co.kr",
-     "date": "2026-10-26",
-     "link": "https://www.newsway.co.kr/news/view?ud=2026102614061520479"
-    },
-    {
-     "title": "美애플, 삼성과 부품동맹·LG와 AI홈 연합…협력전략 이원화 '윈윈'",
-     "source": "seouleconews.com",
-     "date": "2026-10-26",
-     "link": "http://www.seouleconews.com/news/articleView.html?idxno=94574"
-    },
-    {
-     "title": "[이재용의 4년㊦] 8년 만에 깨어난 빅딜…'반도체 이후' 밑그림 그린다",
-     "source": "dailian.co.kr",
-     "date": "2026-10-26",
-     "link": "https://n.news.naver.com/mnews/article/119/0003146767?sid=101"
-    },
-    {
-     "title": "화면은 삼성·AI홈은 LG…애플의 합종연횡",
-     "source": "it.chosun.com",
-     "date": "2026-10-26",
-     "link": "https://it.chosun.com/news/articleView.html?idxno=2023092172686"
-    },
-    {
-     "title": "[단독] 타이젠 코드 뜯은 美 해커의 공세…삼성, 스마트TV '데이터 수집...",
-     "source": "the-today.com",
-     "date": "2026-10-26",
-     "link": "https://www.the-today.com/news/articleView.html?idxno=92380"
-    },
-    {
-     "title": "\"내 말 듣고 있었나\"…삼성 TV '주변 소리 수집' 주장에 오픈AI 계정 정...",
-     "source": "kpinews.kr",
-     "date": "2026-10-24",
-     "link": "https://www.kpinews.kr/newsView/1065604418870384"
-    },
-    {
-     "title": "티피링크 타포, 스마트 재실 센서 'T150' 출시…미세 움직임까지 감지 스...",
-     "source": "epnc.co.kr",
-     "date": "2026-10-23",
-     "link": "https://www.epnc.co.kr/news/articleView.html?idxno=408654"
-    },
-    {
-     "title": "티피링크 타포, 스마트 재실 센서 'Tapo T150'으로 스마트 홈 자동화 구...",
-     "source": "boannews.com",
-     "date": "2026-10-23",
-     "link": "https://www.boannews.com/news/articleView.html?idxno=146666"
-    },
-    {
-     "title": "티피링크, 미세 움직임까지 감지 ··· 스마트 재실 센서 '타포 T150' 출...",
-     "source": "datanet.co.kr",
-     "date": "2026-10-23",
-     "link": "https://www.datanet.co.kr/news/articleView.html?idxno=215296"
-    },
-    {
-     "title": "삼성 스마트싱스 vs LG·애플 연합…AI홈 플랫폼 대전",
-     "source": "ebn.co.kr",
-     "date": "2026-10-23",
-     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1728783"
     }
    ]
   },
@@ -674,7 +674,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78171,
+   "total": 78174,
    "sentiment": {
     "pos": 21,
     "neu": 38,
@@ -683,75 +683,75 @@
    "keywords": [
     [
      "AI",
-     83
-    ],
-    [
-     "냉장고",
-     54
+     79
     ],
     [
      "LG전자",
-     53
+     52
+    ],
+    [
+     "냉장고",
+     52
     ],
     [
      "냉동",
-     51
-    ],
-    [
-     "보관",
-     50
-    ],
-    [
-     "모드를",
-     50
-    ],
-    [
-     "와인",
      48
     ],
     [
-     "육류",
+     "보관",
      47
     ],
     [
+     "모드를",
+     47
+    ],
+    [
+     "와인",
+     45
+    ],
+    [
+     "육류",
+     44
+    ],
+    [
      "밀키트",
-     43
-    ],
-    [
-     "김치",
-     42
-    ],
-    [
-     "선택할",
-     42
-    ],
-    [
-     "기능과",
-     41
-    ],
-    [
-     "서랍형",
      40
     ],
     [
+     "ThinQ",
+     39
+    ],
+    [
+     "김치",
+     39
+    ],
+    [
+     "기능과",
+     39
+    ],
+    [
+     "선택할",
+     39
+    ],
+    [
+     "서랍형",
+     37
+    ],
+    [
      "하칸에는",
-     38
+     36
     ],
     [
      "스템",
-     37
-    ],
-    [
-     "ThinQ",
-     37
+     34
     ],
     [
      "생선",
-     34
+     33
     ],
     [
-     "오토",
-     34
+     "유제품",
+     32
     ]
    ],
    "posWords": [
@@ -768,6 +768,10 @@
      2
     ],
     [
+     "1위",
+     1
+    ],
+    [
      "인기",
      1
     ],
@@ -781,18 +785,36 @@
     ]
    ],
    "related": [
-    "lg 씽큐",
     "lg 씽큐온",
+    "lg 씽큐",
     "lg 씽큐 세탁기",
-    "lg 씽큐 와이파이",
     "lg 씽큐 티비연결",
     "lg 씽큐 에어컨",
+    "lg 씽큐 와이파이",
     "lg 씽큐 연결",
-    "lg 씽큐 에어컨 연결",
     "lg 씽큐 초기화",
+    "lg 씽큐 에어컨 연결",
     "lg 씽큐온 사용방법"
    ],
    "recent": [
+    {
+     "title": "AI인버터로 배터리효율·편의성 동시 향상<NBCI>",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/016/0002715685?sid=101"
+    },
+    {
+     "title": "LG전자, 인니 드럼세탁기 시장 압도적 1위.. \"소비자 10명 중 4명 사용\"",
+     "source": "파이낸셜뉴스",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/014/0005595746?sid=101"
+    },
+    {
+     "title": "[기업분석] 애플과 손잡은 LG전자, 냉장고 넘어 발전소까지…AI로 사업 ...",
+     "source": "dailypop.kr",
+     "date": "2026-10-28",
+     "link": "http://www.dailypop.kr/news/articleView.html?idxno=103799"
+    },
     {
      "title": "\"음원도 IP도 LG 소유\"…LG전자 '에이아이돌'의 셈법",
      "source": "newspim.com",
@@ -860,28 +882,10 @@
      "link": "https://n.news.naver.com/mnews/article/011/0004675228?sid=101"
     },
     {
-     "title": "\"AI와 서랍형 냉동고로 한층 편리\"...LG전자, '스템' 냉장고 출시",
-     "source": "wolyo.co.kr",
-     "date": "2026-10-26",
-     "link": "https://www.wolyo.co.kr/news/articleView.html?idxno=319576"
-    },
-    {
      "title": "LG전자, 서랍형 냉동고·AI 적용한 얼음정수 냉장고 '스템' 출시",
      "source": "biz.newdaily.co.kr",
      "date": "2026-10-26",
      "link": "https://biz.newdaily.co.kr/site/data/html/2026/10/26/2026102600268.html"
-    },
-    {
-     "title": "LG전자, AI·서랍형 냉동고 적용한 '디오스 STEM 냉장고' 출시",
-     "source": "hbnpress.com",
-     "date": "2026-10-26",
-     "link": "https://hbnpress.com/news/view/1065593334354348"
-    },
-    {
-     "title": "LG전자, AI·서랍형 냉동고 더한 ‘디오스 AI 스템’ 냉장고 출시..인체...",
-     "source": "dailycar.co.kr",
-     "date": "2026-10-26",
-     "link": "https://www.dailycar.co.kr/content/news.html?type=view&autoId=62946"
     }
    ]
   },
@@ -889,84 +893,84 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76307,
+   "total": 76316,
    "sentiment": {
-    "pos": 10,
-    "neu": 46,
-    "neg": 4
+    "pos": 12,
+    "neu": 40,
+    "neg": 8
    },
    "keywords": [
     [
      "tv",
-     44
-    ],
-    [
-     "LG유플러스",
-     41
-    ],
-    [
-     "TV",
-     33
-    ],
-    [
-     "홈갤러리",
      32
     ],
     [
-     "앨범을",
+     "LG유플러스",
+     30
+    ],
+    [
+     "TV",
      26
     ],
     [
-     "연동해",
-     26
-    ],
-    [
-     "오늘일상",
-     24
-    ],
-    [
-     "가족사진",
+     "홈갤러리",
      23
     ],
     [
-     "날씨",
+     "앨범을",
      20
     ],
     [
-     "감상할",
-     20
-    ],
-    [
-     "TV를",
+     "연동해",
      19
     ],
     [
-     "화면으로",
-     18
-    ],
-    [
-     "tv와",
+     "오늘일상",
      17
     ],
     [
-     "화면",
+     "날씨",
      16
     ],
     [
-     "정진이",
+     "감상할",
+     16
+    ],
+    [
+     "가족사진",
      16
     ],
     [
      "AI",
-     13
+     15
     ],
     [
-     "포토",
-     13
+     "TV를",
+     15
     ],
     [
-     "화면을",
-     13
+     "tv와",
+     14
+    ],
+    [
+     "화면으로",
+     12
+    ],
+    [
+     "정진이",
+     12
+    ],
+    [
+     "삼성증권",
+     11
+    ],
+    [
+     "화면",
+     11
+    ],
+    [
+     "으로",
+     10
     ]
    ],
    "posWords": [
@@ -975,19 +979,23 @@
      6
     ],
     [
+     "글로벌",
+     3
+    ],
+    [
+     "1위",
+     2
+    ],
+    [
      "개선",
      2
     ],
     [
-     "글로벌",
-     2
-    ],
-    [
-     "수출",
+     "만족",
      1
     ],
     [
-     "1위",
+     "수출",
      1
     ],
     [
@@ -1004,14 +1012,68 @@
     "구글 홈 스피커",
     "구글 홈",
     "구글 홈 화면 삭제",
-    "구글 홈페이지",
     "구글 홈 미니",
+    "구글 홈페이지",
     "구글 홈화면빼는법",
-    "구글 홈 스피커 연결",
-    "구글 홈화면 없애기",
-    "구글 홈 연결"
+    "구글 홈 미니 1세대",
+    "구글 홈 미니 연결",
+    "구글 홈 스피커 연결"
    ],
    "recent": [
+    {
+     "title": "[게임뉴스] 라이온하트 및 라인게임즈 소식 외",
+     "source": "gamevu.co.kr",
+     "date": "2026-10-28",
+     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=61807"
+    },
+    {
+     "title": "DGIST, 렌즈 표면 ‘나사산’ 기술로 초음파 센서 잡음 대폭 줄여…반도...",
+     "source": "breaknews.com",
+     "date": "2026-10-28",
+     "link": "http://www.breaknews.com/1246583"
+    },
+    {
+     "title": "[주간스타트업동향] 펫나우, 동물보호법 개정 맞춰 '반려견 AI 비문등록...",
+     "source": "it.donga.com",
+     "date": "2026-10-28",
+     "link": "https://it.donga.com/109788/"
+    },
+    {
+     "title": "\"한국시리즈 티켓 잡아라\"… 전남광주특별시, 2026 KBO 플레이오프 맞춤...",
+     "source": "breaknews.com",
+     "date": "2026-10-28",
+     "link": "http://www.breaknews.com/1246547"
+    },
+    {
+     "title": "SKT, 10년 이상 이용 장기고객 ‘뮤지컬 데이’..시카고 단독 대관",
+     "source": "breaknews.com",
+     "date": "2026-10-28",
+     "link": "http://www.breaknews.com/1246481"
+    },
+    {
+     "title": "쿠팡, 최대 할인전 ‘와우 멤버스데이’ 11월 2일 시작",
+     "source": "breaknews.com",
+     "date": "2026-10-28",
+     "link": "http://www.breaknews.com/1246425"
+    },
+    {
+     "title": "“AI와 생명, 윤리의 공진화”…100세 시대를 여는 ‘인간 중심’ 디지...",
+     "source": "seoul.co.kr",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/081/0003693391?sid=102"
+    },
+    {
+     "title": "김해FC2008, 새 사령탑에 설기현 전 경남FC 감독 선임",
+     "source": "breaknews.com",
+     "date": "2026-10-28",
+     "link": "http://www.breaknews.com/1246379"
+    },
+    {
+     "title": "AI로 U+tv 업그레이드 통했다…LGU+, AX 품질만족지수 1위",
+     "source": "news1.kr",
+     "date": "2026-10-28",
+     "link": "https://n.news.naver.com/mnews/article/421/0009254404?sid=105"
+    },
     {
      "title": "[증권 NOW] 한국투자증권·삼성증권·신한투자증권·대신증권·교보증권...",
      "source": "wikileaks-kr.org",
@@ -1047,60 +1109,6 @@
      "source": "thebigdata.co.kr",
      "date": "2026-10-27",
      "link": "https://www.thebigdata.co.kr/view.php?ud=20261027145706525737600e7ec7_23"
-    },
-    {
-     "title": "[ZD SW 투데이] 어도비, 히스로 공항과 AI 검색 정보 정확도 높인다 外",
-     "source": "지디넷",
-     "date": "2026-10-27",
-     "link": "https://n.news.naver.com/mnews/article/092/0002442562?sid=105"
-    },
-    {
-     "title": "자동차보험료비교견적사이트 차통령, 안드로이드 앱 8.0 업데이트... 회...",
-     "source": "thebigdata.co.kr",
-     "date": "2026-10-27",
-     "link": "https://www.thebigdata.co.kr/view.php?ud=20261027145002992837600e7ec7_23"
-    },
-    {
-     "title": "[금융권 이모저모]삼성액티브자산운용, 대형주·단기채 혼합 ETF 상장 外",
-     "source": "businessplus.kr",
-     "date": "2026-10-27",
-     "link": "https://www.businessplus.kr/news/articleView.html?idxno=118802"
-    },
-    {
-     "title": "\"AI 투자 효과 0?\"…빅테크 수익성 시험대",
-     "source": "mstoday.co.kr",
-     "date": "2026-10-27",
-     "link": "https://www.mstoday.co.kr/news/articleView.html?idxno=200288"
-    },
-    {
-     "title": "[증권브리핑] 메리츠증권, 발행어음 출시···신규 고객 특판 연 5% 외",
-     "source": "seoulfn.com",
-     "date": "2026-10-27",
-     "link": "https://www.seoulfn.com/news/articleView.html?idxno=641083"
-    },
-    {
-     "title": "제2회 ‘코리아 그랜드 페스티벌’ 10월 29일 개막..역대급 소비축제 열...",
-     "source": "breaknews.com",
-     "date": "2026-10-27",
-     "link": "http://www.breaknews.com/1246027"
-    },
-    {
-     "title": "에너자이, 브로드컴 NPU 기반 스마트홈 AI 시연…글로벌 통신장비 시장...",
-     "source": "venturesquare.net",
-     "date": "2026-10-27",
-     "link": "https://www.venturesquare.net/1123314/"
-    },
-    {
-     "title": "[산업소식] 종근당 '더마그램 피디알엔 크림' 외국인 약국 쇼핑 추천품...",
-     "source": "4th.kr",
-     "date": "2026-10-27",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2120463"
-    },
-    {
-     "title": "자주(JAJU), 플란넬 파자마·라운지웨어 신제품 출시",
-     "source": "breaknews.com",
-     "date": "2026-10-27",
-     "link": "http://www.breaknews.com/1245966"
     }
    ]
   }
