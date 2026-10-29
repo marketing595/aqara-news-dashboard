@@ -49,6 +49,9 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .ph{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .ph h2{font-size:14px;font-weight:700;color:var(--ink)}
 .search{height:34px;border:1px solid var(--line2);border-radius:999px;padding:0 14px;min-width:220px;outline:none}
+.seg{display:inline-flex;background:#f1f2f4;border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:none;height:28px;padding:0 12px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--tx2);white-space:nowrap}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .search:focus{border-color:var(--acc)}
 .tbl{width:100%;border-collapse:collapse}
 .tbl th{font-size:11.5px;color:var(--tx3);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;background:#fff}
@@ -116,7 +119,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 
   <div class="panel">
     <div class="ph">
-      <h2 id="listTitle">전체</h2>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div></div>
       <input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색">
     </div>
     <div style="overflow:auto;max-height:72vh">
@@ -141,7 +144,9 @@ const fmtTime = (ms) => { if(!ms) return ''; const d = new Date(ms); return `${d
 const ST = { yes: '참석', no: '불참', pending: '미응답' };
 function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('on'), 2200); }
 
-let G = {}, META = {}, LOG = {}, FILTER = 'all', OPEN = '', EDITING = false;
+let G = {}, META = {}, LOG = {}, FILTER = 'all', COMP = 'all', OPEN = '', EDITING = false;
+// 동행인 탭: 명단에 동행인을 적었던 그룹(지금 다 뺐어도 포함) / 혼자 오는 그룹
+const withComps = (g) => (g.comps || []).length > 0 || ((g.orig && g.orig.n) || 1) > 1;
 const linkOf = (t) => location.origin + '/r/' + t;
 
 async function api(body){
@@ -199,13 +204,15 @@ function paint(){
   paintRows();
 }
 
-function filtered(){
+function filtered(ignoreComp){
   const q = $('#q').value.trim().toLowerCase().replace(/-/g, '');
   return list().filter(g => {
     if(FILTER === 'yes' && g.status !== 'yes') return false;
     if(FILTER === 'no' && g.status !== 'no') return false;
     if(FILTER === 'pending' && g.status !== 'pending' && g.status) return false;
     if(FILTER === 'chg' && !changed(g)) return false;
+    if(!ignoreComp && COMP === 'with' && !withComps(g)) return false;
+    if(!ignoreComp && COMP === 'solo' && withComps(g)) return false;
     if(!q) return true;
     const hay = [g.rep.name, g.rep.org, g.rep.phone, g.email, g.route, g.sub && g.sub.name, ...(g.comps || []).map(c => c.name)].join(' ').toLowerCase();
     return hay.includes(q);
@@ -215,6 +222,10 @@ function filtered(){
 function paintRows(){
   if(EDITING) return;
   const L = filtered();
+  const base = filtered(true), nW = base.filter(withComps).length;
+  $('#seg').innerHTML = [['all', '전체', base.length], ['with', '동행인 있음', nW], ['solo', '혼자 참석', base.length - nW]]
+    .map(([k, l, n]) => `<button class="${COMP === k ? 'on' : ''}" data-comp="${k}">${l} ${n}</button>`).join('');
+  document.querySelectorAll('[data-comp]').forEach(b => b.onclick = () => { COMP = b.dataset.comp; OPEN = ''; paintRows(); });
   $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', pending: '미응답', chg: '대리·동행인 변경' })[FILTER] + ` ${L.length}`;
   if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="8" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
   $('#rows').innerHTML = L.map(g => {

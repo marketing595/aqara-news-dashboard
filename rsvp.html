@@ -170,33 +170,37 @@ async function load(){
 }
 function setData(j){
   D = j;
-  F = { status: j.status === 'pending' ? '' : j.status, rep: clone(j.rep), sub: j.sub ? clone(j.sub) : null, comps: clone(j.comps || []) };
+  F = { status: j.status === 'pending' ? '' : j.status, rep: clone(j.rep), comps: clone(j.comps || []), removed: clone(j.removed || []) };
   DIRTY = false;
   const ev = j.event || {};
   $('#evTitle').textContent = ev.title || 'SMART HOME INTERIOR 2026';
   $('#evMeta').innerHTML = `${ev.sub ? esc(ev.sub) + '<br>' : ''}<b>일시</b> ${esc(ev.date || '')}<br><b>장소</b> ${esc(ev.place || '')}`;
 }
 
-function headCount(){ return F.status === 'yes' ? 1 + F.comps.filter(c => c.name.trim()).length : 0; }
+function headCount(){ return F.status === 'yes' ? 1 + F.comps.length : 0; }
+// 동행인을 적었던 분인지(지금 뺀 사람 포함) — 혼자 오는 분에겐 동행인 칸 자체를 보여주지 않는다
+const hasComps = () => F.comps.length + F.removed.length > 0;
 
+// 손님이 할 수 있는 것: 참석/불참, 본인 연락처 확인, (동행인을 적었던 분만) 동행인 빼기·되돌리기와 연락처 입력.
+// 동행인 이름 수정·새 동행인 추가·대리 참석은 담당자만(2026-10-29 사용자 지정).
 function render(){
   if(MODE === 'done') return renderDone();
   const ro = D.closed;
-  const rep = F.rep, sub = F.sub;
+  const rep = F.rep;
   const comps = F.comps.map((c, i) => `
-    <div class="person" data-i="${i}">
-      <div class="p-top"><span class="p-num">동행인 ${i + 1}${c._chg ? `<span class="p-tag acc">${esc(c._chg)}님 대신</span>` : ''}</span>${ro ? '' : `<span><button type="button" class="del" data-chg="${i}" style="margin-right:6px">다른 분으로 변경</button><button type="button" class="del" data-del="${i}" aria-label="동행인 ${i + 1} 삭제">삭제</button></span>`}</div>
-      <label class="fld"><span>성함<i>*</i></span><input data-c="${i}" data-k="name" value="${esc(c.name)}" autocomplete="off" ${ro ? 'disabled' : ''}></label>
-      <div class="row2">
-        <label class="fld"><span>직책</span><input data-c="${i}" data-k="title" value="${esc(c.title)}" autocomplete="off" ${ro ? 'disabled' : ''}></label>
-        <label class="fld"><span>연락처 (선택)</span><input data-c="${i}" data-k="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(c.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
-      </div>
+    <div class="person">
+      <div class="p-top"><span class="p-name">${esc(c.name)}<span class="p-tag">동행</span></span>${ro ? '' : `<button type="button" class="del" data-del="${i}" aria-label="${esc(c.name)} 삭제">삭제</button>`}</div>
+      <label class="fld"><span>연락처</span><input data-c="${i}" data-k="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(c.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
+    </div>`).join('');
+  const removed = F.removed.map((n, i) => `
+    <div class="person dim">
+      <div class="p-top" style="margin-bottom:10px"><span class="p-name"><span class="strike">${esc(n)}</span><span class="p-tag">안 오심</span></span>${ro ? '' : `<button type="button" class="del" data-undo="${i}">되돌리기</button>`}</div>
     </div>`).join('');
 
   $('#app').innerHTML = `
     <section class="card">
       <h2>${esc(rep.name)}님,<br>세미나에 참석하시나요?</h2>
-      <p class="lead">참석 여부와 함께 오시는 분을 확인해 주세요. 저장한 뒤에도 이 링크로 언제든 다시 바꿀 수 있어요.</p>
+      <p class="lead">${hasComps() ? '참석 여부와 함께 오시는 분을 확인해 주세요.' : '참석 여부와 연락처를 확인해 주세요.'} 저장한 뒤에도 이 링크로 언제든 다시 바꿀 수 있어요.</p>
       ${ro ? '<div class="closed">응답이 마감되어 지금은 수정할 수 없어요. 변경이 필요하면 담당자에게 연락해 주세요.</div>' : ''}
       <div class="choice" role="group" aria-label="참석 여부">
         <button type="button" class="yes" data-st="yes" aria-pressed="${F.status === 'yes'}" ${ro ? 'disabled' : ''}>참석합니다</button>
@@ -205,33 +209,19 @@ function render(){
     </section>
 
     <section class="card" ${F.status === 'yes' ? '' : 'hidden'}>
-      <div class="sec-h" style="margin-bottom:12px"><h3>참석하시는 분</h3></div>
-      <div class="person ${sub ? 'dim' : ''}">
-        <div class="p-top"><span class="p-name"><span class="${sub ? 'strike' : ''}">${esc(rep.name)}</span><span class="p-tag">초대받은 분</span></span></div>
-        ${sub ? `<p class="hint" style="margin:-4px 0 12px">다른 분이 대신 참석해요.</p>` : `
-        <div class="row2">
-          <label class="fld"><span>소속</span><input data-r="org" value="${esc(rep.org)}" autocomplete="organization" ${ro ? 'disabled' : ''}></label>
-          <label class="fld"><span>직책</span><input data-r="title" value="${esc(rep.title)}" ${ro ? 'disabled' : ''}></label>
-        </div>
-        <label class="fld"><span>연락처</span><input data-r="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(rep.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>`}
+      <div class="sec-h" style="margin-bottom:12px"><h3>연락처 확인</h3></div>
+      <div class="person">
+        <div class="p-top"><span class="p-name">${esc(rep.name)}<span class="p-tag">초대받은 분</span></span></div>
+        ${D.sub && D.sub.name ? `<p class="hint" style="margin:-4px 0 12px">${esc(D.sub.name)}님이 대신 참석해요.</p>` : ''}
+        <label class="fld"><span>연락처<i>*</i></span><input data-r="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(rep.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
       </div>
-      ${sub ? `
-      <div class="person" style="margin-top:10px">
-        <div class="p-top"><span class="p-name">대신 참석하는 분<span class="p-tag acc">변경</span></span>${ro ? '' : '<button type="button" class="del" id="subOff">본인 참석으로</button>'}</div>
-        <label class="fld"><span>성함<i>*</i></span><input data-s="name" value="${esc(sub.name)}" ${ro ? 'disabled' : ''}></label>
-        <div class="row2">
-          <label class="fld"><span>소속</span><input data-s="org" value="${esc(sub.org)}" ${ro ? 'disabled' : ''}></label>
-          <label class="fld"><span>직책</span><input data-s="title" value="${esc(sub.title)}" ${ro ? 'disabled' : ''}></label>
-        </div>
-        <label class="fld"><span>연락처<i>*</i></span><input data-s="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(sub.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
-      </div>` : (ro ? '' : `<p style="margin-top:12px"><button type="button" class="link" id="subOn">본인 대신 다른 분이 오시나요?</button></p>`)}
-
+      ${hasComps() ? `
       <div class="sec">
         <div class="sec-h"><h3>함께 오시는 분</h3><span class="cnt">${F.comps.length}명</span></div>
         ${comps || '<div class="empty">함께 오시는 분이 없어요.</div>'}
-        ${ro ? '' : '<button type="button" class="add" id="addComp">+ 동행인 추가</button>'}
-        <p class="hint">오지 않는 분은 ‘삭제’, 다른 분으로 바뀌었으면 이름을 고쳐 주세요.</p>
-      </div>
+        ${removed ? `<div style="margin-top:10px">${removed}</div>` : ''}
+        <p class="hint">오지 않는 분은 ‘삭제’를 눌러 주세요. 명단에 없는 분이 오시면 담당자에게 알려 주세요.</p>
+      </div>` : ''}
     </section>`;
   paintBar();
   bind();
@@ -244,7 +234,7 @@ function paintBar(){
   const n = headCount();
   $('#sum').innerHTML = !F.status ? '<b>참석 여부를 선택해 주세요</b>'
     : F.status === 'no' ? '<b>불참</b>저장하면 담당자에게 전달돼요'
-    : `<b>총 ${n}명 참석</b>${F.sub ? '대리 참석 1명' : '본인'}${n > 1 ? ` + 동행인 ${n - 1}명` : ''}`;
+    : `<b>총 ${n}명 참석</b>${n > 1 ? `본인 + 동행인 ${n - 1}명` : '본인'}`;
   $('#saveBtn').disabled = !F.status;
   $('#saveBtn').textContent = D.answered ? '변경 내용 저장' : '응답 저장하기';
 }
@@ -252,31 +242,19 @@ function paintBar(){
 function bind(){
   document.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { F.status = b.dataset.st; DIRTY = true; render(); });
   document.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
-    const i = +b.dataset.del, c = F.comps[i];
-    F.comps.splice(i, 1); DIRTY = true; render();
-    toast((c.name ? c.name + '님을 ' : '') + '동행인에서 뺐어요');
+    const c = F.comps.splice(+b.dataset.del, 1)[0];
+    F.removed.push(c.name); DIRTY = true; render();
+    toast(c.name + '님을 동행인에서 뺐어요');
   });
-  document.querySelectorAll('[data-chg]').forEach(b => b.onclick = () => {
-    const i = +b.dataset.chg, c = F.comps[i];
-    F.comps[i] = { name: '', title: '', org: c.org || '', phone: '', _chg: c._chg || c.name };
-    DIRTY = true; render();
-    const el = document.querySelector(`[data-c="${i}"][data-k="name"]`); if(el) el.focus();
+  document.querySelectorAll('[data-undo]').forEach(b => b.onclick = () => {
+    const n = F.removed.splice(+b.dataset.undo, 1)[0];
+    F.comps.push({ name: n, title: '', org: '', phone: '' }); DIRTY = true; render();
   });
-  const add = $('#addComp'); if(add) add.onclick = () => {
-    if(F.comps.length >= 30) return toast('동행인은 30명까지 입력할 수 있어요');
-    F.comps.push({ name: '', title: '', org: F.rep.org || '', phone: '' }); DIRTY = true; render();
-    const ins = document.querySelectorAll('[data-k="name"]'); ins[ins.length - 1].focus();
-  };
-  const on = $('#subOn'); if(on) on.onclick = () => { F.sub = { name: '', title: '', org: F.rep.org || '', phone: '' }; DIRTY = true; render(); const el = document.querySelector('[data-s="name"]'); if(el) el.focus(); };
-  const off = $('#subOff'); if(off) off.onclick = () => { F.sub = null; DIRTY = true; render(); };
   document.querySelectorAll('input').forEach(inp => {
     inp.oninput = () => {
       DIRTY = true; inp.classList.remove('bad');
-      const v = inp.value;
-      if(inp.dataset.r) F.rep[inp.dataset.r] = v;
-      else if(inp.dataset.s) F.sub[inp.dataset.s] = v;
-      else if(inp.dataset.c != null) F.comps[+inp.dataset.c][inp.dataset.k] = v;
-      if(inp.dataset.k === 'name' || inp.dataset.s === 'name') paintBar();
+      if(inp.dataset.r) F.rep[inp.dataset.r] = inp.value;
+      else if(inp.dataset.c != null) F.comps[+inp.dataset.c][inp.dataset.k] = inp.value;
     };
     if(inp.type === 'tel') inp.onblur = () => { inp.value = fmtPhone(inp.value); };
   });
@@ -286,15 +264,8 @@ function validate(){
   if(F.status !== 'yes') return true;
   let first = null;
   const mark = (sel) => { const el = document.querySelector(sel); if(el){ el.classList.add('bad'); if(!first) first = el; } };
-  if(F.sub){
-    if(!F.sub.name.trim()) mark('[data-s="name"]');
-    if(!String(F.sub.phone).replace(/\D/g, '') || !phoneOk(F.sub.phone)) mark('[data-s="phone"]');
-  }else if(!phoneOk(F.rep.phone)) mark('[data-r="phone"]');
-  F.comps.forEach((c, i) => {
-    const filled = c.name.trim() || c.title.trim() || String(c.phone).replace(/\D/g, '');
-    if(filled && !c.name.trim()) mark(`[data-c="${i}"][data-k="name"]`);
-    if(!phoneOk(c.phone)) mark(`[data-c="${i}"][data-k="phone"]`);
-  });
+  if(!String(F.rep.phone).replace(/\D/g, '') || !phoneOk(F.rep.phone)) mark('[data-r="phone"]');
+  F.comps.forEach((c, i) => { if(!phoneOk(c.phone)) mark(`[data-c="${i}"][data-k="phone"]`); });
   if(first){ first.focus(); first.scrollIntoView({ block: 'center', behavior: 'smooth' }); toast('빨간 칸을 확인해 주세요'); return false; }
   return true;
 }
@@ -302,10 +273,9 @@ function validate(){
 async function save(){
   if(!F.status || !validate()) return;
   const btn = $('#saveBtn'); btn.disabled = true; btn.textContent = '저장 중…';
-  const comps = F.comps.filter(c => c.name.trim());
   try{
     const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: F.rep, sub: F.sub, comps }) });
+      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone }, comps: F.comps.map(c => ({ name: c.name, phone: c.phone })) }) });
     const j = await r.json();
     if(!j.ok){ toast(j.error || '저장하지 못했어요. 다시 시도해 주세요.'); paintBar(); return; }
     setData(j); MODE = 'done'; render(); window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -145,12 +145,22 @@ function cleanComps(a){
 }
 const STATUSES = ['pending', 'yes', 'no'];
 
-// 손님에게 돌려줄 값 — 이메일·메모·원본은 빼고
+// 손님이 고를 수 있는 동행인 = 처음 명단(orig) + 지금 명단(담당자가 추가한 사람). 손님은 새 사람을 추가할 수 없다(2026-10-29 사용자 지정).
+function allowedComps(g){
+  const m = {};
+  String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(Boolean)
+    .forEach(n => { m[n] = { name: n, title: '', org: g.rep.org || '', phone: '' }; });
+  (g.comps || []).forEach(c => { if(c && c.name) m[c.name] = c; });
+  return m;
+}
+// 손님에게 돌려줄 값 — 이메일·메모·원본은 빼고. removed = 명단에 있었지만 지금 빠진 동행인(되돌리기용)
 function guestView(g, meta){
+  const now = (g.comps || []).map(c => c.name);
   return {
     ok: true, event: EVENT, closed: !!(meta && meta.closed),
     rep: { name: g.rep.name, title: g.rep.title || '', org: g.rep.org || '', phone: g.rep.phone || '' },
     sub: g.sub || null, comps: g.comps || [], status: g.status || 'pending',
+    removed: Object.keys(allowedComps(g)).filter(n => !now.includes(n)),
     updatedAt: g.updatedAt || 0, answered: !!g.answeredAt,
   };
 }
@@ -176,12 +186,15 @@ module.exports = async (req, res) => {
       if(meta.closed) return res.status(200).json({ ok: false, error: '응답이 마감되었어요. 변경이 필요하면 담당자에게 연락해 주세요.' });
       const status = STATUSES.includes(body.status) && body.status !== 'pending' ? body.status : '';
       if(!status) return res.status(200).json({ ok: false, error: '참석 여부를 선택해 주세요.' });
-      const rep = cleanPerson(Object.assign({}, body.rep, { name: g.rep.name }));   // 초대받은 분 이름은 고정
-      const sub = body.sub && str(body.sub.name, 40) ? cleanPerson(body.sub) : null;
-      const comps = cleanComps(body.comps);
+      // 손님이 바꿀 수 있는 것: 참석 여부, 본인 연락처, 동행인 빼기/되돌리기와 동행인 연락처. 이름·소속·대리 참석은 담당자만.
+      const rep = cleanPerson(body.rep);
+      const allow = allowedComps(g), seen = {};
+      const comps = cleanComps(body.comps).filter(c => allow[c.name] && !seen[c.name] && (seen[c.name] = 1))
+        .map(c => Object.assign({}, allow[c.name], { phone: c.phone }));
+      const sub = g.sub || null;
       const now = Date.now();
       const next = Object.assign({}, g, {
-        status, rep: Object.assign({}, g.rep, { title: rep.title, org: rep.org, phone: rep.phone }),
+        status, rep: Object.assign({}, g.rep, { phone: rep.phone }),
         sub, comps, updatedAt: now, updatedBy: 'guest', answeredAt: now,
       });
       await fb('PUT', `groups/${t}`, next);
