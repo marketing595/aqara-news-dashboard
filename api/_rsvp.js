@@ -200,19 +200,20 @@ module.exports = async (req, res) => {
       (Array.isArray(body.comps) ? body.comps : []).slice(0, 30).forEach(x => {
         const nm = str(x && x.name, 40), from = str(x && x.from, 40), phone = digits(x && x.phone);
         const org = (o) => (x && x.org !== undefined) ? { org: str(x.org, 80) } : (o ? { org: o } : {});   // 소속: 손님이 적은 값, 안 보냈으면 기존 값
+        const title = (o) => (x && x.title !== undefined) ? { title: str(x.title, 40) } : (o ? { title: o } : {});   // 직책도 같은 방식
         if(from && phs[from]){
           if(seen[from]) return; seen[from] = 1;
-          const c = Object.assign({}, phs[from], { name: nm || from, phone }, org(phs[from].org));
+          const c = Object.assign({}, phs[from], { name: nm || from, phone }, org(phs[from].org), title(phs[from].title));
           if(c.name === from) delete c.from; else c.from = from;
           comps.push(c);
         }else if(nm && allow[nm] && !seen[nm]){
-          seen[nm] = 1; comps.push(Object.assign({}, allow[nm], { phone }, org(allow[nm].org)));
+          seen[nm] = 1; comps.push(Object.assign({}, allow[nm], { phone }, org(allow[nm].org), title(allow[nm].title)));
         }
       });
       const sub = g.sub || null;
       const now = Date.now();
       const next = Object.assign({}, g, {
-        status, rep: Object.assign({}, g.rep, { phone: rep.phone }, body.rep && body.rep.org !== undefined ? { org: rep.org } : {}),
+        status, rep: Object.assign({}, g.rep, { phone: rep.phone }, body.rep && body.rep.org !== undefined ? { org: rep.org } : {}, body.rep && body.rep.title !== undefined ? { title: rep.title } : {}),
         sub, comps, updatedAt: now, updatedBy: 'guest', answeredAt: now,
       });
       await fb('PUT', `groups/${t}`, next);
