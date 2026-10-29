@@ -189,7 +189,7 @@ function paint(){
   const pct = (n) => s.all ? (n / s.all * 100) : 0;
   const k = (id, l, v, d) => `<button class="kpi ${FILTER === id ? 'on' : ''}" data-f="${id}"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></button>`;
   $('#kpis').innerHTML =
-    k('all', '총 대상', `${s.all}<small>그룹</small>`, `응답률 ${s.all ? Math.round((s.yes + s.no) / s.all * 100) : 0}%`) +
+    k('all', '총 대상', `${s.all}<small>그룹</small>`, `명단 ${list().reduce((n, g) => n + 1 + (g.comps || []).length, 0)}명 · 응답률 ${s.all ? Math.round((s.yes + s.no) / s.all * 100) : 0}%`) +
     k('yes', '참석 확정', `${s.yesN}<small>명</small>`, `${s.yes}그룹 · 대표 ${s.yes} + 동행 ${s.yesC}`) +
     k('no', '불참', `${s.no}<small>그룹</small>`, '참석에서 빠짐') +
     k('pending', '미응답', `${s.pending}<small>그룹</small>`, `명단상 예상 ${s.pendN}명 · 재발송 대상`) +
@@ -222,9 +222,11 @@ function filtered(ignoreComp){
 function paintRows(){
   if(EDITING) return;
   const L = filtered();
-  const base = filtered(true), nW = base.filter(withComps).length;
-  $('#seg').innerHTML = [['all', '전체', base.length], ['with', '동행인 있음', nW], ['solo', '혼자 참석', base.length - nW]]
-    .map(([k, l, n]) => `<button class="${COMP === k ? 'on' : ''}" data-comp="${k}">${l} ${n}</button>`).join('');
+  // 그룹 수 옆에 사람 수(본인 + 명단상 동행인)를 같이 보여준다 — 그룹 수만 보면 전체 인원이 헷갈려서(2026-10-29 요청)
+  const base = filtered(true), W = base.filter(withComps);
+  const ppl = (A) => A.reduce((n, g) => n + 1 + (g.comps || []).length, 0);
+  $('#seg').innerHTML = [['all', '전체', base.length, `총 ${ppl(base)}명`], ['with', '동행인 있음', W.length, `동행인 포함 ${ppl(W)}명`], ['solo', '혼자 참석', base.length - W.length, '']]
+    .map(([k, l, n, p]) => `<button class="${COMP === k ? 'on' : ''}" data-comp="${k}">${l} ${n}${p ? ` <span style="font-weight:500;color:var(--tx3)">(${p})</span>` : ''}</button>`).join('');
   document.querySelectorAll('[data-comp]').forEach(b => b.onclick = () => { COMP = b.dataset.comp; OPEN = ''; paintRows(); });
   $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', pending: '미응답', chg: '대리·동행인 변경' })[FILTER] + ` ${L.length}`;
   if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="8" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
