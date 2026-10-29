@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>세미나 RSVP 관리</title>
+<link rel="icon" href="/favicon-seminar.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --acc:#7C5CFF; --acc-soft:#EDE9FF; --or:#ff4b00;
+  --ink:#16181d; --tx:#2b2f37; --tx2:#5d6370; --tx3:#8b909b;
+  --bg:#f5f6f8; --card:#fff; --line:#e5e7eb; --line2:#d1d5db;
+  --yes:#14804a; --yes-bg:#e7f6ee; --no:#4b5563; --no-bg:#eef0f3; --pd:#a15c00; --pd-bg:#fff4e0; --err:#d93025;
+  --f:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f);background:var(--bg);color:var(--tx);font-size:13.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 16px 60px}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-size:20px;font-weight:800;color:var(--ink)}
+.sub{color:var(--tx2);font-size:12.5px;margin-top:2px}
+.state{font-size:12px;color:var(--tx3)}
+.state b{color:var(--yes)} .state b.bad{color:var(--err)}
+.btn{height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);background:#fff;font-weight:600;font-size:12.5px;white-space:nowrap}
+.btn:hover{border-color:var(--tx3)}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.danger{color:var(--err)}
+.btn:disabled{opacity:.5;cursor:default}
+.tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-align:left;cursor:pointer;transition:border-color .15s}
+.kpi:hover{border-color:var(--line2)}
+.kpi.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc-soft)}
+.kpi .l{font-size:12px;color:var(--tx2);font-weight:600}
+.kpi .v{font-size:26px;font-weight:800;color:var(--ink);line-height:1.2;margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:13px;font-weight:600;color:var(--tx2);margin-left:4px}
+.kpi .d{font-size:11.5px;color:var(--tx3);margin-top:2px}
+.prog{height:6px;border-radius:99px;background:#e9eaee;overflow:hidden;display:flex;margin-top:12px}
+.prog i{display:block;height:100%}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:14px}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.ph h2{font-size:14px;font-weight:700;color:var(--ink)}
+.search{height:34px;border:1px solid var(--line2);border-radius:999px;padding:0 14px;min-width:220px;outline:none}
+.search:focus{border-color:var(--acc)}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:11.5px;color:var(--tx3);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;background:#fff}
+.tbl td{padding:9px 10px;border-bottom:1px solid #f0f1f3;vertical-align:top}
+.tbl tr.g:hover td{background:#fafafb}
+.tbl tr.g{cursor:pointer}
+.nm{font-weight:700;color:var(--ink)}
+.org{color:var(--tx2);font-size:12px}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;border-radius:5px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+.t-vip{background:#16181d;color:#fff}
+.t-sub{background:#fff1ea;color:#c23c00}
+.t-chg{background:var(--acc-soft);color:#5B44C7}
+.st{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.st.yes{background:var(--yes-bg);color:var(--yes)} .st.no{background:var(--no-bg);color:var(--no)} .st.pending{background:var(--pd-bg);color:var(--pd)}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.mut{color:var(--tx3);font-size:12px}
+.comps{color:var(--tx2);font-size:12px;max-width:340px}
+.lk{border:0;background:none;color:var(--acc);font-weight:600;font-size:12px;padding:2px 0;margin-right:8px}
+.lk:hover{text-decoration:underline}
+
+.ed td{background:#fafaff;padding:14px 16px}
+.edg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 10px}
+.edg label{display:block;font-size:11px;color:var(--tx2);font-weight:600}
+.edg input,.edg select,.edg textarea{width:100%;height:32px;border:1px solid var(--line2);border-radius:8px;padding:0 9px;background:#fff;margin-top:2px;outline:none}
+.edg textarea{height:auto;padding:7px 9px;resize:vertical}
+.edg input:focus,.edg select:focus,.edg textarea:focus{border-color:var(--acc)}
+.full{grid-column:1/-1}
+.ehead{font-size:12px;font-weight:700;color:var(--ink);margin:12px 0 6px}
+.logs{font-size:11.5px;color:var(--tx2);margin-top:10px;line-height:1.7}
+
+.modal{position:fixed;inset:0;background:rgba(15,17,22,.45);display:grid;place-items:center;z-index:50;padding:16px}
+.modal .box{background:#fff;border-radius:16px;max-width:640px;width:100%;padding:20px;max-height:90vh;overflow:auto}
+.modal h3{font-size:16px;font-weight:800;color:var(--ink)}
+.modal p{color:var(--tx2);font-size:12.5px;margin-top:4px}
+.modal textarea{width:100%;height:120px;border:1px solid var(--line2);border-radius:10px;padding:10px;margin-top:10px;font-size:12.5px}
+.prev{margin-top:12px;font-size:12.5px;background:#f6f7f9;border-radius:10px;padding:10px 12px;line-height:1.7}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60}
+.toast.on{opacity:1}
+.warn{background:#fff4e0;border:1px solid #f3d29a;color:#7a4a00;border-radius:10px;padding:9px 12px;font-size:12.5px;margin-top:12px}
+.empty{padding:40px;text-align:center;color:var(--tx3)}
+[hidden]{display:none!important}
+@media (max-width:900px){ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))} .edg{grid-template-columns:1fr 1fr} .hide-m{display:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>세미나 RSVP 관리</h1>
+      <p class="sub">SMART HOME INTERIOR 2026 · 개인별 링크로 참석·불참·동행인을 직접 고치게 하고, 결과를 여기서 모아 봅니다.</p>
+      <p class="state" id="state">불러오는 중…</p>
+    </div>
+    <div class="tools">
+      <label class="btn" style="display:inline-flex;align-items:center">명단 엑셀 가져오기<input type="file" id="file" accept=".xlsx,.xls,.csv" hidden></label>
+      <button class="btn" id="btnLinks">링크·문자 추출</button>
+      <button class="btn" id="btnXlsx">최신 명단 .xlsx</button>
+      <button class="btn" id="btnCsv">.csv</button>
+      <button class="btn" id="btnClose"></button>
+      <button class="btn" id="btnReload" title="30초마다 자동으로 새로 불러와요">새로고침</button>
+    </div>
+  </div>
+
+  <div id="warn"></div>
+  <div class="kpis" id="kpis"></div>
+
+  <div class="panel">
+    <div class="ph">
+      <h2 id="listTitle">전체</h2>
+      <input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색">
+    </div>
+    <div style="overflow:auto;max-height:72vh">
+      <table class="tbl">
+        <thead><tr><th>초대받은 분</th><th>연락처</th><th class="hide-m">초청 경로</th><th>상태</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th>링크</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div id="modal"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtPhone = (v) => { const d = String(v || '').replace(/\D/g, '');
+  if(d.length === 11) return d.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+  if(d.length === 10) return d.startsWith('02') ? d.replace(/(\d{2})(\d{4})(\d{4})/, '$1-$2-$3') : d.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+  return d; };
+const fmtTime = (ms) => { if(!ms) return ''; const d = new Date(ms); return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; };
+const ST = { yes: '참석', no: '불참', pending: '미응답' };
+function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('on'), 2200); }
+
+let G = {}, META = {}, LOG = {}, FILTER = 'all', OPEN = '', EDITING = false;
+const linkOf = (t) => location.origin + '/r/' + t;
+
+async function api(body){
+  const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  return r.json();
+}
+async function load(){
+  try{
+    const r = await fetch('/api/rsvp?op=list', { cache: 'no-store' });
+    const j = await r.json();
+    if(!j.ok){ $('#state').innerHTML = `<b class="bad">${esc(j.error || '불러오기 실패')}</b>`; return; }
+    G = j.groups || {}; META = j.meta || {}; LOG = j.log || {};
+    $('#state').innerHTML = `${esc(j.email)} · 개인정보 보호 ${j.locked === true ? '<b>정상(customerDb 잠김)</b>' : '<b class="bad">확인 필요</b>'} · ${fmtTime(Date.now())} 기준`;
+    paint();
+  }catch(e){ $('#state').innerHTML = '<b class="bad">연결 실패</b>'; }
+}
+
+// 응답 뒤 '바뀐 것' 판정: 대리 참석, 또는 동행인 명단이 처음과 다름
+function changed(g){
+  if(g.sub && g.sub.name) return true;
+  const now = (g.comps || []).map(c => c.name).join(', ');
+  return !!g.answeredAt && g.orig && now !== (g.orig.comps || '');
+}
+const heads = (g) => g.status === 'yes' ? 1 + (g.comps || []).length : 0;
+function list(){ return Object.keys(G).map(t => Object.assign({ t }, G[t])).filter(g => g.rep); }
+
+function stats(){
+  const L = list(); const s = { all: L.length, yes: 0, yesN: 0, yesC: 0, no: 0, pending: 0, pendN: 0, chg: 0 };
+  L.forEach(g => {
+    if(g.status === 'yes'){ s.yes++; s.yesN += heads(g); s.yesC += (g.comps || []).length; }
+    else if(g.status === 'no') s.no++;
+    else { s.pending++; s.pendN += 1 + (g.comps || []).length; }
+    if(changed(g)) s.chg++;
+  });
+  return s;
+}
+
+function paint(){
+  const s = stats();
+  const pct = (n) => s.all ? (n / s.all * 100) : 0;
+  const k = (id, l, v, d) => `<button class="kpi ${FILTER === id ? 'on' : ''}" data-f="${id}"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></button>`;
+  $('#kpis').innerHTML =
+    k('all', '총 대상', `${s.all}<small>그룹</small>`, `응답률 ${s.all ? Math.round((s.yes + s.no) / s.all * 100) : 0}%`) +
+    k('yes', '참석 확정', `${s.yesN}<small>명</small>`, `${s.yes}그룹 · 대표 ${s.yes} + 동행 ${s.yesC}`) +
+    k('no', '불참', `${s.no}<small>그룹</small>`, '참석에서 빠짐') +
+    k('pending', '미응답', `${s.pending}<small>그룹</small>`, `명단상 예상 ${s.pendN}명 · 재발송 대상`) +
+    k('chg', '대리·동행인 변경', `${s.chg}<small>그룹</small>`, '처음 명단과 달라짐');
+  $('#kpis').insertAdjacentHTML('beforeend', `<div class="full" style="grid-column:1/-1"><div class="prog">
+      <i style="width:${pct(s.yes)}%;background:var(--yes)"></i><i style="width:${pct(s.no)}%;background:#9ca3af"></i><i style="width:${pct(s.pending)}%;background:#f3c26b"></i></div></div>`);
+  document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = FILTER === b.dataset.f ? 'all' : b.dataset.f; OPEN = ''; paint(); });
+  $('#btnClose').textContent = META.closed ? '응답 다시 열기' : '응답 마감';
+  $('#btnClose').classList.toggle('danger', !META.closed);
+  $('#warn').innerHTML = META.closed ? '<div class="warn">응답이 마감된 상태입니다. 손님은 링크에서 보기만 할 수 있어요.</div>'
+    : (!s.all ? '<div class="warn">아직 명단이 없습니다. 오른쪽 위 <b>명단 엑셀 가져오기</b>로 RSVP 명단 파일(참석자 명단 시트)을 올려 주세요.</div>' : '');
+  paintRows();
+}
+
+function filtered(){
+  const q = $('#q').value.trim().toLowerCase().replace(/-/g, '');
+  return list().filter(g => {
+    if(FILTER === 'yes' && g.status !== 'yes') return false;
+    if(FILTER === 'no' && g.status !== 'no') return false;
+    if(FILTER === 'pending' && g.status !== 'pending' && g.status) return false;
+    if(FILTER === 'chg' && !changed(g)) return false;
+    if(!q) return true;
+    const hay = [g.rep.name, g.rep.org, g.rep.phone, g.email, g.route, g.sub && g.sub.name, ...(g.comps || []).map(c => c.name)].join(' ').toLowerCase();
+    return hay.includes(q);
+  }).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0) || String(a.rep.name).localeCompare(b.rep.name, 'ko'));
+}
+
+function paintRows(){
+  if(EDITING) return;
+  const L = filtered();
+  $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', pending: '미응답', chg: '대리·동행인 변경' })[FILTER] + ` ${L.length}`;
+  if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="8" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
+  $('#rows').innerHTML = L.map(g => {
+    const st = g.status || 'pending';
+    const orig = g.orig ? g.orig.n : '';
+    const now = st === 'yes' ? heads(g) : (st === 'no' ? 0 : '');
+    const comps = (g.comps || []).map(c => esc(c.name)).join(', ');
+    return `<tr class="g" data-t="${g.t}">
+      <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
+      <td class="num">${esc(fmtPhone(g.rep.phone))}</td>
+      <td class="hide-m mut">${esc(g.route || '')}</td>
+      <td><span class="st ${st}">${ST[st]}</span></td>
+      <td class="num">${now === '' ? `<span class="mut">예상 ${orig}</span>` : (orig !== '' && orig !== now ? `<span class="mut">${orig} →</span> <b>${now}</b>` : `<b>${now}</b>`)}</td>
+      <td class="hide-m comps">${g.sub && g.sub.name ? `<span class="tag t-sub" style="margin-left:0">대리</span> ${esc(g.sub.name)}${comps ? ' · ' : ''}` : ''}${comps || '<span class="mut">—</span>'}</td>
+      <td class="mut num">${g.updatedAt ? fmtTime(g.updatedAt) + (g.updatedBy === 'guest' ? ' · 본인' : ' · 담당') : ''}</td>
+      <td style="white-space:nowrap"><button class="lk" data-copy="${g.t}">복사</button><a class="lk" href="/r/${g.t}" target="_blank" rel="noopener">열기</a></td>
+    </tr>${OPEN === g.t ? editRow(g) : ''}`;
+  }).join('');
+  document.querySelectorAll('tr.g').forEach(tr => tr.onclick = (e) => {
+    if(e.target.closest('[data-copy],a')) return;
+    OPEN = OPEN === tr.dataset.t ? '' : tr.dataset.t; paintRows();
+  });
+  document.querySelectorAll('[data-copy]').forEach(b => b.onclick = async () => { await navigator.clipboard.writeText(linkOf(b.dataset.copy)); toast('링크를 복사했어요'); });
+  bindEdit();
+}
+
+function editRow(g){
+  const r = g.rep, s = g.sub || {};
+  const logs = Object.values(LOG[g.t] || {}).sort((a, b) => b.at - a.at).slice(0, 8)
+    .map(l => `${fmtTime(l.at)} · ${l.by === 'guest' ? '본인' : esc(l.by.split('@')[0])} · ${ST[l.status] || ''}${l.status === 'yes' ? ' ' + l.n + '명' : ''}${l.sub ? ' · 대리 ' + esc(l.sub) : ''}${l.comps ? ' · 동행 ' + esc(l.comps) : ''}`).join('<br>');
+  return `<tr class="ed"><td colspan="8"><div class="edg" id="ed">
+    <div><label>상태<select data-e="status">${['pending','yes','no'].map(x => `<option value="${x}" ${g.status === x ? 'selected' : ''}>${ST[x]}</option>`).join('')}</select></label></div>
+    <div><label>성함<input data-e="rep.name" value="${esc(r.name)}"></label></div>
+    <div><label>소속<input data-e="rep.org" value="${esc(r.org)}"></label></div>
+    <div><label>연락처<input data-e="rep.phone" value="${esc(fmtPhone(r.phone))}"></label></div>
+    <div><label>대리 참석자<input data-e="sub.name" value="${esc(s.name || '')}" placeholder="없으면 비워 두기"></label></div>
+    <div><label>대리 소속<input data-e="sub.org" value="${esc(s.org || '')}"></label></div>
+    <div><label>대리 연락처<input data-e="sub.phone" value="${esc(fmtPhone(s.phone || ''))}"></label></div>
+    <div><label>직책(초대받은 분)<input data-e="rep.title" value="${esc(r.title)}"></label></div>
+    <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처</span><textarea data-e="comps" rows="${Math.max(3, (g.comps || []).length + 1)}">${esc((g.comps || []).map(c => [c.name, c.title, fmtPhone(c.phone)].filter((v, i) => v || i === 0).join(' / ')).join('\n'))}</textarea></label></div>
+    <div class="full"><label>담당자 메모<input data-e="memo" value="${esc(g.memo || '')}" placeholder="통화 내용 등(손님에겐 안 보임)"></label></div>
+  </div>
+  <div class="tools" style="margin-top:10px"><button class="btn pri" id="edSave">저장</button><button class="btn" id="edCancel">닫기</button><span style="flex:1"></span><button class="btn danger" id="edDel">이 그룹 삭제</button></div>
+  <div class="logs">${g.email ? `이메일 ${esc(g.email)} · ` : ''}처음 명단 ${g.orig ? g.orig.n + '명' + (g.orig.comps ? ' (' + esc(g.orig.comps) + ')' : '') : ''}${g.note ? ' · 비고 ' + esc(g.note) : ''}${logs ? '<br><b>변경 이력</b><br>' + logs : ''}</div>
+  </td></tr>`;
+}
+
+function bindEdit(){
+  const box = $('#ed'); if(!box) return;
+  box.addEventListener('focusin', () => { EDITING = true; });
+  $('#edCancel').onclick = () => { EDITING = false; OPEN = ''; paintRows(); };
+  $('#edDel').onclick = async () => {
+    const g = G[OPEN]; if(!confirm(`${g.rep.name}님 그룹을 삭제할까요? 보낸 링크도 더는 열리지 않아요.`)) return;
+    const j = await api({ op: 'delete', t: OPEN }); if(!j.ok) return toast(j.error || '삭제 실패');
+    delete G[OPEN]; EDITING = false; OPEN = ''; paint(); toast('삭제했어요');
+  };
+  $('#edSave').onclick = async () => {
+    const v = (k) => (box.querySelector(`[data-e="${k}"]`) || {}).value || '';
+    const comps = v('comps').split('\n').map(l => l.split('/').map(x => x.trim())).filter(a => a[0])
+      .map(a => ({ name: a[0], title: a[1] || '', phone: a[2] || '', org: '' }));
+    const body = { op: 'admin-save', t: OPEN, status: v('status'),
+      rep: { name: v('rep.name'), org: v('rep.org'), title: v('rep.title'), phone: v('rep.phone') },
+      sub: v('sub.name') ? { name: v('sub.name'), org: v('sub.org'), phone: v('sub.phone') } : null,
+      comps, memo: v('memo') };
+    const j = await api(body); if(!j.ok) return toast(j.error || '저장 실패');
+    G[OPEN] = j.group; EDITING = false; toast('저장했어요'); paint();
+  };
+}
+
+// ── 엑셀 가져오기 ──
+function parseSheet(wb){
+  const want = ['구분', '성함', '연락처'];
+  for(const name of wb.SheetNames){
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: '', raw: false });
+    for(let h = 0; h < Math.min(15, rows.length); h++){
+      const hdr = rows[h].map(x => String(x).trim());
+      if(!want.every(w => hdr.includes(w))) continue;
+      const col = (n) => hdr.indexOf(n);
+      const C = { kind: col('구분'), name: col('성함'), title: col('직책'), org: col('소속'), phone: col('연락처'), email: col('이메일'), route: col('초청 경로'), note: col('비고') };
+      const cell = (r, k) => C[k] < 0 ? '' : String(r[C[k]] == null ? '' : r[C[k]]).trim();
+      const groups = []; let cur = null, orphan = 0;
+      for(const r of rows.slice(h + 1)){
+        const kind = cell(r, 'kind'), nm = cell(r, 'name');
+        if(!kind && !nm) continue;
+        const p = { name: nm, title: cell(r, 'title'), org: cell(r, 'org'), phone: cell(r, 'phone').replace(/\D/g, '') };
+        if(kind === '동행인'){
+          if(!cur){ orphan++; continue; }
+          if(p.phone && p.phone === cur.rep.phone) p.phone = '';          // 동행인 칸에 대표 번호가 복사돼 있음
+          if(!p.name) p.name = '이름 미정';
+          cur.comps.push(p);
+        }else{
+          cur = { rep: p, comps: [], email: cell(r, 'email'), route: cell(r, 'route'), note: cell(r, 'note'), vip: kind === 'VIP' || cell(r, 'route') === '연사' };
+          groups.push(cur);
+        }
+      }
+      return { sheet: name, groups, orphan };
+    }
+  }
+  return null;
+}
+$('#file').onchange = async (e) => {
+  const f = e.target.files[0]; e.target.value = ''; if(!f) return;
+  try{
+    const wb = XLSX.read(await f.arrayBuffer(), { type: 'array' });
+    const p = parseSheet(wb);
+    if(!p || !p.groups.length) return toast('‘구분 · 성함 · 연락처’ 머리글이 있는 시트를 찾지 못했어요');
+    const people = p.groups.reduce((n, g) => n + 1 + g.comps.length, 0);
+    const exist = list().length;
+    modal(`<h3>명단 가져오기</h3>
+      <p>${esc(f.name)} · ‘${esc(p.sheet)}’ 시트</p>
+      <div class="prev">초대 그룹 <b>${p.groups.length}</b> · 전체 인원 <b>${people}</b>명 (대표 ${p.groups.length} + 동행인 ${people - p.groups.length})${p.orphan ? `<br>대표 없이 시작한 동행인 ${p.orphan}줄은 건너뜀` : ''}
+      ${exist ? `<br><br>이미 ${exist}그룹이 있어요. <b>연락처가 같은 그룹은 기존 링크를 그대로 유지</b>하고, 손님이나 담당자가 이미 고친 그룹은 덮어쓰지 않아요. 새 사람만 새 링크가 생깁니다.` : '<br><br>그룹마다 개인 링크가 만들어져요.'}</div>
+      <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>취소</button><button class="btn pri" id="impGo">가져오기</button></div>`);
+    $('#impGo').onclick = async () => {
+      $('#impGo').disabled = true; $('#impGo').textContent = '올리는 중…';
+      const j = await api({ op: 'import', groups: p.groups });
+      closeModal();
+      if(!j.ok) return toast(j.error || '가져오기 실패');
+      toast(`새로 ${j.added} · 갱신 ${j.refreshed} · 응답 있어 유지 ${j.kept}`);
+      load();
+    };
+  }catch(err){ toast('엑셀을 읽지 못했어요: ' + err.message); }
+};
+
+// ── 내보내기 ──
+function personRows(){
+  const out = [];
+  list().sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
+    const st = ST[g.status || 'pending'];
+    const base = { 상태: st, '초대받은 분': g.rep.name, '초청 경로': g.route || '', 'VIP': g.vip ? 'VIP' : '', '마지막 변경': g.updatedAt ? new Date(g.updatedAt).toLocaleString('ko-KR') : '', '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
+    const rep = g.sub && g.sub.name ? g.sub : g.rep;
+    out.push(Object.assign({ 구분: g.sub && g.sub.name ? '대리 참석' : '본인', 성함: rep.name, 직책: rep.title || '', 소속: rep.org || g.rep.org || '', 연락처: fmtPhone(rep.phone), 이메일: g.sub && g.sub.name ? '' : (g.email || '') }, base));
+    (g.comps || []).forEach(c => out.push(Object.assign({ 구분: '동행인', 성함: c.name, 직책: c.title || '', 소속: c.org || g.rep.org || '', 연락처: fmtPhone(c.phone), 이메일: '' }, base)));
+  });
+  return out;
+}
+const stamp = () => { const d = new Date(); return `${d.getMonth()+1}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`; };
+$('#btnXlsx').onclick = () => {
+  const all = personRows();
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(all.filter(r => r.상태 === '참석')), '참석 확정');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(all), '전체(상태 포함)');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(linkRows(list())), '개인 링크');
+  XLSX.writeFile(wb, `RSVP_세미나_최신명단_${stamp()}.xlsx`);
+};
+$('#btnCsv').onclick = () => download(`RSVP_세미나_최신명단_${stamp()}.csv`, toCsv(personRows()));
+function toCsv(rows){
+  if(!rows.length) return '';
+  const keys = Object.keys(rows[0]);
+  const q = (v) => { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+  return '﻿' + [keys.join(','), ...rows.map(r => keys.map(k => q(r[k])).join(','))].join('\r\n');
+}
+function download(name, text){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' })); a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+// ── 링크·문자 추출 ──
+const SMS_DEFAULT = '[아카라라이프] {이름}님, 11/19(목) SMART HOME INTERIOR 2026 세미나 참석 확인 부탁드립니다. 아래 링크에서 참석 여부와 동행인 정보를 확인·수정해 주세요.\n{링크}';
+function smsText(g, tpl){ return tpl.replace(/\{이름\}/g, g.rep.name).replace(/\{링크\}/g, linkOf(g.t)); }
+function linkRows(L, tpl){
+  return L.map(g => ({ 이름: g.rep.name, 소속: g.rep.org || '', 연락처: fmtPhone(g.rep.phone), 이메일: g.email || '', 상태: ST[g.status || 'pending'], 링크: linkOf(g.t), 문자: smsText(g, tpl || SMS_DEFAULT) }));
+}
+$('#btnLinks').onclick = () => {
+  const counts = stats();
+  modal(`<h3>링크·문자 추출</h3>
+    <p>대상을 고르고 문구를 다듬은 뒤 CSV로 받아 문자/메일 발송 도구에 붙여 넣으세요. {이름}·{링크}는 사람마다 바뀝니다.</p>
+    <div class="tools" style="margin-top:12px" id="tg">
+      <label class="btn"><input type="radio" name="tg" value="pending" checked> 미응답 ${counts.pending}</label>
+      <label class="btn"><input type="radio" name="tg" value="all"> 전체 ${counts.all}</label>
+      <label class="btn"><input type="radio" name="tg" value="yes"> 참석 ${counts.yes}</label>
+      <label class="btn"><input type="radio" name="tg" value="view"> 지금 목록 ${filtered().length}</label>
+    </div>
+    <textarea id="tpl">${esc(SMS_DEFAULT)}</textarea>
+    <div class="prev" id="tplPrev"></div>
+    <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>닫기</button><button class="btn" id="cpNums">연락처만 복사</button><button class="btn pri" id="dlLinks">CSV 받기</button></div>`);
+  const target = () => { const v = document.querySelector('[name=tg]:checked').value;
+    return v === 'view' ? filtered() : list().filter(g => v === 'all' || (v === 'pending' ? (g.status || 'pending') === 'pending' : g.status === v)); };
+  const prev = () => { const L = target(); $('#tplPrev').innerHTML = L.length ? `${L.length}명 · 미리보기<br>${esc(smsText(L[0], $('#tpl').value)).replace(/\n/g, '<br>')}` : '대상이 없어요.'; };
+  document.querySelectorAll('[name=tg]').forEach(r => r.onchange = prev); $('#tpl').oninput = prev; prev();
+  $('#dlLinks').onclick = () => { const L = target(); if(!L.length) return toast('대상이 없어요'); download(`RSVP_링크_${stamp()}.csv`, toCsv(linkRows(L, $('#tpl').value))); };
+  $('#cpNums').onclick = async () => { const L = target(); await navigator.clipboard.writeText(L.map(g => fmtPhone(g.rep.phone)).filter(Boolean).join('\n')); toast(`연락처 ${L.length}개를 복사했어요`); };
+};
+
+function modal(html){ $('#modal').innerHTML = `<div class="modal"><div class="box">${html}</div></div>`;
+  $('#modal').querySelectorAll('[data-x]').forEach(b => b.onclick = closeModal);
+  $('#modal .modal').onclick = (e) => { if(e.target.classList.contains('modal')) closeModal(); }; }
+function closeModal(){ $('#modal').innerHTML = ''; }
+
+$('#btnClose').onclick = async () => {
+  const next = !META.closed;
+  if(!confirm(next ? '응답을 마감할까요? 손님은 링크에서 보기만 할 수 있게 됩니다.' : '응답을 다시 열까요?')) return;
+  const j = await api({ op: 'meta', closed: next }); if(!j.ok) return toast(j.error || '실패');
+  META.closed = next; paint();
+};
+$('#btnReload').onclick = load;
+$('#q').oninput = () => { OPEN = ''; paintRows(); };
+setInterval(() => { if(!EDITING && !$('#modal').innerHTML && document.visibilityState === 'visible') load(); }, 30000);
+load();
+</script>
+</body>
+</html>

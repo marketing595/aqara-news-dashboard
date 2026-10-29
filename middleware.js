@@ -15,7 +15,9 @@ export const config = {
   // hakdong.html / hakdong.json = 학동 스마트 인테리어 MAP(일반 소비자용 공개 지도 + 웰컴 쿠폰). 쇼룸 QR로 배포되므로 공개.
   //   팀 수정분·쿠폰 로그는 Firebase(hakdong/*)에 있고 개인정보는 담지 않는다.
   //   aqaralife-logo*.png·hakdong-*.png = 학동 지도에 쓰는 로고·예약 QR. 빠지면 비로그인·hakdongmap.kr에서 이미지가 깨진다.
-  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json|campaign-l100.html|hakdong.html|hakdong.json|aqaralife-logo|hakdong-).*)'],
+  // rsvp.html / api/rsvp / r/<토큰> = 세미나 참석 확인(RSVP) 개인별 링크. 손님은 로그인 없이 자기 토큰의 그룹 1건만 읽고 쓴다.
+  //   개인정보는 Firebase customerDb/rsvp(익명 차단)에 있고 api/rsvp가 서버 비밀키로만 접근한다. 관리 화면 rsvp-admin.html은 로그인 뒤.
+  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json|campaign-l100.html|hakdong.html|hakdong.json|aqaralife-logo|hakdong-|rsvp.html|api/rsvp).*)'],
 };
 
 function fromB64url(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; return atob(s); }
@@ -54,6 +56,12 @@ export default async function middleware(req){
       return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
     }
     return Response.redirect(new URL('/' + url0.search, url0.origin).toString(), 302);
+  }
+  // RSVP 짧은 링크: /r/<토큰> → rsvp.html?t=<토큰> (문자로 보내기 좋게, 로그인 없이)
+  const rm = url0.pathname.match(/^\/r\/([A-Za-z0-9_-]{12})\/?$/);
+  if(rm){
+    const dest = new URL('/rsvp.html?t=' + rm[1], url0.origin);
+    return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
   }
   const CID = process.env.GOOGLE_CLIENT_ID, SECRET = process.env.SESSION_SECRET;
   if(!CID || !SECRET) return;                 // 미설정 → 개방(설정 전 잠금 방지)

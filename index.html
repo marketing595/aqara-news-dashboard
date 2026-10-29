@@ -1335,6 +1335,7 @@
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">프로젝트</p>
              <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">11월 세미나</button>
+             <button id="mktBtn-rsvp" onclick="mktSub('rsvp')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">✉️ 세미나 참석 확인(RSVP)</button>
              <button id="mktBtn-raffle" onclick="mktSub('raffle')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🎁 세미나 경품 추첨</button>
              <button id="mktBtn-brandbook" onclick="mktSub('brandbook')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">📕 브랜드북</button>
              <button id="mktBtn-lanseon" onclick="mktSub('lanseon')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🏠 랜선집들이</button>
@@ -1364,6 +1365,7 @@
          </div>
        </div>
        <div id="mktSeminarSlot"></div>
+       <div id="view-rsvp" class="hidden"><div id="rsBody"></div></div>
        <div id="view-raffle" class="hidden"><div id="rfBody"></div></div>
        <div id="view-brandbook" class="hidden"><div id="bbBody"></div></div>
        <div id="view-lanseon" class="hidden"><div id="lnBody"></div></div>
@@ -9270,6 +9272,13 @@
       box.innerHTML=`<table class="w-full text-[12px]"><thead><tr class="text-[11px] text-slate-400 text-left"><th class="px-2 py-1.5 text-center">#</th><th class="px-2 py-1.5">이름 · 영문</th><th class="px-2 py-1.5">카테고리</th><th class="px-2 py-1.5">주소</th><th class="px-2 py-1.5">한 줄 소개</th><th class="px-2 py-1.5">좌표(위도, 경도)</th><th class="px-2 py-1.5">네이버 ID</th><th class="px-2 py-1.5 text-center">공개</th></tr></thead><tbody>${rows}</tbody></table>`;
       box.onfocusout=()=>{ setTimeout(()=>{ if(HK_DIRTY&&!box.contains(document.activeElement)){ hkPaintTable(); hkPaintStats(); } },80); }; }
     /* ===== 🎁 세미나 경품 추첨 (raffle.html 임베드 — 설정·당첨 이력은 브라우저 localStorage에 저장되므로 행사 당일엔 발표 PC에서 실행) ===== */
+    /* ===== ✉️ 세미나 참석 확인(RSVP) — rsvp-admin.html 임베드. 손님용 개인 링크(/r/<토큰>)는 로그인 없이 열리고, 개인정보는 api/rsvp → Firebase customerDb/rsvp(익명 차단) ===== */
+    function renderRsvp(){ const box=document.getElementById('rsBody'); if(!box||box.dataset.ok) return; box.dataset.ok='1';
+      box.innerHTML=`<div class="flex items-center justify-end gap-3 flex-wrap mb-2">
+          <a href="/rsvp-admin.html" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-[#7C5CFF] text-white text-[13px] font-bold hover:brightness-110 whitespace-nowrap">새 창으로 열기 ↗</a>
+        </div>
+        <iframe src="/rsvp-admin.html" title="세미나 참석 확인(RSVP) 관리" class="w-full rounded-2xl border border-slate-200 bg-white" style="height:min(86vh,1000px);min-height:600px"></iframe>`;
+    }
     function renderRaffle(){ const box=document.getElementById('rfBody'); if(!box||box.dataset.ok) return; box.dataset.ok='1';
       box.innerHTML=`<div class="flex items-center justify-between gap-3 flex-wrap mb-3">
           <div><h2 class="text-[18px] font-extrabold text-ink">🎁 세미나 경품 추첨</h2>
@@ -9352,6 +9361,7 @@
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       const adv=document.getElementById('view-ad'); if(adv) adv.classList.toggle('hidden', s!=='ad');
       const sem=document.getElementById('view-seminar'); if(sem) sem.classList.toggle('hidden', s!=='seminar');
+      const rsv=document.getElementById('view-rsvp'); if(rsv) rsv.classList.toggle('hidden', s!=='rsvp');
       const rfv=document.getElementById('view-raffle'); if(rfv) rfv.classList.toggle('hidden', s!=='raffle');
       const bbv=document.getElementById('view-brandbook'); if(bbv) bbv.classList.toggle('hidden', s!=='brandbook');
       const lnv=document.getElementById('view-lanseon'); if(lnv) lnv.classList.toggle('hidden', s!=='lanseon');
@@ -9367,7 +9377,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','seminar','raffle','brandbook','lanseon','hakmap','budget','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
+      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','seminar','rsvp','raffle','brandbook','lanseon','hakmap','budget','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -9377,6 +9387,7 @@
       if(s==='prpitch'){ renderMktPr(); }
       if(s==='ad'){ loadAd(); }
       if(s==='seminar'){ renderSeminar(); }
+      if(s==='rsvp'){ renderRsvp(); }
       if(s==='raffle'){ renderRaffle(); }
       if(s==='brandbook'){ renderBrandbook(); }
       if(s==='lanseon'){ renderLanseon(); }
