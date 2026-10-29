@@ -314,13 +314,15 @@ function parseSheet(wb){
         if(kind === '동행인'){
           if(!cur){ orphan++; continue; }
           if(p.phone && p.phone === cur.rep.phone) p.phone = '';          // 동행인 칸에 대표 번호가 복사돼 있음
-          if(!p.name) p.name = '이름 미정';
+          if(!p.name || /미기재|미정/.test(p.name)) p.name = '이름 미기재';   // 손님이 링크에서 이름을 적을 수 있는 자리
           cur.comps.push(p);
         }else{
           cur = { rep: p, comps: [], email: cell(r, 'email'), route: cell(r, 'route'), note: cell(r, 'note'), vip: kind === 'VIP' || cell(r, 'route') === '연사' };
           groups.push(cur);
         }
       }
+      // 한 그룹에 이름 미기재가 여럿이면 번호를 붙인다(이름이 같으면 서버에서 한 명으로 합쳐지므로)
+      groups.forEach(g => { const ph = g.comps.filter(c => c.name === '이름 미기재'); if(ph.length > 1) ph.forEach((c, i) => { c.name = '이름 미기재 ' + (i + 1); }); });
       return { sheet: name, groups, orphan };
     }
   }

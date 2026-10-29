@@ -146,11 +146,14 @@ function cleanComps(a){
 const STATUSES = ['pending', 'yes', 'no'];
 
 // 손님이 고를 수 있는 동행인 = 처음 명단(orig) + 지금 명단(담당자가 추가한 사람). 손님은 새 사람을 추가할 수 없다(2026-10-29 사용자 지정).
+// 예외: '이름 미기재' 자리는 손님이 이름을 적을 수 있다. 적은 뒤엔 comp.from 에 원래 자리 이름(이름 미기재 N)을 남겨 같은 자리로 추적한다.
+const isPH = (n) => /미기재|미정/.test(String(n || ''));
 function allowedComps(g){
   const m = {};
   String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(Boolean)
     .forEach(n => { m[n] = { name: n, title: '', org: g.rep.org || '', phone: '' }; });
   (g.comps || []).forEach(c => { if(c && c.name) m[c.name] = c; });
+  (g.comps || []).forEach(c => { if(c && c.from && c.from !== c.name) delete m[c.from]; });   // 이름을 적은 자리는 원래 자리 이름으로 따로 안 보이게
   return m;
 }
 // 손님에게 돌려줄 값 — 이메일·메모·원본은 빼고. removed = 명단에 있었지만 지금 빠진 동행인(되돌리기용)
@@ -189,8 +192,22 @@ module.exports = async (req, res) => {
       // 손님이 바꿀 수 있는 것: 참석 여부, 본인 연락처, 동행인 빼기/되돌리기와 동행인 연락처. 이름·소속·대리 참석은 담당자만.
       const rep = cleanPerson(body.rep);
       const allow = allowedComps(g), seen = {};
-      const comps = cleanComps(body.comps).filter(c => allow[c.name] && !seen[c.name] && (seen[c.name] = 1))
-        .map(c => Object.assign({}, allow[c.name], { phone: c.phone }));
+      // 이름 미기재 자리: 처음 명단의 미기재 이름 + 이미 이름을 적은 자리(from)
+      const phs = {};
+      Object.keys(allow).forEach(n => { if(isPH(n)) phs[n] = { name: n, title: '', org: g.rep.org || '', phone: '' }; });
+      (g.comps || []).forEach(c => { if(c && c.from) phs[c.from] = c; });
+      const comps = [];
+      (Array.isArray(body.comps) ? body.comps : []).slice(0, 30).forEach(x => {
+        const nm = str(x && x.name, 40), from = str(x && x.from, 40), phone = digits(x && x.phone);
+        if(from && phs[from]){
+          if(seen[from]) return; seen[from] = 1;
+          const c = Object.assign({}, phs[from], { name: nm || from, phone });
+          if(c.name === from) delete c.from; else c.from = from;
+          comps.push(c);
+        }else if(nm && allow[nm] && !seen[nm]){
+          seen[nm] = 1; comps.push(Object.assign({}, allow[nm], { phone }));
+        }
+      });
       const sub = g.sub || null;
       const now = Date.now();
       const next = Object.assign({}, g, {
@@ -256,7 +273,9 @@ module.exports = async (req, res) => {
         status: STATUSES.includes(body.status) ? body.status : g.status,
         rep: Object.assign({}, g.rep, rep, { name: rep.name || g.rep.name }),
         sub: body.sub && str(body.sub.name, 40) ? cleanPerson(body.sub) : null,
-        comps: cleanComps(body.comps), memo: str(body.memo, 300),
+        // 손님이 이름을 적은 '이름 미기재' 자리 표시(from)는 담당자가 저장해도 유지
+        comps: cleanComps(body.comps).map(c => { const p = (g.comps || []).find(x => x.name === c.name && x.from); return p ? Object.assign(c, { from: p.from }) : c; }),
+        memo: str(body.memo, 300),
         updatedAt: now, updatedBy: email,
       });
       await fb('PUT', `groups/${body.t}`, next);

@@ -170,7 +170,7 @@ async function load(){
 }
 function setData(j){
   D = j;
-  F = { status: j.status === 'pending' ? '' : j.status, rep: clone(j.rep), comps: clone(j.comps || []), removed: clone(j.removed || []) };
+  F = { status: j.status === 'pending' ? '' : j.status, rep: clone(j.rep), comps: clone(j.comps || []).map(withPH), removed: clone(j.removed || []) };
   DIRTY = false;
   const ev = j.event || {};
   $('#evTitle').textContent = ev.title || 'SMART HOME INTERIOR 2026';
@@ -180,6 +180,9 @@ function setData(j){
 function headCount(){ return F.status === 'yes' ? 1 + F.comps.length : 0; }
 // 동행인을 적었던 분인지(지금 뺀 사람 포함) — 혼자 오는 분에겐 동행인 칸 자체를 보여주지 않는다
 const hasComps = () => F.comps.length + F.removed.length > 0;
+// 이름 미기재 자리(_ph = 원래 자리 이름): 손님이 이름을 적을 수 있는 유일한 예외
+const isPH = (n) => /미기재|미정/.test(String(n || ''));
+function withPH(c){ c._ph = c.from || (isPH(c.name) ? c.name : ''); if(c._ph && isPH(c.name)) c.name = ''; return c; }
 
 // 손님이 할 수 있는 것: 참석/불참, 본인 연락처 확인, (동행인을 적었던 분만) 동행인 빼기·되돌리기와 연락처 입력.
 // 동행인 이름 수정·새 동행인 추가·대리 참석은 담당자만(2026-10-29 사용자 지정).
@@ -189,12 +192,13 @@ function render(){
   const rep = F.rep;
   const comps = F.comps.map((c, i) => `
     <div class="person">
-      <div class="p-top"><span class="p-name">${esc(c.name)}<span class="p-tag">동행</span></span>${ro ? '' : `<button type="button" class="del" data-del="${i}" aria-label="${esc(c.name)} 삭제">삭제</button>`}</div>
+      <div class="p-top"><span class="p-name">${c._ph ? '동행인' : esc(c.name)}<span class="p-tag ${c._ph ? 'acc' : ''}">${c._ph ? '이름 미기재' : '동행'}</span></span>${ro ? '' : `<button type="button" class="del" data-del="${i}" aria-label="${esc(c.name || '동행인')} 삭제">삭제</button>`}</div>
+      ${c._ph ? `<label class="fld"><span>성함</span><input data-c="${i}" data-k="name" value="${esc(c.name)}" placeholder="오시는 분 성함을 적어 주세요" autocomplete="off" ${ro ? 'disabled' : ''}></label>` : ''}
       <label class="fld"><span>연락처</span><input data-c="${i}" data-k="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(c.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
     </div>`).join('');
   const removed = F.removed.map((n, i) => `
     <div class="person dim">
-      <div class="p-top" style="margin-bottom:10px"><span class="p-name"><span class="strike">${esc(n)}</span><span class="p-tag">안 오심</span></span>${ro ? '' : `<button type="button" class="del" data-undo="${i}">되돌리기</button>`}</div>
+      <div class="p-top" style="margin-bottom:10px"><span class="p-name"><span class="strike">${isPH(n) ? '동행인(이름 미기재)' : esc(n)}</span><span class="p-tag">안 오심</span></span>${ro ? '' : `<button type="button" class="del" data-undo="${i}">되돌리기</button>`}</div>
     </div>`).join('');
 
   $('#app').innerHTML = `
@@ -243,12 +247,12 @@ function bind(){
   document.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { F.status = b.dataset.st; DIRTY = true; render(); });
   document.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
     const c = F.comps.splice(+b.dataset.del, 1)[0];
-    F.removed.push(c.name); DIRTY = true; render();
-    toast(c.name + '님을 동행인에서 뺐어요');
+    F.removed.push(c._ph || c.name); DIRTY = true; render();
+    toast((c.name || '동행인') + (c.name ? '님을' : '을') + ' 동행인에서 뺐어요');
   });
   document.querySelectorAll('[data-undo]').forEach(b => b.onclick = () => {
     const n = F.removed.splice(+b.dataset.undo, 1)[0];
-    F.comps.push({ name: n, title: '', org: '', phone: '' }); DIRTY = true; render();
+    F.comps.push(withPH({ name: n, title: '', org: '', phone: '' })); DIRTY = true; render();
   });
   document.querySelectorAll('input').forEach(inp => {
     inp.oninput = () => {
@@ -275,7 +279,7 @@ async function save(){
   const btn = $('#saveBtn'); btn.disabled = true; btn.textContent = '저장 중…';
   try{
     const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone }, comps: F.comps.map(c => ({ name: c.name, phone: c.phone })) }) });
+      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone }, comps: F.comps.map(c => ({ name: c.name.trim() || c._ph, from: c._ph || undefined, phone: c.phone })) }) });
     const j = await r.json();
     if(!j.ok){ toast(j.error || '저장하지 못했어요. 다시 시도해 주세요.'); paintBar(); return; }
     setData(j); MODE = 'done'; render(); window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -287,7 +291,7 @@ function renderDone(){
   const who = D.sub ? D.sub : D.rep;
   const items = yes ? [
     `<li><span>${esc(who.name)}${D.sub ? ` <span class="p-tag acc">${esc(D.rep.name)}님 대신</span>` : ''}</span><span>${esc([who.org, who.title].filter(Boolean).join(' · '))}</span></li>`,
-    ...D.comps.map(c => `<li><span>${esc(c.name)} <span class="p-tag">동행</span></span><span>${esc(c.title || '')}</span></li>`)
+    ...D.comps.map(c => `<li><span>${isPH(c.name) ? "동행인(이름 미기재)" : esc(c.name)} <span class="p-tag">동행</span></span><span>${esc(c.title || '')}</span></li>`)
   ].join('') : '';
   const check = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   const cross = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>';
