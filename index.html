@@ -1337,8 +1337,6 @@
              <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">11월 세미나</button>
              <button id="mktBtn-rsvp" onclick="mktSub('rsvp')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">✉️ 세미나 참석 확인(RSVP)</button>
              <button id="mktBtn-raffle" onclick="mktSub('raffle')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🎁 세미나 경품 추첨</button>
-             <button id="mktBtn-brandbook" onclick="mktSub('brandbook')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">📕 브랜드북</button>
-             <button id="mktBtn-lanseon" onclick="mktSub('lanseon')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🏠 랜선집들이</button>
              <button id="mktBtn-hakmap" onclick="mktSub('hakmap')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🗺 학동 인테리어 지도</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
@@ -1351,15 +1349,20 @@
              <button id="mktBtn-prpitch" onclick="mktSub('prpitch')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">PR 소재 제안</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[150px]">
-             <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">온드미디어 관리</p>
-             <button id="mktBtn-insta" onclick="mktSub('insta')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
-             <button id="mktBtn-blog" onclick="mktSub('blog')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
-             <button id="mktBtn-thumb" onclick="mktSub('thumb')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🖼 썸네일 메이커</button>
-           </div>
-           <div class="flex flex-col gap-0.5 min-w-[150px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">광고 · 리포트</p>
              <button id="mktBtn-ad" onclick="mktSub('ad')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">파워링크/브랜드검색</button>
              <button id="mktBtn-report" onclick="mktSub('report')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">종합 리포트</button>
+           </div>
+           <!-- 🗑 휴지통: 지금 안 쓰는 탭(2026-10-29 사용자 요청). 기능·데이터는 그대로 두고 메뉴만 접어 둠 — 다시 쓰려면 버튼을 원래 그룹으로 옮기면 됨 -->
+           <div class="flex flex-col gap-0.5 min-w-[130px]">
+             <button id="mktTrashBtn" onclick="mktTrashToggle()" class="text-left px-2 pb-1 text-[11px] font-extrabold text-slate-400 hover:text-[#7C5CFF] tracking-wide whitespace-nowrap">🗑 휴지통 (5) <span id="mktTrashArrow">▸</span></button>
+             <div id="mktTrashList" class="hidden flex flex-col gap-0.5">
+               <button id="mktBtn-lanseon" onclick="mktSub('lanseon')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🏠 랜선집들이</button>
+               <button id="mktBtn-brandbook" onclick="mktSub('brandbook')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">📕 브랜드북</button>
+               <button id="mktBtn-thumb" onclick="mktSub('thumb')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🖼 썸네일 메이커</button>
+               <button id="mktBtn-insta" onclick="mktSub('insta')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">인스타 콘텐츠 제안</button>
+               <button id="mktBtn-blog" onclick="mktSub('blog')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">블로그 글 제안</button>
+             </div>
            </div>
            <button onclick="mktLock()" class="ml-auto px-3 py-1.5 rounded-full text-[13px] text-slate-400 hover:text-ink whitespace-nowrap">🔓 잠그기</button>
          </div>
@@ -9356,7 +9359,12 @@
     }
     function mktUnlock(){ const v=document.getElementById('mktPw').value; if(v===MKT_PW){ sessionStorage.setItem('mktUnlocked','1'); document.getElementById('mktPwErr').classList.add('hidden'); mktEnter(); } else { document.getElementById('mktPwErr').classList.remove('hidden'); } }
     function mktLock(){ sessionStorage.removeItem('mktUnlocked'); mktEnter(); }
-    function mktSub(s){ mktSection=s;
+    /* 🗑 휴지통 — 안 쓰는 탭 메뉴 접기/펼치기(휴지통 안 탭을 열면 자동으로 펼친 상태 유지) */
+    const MKT_TRASH=['lanseon','brandbook','thumb','insta','blog'];
+    function mktTrashToggle(open){ const l=document.getElementById('mktTrashList'), a=document.getElementById('mktTrashArrow'); if(!l) return;
+      const on = open===undefined ? l.classList.contains('hidden') : open;
+      l.classList.toggle('hidden', !on); if(a) a.textContent = on ? '▾' : '▸'; }
+    function mktSub(s){ mktSection=s; if(MKT_TRASH.includes(s)) mktTrashToggle(true);
       const ml=document.getElementById('view-medialist'); if(ml) ml.classList.toggle('hidden', s!=='medialist');
       const cal=document.getElementById('view-calendar'); if(cal) cal.classList.toggle('hidden', s!=='calendar');
       const adv=document.getElementById('view-ad'); if(adv) adv.classList.toggle('hidden', s!=='ad');
