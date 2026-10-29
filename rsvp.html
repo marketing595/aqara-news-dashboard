@@ -50,6 +50,9 @@ h2{font-size:21px;line-height:1.35;font-weight:700;color:var(--ink);letter-spaci
 .choice button:hover{border-color:var(--tx3)}
 .choice button[aria-pressed="true"].yes{background:var(--acc);border-color:var(--acc);color:#fff}
 .choice button[aria-pressed="true"].no{background:var(--ink);border-color:var(--ink);color:#fff}
+.choice.sm{margin-top:0;gap:8px}
+.choice.sm button{height:44px;font-size:15px;border-radius:10px}
+.qr-note{color:var(--err);font-size:12.5px;font-weight:600;margin:-4px 0 12px}
 .choice button:focus-visible,.btn:focus-visible,.link:focus-visible,.del:focus-visible{outline:3px solid rgba(255,75,0,.35);outline-offset:2px}
 
 /* 섹션 */
@@ -170,63 +173,69 @@ async function load(){
 }
 function setData(j){
   D = j;
-  F = { status: j.status === 'pending' ? '' : j.status, rep: clone(j.rep), comps: clone(j.comps || []).map(withPH), removed: clone(j.removed || []) };
+  // 본인 참석 여부(status) + 함께 오시는 분 각자의 참석 여부(on). 서버의 comps = 참석하는 동행인, removed = 불참으로 고른 동행인
+  F = { status: j.status === 'pending' ? '' : j.status, rep: clone(j.rep),
+    people: [...clone(j.comps || []).map(c => Object.assign(withPH(c), { on: j.status === 'pending' ? null : true })),
+             ...clone(j.removed || []).map(n => Object.assign(withPH({ name: n, title: '', org: '', phone: '' }), { on: false }))] };
   DIRTY = false;
   const ev = j.event || {};
   $('#evTitle').textContent = ev.title || 'SMART HOME INTERIOR 2026';
   $('#evMeta').innerHTML = `${ev.sub ? esc(ev.sub) + '<br>' : ''}<b>일시</b> ${esc(ev.date || '')}<br><b>장소</b> ${esc(ev.place || '')}`;
 }
 
-function headCount(){ return F.status === 'yes' ? 1 + F.comps.length : 0; }
-// 동행인을 적었던 분인지(지금 뺀 사람 포함) — 혼자 오는 분에겐 동행인 칸 자체를 보여주지 않는다
-const hasComps = () => F.comps.length + F.removed.length > 0;
+const goingComps = () => F.people.filter(p => p.on === true);
+function headCount(){ return (F.status === 'yes' ? 1 : 0) + goingComps().length; }
+// 명단에 동행인이 있었던 분인지 — 혼자 오는 분에겐 동행인 칸 자체를 보여주지 않는다
+const hasComps = () => F.people.length > 0;
 // 이름 미기재 자리(_ph = 원래 자리 이름): 손님이 이름을 적을 수 있는 유일한 예외
 const isPH = (n) => /미기재|미정/.test(String(n || ''));
 function withPH(c){ c._ph = c.from || (isPH(c.name) ? c.name : ''); if(c._ph && isPH(c.name)) c.name = ''; return c; }
+const QR_NOTE = '<p class="qr-note">이 연락처로 입장 큐알이 발송됩니다.</p>';
+const pick = (attr, i, on, ro) => `
+  <div class="choice sm" role="group">
+    <button type="button" class="yes" ${attr}="${i}" data-v="1" aria-pressed="${on === true}" ${ro ? 'disabled' : ''}>참석</button>
+    <button type="button" class="no" ${attr}="${i}" data-v="0" aria-pressed="${on === false}" ${ro ? 'disabled' : ''}>불참</button>
+  </div>`;
 
-// 손님이 할 수 있는 것: 참석/불참, 본인 연락처 확인, (동행인을 적었던 분만) 동행인 빼기·되돌리기와 연락처 입력.
-// 동행인 이름 수정·새 동행인 추가·대리 참석은 담당자만(2026-10-29 사용자 지정).
+// 손님이 할 수 있는 것: 본인과 함께 오시는 분 각자의 참석/불참, 참석하는 분의 연락처(입장 QR 발송용).
+// 동행인 이름 수정·새 동행인 추가·대리 참석은 담당자만(단, '이름 미기재' 자리는 이름을 적을 수 있음).
 function render(){
   if(MODE === 'done') return renderDone();
   const ro = D.closed;
   const rep = F.rep;
-  const comps = F.comps.map((c, i) => `
-    <div class="person">
-      <div class="p-top"><span class="p-name">${c._ph ? '동행인' : esc(c.name)}<span class="p-tag ${c._ph ? 'acc' : ''}">${c._ph ? '이름 미기재' : '동행'}</span></span>${ro ? '' : `<button type="button" class="del" data-del="${i}" aria-label="${esc(c.name || '동행인')} 삭제">삭제</button>`}</div>
-      ${c._ph ? `<label class="fld"><span>성함</span><input data-c="${i}" data-k="name" value="${esc(c.name)}" placeholder="오시는 분 성함을 적어 주세요" autocomplete="off" ${ro ? 'disabled' : ''}></label>` : ''}
-      <label class="fld"><span>연락처</span><input data-c="${i}" data-k="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(c.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
-    </div>`).join('');
-  const removed = F.removed.map((n, i) => `
-    <div class="person dim">
-      <div class="p-top" style="margin-bottom:10px"><span class="p-name"><span class="strike">${isPH(n) ? '동행인(이름 미기재)' : esc(n)}</span><span class="p-tag">안 오심</span></span>${ro ? '' : `<button type="button" class="del" data-undo="${i}">되돌리기</button>`}</div>
+  const people = F.people.map((c, i) => `
+    <div class="person ${c.on === false ? 'dim' : ''}">
+      <div class="p-top"><span class="p-name">${c._ph ? '동행인' : esc(c.name)}<span class="p-tag ${c._ph ? 'acc' : ''}">${c._ph ? '이름 미기재' : '동행'}</span></span></div>
+      ${pick('data-cp', i, c.on, ro)}
+      ${c.on === true ? `
+      ${c._ph ? `<label class="fld" style="margin-top:12px"><span>성함<i>*</i></span><input data-c="${i}" data-k="name" value="${esc(c.name)}" placeholder="오시는 분 성함을 적어 주세요" autocomplete="off" ${ro ? 'disabled' : ''}></label>` : ''}
+      <label class="fld" style="margin-top:12px"><span>연락처<i>*</i></span><input data-c="${i}" data-k="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(c.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
+      ${QR_NOTE}` : '<div style="height:12px"></div>'}
     </div>`).join('');
 
   $('#app').innerHTML = `
     <section class="card">
       <h2>${esc(rep.name)}님,<br>세미나에 참석하시나요?</h2>
-      <p class="lead">${hasComps() ? '참석 여부와 함께 오시는 분을 확인해 주세요.' : '참석 여부와 연락처를 확인해 주세요.'} 저장한 뒤에도 이 링크로 언제든 다시 바꿀 수 있어요.</p>
+      <p class="lead">${hasComps() ? '본인과 함께 오시는 분 각각 참석 여부를 알려 주세요.' : '참석 여부와 연락처를 확인해 주세요.'} 저장한 뒤에도 이 링크로 언제든 다시 바꿀 수 있어요.</p>
       ${ro ? '<div class="closed">응답이 마감되어 지금은 수정할 수 없어요. 변경이 필요하면 담당자에게 연락해 주세요.</div>' : ''}
       <div class="choice" role="group" aria-label="참석 여부">
         <button type="button" class="yes" data-st="yes" aria-pressed="${F.status === 'yes'}" ${ro ? 'disabled' : ''}>참석합니다</button>
         <button type="button" class="no" data-st="no" aria-pressed="${F.status === 'no'}" ${ro ? 'disabled' : ''}>불참합니다</button>
       </div>
-    </section>
-
-    <section class="card" ${F.status === 'yes' ? '' : 'hidden'}>
-      <div class="sec-h" style="margin-bottom:12px"><h3>연락처 확인</h3></div>
-      <div class="person">
-        <div class="p-top"><span class="p-name">${esc(rep.name)}<span class="p-tag">초대받은 분</span></span></div>
+      ${F.status === 'yes' ? `
+      <div class="person" style="margin-top:16px">
+        <div class="p-top"><span class="p-name">${esc(rep.name)}<span class="p-tag">본인</span></span></div>
         ${D.sub && D.sub.name ? `<p class="hint" style="margin:-4px 0 12px">${esc(D.sub.name)}님이 대신 참석해요.</p>` : ''}
         <label class="fld"><span>연락처<i>*</i></span><input data-r="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(rep.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
-      </div>
-      ${hasComps() ? `
-      <div class="sec">
-        <div class="sec-h"><h3>함께 오시는 분</h3><span class="cnt">${F.comps.length}명</span></div>
-        ${comps || '<div class="empty">함께 오시는 분이 없어요.</div>'}
-        ${removed ? `<div style="margin-top:10px">${removed}</div>` : ''}
-        <p class="hint">오지 않는 분은 ‘삭제’를 눌러 주세요. 명단에 없는 분이 오시면 담당자에게 알려 주세요.</p>
+        ${QR_NOTE}
       </div>` : ''}
-    </section>`;
+    </section>
+
+    ${hasComps() && F.status ? `
+    <section class="card">
+      <div class="sec-h" style="margin-bottom:12px"><h3>함께 오시는 분</h3><span class="cnt">참석 ${goingComps().length}명 / ${F.people.length}명</span></div>
+      ${people}
+    </section>` : ''}`;
   paintBar();
   bind();
 }
@@ -235,41 +244,38 @@ function paintBar(){
   const bar = $('#bar');
   if(MODE !== 'form' || D.closed){ bar.hidden = true; return; }
   bar.hidden = false;
-  const n = headCount();
+  const n = headCount(), c = goingComps().length, undecided = F.status && F.people.some(p => p.on == null);
   $('#sum').innerHTML = !F.status ? '<b>참석 여부를 선택해 주세요</b>'
-    : F.status === 'no' ? '<b>불참</b>저장하면 담당자에게 전달돼요'
-    : `<b>총 ${n}명 참석</b>${n > 1 ? `본인 + 동행인 ${n - 1}명` : '본인'}`;
-  $('#saveBtn').disabled = !F.status;
+    : undecided ? '<b>함께 오시는 분도 선택해 주세요</b>참석 또는 불참'
+    : n === 0 ? '<b>불참</b>저장하면 담당자에게 전달돼요'
+    : `<b>총 ${n}명 참석</b>${[F.status === 'yes' ? '본인' : '본인 불참', c ? `동행인 ${c}명` : ''].filter(Boolean).join(' + ')}`;
+  $('#saveBtn').disabled = !F.status || undecided;
   $('#saveBtn').textContent = D.answered ? '변경 내용 저장' : '응답 저장하기';
 }
 
 function bind(){
   document.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { F.status = b.dataset.st; DIRTY = true; render(); });
-  document.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
-    const c = F.comps.splice(+b.dataset.del, 1)[0];
-    F.removed.push(c._ph || c.name); DIRTY = true; render();
-    toast((c.name || '동행인') + (c.name ? '님을' : '을') + ' 동행인에서 뺐어요');
-  });
-  document.querySelectorAll('[data-undo]').forEach(b => b.onclick = () => {
-    const n = F.removed.splice(+b.dataset.undo, 1)[0];
-    F.comps.push(withPH({ name: n, title: '', org: '', phone: '' })); DIRTY = true; render();
-  });
+  document.querySelectorAll('[data-cp]').forEach(b => b.onclick = () => { F.people[+b.dataset.cp].on = b.dataset.v === '1'; DIRTY = true; render(); });
   document.querySelectorAll('input').forEach(inp => {
     inp.oninput = () => {
       DIRTY = true; inp.classList.remove('bad');
       if(inp.dataset.r) F.rep[inp.dataset.r] = inp.value;
-      else if(inp.dataset.c != null) F.comps[+inp.dataset.c][inp.dataset.k] = inp.value;
+      else if(inp.dataset.c != null) F.people[+inp.dataset.c][inp.dataset.k] = inp.value;
     };
     if(inp.type === 'tel') inp.onblur = () => { inp.value = fmtPhone(inp.value); };
   });
 }
 
 function validate(){
-  if(F.status !== 'yes') return true;
   let first = null;
   const mark = (sel) => { const el = document.querySelector(sel); if(el){ el.classList.add('bad'); if(!first) first = el; } };
-  if(!String(F.rep.phone).replace(/\D/g, '') || !phoneOk(F.rep.phone)) mark('[data-r="phone"]');
-  F.comps.forEach((c, i) => { if(!phoneOk(c.phone)) mark(`[data-c="${i}"][data-k="phone"]`); });
+  const need = (v) => !String(v || '').replace(/\D/g, '') || !phoneOk(v);
+  if(F.status === 'yes' && need(F.rep.phone)) mark('[data-r="phone"]');
+  F.people.forEach((c, i) => {
+    if(c.on !== true) return;
+    if(c._ph && !c.name.trim()) mark(`[data-c="${i}"][data-k="name"]`);
+    if(need(c.phone)) mark(`[data-c="${i}"][data-k="phone"]`);
+  });
   if(first){ first.focus(); first.scrollIntoView({ block: 'center', behavior: 'smooth' }); toast('빨간 칸을 확인해 주세요'); return false; }
   return true;
 }
@@ -279,7 +285,8 @@ async function save(){
   const btn = $('#saveBtn'); btn.disabled = true; btn.textContent = '저장 중…';
   try{
     const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone }, comps: F.comps.map(c => ({ name: c.name.trim() || c._ph, from: c._ph || undefined, phone: c.phone })) }) });
+      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone },
+        comps: goingComps().map(c => ({ name: c.name.trim() || c._ph, from: c._ph || undefined, phone: c.phone })) }) });
     const j = await r.json();
     if(!j.ok){ toast(j.error || '저장하지 못했어요. 다시 시도해 주세요.'); paintBar(); return; }
     setData(j); MODE = 'done'; render(); window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -288,24 +295,27 @@ async function save(){
 
 function renderDone(){
   const yes = D.status === 'yes', ev = D.event || {};
+  const n = (yes ? 1 : 0) + D.comps.length, any = n > 0;
   const who = D.sub ? D.sub : D.rep;
-  const items = yes ? [
-    `<li><span>${esc(who.name)}${D.sub ? ` <span class="p-tag acc">${esc(D.rep.name)}님 대신</span>` : ''}</span><span>${esc([who.org, who.title].filter(Boolean).join(' · '))}</span></li>`,
-    ...D.comps.map(c => `<li><span>${isPH(c.name) ? "동행인(이름 미기재)" : esc(c.name)} <span class="p-tag">동행</span></span><span>${esc(c.title || '')}</span></li>`)
-  ].join('') : '';
+  const items = [
+    yes ? `<li><span>${esc(who.name)}${D.sub ? ` <span class="p-tag acc">${esc(D.rep.name)}님 대신</span>` : ' <span class="p-tag">본인</span>'}</span><span>참석</span></li>`
+        : `<li><span>${esc(D.rep.name)} <span class="p-tag">본인</span></span><span>불참</span></li>`,
+    ...D.comps.map(c => `<li><span>${isPH(c.name) ? '동행인(이름 미기재)' : esc(c.name)} <span class="p-tag">동행</span></span><span>참석</span></li>`),
+    ...(D.removed || []).map(nm => `<li><span>${isPH(nm) ? '동행인(이름 미기재)' : esc(nm)} <span class="p-tag">동행</span></span><span>불참</span></li>`)
+  ].join('');
   const check = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   const cross = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>';
   $('#app').innerHTML = `
     <section class="card">
-      <div class="done-mark ${yes ? '' : 'no'}">${yes ? check : cross}</div>
-      <h2>${yes ? `참석으로 저장했어요<br>총 ${1 + D.comps.length}명` : '불참으로 저장했어요'}</h2>
-      <p class="lead">${yes ? '행사 당일 등록 데스크에서 참석자 성함을 말씀해 주세요.' : '알려 주셔서 감사합니다. 일정이 바뀌면 이 링크에서 다시 참석으로 바꿔 주세요.'}</p>
-      ${yes ? `<ul class="list">${items}</ul>` : ''}
+      <div class="done-mark ${any ? '' : 'no'}">${any ? check : cross}</div>
+      <h2>${any ? `참석으로 저장했어요<br>총 ${n}명` : '불참으로 저장했어요'}</h2>
+      <p class="lead">${any ? '입력하신 연락처로 입장 큐알이 발송됩니다.' : '알려 주셔서 감사합니다. 일정이 바뀌면 이 링크에서 다시 참석으로 바꿔 주세요.'}</p>
+      <ul class="list">${items}</ul>
       ${D.closed ? '<div class="closed">응답이 마감되었어요. 변경이 필요하면 담당자에게 연락해 주세요.</div>'
         : '<button type="button" class="btn ghost" id="editBtn" style="width:100%;margin-top:20px">응답 수정하기</button>'}
       ${D.updatedAt ? `<p class="stamp">마지막 저장 ${fmtTime(D.updatedAt)} · 이 화면을 캡처해 두셔도 좋아요</p>` : ''}
     </section>
-    ${yes ? `<section class="card">
+    ${any ? `<section class="card">
       <div class="sec-h" style="margin-bottom:6px"><h3>참석 안내</h3></div>
       <ul class="list" style="margin-top:6px">
         <li><span>일시</span><span>${esc(ev.date || '')}</span></li>

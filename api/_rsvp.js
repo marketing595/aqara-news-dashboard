@@ -215,7 +215,7 @@ module.exports = async (req, res) => {
         sub, comps, updatedAt: now, updatedBy: 'guest', answeredAt: now,
       });
       await fb('PUT', `groups/${t}`, next);
-      await fb('POST', `log/${t}`, { at: now, by: 'guest', status, n: (status === 'yes' ? 1 + comps.length : 0), sub: sub ? sub.name : '', comps: comps.map(c => c.name).join(', ') });
+      await fb('POST', `log/${t}`, { at: now, by: 'guest', status, n: (status === 'yes' ? 1 : 0) + comps.length, sub: sub ? sub.name : '', comps: comps.map(c => c.name).join(', ') });
       return res.status(200).json(guestView(next, meta));
     }
 
@@ -279,7 +279,7 @@ module.exports = async (req, res) => {
         updatedAt: now, updatedBy: email,
       });
       await fb('PUT', `groups/${body.t}`, next);
-      await fb('POST', `log/${body.t}`, { at: now, by: email, status: next.status, n: (next.status === 'yes' ? 1 + next.comps.length : 0), sub: next.sub ? next.sub.name : '', comps: next.comps.map(c => c.name).join(', ') });
+      await fb('POST', `log/${body.t}`, { at: now, by: email, status: next.status, n: (next.status === 'yes' ? 1 : 0) + (next.status === 'no' || next.status === 'yes' ? next.comps.length : 0), sub: next.sub ? next.sub.name : '', comps: next.comps.map(c => c.name).join(', ') });
       return res.status(200).json({ ok: true, group: next });
     }
     if(op === 'delete'){

@@ -170,14 +170,19 @@ function changed(g){
   const now = (g.comps || []).map(c => c.name).join(', ');
   return !!g.answeredAt && g.orig && now !== (g.orig.comps || '');
 }
-const heads = (g) => g.status === 'yes' ? 1 + (g.comps || []).length : 0;
+// 참석 인원 = 본인(참석일 때) + 참석으로 고른 동행인. 본인이 불참이어도 동행인만 올 수 있다(2026-10-29 손님 화면 변경).
+const answered = (g) => g.status === 'yes' || g.status === 'no';
+const heads = (g) => (g.status === 'yes' ? 1 : 0) + (answered(g) ? (g.comps || []).length : 0);
+// 그룹 상태: 미응답 / 참석(한 명이라도 옴) / 불참(아무도 안 옴)
+const gst = (g) => !answered(g) ? 'pending' : (heads(g) > 0 ? 'yes' : 'no');
+const stLabel = (g) => g.status === 'no' && heads(g) > 0 ? '동행만 참석' : ST[gst(g)];
 function list(){ return Object.keys(G).map(t => Object.assign({ t }, G[t])).filter(g => g.rep); }
 
 function stats(){
-  const L = list(); const s = { all: L.length, yes: 0, yesN: 0, yesC: 0, no: 0, pending: 0, pendN: 0, chg: 0 };
+  const L = list(); const s = { all: L.length, yes: 0, yesN: 0, yesC: 0, yesR: 0, no: 0, pending: 0, pendN: 0, chg: 0 };
   L.forEach(g => {
-    if(g.status === 'yes'){ s.yes++; s.yesN += heads(g); s.yesC += (g.comps || []).length; }
-    else if(g.status === 'no') s.no++;
+    if(gst(g) === 'yes'){ s.yes++; s.yesN += heads(g); s.yesC += (g.comps || []).length; if(g.status === 'yes') s.yesR++; }
+    else if(gst(g) === 'no') s.no++;
     else { s.pending++; s.pendN += 1 + (g.comps || []).length; }
     if(changed(g)) s.chg++;
   });
@@ -190,7 +195,7 @@ function paint(){
   const k = (id, l, v, d) => `<button class="kpi ${FILTER === id ? 'on' : ''}" data-f="${id}"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></button>`;
   $('#kpis').innerHTML =
     k('all', '총 대상', `${s.all}<small>그룹</small>`, `명단 ${list().reduce((n, g) => n + 1 + (g.comps || []).length, 0)}명 · 응답률 ${s.all ? Math.round((s.yes + s.no) / s.all * 100) : 0}%`) +
-    k('yes', '참석 확정', `${s.yesN}<small>명</small>`, `${s.yes}그룹 · 대표 ${s.yes} + 동행 ${s.yesC}`) +
+    k('yes', '참석 확정', `${s.yesN}<small>명</small>`, `${s.yes}그룹 · 본인 ${s.yesR} + 동행 ${s.yesC}`) +
     k('no', '불참', `${s.no}<small>그룹</small>`, '참석에서 빠짐') +
     k('pending', '미응답', `${s.pending}<small>그룹</small>`, `명단상 예상 ${s.pendN}명 · 재발송 대상`) +
     k('chg', '대리·동행인 변경', `${s.chg}<small>그룹</small>`, '처음 명단과 달라짐');
@@ -207,9 +212,9 @@ function paint(){
 function filtered(ignoreComp){
   const q = $('#q').value.trim().toLowerCase().replace(/-/g, '');
   return list().filter(g => {
-    if(FILTER === 'yes' && g.status !== 'yes') return false;
-    if(FILTER === 'no' && g.status !== 'no') return false;
-    if(FILTER === 'pending' && g.status !== 'pending' && g.status) return false;
+    if(FILTER === 'yes' && gst(g) !== 'yes') return false;
+    if(FILTER === 'no' && gst(g) !== 'no') return false;
+    if(FILTER === 'pending' && gst(g) !== 'pending') return false;
     if(FILTER === 'chg' && !changed(g)) return false;
     if(!ignoreComp && COMP === 'with' && !withComps(g)) return false;
     if(!ignoreComp && COMP === 'solo' && withComps(g)) return false;
@@ -231,15 +236,15 @@ function paintRows(){
   $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', pending: '미응답', chg: '대리·동행인 변경' })[FILTER] + ` ${L.length}`;
   if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="8" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
   $('#rows').innerHTML = L.map(g => {
-    const st = g.status || 'pending';
+    const st = gst(g);
     const orig = g.orig ? g.orig.n : '';
-    const now = st === 'yes' ? heads(g) : (st === 'no' ? 0 : '');
+    const now = st === 'pending' ? '' : heads(g);
     const comps = (g.comps || []).map(c => esc(c.name)).join(', ');
     return `<tr class="g" data-t="${g.t}">
       <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
       <td class="num">${esc(fmtPhone(g.rep.phone))}</td>
       <td class="hide-m mut">${esc(g.route || '')}</td>
-      <td><span class="st ${st}">${ST[st]}</span></td>
+      <td><span class="st ${st}">${stLabel(g)}</span></td>
       <td class="num">${now === '' ? `<span class="mut">예상 ${orig}</span>` : (orig !== '' && orig !== now ? `<span class="mut">${orig} →</span> <b>${now}</b>` : `<b>${now}</b>`)}</td>
       <td class="hide-m comps">${g.sub && g.sub.name ? `<span class="tag t-sub" style="margin-left:0">대리</span> ${esc(g.sub.name)}${comps ? ' · ' : ''}` : ''}${comps || '<span class="mut">—</span>'}</td>
       <td class="mut num">${g.updatedAt ? fmtTime(g.updatedAt) + (g.updatedBy === 'guest' ? ' · 본인' : ' · 담당') : ''}</td>
@@ -358,11 +363,17 @@ $('#file').onchange = async (e) => {
 function personRows(){
   const out = [];
   list().sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
-    const st = ST[g.status || 'pending'];
-    const base = { 상태: st, '초대받은 분': g.rep.name, '초청 경로': g.route || '', 'VIP': g.vip ? 'VIP' : '', '마지막 변경': g.updatedAt ? new Date(g.updatedAt).toLocaleString('ko-KR') : '', '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
+    // 상태는 사람마다: 본인 = 본인 응답, 동행인 = 응답했으면 참석(명단에서 빠진 사람은 아래에서 불참으로)
+    const ans = answered(g), st = ans ? ST[g.status] : ST.pending;
+    const base = { '초대받은 분': g.rep.name, '초청 경로': g.route || '', 'VIP': g.vip ? 'VIP' : '', '마지막 변경': g.updatedAt ? new Date(g.updatedAt).toLocaleString('ko-KR') : '', '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
     const rep = g.sub && g.sub.name ? g.sub : g.rep;
-    out.push(Object.assign({ 구분: g.sub && g.sub.name ? '대리 참석' : '본인', 성함: rep.name, 직책: rep.title || '', 소속: rep.org || g.rep.org || '', 연락처: fmtPhone(rep.phone), 이메일: g.sub && g.sub.name ? '' : (g.email || '') }, base));
-    (g.comps || []).forEach(c => out.push(Object.assign({ 구분: '동행인', 성함: c.name, 직책: c.title || '', 소속: c.org || g.rep.org || '', 연락처: fmtPhone(c.phone), 이메일: '' }, base)));
+    out.push(Object.assign({ 상태: st, 구분: g.sub && g.sub.name ? '대리 참석' : '본인', 성함: rep.name, 직책: rep.title || '', 소속: rep.org || g.rep.org || '', 연락처: fmtPhone(rep.phone), 이메일: g.sub && g.sub.name ? '' : (g.email || '') }, base));
+    (g.comps || []).forEach(c => out.push(Object.assign({ 상태: ans ? '참석' : ST.pending, 구분: '동행인', 성함: c.name, 직책: c.title || '', 소속: c.org || g.rep.org || '', 연락처: fmtPhone(c.phone), 이메일: '' }, base)));
+    if(ans){   // 처음 명단에 있었는데 불참으로 고른 동행인
+      const now = new Set((g.comps || []).flatMap(c => [c.name, c.from].filter(Boolean)));
+      String((g.orig && g.orig.comps) || '').split(', ').filter(n => n && !now.has(n))
+        .forEach(n => out.push(Object.assign({ 상태: '불참', 구분: '동행인', 성함: n, 직책: '', 소속: g.rep.org || '', 연락처: '', 이메일: '' }, base)));
+    }
   });
   return out;
 }
@@ -392,7 +403,7 @@ function download(name, text){
 const SMS_DEFAULT = '[아카라라이프] {이름}님, 11/19(목) SMART HOME INTERIOR 2026 세미나 참석 확인 부탁드립니다. 아래 링크에서 참석 여부와 동행인 정보를 확인·수정해 주세요.\n{링크}';
 function smsText(g, tpl){ return tpl.replace(/\{이름\}/g, g.rep.name).replace(/\{링크\}/g, linkOf(g.t)); }
 function linkRows(L, tpl){
-  return L.map(g => ({ 이름: g.rep.name, 소속: g.rep.org || '', 연락처: fmtPhone(g.rep.phone), 이메일: g.email || '', 상태: ST[g.status || 'pending'], 링크: linkOf(g.t), 문자: smsText(g, tpl || SMS_DEFAULT) }));
+  return L.map(g => ({ 이름: g.rep.name, 소속: g.rep.org || '', 연락처: fmtPhone(g.rep.phone), 이메일: g.email || '', 상태: stLabel(g), 링크: linkOf(g.t), 문자: smsText(g, tpl || SMS_DEFAULT) }));
 }
 $('#btnLinks').onclick = () => {
   const counts = stats();
@@ -408,7 +419,7 @@ $('#btnLinks').onclick = () => {
     <div class="prev" id="tplPrev"></div>
     <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>닫기</button><button class="btn" id="cpNums">연락처만 복사</button><button class="btn pri" id="dlLinks">CSV 받기</button></div>`);
   const target = () => { const v = document.querySelector('[name=tg]:checked').value;
-    return v === 'view' ? filtered() : list().filter(g => v === 'all' || (v === 'pending' ? (g.status || 'pending') === 'pending' : g.status === v)); };
+    return v === 'view' ? filtered() : list().filter(g => v === 'all' || gst(g) === v); };
   const prev = () => { const L = target(); $('#tplPrev').innerHTML = L.length ? `${L.length}명 · 미리보기<br>${esc(smsText(L[0], $('#tpl').value)).replace(/\n/g, '<br>')}` : '대상이 없어요.'; };
   document.querySelectorAll('[name=tg]').forEach(r => r.onchange = prev); $('#tpl').oninput = prev; prev();
   $('#dlLinks').onclick = () => { const L = target(); if(!L.length) return toast('대상이 없어요'); download(`RSVP_링크_${stamp()}.csv`, toCsv(linkRows(L, $('#tpl').value))); };
