@@ -132,7 +132,8 @@ h2{font-size:21px;line-height:1.35;font-weight:700;color:var(--ink);letter-spaci
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-const T = (new URLSearchParams(location.search).get('t') || '').trim();
+// 짧은 링크 /r/<토큰> 은 middleware가 주소를 그대로 둔 채 이 페이지를 보여주므로 경로에서도 토큰을 읽는다
+const T = (new URLSearchParams(location.search).get('t') || (location.pathname.match(/\/r\/([A-Za-z0-9_-]{12})\/?$/) || [])[1] || '').trim();
 let D = null;          // 서버 값
 let F = null;          // 편집 중인 값
 let MODE = 'form';     // form | done
