@@ -1,8 +1,8 @@
 // 세미나 RSVP(참석 확인) — 개인별 링크 /r/<토큰> 으로 참석·불참·동행인 수정
 // ※ 파일명이 _로 시작해 독립 함수가 아니다(Vercel Hobby 함수 12개 제한). middleware가 /api/rsvp → /api/db?rsvp=1 로 넘기고 db.js가 이 모듈을 부른다.
 // ------------------------------------------------------------------
-// · 개인정보(이름·연락처·이메일)라서 Firebase `customerDb/rsvp/*` 에 저장한다.
-//   customerDb는 규칙으로 익명 접근이 막혀 있고, 이 함수만 서버 비밀키(FIREBASE_DB_SECRET)로 읽고 쓴다.
+// · 개인정보(이름·연락처·이메일)는 아래 "저장소" 설명대로 비공개 경로에 암호화해서 저장한다.
+//   (처음엔 customerDb + FIREBASE_DB_SECRET였으나 그 키가 Firebase에서 거부돼 2026-10-29 변경)
 // · 손님(로그인 없음): 토큰을 아는 사람만 그 그룹 1건을 읽고 저장할 수 있다. 목록 조회는 불가.
 //   토큰은 추측 불가능한 무작위 12자. middleware 예외에 api/rsvp·rsvp.html·r/ 를 넣어 로그인 없이 열린다.
 // · 관리자(@aqara.kr 세션): 명단 가져오기·전체 목록·수정·삭제·응답 마감.
@@ -54,33 +54,87 @@ function sessionEmail(req){
   }catch(e){ return ''; }
 }
 
-const secret = () => (process.env.FIREBASE_DB_SECRET || '').trim();
 const okTok = (s) => /^[A-Za-z0-9_-]{12}$/.test(String(s || ''));
 const newTok = () => crypto.randomBytes(9).toString('base64url');   // 12자
 const str = (v, n) => String(v == null ? '' : v).trim().slice(0, n || 100);
 const digits = (v) => String(v || '').replace(/\D/g, '').slice(0, 15);
 
-async function fb(method, path, body){
-  const r = await fetch(`${DB_URL}/${ROOT}/${path}.json?auth=${encodeURIComponent(secret())}`, {
+// ── 저장소: 암호화 + 익명 로그인 ──
+// FIREBASE_DB_SECRET(관리자 키)이 유효하지 않아(2026-10-29 확인: Permission denied) 관리자 키 없이 동작하게 바꿨다.
+// · 서버가 익명 로그인 토큰으로 Firebase에 접근한다(브라우저는 Firebase에 직접 붙지 않음).
+// · 저장 위치는 SESSION_SECRET에서 만든 비공개 경로(rsvpx_<해시>) — 브라우저 코드·저장소 어디에도 안 나온다. 루트 목록은 익명에게 막혀 있다.
+// · 그룹·이력 내용은 AES-256-GCM으로 암호화해서 넣는다. 경로를 알아내도 이름·연락처는 읽을 수 없다.
+//   키 = SHA-256(SESSION_SECRET + 'rsvp'). ⚠️ SESSION_SECRET을 바꾸면 기존 RSVP 데이터를 못 읽는다(바꾸기 전 명단을 내보낼 것).
+const SS = () => (process.env.SESSION_SECRET || '').trim();
+const ROOT = () => 'rsvpx_' + crypto.createHmac('sha256', SS()).update('rsvp-root').digest('hex').slice(0, 24);
+const KEY = () => crypto.createHash('sha256').update(SS() + 'rsvp').digest();
+const gid = (t) => crypto.createHmac('sha256', SS()).update('g:' + t).digest('hex').slice(0, 20);   // 토큰도 경로에 그대로 쓰지 않는다
+function enc(obj){
+  const iv = crypto.randomBytes(12), c = crypto.createCipheriv('aes-256-gcm', KEY(), iv);
+  const ct = Buffer.concat([c.update(JSON.stringify(obj), 'utf8'), c.final()]);
+  return Buffer.concat([iv, c.getAuthTag(), ct]).toString('base64');
+}
+function dec(s){
+  try{
+    const b = Buffer.from(String(s || ''), 'base64');
+    const d = crypto.createDecipheriv('aes-256-gcm', KEY(), b.subarray(0, 12));
+    d.setAuthTag(b.subarray(12, 28));
+    return JSON.parse(Buffer.concat([d.update(b.subarray(28)), d.final()]).toString('utf8'));
+  }catch(e){ return null; }
+}
+let ANON = { tok: '', exp: 0 };
+async function anonToken(force){
+  if(!force && ANON.tok && Date.now() < ANON.exp) return ANON.tok;
+  const s = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${WEB_API_KEY}`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ returnSecureToken: true }),
+  }).then(r => r.json());
+  if(!s.idToken) throw new Error('Firebase 익명 로그인 실패');
+  ANON = { tok: s.idToken, exp: Date.now() + 50 * 60 * 1000 };
+  return ANON.tok;
+}
+async function raw(method, path, body, retried){
+  const r = await fetch(`${DB_URL}/${ROOT()}/${path}.json?auth=${encodeURIComponent(await anonToken(retried))}`, {
     method,
     headers: body === undefined ? {} : { 'Content-Type': 'application/json' },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   const t = await r.text();
+  if(r.status === 401 && !retried) return raw(method, path, body, true);   // 토큰 만료 → 한 번 다시
   if(!r.ok) throw new Error(`Firebase ${r.status}: ${t.slice(0, 200)}`);
   return t ? JSON.parse(t) : null;
 }
-
-// customerDb가 익명에게 막혀 있는지 — 열려 있으면 개인정보를 올리지 않는다
-async function rulesLocked(){
-  try{
-    const s = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${WEB_API_KEY}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ returnSecureToken: true }),
-    }).then(r => r.json());
-    if(!s.idToken) return null;
-    const r = await fetch(`${DB_URL}/customerDb.json?shallow=true&auth=${s.idToken}`);
-    return r.status === 401 || r.status === 403;
-  }catch(e){ return null; }
+// 예전 경로 이름(groups/<t>, groups, log/<t>, meta)을 그대로 받아 암호화 저장소로 옮겨 준다
+async function fb(method, path, body){
+  const [kind, t] = path.split('/');
+  if(kind === 'meta') return raw(method, 'meta', body);
+  if(kind === 'groups'){
+    if(t){
+      if(method === 'GET'){ const v = await raw('GET', 'g/' + gid(t)); return v ? dec(v.c) : null; }
+      if(method === 'PUT') return raw('PUT', 'g/' + gid(t), { c: enc(Object.assign({}, body, { _t: t })) });
+      return raw(method, 'g/' + gid(t));
+    }
+    if(method === 'GET'){
+      const all = (await raw('GET', 'g')) || {}, out = {};
+      Object.keys(all).forEach(k => { const g = all[k] && dec(all[k].c); if(g && g._t) out[g._t] = g; });
+      return out;
+    }
+    if(method === 'PATCH'){
+      const o = {};
+      Object.keys(body).forEach(k => { o[gid(k)] = { c: enc(Object.assign({}, body[k], { _t: k })) }; });
+      return raw('PATCH', 'g', o);
+    }
+  }
+  if(kind === 'log'){
+    if(t && method === 'POST') return raw('POST', 'l/' + gid(t), { c: enc(body) });
+    if(t) return raw(method, 'l/' + gid(t));
+  }
+  throw new Error('unknown path ' + path);
+}
+// 관리자 목록용: 그룹별 변경 이력 { 토큰: {키: 이력} }
+async function logsFor(tokens){
+  const all = (await raw('GET', 'l')) || {}, out = {};
+  tokens.forEach(t => { const L = all[gid(t)]; if(!L) return; out[t] = {}; Object.keys(L).forEach(k => { const v = dec(L[k] && L[k].c); if(v) out[t][k] = v; }); });
+  return out;
 }
 
 function cleanPerson(p){
@@ -108,7 +162,7 @@ module.exports = async (req, res) => {
   const body = req.body || {};
   const op = String((req.method === 'GET' ? req.query.op : body.op) || '');
   try{
-    if(!secret()) return res.status(200).json({ ok: false, error: '서버 설정이 끝나지 않았어요(FIREBASE_DB_SECRET).' });
+    if(!SS()) return res.status(200).json({ ok: false, error: "서버 설정이 끝나지 않았어요(SESSION_SECRET)." });
 
     // ── 손님 ──
     if(op === 'get' || op === 'save'){
@@ -141,13 +195,13 @@ module.exports = async (req, res) => {
     if(!email) return res.status(401).json({ ok: false, error: '@' + DOMAIN + ' 로그인이 필요합니다.' });
 
     if(op === 'list'){
-      const [groups, meta, log] = await Promise.all([fb('GET', 'groups'), fb('GET', 'meta'), fb('GET', 'log')]);
-      return res.status(200).json({ ok: true, email, groups: groups || {}, meta: meta || {}, log: log || {}, locked: await rulesLocked() });
+      const [groups, meta] = await Promise.all([fb("GET", "groups"), fb("GET", "meta")]);
+      const log = await logsFor(Object.keys(groups || {}));
+      return res.status(200).json({ ok: true, email, groups: groups || {}, meta: meta || {}, log: log || {}, locked: true });
     }
     if(req.method !== 'POST') return res.status(405).json({ ok: false });
 
     if(op === 'import'){
-      if(await rulesLocked() !== true) return res.status(200).json({ ok: false, error: 'Firebase 규칙이 customerDb를 막고 있지 않아 개인정보를 올리지 않았습니다.' });
       const incoming = (Array.isArray(body.groups) ? body.groups : []).slice(0, 3000);
       const cur = (await fb('GET', 'groups')) || {};
       const byKey = {};

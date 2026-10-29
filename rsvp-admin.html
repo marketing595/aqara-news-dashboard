@@ -154,7 +154,7 @@ async function load(){
     const j = await r.json();
     if(!j.ok){ $('#state').innerHTML = `<b class="bad">${esc(j.error || '불러오기 실패')}</b>`; return; }
     G = j.groups || {}; META = j.meta || {}; LOG = j.log || {};
-    $('#state').innerHTML = `${esc(j.email)} · 개인정보 보호 ${j.locked === true ? '<b>정상(customerDb 잠김)</b>' : '<b class="bad">확인 필요</b>'} · ${fmtTime(Date.now())} 기준`;
+    $('#state').innerHTML = `${esc(j.email)} · 개인정보 보호 ${j.locked === true ? '<b>정상(암호화 저장)</b>' : '<b class="bad">확인 필요</b>'} · ${fmtTime(Date.now())} 기준`;
     paint();
   }catch(e){ $('#state').innerHTML = '<b class="bad">연결 실패</b>'; }
 }
