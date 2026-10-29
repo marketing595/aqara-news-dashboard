@@ -17,7 +17,7 @@ export const config = {
   //   aqaralife-logo*.png·hakdong-*.png = 학동 지도에 쓰는 로고·예약 QR. 빠지면 비로그인·hakdongmap.kr에서 이미지가 깨진다.
   // rsvp.html / api/rsvp / r/<토큰> = 세미나 참석 확인(RSVP) 개인별 링크. 손님은 로그인 없이 자기 토큰의 그룹 1건만 읽고 쓴다.
   //   개인정보는 Firebase customerDb/rsvp(익명 차단)에 있고 api/rsvp가 서버 비밀키로만 접근한다. 관리 화면 rsvp-admin.html은 로그인 뒤.
-  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json|campaign-l100.html|hakdong.html|hakdong.json|aqaralife-logo|hakdong-|rsvp.html|api/rsvp).*)'],
+  matcher: ['/((?!api/auth|_next|favicon|apple-touch-icon|robots.txt|sitemap.xml|media.html|media.json|campaign-l100.html|hakdong.html|hakdong.json|aqaralife-logo|hakdong-|rsvp.html).*)'],
 };
 
 function fromB64url(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; return atob(s); }
@@ -61,6 +61,12 @@ export default async function middleware(req){
   const rm = url0.pathname.match(/^\/r\/([A-Za-z0-9_-]{12})\/?$/);
   if(rm){
     const dest = new URL('/rsvp.html?t=' + rm[1], url0.origin);
+    return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
+  }
+  // RSVP API: /api/rsvp → /api/db?rsvp=1 (Vercel Hobby 함수 12개 제한이라 db.js가 대신 처리). 로그인 검사는 _rsvp.js가 op별로 직접 한다.
+  if(url0.pathname === '/api/rsvp'){
+    const dest = new URL('/api/db' + url0.search, url0.origin);
+    dest.searchParams.set('rsvp', '1');
     return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
   }
   const CID = process.env.GOOGLE_CLIENT_ID, SECRET = process.env.SESSION_SECRET;

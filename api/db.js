@@ -69,6 +69,8 @@ async function rulesLocked(){
 }
 
 module.exports = async (req, res) => {
+  // 세미나 RSVP: /api/rsvp 를 middleware가 여기로 넘긴다(함수 개수 제한 때문에 별도 함수 대신 _rsvp.js 모듈). 손님 요청은 로그인 없이 처리.
+  if((req.query && req.query.rsvp === '1') || /^\/api\/rsvp/.test(req.url || '')) return require('./_rsvp.js')(req, res);
   res.setHeader('Cache-Control', 'no-store');   // 개인정보 → 캐시 금지
   const email = sessionEmail(req);
   if(!email) return res.status(401).json({ ok: false, error: '@' + DOMAIN + ' 로그인이 필요합니다.' });
