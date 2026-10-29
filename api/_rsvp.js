@@ -18,7 +18,6 @@ const crypto = require('crypto');
 const DB_URL = 'https://aqara-weekly-1227c-default-rtdb.asia-southeast1.firebasedatabase.app';
 const WEB_API_KEY = 'AIzaSyAs_yQ1fgGKfRDKbkUb0lviIoJ2e00KRGA'; // 공개 키(규칙 점검용 익명 로그인에만 사용)
 const DOMAIN = (process.env.ALLOWED_DOMAIN || 'aqara.kr').toLowerCase();
-const ROOT = 'customerDb/rsvp';
 
 // 행사 정보(손님 화면 상단) — seminar.json 기준
 const EVENT = {
