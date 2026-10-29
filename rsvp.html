@@ -209,7 +209,8 @@ function render(){
       ${pick('data-cp', i, c.on, ro)}
       ${c.on === true ? `
       ${c._ph ? `<label class="fld" style="margin-top:12px"><span>성함<i>*</i></span><input data-c="${i}" data-k="name" value="${esc(c.name)}" placeholder="오시는 분 성함을 적어 주세요" autocomplete="off" ${ro ? 'disabled' : ''}></label>` : ''}
-      <label class="fld" style="margin-top:12px"><span>연락처<i>*</i></span><input data-c="${i}" data-k="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(c.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
+      <label class="fld" style="margin-top:12px"><span>소속</span><input data-c="${i}" data-k="org" value="${esc(c.org || '')}" placeholder="회사·학교 등" autocomplete="organization" ${ro ? 'disabled' : ''}></label>
+      <label class="fld"><span>연락처<i>*</i></span><input data-c="${i}" data-k="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(c.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
       ${QR_NOTE}` : '<div style="height:12px"></div>'}
     </div>`).join('');
 
@@ -226,6 +227,7 @@ function render(){
       <div class="person" style="margin-top:16px">
         <div class="p-top"><span class="p-name">${esc(rep.name)}<span class="p-tag">본인</span></span></div>
         ${D.sub && D.sub.name ? `<p class="hint" style="margin:-4px 0 12px">${esc(D.sub.name)}님이 대신 참석해요.</p>` : ''}
+        <label class="fld"><span>소속</span><input data-r="org" value="${esc(rep.org || '')}" placeholder="회사·학교 등" autocomplete="organization" ${ro ? 'disabled' : ''}></label>
         <label class="fld"><span>연락처<i>*</i></span><input data-r="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(rep.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
         ${QR_NOTE}
       </div>` : ''}
@@ -285,8 +287,8 @@ async function save(){
   const btn = $('#saveBtn'); btn.disabled = true; btn.textContent = '저장 중…';
   try{
     const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone },
-        comps: goingComps().map(c => ({ name: c.name.trim() || c._ph, from: c._ph || undefined, phone: c.phone })) }) });
+      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone, org: F.rep.org || '' },
+        comps: goingComps().map(c => ({ name: c.name.trim() || c._ph, from: c._ph || undefined, phone: c.phone, org: c.org || '' })) }) });
     const j = await r.json();
     if(!j.ok){ toast(j.error || '저장하지 못했어요. 다시 시도해 주세요.'); paintBar(); return; }
     setData(j); MODE = 'done'; render(); window.scrollTo({ top: 0, behavior: 'smooth' });

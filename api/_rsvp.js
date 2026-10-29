@@ -189,7 +189,7 @@ module.exports = async (req, res) => {
       if(meta.closed) return res.status(200).json({ ok: false, error: '응답이 마감되었어요. 변경이 필요하면 담당자에게 연락해 주세요.' });
       const status = STATUSES.includes(body.status) && body.status !== 'pending' ? body.status : '';
       if(!status) return res.status(200).json({ ok: false, error: '참석 여부를 선택해 주세요.' });
-      // 손님이 바꿀 수 있는 것: 참석 여부, 본인 연락처, 동행인 빼기/되돌리기와 동행인 연락처. 이름·소속·대리 참석은 담당자만.
+      // 손님이 바꿀 수 있는 것: 본인·동행인 각자의 참석 여부, 소속, 연락처(+ 이름 미기재 자리의 이름). 동행인 추가·이름 수정·대리 참석은 담당자만.
       const rep = cleanPerson(body.rep);
       const allow = allowedComps(g), seen = {};
       // 이름 미기재 자리: 처음 명단의 미기재 이름 + 이미 이름을 적은 자리(from)
@@ -199,19 +199,20 @@ module.exports = async (req, res) => {
       const comps = [];
       (Array.isArray(body.comps) ? body.comps : []).slice(0, 30).forEach(x => {
         const nm = str(x && x.name, 40), from = str(x && x.from, 40), phone = digits(x && x.phone);
+        const org = (o) => (x && x.org !== undefined) ? { org: str(x.org, 80) } : (o ? { org: o } : {});   // 소속: 손님이 적은 값, 안 보냈으면 기존 값
         if(from && phs[from]){
           if(seen[from]) return; seen[from] = 1;
-          const c = Object.assign({}, phs[from], { name: nm || from, phone });
+          const c = Object.assign({}, phs[from], { name: nm || from, phone }, org(phs[from].org));
           if(c.name === from) delete c.from; else c.from = from;
           comps.push(c);
         }else if(nm && allow[nm] && !seen[nm]){
-          seen[nm] = 1; comps.push(Object.assign({}, allow[nm], { phone }));
+          seen[nm] = 1; comps.push(Object.assign({}, allow[nm], { phone }, org(allow[nm].org)));
         }
       });
       const sub = g.sub || null;
       const now = Date.now();
       const next = Object.assign({}, g, {
-        status, rep: Object.assign({}, g.rep, { phone: rep.phone }),
+        status, rep: Object.assign({}, g.rep, { phone: rep.phone }, body.rep && body.rep.org !== undefined ? { org: rep.org } : {}),
         sub, comps, updatedAt: now, updatedBy: 'guest', answeredAt: now,
       });
       await fb('PUT', `groups/${t}`, next);
