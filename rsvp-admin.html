@@ -109,6 +109,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
       <button class="btn" id="btnLinks">링크·문자 추출</button>
       <button class="btn" id="btnXlsx">최신 명단 .xlsx</button>
       <button class="btn" id="btnCsv">.csv</button>
+      <button class="btn" id="btnEventus" title="참석 확정자만, 이벤터스 '참가자리스트 엑셀 등록하기' 양식">이벤터스 등록 양식</button>
       <button class="btn" id="btnClose"></button>
       <button class="btn" id="btnReload" title="30초마다 자동으로 새로 불러와요">새로고침</button>
     </div>
@@ -387,6 +388,38 @@ $('#btnXlsx').onclick = () => {
   XLSX.writeFile(wb, `RSVP_세미나_최신명단_${stamp()}.xlsx`);
 };
 $('#btnCsv').onclick = () => download(`RSVP_세미나_최신명단_${stamp()}.csv`, toCsv(personRows()));
+
+// ── 이벤터스 '참가자리스트_엑셀등록하기' 양식(2026-10-30 받은 파일 그대로): 1행 안내 · 2행 머리글 · 3행부터 참석 확정자 ──
+const EVENTUS_GROUP = '기본 카테고리||기본 티켓';
+const EVENTUS_HEAD1 = ['이름을 입력하세요.', '이메일 주소를 입력하세요', '휴대전화번호를 입력하세요.\n빈칸, - (대시)를 제거하고 입력하세요.',
+  '그룹명을 입력하세요\n*그룹은 수정되지 않습니다.\n아래의 그룹 중 복사/붙여넣기 하세요\n*여러개의 그룹은 줄바꿈으로 구분됩니다.\n\n-- 그룹 목록 --\n' + EVENTUS_GROUP,
+  '소속을 입력하세요.', '직함을 입력하세요.'];
+const EVENTUS_HEAD2 = ['이름(필수)', '이메일(필수)', '휴대전화번호', '그룹명(필수)', '소속', '직함'];
+function eventusRows(){
+  const out = [];
+  list().filter(answered).sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
+    if(g.status === 'yes'){
+      const p = g.sub && g.sub.name ? g.sub : g.rep;
+      out.push([p.name, g.sub && g.sub.name ? '' : (g.email || ''), String(p.phone || '').replace(/\D/g, ''), EVENTUS_GROUP, p.org || g.rep.org || '', p.title || '']);
+    }
+    (g.comps || []).forEach(c => out.push([c.name, '', String(c.phone || '').replace(/\D/g, ''), EVENTUS_GROUP, c.org || g.rep.org || '', c.title || '']));
+  });
+  return out;
+}
+$('#btnEventus').onclick = () => {
+  const rows = eventusRows();
+  if(!rows.length) return toast('참석으로 응답한 사람이 아직 없어요');
+  const ws = XLSX.utils.aoa_to_sheet([EVENTUS_HEAD1, EVENTUS_HEAD2, ...rows]);
+  ws['!cols'] = [{ wch: 14 }, { wch: 28 }, { wch: 16 }, { wch: 26 }, { wch: 24 }, { wch: 14 }];
+  ws['!rows'] = [{ hpt: 150 }];
+  // 휴대전화번호는 앞자리 0이 사라지지 않게 글자로
+  rows.forEach((r, i) => { const a = XLSX.utils.encode_cell({ r: i + 2, c: 2 }); if(ws[a]){ ws[a].t = 's'; ws[a].z = '@'; } });
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  XLSX.writeFile(wb, `참가자리스트_엑셀등록하기_이벤터스_${stamp()}.xlsx`);
+  const noMail = rows.filter(r => !r[1]).length;
+  toast(`참석 확정 ${rows.length}명 내려받음` + (noMail ? ` · 이메일 없는 ${noMail}명(동행인 등)은 이벤터스에서 확인 필요` : ''));
+};
 function toCsv(rows){
   if(!rows.length) return '';
   const keys = Object.keys(rows[0]);
