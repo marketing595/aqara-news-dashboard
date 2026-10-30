@@ -170,6 +170,16 @@ function guestView(g, meta){
   };
 }
 
+// 앞 6자 → 전체 토큰. 그룹 목록을 한 번 읽어 5분간 기억(같은 앞자리가 둘 이상이면 찾지 않음 — 관리 화면이 경고)
+let SHORT = { at: 0, m: {} };
+async function shortToTok(sc){
+  const build = async () => { const all = (await fb('GET', 'groups')) || {}, m = {};
+    Object.keys(all).forEach(t => { const k = t.slice(0, 6); m[k] = m[k] ? '!' : t; }); SHORT = { at: Date.now(), m }; };
+  if(Date.now() - SHORT.at > 5 * 60 * 1000 || !SHORT.m[sc]) await build();
+  const t = SHORT.m[sc];
+  return t && t !== '!' ? t : '';
+}
+
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');   // 개인정보 → 캐시 금지
   res.setHeader('X-Robots-Tag', 'noindex');
@@ -180,7 +190,10 @@ module.exports = async (req, res) => {
 
     // ── 손님 ──
     if(op === 'get' || op === 'save'){
-      const t = req.method === 'GET' ? req.query.t : body.t;
+      let t = req.method === 'GET' ? req.query.t : body.t;
+      // 초단축 링크 hakdongmap.kr/<토큰 앞 6자>(이벤터스 직함 칸 길이 제한, 2026-10-30) → 전체 토큰으로 찾아 준다
+      const sc = req.method === 'GET' ? String(req.query.s || '') : '';
+      if(!okTok(t) && /^[A-Za-z0-9_-]{6}$/.test(sc)) t = await shortToTok(sc);
       if(!okTok(t)) return res.status(200).json({ ok: false, error: 'link' });
       const g = await fb('GET', `groups/${t}`);
       if(!g || !g.rep) return res.status(200).json({ ok: false, error: 'link' });
@@ -191,7 +204,7 @@ module.exports = async (req, res) => {
           try{ const o = (await raw('GET', 'o/' + gid(t))) || {}; const now = Date.now();
             await raw('PUT', 'o/' + gid(t), { first: o.first || now, last: now, n: (o.n || 0) + 1 }); }catch(e){}
         }
-        return res.status(200).json(guestView(g, meta));
+        return res.status(200).json(Object.assign(guestView(g, meta), { t }));
       }
 
       if(req.method !== 'POST') return res.status(405).json({ ok: false });

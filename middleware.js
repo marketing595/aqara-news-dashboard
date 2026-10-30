@@ -64,6 +64,12 @@ export default async function middleware(req){
       dest.searchParams.set('rsvp', '1');
       return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
     }
+    // 초단축: hakdongmap.kr/<토큰 앞 6자> (직함 칸에 20자로 들어가게)
+    const sm0 = url0.pathname.match(/^\/([A-Za-z0-9_-]{6})\/?$/);
+    if(sm0){
+      const dest = new URL('/rsvp.html?s=' + sm0[1], url0.origin);
+      return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
+    }
     if(['/rsvp.html', '/favicon-seminar.png', '/aqaralife-logo-black-v2.png'].includes(url0.pathname)) return;
     if(url0.pathname === '/'){
       const dest = new URL('/hakdong.html' + url0.search, url0.origin);

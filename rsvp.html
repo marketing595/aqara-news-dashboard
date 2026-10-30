@@ -136,7 +136,9 @@ h2{font-size:21px;line-height:1.35;font-weight:700;color:var(--ink);letter-spaci
 
 <script>
 // 짧은 링크 /r/<토큰> 은 middleware가 주소를 그대로 둔 채 이 페이지를 보여주므로 경로에서도 토큰을 읽는다
-const T = (new URLSearchParams(location.search).get('t') || (location.pathname.match(/\/r\/([A-Za-z0-9_-]{12})\/?$/) || [])[1] || '').trim();
+let T = (new URLSearchParams(location.search).get('t') || (location.pathname.match(/\/r\/([A-Za-z0-9_-]{12})\/?$/) || [])[1] || '').trim();
+// 초단축 링크 hakdongmap.kr/<6자>: 서버가 전체 토큰을 찾아 돌려준다(저장 때는 전체 토큰 사용)
+const S = (new URLSearchParams(location.search).get('s') || (location.pathname.match(/^\/([A-Za-z0-9_-]{6})\/?$/) || [])[1] || '').trim();
 let D = null;          // 서버 값
 let F = null;          // 편집 중인 값
 let MODE = 'form';     // form | done
@@ -159,10 +161,12 @@ function showMsg(title, body){
 }
 
 async function load(){
-  if(!/^[A-Za-z0-9_-]{12}$/.test(T)) return showMsg('링크를 확인해 주세요', '받으신 문자의 링크를 그대로 눌러 들어와 주세요.');
+  const full = /^[A-Za-z0-9_-]{12}$/.test(T);
+  if(!full && !/^[A-Za-z0-9_-]{6}$/.test(S)) return showMsg('링크를 확인해 주세요', '받으신 문자의 링크를 그대로 눌러 들어와 주세요.');
   try{
-    const r = await fetch('/api/rsvp?op=get&t=' + encodeURIComponent(T), { cache: 'no-store' });
+    const r = await fetch('/api/rsvp?op=get&' + (full ? 't=' + encodeURIComponent(T) : 's=' + encodeURIComponent(S)), { cache: 'no-store' });
     const j = await r.json();
+    if(j.ok && j.t) T = j.t;
     if(!j.ok){ return j.error === 'link'
       ? showMsg('링크를 확인해 주세요', '이 링크로는 참석 정보를 찾을 수 없어요. 받으신 문자의 링크를 그대로 눌러 주세요.')
       : showMsg('잠시 후 다시 시도해 주세요', esc(j.error || '')); }

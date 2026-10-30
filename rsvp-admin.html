@@ -156,7 +156,11 @@ let G = {}, META = {}, LOG = {}, FILTER = 'all', COMP = 'all', OPEN = '', EDITIN
 // 동행인 탭: 명단에 동행인을 적었던 그룹(지금 다 뺐어도 포함) / 혼자 오는 그룹
 const withComps = (g) => (g.comps || []).length > 0 || ((g.orig && g.orig.n) || 1) > 1;
 // 손님에게 보내는 링크는 짧은 도메인(2026-10-30, 이벤터스 직함 칸 길이 제한). middleware가 hakdongmap.kr/r/ 도 RSVP로 보낸다
-const linkOf = (t) => 'https://hakdongmap.kr/r/' + t;
+// → 다시 더 짧게: https://hakdongmap.kr/<토큰 앞 6자> (28자). 앞 6자가 겹치는 그룹이 있으면 그 그룹만 긴 주소로.
+const linkOf = (t) => {
+  const k = t.slice(0, 6), dup = Object.keys(G).some(x => x !== t && x.slice(0, 6) === k);
+  return dup ? 'https://hakdongmap.kr/r/' + t : 'https://hakdongmap.kr/' + k;   // 28자(이벤터스 개인화 변수 영문 30자 제한)
+};
 
 async function api(body){
   const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
