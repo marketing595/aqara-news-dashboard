@@ -116,6 +116,10 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
     </div>
   </div>
 
+  <div class="tools" style="margin-top:14px;justify-content:space-between">
+    <div class="seg" id="viewSeg"></div>
+    <button class="btn pri" id="btnAdd">+ 직접 입력</button>
+  </div>
   <div id="warn"></div>
   <div class="kpis" id="kpis"></div>
 
@@ -178,7 +182,10 @@ const heads = (g) => (g.status === 'yes' ? 1 : 0) + (answered(g) ? (g.comps || [
 // 그룹 상태: 미응답 / 참석(한 명이라도 옴) / 불참(아무도 안 옴)
 const gst = (g) => !answered(g) ? 'pending' : (heads(g) > 0 ? 'yes' : 'no');
 const stLabel = (g) => g.status === 'no' && heads(g) > 0 ? '동행만 참석' : ST[gst(g)];
-function list(){ return Object.keys(G).map(t => Object.assign({ t }, G[t])).filter(g => g.rep); }
+// VIEW: 'real' = 실제 명단 / 'test' = 테스트 탭. 테스트 그룹(g.test)은 실제 통계·목록·내보내기·이벤터스에서 빠진다.
+let VIEW = 'real';
+const allGroups = () => Object.keys(G).map(t => Object.assign({ t }, G[t])).filter(g => g.rep);
+function list(){ return allGroups().filter(g => !!g.test === (VIEW === 'test')); }
 // 문자 발송(sent: 담당자가 '보냄'으로 표시) · 링크 열람(open: 손님이 링크를 연 기록)
 const isSent = (g) => !!(g.sent && g.sent.at);
 const isOpen = (g) => !!(g.open && g.open.first);
@@ -214,8 +221,17 @@ function paint(){
   document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = FILTER === b.dataset.f ? 'all' : b.dataset.f; OPEN = ''; paint(); });
   $('#btnClose').textContent = META.closed ? '응답 다시 열기' : '응답 마감';
   $('#btnClose').classList.toggle('danger', !META.closed);
-  $('#warn').innerHTML = META.closed ? '<div class="warn">응답이 마감된 상태입니다. 손님은 링크에서 보기만 할 수 있어요.</div>'
-    : (!s.all ? '<div class="warn">아직 명단이 없습니다. 오른쪽 위 <b>명단 엑셀 가져오기</b>로 RSVP 명단 파일(참석자 명단 시트)을 올려 주세요.</div>' : '');
+  const nTest = allGroups().filter(g => g.test).length;
+  $('#viewSeg').innerHTML = `<button class="${VIEW === 'real' ? 'on' : ''}" data-view="real">실제 명단 ${allGroups().length - nTest}</button><button class="${VIEW === 'test' ? 'on' : ''}" data-view="test">🧪 테스트 ${nTest}</button>`;
+  document.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { VIEW = b.dataset.view; FILTER = 'all'; COMP = 'all'; OPEN = ''; paint(); });
+  // 테스트 탭에선 실제 명단용 버튼(가져오기·이벤터스·마감)을 숨기고, 초기화는 테스트 그룹만
+  ['#btnEventus', '#btnClose'].forEach(s => { $(s).style.display = VIEW === 'test' ? 'none' : ''; });
+  $('#file').parentElement.style.display = VIEW === 'test' ? 'none' : 'inline-flex';
+  $('#btnReset').textContent = VIEW === 'test' ? '테스트 응답 초기화' : '응답 초기화';
+  $('#btnAdd').textContent = VIEW === 'test' ? '+ 테스트 대상 입력' : '+ 직접 입력';
+  $('#warn').innerHTML = VIEW === 'test' ? `<div class="warn">🧪 <b>테스트 탭</b> — 여기서 만든 대상은 실제 명단·통계·엑셀·이벤터스 양식에 들어가지 않아요. <b>+ 테스트 대상 입력</b>으로 내 번호를 넣고 링크를 열어 손님 화면을 시험해 보세요.${META.closed ? ' (지금은 응답 마감 상태라 테스트 링크도 보기만 돼요)' : ''}</div>`
+    : META.closed ? '<div class="warn">응답이 마감된 상태입니다. 손님은 링크에서 보기만 할 수 있어요.</div>'
+    : (!s.all ?'<div class="warn">아직 명단이 없습니다. 오른쪽 위 <b>명단 엑셀 가져오기</b>로 RSVP 명단 파일(참석자 명단 시트)을 올려 주세요.</div>' : '');
   paintRows();
 }
 
@@ -484,7 +500,20 @@ function download(name, text){
 }
 
 // ── 링크·문자 추출 ──
-const SMS_DEFAULT = '[아카라라이프] {이름}님, 11/19(목) SMART HOME INTERIOR 2026 세미나 참석 확인 부탁드립니다. 아래 링크에서 참석 여부와 동행인 정보를 확인·수정해 주세요.\n{링크}';
+// 2026-10-30 사용자 원문을 다듬은 것({이름}·{링크}는 사람마다 바뀜). 문자엔 버튼이 없어서 '참석/불참' 버튼 대신 링크로 안내
+const SMS_DEFAULT = `[아카라라이프] 세미나 참석 확인
+
+{이름}님, 안녕하세요.
+'공간 디자인의 새로운 패러다임: 스마트홈 인테리어 2026' 세미나에 신청해 주셔서 감사합니다.
+원활한 행사 준비를 위해 참석 여부를 한 번 더 확인 부탁드립니다.
+
+■ 일시: 2026년 11월 19일(목) 14:00~17:00
+■ 장소: 코엑스 4층 컨퍼런스룸(남) 401호
+
+아래 링크에서 [참석] 또는 [불참]을 눌러 알려주세요.
+{링크}
+
+소중한 응답에 미리 감사드립니다.`;
 function smsText(g, tpl){ return tpl.replace(/\{이름\}/g, g.rep.name).replace(/\{링크\}/g, linkOf(g.t)); }
 function linkRows(L, tpl){
   return L.map(g => ({ 이름: g.rep.name, 소속: g.rep.org || '', 연락처: fmtPhone(g.rep.phone), 이메일: g.email || '', 상태: stLabel(g), '문자 발송': isSent(g) ? fullTime(g.sent.at) : '', 링크: linkOf(g.t), 문자: smsText(g, tpl || SMS_DEFAULT) }));
@@ -536,11 +565,48 @@ $('#btnClose').onclick = async () => {
 };
 $('#btnReset').onclick = async () => {
   const n = list().filter(g => answered(g) || g.updatedBy).length;
+  if(VIEW === 'test'){
+    if(!confirm(`테스트 대상 ${list().length}곳의 응답·열람·발송 기록을 모두 초기화할까요? (실제 명단은 그대로)`)) return;
+    const j = await api({ op: 'reset', test: true }); if(!j.ok) return toast(j.error || '초기화 실패');
+    toast(`테스트 ${j.reset}곳을 미응답으로 되돌렸어요`); return load();
+  }
   if(!confirm(`응답을 모두 초기화할까요?\n\n· 응답했거나 고친 그룹 ${n}곳이 모두 '미응답'으로 돌아갑니다\n· 변경 이력도 지워집니다\n· 보낸 링크는 그대로 쓸 수 있어요\n\n되돌릴 수 없습니다.`)) return;
   if(!confirm('정말 초기화할까요? (마지막 확인)')) return;
   const j = await api({ op: 'reset' }); if(!j.ok) return toast(j.error || '초기화 실패');
   toast(`${j.reset}곳을 미응답으로 초기화했어요 — 명단 엑셀을 한 번 더 가져오면 연락처·소속까지 명단 값으로 돌아가요`);
   load();
+};
+// ── 직접 입력: 한 그룹 추가(테스트 탭이면 테스트 대상) ──
+$('#btnAdd').onclick = () => {
+  const test = VIEW === 'test';
+  modal(`<h3>${test ? '🧪 테스트 대상 입력' : '직접 입력 — 명단에 한 명 추가'}</h3>
+    <p>${test ? '실제 명단에는 들어가지 않아요. 내 번호를 넣고 만들어진 링크로 손님 화면을 시험해 보세요.' : '엑셀 없이 명단에 바로 추가해요. 같은 연락처가 이미 있으면 막아요.'}</p>
+    <div class="edg" id="addF" style="margin-top:12px">
+      <div><label>성함 *<input data-a="name" placeholder="${test ? '테스트 홍길동' : ''}"></label></div>
+      <div><label>직책<input data-a="title"></label></div>
+      <div><label>소속<input data-a="org"></label></div>
+      <div><label>연락처<input data-a="phone" placeholder="010-0000-0000"></label></div>
+      <div><label>이메일<input data-a="email"></label></div>
+      <div><label>초청 경로<input data-a="route" value="${test ? '테스트' : ''}"></label></div>
+      <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처</span> (없으면 비워 두기)<textarea data-a="comps" rows="3" style="height:auto;padding:6px 9px"></textarea></label></div>
+    </div>
+    <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>닫기</button><button class="btn pri" id="addGo">${test ? '테스트 링크 만들기' : '명단에 추가'}</button></div>
+    <div id="addOut"></div>`);
+  $('#addGo').onclick = async () => {
+    const v = (k) => ($(`[data-a="${k}"]`) || {}).value || '';
+    if(!v('name').trim()) return toast('성함을 입력해 주세요');
+    const comps = v('comps').split('\n').map(l => l.split('/').map(x => x.trim())).filter(a => a[0]).map(a => ({ name: a[0], title: a[1] || '', phone: a[2] || '', org: v('org') }));
+    $('#addGo').disabled = true;
+    const j = await api({ op: 'add', test, rep: { name: v('name'), title: v('title'), org: v('org'), phone: v('phone') }, email: v('email'), route: v('route'), comps });
+    $('#addGo').disabled = false;
+    if(!j.ok) return toast(j.error || '추가 실패');
+    G[j.t] = j.group; paint();
+    $('#addOut').innerHTML = `<div class="prev" style="margin-top:12px">✅ <b>${esc(j.group.rep.name)}</b>님 ${test ? '테스트 링크' : '개인 링크'}가 만들어졌어요.<br><span class="num">${esc(linkOf(j.t))}</span>
+      <div class="tools" style="margin-top:8px"><button class="btn" id="addCp">링크 복사</button><a class="btn" style="display:inline-flex;align-items:center;text-decoration:none" href="/r/${j.t}" target="_blank" rel="noopener">열기</a><button class="btn" id="addSms">문자 문구 복사</button></div></div>`;
+    $('#addCp').onclick = async () => { await navigator.clipboard.writeText(linkOf(j.t)); toast('링크를 복사했어요'); };
+    $('#addSms').onclick = async () => { await navigator.clipboard.writeText(smsText(Object.assign({ t: j.t }, j.group), SMS_DEFAULT)); toast('문자 문구를 복사했어요'); };
+    $('#addF').querySelectorAll('input,textarea').forEach(el => { if(el.dataset.a !== 'route') el.value = ''; });
+  };
 };
 $('#btnReload').onclick = load;
 $('#q').oninput = () => { OPEN = ''; paintRows(); };

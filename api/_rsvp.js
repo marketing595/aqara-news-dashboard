@@ -286,6 +286,25 @@ module.exports = async (req, res) => {
       if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
       return res.status(200).json({ ok: true, added, refreshed, kept });
     }
+    // 직접 입력: 한 그룹 추가. test=true 면 테스트 탭 전용(실제 명단·통계·내보내기에서 빠짐)
+    if(op === 'add'){
+      const rep = cleanPerson(body.rep);
+      if(!rep.name) return res.status(200).json({ ok: false, error: '성함을 입력해 주세요.' });
+      const test = !!body.test, comps = cleanComps(body.comps), email2 = str(body.email, 120).toLowerCase();
+      const cur = (await fb('GET', 'groups')) || {};
+      let t = newTok(); while(cur[t]) t = newTok();
+      const key = test ? 'test|' + t : (rep.phone ? 'p' + rep.phone : (email2 ? 'e' + email2 : 'n' + (rep.name + '|' + rep.org).replace(/[.#$\[\]\/]/g, '')));
+      if(!test){
+        const dup = Object.keys(cur).find(k => cur[k] && !cur[k].test && cur[k].key === key);
+        if(dup) return res.status(200).json({ ok: false, error: `같은 연락처(또는 이메일)로 이미 명단에 있어요: ${cur[dup].rep.name}` });
+      }
+      const now = Date.now();
+      const g = { key, email: email2, route: str(body.route, 80), vip: false, note: str(body.note, 300), orig: { n: 1 + comps.length, comps: comps.map(c => c.name).join(', ') },
+        rep, comps, sub: null, status: 'pending', created: now, updatedAt: 0, addedBy: email };
+      if(test) g.test = true;
+      await fb('PUT', `groups/${t}`, g);
+      return res.status(200).json({ ok: true, t, group: g });
+    }
     if(op === 'admin-save'){
       if(!okTok(body.t)) return res.status(400).json({ ok: false, error: 't' });
       const g = await fb('GET', `groups/${body.t}`);
@@ -318,10 +337,17 @@ module.exports = async (req, res) => {
     // 응답 초기화: 모든 그룹을 미응답으로 되돌리고 동행인은 처음 명단 이름으로, 변경 이력 삭제. 링크(토큰)는 그대로.
     // 초기화 뒤 같은 명단 엑셀을 다시 가져오면 연락처·소속까지 명단 값으로 돌아간다(미응답 그룹은 가져오기가 갱신하므로).
     if(op === 'reset'){
+      // test=true 면 테스트 그룹만, 아니면 실제 명단만 초기화한다
+      const onlyTest = !!body.test;
       const cur = (await fb('GET', 'groups')) || {}, patch = {};
+      if(onlyTest){
+        const ts = Object.keys(cur).filter(t => cur[t] && cur[t].test);
+        await Promise.all(ts.flatMap(t => [raw('DELETE', 'l/' + gid(t)), raw('DELETE', 'o/' + gid(t)), raw('DELETE', 's/' + gid(t))]));
+      }
       Object.keys(cur).forEach(t => {
         const g = cur[t];
-        if(!g || !g.rep || (!g.answeredAt && !g.updatedBy && (g.status || 'pending') === 'pending')) return;
+        if(!g || !!g.test !== onlyTest) return;
+        if(!g.rep || (!g.answeredAt && !g.updatedBy && (g.status || 'pending') === 'pending')) return;
         const names = String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(Boolean);
         const comps = names.map(n => { const c = (g.comps || []).find(x => x.name === n); if(c){ const o = Object.assign({}, c); delete o.from; return o; } return { name: n, title: '', org: g.rep.org || '', phone: '' }; });
         const next = Object.assign({}, g, { status: 'pending', comps, updatedAt: 0 });
@@ -329,6 +355,7 @@ module.exports = async (req, res) => {
         patch[t] = next;
       });
       if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
+      if(onlyTest) return res.status(200).json({ ok: true, reset: Object.keys(patch).length });
       await raw('DELETE', 'l');
       await raw('DELETE', 'o');   // 테스트하며 연 기록도 지운다(문자 발송 기록 s/ 는 유지)
       await fb('PATCH', 'meta', { resetBy: email, resetAt: Date.now() });
