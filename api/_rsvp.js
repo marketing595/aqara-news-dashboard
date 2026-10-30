@@ -183,7 +183,14 @@ module.exports = async (req, res) => {
       const g = await fb('GET', `groups/${t}`);
       if(!g || !g.rep) return res.status(200).json({ ok: false, error: 'link' });
       const meta = (await fb('GET', 'meta')) || {};
-      if(op === 'get') return res.status(200).json(guestView(g, meta));
+      if(op === 'get'){
+        // 링크 열람 기록(o/<gid>: 처음·마지막·횟수) — 담당자가 관리 화면에서 '열기'로 연 건 세지 않는다
+        if(!sessionEmail(req)){
+          try{ const o = (await raw('GET', 'o/' + gid(t))) || {}; const now = Date.now();
+            await raw('PUT', 'o/' + gid(t), { first: o.first || now, last: now, n: (o.n || 0) + 1 }); }catch(e){}
+        }
+        return res.status(200).json(guestView(g, meta));
+      }
 
       if(req.method !== 'POST') return res.status(405).json({ ok: false });
       if(meta.closed) return res.status(200).json({ ok: false, error: '응답이 마감되었어요. 변경이 필요하면 담당자에게 연락해 주세요.' });
@@ -226,11 +233,25 @@ module.exports = async (req, res) => {
     if(!email) return res.status(401).json({ ok: false, error: '@' + DOMAIN + ' 로그인이 필요합니다.' });
 
     if(op === 'list'){
-      const [groups, meta] = await Promise.all([fb("GET", "groups"), fb("GET", "meta")]);
+      const [groups, meta, opens, sent] = await Promise.all([fb("GET", "groups"), fb("GET", "meta"), raw('GET', 'o'), raw('GET', 's')]);
       const log = await logsFor(Object.keys(groups || {}));
+      // 문자 발송·링크 열람 기록을 그룹에 붙여 준다(저장은 따로: s/<gid>, o/<gid>)
+      Object.keys(groups || {}).forEach(t => { const k = gid(t);
+        if(opens && opens[k]) groups[t].open = opens[k];
+        if(sent && sent[k]) groups[t].sent = sent[k]; });
       return res.status(200).json({ ok: true, email, groups: groups || {}, meta: meta || {}, log: log || {}, locked: true });
     }
     if(req.method !== 'POST') return res.status(405).json({ ok: false });
+
+    // 문자 보냄 표시: { ts: [토큰…] } (unmark: true 면 표시 해제). 같은 사람에게 다시 보내면 횟수가 늘어난다.
+    if(op === 'sent'){
+      const ts = (Array.isArray(body.ts) ? body.ts : []).filter(okTok).slice(0, 3000);
+      if(!ts.length) return res.status(200).json({ ok: true, n: 0 });
+      const cur = (await raw('GET', 's')) || {}, now = Date.now(), patch = {};
+      ts.forEach(t => { const k = gid(t); patch[k] = body.unmark ? null : { first: (cur[k] && cur[k].first) || now, at: now, n: ((cur[k] && cur[k].n) || 0) + 1, by: email }; });
+      await raw('PATCH', 's', patch);
+      return res.status(200).json({ ok: true, n: ts.length });
+    }
 
     if(op === 'import'){
       const incoming = (Array.isArray(body.groups) ? body.groups : []).slice(0, 3000);
@@ -309,6 +330,7 @@ module.exports = async (req, res) => {
       });
       if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
       await raw('DELETE', 'l');
+      await raw('DELETE', 'o');   // 테스트하며 연 기록도 지운다(문자 발송 기록 s/ 는 유지)
       await fb('PATCH', 'meta', { resetBy: email, resetAt: Date.now() });
       return res.status(200).json({ ok: true, reset: Object.keys(patch).length });
     }

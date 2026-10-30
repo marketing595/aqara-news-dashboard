@@ -34,7 +34,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .btn:disabled{opacity:.5;cursor:default}
 .tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 
-.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:16px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:16px}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-align:left;cursor:pointer;transition:border-color .15s}
 .kpi:hover{border-color:var(--line2)}
 .kpi.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc-soft)}
@@ -107,7 +107,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
     <div class="tools">
       <label class="btn" style="display:inline-flex;align-items:center">명단 엑셀 가져오기<input type="file" id="file" accept=".xlsx,.xls,.csv" hidden></label>
       <button class="btn" id="btnLinks">링크·문자 추출</button>
-      <button class="btn" id="btnXlsx">최신 명단 .xlsx</button>
+      <button class="btn" id="btnXlsx" title="요약 · 응답 현황(그룹별) · 참석 확정 · 전체(사람별) · 개인 링크">응답 현황 엑셀</button>
       <button class="btn" id="btnCsv">.csv</button>
       <button class="btn" id="btnEventus" title="참석 확정자만, 이벤터스 '참가자리스트 엑셀 등록하기' 양식">이벤터스 등록 양식</button>
       <button class="btn" id="btnClose"></button>
@@ -126,7 +126,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
     </div>
     <div style="overflow:auto;max-height:72vh">
       <table class="tbl">
-        <thead><tr><th>초대받은 분</th><th>연락처</th><th class="hide-m">초청 경로</th><th>상태</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th>링크</th></tr></thead>
+        <thead><tr><th>초대받은 분</th><th>연락처</th><th class="hide-m">초청 경로</th><th>상태</th><th>문자 · 열람</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th>링크</th></tr></thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
@@ -179,10 +179,17 @@ const heads = (g) => (g.status === 'yes' ? 1 : 0) + (answered(g) ? (g.comps || [
 const gst = (g) => !answered(g) ? 'pending' : (heads(g) > 0 ? 'yes' : 'no');
 const stLabel = (g) => g.status === 'no' && heads(g) > 0 ? '동행만 참석' : ST[gst(g)];
 function list(){ return Object.keys(G).map(t => Object.assign({ t }, G[t])).filter(g => g.rep); }
+// 문자 발송(sent: 담당자가 '보냄'으로 표시) · 링크 열람(open: 손님이 링크를 연 기록)
+const isSent = (g) => !!(g.sent && g.sent.at);
+const isOpen = (g) => !!(g.open && g.open.first);
+const sentPend = (g) => isSent(g) && gst(g) === 'pending';   // 보냈는데 아직 응답 없음 → 재발송·전화 대상
 
 function stats(){
-  const L = list(); const s = { all: L.length, yes: 0, yesN: 0, yesC: 0, yesR: 0, no: 0, pending: 0, pendN: 0, chg: 0 };
+  const L = list(); const s = { all: L.length, yes: 0, yesN: 0, yesC: 0, yesR: 0, no: 0, pending: 0, pendN: 0, chg: 0, sent: 0, open: 0, sentPend: 0, sentPendOpen: 0 };
   L.forEach(g => {
+    if(isSent(g)) s.sent++;
+    if(isOpen(g)) s.open++;
+    if(sentPend(g)){ s.sentPend++; if(isOpen(g)) s.sentPendOpen++; }
     if(gst(g) === 'yes'){ s.yes++; s.yesN += heads(g); s.yesC += (g.comps || []).length; if(g.status === 'yes') s.yesR++; }
     else if(gst(g) === 'no') s.no++;
     else { s.pending++; s.pendN += 1 + (g.comps || []).length; }
@@ -200,6 +207,7 @@ function paint(){
     k('yes', '참석 확정', `${s.yesN}<small>명</small>`, `${s.yes}그룹 · 본인 ${s.yesR} + 동행 ${s.yesC}`) +
     k('no', '불참', `${s.no}<small>그룹</small>`, '참석에서 빠짐') +
     k('pending', '미응답', `${s.pending}<small>그룹</small>`, `명단상 예상 ${s.pendN}명 · 재발송 대상`) +
+    k('sentpend', '보냈는데 미응답', `${s.sentPend}<small>그룹</small>`, `문자 ${s.sent}그룹 발송 · 링크 열람 ${s.open}${s.sentPend ? ` · 열고 안 함 ${s.sentPendOpen}` : ''}`) +
     k('chg', '대리·동행인 변경', `${s.chg}<small>그룹</small>`, '처음 명단과 달라짐');
   $('#kpis').insertAdjacentHTML('beforeend', `<div class="full" style="grid-column:1/-1"><div class="prog">
       <i style="width:${pct(s.yes)}%;background:var(--yes)"></i><i style="width:${pct(s.no)}%;background:#9ca3af"></i><i style="width:${pct(s.pending)}%;background:#f3c26b"></i></div></div>`);
@@ -218,6 +226,7 @@ function filtered(ignoreComp){
     if(FILTER === 'no' && gst(g) !== 'no') return false;
     if(FILTER === 'pending' && gst(g) !== 'pending') return false;
     if(FILTER === 'chg' && !changed(g)) return false;
+    if(FILTER === 'sentpend' && !sentPend(g)) return false;
     if(!ignoreComp && COMP === 'with' && !withComps(g)) return false;
     if(!ignoreComp && COMP === 'solo' && withComps(g)) return false;
     if(!q) return true;
@@ -235,8 +244,8 @@ function paintRows(){
   $('#seg').innerHTML = [['all', '전체', base.length, `총 ${ppl(base)}명`], ['with', '동행인 있음', W.length, `동행인 포함 ${ppl(W)}명`], ['solo', '혼자 참석', base.length - W.length, '']]
     .map(([k, l, n, p]) => `<button class="${COMP === k ? 'on' : ''}" data-comp="${k}">${l} ${n}${p ? ` <span style="font-weight:500;color:var(--tx3)">(${p})</span>` : ''}</button>`).join('');
   document.querySelectorAll('[data-comp]').forEach(b => b.onclick = () => { COMP = b.dataset.comp; OPEN = ''; paintRows(); });
-  $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', pending: '미응답', chg: '대리·동행인 변경' })[FILTER] + ` ${L.length}`;
-  if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="8" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
+  $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', pending: '미응답', sentpend: '보냈는데 미응답', chg: '대리·동행인 변경' })[FILTER] + ` ${L.length}`;
+  if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="9" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
   $('#rows').innerHTML = L.map(g => {
     const st = gst(g);
     const orig = g.orig ? g.orig.n : '';
@@ -247,6 +256,7 @@ function paintRows(){
       <td class="num">${esc(fmtPhone(g.rep.phone))}</td>
       <td class="hide-m mut">${esc(g.route || '')}</td>
       <td><span class="st ${st}">${stLabel(g)}</span></td>
+      <td class="mut num" style="white-space:nowrap;font-size:12px">${isSent(g) ? `문자 ${fmtTime(g.sent.at)}${g.sent.n > 1 ? ` (${g.sent.n}회)` : ''}` : '<span style="color:var(--tx3)">안 보냄</span>'}<br>${isOpen(g) ? `<b style="color:var(--ink)">열람</b> ${fmtTime(g.open.last)}${g.open.n > 1 ? ` (${g.open.n}회)` : ''}` : '<span style="color:var(--tx3)">안 열어봄</span>'}</td>
       <td class="num">${now === '' ? `<span class="mut">예상 ${orig}</span>` : (orig !== '' && orig !== now ? `<span class="mut">${orig} →</span> <b>${now}</b>` : `<b>${now}</b>`)}</td>
       <td class="hide-m comps">${g.sub && g.sub.name ? `<span class="tag t-sub" style="margin-left:0">대리</span> ${esc(g.sub.name)}${comps ? ' · ' : ''}` : ''}${comps || '<span class="mut">—</span>'}</td>
       <td class="mut num">${g.updatedAt ? fmtTime(g.updatedAt) + (g.updatedBy === 'guest' ? ' · 본인' : ' · 담당') : ''}</td>
@@ -265,7 +275,7 @@ function editRow(g){
   const r = g.rep, s = g.sub || {};
   const logs = Object.values(LOG[g.t] || {}).sort((a, b) => b.at - a.at).slice(0, 8)
     .map(l => `${fmtTime(l.at)} · ${l.by === 'guest' ? '본인' : esc(l.by.split('@')[0])} · ${ST[l.status] || ''}${l.status === 'yes' ? ' ' + l.n + '명' : ''}${l.sub ? ' · 대리 ' + esc(l.sub) : ''}${l.comps ? ' · 동행 ' + esc(l.comps) : ''}`).join('<br>');
-  return `<tr class="ed"><td colspan="8"><div class="edg" id="ed">
+  return `<tr class="ed"><td colspan="9"><div class="edg" id="ed">
     <div><label>상태<select data-e="status">${['pending','yes','no'].map(x => `<option value="${x}" ${g.status === x ? 'selected' : ''}>${ST[x]}</option>`).join('')}</select></label></div>
     <div><label>성함<input data-e="rep.name" value="${esc(r.name)}"></label></div>
     <div><label>소속<input data-e="rep.org" value="${esc(r.org)}"></label></div>
@@ -277,7 +287,7 @@ function editRow(g){
     <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처</span><textarea data-e="comps" rows="${Math.max(3, (g.comps || []).length + 1)}">${esc((g.comps || []).map(c => [c.name, c.title, fmtPhone(c.phone)].filter((v, i) => v || i === 0).join(' / ')).join('\n'))}</textarea></label></div>
     <div class="full"><label>담당자 메모<input data-e="memo" value="${esc(g.memo || '')}" placeholder="통화 내용 등(손님에겐 안 보임)"></label></div>
   </div>
-  <div class="tools" style="margin-top:10px"><button class="btn pri" id="edSave">저장</button><button class="btn" id="edCancel">닫기</button><span style="flex:1"></span><button class="btn danger" id="edDel">이 그룹 삭제</button></div>
+  <div class="tools" style="margin-top:10px"><button class="btn pri" id="edSave">저장</button><button class="btn" id="edCancel">닫기</button><button class="btn" id="edSent">${isSent(g) ? '문자 보냄 표시 해제' : '문자 보냄으로 표시'}</button><span style="flex:1"></span><button class="btn danger" id="edDel">이 그룹 삭제</button></div>
   <div class="logs">${g.email ? `이메일 ${esc(g.email)} · ` : ''}처음 명단 ${g.orig ? g.orig.n + '명' + (g.orig.comps ? ' (' + esc(g.orig.comps) + ')' : '') : ''}${g.note ? ' · 비고 ' + esc(g.note) : ''}${logs ? '<br><b>변경 이력</b><br>' + logs : ''}</div>
   </td></tr>`;
 }
@@ -286,6 +296,11 @@ function bindEdit(){
   const box = $('#ed'); if(!box) return;
   box.addEventListener('focusin', () => { EDITING = true; });
   $('#edCancel').onclick = () => { EDITING = false; OPEN = ''; paintRows(); };
+  $('#edSent').onclick = async () => {
+    const t = OPEN, un = isSent(G[t]);
+    const j = await api({ op: 'sent', ts: [t], unmark: un }); if(!j.ok) return toast(j.error || '실패');
+    EDITING = false; toast(un ? '문자 보냄 표시를 해제했어요' : '문자 보냄으로 표시했어요'); load();
+  };
   $('#edDel').onclick = async () => {
     const g = G[OPEN]; if(!confirm(`${g.rep.name}님 그룹을 삭제할까요? 보낸 링크도 더는 열리지 않아요.`)) return;
     const j = await api({ op: 'delete', t: OPEN }); if(!j.ok) return toast(j.error || '삭제 실패');
@@ -300,7 +315,7 @@ function bindEdit(){
       sub: v('sub.name') ? { name: v('sub.name'), org: v('sub.org'), phone: v('sub.phone') } : null,
       comps, memo: v('memo') };
     const j = await api(body); if(!j.ok) return toast(j.error || '저장 실패');
-    G[OPEN] = j.group; EDITING = false; toast('저장했어요'); paint();
+    G[OPEN] = Object.assign(j.group, { sent: G[OPEN].sent, open: G[OPEN].open }); EDITING = false; toast('저장했어요'); paint();
   };
 }
 
@@ -367,7 +382,7 @@ function personRows(){
   list().sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
     // 상태는 사람마다: 본인 = 본인 응답, 동행인 = 응답했으면 참석(명단에서 빠진 사람은 아래에서 불참으로)
     const ans = answered(g), st = ans ? ST[g.status] : ST.pending;
-    const base = { '초대받은 분': g.rep.name, '초청 경로': g.route || '', 'VIP': g.vip ? 'VIP' : '', '마지막 변경': g.updatedAt ? new Date(g.updatedAt).toLocaleString('ko-KR') : '', '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
+    const base = { '초대받은 분': g.rep.name, '초청 경로': g.route || '', 'VIP': g.vip ? 'VIP' : '', '문자 발송': isSent(g) ? fullTime(g.sent.at) : '', '링크 열람': isOpen(g) ? fullTime(g.open.last) : '', '응답 일시': fullTime(g.answeredAt), '마지막 변경':g.updatedAt ? new Date(g.updatedAt).toLocaleString('ko-KR') : '', '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
     const rep = g.sub && g.sub.name ? g.sub : g.rep;
     out.push(Object.assign({ 상태: st, 구분: g.sub && g.sub.name ? '대리 참석' : '본인', 성함: rep.name, 직책: rep.title || '', 소속: rep.org || g.rep.org || '', 연락처: fmtPhone(rep.phone), 이메일: g.sub && g.sub.name ? '' : (g.email || '') }, base));
     (g.comps || []).forEach(c => out.push(Object.assign({ 상태: ans ? '참석' : ST.pending, 구분: '동행인', 성함: c.name, 직책: c.title || '', 소속: c.org || g.rep.org || '', 연락처: fmtPhone(c.phone), 이메일: '' }, base)));
@@ -380,13 +395,45 @@ function personRows(){
   return out;
 }
 const stamp = () => { const d = new Date(); return `${d.getMonth()+1}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`; };
+const fullTime = (ms) => ms ? new Date(ms).toLocaleString('ko-KR') : '';
+// 응답 현황: 초대 그룹 1줄씩(문자 발송 → 링크 열람 → 응답 흐름 + 인원)
+function groupRows(){
+  return list().sort((a, b) => ({ yes: 0, no: 1, pending: 2 })[gst(a)] - ({ yes: 0, no: 1, pending: 2 })[gst(b)] || String(a.rep.name).localeCompare(b.rep.name, 'ko')).map(g => {
+    const ans = answered(g), now = new Set((g.comps || []).flatMap(c => [c.name, c.from].filter(Boolean)));
+    const gone = ans ? String((g.orig && g.orig.comps) || '').split(', ').filter(n => n && !now.has(n)) : [];
+    return { 상태: stLabel(g), '초대받은 분': g.rep.name, 직책: g.rep.title || '', 소속: g.rep.org || '', 연락처: fmtPhone(g.rep.phone), 이메일: g.email || '', '초청 경로': g.route || '', VIP: g.vip ? 'VIP' : '',
+      '본인': ans ? ST[g.status] : '미응답', '명단 인원': g.orig ? g.orig.n : 1 + (g.comps || []).length, '참석 인원': ans ? heads(g) : '',
+      '참석 동행인': ans ? (g.comps || []).map(c => c.name).join(', ') : '', '불참 동행인': gone.join(', '), '대리 참석': g.sub && g.sub.name ? g.sub.name : '',
+      '문자 발송': isSent(g) ? fullTime(g.sent.at) : '', '발송 횟수': isSent(g) ? (g.sent.n || 1) : '', '링크 열람': isOpen(g) ? fullTime(g.open.first) : '', '열람 횟수': isOpen(g) ? g.open.n : '',
+      '응답 일시': fullTime(g.answeredAt), '마지막 변경': fullTime(g.updatedAt), '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
+  });
+}
+function summaryRows(){
+  const s = stats(), pct = (n, d) => d ? Math.round(n / d * 100) + '%' : '';
+  return [['항목', '값', '설명'],
+    ['기준 시각', new Date().toLocaleString('ko-KR'), ''],
+    ['총 대상', s.all + '그룹', `명단 ${list().reduce((n, g) => n + 1 + (g.comps || []).length, 0)}명`],
+    ['문자 발송', s.sent + '그룹', pct(s.sent, s.all) + ' (관리 화면에서 보냄으로 표시한 그룹)'],
+    ['링크 열람', s.open + '그룹', '발송 대비 ' + pct(s.open, s.sent)],
+    ['응답', (s.yes + s.no) + '그룹', '응답률 ' + pct(s.yes + s.no, s.all)],
+    ['참석 확정', s.yesN + '명', `${s.yes}그룹 · 본인 ${s.yesR} + 동행 ${s.yesC}`],
+    ['불참', s.no + '그룹', ''],
+    ['미응답', s.pending + '그룹', `명단상 예상 ${s.pendN}명`],
+    ['보냈는데 미응답', s.sentPend + '그룹', `그중 링크는 열어봄 ${s.sentPendOpen}`],
+    ['대리·동행인 변경', s.chg + '그룹', '처음 명단과 달라짐']];
+}
+const fitCols = (ws, rows) => { if(!rows.length) return ws; const keys = Object.keys(rows[0]);
+  ws['!cols'] = keys.map(k => ({ wch: Math.min(40, Math.max(String(k).length * 2, ...rows.slice(0, 300).map(r => String(r[k] == null ? '' : r[k]).length + 2))) })); return ws; };
 $('#btnXlsx').onclick = () => {
-  const all = personRows();
+  const all = personRows(), grp = groupRows();
   const wb = XLSX.utils.book_new();
+  const sum = XLSX.utils.aoa_to_sheet(summaryRows()); sum['!cols'] = [{ wch: 18 }, { wch: 24 }, { wch: 44 }];
+  XLSX.utils.book_append_sheet(wb, sum, '요약');
+  XLSX.utils.book_append_sheet(wb, fitCols(XLSX.utils.json_to_sheet(grp), grp), '응답 현황');
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(all.filter(r => r.상태 === '참석')), '참석 확정');
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(all), '전체(상태 포함)');
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(linkRows(list())), '개인 링크');
-  XLSX.writeFile(wb, `RSVP_세미나_최신명단_${stamp()}.xlsx`);
+  XLSX.writeFile(wb, `RSVP_세미나_응답현황_${stamp()}.xlsx`);
 };
 $('#btnCsv').onclick = () => download(`RSVP_세미나_최신명단_${stamp()}.csv`, toCsv(personRows()));
 
@@ -440,7 +487,14 @@ function download(name, text){
 const SMS_DEFAULT = '[아카라라이프] {이름}님, 11/19(목) SMART HOME INTERIOR 2026 세미나 참석 확인 부탁드립니다. 아래 링크에서 참석 여부와 동행인 정보를 확인·수정해 주세요.\n{링크}';
 function smsText(g, tpl){ return tpl.replace(/\{이름\}/g, g.rep.name).replace(/\{링크\}/g, linkOf(g.t)); }
 function linkRows(L, tpl){
-  return L.map(g => ({ 이름: g.rep.name, 소속: g.rep.org || '', 연락처: fmtPhone(g.rep.phone), 이메일: g.email || '', 상태: stLabel(g), 링크: linkOf(g.t), 문자: smsText(g, tpl || SMS_DEFAULT) }));
+  return L.map(g => ({ 이름: g.rep.name, 소속: g.rep.org || '', 연락처: fmtPhone(g.rep.phone), 이메일: g.email || '', 상태: stLabel(g), '문자 발송': isSent(g) ? fullTime(g.sent.at) : '', 링크: linkOf(g.t), 문자: smsText(g, tpl || SMS_DEFAULT) }));
+}
+// 받은 대상을 '문자 보냄'으로 기록 → 목록·KPI의 문자/열람 현황에 반영
+async function markSent(L){
+  if(!$('#markSent') || !$('#markSent').checked || !L.length) return;
+  const j = await api({ op: 'sent', ts: L.map(g => g.t) });
+  if(!j.ok) return toast(j.error || '문자 보냄 기록 실패');
+  toast(`${L.length}그룹을 '문자 보냄'으로 기록했어요`); load();
 }
 $('#btnLinks').onclick = () => {
   const counts = stats();
@@ -448,19 +502,25 @@ $('#btnLinks').onclick = () => {
     <p>대상을 고르고 문구를 다듬은 뒤 CSV로 받아 문자/메일 발송 도구에 붙여 넣으세요. {이름}·{링크}는 사람마다 바뀝니다.</p>
     <div class="tools" style="margin-top:12px" id="tg">
       <label class="btn"><input type="radio" name="tg" value="pending" checked> 미응답 ${counts.pending}</label>
+      <label class="btn"><input type="radio" name="tg" value="unsent"> 아직 안 보냄 ${list().filter(g => !isSent(g) && gst(g) === 'pending').length}</label>
+      <label class="btn"><input type="radio" name="tg" value="sentpend"> 보냈는데 미응답 ${counts.sentPend}</label>
       <label class="btn"><input type="radio" name="tg" value="all"> 전체 ${counts.all}</label>
       <label class="btn"><input type="radio" name="tg" value="yes"> 참석 ${counts.yes}</label>
       <label class="btn"><input type="radio" name="tg" value="view"> 지금 목록 ${filtered().length}</label>
     </div>
     <textarea id="tpl">${esc(SMS_DEFAULT)}</textarea>
     <div class="prev" id="tplPrev"></div>
+    <label style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:13px"><input type="checkbox" id="markSent" checked> CSV 받기·연락처 복사 때 이 대상을 <b>'문자 보냄'</b>으로 기록 (응답 현황에서 발송·열람을 따라가요)</label>
     <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>닫기</button><button class="btn" id="cpNums">연락처만 복사</button><button class="btn pri" id="dlLinks">CSV 받기</button></div>`);
   const target = () => { const v = document.querySelector('[name=tg]:checked').value;
-    return v === 'view' ? filtered() : list().filter(g => v === 'all' || gst(g) === v); };
+    if(v === 'view') return filtered();
+    if(v === 'unsent') return list().filter(g => !isSent(g) && gst(g) === 'pending');
+    if(v === 'sentpend') return list().filter(sentPend);
+    return list().filter(g => v === 'all' || gst(g) === v); };
   const prev = () => { const L = target(); $('#tplPrev').innerHTML = L.length ? `${L.length}명 · 미리보기<br>${esc(smsText(L[0], $('#tpl').value)).replace(/\n/g, '<br>')}` : '대상이 없어요.'; };
   document.querySelectorAll('[name=tg]').forEach(r => r.onchange = prev); $('#tpl').oninput = prev; prev();
-  $('#dlLinks').onclick = () => { const L = target(); if(!L.length) return toast('대상이 없어요'); download(`RSVP_링크_${stamp()}.csv`, toCsv(linkRows(L, $('#tpl').value))); };
-  $('#cpNums').onclick = async () => { const L = target(); await navigator.clipboard.writeText(L.map(g => fmtPhone(g.rep.phone)).filter(Boolean).join('\n')); toast(`연락처 ${L.length}개를 복사했어요`); };
+  $('#dlLinks').onclick = () => { const L = target(); if(!L.length) return toast('대상이 없어요'); download(`RSVP_링크_${stamp()}.csv`, toCsv(linkRows(L, $('#tpl').value))); markSent(L); };
+  $('#cpNums').onclick = async () => { const L = target(); await navigator.clipboard.writeText(L.map(g => fmtPhone(g.rep.phone)).filter(Boolean).join('\n')); toast(`연락처 ${L.length}개를 복사했어요`); markSent(L); };
 };
 
 function modal(html){ $('#modal').innerHTML = `<div class="modal"><div class="box">${html}</div></div>`;
