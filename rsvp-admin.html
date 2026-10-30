@@ -125,7 +125,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 
   <div class="panel">
     <div class="ph">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div></div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div><button class="btn" id="btnTabXlsx" title="지금 고른 탭(전체/동행인 있음/혼자 참석)과 위 카드 필터·검색 결과만 엑셀로">이 탭 엑셀 받기</button></div>
       <input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색">
     </div>
     <div style="overflow:auto;max-height:72vh">
@@ -394,9 +394,9 @@ $('#file').onchange = async (e) => {
 };
 
 // ── 내보내기 ──
-function personRows(){
+function personRows(L){
   const out = [];
-  list().sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
+  (L || list()).slice().sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
     // 상태는 사람마다: 본인 = 본인 응답, 동행인 = 응답했으면 참석(명단에서 빠진 사람은 아래에서 불참으로)
     const ans = answered(g), st = ans ? ST[g.status] : ST.pending;
     const base = { '초대받은 분': g.rep.name, '초청 경로': g.route || '', 'VIP': g.vip ? 'VIP' : '', '문자 발송': isSent(g) ? fullTime(g.sent.at) : '', '링크 열람': isOpen(g) ? fullTime(g.open.last) : '', '응답 일시': fullTime(g.answeredAt), '마지막 변경':g.updatedAt ? new Date(g.updatedAt).toLocaleString('ko-KR') : '', '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
@@ -414,8 +414,8 @@ function personRows(){
 const stamp = () => { const d = new Date(); return `${d.getMonth()+1}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`; };
 const fullTime = (ms) => ms ? new Date(ms).toLocaleString('ko-KR') : '';
 // 응답 현황: 초대 그룹 1줄씩(문자 발송 → 링크 열람 → 응답 흐름 + 인원)
-function groupRows(){
-  return list().sort((a, b) => ({ yes: 0, no: 1, pending: 2 })[gst(a)] - ({ yes: 0, no: 1, pending: 2 })[gst(b)] || String(a.rep.name).localeCompare(b.rep.name, 'ko')).map(g => {
+function groupRows(L){
+  return (L || list()).slice().sort((a, b) => ({ yes: 0, no: 1, pending: 2 })[gst(a)] - ({ yes: 0, no: 1, pending: 2 })[gst(b)] || String(a.rep.name).localeCompare(b.rep.name, 'ko')).map(g => {
     const ans = answered(g), now = new Set((g.comps || []).flatMap(c => [c.name, c.from].filter(Boolean)));
     const gone = ans ? String((g.orig && g.orig.comps) || '').split(', ').filter(n => n && !now.has(n)) : [];
     return { 상태: stLabel(g), '초대받은 분': g.rep.name, 직책: g.rep.title || '', 소속: g.rep.org || '', 연락처: fmtPhone(g.rep.phone), 이메일: g.email || '', '초청 경로': g.route || '', VIP: g.vip ? 'VIP' : '',
@@ -452,7 +452,18 @@ $('#btnXlsx').onclick = () => {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(linkRows(list())), '개인 링크');
   XLSX.writeFile(wb, `RSVP_세미나_응답현황_${stamp()}.xlsx`);
 };
-$('#btnCsv').onclick = () => download(`RSVP_세미나_최신명단_${stamp()}.csv`, toCsv(personRows()));
+// 탭별 내려받기: 전체 / 동행인 있음 / 혼자 참석 (+ 위 카드 필터·검색이 걸려 있으면 그것도 반영)
+$('#btnTabXlsx').onclick = () => {
+  const L = filtered(); if(!L.length) return toast('이 탭에 받을 대상이 없어요');
+  const tab = ({ all: '전체', with: '동행인있음', solo: '혼자참석' })[COMP];
+  const kpi = FILTER === 'all' ? '' : '_' + ({ yes: '참석', no: '불참', pending: '미응답', sentpend: '보냈는데미응답', chg: '변경' })[FILTER];
+  const grp = groupRows(L), ppl = personRows(L);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, fitCols(XLSX.utils.json_to_sheet(grp), grp), '응답 현황');
+  XLSX.utils.book_append_sheet(wb, fitCols(XLSX.utils.json_to_sheet(ppl), ppl), '사람별');
+  XLSX.writeFile(wb, `RSVP_세미나_${VIEW === 'test' ? '테스트_' : ''}${tab}${kpi}_${L.length}그룹_${stamp()}.xlsx`);
+};
+$('#btnCsv').onclick =() => download(`RSVP_세미나_최신명단_${stamp()}.csv`, toCsv(personRows()));
 
 // ── 이벤터스 '참가자리스트_엑셀등록하기' 양식(2026-10-30 받은 파일 그대로): 1행 안내 · 2행 머리글 · 3행부터 참석 확정자 ──
 const EVENTUS_GROUP = '기본 카테고리||기본 티켓';
