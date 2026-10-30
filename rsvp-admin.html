@@ -395,10 +395,11 @@ const EVENTUS_HEAD1 = ['이름을 입력하세요.', '이메일 주소를 입력
   '그룹명을 입력하세요\n*그룹은 수정되지 않습니다.\n아래의 그룹 중 복사/붙여넣기 하세요\n*여러개의 그룹은 줄바꿈으로 구분됩니다.\n\n-- 그룹 목록 --\n' + EVENTUS_GROUP,
   '소속을 입력하세요.', '직함을 입력하세요.'];
 const EVENTUS_HEAD2 = ['이름(필수)', '이메일(필수)', '휴대전화번호', '그룹명(필수)', '소속', '직함'];
-function eventusRows(){
+// mode 'yes' = 참석으로 응답한 사람만 / 'all' = 명단 전체에서 불참으로 응답한 사람만 뺀 것(미응답 포함)
+function eventusRows(mode){
   const out = [];
-  list().filter(answered).sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
-    if(g.status === 'yes'){
+  list().filter(g => mode === 'all' || answered(g)).sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
+    if(g.status === 'yes' || (mode === 'all' && !answered(g))){
       const p = g.sub && g.sub.name ? g.sub : g.rep;
       out.push([p.name, g.sub && g.sub.name ? '' : (g.email || ''), String(p.phone || '').replace(/\D/g, ''), EVENTUS_GROUP, p.org || g.rep.org || '', p.title || '']);
     }
@@ -406,9 +407,11 @@ function eventusRows(){
   });
   return out;
 }
-$('#btnEventus').onclick = () => {
-  const rows = eventusRows();
-  if(!rows.length) return toast('참석으로 응답한 사람이 아직 없어요');
+// 누르면 바로 내려받기(사용자 요청 2026-10-30): 명단 전체에서 링크로 불참 응답한 사람만 뺀다
+$('#btnEventus').onclick = () => eventusDownload('all');
+function eventusDownload(mode){
+  const rows = eventusRows(mode);
+  if(!rows.length) return toast('내려받을 사람이 없어요');
   const ws = XLSX.utils.aoa_to_sheet([EVENTUS_HEAD1, EVENTUS_HEAD2, ...rows]);
   ws['!cols'] = [{ wch: 14 }, { wch: 28 }, { wch: 16 }, { wch: 26 }, { wch: 24 }, { wch: 14 }];
   ws['!rows'] = [{ hpt: 150 }];
@@ -418,8 +421,8 @@ $('#btnEventus').onclick = () => {
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
   XLSX.writeFile(wb, `참가자리스트_엑셀등록하기_이벤터스_${stamp()}.xlsx`);
   const noMail = rows.filter(r => !r[1]).length;
-  toast(`참석 확정 ${rows.length}명 내려받음` + (noMail ? ` · 이메일 없는 ${noMail}명(동행인 등)은 이벤터스에서 확인 필요` : ''));
-};
+  toast(`${mode === 'yes' ? '참석 확정' : '명단 전체'} ${rows.length}명 내려받음` + (noMail ? ` · 이메일 없는 ${noMail}명(동행인 등)은 이벤터스에서 확인 필요` : ''));
+}
 function toCsv(rows){
   if(!rows.length) return '';
   const keys = Object.keys(rows[0]);
