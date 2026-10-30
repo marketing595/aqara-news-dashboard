@@ -52,6 +52,19 @@ const HAKDONG_HOSTS = ['hakdongmap.kr', 'www.hakdongmap.kr'];
 export default async function middleware(req){
   const url0 = new URL(req.url);
   if(HAKDONG_HOSTS.includes(url0.hostname)){
+    // 세미나 RSVP 단축 링크(2026-10-30): hakdongmap.kr/r/<토큰> — 이벤터스 직함 칸 길이 제한 때문에 짧은 도메인을 같이 쓴다.
+    // RSVP 화면이 쓰는 파일(rsvp.html·api/rsvp·로고·파비콘)만 통과, 나머지는 기존처럼 학동 지도로.
+    const rm0 = url0.pathname.match(/^\/r\/([A-Za-z0-9_-]{12})\/?$/);
+    if(rm0){
+      const dest = new URL('/rsvp.html?t=' + rm0[1], url0.origin);
+      return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
+    }
+    if(url0.pathname === '/api/rsvp'){
+      const dest = new URL('/api/db' + url0.search, url0.origin);
+      dest.searchParams.set('rsvp', '1');
+      return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
+    }
+    if(['/rsvp.html', '/favicon-seminar.png', '/aqaralife-logo-black-v2.png'].includes(url0.pathname)) return;
     if(url0.pathname === '/'){
       const dest = new URL('/hakdong.html' + url0.search, url0.origin);
       return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
