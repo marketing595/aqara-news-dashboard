@@ -313,7 +313,7 @@ function renderDone(){
     <section class="card">
       <div class="done-mark ${any ? '' : 'no'}">${any ? check : cross}</div>
       <h2>${any ? `참석으로 저장했어요<br>총 ${n}명` : '불참으로 저장했어요'}</h2>
-      <p class="lead">${any ? '입장 큐알코드는 11월 16일 (월)에 입력하신 연락처로 개별 발송됩니다.' :'알려 주셔서 감사합니다. 일정이 바뀌면 이 링크에서 다시 참석으로 바꿔 주세요.'}</p>
+      <p class="lead">${any ? '입장 큐알코드는 11월 16일 (월)에 입력하신 연락처로 개별 발송됩니다.' :'알려 주셔서 감사합니다.'}</p>
       <ul class="list">${items}</ul>
       ${D.closed ? '<div class="closed">응답이 마감되었어요. 변경이 필요하면 담당자에게 연락해 주세요.</div>'
         : '<button type="button" class="btn ghost" id="editBtn" style="width:100%;margin-top:20px">응답 수정하기</button>'}
