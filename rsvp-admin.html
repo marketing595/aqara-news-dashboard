@@ -155,7 +155,8 @@ function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add(
 let G = {}, META = {}, LOG = {}, FILTER = 'all', COMP = 'all', OPEN = '', EDITING = false;
 // 동행인 탭: 명단에 동행인을 적었던 그룹(지금 다 뺐어도 포함) / 혼자 오는 그룹
 const withComps = (g) => (g.comps || []).length > 0 || ((g.orig && g.orig.n) || 1) > 1;
-const linkOf = (t) => location.origin + '/r/' + t;
+// 손님에게 보내는 링크는 짧은 도메인(2026-10-30, 이벤터스 직함 칸 길이 제한). middleware가 hakdongmap.kr/r/ 도 RSVP로 보낸다
+const linkOf = (t) => 'https://hakdongmap.kr/r/' + t;
 
 async function api(body){
   const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
