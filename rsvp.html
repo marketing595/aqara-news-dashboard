@@ -176,7 +176,7 @@ function setData(j){
   // 본인 참석 여부(status) + 함께 오시는 분 각자의 참석 여부(on). 서버의 comps = 참석하는 동행인, removed = 불참으로 고른 동행인
   F = { status: j.status === 'pending' ? '' : j.status, rep: clone(j.rep),
     people: [...clone(j.comps || []).map(c => Object.assign(withPH(c), { on: j.status === 'pending' ? null : true })),
-             ...clone(j.removed || []).map(n => Object.assign(withPH({ name: n, title: '', org: '', phone: '' }), { on: false }))] };
+             ...clone(j.removed || []).map(n => Object.assign(withPH({ name: n, title: '', org: (j.rep && j.rep.org) || '', phone: '' }), { on: false }))] };
   DIRTY = false;
   const ev = j.event || {};
   $('#evTitle').textContent = ev.title || 'SMART HOME INTERIOR 2026';

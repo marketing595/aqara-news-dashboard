@@ -324,8 +324,9 @@ function bindEdit(){
   };
   $('#edSave').onclick = async () => {
     const v = (k) => (box.querySelector(`[data-e="${k}"]`) || {}).value || '';
+    const g0 = G[OPEN] || {};
     const comps = v('comps').split('\n').map(l => l.split('/').map(x => x.trim())).filter(a => a[0])
-      .map(a => ({ name: a[0], title: a[1] || '', phone: a[2] || '', org: '' }));
+      .map(a => ({ name: a[0], title: a[1] || '', phone: a[2] || '', org: (g0.comps || []).map(c => c.name === a[0] ? c.org : '').find(Boolean) || '' }));   // 기존 동행인 소속 유지, 없으면 서버가 대표 소속으로 채움
     const body = { op: 'admin-save', t: OPEN, status: v('status'),
       rep: { name: v('rep.name'), org: v('rep.org'), title: v('rep.title'), phone: v('rep.phone') },
       sub: v('sub.name') ? { name: v('sub.name'), org: v('sub.org'), phone: v('sub.phone') } : null,

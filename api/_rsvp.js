@@ -140,6 +140,8 @@ function cleanPerson(p){
   p = p || {};
   return { name: str(p.name, 40), title: str(p.title, 40), org: str(p.org, 80), phone: digits(p.phone) };
 }
+// 동행인 소속이 비어 있으면 대표자 소속으로 채운다(2026-10-30 사용자 지정)
+const fillOrg = (comps, org) => (comps || []).map(c => c.org ? c : Object.assign({}, c, { org: org || '' }));
 function cleanComps(a){
   return (Array.isArray(a) ? a : []).slice(0, 30).map(cleanPerson).filter(c => c.name || c.phone);
 }
@@ -162,7 +164,7 @@ function guestView(g, meta){
   return {
     ok: true, event: EVENT, closed: !!(meta && meta.closed),
     rep: { name: g.rep.name, title: g.rep.title || '', org: g.rep.org || '', phone: g.rep.phone || '' },
-    sub: g.sub || null, comps: g.comps || [], status: g.status || 'pending',
+    sub: g.sub || null, comps: fillOrg(g.comps, g.rep.org), status: g.status || 'pending',
     removed: Object.keys(allowedComps(g)).filter(n => !now.includes(n)),
     updatedAt: g.updatedAt || 0, answered: !!g.answeredAt,
   };
@@ -221,8 +223,9 @@ module.exports = async (req, res) => {
       const now = Date.now();
       const next = Object.assign({}, g, {
         status, rep: Object.assign({}, g.rep, { phone: rep.phone }, body.rep && body.rep.org !== undefined ? { org: rep.org } : {}, body.rep && body.rep.title !== undefined ? { title: rep.title } : {}),
-        sub, comps, updatedAt: now, updatedBy: 'guest', answeredAt: now,
+        sub, updatedAt: now, updatedBy: 'guest', answeredAt: now,
       });
+      next.comps = fillOrg(comps, next.rep.org);
       await fb('PUT', `groups/${t}`, next);
       await fb('POST', `log/${t}`, { at: now, by: 'guest', status, n: (status === 'yes' ? 1 : 0) + comps.length, sub: sub ? sub.name : '', comps: comps.map(c => c.name).join(', ') });
       return res.status(200).json(guestView(next, meta));
@@ -268,7 +271,7 @@ module.exports = async (req, res) => {
         // 같은 파일 안에서 연락처가 겹치면(대표번호 공유 등) 이름을 붙여 따로 둔다
         if(seen[key]) key += '|' + rep.name.replace(/[.#$\[\]\/]/g, '') + '|' + seen[key];
         seen[key.split('|')[0]] = (seen[key.split('|')[0]] || 0) + 1;
-        const comps = cleanComps(x.comps);
+        const comps = fillOrg(cleanComps(x.comps), rep.org);
         const base = { key, email: email2, route: str(x.route, 80), vip: !!x.vip, note: str(x.note, 300), orig: { n: 1 + comps.length, comps: comps.map(c => c.name).join(', ') } };
         const t = byKey[key];
         if(t){
@@ -290,7 +293,7 @@ module.exports = async (req, res) => {
     if(op === 'add'){
       const rep = cleanPerson(body.rep);
       if(!rep.name) return res.status(200).json({ ok: false, error: '성함을 입력해 주세요.' });
-      const test = !!body.test, comps = cleanComps(body.comps), email2 = str(body.email, 120).toLowerCase();
+      const test = !!body.test, comps = fillOrg(cleanComps(body.comps), rep.org), email2 = str(body.email, 120).toLowerCase();
       const cur = (await fb('GET', 'groups')) || {};
       let t = newTok(); while(cur[t]) t = newTok();
       const key = test ? 'test|' + t : (rep.phone ? 'p' + rep.phone : (email2 ? 'e' + email2 : 'n' + (rep.name + '|' + rep.org).replace(/[.#$\[\]\/]/g, '')));
@@ -316,7 +319,7 @@ module.exports = async (req, res) => {
         rep: Object.assign({}, g.rep, rep, { name: rep.name || g.rep.name }),
         sub: body.sub && str(body.sub.name, 40) ? cleanPerson(body.sub) : null,
         // 손님이 이름을 적은 '이름 미기재' 자리 표시(from)는 담당자가 저장해도 유지
-        comps: cleanComps(body.comps).map(c => { const p = (g.comps || []).find(x => x.name === c.name && x.from); return p ? Object.assign(c, { from: p.from }) : c; }),
+        comps: fillOrg(cleanComps(body.comps), rep.org || g.rep.org).map(c => { const p = (g.comps || []).find(x => x.name === c.name && x.from); return p ? Object.assign(c, { from: p.from }) : c; }),
         memo: str(body.memo, 300),
         updatedAt: now, updatedBy: email,
       });
