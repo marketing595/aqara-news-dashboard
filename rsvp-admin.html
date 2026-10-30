@@ -111,6 +111,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
       <button class="btn" id="btnCsv">.csv</button>
       <button class="btn" id="btnEventus" title="참석 확정자만, 이벤터스 '참가자리스트 엑셀 등록하기' 양식">이벤터스 등록 양식</button>
       <button class="btn" id="btnClose"></button>
+      <button class="btn danger" id="btnReset" title="모든 응답을 미응답으로 되돌림(링크는 유지)">응답 초기화</button>
       <button class="btn" id="btnReload" title="30초마다 자동으로 새로 불러와요">새로고침</button>
     </div>
   </div>
@@ -472,6 +473,14 @@ $('#btnClose').onclick = async () => {
   if(!confirm(next ? '응답을 마감할까요? 손님은 링크에서 보기만 할 수 있게 됩니다.' : '응답을 다시 열까요?')) return;
   const j = await api({ op: 'meta', closed: next }); if(!j.ok) return toast(j.error || '실패');
   META.closed = next; paint();
+};
+$('#btnReset').onclick = async () => {
+  const n = list().filter(g => answered(g) || g.updatedBy).length;
+  if(!confirm(`응답을 모두 초기화할까요?\n\n· 응답했거나 고친 그룹 ${n}곳이 모두 '미응답'으로 돌아갑니다\n· 변경 이력도 지워집니다\n· 보낸 링크는 그대로 쓸 수 있어요\n\n되돌릴 수 없습니다.`)) return;
+  if(!confirm('정말 초기화할까요? (마지막 확인)')) return;
+  const j = await api({ op: 'reset' }); if(!j.ok) return toast(j.error || '초기화 실패');
+  toast(`${j.reset}곳을 미응답으로 초기화했어요 — 명단 엑셀을 한 번 더 가져오면 연락처·소속까지 명단 값으로 돌아가요`);
+  load();
 };
 $('#btnReload').onclick = load;
 $('#q').oninput = () => { OPEN = ''; paintRows(); };

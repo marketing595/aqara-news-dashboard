@@ -294,6 +294,24 @@ module.exports = async (req, res) => {
       await fb('PATCH', 'meta', { closed: !!body.closed, by: email, at: Date.now() });
       return res.status(200).json({ ok: true });
     }
+    // 응답 초기화: 모든 그룹을 미응답으로 되돌리고 동행인은 처음 명단 이름으로, 변경 이력 삭제. 링크(토큰)는 그대로.
+    // 초기화 뒤 같은 명단 엑셀을 다시 가져오면 연락처·소속까지 명단 값으로 돌아간다(미응답 그룹은 가져오기가 갱신하므로).
+    if(op === 'reset'){
+      const cur = (await fb('GET', 'groups')) || {}, patch = {};
+      Object.keys(cur).forEach(t => {
+        const g = cur[t];
+        if(!g || !g.rep || (!g.answeredAt && !g.updatedBy && (g.status || 'pending') === 'pending')) return;
+        const names = String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(Boolean);
+        const comps = names.map(n => { const c = (g.comps || []).find(x => x.name === n); if(c){ const o = Object.assign({}, c); delete o.from; return o; } return { name: n, title: '', org: g.rep.org || '', phone: '' }; });
+        const next = Object.assign({}, g, { status: 'pending', comps, updatedAt: 0 });
+        delete next.answeredAt; delete next.updatedBy; delete next._t;
+        patch[t] = next;
+      });
+      if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
+      await raw('DELETE', 'l');
+      await fb('PATCH', 'meta', { resetBy: email, resetAt: Date.now() });
+      return res.status(200).json({ ok: true, reset: Object.keys(patch).length });
+    }
     return res.status(400).json({ ok: false, error: 'unknown op' });
   }catch(e){
     return res.status(200).json({ ok: false, error: String((e && e.message) || e).replace(/auth=[^&\s]+/g, 'auth=***') });
