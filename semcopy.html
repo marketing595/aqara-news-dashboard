@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AqaraLife 링크 복사</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon-hakdong.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<!-- 세미나 현장 QR → 이 페이지 → [링크 복사하기]. 복사할 URL·문구는 ONLY MKT '🔗 링크 복사 QR' 탭에서 고친다(Firebase semcopy/config).
+     Firebase가 안 붙어도 아래 DEFAULT로 동작한다. 집계: semcopy/stats/<KST날짜>/{view,qr,copy,open} -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<style>
+:root{--bg:#F7F7F7;--card:#fff;--ink:#1D1D1F;--tx2:#5E625F;--tx3:#86868B;--line:rgba(0,0,0,.10);--acc:#FBC400;--deep:#382D18}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px calc(32px + env(safe-area-inset-bottom))}
+.card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px 24px 26px;text-align:center}
+.logo{height:22px;margin:0 auto 26px;display:block}
+.eyebrow{font-size:12.5px;font-weight:700;color:var(--tx3);letter-spacing:.02em;margin:0 0 8px}
+h1{font-size:22px;line-height:1.35;font-weight:800;margin:0 0 10px;word-break:keep-all}
+.desc{font-size:15px;line-height:1.6;color:var(--tx2);margin:0 0 26px;word-break:keep-all;white-space:pre-line}
+.copy{width:100%;height:64px;border:0;border-radius:16px;background:var(--acc);color:var(--deep);font:inherit;font-size:19px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .08s,filter .15s}
+.copy:active{transform:scale(.98);filter:brightness(.96)}
+.copy svg{width:22px;height:22px}
+.url{margin-top:14px;font-size:12.5px;color:var(--tx3);word-break:break-all;line-height:1.5;user-select:all;-webkit-user-select:all;max-height:3em;overflow:hidden}
+.open{display:inline-block;margin-top:18px;font-size:14px;font-weight:600;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.foot{margin-top:18px;font-size:11.5px;color:var(--tx3)}
+.cpn{margin-top:24px;padding:18px 16px;border:1.5px dashed #D9D9D1;border-radius:14px;background:#FCFCFA}
+.cpn .cl{margin:0 0 6px;font-size:12.5px;font-weight:700;color:var(--tx3)}
+.cpn .cv{font-size:22px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums;word-break:break-all}
+.cpn .cv.none{font-size:14.5px;font-weight:600;letter-spacing:0;color:var(--tx2)}
+.cpn .cbtn{margin-top:12px;height:42px;padding:0 18px;border-radius:999px;border:1px solid rgba(0,0,0,.16);background:#fff;font:inherit;font-size:14px;font-weight:700;color:var(--ink)}
+.cpn .cn{margin:10px 0 0;font-size:12.5px;color:var(--tx3);line-height:1.5;word-break:keep-all}
+.steps{margin:22px 0 0;padding:0;list-style:none;text-align:left;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:0 0 12px 34px;font-size:14px;line-height:1.55;color:var(--tx2);word-break:keep-all}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.steps li b{color:var(--ink)}
+/* 복사 완료 팝업 */
+.pop{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .18s;z-index:10;padding:16px}
+.pop.on{opacity:1;pointer-events:auto}
+.pbox{background:#fff;border-radius:18px;padding:26px 22px 20px;max-width:320px;width:100%;text-align:center;transform:translateY(8px);transition:transform .18s}
+.pop.on .pbox{transform:none}
+.pbox .ok{width:52px;height:52px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.pbox b{display:block;font-size:18px;margin-bottom:6px}
+.pbox p{margin:0 0 18px;font-size:13.5px;color:var(--tx2);line-height:1.55}
+.pbox button{width:100%;height:46px;border:0;border-radius:12px;background:var(--ink);color:#fff;font:inherit;font-size:15px;font-weight:700}
+/* 복사가 막힌 브라우저용: 직접 길게 눌러 복사 */
+.manual{display:none;margin-top:14px;text-align:left}
+.manual.on{display:block}
+.manual p{font-size:13px;color:#C2410C;font-weight:600;margin:0 0 6px}
+.manual textarea{width:100%;height:84px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:13px;resize:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main class="card">
+    <img class="logo" src="/aqaralife-logo-black-v2.png" alt="AqaraLife">
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 id="title"></h1>
+    <p class="desc" id="desc"></p>
+    <button type="button" class="copy" id="copyBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
+      <span id="btnLabel"></span>
+    </button>
+    <div class="manual" id="manual"><p>이 브라우저에선 자동 복사가 안 돼요. 아래 내용을 길게 눌러 복사해 주세요.</p><textarea id="manualTxt" readonly></textarea></div>
+    <div class="url" id="url"></div>
+    <a class="open" id="openLink" href="#" target="_blank" rel="noopener">바로 열어보기 →</a>
+    <!-- 쿠폰 코드: QR 주소의 ?code= 가 있으면 그 코드, 없으면 관리 탭의 공용 코드, 둘 다 없으면 '교환권에 적힌 코드' 안내 -->
+    <div class="cpn" id="cpnBox">
+      <p class="cl">100% 할인 쿠폰 코드</p>
+      <div class="cv" id="cpnCode"></div>
+      <button type="button" class="cbtn" id="cpnBtn">쿠폰 코드 복사</button>
+      <p class="cn" id="cpnNote"></p>
+    </div>
+    <ol class="steps" id="steps"></ol>
+  </main>
+  <p class="foot">AqaraLife · SMART HOME INTERIOR 2026</p>
+</div>
+<div class="pop" id="pop"><div class="pbox">
+  <div class="ok"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#382D18" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+  <b id="popT">URL이 복사되었습니다!</b>
+  <p id="popD">브라우저 주소창에 붙여 넣어 열어 주세요.</p>
+  <button type="button" id="popClose">확인</button>
+</div></div>
+<script>
+// 관리 탭(ONLY MKT '🔗 링크 복사 QR')에서 고친 값이 Firebase semcopy/config 로 덮어쓴다. steps는 한 줄에 한 단계.
+const DEFAULT = {
+  eyebrow: 'LUCKY DRAW VOUCHER',
+  title: '아카라 스마트 도어락 L100\n경품 교환권',
+  desc: '당첨을 축하드려요! 아래 순서대로 아카라라이프 쇼핑몰에서 100% 할인 쿠폰을 적용해 주세요.',
+  btn: '상품 링크 복사하기',
+  coupon: '',
+  couponNote: '쿠폰 코드는 교환권에 적힌 코드를 입력해 주세요.',
+  steps: '[상품 링크 복사하기]를 누르고 주소를 브라우저에 붙여 넣어 열어 주세요.\n아카라라이프 쇼핑몰에 로그인(또는 회원가입)해 주세요.\n주문서에서 쿠폰 코드를 입력하면 **100% 할인**이 적용돼요.\n배송지를 입력하고 0원으로 주문을 마쳐 주세요.',
+  url: 'https://aqaralife.shop/product/%EC%95%84%EC%B9%B4%EB%9D%BC-%EC%8A%A4%EB%A7%88%ED%8A%B8-%EB%8F%84%EC%96%B4%EB%9D%BD-l100-%EC%9E%90%EA%B0%80-%EC%84%A4%EC%B9%98/478/category/82/display/1/',
+};
+let C = Object.assign({}, DEFAULT);
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pretty = (u) => { try{ return decodeURI(u); }catch(e){ return u; } };
+function paint(){
+  $('#eyebrow').textContent = C.eyebrow || '';
+  $('#eyebrow').style.display = C.eyebrow ? '' : 'none';
+  $('#title').innerHTML = esc(C.title).replace(/\n/g, '<br>');
+  $('#desc').textContent = C.desc || '';
+  $('#btnLabel').textContent = C.btn || DEFAULT.btn;
+  $('#url').textContent = pretty(C.url);
+  $('#openLink').href = C.url;
+  $('#manualTxt').value = C.url;
+  const code = couponCode();
+  $('#cpnCode').textContent = code || '교환권에 적힌 쿠폰 코드';
+  $('#cpnCode').classList.toggle('none', !code);
+  $('#cpnBtn').style.display = code ? '' : 'none';
+  $('#cpnNote').textContent = code ? '주문서의 쿠폰 입력란에 붙여 넣어 주세요.' : (C.couponNote || '');
+  $('#steps').innerHTML = String(C.steps || '').split('\n').map(s => s.trim()).filter(Boolean)
+    .map(s => `<li>${esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('');
+  document.title = (C.title || '').replace(/\n/g, ' ') + ' · AqaraLife';
+}
+// 교환권마다 다른 코드면 QR 주소에 ?code=XXXX 를 붙여 인쇄한다(관리 탭 '코드별 QR'). 없으면 공용 코드.
+const URL_CODE = (new URLSearchParams(location.search).get('code') || '').trim().slice(0, 40);
+function couponCode(){ return URL_CODE || String(C.coupon || '').trim(); }
+paint();
+
+// ── 복사: Clipboard API → (인앱 브라우저 등) execCommand → 직접 복사 안내 ──
+function legacyCopy(t){
+  const ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;font-size:16px';
+  document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, t.length);
+  let ok = false; try{ ok = document.execCommand('copy'); }catch(e){}
+  ta.remove(); return ok;
+}
+async function copyText(t){
+  let ok = false;
+  try{ if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(t); ok = true; } }catch(e){}
+  return ok || legacyCopy(t);
+}
+function popup(title, desc){ $('#popT').textContent = title; $('#popD').textContent = desc; $('#pop').classList.add('on'); }
+async function copy(){
+  if(await copyText(C.url)){ popup('URL이 복사되었습니다!', '브라우저 주소창에 붙여 넣어 열어 주세요.'); $('#manual').classList.remove('on'); bump('copy'); }
+  else{ $('#manual').classList.add('on'); $('#manualTxt').value = C.url; const ta = $('#manualTxt'); ta.focus(); ta.select(); bump('copyFail'); }
+}
+$('#copyBtn').onclick = copy;
+$('#cpnBtn').onclick = async () => {
+  const code = couponCode(); if(!code) return;
+  if(await copyText(code)){ popup('쿠폰 코드가 복사되었습니다!', '주문서의 쿠폰 입력란에 붙여 넣어 주세요.'); bump('coupon'); }
+  else{ $('#manual').classList.add('on'); $('#manualTxt').value = code; $('#manualTxt').focus(); $('#manualTxt').select(); }
+};
+$('#popClose').onclick = () => $('#pop').classList.remove('on');
+$('#pop').onclick = (e) => { if(e.target.id === 'pop') $('#pop').classList.remove('on'); };
+$('#openLink').addEventListener('click', () => bump('open'));
+
+// ── Firebase: 문구·URL 반영 + 집계(개인정보 없음) ──
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAs_yQ1fgGKfRDKbkUb0lviIoJ2e00KRGA",
+  authDomain: "aqara-weekly-1227c.firebaseapp.com",
+  databaseURL: "https://aqara-weekly-1227c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "aqara-weekly-1227c",
+  storageBucket: "aqara-weekly-1227c.firebasestorage.app",
+  messagingSenderId: "869711080033",
+  appId: "1:869711080033:web:9fc6fb53b272b942085820"
+};
+let DB = null;
+const kst = () => new Date(Date.now() + 9 * 36e5).toISOString().slice(0, 10);
+const once = {};
+function bump(k){
+  if(!DB) return;
+  if((k === 'copy' || k === 'open' || k === 'coupon') && once[k]) return; once[k] = 1;   // 한 번 열었을 때 여러 번 눌러도 1회
+  DB.ref(`semcopy/stats/${kst()}/${k}`).transaction(n => (n || 0) + 1).catch(() => {});
+}
+if(typeof firebase !== 'undefined'){
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG); DB = firebase.database();
+    firebase.auth().signInAnonymously().catch(() => {});
+    firebase.auth().onAuthStateChanged(u => {
+      if(!u) return;
+      DB.ref('semcopy/config').on('value', s => { const v = s.val() || {};
+        C = Object.assign({}, DEFAULT); Object.keys(v).forEach(k => { if(v[k] != null && v[k] !== '') C[k] = v[k]; }); paint(); });
+      bump('view'); if(/[?&]ref=qr/.test(location.search)) bump('qr');
+    });
+  }catch(e){}
+}
+</script>
+</body>
+</html>

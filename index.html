@@ -1337,6 +1337,7 @@
              <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">11월 세미나</button>
              <button id="mktBtn-rsvp" onclick="mktSub('rsvp')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">✉️ 세미나 참석 확인(RSVP)</button>
              <button id="mktBtn-raffle" onclick="mktSub('raffle')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🎁 세미나 경품 추첨</button>
+             <button id="mktBtn-semcopy" onclick="mktSub('semcopy')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🔗 경품 교환권 QR</button>
              <button id="mktBtn-hakmap" onclick="mktSub('hakmap')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🗺 학동 인테리어 지도</button>
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
@@ -1369,6 +1370,7 @@
        </div>
        <div id="mktSeminarSlot"></div>
        <div id="view-rsvp" class="hidden"><div id="rsBody"></div></div>
+       <div id="view-semcopy" class="hidden"><div id="scBody"></div></div>
        <div id="view-raffle" class="hidden"><div id="rfBody"></div></div>
        <div id="view-brandbook" class="hidden"><div id="bbBody"></div></div>
        <div id="view-lanseon" class="hidden"><div id="lnBody"></div></div>
@@ -9282,6 +9284,80 @@
         </div>
         <iframe src="/rsvp-admin.html" title="세미나 참석 확인(RSVP) 관리" class="w-full rounded-2xl border border-slate-200 bg-white" style="height:min(86vh,1000px);min-height:600px"></iframe>`;
     }
+    /* ===== 🔗 경품 교환권 QR — 공개 페이지 semcopy.html(상품 링크·100% 쿠폰 코드 복사). 문구·URL·공용 코드 = Firebase semcopy/config, 집계 = semcopy/stats/<KST날짜> ===== */
+    const SC_FIELDS=[['eyebrow','윗줄 라벨','input'],['title','제목 (줄바꿈 가능)','textarea2'],['desc','설명','textarea2'],['btn','복사 버튼 글자','input'],['url','복사될 URL','input'],['coupon','공용 쿠폰 코드 (교환권마다 다르면 비워 두고 아래 코드별 QR 사용)','input'],['couponNote','코드가 없을 때 안내','input'],['steps','이용 순서 (한 줄에 한 단계, **굵게**)','textarea4']];
+    let SC_CFG=null, SC_STATS={}, SC_ON=false;
+    function scUrl(q){ return (location.origin&&/^https?:/.test(location.origin)?location.origin:'https://aqara-news-dashboard.vercel.app')+'/semcopy.html'+(q||''); }
+    function scQrLib(){ return window.QRCode?Promise.resolve():new Promise((ok,no)=>{ const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s.onload=ok; s.onerror=no; document.head.appendChild(s); }); }
+    function scDraw(el,text,size){ el.innerHTML=''; new QRCode(el,{text,width:size,height:size,colorDark:'#1D1D1F',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }
+    function scPng(el,name){ const c=el.querySelector('canvas'); if(!c) return; const a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download=name; a.click(); }
+    function renderSemCopy(){ const box=document.getElementById('scBody'); if(!box) return;
+      if(!box.dataset.ok){ box.dataset.ok='1';
+        box.innerHTML=`<div class="card p-5 mb-4">
+            <div class="flex items-start justify-between gap-3 flex-wrap">
+              <div><h2 class="text-lg font-extrabold text-ink">🔗 경품 교환권 QR</h2>
+                <p class="text-[12.5px] text-slate-500 mt-1">교환권 QR → 공개 페이지에서 <b>상품 링크 복사</b> + <b>100% 할인 쿠폰 코드</b> 안내. 여기서 고치면 이미 뽑은 QR도 바로 반영돼요.</p>
+                <p id="scState" class="text-[11.5px] mt-1"></p></div>
+              <div class="flex gap-2 flex-wrap"><button onclick="scCopy()" class="px-3 py-1.5 rounded-full border border-slate-300 text-[12.5px] font-semibold">공개 링크 복사</button><a href="${scUrl()}" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-full bg-[#7C5CFF] text-white text-[12.5px] font-bold">페이지 열기 ↗</a></div>
+            </div>
+            <div id="scStats" class="grid grid-cols-2 md:grid-cols-5 gap-2 mt-4"></div>
+          </div>
+          <div class="grid md:grid-cols-[1fr_300px] gap-4">
+            <div class="card p-5"><h3 class="font-bold text-ink mb-3">페이지 문구</h3><div id="scForm" class="space-y-3"></div>
+              <div class="flex items-center gap-3 mt-4"><button onclick="scSave()" class="px-4 py-2 rounded-full bg-[#7C5CFF] text-white text-[13px] font-bold">저장 → 공개 페이지 반영</button><span id="scMsg" class="text-[12px]"></span></div></div>
+            <div class="space-y-4">
+              <div class="card p-5 text-center"><h3 class="font-bold text-ink mb-1">공용 QR</h3><p class="text-[11.5px] text-slate-500 mb-3">모든 교환권에 같은 QR · 코드는 공용 코드 또는 교환권 인쇄</p>
+                <div id="scQr" class="inline-block p-2 bg-white border border-slate-200 rounded-xl"></div>
+                <div class="mt-3"><button onclick="scPng(document.getElementById('scQr'),'경품교환권_QR.png')" class="px-3 py-1.5 rounded-full border border-slate-300 text-[12.5px] font-semibold">PNG 받기</button></div>
+                <p class="text-[10.5px] text-slate-400 mt-2 break-all">${scUrl('?ref=qr')}</p></div>
+              <div class="card p-5"><h3 class="font-bold text-ink mb-1">코드별 QR</h3><p class="text-[11.5px] text-slate-500 mb-2">교환권마다 쿠폰 코드가 다르면 한 줄에 하나씩 붙여 넣으세요. QR을 찍으면 그 코드가 바로 보이고 복사돼요.</p>
+                <textarea id="scCodes" rows="5" class="w-full text-[12.5px] border border-slate-300 rounded-lg p-2 font-mono" placeholder="L100-AAAA-0001&#10;L100-AAAA-0002"></textarea>
+                <div class="flex gap-2 flex-wrap mt-2"><button onclick="scMakeCodes()" class="px-3 py-1.5 rounded-full bg-ink text-white text-[12.5px] font-semibold">QR 만들기</button><button onclick="scCodesCsv()" class="px-3 py-1.5 rounded-full border border-slate-300 text-[12.5px] font-semibold">CSV(코드·주소)</button><button onclick="scCodesPng()" class="px-3 py-1.5 rounded-full border border-slate-300 text-[12.5px] font-semibold">PNG 모두 받기</button></div>
+                <div id="scCodeQrs" class="grid grid-cols-2 gap-2 mt-3"></div></div>
+            </div>
+          </div>`;
+        scQrLib().then(()=>scDraw(document.getElementById('scQr'),scUrl('?ref=qr'),180)).catch(()=>{ document.getElementById('scQr').textContent='QR 라이브러리 로드 실패'; });
+      }
+      if(!SC_ON && typeof wkUseFB==='function' && wkUseFB()){ SC_ON=true;
+        WK_DB.ref('semcopy/config').on('value',s=>{ SC_CFG=s.val()||{}; scPaintForm(); scPaintState(); });
+        WK_DB.ref('semcopy/stats').on('value',s=>{ SC_STATS=s.val()||{}; scPaintStats(); });
+      }
+      if(!SC_ON) setTimeout(()=>{ if(mktSection==='semcopy') renderSemCopy(); },1500);
+      scPaintForm(); scPaintStats(); scPaintState();
+    }
+    function scPaintState(){ const el=document.getElementById('scState'); if(!el) return;
+      el.className='text-[11.5px] mt-1 font-semibold '+(SC_ON?'text-agreen':'text-ared'); el.textContent=SC_ON?'🟢 실시간 연결됨':'⚠️ 서버 연결 중… (연결 전엔 페이지 기본 문구로 보여요)'; }
+    function scPaintForm(){ const f=document.getElementById('scForm'); if(!f||f.dataset.dirty) return; const c=SC_CFG||{};
+      f.innerHTML=SC_FIELDS.map(([k,l,t])=>`<label class="block"><span class="text-[11.5px] font-semibold text-slate-500">${esc(l)}</span>${t.startsWith('textarea')?`<textarea data-sc="${k}" rows="${t.slice(8)}" class="mt-1 w-full text-[13px] border border-slate-300 rounded-lg p-2">${esc(c[k]||'')}</textarea>`:`<input data-sc="${k}" value="${esc(c[k]||'')}" class="mt-1 w-full text-[13px] border border-slate-300 rounded-lg px-2 py-1.5">`}</label>`).join('')
+        +'<p class="text-[11px] text-slate-400">비워 둔 칸은 공개 페이지의 기본 문구가 나가요.</p>';
+      f.oninput=()=>{ f.dataset.dirty='1'; }; }
+    function scSave(){ const f=document.getElementById('scForm'), m=document.getElementById('scMsg'); if(!f) return;
+      if(!SC_ON){ m.className='text-[12px] text-ared'; m.textContent='서버에 연결되지 않아 저장할 수 없어요'; return; }
+      const v={}; f.querySelectorAll('[data-sc]').forEach(el=>{ v[el.dataset.sc]=el.value.trim(); });
+      if(v.url && !/^https?:\/\//.test(v.url)){ m.className='text-[12px] text-ared'; m.textContent='URL은 https:// 로 시작해야 해요'; return; }
+      v.updatedAt=Date.now(); v.by=(typeof wkDeviceName==='function'?wkDeviceName():'');
+      WK_DB.ref('semcopy/config').set(v).then(()=>{ delete f.dataset.dirty; m.className='text-[12px] text-agreen font-semibold'; m.textContent='저장했어요 — 공개 페이지에 바로 반영돼요'; })
+        .catch(e=>{ m.className='text-[12px] text-ared'; m.textContent='저장 실패: '+(e&&e.code||e); }); }
+    function scPaintStats(){ const el=document.getElementById('scStats'); if(!el) return;
+      const today=(typeof kstToday==='function'?kstToday():new Date(Date.now()+9*36e5).toISOString().slice(0,10));
+      const sum=k=>Object.values(SC_STATS).reduce((n,d)=>n+((d&&d[k])||0),0), td=k=>((SC_STATS[today]||{})[k]||0);
+      const t=(l,k,d)=>`<div class="rounded-xl border border-slate-200 p-3"><div class="text-[11.5px] font-semibold text-slate-500">${l}</div><div class="text-2xl font-extrabold text-ink">${sum(k)}</div><div class="text-[11px] text-slate-400">오늘 ${td(k)}${d?' · '+d:''}</div></div>`;
+      el.innerHTML=t('페이지 열림','view','')+t('QR로 들어옴','qr','')+t('링크 복사','copy',sum('copyFail')?'복사 실패 '+sum('copyFail'):'')+t('바로 열기','open','')+t('쿠폰 코드 복사','coupon',''); }
+    function scCopy(){ const u=scUrl(); (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>{ const m=document.getElementById('scMsg'); if(m){ m.className='text-[12px] text-agreen font-semibold'; m.textContent='공개 링크를 복사했어요'; } }).catch(()=>prompt('공개 링크',u)); }
+    function scCodes(){ const t=document.getElementById('scCodes'); return t?[...new Set(t.value.split('\n').map(s=>s.trim()).filter(Boolean))]:[]; }
+    const scCodeUrl=c=>scUrl('?ref=qr&code='+encodeURIComponent(c));
+    function scMakeCodes(){ const L=scCodes(), box=document.getElementById('scCodeQrs'); if(!box) return; if(!L.length){ box.innerHTML='<p class="col-span-2 text-[12px] text-slate-400">코드를 한 줄에 하나씩 넣어 주세요.</p>'; return; }
+      if(L.length>300){ box.innerHTML='<p class="col-span-2 text-[12px] text-ared">한 번에 300개까지 만들 수 있어요.</p>'; return; }
+      scQrLib().then(()=>{ box.innerHTML=L.map((c,i)=>`<div class="text-center border border-slate-200 rounded-lg p-2"><div class="sc-q inline-block" data-i="${i}"></div><div class="text-[10.5px] font-mono mt-1 break-all">${esc(c)}</div></div>`).join('');
+        box.querySelectorAll('.sc-q').forEach(el=>scDraw(el,scCodeUrl(L[+el.dataset.i]),110)); }); }
+    function scCodesCsv(){ const L=scCodes(); if(!L.length) return; const rows=[['쿠폰 코드','QR 주소'],...L.map(c=>[c,scCodeUrl(c)])];
+      const csv='﻿'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+      const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download='경품교환권_코드별QR주소.csv'; a.click(); }
+    function scCodesPng(){ const L=scCodes(), box=document.getElementById('scCodeQrs'); if(!L.length||!box) return;
+      // 인쇄용으로 크게(400px) 다시 그려 한 장씩 내려받는다
+      scQrLib().then(async()=>{ const tmp=document.createElement('div'); tmp.style.cssText='position:fixed;left:-9999px'; document.body.appendChild(tmp);
+        for(const c of L){ scDraw(tmp,scCodeUrl(c),400); await new Promise(r=>setTimeout(r,120)); scPng(tmp,'QR_'+c.replace(/[^\w\-가-힣]/g,'_')+'.png'); }
+        tmp.remove(); }); }
     function renderRaffle(){ const box=document.getElementById('rfBody'); if(!box||box.dataset.ok) return; box.dataset.ok='1';
       box.innerHTML=`<div class="flex items-center justify-between gap-3 flex-wrap mb-3">
           <div><h2 class="text-[18px] font-extrabold text-ink">🎁 세미나 경품 추첨</h2>
@@ -9370,6 +9446,7 @@
       const adv=document.getElementById('view-ad'); if(adv) adv.classList.toggle('hidden', s!=='ad');
       const sem=document.getElementById('view-seminar'); if(sem) sem.classList.toggle('hidden', s!=='seminar');
       const rsv=document.getElementById('view-rsvp'); if(rsv) rsv.classList.toggle('hidden', s!=='rsvp');
+      const scv=document.getElementById('view-semcopy'); if(scv) scv.classList.toggle('hidden', s!=='semcopy');
       const rfv=document.getElementById('view-raffle'); if(rfv) rfv.classList.toggle('hidden', s!=='raffle');
       const bbv=document.getElementById('view-brandbook'); if(bbv) bbv.classList.toggle('hidden', s!=='brandbook');
       const lnv=document.getElementById('view-lanseon'); if(lnv) lnv.classList.toggle('hidden', s!=='lanseon');
@@ -9385,7 +9462,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','seminar','rsvp','raffle','brandbook','lanseon','hakmap','budget','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
+      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','seminar','rsvp','semcopy','raffle','brandbook','lanseon','hakmap','budget','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -9396,6 +9473,7 @@
       if(s==='ad'){ loadAd(); }
       if(s==='seminar'){ renderSeminar(); }
       if(s==='rsvp'){ renderRsvp(); }
+      if(s==='semcopy'){ renderSemCopy(); }
       if(s==='raffle'){ renderRaffle(); }
       if(s==='brandbook'){ renderBrandbook(); }
       if(s==='lanseon'){ renderLanseon(); }
