@@ -23,7 +23,7 @@ const DOMAIN = (process.env.ALLOWED_DOMAIN || 'aqara.kr').toLowerCase();
 const EVENT = {
   title: 'SMART HOME INTERIOR 2026',
   sub: '공간디자인의 새로운 표준',
-  date: '2026년 11월 19일 (목) 13:00 – 17:30',
+  date: '2026년 11월 19일 (목) 14:00 – 17:00',
   place: '서울 코엑스 401호 세미나룸',
   addr: '서울 강남구 영동대로 513 코엑스',
   way: '2호선 삼성역과 지하로 바로 연결돼요. 차량은 코엑스 주차장을 이용해 주세요.',
