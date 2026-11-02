@@ -93,6 +93,14 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .warn{background:#fff4e0;border:1px solid #f3d29a;color:#7a4a00;border-radius:10px;padding:9px 12px;font-size:12.5px;margin-top:12px}
 .empty{padding:40px;text-align:center;color:var(--tx3)}
 [hidden]{display:none!important}
+.tlb{padding:12px 14px 10px}
+.tlsum{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--tx2)}
+.tlsum b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums;margin-right:2px}
+.tlsum i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:0}
+.tlc{position:relative;margin-top:8px}
+.tlc svg{display:block;width:100%;height:220px;overflow:visible}
+.tlc text{font-size:10.5px;fill:var(--tx3);font-family:var(--f)}
+.tltip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;line-height:1.5;padding:7px 10px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-100%);z-index:5}
 @media (max-width:900px){ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))} .edg{grid-template-columns:1fr 1fr} .hide-m{display:none} }
 </style>
 </head>
@@ -123,6 +131,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
   </div>
   <div id="warn"></div>
   <div class="kpis" id="kpis"></div>
+  <div class="panel tl" id="tl" hidden><div class="ph"><h2 id="tlTitle">응답 타임라인</h2><div class="seg" id="tlSeg"></div></div><div class="tlb"><div class="tlsum" id="tlSum"></div><div class="tlc" id="tlChart"></div></div></div>
 
   <div class="panel">
     <div class="ph">
@@ -243,8 +252,87 @@ function paint(){
   $('#warn').innerHTML = VIEW === 'test' ? `<div class="warn">🧪 <b>테스트 탭</b> — 여기서 만든 대상은 실제 명단·통계·엑셀·이벤터스 양식에 들어가지 않아요. <b>+ 테스트 대상 입력</b>으로 내 번호를 넣고 링크를 열어 손님 화면을 시험해 보세요.${META.closed ? ' (지금은 응답 마감 상태라 테스트 링크도 보기만 돼요)' : ''}</div>`
     : META.closed ? '<div class="warn">응답이 마감된 상태입니다. 손님은 링크에서 보기만 할 수 있어요.</div>'
     : (!s.all ?'<div class="warn">아직 명단이 없습니다. 오른쪽 위 <b>명단 엑셀 가져오기</b>로 RSVP 명단 파일(참석자 명단 시트)을 올려 주세요.</div>' : '');
+  drawTimeline();
   paintRows();
 }
+
+// ── 응답 타임라인(2026-11-02) ── 손님이 링크로 처음 답한 시각 기준. 이벤터스·담당자 입력은 한꺼번에 들어가 추이를 왜곡하므로 따로 숫자만.
+let TLMODE = '';
+function firstAnswers(){
+  const out = []; let other = 0;
+  list().forEach(g => {
+    const gl = Object.values(LOG[g.t] || {}).filter(l => l && l.by === 'guest' && l.at).sort((a, b) => a.at - b.at)[0];
+    const at = gl ? gl.at : (g.answeredAt || 0);
+    if(at) out.push({ at, yes: (gl ? gl.status : g.status) === 'yes' || (gl ? gl.n : heads(g)) > 0, n: gl ? gl.n : heads(g), name: g.rep.name });
+    else if(answered(g)) other++;
+  });
+  return { A: out.sort((a, b) => a.at - b.at), other };
+}
+function drawTimeline(){
+  const { A, other } = firstAnswers(), box = $('#tl');
+  box.hidden = !A.length && !other;
+  if(box.hidden) return;
+  const now = Date.now(), H = 3600e3, D = 24 * H;
+  const span = A.length ? now - A[0].at : 0;
+  const mode = TLMODE || (span > 3 * D ? 'day' : 'hour');
+  $('#tlSeg').innerHTML = [['hour', '시간별'], ['day', '일별'], ['hod', '시간대(0~23시)']].map(([k, l]) => `<button class="${mode === k ? 'on' : ''}" data-tl="${k}">${l}</button>`).join('');
+  document.querySelectorAll('[data-tl]').forEach(b => b.onclick = () => { TLMODE = b.dataset.tl; drawTimeline(); });
+  // 버킷 만들기
+  const pad = (n) => String(n).padStart(2, '0'), B = [];
+  if(mode === 'hod'){
+    for(let h = 0; h < 24; h++) B.push({ k: h, l: h + '시', tip: `${h}:00–${h}:59 (전체 기간 합계)`, y: 0, n: 0, p: 0 });
+    A.forEach(a => { const b = B[new Date(a.at).getHours()]; a.yes ? b.y++ : b.n++; b.p += a.n; });
+  }else if(A.length){
+    const step = mode === 'day' ? D : H;
+    const floor = (ms) => { const d = new Date(ms); if(mode === 'day') d.setHours(0, 0, 0, 0); else d.setMinutes(0, 0, 0); return d.getTime(); };
+    let t0 = floor(A[0].at); const t1 = floor(now);
+    if(mode === 'hour' && (t1 - t0) / H > 167) t0 = t1 - 167 * H;   // 시간별은 최근 7일까지만
+    for(let t = t0; t <= t1; t = floor(t + step + (mode === 'day' ? 2 * H : 0))){   // 서머타임 없음, 일별은 여유 두고 다시 내림
+      const d = new Date(t);
+      B.push({ k: t, l: mode === 'day' ? `${d.getMonth() + 1}/${d.getDate()}` : (d.getHours() === 0 ? `${d.getMonth() + 1}/${d.getDate()}` : d.getHours() + '시'),
+        tip: mode === 'day' ? `${d.getMonth() + 1}월 ${d.getDate()}일` : `${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:00–${pad(d.getHours())}:59`, y: 0, n: 0, p: 0, cum: 0 });
+    }
+    let i = 0, cum = A.filter(a => a.at < t0).length;
+    B.forEach((b, j) => { const end = j + 1 < B.length ? B[j + 1].k : Infinity;
+      while(i < A.length && A[i].at < end){ if(A[i].at >= b.k){ const a = A[i]; a.yes ? b.y++ : b.n++; b.p += a.n; cum++; } i++; }
+      b.cum = cum; });
+  }
+  // 요약
+  const last = (ms) => A.filter(a => a.at > now - ms).length;
+  const peak = B.reduce((m, b) => (b.y + b.n) > (m ? m.y + m.n : 0) ? b : m, null);
+  $('#tlTitle').textContent = '응답 타임라인';
+  $('#tlSum').innerHTML = `<span><b>${A.length}</b>링크 응답</span><span><b>${last(H)}</b>최근 1시간</span><span><b>${last(D)}</b>최근 24시간</span>${peak ? `<span>가장 많은 때 <b style="font-size:13px">${esc(peak.tip.replace(' (전체 기간 합계)', ''))}</b> ${peak.y + peak.n}건</span>` : ''}${other ? `<span>링크 밖 응답(이벤터스·담당자) ${other}건은 그래프에서 제외</span>` : ''}<span style="margin-left:auto"><i style="background:var(--yes)"></i>참석 <i style="background:#9ca3af;margin-left:8px"></i>불참${mode !== 'hod' ? ' <i style="background:var(--acc);height:2px;margin-left:8px;vertical-align:3px"></i>누적' : ''}</span>`;
+  // 그래프(SVG)
+  const W = Math.max(320, $('#tlChart').clientWidth || 900), HH = 220, L = 30, R = mode !== 'hod' ? 36 : 8, T = 10, Bm = 22;
+  const iw = W - L - R, ih = HH - T - Bm, n = B.length || 1, bw = iw / n;
+  const mx = Math.max(1, ...B.map(b => b.y + b.n)), mc = Math.max(1, ...B.map(b => b.cum || 0));
+  const nice = (m) => { const s = [1, 2, 5, 10, 20, 25, 50, 100, 200]; const st = s.find(x => m / x <= 4) || 500; return { st, top: Math.ceil(m / st) * st }; };
+  const ny = nice(mx), y = (v) => T + ih - v / ny.top * ih, yc = (v) => T + ih - v / mc * ih;
+  let g = '';
+  for(let v = 0; v <= ny.top; v += ny.st) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v ? '#eef0f3' : '#d1d5db'}"/><text x="${L - 6}" y="${y(v) + 3.5}" text-anchor="end">${v}</text>`;
+  const every = Math.ceil(n / Math.max(1, Math.floor(iw / 44)));
+  B.forEach((b, j) => {
+    const x = L + j * bw, w = Math.max(1, bw - Math.min(6, bw * .25)), cx = x + (bw - w) / 2;
+    if(b.y) g += `<rect x="${cx}" y="${y(b.y)}" width="${w}" height="${y(0) - y(b.y)}" style="fill:var(--yes)" rx="${Math.min(2, w / 3)}"/>`;
+    if(b.n) g += `<rect x="${cx}" y="${y(b.y + b.n)}" width="${w}" height="${y(b.y) - y(b.y + b.n)}" fill="#9ca3af"/>`;
+    if(j % every === 0) g += `<text x="${x + bw / 2}" y="${HH - 6}" text-anchor="middle">${esc(b.l)}</text>`;
+    g += `<rect x="${x}" y="${T}" width="${bw}" height="${ih}" fill="transparent" data-b="${j}"/>`;
+  });
+  if(mode !== 'hod' && B.length){
+    g += `<polyline points="${B.map((b, j) => `${L + j * bw + bw / 2},${yc(b.cum)}`).join(' ')}" fill="none" style="stroke:var(--acc)" stroke-width="2" stroke-linejoin="round" pointer-events="none"/>`;
+    g += `<text x="${W - R + 6}" y="${yc(mc) + 3.5}" style="fill:var(--acc)">${mc}</text>`;
+  }
+  $('#tlChart').innerHTML = `<svg viewBox="0 0 ${W} ${HH}" preserveAspectRatio="none">${g}</svg><div class="tltip" hidden></div>`;
+  const tip = $('#tlChart .tltip');
+  $('#tlChart svg').onmousemove = (e) => {
+    const j = e.target.dataset && e.target.dataset.b; if(j === undefined){ tip.hidden = true; return; }
+    const b = B[+j], r = $('#tlChart').getBoundingClientRect();
+    tip.innerHTML = `<b>${esc(b.tip)}</b><br>응답 ${b.y + b.n}건 · 참석 ${b.y} · 불참 ${b.n}<br>참석 인원 ${b.p}명${b.cum !== undefined ? `<br>누적 ${b.cum}건` : ''}`;
+    tip.style.left = Math.min(r.width - 90, Math.max(90, e.clientX - r.left)) + 'px'; tip.style.top = (e.clientY - r.top - 10) + 'px'; tip.hidden = false;
+  };
+  $('#tlChart svg').onmouseleave = () => { tip.hidden = true; };
+}
+window.addEventListener('resize', () => { clearTimeout(drawTimeline.h); drawTimeline.h = setTimeout(() => { if(Object.keys(G).length) drawTimeline(); }, 200); });
 
 function filtered(ignoreComp){
   const q = $('#q').value.trim().toLowerCase().replace(/-/g, '');
