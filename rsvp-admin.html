@@ -156,6 +156,8 @@ function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add(
 let G = {}, META = {}, LOG = {}, FILTER = 'all', COMP = 'all', OPEN = '', EDITING = false;
 // 동행인 탭: 명단에 동행인을 적었던 그룹(지금 다 뺐어도 포함) / 혼자 오는 그룹
 const withComps = (g) => (g.comps || []).length > 0 || ((g.orig && g.orig.n) || 1) > 1;
+// 명단 인원 = 본인 + (처음 명단 동행인 ∪ 지금 동행인). 불참으로 고른 동행인도 명단엔 남는다(2026-11-02: 614명이 608명으로 보인다는 지적)
+const rosterN = (g) => 1 + new Set([...String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(Boolean), ...(g.comps || []).map(c => c.from || c.name)]).size;
 // 손님에게 보내는 링크는 짧은 도메인(2026-10-30, 이벤터스 직함 칸 길이 제한). middleware가 hakdongmap.kr/r/ 도 RSVP로 보낸다
 // → 다시 더 짧게: https://hakdongmap.kr/<토큰 앞 6자> (28자). 앞 6자가 겹치는 그룹이 있으면 그 그룹만 긴 주소로.
 const linkOf = (t) => {
@@ -218,7 +220,7 @@ function paint(){
   const pct = (n) => s.all ? (n / s.all * 100) : 0;
   const k = (id, l, v, d) => `<button class="kpi ${FILTER === id ? 'on' : ''}" data-f="${id}"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></button>`;
   $('#kpis').innerHTML =
-    k('all', '총 대상', `${s.all}<small>그룹</small>`, `명단 ${list().reduce((n, g) => n + 1 + (g.comps || []).length, 0)}명 · 응답률 ${s.all ? Math.round((s.yes + s.no) / s.all * 100) : 0}%`) +
+    k('all', '총 대상', `${s.all}<small>그룹</small>`, `명단 ${list().reduce((n, g) => n + rosterN(g), 0)}명 · 응답률 ${s.all ? Math.round((s.yes + s.no) / s.all * 100) : 0}%`) +
     k('yes', '참석 확정', `${s.yesN}<small>명</small>`, `${s.yes}그룹 · 본인 ${s.yesR} + 동행 ${s.yesC}`) +
     k('no', '불참', `${s.no}<small>그룹</small>`, '참석에서 빠짐') +
     k('pending', '미응답', `${s.pending}<small>그룹</small>`, `명단상 예상 ${s.pendN}명 · 재발송 대상`) +
@@ -265,7 +267,7 @@ function paintRows(){
   const L = filtered();
   // 그룹 수 옆에 사람 수(본인 + 명단상 동행인)를 같이 보여준다 — 그룹 수만 보면 전체 인원이 헷갈려서(2026-10-29 요청)
   const base = filtered(true), W = base.filter(withComps);
-  const ppl = (A) => A.reduce((n, g) => n + 1 + (g.comps || []).length, 0);
+  const ppl = (A) => A.reduce((n, g) => n + rosterN(g), 0);
   $('#seg').innerHTML = [['all', '전체', base.length, `총 ${ppl(base)}명`], ['with', '동행인 있음', W.length, `동행인 포함 ${ppl(W)}명`], ['solo', '혼자 참석', base.length - W.length, '']]
     .map(([k, l, n, p]) => `<button class="${COMP === k ? 'on' : ''}" data-comp="${k}">${l} ${n}${p ? ` <span style="font-weight:500;color:var(--tx3)">(${p})</span>` : ''}</button>`).join('');
   document.querySelectorAll('[data-comp]').forEach(b => b.onclick = () => { COMP = b.dataset.comp; OPEN = ''; paintRows(); });
@@ -517,7 +519,7 @@ function groupRows(L){
     const ans = answered(g), now = new Set((g.comps || []).flatMap(c => [c.name, c.from].filter(Boolean)));
     const gone = ans ? String((g.orig && g.orig.comps) || '').split(', ').filter(n => n && !now.has(n)) : [];
     return { 상태: stLabel(g), '초대받은 분': g.rep.name, 직책: g.rep.title || '', 소속: g.rep.org || '', 연락처: telDigits(g.rep.phone), 이메일: g.email || '', '초청 경로': g.route || '', VIP: g.vip ? 'VIP' : '',
-      '본인': ans ? ST[g.status] : '미응답', '명단 인원': g.orig ? g.orig.n : 1 + (g.comps || []).length, '참석 인원': ans ? heads(g) : '',
+      '본인': ans ? ST[g.status] : '미응답', '명단 인원': rosterN(g), '참석 인원': ans ? heads(g) : '',
       '참석 동행인': ans ? (g.comps || []).map(c => c.name).join(', ') : '', '불참 동행인': gone.join(', '), '대리 참석': g.sub && g.sub.name ? g.sub.name : '',
       '문자 발송': isSent(g) ? fullTime(g.sent.at) : '', '발송 횟수': isSent(g) ? (g.sent.n || 1) : '', '발송 메모': g.sendNote || '', '링크 열람': isOpen(g) ? fullTime(g.open.first) : '', '열람 횟수': isOpen(g) ? g.open.n : '',
       '응답 일시': fullTime(g.answeredAt), '마지막 변경': fullTime(g.updatedAt), '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
@@ -527,7 +529,7 @@ function summaryRows(){
   const s = stats(), pct = (n, d) => d ? Math.round(n / d * 100) + '%' : '';
   return [['항목', '값', '설명'],
     ['기준 시각', new Date().toLocaleString('ko-KR'), ''],
-    ['총 대상', s.all + '그룹', `명단 ${list().reduce((n, g) => n + 1 + (g.comps || []).length, 0)}명`],
+    ['총 대상', s.all + '그룹', `명단 ${list().reduce((n, g) => n + rosterN(g), 0)}명`],
     ['문자 발송', s.sent + '그룹', pct(s.sent, s.all) + ' (관리 화면에서 보냄으로 표시한 그룹)'],
     ['링크 열람', s.open + '그룹', '발송 대비 ' + pct(s.open, s.sent)],
     ['응답', (s.yes + s.no) + '그룹', '응답률 ' + pct(s.yes + s.no, s.all)],
