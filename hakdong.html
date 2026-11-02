@@ -792,13 +792,16 @@
   const parkPlace=p=>'https://map.naver.com/p/entry/place/'+p.np;
   const parkDrive=p=>'https://map.naver.com/p/directions/-/'+merc(+p.lat,+p.lng)+','+encodeURIComponent(p.n)+','+p.np+',PLACE_POI/-/car';
   function parkHtml(){ const ps=parkList();
-    let h=`<div class="rhead"><div class="ey">Parking</div><b>쇼룸 주변 공영주차장</b><p>아카라라이프 쇼룸까지 걷는 시간이 짧은 순이에요 · ${ps.length}곳</p></div>`;
+    let h=`<div class="rhead"><div class="ey">Parking</div><b>쇼룸 주변 공영주차장</b><p>아카라라이프 쇼룸까지 걷는 시간이 짧은 순이에요 · ${ps.length}곳</p><div class="acts"><button class="btn sm" onclick="sharePark()"><iconify-icon icon="lucide:link" aria-hidden="true"></iconify-icon> 주차장 링크 복사</button></div></div>`;
     h+=ps.map(p=>`<div class="prow ${ACTIVE===p.id?'active':''}" data-id="${p.id}" onclick="focusPark('${p.id}')" role="button" tabindex="0" aria-label="${esc(p.n)} — 지도에서 보기">
       <div class="pk">P</div>
       <div class="nm">${esc(p.n)}<span class="ty">${esc(p.type||'')}</span></div>
       <div class="wk">쇼룸까지 ${fmtWalk(p._w)}</div>
       <div class="fee">${parkFee(p)}</div></div>`).join('');
     return h+(DATA.parkingNote?`<p class="pnote">${esc(DATA.parkingNote)}</p>`:'')+footHtml(); }
+  // 주차장 탭만 바로 열리는 링크(?cat=park)를 복사한다 — 방문 예정 손님에게 주차 안내용으로 보낼 때
+  function sharePark(){ const url=location.origin+location.pathname+'?cat=park';
+    (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>showToast('주차장 링크를 복사했어요')).catch(()=>prompt('주차장 링크',url)); }
   function openPark(id){ const p=parkList().find(x=>x.id===id); if(!p||!MAP) return; INFO_ID=id;
     INFO.setOptions({content:`<div class="nwin"><button class="x" onclick="closeInfo()" aria-label="닫기">×</button><div class="pp" style="--c:#1A5FD0"><span class="en">${esc(p.type||'')} 공영주차장</span>
       <div class="nm">${esc(p.n)}</div><div class="ds">아카라라이프 쇼룸까지 ${fmtWalk(p._w)}</div><div class="ad">${parkFee(p)}</div>
@@ -995,7 +998,7 @@
   addEventListener('resize',placeTour); addEventListener('scroll',placeTour,true);
   document.addEventListener('keydown',e=>{ if(TI<0) return; if(e.key==='Escape') endTour(); else if(e.key==='ArrowRight'||e.key==='Enter'&&e.target.id!=='tourN') tourGo(TI+1); });
   function maybeTour(){ const p=new URLSearchParams(location.search);
-    if(REDEEM||p.get('benefit')==='1'||p.get('route')) return;
+    if(REDEEM||p.get('benefit')==='1'||p.get('route')||p.get('cat')==='park') return;   // 주차장 링크로 들어온 손님에겐 튜토리얼을 띄우지 않는다
     let seen=false; try{ seen=localStorage.getItem(TOUR_KEY)==='1'; }catch(e){}
     if(seen&&p.get('tour')!=='1') return;
     setTimeout(startTour,700); }
