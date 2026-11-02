@@ -302,6 +302,37 @@ module.exports = async (req, res) => {
       if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
       return res.status(200).json({ ok: true, added, refreshed, kept });
     }
+    // 현황 엑셀 반영(2026-11-02): 담당자가 정리한 '참석 확정 여부·발송 여부' 엑셀을 기존 그룹에 덮어 쓴다(새 그룹은 안 만듦).
+    // items: [{ t, status?, comps?:[참석 동행인 이름], src?, sent?, sendNote? }]. 손님이 링크로 답한 그룹·담당자가 직접 고친 그룹의 상태는 건드리지 않는다.
+    if(op === 'status'){
+      const items = (Array.isArray(body.items) ? body.items : []).filter(x => x && okTok(x.t)).slice(0, 3000);
+      const cur = (await fb('GET', 'groups')) || {}, sentCur = (await raw('GET', 's')) || {};
+      const patch = {}, sentPatch = {}, logs = [], now = Date.now(); let applied = 0, kept = 0, sentN = 0, notes = 0;
+      for(const x of items){
+        const g0 = cur[x.t]; if(!g0 || !g0.rep || g0.test) continue;
+        const g = Object.assign({}, g0);
+        if(x.status === 'yes' || x.status === 'no'){
+          const mine = g.src && g.updatedBy !== 'guest';   // 전에 이 기능으로 넣은 값이면 다시 반영해도 된다
+          if(g.updatedBy === 'guest' || (g.updatedBy && !mine && (g.status || 'pending') !== 'pending')) kept++;
+          else{
+            g.status = x.status;
+            if(Array.isArray(x.comps)){ const keep = x.comps.map(n => str(n, 40)); g.comps = (g.comps || []).filter(c => keep.includes(c.name) || (c.from && keep.includes(c.from))); }
+            g.src = str(x.src, 40) || '담당자 엑셀'; g.updatedAt = now; g.updatedBy = email;
+            logs.push([x.t, { at: now, by: email, status: g.status, n: (g.status === 'yes' ? 1 : 0) + (g.comps || []).length, sub: '', comps: (g.comps || []).map(c => c.name).join(', '), src: g.src }]);
+            applied++;
+          }
+        }
+        const note = str(x.sendNote, 60);
+        if(note !== (g.sendNote || '')){ if(note) g.sendNote = note; else delete g.sendNote; notes++; }
+        if(JSON.stringify(g) !== JSON.stringify(g0)) patch[x.t] = g;
+        const k = gid(x.t);
+        if(x.sent && !sentCur[k]){ sentPatch[k] = { first: now, at: now, n: 1, by: email, src: 'excel' }; sentN++; }
+      }
+      if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
+      if(Object.keys(sentPatch).length) await raw('PATCH', 's', sentPatch);
+      await Promise.all(logs.map(([t, l]) => fb('POST', `log/${t}`, l)));
+      return res.status(200).json({ ok: true, applied, kept, sent: sentN, notes });
+    }
     // 직접 입력: 한 그룹 추가. test=true 면 테스트 탭 전용(실제 명단·통계·내보내기에서 빠짐)
     if(op === 'add'){
       const rep = cleanPerson(body.rep);
