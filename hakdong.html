@@ -409,6 +409,9 @@
       .legend{display:none}
       .mtoggle{display:flex}
     }
+    /* 주차장 전용 링크(?cat=park): 손님에게 보내는 주차 안내 — 다른 탭·쿠폰·검색은 전부 가린다 */
+    body.park-only .hdr-nav,body.park-only #mybar,body.park-only .tools,body.park-only #mapfab,
+    body.park-only #legend,body.park-only #research,body.park-only #toast,body.park-only .rhead .acts{display:none!important}
   </style>
 </head>
 <body>
@@ -512,7 +515,8 @@
   }catch(e){ DB=null; }
 
   let DATA=null, SPOTS=[], CATS=[], OVER={}, MAP=null, MARK={}, FILTER='all', ACTIVE=null;
-  const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  // ?cat=park 로 들어오면 '주차장 전용' 화면 — 주차장 탭에 고정하고 쿠폰·매장 찾기·내 코스는 열 수 없게 한다
+  const PARK_ONLY=new URLSearchParams(location.search).get('cat')==='park';  const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const catOf=id=>CATS.find(c=>c.id===id)||{color:'#BFA97C',en:'',ko:''};
   // 네이버지도는 '상호+주소'를 같이 넣으면 '조건에 맞는 업체가 없습니다'가 뜬다 → 업체명만 검색(괄호 속 영문 표기는 제거)
   const naverUrl=s=>s.np?('https://map.naver.com/p/entry/place/'+encodeURIComponent(s.np)):('https://map.naver.com/p/search/'+encodeURIComponent(naverName(s)));   // np = 네이버 플레이스 ID(검증 완료분) → 바로 그 업체로
@@ -692,6 +696,10 @@
   function boot(){
     document.getElementById('ttl').textContent=DATA.title||'학동 스마트 인테리어 MAP';
     document.title=(DATA.title||'학동 스마트 인테리어 MAP')+' · AqaraLife';
+    if(PARK_ONLY){ document.body.classList.add('park-only');
+      document.getElementById('ttl').textContent='아카라라이프 쇼룸 주차 안내';
+      document.querySelector('.hero-subtitle').textContent='Showroom Parking Guide';
+      document.title='아카라라이프 쇼룸 주차 안내 · AqaraLife'; }
     document.getElementById('legend').innerHTML=CATS.map(c=>`<div><span class="dot" style="background:${c.color}"></span>${esc(c.ko)}</div>`).join('');
     document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map((b,i)=>`<div class="bn"><div class="ic">${no2(i+1)}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}${b.link?`<a class="bk" href="${esc(b.link)}" target="_blank" rel="noopener">${esc(b.linkLabel||'바로가기')} →</a>`:''}</div></div>`).join('');
     initMap(); applyOver();
@@ -702,7 +710,7 @@
     syncSave();
     if(p.get('spot')) setTimeout(()=>focusSpot(p.get('spot')),400);
     if(REDEEM) openRedeem();
-    else if(p.get('benefit')==='1') openBenefit();
+    else if(p.get('benefit')==='1'&&!PARK_ONLY) openBenefit();
     maybeTour();
   }
 
@@ -744,12 +752,12 @@
   const inArea=s=>!AREA||AREA.hasLatLng(LL(s.lat,s.lng));
   function pinHtml(s){ const c=catOf(s.cat);
     if(FILTER==='route'){ const k=routeIds().indexOf(s.id); if(k>-1) return `<div class="pin step" data-pid="${s.id}">${k+1}</div>`; }
-    return s.hl?`<div class="hqpin"><span class="wc">Welcome Coupon</span><div class="core">AQARA</div></div>`:`<div class="pin" data-pid="${s.id}" style="--c:${c.color}">${no2(s._no)}</div>`; }
+    return s.hl?`<div class="hqpin">${PARK_ONLY?'':'<span class="wc">Welcome Coupon</span>'}<div class="core">AQARA</div></div>`:`<div class="pin" data-pid="${s.id}" style="--c:${c.color}">${no2(s._no)}</div>`; }
   function popupHtml(s){ const c=catOf(s.cat);
-    return `<div class="pp" style="--c:${c.color}">${s.hl?'<span class="badge-hl">웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${brandHtml(s.en)}</span>
+    return `<div class="pp" style="--c:${c.color}">${s.hl&&!PARK_ONLY?'<span class="badge-hl">웰컴 쿠폰 · 커피 한 잔 쉬어가세요</span><br>':''}<span class="en">${brandHtml(s.en)}</span>
       <div class="nm">${esc(s.n)}</div>
       <div class="ds">${esc(s.d||'')}</div><div class="ad">${esc(s.a||'')}</div>
-      <div class="acts">${s.hl?`<button class="btn primary sm" onclick="openBenefit()">웰컴 쿠폰</button>`:''}${s.id?saveBtn(s.id):''}<a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div>`; }
+      <div class="acts">${s.hl&&!PARK_ONLY?`<button class="btn primary sm" onclick="openBenefit()">웰컴 쿠폰</button>`:''}${s.id&&!PARK_ONLY?saveBtn(s.id):''}<a class="btn sm" href="${naverUrl(s)}" target="_blank" rel="noopener">네이버지도 ↗</a></div></div>`; }
   const winHtml=s=>`<div class="nwin"><button class="x" onclick="closeInfo()" aria-label="닫기">×</button>${popupHtml(s)}</div>`;
   function openInfo(id){ const s=SPOTS.find(x=>x.id===id); if(!s||!MAP) return;
     const big=s.hl&&FILTER!=='route'; INFO_ID=id;
@@ -775,7 +783,7 @@
     updLoc();   // 코스 보기로 들어오고 나갈 때 '다음 매장' 바도 같이 켜고 끈다
   }
   function focusSpot(id,fromList){ const s=SPOTS.find(x=>x.id===id); if(!s) return; unfollow();
-    if(!MARK[id]){ FILTER='all'; AREA=null; paint(); paintMarkers(); }
+    if(!MARK[id]&&!PARK_ONLY){ FILTER='all'; AREA=null; paint(); paintMarkers(); }
     if(!MARK[id]) return;
     if(window.innerWidth<=860) setMobileView('map');   // 목록만 보던 중이면 지도로 되돌린다
     flyTo(s.lat,s.lng,17,700); setTimeout(()=>openInfo(id),520); setActive(id,!fromList);
@@ -849,7 +857,8 @@
     if(FILTER==='route'){ numbered(); return routeSpots(); }
     if(FILTER==='park') return numbered().filter(s=>s.hl);   // 주차장 탭: 매장 중엔 아카라 쇼룸만 기준점으로
     return numbered().filter(s=>(FILTER==='all'||s.cat===FILTER)&&inArea(s)&&(!q||[s.n,s.en,s.d,s.a,catOf(s.cat).ko,catOf(s.cat).en].join(' ').toLowerCase().includes(q))); }
-  function setFilter(id){ FILTER=(id==='route'||id==='park')?id:CATS.some(c=>c.id===id)?id:'all'; if(FILTER==='route'||FILTER==='park') showResearch(false); paint(); paintMarkers();
+  function setFilter(id){ if(PARK_ONLY) id='park';
+    FILTER=(id==='route'||id==='park')?id:CATS.some(c=>c.id===id)?id:'all'; if(FILTER==='route'||FILTER==='park') showResearch(false); paint(); paintMarkers();
     if(FILTER==='route'){ fitRoute(); return; }
     if(FILTER==='park'){ fitPark(); return; }
     const vs=visible(); if(vs.length&&FILTER!=='all'&&!AREA)fitSpots(vs,60,16); }
@@ -893,7 +902,7 @@
 
   /* ───────── 혜택 모달 · 쿠폰 발급 ───────── */
   let LAST_FOCUS=null;
-  function openBenefit(){ LAST_FOCUS=document.activeElement;   // 닫을 때 원래 자리로 포커스를 돌려준다
+  function openBenefit(){ if(PARK_ONLY) return; LAST_FOCUS=document.activeElement;   // 닫을 때 원래 자리로 포커스를 돌려준다
     document.getElementById('ov').classList.add('show'); renderCoupon(); document.body.style.overflow='hidden';
     const x=document.querySelector('.md .x'); if(x) x.focus(); }
   function closeBenefit(){ const ov=document.getElementById('ov'); ov.classList.remove('show'); document.body.style.overflow='';
