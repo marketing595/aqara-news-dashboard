@@ -114,7 +114,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
     </div>
     <div class="tools">
       <label class="btn" style="display:inline-flex;align-items:center">명단 엑셀 가져오기<input type="file" id="file" accept=".xlsx,.xls,.csv" hidden></label>
-      <label class="btn" style="display:inline-flex;align-items:center" title="'참석 확정 여부 · 발송 여부 · 응답 근거' 열이 있는 담당자 정리 엑셀 — 이벤터스 응답·발송 문제를 기존 그룹에 반영(새 그룹은 안 만듦)">현황 엑셀 반영<input type="file" id="fileSt" accept=".xlsx,.xls" hidden></label>
+      <label class="btn" style="display:inline-flex;align-items:center" title="이벤터스 참가자 리스트(참석/불참 상태) 또는 '참석 확정 여부 · 발송 여부' 열이 있는 담당자 정리 엑셀 — 이벤터스 응답·발송 문제를 기존 그룹에 반영(새 그룹은 안 만듦)">현황 엑셀 반영<input type="file" id="fileSt" accept=".xlsx,.xls" hidden></label>
       <button class="btn" id="btnLinks">링크·문자 추출</button>
       <button class="btn" id="btnXlsx" title="요약 · 응답 현황(그룹별) · 참석 확정 · 전체(사람별) · 개인 링크">응답 현황 엑셀</button>
       <button class="btn" id="btnCsv">.csv</button>
@@ -256,14 +256,14 @@ function paint(){
   paintRows();
 }
 
-// ── 응답 타임라인(2026-11-02) ── 손님이 링크로 처음 답한 시각 기준. 이벤터스·담당자 입력은 한꺼번에 들어가 추이를 왜곡하므로 따로 숫자만.
+// ── 응답 타임라인(2026-11-02) ── 손님이 링크로 처음 답한 시각 + 이벤터스 응답 시각(srcAt). 시각 없는 담당자 입력은 추이를 왜곡하므로 따로 숫자만.
 let TLMODE = '';
 function firstAnswers(){
   const out = []; let other = 0;
   list().forEach(g => {
     const gl = Object.values(LOG[g.t] || {}).filter(l => l && l.by === 'guest' && l.at).sort((a, b) => a.at - b.at)[0];
-    const at = gl ? gl.at : (g.answeredAt || 0);
-    if(at) out.push({ at, yes: (gl ? gl.status : g.status) === 'yes' || (gl ? gl.n : heads(g)) > 0, n: gl ? gl.n : heads(g), name: g.rep.name });
+    const at = gl ? gl.at : (g.answeredAt || (g.updatedBy !== "guest" && answered(g) && g.srcAt) || 0), ev = !gl && !g.answeredAt && !!at;   // 이벤터스 응답은 이벤터스 응답 시각으로
+    if(at) out.push({ at, yes: (gl ? gl.status : g.status) === 'yes' || (gl ? gl.n : heads(g)) > 0, n: gl ? gl.n : heads(g), name: g.rep.name, ev });
     else if(answered(g)) other++;
   });
   return { A: out.sort((a, b) => a.at - b.at), other };
@@ -301,7 +301,7 @@ function drawTimeline(){
   const last = (ms) => A.filter(a => a.at > now - ms).length;
   const peak = B.reduce((m, b) => (b.y + b.n) > (m ? m.y + m.n : 0) ? b : m, null);
   $('#tlTitle').textContent = '응답 타임라인';
-  $('#tlSum').innerHTML = `<span><b>${A.length}</b>링크 응답</span><span><b>${last(H)}</b>최근 1시간</span><span><b>${last(D)}</b>최근 24시간</span>${peak ? `<span>가장 많은 때 <b style="font-size:13px">${esc(peak.tip.replace(' (전체 기간 합계)', ''))}</b> ${peak.y + peak.n}건</span>` : ''}${other ? `<span>링크 밖 응답(이벤터스·담당자) ${other}건은 그래프에서 제외</span>` : ''}<span style="margin-left:auto"><i style="background:var(--yes)"></i>참석 <i style="background:#9ca3af;margin-left:8px"></i>불참${mode !== 'hod' ? ' <i style="background:var(--acc);height:2px;margin-left:8px;vertical-align:3px"></i>누적' : ''}</span>`;
+  $('#tlSum').innerHTML = `<span><b>${A.length}</b>응답 (링크 ${A.filter(a => !a.ev).length} · 이벤터스 ${A.filter(a => a.ev).length})</span><span><b>${last(H)}</b>최근 1시간</span><span><b>${last(D)}</b>최근 24시간</span>${peak ? `<span>가장 많은 때 <b style="font-size:13px">${esc(peak.tip.replace(' (전체 기간 합계)', ''))}</b> ${peak.y + peak.n}건</span>` : ''}${other ? `<span>응답 시각 없는 담당자 입력 ${other}건은 그래프에서 제외</span>` : ''}<span style="margin-left:auto"><i style="background:var(--yes)"></i>참석 <i style="background:#9ca3af;margin-left:8px"></i>불참${mode !== 'hod' ? ' <i style="background:var(--acc);height:2px;margin-left:8px;vertical-align:3px"></i>누적' : ''}</span>`;
   // 그래프(SVG)
   const W = Math.max(320, $('#tlChart').clientWidth || 900), HH = 220, L = 30, R = mode !== 'hod' ? 36 : 8, T = 10, Bm = 22;
   const iw = W - L - R, ih = HH - T - Bm, n = B.length || 1, bw = iw / n;
@@ -497,6 +497,20 @@ $('#file').onchange = async (e) => {
 // 이벤터스로 받은 응답처럼 링크 밖에서 모은 참석/불참, 번호 오류 같은 발송 문제를 관리 화면에 보이게 하려는 것. 새 그룹은 만들지 않는다.
 function parseStatusSheet(wb){
   for(const name of wb.SheetNames){
+    // 이벤터스 참가자 리스트(참석/불참 상태·응답시각 열) — 한 줄 = 초대받은 분 1명. 직함 칸의 hakdongmap.kr/<앞 6자>로 그룹을 바로 찾는다
+    const er = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: '', raw: false });
+    for(let h = 0; h < Math.min(15, er.length); h++){
+      const hdr = er[h].map(x => String(x).trim());
+      if(!['이름', '휴대전화번호', '참석/불참 상태'].every(w => hdr.includes(w))) continue;
+      const ci = (n) => hdr.indexOf(n), cell = (r, n) => ci(n) < 0 ? '' : String(r[ci(n)] == null ? '' : r[ci(n)]).trim();
+      const at = (s) => { const m = /^(\d{4})-(\d\d)-(\d\d)[ T](\d\d):(\d\d)(?::(\d\d))?/.exec(s); return m ? new Date(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6] || '00'}+09:00`).getTime() : 0; };
+      const groups = er.slice(h + 1).filter(r => cell(r, '이름')).map(r => {
+        const sh = /hakdongmap\.kr\/(?:r\/)?([A-Za-z0-9_-]{6,12})/.exec(cell(r, '직함'));
+        return { rep: { name: cell(r, '이름'), org: cell(r, '소속'), phone: telDigits(cell(r, '휴대전화번호')), email: cell(r, '이메일').toLowerCase(),
+          st: cell(r, '참석/불참 상태'), why: '이벤터스', at: at(cell(r, '참석/불참 응답시각')), short: sh ? sh[1] : '' }, send: '', comps: [] };
+      });
+      return { sheet: name, groups, hasSend: false, eventus: true };
+    }
     const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: '', raw: false });
     for(let h = 0; h < Math.min(15, rows.length); h++){
       const hdr = rows[h].map(x => String(x).trim());
@@ -525,7 +539,9 @@ function planStatus(p){
   const XS = { '참석': 'yes', '불참': 'no' };
   p.groups.forEach(x => {
     const r = x.rep;
-    let g = uniq(L.filter(g => telDigits(g.rep.phone) === r.phone && nz(g.rep.name) === nz(r.name)))
+    let g = (r.short ? uniq(L.filter(g => r.short.length > 6 ? g.t === r.short : g.t.slice(0, 6) === r.short)) : null)
+      || uniq(L.filter(g => telDigits(g.rep.phone) === r.phone && nz(g.rep.name) === nz(r.name)))
+      || (r.email ? uniq(L.filter(g => (g.email || "").toLowerCase() === r.email && nz(g.rep.name) === nz(r.name))) : null)
       || uniq(L.filter(g => nz(g.rep.name) === nz(r.name) && nz(g.rep.org) === nz(r.org)))
       || uniq(L.filter(g => nz(g.rep.name) === nz(r.name)));
     if(!g && r.phone.length >= 9){ g = uniq(L.filter(g => telDigits(g.rep.phone) === r.phone)); if(g) out.byPhone.push(`${r.name} → ${g.rep.name}`); }
@@ -535,10 +551,11 @@ function planStatus(p){
     const xs = XS[r.st];
     const sys = g.status || 'pending';
     if(xs){
-      if(sys === xs) out.same++;
+      if(sys === xs){ out.same++; if(r.at && g.src && g.updatedBy !== "guest" && g.srcAt !== r.at) it.at = r.at; }
       else if(g.updatedBy === 'guest' || (g.updatedBy && !g.src && sys !== 'pending')) out.conflict.push(`${g.rep.name}: 엑셀 ${r.st} / 관리 화면 ${ST[sys]}(${g.updatedBy === 'guest' ? '본인 링크' : '담당자'}) → 관리 화면 유지`);
       else {
         it.status = xs; it.src = /이벤터스/.test(r.why) ? '이벤터스' : '담당자 엑셀';
+        if(r.at) it.at = r.at;
         // 동행인 참석 여부가 엑셀에 있으면 그대로, 전부 미응답이면 지금 명단 유지
         if(x.comps.some(c => XS[c.st])) it.comps = x.comps.filter(c => c.st === '참석').map(c => { const m = /이름 입력:\s*(\S+)/.exec(c.why); return m ? m[1] : c.name; });
         out.apply.push(`${g.rep.name} · ${r.st}${it.src === '이벤터스' ? ' (이벤터스)' : ''}`);

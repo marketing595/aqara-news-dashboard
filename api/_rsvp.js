@@ -322,6 +322,8 @@ module.exports = async (req, res) => {
             applied++;
           }
         }
+        // 이벤터스 응답 시각(타임라인용) — 이 기능으로 넣은 응답에만
+        if(Number(x.at) > 1.6e12 && Number(x.at) < now + 864e5 && g.src && g.updatedBy !== 'guest') g.srcAt = Number(x.at);
         const note = str(x.sendNote, 60);
         if(note !== (g.sendNote || '')){ if(note) g.sendNote = note; else delete g.sendNote; notes++; }
         if(JSON.stringify(g) !== JSON.stringify(g0)) patch[x.t] = g;
