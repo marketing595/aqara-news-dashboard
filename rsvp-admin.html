@@ -34,7 +34,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .btn:disabled{opacity:.5;cursor:default}
 .tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 
-.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:16px}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:16px}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-align:left;cursor:pointer;transition:border-color .15s}
 .kpi:hover{border-color:var(--line2)}
 .kpi.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc-soft)}
@@ -223,6 +223,7 @@ function stats(){
     if(isSent(g)) s.sent++;
     if(isOpen(g)) s.open++;
     if(sentPend(g)){ s.sentPend++; if(isOpen(g)) s.sentPendOpen++; }
+    if(gst(g) === 'pending' && isOpen(g)) s.pendOpen = (s.pendOpen || 0) + 1;
     if(gst(g) === 'yes'){ s.yes++; s.yesN += heads(g); s.yesC += (g.comps || []).length; if(g.status === 'yes') s.yesR++; }
     else if(gst(g) === 'no') s.no++;
     else { s.pending++; s.pendN += 1 + (g.comps || []).length; }
@@ -239,8 +240,7 @@ function paint(){
     k('all', '총 대상', `${s.all}<small>그룹</small>`, `명단 ${list().reduce((n, g) => n + rosterN(g), 0)}명 · 응답률 ${s.all ? Math.round((s.yes + s.no) / s.all * 100) : 0}%`) +
     k('yes', '참석 확정', `${s.yesN}<small>명</small>`, `${s.yes}그룹 · 본인 ${s.yesR} + 동행 ${s.yesC}`) +
     k('no', '불참', `${s.no}<small>그룹</small>`, '참석에서 빠짐') +
-    k('pending', '미응답', `${s.pending}<small>그룹</small>`, `명단상 예상 ${s.pendN}명 · 재발송 대상`) +
-    k('sentpend', '보냈는데 미응답', `${s.sentPend}<small>그룹</small>`, `문자 ${s.sent}그룹 발송 · 링크 열람 ${s.open}${s.sentPend ? ` · 열고 안 함 ${s.sentPendOpen}` : ''}`) +
+    k('pending', '미응답', `${s.pending}<small>그룹</small>`, `명단상 예상 ${s.pendN}명 · 그중 링크 열어봄 ${s.pendOpen || 0}`) +
     k('chg', '대리·동행인 변경', `${s.chg}<small>그룹</small>`, '처음 명단과 달라짐');
   $('#kpis').insertAdjacentHTML('beforeend', `<div class="full" style="grid-column:1/-1"><div class="prog">
       <i style="width:${pct(s.yes)}%;background:var(--yes)"></i><i style="width:${pct(s.no)}%;background:#9ca3af"></i><i style="width:${pct(s.pending)}%;background:#f3c26b"></i></div></div>`);
@@ -487,36 +487,38 @@ function parseSheet(wb){
 function parseEventusRoster(wb){
   const nf = (s) => (s === 'Data Not Found' ? '' : s);
   const okEm = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) && !/^[a-z0-9]{1,2}@aqara\.kr$/.test(s);
+  const key = (s) => String(s || '').replace(/\s/g, '');
   for(const name of wb.SheetNames){
     const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: '', raw: false });
     for(let h = 0; h < Math.min(15, rows.length); h++){
       const hdr = rows[h].map(x => String(x).trim());
       if(!hdr.includes('이름') || !hdr.includes('휴대전화번호') || !hdr.some(x => x.startsWith('기본 카테고리'))) continue;
       const cell = (r, n) => { const i = hdr.indexOf(n); return i < 0 ? '' : nf(String(r[i] == null ? '' : r[i]).trim()); };
-      const L = allGroups().filter(g => !g.test), phones = new Set(), byShort = {};
-      L.forEach(g => { [g.rep, g.sub, ...(g.comps || [])].forEach(p => { const d = telDigits(p && p.phone); if(d) phones.add(d); }); byShort[g.t.slice(0, 6)] = g; });
+      const shortOf = (r) => { const m = /hakdongmap\.kr\/(?:r\/)?([A-Za-z0-9_-]{6})/.exec(cell(r, '직함')); return m ? m[1] : ''; };
+      const L = allGroups().filter(g => !g.test), where = {}, byShort = {};
+      L.forEach(g => { [g.rep, g.sub, ...(g.comps || [])].forEach((p, i) => { const d = telDigits(p && p.phone); if(d) where[d] = where[d] || (i === 0 ? g.rep.name : `${g.rep.name}님 그룹`); }); byShort[g.t.slice(0, 6)] = g; });
+      const body = rows.slice(h + 1).filter(r => cell(r, '이름'));
+      // 같은 파일에서 개별 링크가 있는(=이미 명단에 있는) 줄의 소속 → 그 그룹. 링크 없는 '동행인 있음' 줄은 여기에 동행인으로 붙인다(예: 윤세진 ← 이도연·김신아)
+      const orgHost = {};
+      body.forEach(r => { const g = byShort[shortOf(r)]; if(g && cell(r, '소속')) orgHost[key(cell(r, '소속'))] = g; });
       const recent = L.filter(isNew), att = {};
-      const out = { sheet: name, groups: [], orphan: 0, eventus: true, exist: 0, staff: 0, nophone: 0, attached: [], fresh: [] };
-      for(const r of rows.slice(h + 1)){
-        const nm = cell(r, '이름'); if(!nm) continue;
-        const email = cell(r, '이메일').toLowerCase(), phone = telDigits(cell(r, '휴대전화번호'));
-        if(/@aqara\.kr$/.test(email) && okEm(email)){ out.staff++; continue; }   // 실제 아카라 직원 메일(임시값 a@aqara.kr 은 okEm 에서 걸러져 여기 안 걸림)
+      const out = { sheet: name, groups: [], orphan: 0, eventus: true, exist: 0, staff: 0, nophone: 0, attached: [], attach: [], fresh: [], existNames: [] };
+      for(const r of body){
+        const nm = cell(r, '이름');
+        const email = cell(r, '이메일').toLowerCase(), phone = telDigits(cell(r, '휴대전화번호')), sh = shortOf(r);
+        if(/@aqara\.kr$/.test(email) && okEm(email)){ out.staff++; continue; }   // 실제 아카라 직원(임시값 a@aqara.kr 은 여기 안 걸림)
         if(!/^01\d{8,9}$/.test(phone)){ out.nophone++; continue; }
-        const job = cell(r, '직함'), sh = /hakdongmap\.kr\/(?:r\/)?([A-Za-z0-9_-]{6})/.exec(job);
-        if(phones.has(phone) || (sh && byShort[sh[1]])){ out.exist++; continue; }
-        const org = cell(r, '소속'), p = { name: nm, title: sh ? '' : job, org, phone, email: okEm(email) ? email : '' };
-        const key = (s) => String(s || '').replace(/\s/g, '');
-        const host = cell(r, '기본 카테고리 - 동행인 있음') === 'O' && org ? recent.find(g => key(g.rep.org) === key(org)) : null;
-        phones.add(phone);
+        if(where[phone] || (sh && byShort[sh])){ out.exist++; out.existNames.push(`${nm} (${where[phone] || byShort[sh].rep.name})`); continue; }
+        const org = cell(r, '소속'), job = cell(r, '직함'), p = { name: nm, title: sh ? '' : job, org, phone, email: okEm(email) ? email : '' };
+        const host = cell(r, '기본 카테고리 - 동행인 있음') === 'O' && org ? (orgHost[key(org)] || recent.find(g => key(g.rep.org) === key(org))) : null;
+        where[phone] = host ? `${host.rep.name}님 그룹` : nm;
         if(host){ (att[host.t] = att[host.t] || { g: host, adds: [] }).adds.push(p); continue; }
         out.fresh.push(p);
         out.groups.push({ rep: { name: p.name, title: p.title, org: p.org, phone: p.phone }, comps: [], email: p.email, route: '이벤터스', note: '', vip: false });
       }
       Object.values(att).forEach(({ g, adds }) => {
         out.attached.push(`${g.rep.name} ← ${adds.map(a => a.name).join(', ')}`);
-        out.groups.push({ rep: { name: g.rep.name, title: g.rep.title || '', org: g.rep.org || '', phone: g.rep.phone || '' },
-          comps: [...(g.comps || []).map(c => ({ name: c.name, title: c.title || '', org: c.org || '', phone: c.phone || '', email: c.email || '' })), ...adds],
-          email: g.email || '', route: g.route || '', note: g.note || '', vip: !!g.vip });
+        out.attach.push({ t: g.t, comps: adds });
       });
       return out;
     }
@@ -599,25 +601,27 @@ $('#file').onchange = async (e) => {
       };
       return;
     }
-    if(p && p.eventus && !p.groups.length) return toast(`이벤터스 명단에 새 사람이 없어요 (이미 있음 ${p.exist})`);
-    if(!p || !p.groups.length) return toast('‘구분 · 성함 · 연락처’ 머리글이 있는 시트를 찾지 못했어요');
-    if(p.eventus){
+    if(p && p.eventus){
+      const nothing = !p.groups.length && !p.attach.length;
       modal(`<h3>이벤터스 명단 가져오기</h3>
         <p>${esc(f.name)} · ‘${esc(p.sheet)}’ 시트</p>
         <div class="prev">새 그룹 <b>${p.fresh.length}</b>${p.fresh.length ? ` — ${p.fresh.map(x => esc(x.name + (x.org ? ' (' + x.org + ')' : ''))).join(', ')}` : ''}
-        ${p.attached.length ? `<br>동행인으로 붙임: ${p.attached.map(esc).join(' · ')}` : ''}
-        <br><br><span style="color:var(--tx3)">이미 명단에 있음 ${p.exist} · 아카라 직원 ${p.staff} · 번호 없음(테스트) ${p.nophone} — 건너뜀. 임시 이메일(a@aqara.kr 등)은 넣지 않아요. 새로 들어온 그룹은 목록 '등록일시' 열에 '이벤터스'로 표시돼요.</span></div>
-        <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>취소</button><button class="btn pri" id="impGo">가져오기</button></div>`);
+        <br>기존 그룹에 동행인 추가 <b>${p.attach.reduce((n, a) => n + a.comps.length, 0)}</b>${p.attached.length ? ` — ${p.attached.map(esc).join(' · ')}` : ''}
+        ${nothing ? '<br><br><b>새로 넣을 사람이 없어요.</b> 이 파일의 사람은 모두 이미 명단에 있어요.' : ''}
+        <details style="margin-top:8px"><summary>이미 명단에 있음 ${p.exist}</summary><div style="font-size:12px;margin-top:4px">${p.existNames.map(esc).join(', ')}</div></details>
+        <span style="color:var(--tx3);font-size:12px">아카라 직원 ${p.staff} · 번호 없음(테스트) ${p.nophone} 건너뜀. 임시 이메일(a@aqara.kr 등)은 넣지 않아요. 동행인은 그룹이 이미 응답했거나 담당자가 고친 그룹이어도 붙어요.</span></div>
+        <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>닫기</button>${nothing ? '' : '<button class="btn pri" id="impGo">가져오기</button>'}</div>`);
+      if(nothing) return;
       $('#impGo').onclick = async () => {
         $('#impGo').disabled = true; $('#impGo').textContent = '올리는 중…';
-        const j = await api({ op: 'import', groups: p.groups, via: '이벤터스' });
-        closeModal();
-        if(!j.ok) return toast(j.error || '가져오기 실패');
-        toast(`새로 ${j.added} · 동행인 추가 ${j.refreshed}${j.kept ? ` · 응답 있어 못 붙임 ${j.kept}` : ''}`);
-        load();
+        let added = 0, comps = 0;
+        if(p.groups.length){ const j = await api({ op: 'import', groups: p.groups, via: '이벤터스' }); if(!j.ok){ closeModal(); return toast(j.error || '가져오기 실패'); } added = j.added; }
+        if(p.attach.length){ const j = await api({ op: 'addcomps', items: p.attach }); if(!j.ok){ closeModal(); return toast(j.error || '동행인 추가 실패'); } comps = j.added; }
+        closeModal(); toast(`새 그룹 ${added} · 동행인 추가 ${comps}명`); load();
       };
       return;
     }
+    if(!p || !p.groups.length) return toast('‘구분 · 성함 · 연락처’ 머리글이 있는 시트를 찾지 못했어요');
     const people = p.groups.reduce((n, g) => n + 1 + g.comps.length, 0);
     const exist = list().length;
     modal(`<h3>명단 가져오기</h3>
@@ -846,7 +850,6 @@ function summaryRows(){
     ['참석 확정', s.yesN + '명', `${s.yes}그룹 · 본인 ${s.yesR} + 동행 ${s.yesC}`],
     ['불참', s.no + '그룹', ''],
     ['미응답', s.pending + '그룹', `명단상 예상 ${s.pendN}명`],
-    ['보냈는데 미응답', s.sentPend + '그룹', `그중 링크는 열어봄 ${s.sentPendOpen}`],
     ['대리·동행인 변경', s.chg + '그룹', '처음 명단과 달라짐']];
 }
 const fitCols = (ws, rows) => { if(!rows.length) return ws; const keys = Object.keys(rows[0]);
@@ -954,7 +957,6 @@ $('#btnLinks').onclick = () => {
     <div class="tools" style="margin-top:12px" id="tg">
       <label class="btn"><input type="radio" name="tg" value="pending" checked> 미응답 ${counts.pending}</label>
       <label class="btn"><input type="radio" name="tg" value="unsent"> 아직 안 보냄 ${list().filter(g => !isSent(g) && gst(g) === 'pending').length}</label>
-      <label class="btn"><input type="radio" name="tg" value="sentpend"> 보냈는데 미응답 ${counts.sentPend}</label>
       <label class="btn"><input type="radio" name="tg" value="all"> 전체 ${counts.all}</label>
       <label class="btn"><input type="radio" name="tg" value="yes"> 참석 ${counts.yes}</label>
       <label class="btn"><input type="radio" name="tg" value="view"> 지금 목록 ${filtered().length}</label>

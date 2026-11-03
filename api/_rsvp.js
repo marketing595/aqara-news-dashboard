@@ -382,6 +382,26 @@ module.exports = async (req, res) => {
       await fb('POST', `log/${body.t}`, { at: now, by: email, status: next.status, n: (next.status === 'yes' ? 1 : 0) + (next.status === 'no' || next.status === 'yes' ? next.comps.length : 0), sub: next.sub ? next.sub.name : '', comps: next.comps.map(c => c.name).join(', ') });
       return res.status(200).json({ ok: true, group: next });
     }
+    // 기존 그룹에 동행인 추가(2026-11-03, 이벤터스 명단 가져오기): items [{ t, comps:[사람] }].
+    // import 는 손님·담당자가 손댄 그룹을 덮어쓰지 않아서 동행인이 안 붙었다 → 여기선 상태는 그대로 두고 없는 사람만 덧붙인다.
+    if(op === 'addcomps'){
+      const items = (Array.isArray(body.items) ? body.items : []).slice(0, 500);
+      let added = 0;
+      for(const x of items){
+        if(!okTok(x && x.t)) continue;
+        const g = await fb('GET', `groups/${x.t}`); if(!g) continue;
+        const have = new Set([...(g.comps || []).flatMap(c => [c.name, c.phone]), ...String((g.orig && g.orig.comps) || '').split(', ')].filter(Boolean));
+        const add = cleanComps(x.comps).filter(c => !have.has(c.name) && !(c.phone && have.has(c.phone)));
+        if(!add.length) continue;
+        g.comps = fillOrg([...(g.comps || []), ...add], g.rep.org);
+        const names = [String((g.orig && g.orig.comps) || ''), ...add.map(c => c.name)].filter(Boolean).join(', ');
+        g.orig = Object.assign({}, g.orig, { n: ((g.orig && g.orig.n) || 1) + add.length, comps: names });
+        await fb('PUT', `groups/${x.t}`, g);
+        await fb('POST', `log/${x.t}`, { at: Date.now(), by: email, status: g.status, n: 0, sub: '', comps: g.comps.map(c => c.name).join(', '), src: '이벤터스 동행인 추가' });
+        added += add.length;
+      }
+      return res.status(200).json({ ok: true, added });
+    }
     // 발송 메모(빨간 글씨) 지우기/고치기(2026-11-03): { t, sendNote }
     if(op === 'sendnote'){
       if(!okTok(body.t)) return res.status(400).json({ ok: false, error: 't' });
