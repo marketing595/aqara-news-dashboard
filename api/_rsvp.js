@@ -380,6 +380,18 @@ module.exports = async (req, res) => {
       await fb('POST', `log/${body.t}`, { at: now, by: email, status: next.status, n: (next.status === 'yes' ? 1 : 0) + (next.status === 'no' || next.status === 'yes' ? next.comps.length : 0), sub: next.sub ? next.sub.name : '', comps: next.comps.map(c => c.name).join(', ') });
       return res.status(200).json({ ok: true, group: next });
     }
+    // 이메일 일괄 반영(2026-11-03): items [{ t, email }] — 설문 응답 엑셀 기준으로 담당자가 확인 후 저장. 상태·응답 시각은 건드리지 않는다.
+    if(op === 'emails'){
+      const items = (Array.isArray(body.items) ? body.items : []).slice(0, 3000);
+      const cur = (await fb('GET', 'groups')) || {}, patch = {};
+      items.forEach(x => {
+        const t = x && x.t, em = str(x && x.email, 120).trim().toLowerCase();
+        if(!okTok(t) || !cur[t] || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em) || cur[t].email === em) return;
+        patch[t] = Object.assign({}, cur[t], { email: em });
+      });
+      if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
+      return res.status(200).json({ ok: true, n: Object.keys(patch).length });
+    }
     if(op === 'delete'){
       if(!okTok(body.t)) return res.status(400).json({ ok: false, error: 't' });
       await fb('DELETE', `groups/${body.t}`);
