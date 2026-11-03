@@ -679,7 +679,7 @@ function planStatus(p){
   const nz = (s) => String(s || '').replace(/\s/g, '');
   const L = allGroups().filter(g => !g.test), used = new Set();
   const uniq = (A) => { A = A.filter(g => !used.has(g.t)); return A.length === 1 ? A[0] : null; };
-  const out = { items: [], apply: [], same: 0, conflict: [], miss: [], byPhone: [], sent: 0, notes: 0, sysOnly: 0 };
+  const out = { items: [], apply: [], same: 0, conflict: [], miss: [], byPhone: [], sent: 0, notes: 0, sysOnly: 0, asComp: [], skip: 0 };
   const XS = { '참석': 'yes', '불참': 'no' };
   p.groups.forEach(x => {
     const r = x.rep;
@@ -689,7 +689,17 @@ function planStatus(p){
       || uniq(L.filter(g => nz(g.rep.name) === nz(r.name) && nz(g.rep.org) === nz(r.org)))
       || uniq(L.filter(g => nz(g.rep.name) === nz(r.name)));
     if(!g && r.phone.length >= 9){ g = uniq(L.filter(g => telDigits(g.rep.phone) === r.phone)); if(g) out.byPhone.push(`${r.name} → ${g.rep.name}`); }
-    if(!g){ out.miss.push(`${r.name}${r.org ? ' (' + r.org + ')' : ''}`); return; }
+    if(!g){
+      // 아카라 직원·번호 없는 테스트 줄은 조용히 건너뜀(2026-11-03)
+      if((r.email && /@aqara\.kr$/.test(r.email) && !/^[a-z0-9]{1,2}@aqara\.kr$/.test(r.email)) || (p.eventus && !r.phone)){ out.skip++; return; }
+      // 대표가 아니라 다른 그룹의 동행인으로 있는 사람(이벤터스엔 한 줄씩 따로 올라감) — 번호, 없으면 이름+소속으로 찾는다
+      const hasC = (g, f) => [...(g.comps || []), ...String((g.orig && g.orig.comps) || '').split(', ').map(n => ({ name: n }))].some(f);
+      const host = (r.phone ? uniq(L.filter(g => hasC(g, c => c.phone && telDigits(c.phone) === r.phone))) : null)
+        || uniq(L.filter(g => hasC(g, c => nz(c.name) === nz(r.name)) && (!r.org || nz(g.rep.org) === nz(r.org))))
+        || uniq(L.filter(g => hasC(g, c => nz(c.name) === nz(r.name))));   // 소속 표기가 달라도(Stack designworks / 스택 디자인웍스) 이름이 하나뿐이면
+      if(host){ out.asComp.push(`${r.name} → ${host.rep.name}님 그룹 동행인${XS[r.st] ? ' (이벤터스 ' + r.st + ')' : ''}`); return; }
+      out.miss.push(`${r.name}${r.org ? ' (' + r.org + ')' : ''}`); return;
+    }
     used.add(g.t);
     const it = { t: g.t };
     const xs = XS[r.st];
@@ -777,7 +787,9 @@ $('#fileSt').onchange = async (e) => {
       ${P.apply.length ? `<details style="margin-top:8px"><summary>반영할 응답 ${P.apply.length}</summary><div style="font-size:12px;margin-top:4px">${more(P.apply, 120)}</div></details>` : ''}
       ${P.conflict.length ? `<details style="margin-top:6px" open><summary>엑셀과 다른 응답 ${P.conflict.length} — 관리 화면 값 유지</summary><div style="font-size:12px;margin-top:4px">${more(P.conflict, 40)}</div></details>` : ''}
       ${P.byPhone.length ? `<details style="margin-top:6px"><summary>이름이 달라 연락처로 맞춘 그룹 ${P.byPhone.length}</summary><div style="font-size:12px;margin-top:4px">${more(P.byPhone, 40)}</div></details>` : ''}
-      ${P.miss.length ? `<details style="margin-top:6px" open><summary><b style="color:var(--err)">관리 화면에서 못 찾은 그룹 ${P.miss.length}</b> — 건너뜀(필요하면 명단 엑셀 가져오기)</summary><div style="font-size:12px;margin-top:4px">${more(P.miss, 40)}</div></details>` : ''}
+      ${P.asComp.length ? `<details style="margin-top:6px"><summary>다른 그룹의 동행인으로 있는 사람 ${P.asComp.length} — 그대로 둠</summary><div style="font-size:12px;margin-top:4px">${more(P.asComp, 40)}</div></details>` : ''}
+      ${P.skip ? `<div style="font-size:12px;margin-top:6px;color:var(--tx3)">아카라 직원·번호 없는 테스트 ${P.skip}줄은 건너뜀</div>` : ''}
+      ${P.miss.length ? `<details style="margin-top:6px" open><summary><b style="color:var(--err)">관리 화면에서 못 찾은 사람 ${P.miss.length}</b> — 명단에 없어요. 같은 파일을 [명단 엑셀 가져오기]에 올리면 새 그룹·동행인으로 들어가요</summary><div style="font-size:12px;margin-top:4px">${more(P.miss, 40)}</div></details>` : ''}
       <br>손님이 링크로 답한 그룹, 담당자가 직접 고친 그룹은 덮어쓰지 않아요. 새 그룹도 만들지 않습니다.</div>
       <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>취소</button><button class="btn pri" id="stGo" ${P.items.length ? '' : 'disabled'}>${P.items.length ? `${P.items.length}그룹 반영` : '바꿀 것 없음'}</button></div>`);
     $('#stGo').onclick = async () => {
