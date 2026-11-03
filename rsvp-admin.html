@@ -409,7 +409,7 @@ function editRow(g){
     <div><label>대리 소속<input data-e="sub.org" value="${esc(s.org || '')}"></label></div>
     <div><label>대리 연락처<input data-e="sub.phone" value="${esc(fmtPhone(s.phone || ''))}"></label></div>
     <div><label>직책(초대받은 분)<input data-e="rep.title" value="${esc(r.title)}"></label></div>
-    <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처</span><textarea data-e="comps" rows="${Math.max(3, (g.comps || []).length + 1)}">${esc((g.comps || []).map(c => [c.name, c.title, fmtPhone(c.phone)].filter((v, i) => v || i === 0).join(' / ')).join('\n'))}</textarea></label></div>
+    <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처 / 이메일</span><textarea data-e="comps" rows="${Math.max(3, (g.comps || []).length + 1)}">${esc((g.comps || []).map(c => [c.name, c.title || '', fmtPhone(c.phone) || '', c.email || ''].join(' / ').replace(/( \/ )+$/, '')).join('\n'))}</textarea></label></div>
     <div class="full"><label>담당자 메모<input data-e="memo" value="${esc(g.memo || '')}" placeholder="통화 내용 등(손님에겐 안 보임)"></label></div>
   </div>
   <div class="tools" style="margin-top:10px"><button class="btn pri" id="edSave">저장</button><button class="btn" id="edCancel">닫기</button><button class="btn" id="edSent">${isSent(g) ? '문자 보냄 표시 해제' : '문자 보냄으로 표시'}</button><span style="flex:1"></span><button class="btn danger" id="edDel">이 그룹 삭제</button></div>
@@ -435,7 +435,7 @@ function bindEdit(){
     const v = (k) => (box.querySelector(`[data-e="${k}"]`) || {}).value || '';
     const g0 = G[OPEN] || {};
     const comps = v('comps').split('\n').map(l => l.split('/').map(x => x.trim())).filter(a => a[0])
-      .map(a => ({ name: a[0], title: a[1] || '', phone: a[2] || '', org: (g0.comps || []).map(c => c.name === a[0] ? c.org : '').find(Boolean) || '' }));   // 기존 동행인 소속 유지, 없으면 서버가 대표 소속으로 채움
+      .map(a => ({ name: a[0], title: a[1] || '', phone: a[2] || '', email: a[3] || '', org: (g0.comps || []).map(c => c.name === a[0] ? c.org : '').find(Boolean) || '' }));   // 기존 동행인 소속 유지, 없으면 서버가 대표 소속으로 채움
     const body = { op: 'admin-save', t: OPEN, status: v('status'),
       rep: { name: v('rep.name'), org: v('rep.org'), title: v('rep.title'), phone: v('rep.phone') },
       sub: v('sub.name') ? { name: v('sub.name'), org: v('sub.org'), phone: v('sub.phone') } : null,
@@ -461,7 +461,7 @@ function parseSheet(wb){
       for(const r of rows.slice(h + 1)){
         const kind = cell(r, 'kind'), nm = cell(r, 'name');
         if(!kind && !nm) continue;
-        const p = { name: nm, title: cell(r, 'title'), org: cell(r, 'org'), phone: cell(r, 'phone').replace(/\D/g, '') };
+        const p = { name: nm, title: cell(r, 'title'), org: cell(r, 'org'), phone: cell(r, 'phone').replace(/\D/g, ''), email: kind === '동행인' ? cell(r, 'email').toLowerCase() : '' };
         if(kind === '동행인'){
           if(!cur){ orphan++; continue; }
           if(p.phone && p.phone === cur.rep.phone) p.phone = '';          // 동행인 칸에 대표 번호가 복사돼 있음
@@ -667,7 +667,7 @@ function personRows(L){
     const base = { '초대받은 분': g.rep.name, '초청 경로': g.route || '', 'VIP': g.vip ? 'VIP' : '', '마지막 문자 전송': isSent(g) ? fullTime(g.sent.at) : '', '링크 열람': isOpen(g) ? fullTime(g.open.last) : '', '응답 일시': fullTime(g.answeredAt), '마지막 변경':g.updatedAt ? new Date(g.updatedAt).toLocaleString('ko-KR') : '', '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
     const rep = g.sub && g.sub.name ? g.sub : g.rep;
     out.push(Object.assign({ 상태: st, 구분: g.sub && g.sub.name ? '대리 참석' : '본인', 성함: rep.name, 직책: rep.title || '', 소속: rep.org || g.rep.org || '', 연락처: telDigits(rep.phone), 이메일: g.sub && g.sub.name ? '' : (g.email || '') }, base));
-    (g.comps || []).forEach(c => out.push(Object.assign({ 상태: ans ? '참석' : ST.pending, 구분: '동행인', 성함: c.name, 직책: c.title || '', 소속: c.org || g.rep.org || '', 연락처: telDigits(c.phone), 이메일: '' }, base)));
+    (g.comps || []).forEach(c => out.push(Object.assign({ 상태: ans ? '참석' : ST.pending, 구분: '동행인', 성함: c.name, 직책: c.title || '', 소속: c.org || g.rep.org || '', 연락처: telDigits(c.phone), 이메일: c.email || '' }, base)));
     if(ans){   // 처음 명단에 있었는데 불참으로 고른 동행인
       const now = new Set((g.comps || []).flatMap(c => [c.name, c.from].filter(Boolean)));
       String((g.orig && g.orig.comps) || '').split(', ').filter(n => n && !now.has(n))
@@ -744,7 +744,7 @@ function eventusRows(mode){
       const p = g.sub && g.sub.name ? g.sub : g.rep;
       out.push([p.name, g.sub && g.sub.name ? '' : (g.email || ''), telDigits(p.phone), EVENTUS_GROUP, p.org || g.rep.org || '', p.title || '']);
     }
-    (g.comps || []).forEach(c => out.push([c.name, '', telDigits(c.phone), EVENTUS_GROUP, c.org || g.rep.org || '', c.title || '']));
+    (g.comps || []).forEach(c => out.push([c.name, c.email || '', telDigits(c.phone), EVENTUS_GROUP, c.org || g.rep.org || '', c.title || '']));
   });
   return out;
 }
@@ -865,14 +865,14 @@ $('#btnAdd').onclick = () => {
       <div><label>연락처<input data-a="phone" placeholder="010-0000-0000"></label></div>
       <div><label>이메일<input data-a="email"></label></div>
       <div><label>초청 경로<input data-a="route" value="${test ? '테스트' : ''}"></label></div>
-      <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처</span> (없으면 비워 두기)<textarea data-a="comps" rows="3" style="height:auto;padding:6px 9px"></textarea></label></div>
+      <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처 / 이메일</span> (없으면 비워 두기)<textarea data-a="comps" rows="3" style="height:auto;padding:6px 9px"></textarea></label></div>
     </div>
     <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>닫기</button><button class="btn pri" id="addGo">${test ? '테스트 링크 만들기' : '명단에 추가'}</button></div>
     <div id="addOut"></div>`);
   $('#addGo').onclick = async () => {
     const v = (k) => ($(`[data-a="${k}"]`) || {}).value || '';
     if(!v('name').trim()) return toast('성함을 입력해 주세요');
-    const comps = v('comps').split('\n').map(l => l.split('/').map(x => x.trim())).filter(a => a[0]).map(a => ({ name: a[0], title: a[1] || '', phone: a[2] || '', org: v('org') }));
+    const comps = v('comps').split('\n').map(l => l.split('/').map(x => x.trim())).filter(a => a[0]).map(a => ({ name: a[0], title: a[1] || '', phone: a[2] || '', email: a[3] || '', org: v('org') }));
     $('#addGo').disabled = true;
     const j = await api({ op: 'add', test, rep: { name: v('name'), title: v('title'), org: v('org'), phone: v('phone') }, email: v('email'), route: v('route'), comps });
     $('#addGo').disabled = false;

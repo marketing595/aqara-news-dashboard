@@ -216,6 +216,7 @@ function render(){
       <label class="fld" style="margin-top:12px"><span>소속</span><input data-c="${i}" data-k="org" value="${esc(c.org || '')}" placeholder="회사·학교 등" autocomplete="organization" ${ro ? 'disabled' : ''}></label>
       <label class="fld"><span>직책</span><input data-c="${i}" data-k="title" value="${esc(c.title || '')}" placeholder="예: 대표, 실장, 디자이너" autocomplete="organization-title" ${ro ? 'disabled' : ''}></label>
       <label class="fld"><span>연락처<i>*</i></span><input data-c="${i}" data-k="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(c.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
+      <label class="fld"><span>이메일</span><input data-c="${i}" data-k="email" type="email" inputmode="email" value="${esc(c.email || '')}" placeholder="name@example.com" autocomplete="off" ${ro ? 'disabled' : ''}></label>
       ${QR_NOTE}` : '<div style="height:12px"></div>'}
     </div>`).join('');
 
@@ -285,6 +286,7 @@ function validate(){
     if(c.on !== true) return;
     if(c._ph && !c.name.trim()) mark(`[data-c="${i}"][data-k="name"]`);
     if(need(c.phone)) mark(`[data-c="${i}"][data-k="phone"]`);
+    if(c.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(c.email).trim())) mark(`[data-c="${i}"][data-k="email"]`);
   });
   if(first){ first.focus(); first.scrollIntoView({ block: 'center', behavior: 'smooth' }); toast('빨간 칸을 확인해 주세요'); return false; }
   return true;
@@ -296,7 +298,7 @@ async function save(){
   try{
     const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone, org: F.rep.org || '', title: F.rep.title || '', email: String(F.rep.email || '').trim() },
-        comps: goingComps().map(c => ({ name: c.name.trim() || c._ph, from: c._ph || undefined, phone: c.phone, org: c.org || '', title: c.title || '' })) }) });
+        comps: goingComps().map(c => ({ name: c.name.trim() || c._ph, from: c._ph || undefined, phone: c.phone, org: c.org || '', title: c.title || '', email: String(c.email || '').trim() })) }) });
     const j = await r.json();
     if(!j.ok){ toast(j.error || '저장하지 못했어요. 다시 시도해 주세요.'); paintBar(); return; }
     setData(j); MODE = 'done'; render(); window.scrollTo({ top: 0, behavior: 'smooth' });

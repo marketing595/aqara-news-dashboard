@@ -138,7 +138,8 @@ async function logsFor(tokens){
 
 function cleanPerson(p){
   p = p || {};
-  return { name: str(p.name, 40), title: str(p.title, 40), org: str(p.org, 80), phone: digits(p.phone) };
+  const em = str(p.email, 120).trim().toLowerCase();
+  return Object.assign({ name: str(p.name, 40), title: str(p.title, 40), org: str(p.org, 80), phone: digits(p.phone) }, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em) ? { email: em } : {});
 }
 // 동행인 소속이 비어 있으면 대표자 소속으로 채운다(2026-10-30 사용자 지정)
 const fillOrg = (comps, org) => (comps || []).map(c => c.org ? c : Object.assign({}, c, { org: org || '' }));
@@ -223,13 +224,14 @@ module.exports = async (req, res) => {
         const nm = str(x && x.name, 40), from = str(x && x.from, 40), phone = digits(x && x.phone);
         const org = (o) => (x && x.org !== undefined) ? { org: str(x.org, 80) } : (o ? { org: o } : {});   // 소속: 손님이 적은 값, 안 보냈으면 기존 값
         const title = (o) => (x && x.title !== undefined) ? { title: str(x.title, 40) } : (o ? { title: o } : {});   // 직책도 같은 방식
+        const mail = (o) => { const e = str(x && x.email, 120).trim().toLowerCase(); return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) ? { email: e } : (o ? { email: o } : {}); };   // 동행인 이메일(2026-11-03): 비워 보내면 기존 값
         if(from && phs[from]){
           if(seen[from]) return; seen[from] = 1;
-          const c = Object.assign({}, phs[from], { name: nm || from, phone }, org(phs[from].org), title(phs[from].title));
+          const c = Object.assign({}, phs[from], { name: nm || from, phone }, org(phs[from].org), title(phs[from].title), mail(phs[from].email));
           if(c.name === from) delete c.from; else c.from = from;
           comps.push(c);
         }else if(nm && allow[nm] && !seen[nm]){
-          seen[nm] = 1; comps.push(Object.assign({}, allow[nm], { phone }, org(allow[nm].org), title(allow[nm].title)));
+          seen[nm] = 1; comps.push(Object.assign({}, allow[nm], { phone }, org(allow[nm].org), title(allow[nm].title), mail(allow[nm].email)));
         }
       });
       const sub = g.sub || null;
