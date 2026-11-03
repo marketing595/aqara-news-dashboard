@@ -283,6 +283,10 @@
         .bud-tbl td.bud-hn{ position:relative; }
         .bud-tbl td.bud-hn::after{ content:''; position:absolute; top:0; right:0; border-top:7px solid #F2A900; border-left:7px solid transparent; pointer-events:none; }
         .bud-tbl td.bud-sel{ box-shadow:inset 0 0 0 1.5px #7C5CFF; }
+        .bud-tbl td.bud-pend{ background:#FDECEA !important; box-shadow:inset 0 0 0 1.5px #D9483B; }
+        .bud-tbl td.bud-pend .bud-num{ color:#B3261E; font-weight:700; }
+        .bud-tbl td.bud-pend .bud-num::placeholder{ color:#D9483B; opacity:1; }
+        .bud-tbl td.bud-pend.bud-sel{ box-shadow:inset 0 0 0 2px #7C5CFF; }
         /* 레퍼런스 대표이미지를 못 불러온 경우 대신 보여줄 아이콘 */
         .bb-noimg::after{ content:'🔗'; font-size:22px; opacity:.35; }
         #mhBody details>summary{ list-style:none; } #mhBody details>summary::-webkit-details-marker{ display:none; }
@@ -6207,6 +6211,11 @@
         <textarea data-bk="${budKey(key)}" data-o="${esc(v)}" rows="5" placeholder="이 칸에 메모를 남기세요 (품의번호, 결제 내역, 업체명 등)"
           class="mt-2 w-full text-[12.5px] leading-relaxed border border-[#E6E3DC] rounded-lg p-2 outline-none focus:border-[#7C5CFF] resize-y"
           oninput="budNoteIn(this)" onblur="budNoteIn(this,1)">${esc(v)}</textarea>
+        ${(()=>{ if(BUD_SEL.k!=='a') return ''; const pl=budPendMap()[BUD_SEL.i+'.'+BUD_SEL.m]||[]; if(!pl.length) return '';
+          return `<div class="mt-2 rounded-lg bg-[#FDECEA] px-2.5 py-2"><p class="text-[11.5px] font-bold text-[#B3261E]">🔴 금액 입력 대기 ${pl.length}건 — 이 칸에 금액을 넣으면 풀려요</p>
+            ${pl.map(z=>`<div class="flex items-start gap-1.5 mt-1 text-[11.5px]"><span class="text-ink min-w-0 flex-1">${esc(z.t)} <span class="text-slate-400 tabular-nums">${esc(z.no)} · ${esc(z.d)}</span></span>
+              <button onclick="budPendClear(${z.i},${z.m},'${esc(z.no)}');setTimeout(()=>{renderBudget();},0)" class="shrink-0 text-[#5E7350] font-semibold hover:underline" title="금액은 이미 들어 있음 — 표시만 해제">완료</button>
+              <button onclick="budPendMove('${esc(z.no)}')" class="shrink-0 text-slate-400 hover:text-ared" title="엉뚱한 칸 — 빼서 다음 전자결재 반영 때 다시 고르기">빼기</button></div>`).join('')}</div>`; })()}
         <p class="text-[10.5px] text-slate-400 mt-1">입력하면 자동 저장 · 다 지우면 메모 삭제</p></div>`;
     }
     function budPaintNote(){ const el=document.getElementById('budNote'); if(el) el.innerHTML=budNoteBox(); }
@@ -6249,7 +6258,7 @@
       return `<div class="w-full rounded-full bg-[#EFEDE8] overflow-hidden" style="height:${h||6}px"><div style="width:${(r*100).toFixed(1)}%;height:100%;background:${over?'#BF5332':'#7C5CFF'}"></div></div>`; }
 
     /* 숫자 칸: 화면엔 선택 단위로, 클릭하면 원 단위 원본 숫자로 */
-    function budNumIn(k,v,over,title){ return `<input class="bud-num${over?' bud-over':''}" data-bk="${budKey(k)}" data-raw="${v||0}" value="${budFmt(v)}" placeholder="–"
+    function budNumIn(k,v,over,title,ph){ return `<input class="bud-num${over?' bud-over':''}" data-bk="${budKey(k)}" data-raw="${v||0}" value="${budFmt(v)}" placeholder="${ph||'–'}"
       inputmode="numeric" ${title?`title="${esc(title)}"`:''} onfocus="budNumFocus(this)" onblur="budNumBlur(this)" onkeydown="budNumKey(event,this)">`; }
     function budNumFocus(el){ const r=+el.dataset.raw||0; el.value=r?String(r):''; setTimeout(()=>{ try{ el.select(); }catch(e){} },0);
       const m=(el.dataset.bk||'').match(/^it_(\d+)_([pa])_(\d+)$/);
@@ -6264,7 +6273,8 @@
     function budNumBlur(el){
       const v=budParse(el.value), old=+el.dataset.raw||0;
       if(isNaN(v)){ el.value=budFmt(old); alert('숫자로 입력해주세요. 예) 3000000 · 300만 · 1.5억 · 3000000+120000'); return; }
-      if(v!==old){ el.dataset.raw=v; budSave(el.dataset.bk.replace(/_/g,'.'),String(v)); }
+      if(v!==old){ el.dataset.raw=v; budSave(el.dataset.bk.replace(/_/g,'.'),String(v));
+        const pm=el.dataset.bk.match(/^it_(\d+)_a_(\d+)$/); if(pm) budPendClear(+pm[1],+pm[2]); }   // 빨간 칸에 금액을 넣으면 대기 해제
       el.value=budFmt(v);
       budAfterEdit(v!==old);
     }
@@ -6453,7 +6463,7 @@
       [/L100.*광고|광고.*L100/,'(DA)','B2C'], [/스마트홈\s*인테리어.*광고|광고비|온라인\s*광고/,'(DA)','B2B'],
       [/맘카페|체험단|바이럴/,'바이럴','B2C'], [/30대의\s*삶|유튜버|인플루언서|KOL|라이선스|라이센스/,'KOL 미들','B2C'],
       [/소재\s*제작|영상|촬영/,'기타 촬영',''], [/기프트|선물|경품|GWP/i,'기프트','B2B'], [/리플렛|브로셔|인쇄|책자/,'리플렛',''],
-      [/쇼룸|소품/,'예비비',''] ];
+      [/쇼룸|소품/,'예비비',''], [/무너스튜디오/,'기타 촬영',''] ];
     function budGwParse(rows){
       const h=rows.findIndex(r=>r.some(c=>budNorm(c)==='문서번호')&&r.some(c=>budNorm(c)==='제목'));
       if(h<0) return null; const H=rows[h], ix=t=>H.findIndex(c=>budNorm(c)===t);
@@ -6495,8 +6505,8 @@
           <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
             <select onchange="BUD_IMP.sel['${esc(z.no)}'].i=+this.value" class="text-[12px] border border-[#E6E3DC] rounded-lg px-2 py-1.5 max-w-full sm:max-w-[300px]">${opts(s.i)}</select>
             <select onchange="BUD_IMP.sel['${esc(z.no)}'].m=+this.value" class="text-[12px] border border-[#E6E3DC] rounded-lg px-2 py-1.5">${mopts(s.m)}</select>
-            <input id="gwAmt_${id(z.no)}" inputmode="numeric" placeholder="집행 금액 (예: 380만)" class="text-[12px] border border-[#E6E3DC] rounded-lg px-2 py-1.5 w-[150px] tabular-nums" onkeydown="if(event.key==='Enter')budGwAdd('${esc(z.no)}')">
-            <button onclick="budGwAdd('${esc(z.no)}')" class="text-[12px] font-bold bg-[#7C5CFF] text-white hover:brightness-110 px-3 py-1.5 rounded-lg">집행에 추가</button>
+            <input id="gwAmt_${id(z.no)}" inputmode="numeric" placeholder="금액 (알면, 예: 380만)" class="text-[12px] border border-[#E6E3DC] rounded-lg px-2 py-1.5 w-[150px] tabular-nums" onkeydown="if(event.key==='Enter')budGwAdd('${esc(z.no)}')">
+            <button onclick="budGwAdd('${esc(z.no)}')" class="text-[12px] font-bold bg-[#7C5CFF] text-white hover:brightness-110 px-3 py-1.5 rounded-lg">표에 표시</button>
             <button onclick="budGwMark('${esc(z.no)}','skip')" class="text-[12px] text-slate-400 hover:text-ink px-2 py-1.5" title="예산과 관계없는 결재 — 다음부터 숨김">제외</button></div></div>`; };
       const mini=(z,btn)=>`<div class="flex items-baseline gap-2 py-1 text-[11.5px]"><span class="tabular-nums text-slate-400 shrink-0">${esc(z.no)}</span><span class="text-slate-600 truncate">${esc(z.t)}</span>${btn||''}</div>`;
       return `
@@ -6505,8 +6515,10 @@
             <p class="text-[16px] font-extrabold text-ink">🧾 전자결재 대조</p>
             <p class="text-[11.5px] text-slate-400 mt-0.5 truncate">${esc(R.file)} · 결재 ${R.docs.length}건</p></div>
             <button onclick="budImpClose()" class="text-slate-400 hover:text-ink text-[18px] leading-none px-1">×</button></div>
-          <p class="text-[12px] text-slate-600 mt-2 leading-relaxed">그룹웨어 목록 파일엔 <b>금액이 없어서</b> 자동으로 채울 수는 없어요. 대신 예산표 메모에 <b>문서번호가 아직 없는 지출 결재</b>만 골랐습니다.
-            항목·월은 제목을 보고 미리 골라뒀으니 확인하고 금액만 넣어 <b>집행에 추가</b>를 누르세요. 그 칸에 금액이 <b>더해지고</b> 메모에 품의번호와 제목이 남습니다.</p>
+          <p class="text-[12px] text-slate-600 mt-2 leading-relaxed">그룹웨어 목록 파일엔 <b>금액이 없어서</b>, 예산표 메모에 <b>문서번호가 아직 없는 지출 결재</b>만 골랐어요.
+            항목·월은 제목과 기안일자로 미리 골라뒀습니다. <b>표에 표시</b>를 누르면 그 칸에 품의번호·기안일자 메모가 달리고 <b class="text-[#B3261E]">빨간 칸</b>이 됩니다. 나중에 표에서 금액만 넣으면 빨간 표시가 풀려요. (금액을 이미 알면 같이 넣어도 됩니다)</p>
+          ${(()=>{ const n=todo.filter(z=>R.sel[z.no].i>=0).length; return n?`<button onclick="budGwPlaceAll()" class="mt-2 w-full text-[13px] font-bold bg-[#D9483B] text-white hover:brightness-110 px-4 py-2.5 rounded-lg">🔴 항목이 정해진 ${n}건 한 번에 표에 표시하기</button>
+            ${todo.length>n?`<p class="text-[11px] text-slate-400 mt-1">항목을 못 정한 ${todo.length-n}건은 아래에서 항목을 고른 뒤 하나씩 표시하거나 제외하세요.</p>`:''}`:''; })()}
           <div class="flex flex-wrap items-center gap-3 mt-2 text-[12px]">
             <span class="font-bold text-[#5B44C7]">남은 결재 ${todo.length}건</span><span class="text-slate-400">이미 적힘 ${done.length} · 제외 ${skip.length}</span>
             <label class="ml-auto flex items-center gap-1.5 text-slate-500 cursor-pointer"><input type="checkbox" ${R.showAll?'checked':''} onchange="BUD_IMP.showAll=this.checked;budImpPaint()" class="accent-[#7C5CFF]">기안서·휴가 등 모든 문서 보기</label></div>
@@ -6520,6 +6532,46 @@
           <p class="text-[11px] text-slate-400">잘못 넣었으면 표에서 그 칸을 눌러 금액·메모를 바로 고치면 됩니다.</p>
           <button onclick="budImpClose()" class="shrink-0 text-[12.5px] font-semibold border border-[#E6E3DC] hover:border-ink px-4 py-2 rounded-lg">닫기</button></div>`;
     }
+    /* 🔴 금액 입력 대기 — gwp_<문서번호> = JSON {i,m,t,d}. 그 칸 금액을 고치면 대기 표시가 풀리고 메모의 ⏳가 지워진다 */
+    function budPendList(){ const out=[];
+      Object.keys(BUD_OVER).forEach(k=>{ const mm=k.match(/^gwp_(.+)$/); if(!mm||!BUD_OVER[k]) return;
+        try{ const v=JSON.parse(BUD_OVER[k]); out.push(Object.assign({no:mm[1]},v)); }catch(e){} });
+      return out.sort((a,b)=>a.i-b.i||a.m-b.m); }
+    function budPendMap(){ const mp={}; budPendList().forEach(z=>{ (mp[z.i+'.'+z.m]=mp[z.i+'.'+z.m]||[]).push(z); }); return mp; }
+    function budPendLine(z){ return '⏳ 품의번호 '+z.no+' · 기안 '+z.d+' · '+z.t; }
+    // 결재 한 건을 그 칸에 표시(메모 한 줄 + 빨간 칸). 금액을 같이 넣었으면 대기 없이 바로 더한다
+    function budGwPlace(z,i,m,amt,u){
+      const x=budItems().find(q=>q.i===i); if(!x) return false;
+      const key=budKey('it.'+i+'.cn.a.'+m), old=(key in u)?u[key]:(x.cn['a.'+m]||'');
+      const line=amt?('품의번호 '+z.no+' · 기안 '+z.d+' · '+z.t+' — '+budWon(amt)):budPendLine(z);
+      u[key]=old?old+'\n'+line:line;
+      if(amt){ const ak=budKey('it.'+i+'.a.'+m), cur=(ak in u)?+u[ak]:x.a[m]; u[ak]=String(cur+amt); }
+      else u[budKey('gwp_'+z.no)]=JSON.stringify({i,m,t:z.t,d:z.d});
+      u[budKey('gw_'+z.no)]='done'; return true;
+    }
+    function budGwPlaceAll(){
+      const R=BUD_IMP; if(!R) return; budGwState(R);
+      const todo=R.docs.filter(z=>!z.rej&&budGwSpend(z)&&!z.done&&!z.skip&&R.sel[z.no].i>=0&&R.sel[z.no].m>=0);
+      if(!todo.length) return;
+      if(!confirm('항목이 정해진 결재 '+todo.length+'건을 표에 빨간 칸으로 표시할까요?\n(칸마다 품의번호·기안일자 메모가 달리고, 금액은 직접 넣으시면 됩니다)')) return;
+      const u={}; todo.forEach(z=>budGwPlace(z,R.sel[z.no].i,R.sel[z.no].m,0,u));
+      const d=new Date(); u.updated=(d.getMonth()+1)+'/'+d.getDate();
+      budWriteMany(u); renderBudget(); budImpPaint();
+    }
+    // 금액을 넣었거나 '완료'를 누르면: 그 칸의 대기 표시 해제 + 메모의 ⏳ 지움
+    function budPendClear(i,m,only){
+      const list=(budPendMap()[i+'.'+m]||[]).filter(z=>!only||z.no===only); if(!list.length) return;
+      const x=budItems().find(q=>q.i===i), u={}; let memo=x?(x.cn['a.'+m]||''):'';
+      list.forEach(z=>{ u[budKey('gwp_'+z.no)]=null; memo=memo.split('⏳ 품의번호 '+z.no).join('품의번호 '+z.no); });
+      if(x) u[budKey('it.'+i+'.cn.a.'+m)]=memo;
+      budWriteMany(u);
+    }
+    function budPendMove(no){ // 엉뚱한 칸에 붙었으면 빼서 전자결재 목록으로 되돌린다
+      const z=budPendList().find(q=>q.no===no); if(!z) return;
+      const x=budItems().find(q=>q.i===z.i), u={}; u[budKey('gwp_'+no)]=null; u[budKey('gw_'+no)]=null;
+      if(x){ const memo=(x.cn['a.'+z.m]||'').split('\n').filter(l=>l.indexOf('⏳ 품의번호 '+no)!==0).join('\n'); u[budKey('it.'+z.i+'.cn.a.'+z.m)]=memo; }
+      budWriteMany(u); renderBudget(); budPaintNote();
+    }
     function budGwMark(no,v){ const u={}; u[budKey('gw_'+no)]=v; budWriteMany(u); budImpPaint(); }
     function budGwAdd(no){
       const R=BUD_IMP; if(!R) return; const z=R.docs.find(d=>d.no===no), s=R.sel[no]; if(!z||!s) return;
@@ -6527,12 +6579,7 @@
       const inp=document.getElementById('gwAmt_'+no.replace(/[^\w]/g,'_')), raw=(inp&&inp.value||'').trim();
       const amt=raw?budParse(raw):0;
       if(isNaN(amt)){ alert('금액은 숫자로 넣어주세요. 예) 3800000 · 380만 · 1.5억'); return; }
-      const x=budItems().find(q=>q.i===s.i); if(!x) return;
-      if(!amt&&!confirm('금액 없이 메모만 남길까요?')) return;
-      const u={}, old=x.cn['a.'+s.m]||'', line='품의번호 '+z.no+' '+z.t+(amt?' — '+budWon(amt):'');
-      if(amt) u[budKey('it.'+x.i+'.a.'+s.m)]=String(x.a[s.m]+amt);
-      u[budKey('it.'+x.i+'.cn.a.'+s.m)]=old?old+'\n'+line:line;
-      u[budKey('gw_'+z.no)]='done';
+      const u={}; if(!budGwPlace(z,s.i,s.m,amt,u)) return;
       const d=new Date(); u.updated=(d.getMonth()+1)+'/'+d.getDate();
       budWriteMany(u); renderBudget(); budImpPaint();
     }
@@ -6585,7 +6632,7 @@
       }
       budStart();
       const cur=budCurM(), MN=Array.from({length:12},(_,m)=>(m+1)+'월');
-      const items=budItems(), tree=budTree(items), all=budAgg(items);
+      const items=budItems(), tree=budTree(items), all=budAgg(items), PEND=budPendMap(), PENDL=budPendList().filter(z=>items.some(x=>x.i===z.i));
       const shown=BUD_FILTER?tree.filter(t=>t.g===BUD_FILTER):tree;
       const toP=budSum(all.p.slice(0,cur+1)), toA=budSum(all.a.slice(0,cur+1)), futA=all.at-toA;
       const over=items.filter(x=>x.at>x.pt);
@@ -6640,8 +6687,9 @@
         const memo=`<td class="px-2 text-[11.5px] text-slate-500 whitespace-normal" style="min-width:180px">${budTxt('it.'+x.i+'.memo',x.memo,'')}</td>`;
         const cells=(kind)=>{ const arr=kind==='p'?x.p:x.a;
           return arr.map((v,m)=>{ const note=x.cn[kind+'.'+m]||'', sel=BUD_SEL&&BUD_SEL.i===x.i&&BUD_SEL.k===kind&&BUD_SEL.m===m;
-            const tip=[kind==='a'&&x.p[m]?('예산 '+budWon(x.p[m])):'', note?('📝 '+note):''].filter(Boolean).join('\n\n');
-            return `<td class="${mcls(m)}${note?' bud-hn':''}${sel?' bud-sel':''}">${budNumIn('it.'+x.i+'.'+kind+'.'+m, v, kind==='a'&&v>x.p[m]&&x.p[m]>0, tip)}</td>`; }).join(''); };
+            const pend=kind==='a'?(PEND[x.i+'.'+m]||[]):[];
+            const tip=[pend.length?('🔴 금액 입력 대기 '+pend.length+'건'):'', kind==='a'&&x.p[m]?('예산 '+budWon(x.p[m])):'', note?('📝 '+note):''].filter(Boolean).join('\n\n');
+            return `<td class="${mcls(m)}${note?' bud-hn':''}${sel?' bud-sel':''}${pend.length?' bud-pend':''}">${budNumIn('it.'+x.i+'.'+kind+'.'+m, v, kind==='a'&&v>x.p[m]&&x.p[m]>0, tip, pend.length?'금액?':'')}</td>`; }).join(''); };
         const tot=(kind)=>{ const t=kind==='p'?x.pt:x.at; return `<td class="bud-sum ${kind==='a'&&x.at>x.pt?'text-ared font-bold':(kind==='p'?'text-slate-500':'font-semibold')}">${budFmt(t)}</td>`; };
         if(!both){ const k=BUD_VIEW==='plan'?'p':'a';
           return `<tr class="bud-item ${k==='p'?'':''}"><td class="bud-stk">${nm}</td>${ac}${cells(k)}${tot(k)}${rateCell(x.at,x.pt)}${memo}</tr>`; }
@@ -6712,6 +6760,14 @@
           <div class="grid grid-cols-1 gap-3 mt-3">${grpCards}</div>
         </div>
       </div>
+
+      ${PENDL.length?`<div class="card p-4 mb-4 border-l-4" style="border-left-color:#D9483B">
+        <p class="text-[14px] font-extrabold text-[#B3261E]">🔴 금액 입력 대기 ${PENDL.length}건 <span class="text-[12px] font-medium text-slate-500">— 전자결재에서 가져온 결재예요. 눌러서 그 칸으로 가 금액을 넣으면 사라집니다.</span></p>
+        <div class="mt-2 flex flex-col gap-1">${PENDL.map(z=>{ const x=items.find(q=>q.i===z.i);
+          return `<button onclick="budGoCell(${z.i},'a',${z.m})" class="text-left flex items-baseline gap-2 text-[12px] hover:bg-[#FDECEA] rounded px-1.5 py-1">
+            <span class="shrink-0 font-bold text-[#B3261E] tabular-nums">${z.m+1}월</span>
+            <span class="shrink-0 text-slate-500 max-w-[40%] truncate">${esc(x.g.replace(' 마케팅',''))} › ${esc(x.n)}</span>
+            <span class="text-ink truncate">${esc(z.t)}</span><span class="ml-auto shrink-0 text-slate-400 tabular-nums">${esc(z.no)} · ${esc(z.d)}</span></button>`; }).join('')}</div></div>`:''}
 
       <div class="card p-4 sm:p-5 mb-4">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
