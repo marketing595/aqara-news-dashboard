@@ -6299,6 +6299,250 @@
     function budSetFilter(f){ BUD_FILTER=f; budUiSave(); renderBudget(); }
     function budReload(){ BUD=null; renderBudget(); }
 
+    /* 📥 엑셀 반영 — ★ 2026 MKT Master를 xlsx로 받은 파일(BG 시트) 또는 이 탭의 'CSV 내려받기' 파일을 읽어
+       바뀐 금액 칸만 덮어쓴다. 반영 직전 값은 impLast(JSON 문자열)에 남겨 '되돌리기' 1회 가능. */
+    let BUD_IMP=null;
+    const budNorm=s=>String(s==null?'':s).replace(/\s+/g,'').toLowerCase();
+    function budImpPick(inp){ const file=inp.files&&inp.files[0]; inp.value=''; if(!file) return;
+      cdbXlsx(()=>{ file.arrayBuffer().then(buf=>{
+          const wb=XLSX.read(buf,{type:'array'}); const r=budImpParse(wb); r.file=file.name;
+          r.opt={p:true,a:true,n:true}; BUD_IMP=r; budImpPaint();
+        }).catch(e=>alert('파일을 읽지 못했습니다: '+((e&&e.message)||e))); });
+    }
+    function budImpNum(v){ if(typeof v==='number') return isFinite(v)?Math.round(v):0;
+      const n=budParse(v); return isNaN(n)?0:n; }
+    // 시트 항목 → 화면 항목 짝짓기: 구분1 + 항목명(현재 이름·예산안 명칭·원본 이름 중 하나), 겹치면 구분2, 그래도 겹치면 나온 순서
+    function budImpMatcher(){
+      const items=budItems(), used={p:new Set(),a:new Set()}, seed=i=>(BUD.items||[])[i]||{};
+      const gm=(a,b)=>{ a=budNorm(a); b=budNorm(b); return !!a&&!!b&&(a===b||a.startsWith(b)||b.startsWith(a)); };
+      return (k,g,s,n)=>{ const nn=budNorm(n); if(!nn) return null;
+        let c=items.filter(x=>gm(x.g,g)&&[x.n,x.pn,seed(x.i).n].some(z=>z&&budNorm(z)===nn));
+        if(c.length>1){ const c2=c.filter(x=>gm(x.s,s)); if(c2.length) c=c2; }
+        const hit=c.find(x=>!used[k].has(x.i)); if(hit) used[k].add(hit.i); return hit||null; };
+    }
+    function budImpParse(wb){
+      const names=wb.SheetNames.slice().sort((a,b)=>(b.trim().toUpperCase()==='BG')-(a.trim().toUpperCase()==='BG'));
+      for(const nm of names){ const ws=wb.Sheets[nm];
+        const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
+        const g=budGwParse(rows); if(g){ g.sheet=nm; return g; }
+        const r=budImpCsv(rows)||budImpBg(rows,ws); if(r){ r.sheet=nm; return budImpDiff(r); } }
+      return {err:'예산표 형식을 찾지 못했습니다.\n★ 2026 MKT Master(구글 시트 › 파일 › 다운로드 › Microsoft Excel)로 받은 파일이나, 이 탭에서 내려받은 CSV를 넣어주세요.'};
+    }
+    const budMonCols=row=>{ const mc=[]; for(let m=0;m<12;m++){ const j=row.findIndex(c=>budNorm(c)===(m+1)+'월'); if(j<0) return null; mc.push(j); } return mc; };
+    // 이 탭의 CSV 내려받기 형식: 구분1, 구분2, 항목, 비용 계정, 구분(예산/집행), 1월…12월
+    function budImpCsv(rows){
+      const h=rows.findIndex(r=>r.some(c=>budNorm(c)==='항목')&&r.some(c=>budNorm(c)==='구분')&&r.some(c=>budNorm(c)==='1월'));
+      if(h<0) return null; const H=rows[h], mc=budMonCols(H); if(!mc) return null;
+      const ix=t=>H.findIndex(c=>budNorm(c)===t), gi=ix('구분1'), si=ix('구분2'), ni=ix('항목'), ki=ix('구분');
+      const match=budImpMatcher(), out={fmt:'이 탭에서 내려받은 CSV', recs:[], miss:[], notes:[]};
+      rows.slice(h+1).forEach(r=>{ const kind=String(r[ki]||'').trim(), k=kind==='예산'?'p':(kind==='집행'?'a':''); if(!k) return;
+        const x=match(k,r[gi],r[si],r[ni]); const vals=mc.map(j=>budImpNum(r[j]));
+        if(x) out.recs.push({x,k,vals}); else out.miss.push({k,n:String(r[ni]||''),g:String(r[gi]||''),t:budSum(vals)}); });
+      return out;
+    }
+    // BG 시트 형식: 'Budget' 블록과 'Actual' 블록, 각각 구분 1 | 구분 2 | (항목) | 비용 계정 | 1월…12월 | TTL, 블록 끝은 GRAND TTL
+    function budImpBg(rows,ws){
+      const heads=[]; rows.forEach((r,i)=>{ if(r.some(c=>budNorm(c)==='비용계정')&&budMonCols(r)) heads.push(i); });
+      if(!heads.length) return null;
+      const match=budImpMatcher(), out={fmt:'★ 2026 MKT Master › BG 시트', recs:[], miss:[], notes:[]};
+      heads.forEach((h,bi)=>{
+        let k=bi===0?'p':(bi===1?'a':'');
+        for(let q=h-1;q>=Math.max(0,h-3);q--){ const t=rows[q].map(budNorm).join(' ');
+          if(/actual|집행|실적/.test(t)){ k='a'; break; } if(/budget|예산/.test(t)){ k='p'; break; } }
+        if(!k) return;
+        const H=rows[h], mc=budMonCols(H), ac=H.findIndex(c=>budNorm(c)==='비용계정'), nc=ac-1;
+        const gc=H.findIndex(c=>budNorm(c)==='구분1'), sc=H.findIndex(c=>budNorm(c)==='구분2');
+        let g='', s='';
+        for(let i=h+1;i<rows.length;i++){ const r=rows[i];
+          if(heads.includes(i)||r.some(c=>budNorm(c)==='grandttl')) break;
+          if(gc>=0&&String(r[gc]).trim()) g=String(r[gc]).trim();
+          if(sc>=0&&String(r[sc]).trim()&&budNorm(r[sc])!=='subttl') s=String(r[sc]).trim();
+          const n=String(r[nc]||'').trim(); if(!n) continue;
+          const vals=mc.map(j=>budImpNum(r[j]));
+          if(!String(r[ac]||'').trim()&&!vals.some(v=>v)) continue;   // '브랜딩+매출 …' 같은 소제목 줄
+          const x=match(k,g,s,n);
+          if(!x){ out.miss.push({k,n,g,t:budSum(vals)}); continue; }
+          out.recs.push({x,k,vals});
+          // 셀 메모는 가져오지 않는다 — 구글 시트 xlsx의 댓글은 'ID#… 작성자 (시각)' 잡문자가 섞이고 칸 위치도 어긋난다
+        }
+      });
+      return out.recs.length?out:null;
+    }
+    function budImpDiff(r){
+      r.ch=[]; r.ft={p:0,a:0};
+      r.recs.forEach(({x,k,vals})=>{ r.ft[k]+=budSum(vals); const cur=k==='p'?x.p:x.a;
+        vals.forEach((v,m)=>{ if(v!==cur[m]) r.ch.push({i:x.i,x,k,m,ov:cur[m],nv:v}); }); });
+      return r;
+    }
+    function budImpClose(){ BUD_IMP=null; const el=document.getElementById('budImp'); if(el) el.remove(); }
+    function budImpOpt(k,v){ if(BUD_IMP){ BUD_IMP.opt[k]=v; budImpPaint(); } }
+    function budImpPaint(){
+      let el=document.getElementById('budImp');
+      if(!el){ el=document.createElement('div'); el.id='budImp'; document.body.appendChild(el); }
+      const R=BUD_IMP; if(!R){ el.remove(); return; }
+      const wrap=inner=>`<div class="fixed inset-0 z-[70] bg-black/40 flex items-center justify-center p-4" onclick="if(event.target===this)budImpClose()">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-[760px] max-h-[calc(100vh-32px)] flex flex-col overflow-hidden">${inner}</div></div>`;
+      if(R.err){ el.innerHTML=wrap(`<div class="p-5"><p class="text-[15px] font-extrabold text-ink">📥 엑셀 반영</p>
+        <p class="text-[13px] text-ared mt-2 whitespace-pre-line">${esc(R.err)}</p>
+        <div class="text-right mt-4"><button onclick="budImpClose()" class="text-[12.5px] font-semibold border border-[#E6E3DC] px-4 py-2 rounded-lg">닫기</button></div></div>`); return; }
+      if(R.fmt==='gw'){ el.innerHTML=wrap(budGwBody(R)); return; }
+      const O=R.opt, chP=R.ch.filter(c=>c.k==='p'), chA=R.ch.filter(c=>c.k==='a');
+      const dP=chP.reduce((s,c)=>s+c.nv-c.ov,0), dA=chA.reduce((s,c)=>s+c.nv-c.ov,0);
+      const all=budAgg(budItems()), nP=all.pt+(O.p?dP:0), nA=all.at+(O.a?dA:0);
+      const sel=R.ch.filter(c=>O[c.k]), nN=O.n?R.notes.length:0, total=sel.length+nN;
+      const sign=v=>(v>0?'+':'')+budWon(v);
+      const box=(k,lab,list,d,from,to)=>`<label class="flex-1 min-w-[200px] rounded-xl border ${O[k]?'border-[#7C5CFF] bg-[#F7F5FF]':'border-[#ECE9E1]'} p-3 cursor-pointer">
+          <div class="flex items-center gap-2"><input type="checkbox" ${O[k]?'checked':''} onchange="budImpOpt('${k}',this.checked)" class="accent-[#7C5CFF]">
+            <span class="text-[13px] font-extrabold text-ink">${lab}</span><span class="ml-auto text-[12px] font-bold text-[#5B44C7]">${list.length}칸</span></div>
+          <p class="text-[11.5px] text-slate-500 mt-1 tabular-nums">${budWon(from)} → <b class="text-ink">${budWon(to)}</b>${d?` <span class="${d>0?'text-ared':'text-agreen'}">(${sign(d)})</span>`:''}</p></label>`;
+      const rows=sel.slice().sort((a,b)=>a.i-b.i||(a.k<b.k?1:-1)||a.m-b.m).slice(0,300).map(c=>`<tr class="border-t border-[#F1EFEA]">
+          <td class="py-1 pr-2 text-[12px]"><span class="text-slate-400">${esc(c.x.g.replace(' 마케팅',''))} › </span>${esc(c.x.n)}</td>
+          <td class="py-1 px-2 text-[12px] whitespace-nowrap">${c.m+1}월 <span class="${c.k==='a'?'text-[#5B44C7] font-bold':'text-slate-400'}">${c.k==='p'?'예산':'집행'}</span></td>
+          <td class="py-1 px-2 text-[12px] text-right tabular-nums text-slate-400 whitespace-nowrap">${c.ov?budWon(c.ov):'–'}</td>
+          <td class="py-1 pl-2 text-[12px] text-right tabular-nums font-semibold whitespace-nowrap">${c.nv?budWon(c.nv):'0원'}</td></tr>`).join('');
+      const miss=R.miss.filter(z=>z.t||true);
+      el.innerHTML=wrap(`
+        <div class="p-5 border-b border-[#F1EFEA]">
+          <div class="flex items-start justify-between gap-3"><div class="min-w-0">
+            <p class="text-[16px] font-extrabold text-ink">📥 엑셀 반영 미리보기</p>
+            <p class="text-[11.5px] text-slate-400 mt-0.5 truncate">${esc(R.file)} · ${esc(R.sheet)} 시트 · ${esc(R.fmt)} · 항목 ${new Set(R.recs.map(z=>z.x.i)).size}개 짝지음</p></div>
+            <button onclick="budImpClose()" class="text-slate-400 hover:text-ink text-[18px] leading-none px-1">×</button></div>
+          <div class="flex flex-wrap gap-2 mt-3">
+            ${box('p','예산',chP,dP,all.pt,nP)}
+            ${box('a','집행',chA,dA,all.at,nA)}</div>
+          ${R.notes.length?`<label class="flex items-center gap-2 mt-2 text-[12px] text-slate-600 cursor-pointer"><input type="checkbox" ${O.n?'checked':''} onchange="budImpOpt('n',this.checked)" class="accent-[#7C5CFF]">
+            파일의 셀 메모 <b>${R.notes.length}개</b>를 메모 없는 칸에 추가 (기존 메모는 안 건드림)</label>`:''}
+          ${miss.length?`<div class="mt-2 rounded-lg bg-[#FFF7E6] border border-[#F3E2B8] px-3 py-2 text-[11.5px] text-[#8A6A00]">
+            ⚠️ 화면에 없는 항목 ${miss.length}개는 반영하지 않습니다: ${miss.slice(0,6).map(z=>esc(z.g.replace(' 마케팅',''))+' › '+esc(z.n)+'('+(z.k==='p'?'예산':'집행')+(z.t?' '+budBig(z.t):'')+')').join(', ')}${miss.length>6?' 외 '+(miss.length-6)+'개':''}
+            <br>필요하면 표에서 <b>+ 항목 추가</b>로 같은 이름의 항목을 만든 뒤 다시 반영하세요.</div>`:''}
+        </div>
+        <div class="flex-1 overflow-auto px-5 py-2">
+          ${sel.length?`<table class="w-full"><thead><tr class="text-[11px] text-slate-400"><th class="text-left font-semibold py-1">항목</th><th class="text-left font-semibold px-2">칸</th><th class="text-right font-semibold px-2">지금</th><th class="text-right font-semibold pl-2">파일</th></tr></thead><tbody>${rows}</tbody></table>
+            ${sel.length>300?`<p class="text-[11px] text-slate-400 py-2">… 외 ${sel.length-300}칸</p>`:''}`
+          :`<p class="text-[13px] text-slate-500 py-8 text-center">${R.ch.length?'선택한 구분에 바뀌는 칸이 없습니다.':'바뀐 금액이 없습니다 — 화면이 이미 이 파일과 같아요.'}</p>`}
+        </div>
+        <div class="p-4 border-t border-[#F1EFEA] flex items-center justify-between gap-2">
+          <p class="text-[11px] text-slate-400">반영 후에도 <b>↩ 되돌리기</b>로 바로 이전 상태로 돌릴 수 있어요.</p>
+          <div class="flex gap-1.5 shrink-0"><button onclick="budImpClose()" class="text-[12.5px] font-semibold border border-[#E6E3DC] hover:border-ink px-4 py-2 rounded-lg">취소</button>
+            <button onclick="budImpApply()" ${total?'':'disabled'} class="text-[12.5px] font-bold bg-[#7C5CFF] text-white px-4 py-2 rounded-lg ${total?'hover:brightness-110':'opacity-40 cursor-not-allowed'}">${total?total+'칸 반영하기':'반영할 것 없음'}</button></div>
+        </div>`);
+    }
+    // 여러 칸을 한 번에 쓴다(null = 키 삭제). Firebase면 update 한 번, 아니면 이 브라우저에만
+    function budWriteMany(upd){
+      Object.keys(upd).forEach(k=>{ if(upd[k]==null) delete BUD_OVER[k]; else BUD_OVER[k]=upd[k]; });
+      const ref=budRef();
+      if(ref) return ref.update(upd).then(()=>budSaved()).catch(e=>{ BUD_FBERR=(e&&e.message)||'쓰기 거부'; budSaved(1); budPaintConn(); alert('서버 저장이 거부됐습니다: '+BUD_FBERR); });
+      try{ localStorage.setItem('aqaraBudget',JSON.stringify(BUD_OVER)); }catch(e){} budSaved(); return Promise.resolve();
+    }
+    function budImpApply(){
+      const R=BUD_IMP; if(!R) return; const O=R.opt, upd={};
+      R.ch.forEach(c=>{ if(O[c.k]) upd[budKey('it.'+c.i+'.'+c.k+'.'+c.m)]=String(c.nv); });
+      if(O.n) R.notes.forEach(z=>{ upd[budKey('it.'+z.i+'.cn.'+z.k+'.'+z.m)]=z.t; });
+      const n=Object.keys(upd).length; if(!n) return;
+      const d=new Date(); upd.updated=(d.getMonth()+1)+'/'+d.getDate();
+      const prev={}; Object.keys(upd).forEach(k=>{ prev[k]=BUD_OVER[k]==null?null:BUD_OVER[k]; });
+      upd.impLast=JSON.stringify({at:d.toISOString(), file:R.file, n, prev});
+      budWriteMany(upd); budImpClose(); renderBudget();
+    }
+    /* 그룹웨어 전자결재 목록(문서분류·문서번호·제목·기안일자·문서상태 — 금액 없음):
+       예산표 메모에 문서번호가 아직 없는 지출 결재만 골라, 항목·월·금액을 정해 한 번에 '금액 더하기 + 품의번호 메모'.
+       처리 표시는 gw_<문서번호> = 'done' | 'skip' */
+    const BUD_GW_RULES=[ // [제목 패턴, 항목명 일부, 구분1 우선]
+      [/브랜드\s*검색/,'브랜드검색',''], [/랜선집들이/,'사례 영상',''], [/카카오|스티비|문자|플친/,'CRM 발송비',''],
+      [/데코페어|전시회|부스|페어|박람회/,'전시회',''], [/머니투데이|기사|언론|기자|매체/,'유가 미디어',''], [/소재\s*제작/,'기타 촬영',''],
+      [/L100.*광고|광고.*L100/,'(DA)','B2C'], [/스마트홈\s*인테리어.*광고|광고비|온라인\s*광고/,'(DA)','B2B'],
+      [/맘카페|체험단|바이럴/,'바이럴','B2C'], [/30대의\s*삶|유튜버|인플루언서|KOL|라이선스|라이센스/,'KOL 미들','B2C'],
+      [/소재\s*제작|영상|촬영/,'기타 촬영',''], [/기프트|선물|경품|GWP/i,'기프트','B2B'], [/리플렛|브로셔|인쇄|책자/,'리플렛',''],
+      [/쇼룸|소품/,'예비비',''] ];
+    function budGwParse(rows){
+      const h=rows.findIndex(r=>r.some(c=>budNorm(c)==='문서번호')&&r.some(c=>budNorm(c)==='제목'));
+      if(h<0) return null; const H=rows[h], ix=t=>H.findIndex(c=>budNorm(c)===t);
+      const ci=ix('문서분류'), ni=ix('문서번호'), ti=ix('제목'), di=ix('기안일자'), si=ix('문서상태'), wi=ix('기안자');
+      const docs=rows.slice(h+1).map(r=>{ let d=r[di];
+          if(typeof d==='number'){ const t=new Date(Math.round((d-25569)*864e5)); d=t.toISOString().slice(0,10); }
+          return {cat:String(r[ci]||'').trim(), no:String(r[ni]||'').trim(), t:String(r[ti]||'').trim(), d:String(d||'').trim(), st:String(r[si]||'').trim(), who:wi>=0?String(r[wi]||'').trim():''}; })
+        .filter(z=>z.no&&z.t);
+      return {fmt:'gw', docs, showAll:false, sel:{}};
+    }
+    function budGwGuess(z){
+      const items=budItems(); let i=-1;
+      for(const [re,nm,gp] of BUD_GW_RULES){ if(!re.test(z.t)) continue;
+        const c=items.filter(x=>x.n.indexOf(nm)>=0); const hit=c.find(x=>gp&&x.g.indexOf(gp)===0)||c[0]; if(hit){ i=hit.i; break; } }
+      // 제목에 비용 월이 적혀 있으면 그 달(2026.09 · 26.09월 · 7월 온라인 광고), 아니면 기안일자 달
+      let m=-1; const a=z.t.match(/20\d\d\s*[.\-\/]\s*(\d{1,2})(?!\d)/)||z.t.match(/(?:^|[^\d])\d{2}\.(\d{1,2})\s*월/)
+        ||z.t.match(/(?:^|[^\d])(\d{1,2})월\s*(?:B2[BC]|온라인|광고|카카오|브랜드)/);
+      if(a&&+a[1]>=1&&+a[1]<=12) m=+a[1]-1; else { const b=z.d.match(/^\d{4}-(\d{2})/); if(b) m=+b[1]-1; }
+      return {i,m};
+    }
+    const budGwSpend=z=>/지출결의|대체결의|사업소득|비용사전품의/.test(z.cat);
+    function budGwState(R){
+      const items=budItems(), memo=budNorm(items.map(x=>Object.values(x.cn).concat([x.memo,x.nn]).join(' ')).join(' '));
+      R.docs.forEach(z=>{ const f=BUV('gw_'+z.no,''); z.done=f==='done'||memo.indexOf(budNorm(z.no))>=0; z.skip=f==='skip';
+        z.rej=/반려|회수|취소/.test(z.st); if(!R.sel[z.no]) R.sel[z.no]=budGwGuess(z); });
+    }
+    function budGwBody(R){
+      budGwState(R);
+      const vis=R.docs.filter(z=>!z.rej&&(R.showAll||budGwSpend(z)));
+      const todo=vis.filter(z=>!z.done&&!z.skip), done=vis.filter(z=>z.done), skip=vis.filter(z=>z.skip&&!z.done);
+      const tree=budTree(budItems());
+      const opts=sel=>`<option value="-1">— 항목 선택 —</option>`+tree.map(t=>`<optgroup label="${esc(t.g)}">${t.subs.map(s=>s.items.map(x=>`<option value="${x.i}" ${x.i===sel?'selected':''}>${esc(s.s)} › ${esc(x.n)}</option>`).join('')).join('')}</optgroup>`).join('');
+      const mopts=sel=>Array.from({length:12},(_,m)=>`<option value="${m}" ${m===sel?'selected':''}>${m+1}월</option>`).join('');
+      const id=no=>no.replace(/[^\w]/g,'_');
+      const row=z=>{ const s=R.sel[z.no];
+        return `<div class="py-2.5 border-t border-[#F1EFEA]">
+          <p class="text-[12.5px] font-semibold text-ink leading-snug">${esc(z.t)}</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">${esc(z.cat)} · ${esc(z.d)} · <span class="tabular-nums">${esc(z.no)}</span>${z.st?' · '+esc(z.st):''}</p>
+          <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
+            <select onchange="BUD_IMP.sel['${esc(z.no)}'].i=+this.value" class="text-[12px] border border-[#E6E3DC] rounded-lg px-2 py-1.5 max-w-full sm:max-w-[300px]">${opts(s.i)}</select>
+            <select onchange="BUD_IMP.sel['${esc(z.no)}'].m=+this.value" class="text-[12px] border border-[#E6E3DC] rounded-lg px-2 py-1.5">${mopts(s.m)}</select>
+            <input id="gwAmt_${id(z.no)}" inputmode="numeric" placeholder="집행 금액 (예: 380만)" class="text-[12px] border border-[#E6E3DC] rounded-lg px-2 py-1.5 w-[150px] tabular-nums" onkeydown="if(event.key==='Enter')budGwAdd('${esc(z.no)}')">
+            <button onclick="budGwAdd('${esc(z.no)}')" class="text-[12px] font-bold bg-[#7C5CFF] text-white hover:brightness-110 px-3 py-1.5 rounded-lg">집행에 추가</button>
+            <button onclick="budGwMark('${esc(z.no)}','skip')" class="text-[12px] text-slate-400 hover:text-ink px-2 py-1.5" title="예산과 관계없는 결재 — 다음부터 숨김">제외</button></div></div>`; };
+      const mini=(z,btn)=>`<div class="flex items-baseline gap-2 py-1 text-[11.5px]"><span class="tabular-nums text-slate-400 shrink-0">${esc(z.no)}</span><span class="text-slate-600 truncate">${esc(z.t)}</span>${btn||''}</div>`;
+      return `
+        <div class="p-5 border-b border-[#F1EFEA]">
+          <div class="flex items-start justify-between gap-3"><div class="min-w-0">
+            <p class="text-[16px] font-extrabold text-ink">🧾 전자결재 대조</p>
+            <p class="text-[11.5px] text-slate-400 mt-0.5 truncate">${esc(R.file)} · 결재 ${R.docs.length}건</p></div>
+            <button onclick="budImpClose()" class="text-slate-400 hover:text-ink text-[18px] leading-none px-1">×</button></div>
+          <p class="text-[12px] text-slate-600 mt-2 leading-relaxed">그룹웨어 목록 파일엔 <b>금액이 없어서</b> 자동으로 채울 수는 없어요. 대신 예산표 메모에 <b>문서번호가 아직 없는 지출 결재</b>만 골랐습니다.
+            항목·월은 제목을 보고 미리 골라뒀으니 확인하고 금액만 넣어 <b>집행에 추가</b>를 누르세요. 그 칸에 금액이 <b>더해지고</b> 메모에 품의번호와 제목이 남습니다.</p>
+          <div class="flex flex-wrap items-center gap-3 mt-2 text-[12px]">
+            <span class="font-bold text-[#5B44C7]">남은 결재 ${todo.length}건</span><span class="text-slate-400">이미 적힘 ${done.length} · 제외 ${skip.length}</span>
+            <label class="ml-auto flex items-center gap-1.5 text-slate-500 cursor-pointer"><input type="checkbox" ${R.showAll?'checked':''} onchange="BUD_IMP.showAll=this.checked;budImpPaint()" class="accent-[#7C5CFF]">기안서·휴가 등 모든 문서 보기</label></div>
+        </div>
+        <div class="flex-1 overflow-auto px-5 pb-3">
+          ${todo.length?todo.map(row).join(''):'<p class="text-[13px] text-slate-500 py-8 text-center">🎉 남은 결재가 없습니다 — 모두 예산표에 적혀 있어요.</p>'}
+          ${done.length?`<details class="mt-3"><summary class="text-[12px] font-semibold text-slate-500 cursor-pointer">✓ 이미 예산표 메모에 있는 결재 ${done.length}건</summary><div class="mt-1">${done.map(z=>mini(z)).join('')}</div></details>`:''}
+          ${skip.length?`<details class="mt-2"><summary class="text-[12px] font-semibold text-slate-500 cursor-pointer">제외한 결재 ${skip.length}건</summary><div class="mt-1">${skip.map(z=>mini(z,`<button onclick="budGwMark('${esc(z.no)}',null)" class="ml-auto shrink-0 text-[#7C5CFF] hover:underline">되살리기</button>`)).join('')}</div></details>`:''}
+        </div>
+        <div class="p-4 border-t border-[#F1EFEA] flex items-center justify-between gap-2">
+          <p class="text-[11px] text-slate-400">잘못 넣었으면 표에서 그 칸을 눌러 금액·메모를 바로 고치면 됩니다.</p>
+          <button onclick="budImpClose()" class="shrink-0 text-[12.5px] font-semibold border border-[#E6E3DC] hover:border-ink px-4 py-2 rounded-lg">닫기</button></div>`;
+    }
+    function budGwMark(no,v){ const u={}; u[budKey('gw_'+no)]=v; budWriteMany(u); budImpPaint(); }
+    function budGwAdd(no){
+      const R=BUD_IMP; if(!R) return; const z=R.docs.find(d=>d.no===no), s=R.sel[no]; if(!z||!s) return;
+      if(s.i<0){ alert('어느 항목에 넣을지 골라주세요.'); return; }
+      const inp=document.getElementById('gwAmt_'+no.replace(/[^\w]/g,'_')), raw=(inp&&inp.value||'').trim();
+      const amt=raw?budParse(raw):0;
+      if(isNaN(amt)){ alert('금액은 숫자로 넣어주세요. 예) 3800000 · 380만 · 1.5억'); return; }
+      const x=budItems().find(q=>q.i===s.i); if(!x) return;
+      if(!amt&&!confirm('금액 없이 메모만 남길까요?')) return;
+      const u={}, old=x.cn['a.'+s.m]||'', line='품의번호 '+z.no+' '+z.t+(amt?' — '+budWon(amt):'');
+      if(amt) u[budKey('it.'+x.i+'.a.'+s.m)]=String(x.a[s.m]+amt);
+      u[budKey('it.'+x.i+'.cn.a.'+s.m)]=old?old+'\n'+line:line;
+      u[budKey('gw_'+z.no)]='done';
+      const d=new Date(); u.updated=(d.getMonth()+1)+'/'+d.getDate();
+      budWriteMany(u); renderBudget(); budImpPaint();
+    }
+    function budImpLast(){ try{ return JSON.parse(BUV('impLast')||'null'); }catch(e){ return null; } }
+    function budImpUndo(){ const L=budImpLast(); if(!L||!L.prev) return;
+      const when=new Date(L.at);
+      if(!confirm((when.getMonth()+1)+'/'+when.getDate()+' '+String(when.getHours()).padStart(2,'0')+':'+String(when.getMinutes()).padStart(2,'0')
+        +'에 반영한 "'+L.file+'"('+L.n+'칸)을 되돌릴까요?\n그 뒤에 같은 칸을 손으로 고쳤다면 그 수정도 반영 전 값으로 돌아갑니다.')) return;
+      const upd=Object.assign({},L.prev); upd.impLast=null; budWriteMany(upd); renderBudget(); }
+
     function budCsv(){
       const items=budItems(), q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
       const M=Array.from({length:12},(_,m)=>(m+1)+'월');
@@ -6424,6 +6668,7 @@
       box.innerHTML=`
       <div class="card px-4 py-3 mb-3 border-l-4" style="border-left-color:#7C5CFF">
         <p class="text-[12.5px] text-slate-500">각 칸을 클릭해 바로 고치세요. 금액은 <b>원 단위</b>로 넣으면 되고 <b>300만 · 1.5억 · 3000000+120000</b>처럼 적어도 됩니다. 합계·집행률은 자동 계산돼요.</p>
+        <p class="text-[12px] text-slate-400 mt-0.5"><b class="text-slate-500">📥 엑셀 반영</b>: MKT Master 시트를 엑셀로 받아 넣으면 바뀐 금액만 반영 · 그룹웨어 <b class="text-slate-500">전자결재 목록</b>을 넣으면 예산표에 아직 안 적힌 결재를 골라줍니다.</p>
         <p id="budConn" class="mt-1"></p>
       </div>
 
@@ -6439,8 +6684,12 @@
             <div class="text-[11px] h-4" id="budSave"></div>
             <div class="flex gap-1.5 mt-1.5">
               <button onclick="budReload()" class="text-[12px] font-semibold border border-[#E6E3DC] hover:border-ink px-3 py-2 rounded-lg">🔄 새로고침</button>
+              <label class="text-[12px] font-bold bg-[#7C5CFF] text-white hover:brightness-110 px-3 py-2 rounded-lg cursor-pointer" title="① ★ 2026 MKT Master를 엑셀로 받은 파일(BG 시트) ② 여기서 내려받아 고친 CSV ③ 그룹웨어 전자결재 목록 엑셀 — 바뀐 칸만 미리 보여주고 반영합니다">📥 엑셀 반영
+                <input type="file" accept=".xlsx,.xls,.csv" class="hidden" onchange="budImpPick(this)"></label>
               <button onclick="budCsv()" class="text-[12px] font-bold bg-ink text-white hover:brightness-125 px-3 py-2 rounded-lg">⬇ 엑셀(CSV) 내려받기</button>
             </div>
+            ${(()=>{ const L=budImpLast(); if(!L) return ''; const t=new Date(L.at);
+              return `<button onclick="budImpUndo()" class="text-[11px] text-slate-400 hover:text-ared mt-1.5" title="${esc(L.file)}">↩ ${t.getMonth()+1}/${t.getDate()} 엑셀 반영(${L.n}칸) 되돌리기</button>`; })()}
           </div>
         </div>
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mt-4">
