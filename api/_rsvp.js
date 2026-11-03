@@ -260,11 +260,14 @@ module.exports = async (req, res) => {
     if(req.method !== 'POST') return res.status(405).json({ ok: false });
 
     // 문자 보냄 표시: { ts: [토큰…] } (unmark: true 면 표시 해제). 같은 사람에게 다시 보내면 횟수가 늘어난다.
+    // at(ms)을 주면 그 시각을 '마지막 문자 전송'으로 기록(외부 도구로 이미 보낸 시각 입력). 같은 시각을 또 넣어도 횟수는 그대로.
     if(op === 'sent'){
       const ts = (Array.isArray(body.ts) ? body.ts : []).filter(okTok).slice(0, 3000);
       if(!ts.length) return res.status(200).json({ ok: true, n: 0 });
       const cur = (await raw('GET', 's')) || {}, now = Date.now(), patch = {};
-      ts.forEach(t => { const k = gid(t); patch[k] = body.unmark ? null : { first: (cur[k] && cur[k].first) || now, at: now, n: ((cur[k] && cur[k].n) || 0) + 1, by: email }; });
+      const atIn = Number(body.at), at = Number.isFinite(atIn) && atIn > 1.7e12 && atIn < now + 864e5 ? Math.round(atIn) : now;
+      ts.forEach(t => { const k = gid(t), c = cur[k] || {};
+        patch[k] = body.unmark ? null : { first: c.first ? Math.min(c.first, at) : at, at: Math.max(c.at || 0, at), n: (c.n || 0) + (c.at === at ? 0 : 1), by: email }; });
       await raw('PATCH', 's', patch);
       return res.status(200).json({ ok: true, n: ts.length });
     }
