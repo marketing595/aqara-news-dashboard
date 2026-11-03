@@ -142,7 +142,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
     </div>
     <div style="overflow:auto;max-height:72vh">
       <table class="tbl">
-        <thead><tr><th>초대받은 분</th><th>연락처 · 이메일</th><th class="hide-m">초청 경로</th><th>상태</th><th>마지막 문자 전송</th><th>링크 열람</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th>링크</th></tr></thead>
+        <thead><tr><th>초대받은 분</th><th>연락처 · 이메일</th><th class="hide-m">초청 경로</th><th>상태</th><th>등록일시</th><th>마지막 문자 전송</th><th>링크 열람</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th>링크</th></tr></thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
@@ -209,7 +209,9 @@ const allGroups = () => Object.keys(G).map(t => Object.assign({ t }, G[t])).filt
 function list(){ return allGroups().filter(g => !!g.test === (VIEW === 'test')); }
 // 문자 발송(sent: 담당자가 '보냄'으로 표시) · 링크 열람(open: 손님이 링크를 연 기록)
 const isSent = (g) => !!(g.sent && g.sent.at);
-// 새 신청 = 마지막 전체 발송(2026-11-03 11:09) 뒤에 명단에 들어온 그룹 → 메일·문자를 따로 보낼 대상(2026-11-03 요청)
+// 새 신청 = 마지막 전체 발송(2026-11-03 11:09) 뒤에 명단에 들어온 그룹. 탭은 사용자 요청으로 없앴고(대신 '등록일시' 열), 이벤터스 가져오기에서 동행인 붙일 그룹 찾을 때만 쓴다.
+// 등록 경로: g.regBy(서버가 등록 때 기록). 예전 그룹은 addedBy 있으면 수기, 아니면 처음 명단 엑셀.
+const regLabel = (g) => g.regBy || (g.addedBy ? '수기 등록' : '엑셀 등록');
 const NEW_SINCE = new Date('2026-11-03T11:09:00+09:00').getTime();
 const isNew = (g) => (g.created || 0) > NEW_SINCE;
 const isOpen = (g) => !!(g.open && g.open.first);
@@ -350,7 +352,6 @@ function filtered(ignoreComp){
     if(FILTER === 'sentpend' && !sentPend(g)) return false;
     if(!ignoreComp && COMP === 'with' && !withComps(g)) return false;
     if(!ignoreComp && COMP === 'solo' && withComps(g)) return false;
-    if(!ignoreComp && COMP === 'new' && !isNew(g)) return false;
     if(!q) return true;
     const hay = [g.rep.name, g.rep.org, g.rep.phone, g.email, g.route, g.sub && g.sub.name, ...(g.comps || []).map(c => c.name)].join(' ').toLowerCase();
     return hay.includes(q);
@@ -363,22 +364,22 @@ function paintRows(){
   // 그룹 수 옆에 사람 수(본인 + 명단상 동행인)를 같이 보여준다 — 그룹 수만 보면 전체 인원이 헷갈려서(2026-10-29 요청)
   const base = filtered(true), W = base.filter(withComps);
   const ppl = (A) => A.reduce((n, g) => n + rosterN(g), 0);
-  const NW = base.filter(isNew);
-  $('#seg').innerHTML = [['all', '전체', base.length, `총 ${ppl(base)}명`], ['with', '동행인 있음', W.length, `동행인 포함 ${ppl(W)}명`], ['solo', '혼자 참석', base.length - W.length, ''], ['new', '🆕 새 신청', NW.length, `${fmtTime(NEW_SINCE)} 이후 · 따로 발송`]]
+  $('#seg').innerHTML = [['all', '전체', base.length, `총 ${ppl(base)}명`], ['with', '동행인 있음', W.length, `동행인 포함 ${ppl(W)}명`], ['solo', '혼자 참석', base.length - W.length, '']]
     .map(([k, l, n, p]) => `<button class="${COMP === k ? 'on' : ''}" data-comp="${k}">${l} ${n}${p ? ` <span style="font-weight:500;color:var(--tx3)">(${p})</span>` : ''}</button>`).join('');
   document.querySelectorAll('[data-comp]').forEach(b => b.onclick = () => { COMP = b.dataset.comp; OPEN = ''; paintRows(); });
   $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', pending: '미응답', sentpend: '보냈는데 미응답', chg: '대리·동행인 변경' })[FILTER] + ` ${L.length}`;
-  if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="10" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
+  if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="11" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
   $('#rows').innerHTML = L.map(g => {
     const st = gst(g);
     const orig = g.orig ? g.orig.n : '';
     const now = st === 'pending' ? '' : heads(g);
     const comps = (g.comps || []).map(c => esc(c.name)).join(', ');
     return `<tr class="g" data-t="${g.t}">
-      <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}${isNew(g) ? '<span class="tag t-vip">새 신청</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
+      <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
       <td class="num">${esc(fmtPhone(g.rep.phone))}<div class="org" style="font-family:inherit">${g.email ? esc(g.email) : '<span style="color:var(--tx3)">이메일 없음</span>'}</div></td>
       <td class="hide-m mut">${esc(g.route || '')}</td>
       <td><span class="st ${st}">${stLabel(g)}</span>${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
+      <td class="num" style="white-space:nowrap;font-size:12px">${g.created ? fmtTime(g.created) : '<span style="color:var(--tx3)">—</span>'}<div class="org" style="font-family:inherit">${esc(regLabel(g))}</div></td>
       <td class="num" style="white-space:nowrap;font-size:12px">${isSent(g) ? `<b>${fmtTime(g.sent.at)}</b>${g.sent.n > 1 ? ` <span class="mut">(${g.sent.n}회)</span>` : ''}` : '<span style="color:var(--tx3)">안 보냄</span>'}${g.sendNote ? `<br><b style="color:var(--err)">${esc(g.sendNote)}</b>` : ''}</td>
       <td class="mut num" style="white-space:nowrap;font-size:12px">${isOpen(g) ? `<b style="color:var(--ink)">열람</b> ${fmtTime(g.open.last)}${g.open.n > 1 ? ` (${g.open.n}회)` : ''}` : '<span style="color:var(--tx3)">안 열어봄</span>'}</td>
       <td class="num">${now === '' ? `<span class="mut">예상 ${orig}</span>` : (orig !== '' && orig !== now ? `<span class="mut">${orig} →</span> <b>${now}</b>` : `<b>${now}</b>`)}</td>
@@ -399,7 +400,7 @@ function editRow(g){
   const r = g.rep, s = g.sub || {};
   const logs = Object.values(LOG[g.t] || {}).sort((a, b) => b.at - a.at).slice(0, 8)
     .map(l => `${fmtTime(l.at)} · ${l.by === 'guest' ? '본인' : esc(l.by.split('@')[0])} · ${ST[l.status] || ''}${l.status === 'yes' ? ' ' + l.n + '명' : ''}${l.sub ? ' · 대리 ' + esc(l.sub) : ''}${l.comps ? ' · 동행 ' + esc(l.comps) : ''}${l.src ? ' · ' + esc(l.src) : ''}`).join('<br>');
-  return `<tr class="ed"><td colspan="10"><div class="edg" id="ed">
+  return `<tr class="ed"><td colspan="11"><div class="edg" id="ed">
     <div><label>상태<select data-e="status">${['pending','yes','no'].map(x => `<option value="${x}" ${g.status === x ? 'selected' : ''}>${ST[x]}</option>`).join('')}</select></label></div>
     <div><label>성함<input data-e="rep.name" value="${esc(r.name)}"></label></div>
     <div><label>소속<input data-e="rep.org" value="${esc(r.org)}"></label></div>
@@ -522,11 +523,82 @@ function parseEventusRoster(wb){
   }
   return null;
 }
+// 구글 설문 응답 엑셀('(RSVP) …_1차(응답)' — 타임스탬프·참석 여부·성함·소속·연락처·이메일·동행인 명수·동행인 정보·초청 경로·직책)도 읽는다(2026-11-03 요청).
+// 머리글이 같은 시트는 모두 읽고(설문 시트 + 손으로 붙인 '신규 추가' 시트), 같은 번호는 아래(나중) 줄 기준. 이미 명단에 있는 사람·불참 응답·아카라 직원은 뺀다.
+// 예전에 일부러 뺀 사람(업계 외·중복 등)이 다시 보일 수 있어서 미리보기에서 한 명씩 고르게 한다.
+function parseCompsText(txt){
+  return String(txt || '').split(/[\n\/,·]+/).map(s => s.trim()).filter(Boolean).map(s => {
+    const ph = (s.match(/01\d[-\s.]?\d{3,4}[-\s.]?\d{4}/) || [''])[0];
+    const rest = s.replace(ph, ' ').replace(/[:()]/g, ' ').replace(/\s+/g, ' ').trim();
+    const nm = (rest.match(/[가-힣]{2,4}/) || [''])[0];
+    return { name: nm, title: rest.replace(nm, '').trim(), org: '', phone: telDigits(ph) };
+  }).filter(c => c.name && !/^(없음|없습니다|미정|본인)$/.test(c.name));
+}
+function parseFormRoster(wb){
+  const okEm = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+  const byPhone = new Map(), sheets = [];
+  for(const name of wb.SheetNames){
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: '', raw: false });
+    for(let h = 0; h < Math.min(15, rows.length); h++){
+      const hdr = rows[h].map(x => String(x).trim());
+      if(!hdr.includes('성함') || !hdr.includes('연락처') || !hdr.some(x => /^참석 여부|^동행인 정보/.test(x))) continue;
+      const ci = (re) => hdr.findIndex(x => re.test(x));
+      const C = { ts: ci(/^타임스탬프/), att: ci(/^참석 여부/), name: hdr.indexOf('성함'), org: hdr.indexOf('소속'), phone: hdr.indexOf('연락처'), email: hdr.indexOf('이메일'),
+        cn: ci(/^동행인 명수/), ci: ci(/^동행인 정보/), route: ci(/^초청 경로/), title: hdr.indexOf('직책'), link: ci(/개별 링크/), memo: ci(/^메모/) };
+      const cell = (r, k) => C[k] < 0 ? '' : String(r[C[k]] == null ? '' : r[C[k]]).trim();
+      sheets.push(name);
+      rows.slice(h + 1).forEach(r => {
+        const nm = cell(r, 'name').replace(/\s+/g, ''), phone = telDigits(cell(r, 'phone'));
+        if(!nm || !phone) return;
+        byPhone.set(phone, { nm, phone, att: cell(r, 'att'), org: cell(r, 'org'), title: cell(r, 'title'), email: cell(r, 'email').replace(/[^\x21-\x7e]/g, '').toLowerCase(),
+          cn: cell(r, 'cn'), comps: cell(r, 'ci'), route: cell(r, 'route'), link: cell(r, 'link'), ts: cell(r, 'ts'), memo: cell(r, 'memo'), sheet: name });
+      });
+      break;
+    }
+  }
+  if(!sheets.length) return null;
+  const L = allGroups().filter(g => !g.test), phones = new Set(), byShort = {};
+  L.forEach(g => { [g.rep, g.sub, ...(g.comps || [])].forEach(p => { const d = telDigits(p && p.phone); if(d) phones.add(d); }); byShort[g.t.slice(0, 6)] = g; });
+  const out = { form: true, sheet: sheets.join(', '), groups: [], cand: [], exist: 0, no: 0, staff: 0, orphan: 0 };
+  byPhone.forEach(x => {
+    const sh = /hakdongmap\.kr\/(?:r\/)?([A-Za-z0-9_-]{6})/.exec(x.link);
+    if(phones.has(x.phone) || (sh && byShort[sh[1]])){ out.exist++; return; }
+    if(/불참/.test(x.att)){ out.no++; return; }
+    if(/@aqara\.kr$/.test(x.email)){ out.staff++; return; }
+    const comps = /^0/.test(x.cn) ? [] : parseCompsText(x.comps).filter(c => !c.phone || !phones.has(c.phone));
+    out.cand.push({ sheet: x.sheet, ts: x.ts, g: { rep: { name: x.nm, title: x.title, org: x.org, phone: x.phone }, comps, email: okEm(x.email) ? x.email : '',
+      route: x.route, note: [x.sheet !== sheets[0] ? x.sheet : '', x.memo].filter(Boolean).join(' · ').slice(0, 300), vip: false } });
+  });
+  out.groups = out.cand.map(c => c.g);
+  return out;
+}
 $('#file').onchange = async (e) => {
   const f = e.target.files[0]; e.target.value = ''; if(!f) return;
   try{
     const wb = XLSX.read(await f.arrayBuffer(), { type: 'array' });
-    const p = parseSheet(wb) || parseEventusRoster(wb);
+    const p = parseSheet(wb) || parseEventusRoster(wb) || parseFormRoster(wb);
+    if(p && p.form){
+      if(!p.cand.length) return toast(`설문 응답에 새 사람이 없어요 (이미 명단에 있음 ${p.exist} · 불참 ${p.no})`);
+      modal(`<h3>설문 응답 가져오기</h3>
+        <p>${esc(f.name)} · ${esc(p.sheet)} — 명단에 없는 사람 <b>${p.cand.length}</b>명 (이미 있음 ${p.exist} · 불참 응답 ${p.no} · 아카라 직원 ${p.staff} 건너뜀)</p>
+        <p style="color:var(--tx3);font-size:12.5px">예전에 일부러 뺀 사람(업계 외·중복 신청 등)도 보일 수 있어요. 넣을 사람만 체크하세요. 넣은 그룹은 목록 '등록일시' 열에 '설문 응답'으로 표시돼요.</p>
+        <div class="prev" style="max-height:340px;overflow:auto;font-size:13px">${p.cand.map((c, i) => `<label style="display:flex;gap:8px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--line,#eee)"><input type="checkbox" data-fi="${i}" checked style="margin-top:3px">
+          <span><b>${esc(c.g.rep.name)}</b> ${esc([c.g.rep.title, c.g.rep.org].filter(Boolean).join(' · '))} · ${esc(fmtPhone(c.g.rep.phone))}${c.g.email ? ' · ' + esc(c.g.email) : ''}
+          ${c.g.comps.length ? `<br><span style="color:var(--tx2)">동행 ${c.g.comps.map(x => esc(x.name + (x.title ? ' ' + x.title : '') + (x.phone ? ' ' + fmtPhone(x.phone) : ''))).join(', ')}</span>` : ''}
+          <br><span style="color:var(--tx3);font-size:12px">${esc([c.ts, c.g.route, c.sheet].filter(Boolean).join(' · '))}</span></span></label>`).join('')}</div>
+        <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>취소</button><button class="btn pri" id="impGo">체크한 사람 가져오기</button></div>`);
+      $('#impGo').onclick = async () => {
+        const pick = [...document.querySelectorAll('[data-fi]')].filter(b => b.checked).map(b => p.cand[+b.dataset.fi].g);
+        if(!pick.length) return toast('가져올 사람을 체크해 주세요');
+        $('#impGo').disabled = true; $('#impGo').textContent = '올리는 중…';
+        const j = await api({ op: 'import', groups: pick, via: '설문 응답' });
+        closeModal();
+        if(!j.ok) return toast(j.error || '가져오기 실패');
+        toast(`새로 ${j.added}${j.refreshed ? ` · 갱신 ${j.refreshed}` : ''}${j.kept ? ` · 유지 ${j.kept}` : ''}`);
+        load();
+      };
+      return;
+    }
     if(p && p.eventus && !p.groups.length) return toast(`이벤터스 명단에 새 사람이 없어요 (이미 있음 ${p.exist})`);
     if(!p || !p.groups.length) return toast('‘구분 · 성함 · 연락처’ 머리글이 있는 시트를 찾지 못했어요');
     if(p.eventus){
@@ -534,11 +606,11 @@ $('#file').onchange = async (e) => {
         <p>${esc(f.name)} · ‘${esc(p.sheet)}’ 시트</p>
         <div class="prev">새 그룹 <b>${p.fresh.length}</b>${p.fresh.length ? ` — ${p.fresh.map(x => esc(x.name + (x.org ? ' (' + x.org + ')' : ''))).join(', ')}` : ''}
         ${p.attached.length ? `<br>동행인으로 붙임: ${p.attached.map(esc).join(' · ')}` : ''}
-        <br><br><span style="color:var(--tx3)">이미 명단에 있음 ${p.exist} · 아카라 직원 ${p.staff} · 번호 없음(테스트) ${p.nophone} — 건너뜀. 임시 이메일(a@aqara.kr 등)은 넣지 않아요. 새로 들어온 그룹은 '🆕 새 신청' 탭에 보여요.</span></div>
+        <br><br><span style="color:var(--tx3)">이미 명단에 있음 ${p.exist} · 아카라 직원 ${p.staff} · 번호 없음(테스트) ${p.nophone} — 건너뜀. 임시 이메일(a@aqara.kr 등)은 넣지 않아요. 새로 들어온 그룹은 목록 '등록일시' 열에 '이벤터스'로 표시돼요.</span></div>
         <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>취소</button><button class="btn pri" id="impGo">가져오기</button></div>`);
       $('#impGo').onclick = async () => {
         $('#impGo').disabled = true; $('#impGo').textContent = '올리는 중…';
-        const j = await api({ op: 'import', groups: p.groups });
+        const j = await api({ op: 'import', groups: p.groups, via: '이벤터스' });
         closeModal();
         if(!j.ok) return toast(j.error || '가져오기 실패');
         toast(`새로 ${j.added} · 동행인 추가 ${j.refreshed}${j.kept ? ` · 응답 있어 못 붙임 ${j.kept}` : ''}`);
@@ -555,7 +627,7 @@ $('#file').onchange = async (e) => {
       <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>취소</button><button class="btn pri" id="impGo">가져오기</button></div>`);
     $('#impGo').onclick = async () => {
       $('#impGo').disabled = true; $('#impGo').textContent = '올리는 중…';
-      const j = await api({ op: 'import', groups: p.groups });
+      const j = await api({ op: 'import', groups: p.groups, via: '엑셀 등록' });
       closeModal();
       if(!j.ok) return toast(j.error || '가져오기 실패');
       toast(`새로 ${j.added} · 갱신 ${j.refreshed} · 응답 있어 유지 ${j.kept}`);
@@ -748,7 +820,7 @@ function groupRows(L){
       '본인': ans ? ST[g.status] : '미응답', '명단 인원': rosterN(g), '참석 인원': ans ? heads(g) : '',
       '참석 동행인': ans ? (g.comps || []).map(c => c.name).join(', ') : '', '불참 동행인': gone.join(', '), '대리 참석': g.sub && g.sub.name ? g.sub.name : '',
       '최초 문자 발송': isSent(g) ? fullTime(g.sent.first || g.sent.at) : '', '마지막 문자 전송': isSent(g) ? fullTime(g.sent.at) : '', '발송 횟수': isSent(g) ? (g.sent.n || 1) : '', '발송 메모': g.sendNote || '', '링크 열람': isOpen(g) ? fullTime(g.open.first) : '', '열람 횟수': isOpen(g) ? g.open.n : '',
-      '응답 일시': fullTime(g.answeredAt), '마지막 변경': fullTime(g.updatedAt), '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
+      '등록일시': fullTime(g.created), '등록 경로': regLabel(g), '응답 일시': fullTime(g.answeredAt), '마지막 변경': fullTime(g.updatedAt), '변경자': g.updatedBy === 'guest' ? '본인' : (g.updatedBy || ''), 메모: g.memo || '', 링크: linkOf(g.t) };
   });
 }
 function summaryRows(){

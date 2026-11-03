@@ -303,7 +303,7 @@ module.exports = async (req, res) => {
           refreshed++;
         }else{
           let nt = newTok(); while(cur[nt] || patch[nt]) nt = newTok();
-          patch[nt] = Object.assign(base, { rep, comps, sub: null, status: 'pending', created: now, updatedAt: 0 });
+          patch[nt] = Object.assign(base, { rep, comps, sub: null, status: 'pending', created: now, updatedAt: 0, regBy: ['엑셀 등록', '이벤터스', '설문 응답'].includes(body.via) ? body.via : '엑셀 등록' });
           byKey[key] = nt; added++;
         }
       }
@@ -357,7 +357,7 @@ module.exports = async (req, res) => {
       }
       const now = Date.now();
       const g = { key, email: email2, route: str(body.route, 80), vip: false, note: str(body.note, 300), orig: { n: 1 + comps.length, comps: comps.map(c => c.name).join(', ') },
-        rep, comps, sub: null, status: 'pending', created: now, updatedAt: 0, addedBy: email };
+        rep, comps, sub: null, status: 'pending', created: now, updatedAt: 0, addedBy: email, regBy: '수기 등록' };
       if(test) g.test = true;
       await fb('PUT', `groups/${t}`, g);
       return res.status(200).json({ ok: true, t, group: g });
