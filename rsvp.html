@@ -235,6 +235,7 @@ function render(){
         <label class="fld"><span>소속</span><input data-r="org" value="${esc(rep.org || '')}" placeholder="회사·학교 등" autocomplete="organization" ${ro ? 'disabled' : ''}></label>
         <label class="fld"><span>직책</span><input data-r="title" value="${esc(rep.title || '')}" placeholder="예: 대표, 실장, 디자이너" autocomplete="organization-title" ${ro ? 'disabled' : ''}></label>
         <label class="fld"><span>연락처<i>*</i></span><input data-r="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(rep.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
+        <label class="fld"><span>이메일</span><input data-r="email" type="email" inputmode="email" value="${esc(rep.email || '')}" placeholder="name@example.com" autocomplete="email" ${ro ? 'disabled' : ''}></label>
         ${QR_NOTE}
       </div>` : ''}
     </section>
@@ -279,6 +280,7 @@ function validate(){
   const mark = (sel) => { const el = document.querySelector(sel); if(el){ el.classList.add('bad'); if(!first) first = el; } };
   const need = (v) => !String(v || '').replace(/\D/g, '') || !phoneOk(v);
   if(F.status === 'yes' && need(F.rep.phone)) mark('[data-r="phone"]');
+  if(F.status === 'yes' && F.rep.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(F.rep.email).trim())) mark('[data-r="email"]');
   F.people.forEach((c, i) => {
     if(c.on !== true) return;
     if(c._ph && !c.name.trim()) mark(`[data-c="${i}"][data-k="name"]`);
@@ -293,7 +295,7 @@ async function save(){
   const btn = $('#saveBtn'); btn.disabled = true; btn.textContent = '저장 중…';
   try{
     const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone, org: F.rep.org || '', title: F.rep.title || '' },
+      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone, org: F.rep.org || '', title: F.rep.title || '', email: String(F.rep.email || '').trim() },
         comps: goingComps().map(c => ({ name: c.name.trim() || c._ph, from: c._ph || undefined, phone: c.phone, org: c.org || '', title: c.title || '' })) }) });
     const j = await r.json();
     if(!j.ok){ toast(j.error || '저장하지 못했어요. 다시 시도해 주세요.'); paintBar(); return; }

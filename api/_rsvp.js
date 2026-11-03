@@ -163,7 +163,7 @@ function guestView(g, meta){
   const now = (g.comps || []).map(c => c.name);
   return {
     ok: true, event: EVENT, closed: !!(meta && meta.closed),
-    rep: { name: g.rep.name, title: g.rep.title || '', org: g.rep.org || '', phone: g.rep.phone || '' },
+    rep: { name: g.rep.name, title: g.rep.title || '', org: g.rep.org || '', phone: g.rep.phone || '', email: g.email || '' },
     sub: g.sub || null, comps: fillOrg(g.comps, g.rep.org), status: g.status || 'pending',
     removed: Object.keys(allowedComps(g)).filter(n => !now.includes(n)),
     updatedAt: g.updatedAt || 0, answered: !!g.answeredAt,
@@ -239,6 +239,9 @@ module.exports = async (req, res) => {
         sub, updatedAt: now, updatedBy: 'guest', answeredAt: now,
       });
       next.comps = fillOrg(comps, next.rep.org);
+      // 이메일(2026-11-03): 손님이 적은 값이 형식에 맞으면 저장, 비워 보내면 기존 값 유지
+      const em = body.rep && typeof body.rep.email === 'string' ? str(body.rep.email, 120).trim().toLowerCase() : '';
+      if(em && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) next.email = em;
       await fb('PUT', `groups/${t}`, next);
       await fb('POST', `log/${t}`, { at: now, by: 'guest', status, n: (status === 'yes' ? 1 : 0) + comps.length, sub: sub ? sub.name : '', comps: comps.map(c => c.name).join(', ') });
       return res.status(200).json(guestView(next, meta));

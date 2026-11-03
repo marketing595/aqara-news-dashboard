@@ -141,7 +141,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
     </div>
     <div style="overflow:auto;max-height:72vh">
       <table class="tbl">
-        <thead><tr><th>초대받은 분</th><th>연락처</th><th class="hide-m">초청 경로</th><th>상태</th><th>마지막 문자 전송</th><th>링크 열람</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th>링크</th></tr></thead>
+        <thead><tr><th>초대받은 분</th><th>연락처 · 이메일</th><th class="hide-m">초청 경로</th><th>상태</th><th>마지막 문자 전송</th><th>링크 열람</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th>링크</th></tr></thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
@@ -374,7 +374,7 @@ function paintRows(){
     const comps = (g.comps || []).map(c => esc(c.name)).join(', ');
     return `<tr class="g" data-t="${g.t}">
       <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}${isNew(g) ? '<span class="tag t-vip">새 신청</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
-      <td class="num">${esc(fmtPhone(g.rep.phone))}</td>
+      <td class="num">${esc(fmtPhone(g.rep.phone))}<div class="org" style="font-family:inherit">${g.email ? esc(g.email) : '<span style="color:var(--tx3)">이메일 없음</span>'}</div></td>
       <td class="hide-m mut">${esc(g.route || '')}</td>
       <td><span class="st ${st}">${stLabel(g)}</span>${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
       <td class="num" style="white-space:nowrap;font-size:12px">${isSent(g) ? `<b>${fmtTime(g.sent.at)}</b>${g.sent.n > 1 ? ` <span class="mut">(${g.sent.n}회)</span>` : ''}` : '<span style="color:var(--tx3)">안 보냄</span>'}${g.sendNote ? `<br><b style="color:var(--err)">${esc(g.sendNote)}</b>` : ''}</td>
