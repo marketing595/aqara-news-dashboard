@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-03 03:28",
+ "generatedAt": "2026-11-04 01:18",
  "brands": [
   {
    "name": "아카라",
@@ -127,9 +127,9 @@
     "아카라 홈캠",
     "아카라 스위치",
     "니케 아카라이브",
-    "아카라카",
     "아카라치",
-    "아카라이브 핫딜"
+    "아카라카",
+    "메랜 아카라이브"
    ],
    "recent": [
     {
@@ -352,7 +352,7 @@
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈캠"
+    "헤이홈 온습도계"
    ],
    "recent": [
     {
@@ -451,32 +451,32 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69522,
+   "total": 69526,
    "sentiment": {
-    "pos": 22,
-    "neu": 38,
+    "pos": 25,
+    "neu": 35,
     "neg": 0
    },
    "keywords": [
     [
      "AI",
-     60
+     61
     ],
     [
      "삼성전자는",
-     25
+     24
     ],
     [
      "가전",
-     21
-    ],
-    [
-     "SmartThings",
-     19
+     20
     ],
     [
      "분석",
      19
+    ],
+    [
+     "SmartThings",
+     16
     ],
     [
      "케어",
@@ -484,10 +484,6 @@
     ],
     [
      "기능을",
-     14
-    ],
-    [
-     "솔루션을",
      12
     ],
     [
@@ -495,8 +491,16 @@
      11
     ],
     [
+     "솔루션을",
+     11
+    ],
+    [
      "반려동물",
      11
+    ],
+    [
+     "에너지",
+     10
     ],
     [
      "보험료",
@@ -525,10 +529,6 @@
     [
      "결과를",
      9
-    ],
-    [
-     "기기",
-     9
     ]
    ],
    "posWords": [
@@ -545,39 +545,63 @@
      6
     ],
     [
+     "강화",
+     4
+    ],
+    [
      "투자",
      4
     ],
     [
-     "강화",
+     "글로벌",
      3
     ],
     [
-     "협업",
-     1
-    ],
-    [
      "공략",
-     1
+     2
     ],
     [
-     "기대",
+     "성장",
      1
     ]
    ],
    "related": [
-    "삼성 스마트싱스 허브",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 스테이션",
+    "삼성 스마트싱스",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스 허브 5세대",
-    "삼성 스마트싱스 허브 4세대",
-    "삼성 스마트싱스 세탁기 원격"
+    "삼성 스마트싱스 세탁기 원격",
+    "삼성 스마트싱스 허브 4세대"
    ],
    "recent": [
+    {
+     "title": "삼성전자서비스, 폭염에도 빈틈없는 에어컨 A/S, AI로 서비스 품질 강화",
+     "source": "매일경제",
+     "date": "2026-11-04",
+     "link": "https://n.news.naver.com/mnews/article/009/0005758578?sid=101"
+    },
+    {
+     "title": "[AIoT 어워드2026] 솔리티, 매터 기반 스마트 도어락",
+     "source": "전자신문",
+     "date": "2026-11-03",
+     "link": "https://n.news.naver.com/mnews/article/030/0003481490?sid=105"
+    },
+    {
+     "title": "[AIoT 어워드2026] 바이텔, 스마트홈 통합 제어 리모컨 '유니버설 리모콘...",
+     "source": "전자신문",
+     "date": "2026-11-03",
+     "link": "https://n.news.naver.com/mnews/article/030/0003481487?sid=105"
+    },
+    {
+     "title": "삼성전자, 2032년 117조 스마트 가전시장 정조준…스마트싱스·AI로 승부",
+     "source": "mydaily.co.kr",
+     "date": "2026-11-03",
+     "link": "https://n.news.naver.com/mnews/article/117/0004121255?sid=105"
+    },
     {
      "title": "정문철 KB라이프 대표, 'KB골든라이프'로 금융·돌봄 연결 [보험사 시니...",
      "source": "fntimes.com",
@@ -643,30 +667,6 @@
      "source": "the-biz.co.kr",
      "date": "2026-10-30",
      "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=730344"
-    },
-    {
-     "title": "십일리터, 농식품부 ‘이달의 에이(A)-벤처스’ 제90호 기업으로 선정",
-     "source": "etoday.co.kr",
-     "date": "2026-10-30",
-     "link": "https://www.etoday.co.kr/news/view/2642266"
-    },
-    {
-     "title": "십일리터, 반려동물 AI 건강 분석 기술력 인정…'A-벤처스' 90호 선정",
-     "source": "magazine.hankyung.com",
-     "date": "2026-10-30",
-     "link": "https://n.news.naver.com/mnews/article/050/0000112607?sid=101"
-    },
-    {
-     "title": "\"강아지 슬개골 탈구도 사진으로?\"…십일리터, 농식품부 'A-벤처스' 선정",
-     "source": "머니투데이",
-     "date": "2026-10-30",
-     "link": "https://n.news.naver.com/mnews/article/008/0005434271?sid=101"
-    },
-    {
-     "title": "십일리터, 농식품부 ‘이달의 에이(A)-벤처스’ 제90호 선정… AI 펫헬스...",
-     "source": "view.asiae.co.kr",
-     "date": "2026-10-30",
-     "link": "https://n.news.naver.com/mnews/article/277/0005835828?sid=101"
     }
    ]
   },
@@ -674,7 +674,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78198,
+   "total": 78200,
    "sentiment": {
     "pos": 22,
     "neu": 37,
@@ -683,75 +683,75 @@
    "keywords": [
     [
      "AI",
-     72
+     69
     ],
     [
      "LG전자",
-     53
+     52
     ],
     [
      "냉장고",
-     35
+     34
     ],
     [
      "ThinQ",
-     30
+     31
     ],
     [
      "냉동",
-     29
+     28
     ],
     [
      "와인",
-     27
-    ],
-    [
-     "보관",
-     27
-    ],
-    [
-     "육류",
-     26
-    ],
-    [
-     "모드를",
-     26
-    ],
-    [
-     "선택할",
      25
     ],
     [
-     "하칸에는",
+     "AI홈",
      24
+    ],
+    [
+     "육류",
+     24
+    ],
+    [
+     "보관",
+     24
+    ],
+    [
+     "모드를",
+     24
+    ],
+    [
+     "하칸에는",
+     23
     ],
     [
      "기능과",
-     24
+     23
     ],
     [
-     "AI홈",
+     "선택할",
      23
     ],
     [
      "밀키트",
-     22
+     21
     ],
     [
      "오토",
-     22
+     21
+    ],
+    [
+     "류재철",
+     20
     ],
     [
      "김치",
-     21
+     20
     ],
     [
      "서랍형",
      20
-    ],
-    [
-     "류재철",
-     19
     ]
    ],
    "posWords": [
@@ -776,15 +776,15 @@
      2
     ],
     [
-     "프리미엄",
-     2
-    ],
-    [
-     "개선",
+     "투자",
      1
     ],
     [
-     "수상",
+     "주목",
+     1
+    ],
+    [
+     "개선",
      1
     ]
    ],
@@ -792,15 +792,27 @@
     "lg 씽큐온",
     "lg 씽큐 세탁기",
     "lg 씽큐 티비연결",
-    "lg 씽큐 와이파이",
-    "lg 씽큐 냉장고",
-    "lg 씽큐 연결",
-    "lg 씽큐 에어컨",
     "lg 씽큐 허브",
+    "lg 씽큐 냉장고",
+    "lg 씽큐 와이파이",
+    "lg 씽큐 에어컨",
+    "lg 씽큐 연결",
     "lg 씽큐 온도",
     "lg 씽큐 초기화"
    ],
    "recent": [
+    {
+     "title": "LG전자 류재철 CEO \"AI홈 다음 표준은 돌봄\"…애플·MS 손잡고 가사노동...",
+     "source": "joongangenews.com",
+     "date": "2026-11-03",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=560571"
+    },
+    {
+     "title": "원림, 화려한 투자포트폴리오 주목",
+     "source": "biz.heraldcorp.com",
+     "date": "2026-11-03",
+     "link": "https://n.news.naver.com/mnews/article/016/0002717874?sid=101"
+    },
     {
      "title": "류재철 LG전자 사장의 AI 홈 비전 “연결 넘어 배려로… ‘피지컬 AI’로...",
      "source": "dnews.co.kr",
@@ -878,18 +890,6 @@
      "source": "biz.chosun.com",
      "date": "2026-11-02",
      "link": "https://n.news.naver.com/mnews/article/366/0001201994?sid=105"
-    },
-    {
-     "title": "류재철 LG전자 CEO \"AI홈 다음 표준은 돌봄\" … 애플·MS와 생태계 확장",
-     "source": "biz.newdaily.co.kr",
-     "date": "2026-11-02",
-     "link": "https://biz.newdaily.co.kr/site/data/html/2026/11/02/2026110200263.html"
-    },
-    {
-     "title": "LG전자 류재철 “AI홈, 연결에서 돌봄으로…고객 시간·노력 아껴야”",
-     "source": "이데일리",
-     "date": "2026-11-02",
-     "link": "https://n.news.naver.com/mnews/article/018/0006402107?sid=101"
     }
    ]
   },
@@ -897,55 +897,63 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76357,
+   "total": 76376,
    "sentiment": {
-    "pos": 20,
-    "neu": 28,
-    "neg": 12
+    "pos": 17,
+    "neu": 30,
+    "neg": 13
    },
    "keywords": [
     [
      "AI",
-     41
-    ],
-    [
-     "으로",
-     14
-    ],
-    [
-     "번역한",
-     14
+     43
     ],
     [
      "아래는",
-     13
+     12
     ],
     [
      "기사를",
-     13
+     12
     ],
     [
      "번역",
-     13
+     12
+    ],
+    [
+     "으로",
+     12
+    ],
+    [
+     "번역한",
+     12
     ],
     [
      "기사의",
-     13
+     11
     ],
     [
      "전문",
-     13
+     11
     ],
     [
      "입니다",
-     12
+     10
     ],
     [
      "모바일",
      10
     ],
     [
-     "화면",
+     "break9874",
+     9
+    ],
+    [
+     "naver",
+     9
+    ],
+    [
+     "com",
      9
     ],
     [
@@ -953,62 +961,54 @@
      9
     ],
     [
-     "번역에",
-     9
-    ],
-    [
-     "오류가",
-     9
-    ],
-    [
-     "break9874",
-     8
-    ],
-    [
-     "naver",
-     8
-    ],
-    [
-     "com",
+     "이해도",
      8
     ],
     [
      "높이기를",
      8
+    ],
+    [
+     "노력하고",
+     8
+    ],
+    [
+     "있습니다",
+     8
     ]
    ],
    "posWords": [
     [
+     "글로벌",
+     4
+    ],
+    [
+     "성장",
+     3
+    ],
+    [
      "투자",
-     7
+     3
     ],
     [
      "돌파",
      3
     ],
     [
+     "흥행",
+     2
+    ],
+    [
      "1위",
      2
     ],
     [
-     "주목",
+     "기대",
      2
     ],
     [
-     "성장",
+     "수상",
      2
-    ],
-    [
-     "인기",
-     2
-    ],
-    [
-     "글로벌",
-     2
-    ],
-    [
-     "파트너십",
-     1
     ]
    ],
    "related": [
@@ -1018,101 +1018,101 @@
     "구글 홈 허브",
     "구글 홈 미니",
     "구글 홈페이지",
-    "구글 홈화면빼는법",
-    "구글 홈 미니 1세대",
     "구글 홈 미니 연결",
+    "구글 홈 미니 1세대",
+    "구글 홈화면빼는법",
     "구글 홈화면 없애기"
    ],
    "recent": [
     {
-     "title": "애플워치 시리즈 12, 8,270보 재시험서 핏빗 엣지 제쳐…6,000보 때는 뒤...",
-     "source": "wikitree.co.kr",
+     "title": "‘알고리즘’에 질린 AI 연구자…‘나만의 유튜브’ 만들었다",
+     "source": "nongmin.com",
      "date": "2026-11-03",
-     "link": "https://www.wikitree.co.kr/articles/1171205"
+     "link": "https://n.news.naver.com/mnews/article/662/0000107556?sid=105"
     },
     {
-     "title": "청와대, 국가AI정책비서관에 이지수 전 삼성전자 상무 임명",
-     "source": "dailysecu.com",
+     "title": "[위클리AI] 구글·오픈AI·아마존, 업무에서 일상까지 AI 쓰임새 넓혔다",
+     "source": "it.donga.com",
      "date": "2026-11-03",
-     "link": "https://www.dailysecu.com/news/articleView.html?idxno=209276"
+     "link": "https://it.donga.com/109832/"
     },
     {
-     "title": "[ICT 종합] 스마일게이트 퓨처랩 및 커세어 소식 외",
-     "source": "gamevu.co.kr",
-     "date": "2026-11-02",
-     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=61917"
+     "title": "음악·게임 사업 동반 흥행한 하이브, 연매출 '5조 클럽' 시대 연다(종합...",
+     "source": "techm.kr",
+     "date": "2026-11-03",
+     "link": "https://www.techm.kr/news/articleView.html?idxno=156869"
     },
     {
-     "title": "생성형 AI 혁명과 로봇 수요 폭증… 피앤에스로보틱스 주가 폭등랠리 계...",
-     "source": "pinpointnews.co.kr",
-     "date": "2026-11-02",
-     "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=500555"
+     "title": "칩값이 문제네…애플의 찜찜한 어닝 서프라이즈",
+     "source": "fortunekorea.co.kr",
+     "date": "2026-11-03",
+     "link": "https://www.fortunekorea.co.kr/news/articleView.html?idxno=54608"
     },
     {
-     "title": "KT·삼성전자, 야구장서 'AI 무선망 자율 운용' 검증..기지국 트래픽 34%...",
+     "title": "애플, 첫 가정용 로봇 출시 지연…하드웨어 완성에도 AI 개발 난항",
+     "source": "aitimes.com",
+     "date": "2026-11-03",
+     "link": "https://www.aitimes.com/news/articleView.html?idxno=216946"
+    },
+    {
+     "title": "삼성 뉴스, 12월 21일부터 갤럭시폰에서 못 본다… 커뮤니티 ‘삼성 멤...",
+     "source": "biz.chosun.com",
+     "date": "2026-11-03",
+     "link": "https://n.news.naver.com/mnews/article/366/0001202264?sid=105"
+    },
+    {
+     "title": "애플, 아이폰·맥 판매 호조에도 성장 둔화…중국 매출 기대 이하",
+     "source": "aitimes.com",
+     "date": "2026-11-03",
+     "link": "https://www.aitimes.com/news/articleView.html?idxno=216941"
+    },
+    {
+     "title": "쿠팡, “수험생 응원부터 홈파티까지”..스위트샵 기획전 진행",
      "source": "breaknews.com",
-     "date": "2026-11-02",
-     "link": "http://www.breaknews.com/1247502"
+     "date": "2026-11-03",
+     "link": "http://www.breaknews.com/1247932"
     },
     {
-     "title": "쿠팡, 8일까지 '와우 멤버스데이'…37만개 상품 최대 70% 할인",
+     "title": "애플, 폴더블폰 생산·메모리 확보 '이중고'",
+     "source": "thelec.kr",
+     "date": "2026-11-03",
+     "link": "https://www.thelec.kr/news/articleView.html?idxno=64780"
+    },
+    {
+     "title": "[유통레이더] 아성다이소, 파파존스, CJ제일제당, 골프존, 소노시즌, 씰...",
+     "source": "daily.hankooki.com",
+     "date": "2026-11-03",
+     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1421059"
+    },
+    {
+     "title": "“아이팟에 총까지 쐈는데”…메모리값 폭등에 애플도 이익률 하락",
+     "source": "donga.com",
+     "date": "2026-11-03",
+     "link": "https://n.news.naver.com/mnews/article/020/0003759691?sid=104"
+    },
+    {
+     "title": "[AIoT 어워드2026] 솔리티, 매터 기반 스마트 도어락",
+     "source": "전자신문",
+     "date": "2026-11-03",
+     "link": "https://n.news.naver.com/mnews/article/030/0003481490?sid=105"
+    },
+    {
+     "title": "[AIoT 어워드2026] 바이텔, 스마트홈 통합 제어 리모컨 '유니버설 리모콘...",
+     "source": "전자신문",
+     "date": "2026-11-03",
+     "link": "https://n.news.naver.com/mnews/article/030/0003481487?sid=105"
+    },
+    {
+     "title": "한우자조금, '2026 제9회 전국한우요리경연대회' 개최…40팀 수상",
      "source": "breaknews.com",
-     "date": "2026-11-02",
-     "link": "http://www.breaknews.com/1247513"
+     "date": "2026-11-03",
+     "link": "http://www.breaknews.com/1247842"
     },
     {
-     "title": "BBQ, 올해 치킨 2마리 마리 넘게 기부했다..전국서 나눔 실천",
+     "title": "파파존스, 피자 구매시 아이브 한정판 포토카드 쏜다",
      "source": "breaknews.com",
-     "date": "2026-11-02",
-     "link": "http://www.breaknews.com/1247521"
-    },
-    {
-     "title": "KB국민카드, 소비자 추천 브랜드 신용카드 부문 11년 연속 1위",
-     "source": "breaknews.com",
-     "date": "2026-11-02",
-     "link": "http://www.breaknews.com/1247452"
-    },
-    {
-     "title": "애플 실적 발표서 아이폰18 판매 '주목'",
-     "source": "news.einfomax.co.kr",
-     "date": "2026-11-02",
-     "link": "https://news.einfomax.co.kr/news/articleView.html?idxno=4442497"
-    },
-    {
-     "title": "창원 LG세이커스 '2026-2027 홈 개막전' 뜨거운 열기",
-     "source": "breaknews.com",
-     "date": "2026-11-02",
-     "link": "http://www.breaknews.com/1247429"
-    },
-    {
-     "title": "[경남 브리핑 모음(11월2일)] 진주의 역사·문화, 도시공간의 품격으로...",
-     "source": "dnews.co.kr",
-     "date": "2026-11-02",
-     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611011420101180059"
-    },
-    {
-     "title": "169만원 XR 글래스 ‘엑스리얼 아우라’, 첫인상은",
-     "source": "byline.network",
-     "date": "2026-11-02",
-     "link": "https://byline.network/?p=9004111222625530"
-    },
-    {
-     "title": "스마트 TV서 기능 삭제, 인스타서 릴스 삭제… AI 활용한 ‘빼기 테크’...",
-     "source": "chosun.com",
-     "date": "2026-11-02",
-     "link": "https://n.news.naver.com/mnews/article/023/0004007241?sid=105"
-    },
-    {
-     "title": "[르포] AI 불러도 '버벅'…200만원 엑스리얼 아우라 써보니",
-     "source": "g-enews.com",
-     "date": "2026-11-01",
-     "link": "https://www.g-enews.com/view.php?ud=202610301449284961139bf6e4b2_1"
-    },
-    {
-     "title": "창원 웅천중 학생 제안으로 지역사회 실천으로 이어져",
-     "source": "breaknews.com",
-     "date": "2026-11-01",
-     "link": "http://www.breaknews.com/1247363"
+     "date": "2026-11-03",
+     "link": "http://www.breaknews.com/1247837"
     }
    ]
   }
