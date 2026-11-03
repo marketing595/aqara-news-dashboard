@@ -479,12 +479,73 @@ function parseSheet(wb){
   }
   return null;
 }
+// 이벤터스 참가자 리스트(다운받은 그대로)도 명단으로 가져온다(2026-11-03 요청).
+// 한 줄 = 한 사람. 이미 명단에 있는 사람(대표·대리·동행인 번호, 직함의 hakdongmap.kr/<앞 6자>)은 건너뛰고 새 사람만 넣는다.
+// '동행인 있음' 그룹 줄이고 소속이 같은 '새 신청' 그룹이 있으면 그 그룹의 동행인으로 붙인다(예: 더존하우징 윤세진 + 이도연·김신아).
+// 이메일이 필수라 임시로 넣은 a@aqara.kr 같은 값은 버리고, 아카라 직원(@aqara.kr)·번호 없는 줄(테스트)은 뺀다.
+function parseEventusRoster(wb){
+  const nf = (s) => (s === 'Data Not Found' ? '' : s);
+  const okEm = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) && !/^[a-z0-9]{1,2}@aqara\.kr$/.test(s);
+  for(const name of wb.SheetNames){
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: '', raw: false });
+    for(let h = 0; h < Math.min(15, rows.length); h++){
+      const hdr = rows[h].map(x => String(x).trim());
+      if(!hdr.includes('이름') || !hdr.includes('휴대전화번호') || !hdr.some(x => x.startsWith('기본 카테고리'))) continue;
+      const cell = (r, n) => { const i = hdr.indexOf(n); return i < 0 ? '' : nf(String(r[i] == null ? '' : r[i]).trim()); };
+      const L = allGroups().filter(g => !g.test), phones = new Set(), byShort = {};
+      L.forEach(g => { [g.rep, g.sub, ...(g.comps || [])].forEach(p => { const d = telDigits(p && p.phone); if(d) phones.add(d); }); byShort[g.t.slice(0, 6)] = g; });
+      const recent = L.filter(isNew), att = {};
+      const out = { sheet: name, groups: [], orphan: 0, eventus: true, exist: 0, staff: 0, nophone: 0, attached: [], fresh: [] };
+      for(const r of rows.slice(h + 1)){
+        const nm = cell(r, '이름'); if(!nm) continue;
+        const email = cell(r, '이메일').toLowerCase(), phone = telDigits(cell(r, '휴대전화번호'));
+        if(/@aqara\.kr$/.test(email) && okEm(email)){ out.staff++; continue; }   // 실제 아카라 직원 메일(임시값 a@aqara.kr 은 okEm 에서 걸러져 여기 안 걸림)
+        if(!/^01\d{8,9}$/.test(phone)){ out.nophone++; continue; }
+        const job = cell(r, '직함'), sh = /hakdongmap\.kr\/(?:r\/)?([A-Za-z0-9_-]{6})/.exec(job);
+        if(phones.has(phone) || (sh && byShort[sh[1]])){ out.exist++; continue; }
+        const org = cell(r, '소속'), p = { name: nm, title: sh ? '' : job, org, phone, email: okEm(email) ? email : '' };
+        const key = (s) => String(s || '').replace(/\s/g, '');
+        const host = cell(r, '기본 카테고리 - 동행인 있음') === 'O' && org ? recent.find(g => key(g.rep.org) === key(org)) : null;
+        phones.add(phone);
+        if(host){ (att[host.t] = att[host.t] || { g: host, adds: [] }).adds.push(p); continue; }
+        out.fresh.push(p);
+        out.groups.push({ rep: { name: p.name, title: p.title, org: p.org, phone: p.phone }, comps: [], email: p.email, route: '이벤터스', note: '', vip: false });
+      }
+      Object.values(att).forEach(({ g, adds }) => {
+        out.attached.push(`${g.rep.name} ← ${adds.map(a => a.name).join(', ')}`);
+        out.groups.push({ rep: { name: g.rep.name, title: g.rep.title || '', org: g.rep.org || '', phone: g.rep.phone || '' },
+          comps: [...(g.comps || []).map(c => ({ name: c.name, title: c.title || '', org: c.org || '', phone: c.phone || '', email: c.email || '' })), ...adds],
+          email: g.email || '', route: g.route || '', note: g.note || '', vip: !!g.vip });
+      });
+      return out;
+    }
+  }
+  return null;
+}
 $('#file').onchange = async (e) => {
   const f = e.target.files[0]; e.target.value = ''; if(!f) return;
   try{
     const wb = XLSX.read(await f.arrayBuffer(), { type: 'array' });
-    const p = parseSheet(wb);
+    const p = parseSheet(wb) || parseEventusRoster(wb);
+    if(p && p.eventus && !p.groups.length) return toast(`이벤터스 명단에 새 사람이 없어요 (이미 있음 ${p.exist})`);
     if(!p || !p.groups.length) return toast('‘구분 · 성함 · 연락처’ 머리글이 있는 시트를 찾지 못했어요');
+    if(p.eventus){
+      modal(`<h3>이벤터스 명단 가져오기</h3>
+        <p>${esc(f.name)} · ‘${esc(p.sheet)}’ 시트</p>
+        <div class="prev">새 그룹 <b>${p.fresh.length}</b>${p.fresh.length ? ` — ${p.fresh.map(x => esc(x.name + (x.org ? ' (' + x.org + ')' : ''))).join(', ')}` : ''}
+        ${p.attached.length ? `<br>동행인으로 붙임: ${p.attached.map(esc).join(' · ')}` : ''}
+        <br><br><span style="color:var(--tx3)">이미 명단에 있음 ${p.exist} · 아카라 직원 ${p.staff} · 번호 없음(테스트) ${p.nophone} — 건너뜀. 임시 이메일(a@aqara.kr 등)은 넣지 않아요. 새로 들어온 그룹은 '🆕 새 신청' 탭에 보여요.</span></div>
+        <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>취소</button><button class="btn pri" id="impGo">가져오기</button></div>`);
+      $('#impGo').onclick = async () => {
+        $('#impGo').disabled = true; $('#impGo').textContent = '올리는 중…';
+        const j = await api({ op: 'import', groups: p.groups });
+        closeModal();
+        if(!j.ok) return toast(j.error || '가져오기 실패');
+        toast(`새로 ${j.added} · 동행인 추가 ${j.refreshed}${j.kept ? ` · 응답 있어 못 붙임 ${j.kept}` : ''}`);
+        load();
+      };
+      return;
+    }
     const people = p.groups.reduce((n, g) => n + 1 + g.comps.length, 0);
     const exist = list().length;
     modal(`<h3>명단 가져오기</h3>
