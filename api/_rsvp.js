@@ -382,6 +382,16 @@ module.exports = async (req, res) => {
       await fb('POST', `log/${body.t}`, { at: now, by: email, status: next.status, n: (next.status === 'yes' ? 1 : 0) + (next.status === 'no' || next.status === 'yes' ? next.comps.length : 0), sub: next.sub ? next.sub.name : '', comps: next.comps.map(c => c.name).join(', ') });
       return res.status(200).json({ ok: true, group: next });
     }
+    // 발송 메모(빨간 글씨) 지우기/고치기(2026-11-03): { t, sendNote }
+    if(op === 'sendnote'){
+      if(!okTok(body.t)) return res.status(400).json({ ok: false, error: 't' });
+      const g = await fb('GET', `groups/${body.t}`);
+      if(!g) return res.status(404).json({ ok: false, error: '없는 그룹' });
+      const note = str(body.sendNote, 60);
+      if(note) g.sendNote = note; else delete g.sendNote;
+      await fb('PUT', `groups/${body.t}`, g);
+      return res.status(200).json({ ok: true });
+    }
     // 이메일 일괄 반영(2026-11-03): items [{ t, email }] — 설문 응답 엑셀 기준으로 담당자가 확인 후 저장. 상태·응답 시각은 건드리지 않는다.
     if(op === 'emails'){
       const items = (Array.isArray(body.items) ? body.items : []).slice(0, 3000);
