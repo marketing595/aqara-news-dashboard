@@ -370,6 +370,7 @@ module.exports = async (req, res) => {
         // 손님이 이름을 적은 '이름 미기재' 자리 표시(from)는 담당자가 저장해도 유지
         comps: fillOrg(cleanComps(body.comps), rep.org || g.rep.org).map(c => { const p = (g.comps || []).find(x => x.name === c.name && x.from); return p ? Object.assign(c, { from: p.from }) : c; }),
         memo: str(body.memo, 300),
+        email: typeof body.email === 'string' ? str(body.email, 120).trim().toLowerCase() : (g.email || ''),   // 2026-11-03 담당자가 이메일 입력·수정
         updatedAt: now, updatedBy: email,
       });
       await fb('PUT', `groups/${body.t}`, next);

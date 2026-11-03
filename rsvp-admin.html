@@ -208,6 +208,9 @@ const allGroups = () => Object.keys(G).map(t => Object.assign({ t }, G[t])).filt
 function list(){ return allGroups().filter(g => !!g.test === (VIEW === 'test')); }
 // 문자 발송(sent: 담당자가 '보냄'으로 표시) · 링크 열람(open: 손님이 링크를 연 기록)
 const isSent = (g) => !!(g.sent && g.sent.at);
+// 새 신청 = 마지막 전체 발송(2026-11-03 11:09) 뒤에 명단에 들어온 그룹 → 메일·문자를 따로 보낼 대상(2026-11-03 요청)
+const NEW_SINCE = new Date('2026-11-03T11:09:00+09:00').getTime();
+const isNew = (g) => (g.created || 0) > NEW_SINCE;
 const isOpen = (g) => !!(g.open && g.open.first);
 const sentPend = (g) => isSent(g) && gst(g) === 'pending';   // 보냈는데 아직 응답 없음 → 재발송·전화 대상
 
@@ -345,6 +348,7 @@ function filtered(ignoreComp){
     if(FILTER === 'sentpend' && !sentPend(g)) return false;
     if(!ignoreComp && COMP === 'with' && !withComps(g)) return false;
     if(!ignoreComp && COMP === 'solo' && withComps(g)) return false;
+    if(!ignoreComp && COMP === 'new' && !isNew(g)) return false;
     if(!q) return true;
     const hay = [g.rep.name, g.rep.org, g.rep.phone, g.email, g.route, g.sub && g.sub.name, ...(g.comps || []).map(c => c.name)].join(' ').toLowerCase();
     return hay.includes(q);
@@ -357,7 +361,8 @@ function paintRows(){
   // 그룹 수 옆에 사람 수(본인 + 명단상 동행인)를 같이 보여준다 — 그룹 수만 보면 전체 인원이 헷갈려서(2026-10-29 요청)
   const base = filtered(true), W = base.filter(withComps);
   const ppl = (A) => A.reduce((n, g) => n + rosterN(g), 0);
-  $('#seg').innerHTML = [['all', '전체', base.length, `총 ${ppl(base)}명`], ['with', '동행인 있음', W.length, `동행인 포함 ${ppl(W)}명`], ['solo', '혼자 참석', base.length - W.length, '']]
+  const NW = base.filter(isNew);
+  $('#seg').innerHTML = [['all', '전체', base.length, `총 ${ppl(base)}명`], ['with', '동행인 있음', W.length, `동행인 포함 ${ppl(W)}명`], ['solo', '혼자 참석', base.length - W.length, ''], ['new', '🆕 새 신청', NW.length, `${fmtTime(NEW_SINCE)} 이후 · 따로 발송`]]
     .map(([k, l, n, p]) => `<button class="${COMP === k ? 'on' : ''}" data-comp="${k}">${l} ${n}${p ? ` <span style="font-weight:500;color:var(--tx3)">(${p})</span>` : ''}</button>`).join('');
   document.querySelectorAll('[data-comp]').forEach(b => b.onclick = () => { COMP = b.dataset.comp; OPEN = ''; paintRows(); });
   $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', pending: '미응답', sentpend: '보냈는데 미응답', chg: '대리·동행인 변경' })[FILTER] + ` ${L.length}`;
@@ -368,7 +373,7 @@ function paintRows(){
     const now = st === 'pending' ? '' : heads(g);
     const comps = (g.comps || []).map(c => esc(c.name)).join(', ');
     return `<tr class="g" data-t="${g.t}">
-      <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
+      <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}${isNew(g) ? '<span class="tag t-vip">새 신청</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
       <td class="num">${esc(fmtPhone(g.rep.phone))}</td>
       <td class="hide-m mut">${esc(g.route || '')}</td>
       <td><span class="st ${st}">${stLabel(g)}</span>${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
@@ -397,6 +402,7 @@ function editRow(g){
     <div><label>성함<input data-e="rep.name" value="${esc(r.name)}"></label></div>
     <div><label>소속<input data-e="rep.org" value="${esc(r.org)}"></label></div>
     <div><label>연락처<input data-e="rep.phone" value="${esc(fmtPhone(r.phone))}"></label></div>
+    <div><label>이메일<input data-e="email" type="email" value="${esc(g.email || '')}" placeholder="name@example.com"></label></div>
     <div><label>대리 참석자<input data-e="sub.name" value="${esc(s.name || '')}" placeholder="없으면 비워 두기"></label></div>
     <div><label>대리 소속<input data-e="sub.org" value="${esc(s.org || '')}"></label></div>
     <div><label>대리 연락처<input data-e="sub.phone" value="${esc(fmtPhone(s.phone || ''))}"></label></div>
@@ -405,7 +411,7 @@ function editRow(g){
     <div class="full"><label>담당자 메모<input data-e="memo" value="${esc(g.memo || '')}" placeholder="통화 내용 등(손님에겐 안 보임)"></label></div>
   </div>
   <div class="tools" style="margin-top:10px"><button class="btn pri" id="edSave">저장</button><button class="btn" id="edCancel">닫기</button><button class="btn" id="edSent">${isSent(g) ? '문자 보냄 표시 해제' : '문자 보냄으로 표시'}</button><span style="flex:1"></span><button class="btn danger" id="edDel">이 그룹 삭제</button></div>
-  <div class="logs">${g.email ? `이메일 ${esc(g.email)} · ` : ''}처음 명단 ${g.orig ? g.orig.n + '명' + (g.orig.comps ? ' (' + esc(g.orig.comps) + ')' : '') : ''}${g.note ? ' · 비고 ' + esc(g.note) : ''}${logs ? '<br><b>변경 이력</b><br>' + logs : ''}</div>
+  <div class="logs">처음 명단 ${g.orig ? g.orig.n + '명' + (g.orig.comps ? ' (' + esc(g.orig.comps) + ')' : '') : ''}${g.note ? ' · 비고 ' + esc(g.note) : ''}${logs ? '<br><b>변경 이력</b><br>' + logs : ''}</div>
   </td></tr>`;
 }
 
@@ -431,7 +437,8 @@ function bindEdit(){
     const body = { op: 'admin-save', t: OPEN, status: v('status'),
       rep: { name: v('rep.name'), org: v('rep.org'), title: v('rep.title'), phone: v('rep.phone') },
       sub: v('sub.name') ? { name: v('sub.name'), org: v('sub.org'), phone: v('sub.phone') } : null,
-      comps, memo: v('memo') };
+      comps, memo: v('memo'), email: v('email').trim() };
+    if(body.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) return toast('이메일 형식을 확인해 주세요');
     const j = await api(body); if(!j.ok) return toast(j.error || '저장 실패');
     G[OPEN] = Object.assign(j.group, { sent: G[OPEN].sent, open: G[OPEN].open }); EDITING = false; toast('저장했어요'); paint();
   };
@@ -662,7 +669,7 @@ $('#btnXlsx').onclick = () => {
 // 탭별 내려받기: 전체 / 동행인 있음 / 혼자 참석 (+ 위 카드 필터·검색이 걸려 있으면 그것도 반영)
 $('#btnTabXlsx').onclick = () => {
   const L = filtered(); if(!L.length) return toast('이 탭에 받을 대상이 없어요');
-  const tab = ({ all: '전체', with: '동행인있음', solo: '혼자참석' })[COMP];
+  const tab = ({ all: '전체', with: '동행인있음', solo: '혼자참석', new: '새신청' })[COMP];
   const kpi = FILTER === 'all' ? '' : '_' + ({ yes: '참석', no: '불참', pending: '미응답', sentpend: '보냈는데미응답', chg: '변경' })[FILTER];
   const grp = groupRows(L), ppl = personRows(L);
   const wb = XLSX.utils.book_new();
@@ -831,14 +838,15 @@ $('#btnAdd').onclick = () => {
 $('#btnSentAt').onclick = () => {
   const L = allGroups().filter(g => !g.test);
   modal(`<h3>마지막 문자 전송 시각 입력</h3>
-    <p>실제 명단 <b>${L.length}그룹</b> 전체의 '마지막 문자 전송'을 이 시각으로 기록해요. 이보다 늦게 보낸 기록이 있는 그룹은 늦은 시각을 그대로 둬요.</p>
+    <p>실제 명단 중 이 시각 전에 명단에 있던 그룹 전체의 '마지막 문자 전송'을 이 시각으로 기록해요(그 뒤 새 신청은 제외). 이보다 늦게 보낸 기록이 있는 그룹은 늦은 시각을 그대로 둬요.</p>
     <div style="margin-top:12px"><label>전송 시각<input type="datetime-local" id="sentAtIn" value="2026-11-03T11:09"></label></div>
     <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>닫기</button><button class="btn pri" id="sentAtGo">전체에 기록</button></div>`);
   $('#sentAtGo').onclick = async () => {
     const at = new Date($('#sentAtIn').value).getTime();
     if(!Number.isFinite(at)) return toast('시각을 입력해 주세요');
     $('#sentAtGo').disabled = true;
-    const j = await api({ op: 'sent', ts: L.map(g => g.t), at });
+    const T = L.filter(g => (g.created || 0) <= at).map(g => g.t);   // 그 시각 뒤에 들어온 새 신청은 안 보낸 것으로 둔다
+    const j = await api({ op: 'sent', ts: T, at });
     $('#sentAtGo').disabled = false;
     if(!j.ok) return toast(j.error || '기록 실패');
     closeModal(); toast(`${j.n}그룹에 ${fmtTime(at)} 기록했어요`); load();
