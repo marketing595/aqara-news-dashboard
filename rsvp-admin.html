@@ -121,7 +121,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
       <button class="btn" id="btnXlsx" title="요약 · 응답 현황(그룹별) · 참석 확정 · 전체(사람별) · 개인 링크">응답 현황 엑셀</button>
       <button class="btn" id="btnCsv">.csv</button>
       <button class="btn" id="btnEventus" title="참석 확정자만, 이벤터스 '참가자리스트 엑셀 등록하기' 양식">이벤터스 등록 양식</button>
-      <button class="btn" id="btnEventusLink" title="명단 전체(본인·동행인·불참 포함)를 이벤터스 엑셀 등록 양식으로 — 직함 칸에 각자의 개인 링크(https:// 없이), 동행인은 동행인 본인 링크">이벤터스 등록용(개인 링크)</button>
+      <button class="btn" id="btnEventusLink" title="그룹마다 대표자 한 줄(동행인 행 없음, 불참 포함)을 이벤터스 엑셀 등록 양식으로 — 직함 칸에 대표자 개인 링크(https:// 없이), 동행인이 있으면 그룹명 '동행인 있음'">이벤터스 등록용(대표자·링크)</button>
       <button class="btn" id="btnClose"></button>
       <button class="btn danger" id="btnReset" title="모든 응답을 미응답으로 되돌림(링크는 유지)">응답 초기화</button>
       <button class="btn" id="btnReload" title="30초마다 자동으로 새로 불러와요">새로고침</button>
@@ -926,13 +926,12 @@ function eventusDownload(mode){
 $('#btnEventusLink').onclick = () => {
   const rows = [], seen = new Set(); let tmp = 0;
   list().slice().sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
+    // 2026-11-04 사용자 지정: 동행인이 있는 그룹도 대표자 이름 한 줄만(동행인 행 없음) — 그룹당 1줄
     const grp = rosterN(g) > 1 ? '기본 카테고리||동행인 있음' : EVENTUS_GROUP;
-    personRows([g]).forEach(r => {
-      let em = String(r.이메일 || '').trim().toLowerCase().replace(/\.co\.comkr$/, '.co.kr');   // 흔한 오타(…co.comkr) 바로잡기
-      if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(em) || seen.has(em)) em = '';
-      if(em) seen.add(em); else em = 'rsvp' + String(++tmp).padStart(3, '0') + '@aqara.kr';
-      rows.push([r.성함, em, r.연락처, grp, r.소속, String(r.링크 || '').replace(/^https?:\/\//, '')]);
-    });
+    let em = String(g.email || '').trim().toLowerCase().replace(/\.co\.comkr$/, '.co.kr');   // 흔한 오타(…co.comkr) 바로잡기
+    if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(em) || seen.has(em)) em = '';
+    if(em) seen.add(em); else em = 'rsvp' + String(++tmp).padStart(3, '0') + '@aqara.kr';
+    rows.push([g.rep.name, em, telDigits(g.rep.phone), grp, g.rep.org || '', linkOf(g.t).replace(/^https?:\/\//, '')]);
   });
   if(!rows.length) return toast('내려받을 사람이 없어요');
   const head1 = EVENTUS_HEAD1.slice(); head1[3] = head1[3].replace(EVENTUS_GROUP, '기본 카테고리||1102 RSVP\n기본 카테고리||동행인 있음\n' + EVENTUS_GROUP);
@@ -942,8 +941,8 @@ $('#btnEventusLink').onclick = () => {
   rows.forEach((r, i) => { const a = XLSX.utils.encode_cell({ r: i + 2, c: 2 }); if(ws[a]){ ws[a].t = 's'; ws[a].z = '@'; } });
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  XLSX.writeFile(wb, `참가자리스트_엑셀등록하기_개인링크_${rows.length}명_${stamp()}.xlsx`);
-  toast(`${rows.length}명 내려받음 · 동행인 ${rows.filter(r => r[5].includes('/c/')).length}명은 동행인 본인 링크` + (tmp ? ` · 임시 이메일 ${tmp}명` : ''));
+  XLSX.writeFile(wb, `참가자리스트_엑셀등록하기_대표자_${rows.length}그룹_${stamp()}.xlsx`);
+  toast(`${rows.length}그룹(대표자) 내려받음 · 동행인 있음 ${rows.filter(r => r[3].includes('동행인')).length}` + (tmp ? ` · 임시 이메일 ${tmp}명` : ''));
 };
 function toCsv(rows){
   if(!rows.length) return '';
