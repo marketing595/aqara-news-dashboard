@@ -59,6 +59,10 @@ export default async function middleware(req){
       const dest = new URL('/rsvp.html?t=' + rm0[1], url0.origin);
       return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
     }
+    // 공통 링크(2026-11-04): hakdongmap.kr/rsvp — "성함이 어떻게 되시나요?"부터 시작
+    if(/^\/rsvp\/?$/i.test(url0.pathname)){
+      return new Response(null, { headers: { 'x-middleware-rewrite': new URL('/rsvp.html', url0.origin).toString() } });
+    }
     // 동행인 개인 링크(2026-11-04): hakdongmap.kr/c/<7자> — 동행인 본인 이름으로 열린다
     const cm0 = url0.pathname.match(/^\/c\/([A-Za-z0-9_-]{7})\/?$/);
     if(cm0){
@@ -88,6 +92,9 @@ export default async function middleware(req){
   if(rm){
     const dest = new URL('/rsvp.html?t=' + rm[1], url0.origin);
     return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
+  }
+  if(/^\/rsvp\/?$/i.test(url0.pathname)){
+    return new Response(null, { headers: { 'x-middleware-rewrite': new URL('/rsvp.html', url0.origin).toString() } });
   }
   const cm = url0.pathname.match(/^\/c\/([A-Za-z0-9_-]{7})\/?$/);
   if(cm){

@@ -162,12 +162,16 @@ function showMsg(title, body){
   $('#bar').hidden = true;
 }
 
+// 공통 링크(2026-11-04): hakdongmap.kr/rsvp → 이름 입력 → 명단에서 찾아 확인 → 본인(대표자) 화면 또는 동행인 화면.
+// K = 서버가 준 표(3시간). 이 경우 등록된 연락처·이메일은 가려져 오고(끝 4자리만), 비워 두면 기존 값이 유지된다.
+let K = '';
+const MASK = () => !!K;
 async function load(){
   if(/^[A-Za-z0-9_-]{7}$/.test(C)) return loadC();
   const full = /^[A-Za-z0-9_-]{12}$/.test(T);
-  if(!full && !/^[A-Za-z0-9_-]{6}$/.test(S)) return showMsg('링크를 확인해 주세요', '받으신 문자의 링크를 그대로 눌러 들어와 주세요.');
+  if(!K && !full && !/^[A-Za-z0-9_-]{6}$/.test(S)) return renderFind();
   try{
-    const r = await fetch('/api/rsvp?op=get&' + (full ? 't=' + encodeURIComponent(T) : 's=' + encodeURIComponent(S)), { cache: 'no-store' });
+    const r = await fetch('/api/rsvp?op=get&' + (K ? 'k=' + encodeURIComponent(K) : full ? 't=' + encodeURIComponent(T) : 's=' + encodeURIComponent(S)), { cache: 'no-store' });
     const j = await r.json();
     if(j.ok && j.t) T = j.t;
     if(!j.ok){ return j.error === 'link'
@@ -185,7 +189,7 @@ function setData(j){
   const cans = j.cans || {};
   F = { status: j.status === 'pending' ? '' : j.status, rep: clone(j.rep),
     people: [...clone(j.comps || []).map(c => Object.assign(withPH(c), { on: j.status === 'pending' ? (cans[c.from || c.name] ? cans[c.from || c.name] === 'yes' : null) : true })),
-             ...clone(j.removed || []).map(n => Object.assign(withPH({ name: n, title: '', org: (j.rep && j.rep.org) || '', phone: '' }), { on: false }))] };
+             ...clone(j.removed || []).map((n, i) => Object.assign(withPH({ name: n, title: '', org: (j.rep && j.rep.org) || '', phone: '', ph4: (j.removedPh4 || [])[i] || '' }), { on: false }))] };
   DIRTY = false;
   const ev = j.event || {};
   $('#evTitle').textContent = ev.title || 'SMART HOME INTERIOR 2026';
@@ -200,6 +204,10 @@ const hasComps = () => F.people.length > 0;
 const isPH = (n) => /미기재|미정/.test(String(n || ''));
 function withPH(c){ c._ph = c.from || (isPH(c.name) ? c.name : ''); if(c._ph && isPH(c.name)) c.name = ''; return c; }
 const QR_NOTE = '<p class="qr-note">이 연락처로 입장 큐알이 발송됩니다.</p>';
+// 공통 링크(가린 화면): 등록된 번호·이메일이 있으면 비워 둬도 유지
+const keepPhone = (p) => MASK() && p && p.ph4 && !String(p.phone || '').replace(/\D/g, '');
+const phPH = (p) => MASK() && p && p.ph4 ? `등록된 번호 유지 (끝자리 ${p.ph4})` : '010-0000-0000';
+const emPH = (p) => MASK() && p && p.hasEmail ? '등록된 이메일 유지 (바꾸려면 입력)' : 'name@example.com';
 const pick = (attr, i, on, ro) => `
   <div class="choice sm" role="group">
     <button type="button" class="yes" ${attr}="${i}" data-v="1" aria-pressed="${on === true}" ${ro ? 'disabled' : ''}>참석</button>
@@ -220,8 +228,8 @@ function render(){
       ${c._ph ? `<label class="fld" style="margin-top:12px"><span>성함<i>*</i></span><input data-c="${i}" data-k="name" value="${esc(c.name)}" placeholder="오시는 분 성함을 적어 주세요" autocomplete="off" ${ro ? 'disabled' : ''}></label>` : ''}
       <label class="fld" style="margin-top:12px"><span>소속</span><input data-c="${i}" data-k="org" value="${esc(c.org || '')}" placeholder="회사·학교 등" autocomplete="organization" ${ro ? 'disabled' : ''}></label>
       <label class="fld"><span>직책</span><input data-c="${i}" data-k="title" value="${esc(c.title || '')}" placeholder="예: 대표, 실장, 디자이너" autocomplete="organization-title" ${ro ? 'disabled' : ''}></label>
-      <label class="fld"><span>연락처<i>*</i></span><input data-c="${i}" data-k="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(c.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
-      <label class="fld"><span>이메일</span><input data-c="${i}" data-k="email" type="email" inputmode="email" value="${esc(c.email || '')}" placeholder="name@example.com" autocomplete="off" ${ro ? 'disabled' : ''}></label>
+      <label class="fld"><span>연락처<i>*</i></span><input data-c="${i}" data-k="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(c.phone))}" placeholder="${phPH(c)}" ${ro ? 'disabled' : ''}></label>
+      <label class="fld"><span>이메일</span><input data-c="${i}" data-k="email" type="email" inputmode="email" value="${esc(c.email || '')}" placeholder="${emPH(c)}" autocomplete="off" ${ro ? 'disabled' : ''}></label>
       ${QR_NOTE}` : '<div style="height:12px"></div>'}
     </div>`).join('');
 
@@ -240,8 +248,8 @@ function render(){
         ${D.sub && D.sub.name ? `<p class="hint" style="margin:-4px 0 12px">${esc(D.sub.name)}님이 대신 참석해요.</p>` : ''}
         <label class="fld"><span>소속</span><input data-r="org" value="${esc(rep.org || '')}" placeholder="회사·학교 등" autocomplete="organization" ${ro ? 'disabled' : ''}></label>
         <label class="fld"><span>직책</span><input data-r="title" value="${esc(rep.title || '')}" placeholder="예: 대표, 실장, 디자이너" autocomplete="organization-title" ${ro ? 'disabled' : ''}></label>
-        <label class="fld"><span>연락처<i>*</i></span><input data-r="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(rep.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
-        <label class="fld"><span>이메일</span><input data-r="email" type="email" inputmode="email" value="${esc(rep.email || '')}" placeholder="name@example.com" autocomplete="email" ${ro ? 'disabled' : ''}></label>
+        <label class="fld"><span>연락처<i>*</i></span><input data-r="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(rep.phone))}" placeholder="${phPH(rep)}" ${ro ? 'disabled' : ''}></label>
+        <label class="fld"><span>이메일</span><input data-r="email" type="email" inputmode="email" value="${esc(rep.email || '')}" placeholder="${emPH(rep)}" autocomplete="email" ${ro ? 'disabled' : ''}></label>
         ${QR_NOTE}
       </div>` : ''}
     </section>
@@ -253,6 +261,7 @@ function render(){
     </section>` : ''}`;
   paintBar();
   bind();
+  notMe();
 }
 
 function paintBar(){
@@ -285,12 +294,12 @@ function validate(){
   let first = null;
   const mark = (sel) => { const el = document.querySelector(sel); if(el){ el.classList.add('bad'); if(!first) first = el; } };
   const need = (v) => !String(v || '').replace(/\D/g, '') || !phoneOk(v);
-  if(F.status === 'yes' && need(F.rep.phone)) mark('[data-r="phone"]');
+  if(F.status === 'yes' && !keepPhone(F.rep) && need(F.rep.phone)) mark('[data-r="phone"]');
   if(F.status === 'yes' && F.rep.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(F.rep.email).trim())) mark('[data-r="email"]');
   F.people.forEach((c, i) => {
     if(c.on !== true) return;
     if(c._ph && !c.name.trim()) mark(`[data-c="${i}"][data-k="name"]`);
-    if(need(c.phone)) mark(`[data-c="${i}"][data-k="phone"]`);
+    if(!keepPhone(c) && need(c.phone)) mark(`[data-c="${i}"][data-k="phone"]`);
     if(c.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(c.email).trim())) mark(`[data-c="${i}"][data-k="email"]`);
   });
   if(first){ first.focus(); first.scrollIntoView({ block: 'center', behavior: 'smooth' }); toast('빨간 칸을 확인해 주세요'); return false; }
@@ -302,7 +311,7 @@ async function save(){
   const btn = $('#saveBtn'); btn.disabled = true; btn.textContent = '저장 중…';
   try{
     const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ op: 'save', t: T, status: F.status, rep: { phone: F.rep.phone, org: F.rep.org || '', title: F.rep.title || '', email: String(F.rep.email || '').trim() },
+      body: JSON.stringify({ op: 'save', ...(K ? { k: K } : { t: T }), status: F.status, rep: { phone: F.rep.phone, org: F.rep.org || '', title: F.rep.title || '', email: String(F.rep.email || '').trim() },
         comps: goingComps().map(c => ({ name: c.name.trim() || c._ph, from: c._ph || undefined, phone: c.phone, org: c.org || '', title: c.title || '', email: String(c.email || '').trim() })) }) });
     const j = await r.json();
     if(!j.ok){ toast(j.error || '저장하지 못했어요. 다시 시도해 주세요.'); paintBar(); return; }
@@ -343,13 +352,62 @@ function renderDone(){
     </section>` : ''}`;
   $('#bar').hidden = true;
   const e = $('#editBtn'); if(e) e.onclick = () => { MODE = 'form'; render(); };
+  notMe();
+}
+
+// ── 공통 링크 첫 화면: 성함 입력 → 명단에서 찾기 → "OOO님 맞으신가요?" ──
+let FIND = { q: '', list: null, busy: false, err: '' };
+function renderFind(){
+  MODE = 'find'; $('#bar').hidden = true;
+  const L = FIND.list;
+  const who = (x) => `${x.org ? esc(x.org) + ' ' : ''}<b>${esc(x.name)}</b>님`;
+  const sub = (x) => x.role === 'comp' ? `${esc(x.host)}님 일행 · 동행인` : (x.n ? `대표 신청자 · 동행 ${x.n}명` : '신청자 본인');
+  $('#app').innerHTML = `
+    <section class="card">
+      <h2>성함이 어떻게 되시나요?</h2>
+      <p class="lead">신청하실 때 적은 성함을 그대로 입력해 주세요. 함께 초대받은 동행인도 본인 성함으로 들어오시면 돼요.</p>
+      <form id="fForm" style="margin-top:18px" autocomplete="off">
+        <label class="fld"><span>성함</span><input id="fName" value="${esc(FIND.q)}" placeholder="예: 홍길동" autocomplete="name" enterkeyhint="search"></label>
+        <button type="submit" class="btn" style="width:100%;margin-top:4px" ${FIND.busy ? 'disabled' : ''}>${FIND.busy ? '찾는 중…' : '확인'}</button>
+      </form>
+      ${FIND.err ? `<p class="hint" style="color:var(--err);font-weight:600">${esc(FIND.err)}</p>` : ''}
+    </section>
+    ${L && !L.length ? `<section class="card"><h3 style="font-size:16px;color:var(--ink)">명단에서 찾지 못했어요</h3>
+      <p class="lead">띄어쓰기 없이 성함만 다시 입력해 보세요. 그래도 안 되면 초대해 주신 담당자에게 문의해 주세요.</p></section>` : ''}
+    ${L && L.length ? `<section class="card">
+      <h3 style="font-size:16px;color:var(--ink)">${L.length === 1 ? '이 분이 맞으신가요?' : '같은 성함이 여러 분 있어요. 본인을 골라 주세요'}</h3>
+      <div style="margin-top:12px">${L.map((x, i) => `<button type="button" class="person" data-pick="${i}" style="display:block;width:100%;text-align:left;padding:14px;cursor:pointer">
+          <div class="p-name" style="font-weight:600">${who(x)}</div>
+          <div class="hint" style="margin-top:2px">${sub(x)}</div>
+          <div class="link" style="margin-top:6px;display:inline-block">${L.length === 1 ? '네, 맞아요' : '이 분이에요'} →</div></button>`).join('')}</div>
+      <p class="hint">본인이 아니면 위에서 성함을 다시 입력해 주세요.</p></section>` : ''}`;
+  const f = $('#fForm');
+  f.onsubmit = async (e) => { e.preventDefault(); const q = $('#fName').value.trim();
+    if(q.replace(/\s/g, '').length < 2){ FIND.err = '성함을 입력해 주세요.'; FIND.list = null; return renderFind(); }
+    FIND = { q, list: null, busy: true, err: '' }; renderFind();
+    try{ const j = await (await fetch('/api/rsvp?op=find&name=' + encodeURIComponent(q), { cache: 'no-store' })).json();
+      FIND.busy = false; if(!j.ok){ FIND.err = j.error || '잠시 후 다시 시도해 주세요.'; return renderFind(); }
+      if(j.event){ $('#evTitle').textContent = j.event.title || 'SMART HOME INTERIOR 2026'; $('#evMeta').innerHTML = `${j.event.sub ? esc(j.event.sub) + '<br>' : ''}<b>일시</b> ${esc(j.event.date || '')}<br><b>장소</b> ${esc(j.event.place || '')}`; }
+      FIND.list = j.list || []; renderFind();
+    }catch(err){ FIND.busy = false; FIND.err = '연결이 원활하지 않아요. 다시 시도해 주세요.'; renderFind(); } };
+  document.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => { const x = FIND.list[+b.dataset.pick]; K = x.k; D = null; CD = null;
+    $('#app').innerHTML = '<div class="msg">불러오는 중…</div>'; x.role === 'comp' ? loadC() : load(); });
+  if(!L) setTimeout(() => { const i = $('#fName'); if(i && !FIND.q) i.focus(); }, 50);
+}
+// 공통 링크로 들어온 화면 위에 '다른 분 성함으로 다시' 링크
+function notMe(){
+  if(!MASK()) return;
+  const d = document.createElement('div'); d.style.cssText = 'text-align:right;margin:-6px 2px 10px';
+  d.innerHTML = '<button type="button" class="link" id="notMe" style="font-size:12.5px">다른 분 성함으로 다시 찾기</button>';
+  $('#app').prepend(d);
+  $('#notMe').onclick = () => { if(DIRTY && !confirm('저장하지 않은 내용이 있어요. 처음으로 돌아갈까요?')) return; K = ''; D = null; CD = null; DIRTY = false; renderFind(); };
 }
 
 // ── 동행인 개인 링크 화면 ──
 let CD = null, CF = null;   // 서버 값 / 편집 중인 값
 async function loadC(){
   try{
-    const r = await fetch('/api/rsvp?op=cget&c=' + encodeURIComponent(C), { cache: 'no-store' });
+    const r = await fetch('/api/rsvp?op=cget&' + (K ? 'k=' + encodeURIComponent(K) : 'c=' + encodeURIComponent(C)), { cache: 'no-store' });
     const j = await r.json();
     if(!j.ok){ return j.error === 'link'
       ? showMsg('링크를 확인해 주세요', '이 링크로는 참석 정보를 찾을 수 없어요. 받으신 문자의 링크를 그대로 눌러 주세요.')
@@ -381,8 +439,8 @@ function renderC(){
         ${me.ph ? `<label class="fld"><span>성함<i>*</i></span><input data-m="name" value="${esc(nm)}" placeholder="성함을 적어 주세요" autocomplete="name" ${ro ? 'disabled' : ''}></label>` : ''}
         <label class="fld"><span>소속</span><input data-m="org" value="${esc(me.org || '')}" placeholder="회사·학교 등" autocomplete="organization" ${ro ? 'disabled' : ''}></label>
         <label class="fld"><span>직책</span><input data-m="title" value="${esc(me.title || '')}" placeholder="예: 대표, 실장, 디자이너" autocomplete="organization-title" ${ro ? 'disabled' : ''}></label>
-        <label class="fld"><span>연락처<i>*</i></span><input data-m="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(me.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
-        <label class="fld"><span>이메일</span><input data-m="email" type="email" inputmode="email" value="${esc(me.email || '')}" placeholder="name@example.com" autocomplete="email" ${ro ? 'disabled' : ''}></label>
+        <label class="fld"><span>연락처<i>*</i></span><input data-m="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(me.phone))}" placeholder="${phPH(me)}" ${ro ? 'disabled' : ''}></label>
+        <label class="fld"><span>이메일</span><input data-m="email" type="email" inputmode="email" value="${esc(me.email || '')}" placeholder="${emPH(me)}" autocomplete="email" ${ro ? 'disabled' : ''}></label>
         ${QR_NOTE}
       </div>` : ''}
     </section>`;
@@ -396,13 +454,14 @@ function renderC(){
     inp.oninput = () => { DIRTY = true; inp.classList.remove('bad'); CF.me[inp.dataset.m] = inp.value; };
     if(inp.type === 'tel') inp.onblur = () => { inp.value = fmtPhone(inp.value); };
   });
+  notMe();
 }
 async function saveC(){
   if(!CF.status) return;
   if(CF.status === 'yes'){
     let first = null; const mark = (k) => { const el = document.querySelector(`[data-m="${k}"]`); if(el){ el.classList.add('bad'); if(!first) first = el; } };
     if(CF.me.ph && !String(CF.me.name || '').trim()) mark('name');
-    if(!String(CF.me.phone || '').replace(/\D/g, '') || !phoneOk(CF.me.phone)) mark('phone');
+    if(!keepPhone(CF.me) && (!String(CF.me.phone || '').replace(/\D/g, '') || !phoneOk(CF.me.phone))) mark('phone');
     if(CF.me.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(CF.me.email).trim())) mark('email');
     if(first){ first.focus(); first.scrollIntoView({ block: 'center', behavior: 'smooth' }); toast('빨간 칸을 확인해 주세요'); return; }
   }
@@ -410,7 +469,7 @@ async function saveC(){
   try{
     const m = CF.me;
     const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ op: 'csave', c: C, status: CF.status, me: { name: String(m.name || '').trim(), phone: m.phone, org: m.org || '', title: m.title || '', email: String(m.email || '').trim() } }) });
+      body: JSON.stringify({ op: 'csave', ...(K ? { k: K } : { c: C }), status: CF.status, me: { name: String(m.name || '').trim(), phone: m.phone, org: m.org || '', title: m.title || '', email: String(m.email || '').trim() } }) });
     const j = await r.json();
     if(!j.ok){ toast(j.error || '저장하지 못했어요. 다시 시도해 주세요.'); btn.disabled = false; btn.textContent = '응답 저장하기'; return; }
     setC(j); MODE = 'done'; renderC(); window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -441,6 +500,7 @@ function renderCDone(){
     </section>` : ''}`;
   $('#bar').hidden = true;
   const e = $('#editBtn'); if(e) e.onclick = () => { MODE = 'form'; renderC(); };
+  notMe();
 }
 
 $('#saveBtn').onclick = () => (CD ? saveC() : save());

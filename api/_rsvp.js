@@ -161,14 +161,18 @@ function allowedComps(g){
 }
 // 손님에게 돌려줄 값 — 이메일·메모·원본은 빼고. removed = 명단에 있었지만 지금 빠진 동행인(되돌리기용)
 // cans = 동행인이 자기 링크로 직접 답한 것 { 자리 이름: 'yes'|'no' } — 대표자 화면에서 미리 골라 보여 준다
-function guestView(g, meta){
+function guestView(g, meta, masked){
   const now = (g.comps || []).map(c => c.name), cans = {};
   Object.keys(g.cans || {}).forEach(s => { if(g.cans[s] && g.cans[s].v) cans[s] = g.cans[s].v; });
+  const rep = { name: g.rep.name, title: g.rep.title || '', org: g.rep.org || '', phone: g.rep.phone || '', email: g.email || '' };
+  const comps = fillOrg(g.comps, g.rep.org);
+  // 공통 링크로 들어온 경우 연락처·이메일은 가린다(끝 4자리만). 이름 미기재 자리 등 나머지는 그대로
+  const removed = Object.keys(allowedComps(g)).filter(n => !now.includes(n));
   return {
-    ok: true, event: EVENT, closed: !!(meta && meta.closed),
-    rep: { name: g.rep.name, title: g.rep.title || '', org: g.rep.org || '', phone: g.rep.phone || '', email: g.email || '' },
-    sub: g.sub || null, comps: fillOrg(g.comps, g.rep.org), status: g.status || 'pending',
-    removed: Object.keys(allowedComps(g)).filter(n => !now.includes(n)),
+    ok: true, event: EVENT, closed: !!(meta && meta.closed), masked: !!masked,
+    rep: masked ? maskP(rep) : rep,
+    sub: g.sub ? { name: g.sub.name } : null, comps: masked ? comps.map(maskP) : comps, status: g.status || 'pending',
+    removed, removedPh4: masked ? removed.map(n => last4((allowedComps(g)[n] || {}).phone)) : undefined,
     updatedAt: g.updatedAt || 0, answered: !!g.answeredAt, cans,
   };
 }
@@ -199,6 +203,29 @@ function compState(g, slot){
   const status = a && a.v ? a.v : ((g.status === 'yes' || g.status === 'no') ? (cur ? 'yes' : 'no') : 'pending');
   return { cur, status, at: a && a.at ? a.at : 0 };
 }
+// ── 공통 링크(2026-11-04): hakdongmap.kr/rsvp — "성함이 어떻게 되시나요?" → 이름으로 명단에서 찾기 ──
+// 개별 링크 배포 오류를 줄이려고 모두 같은 링크를 쓰고, 이름으로 본인/동행인 자리를 찾는다.
+// 이름만 알면 들어올 수 있으므로: 찾기 결과엔 소속·일행 이름만, 화면엔 등록된 연락처·이메일을 보여 주지 않는다(끝 4자리만).
+// 찾은 뒤엔 서명된 표(k = 그룹 토큰·자리·만료 3시간)로만 그 사람 화면을 읽고 저장한다 — 그룹 토큰은 브라우저로 안 나간다.
+const normName = (s) => String(s || '').replace(/\s+/g, '').toLowerCase();
+const TK_TTL = 3 * 3600 * 1000;
+const tkMac = (p) => crypto.createHmac('sha256', SS()).update('k:' + p).digest('base64url').slice(0, 22);
+function mkTk(t, s){ const p = Buffer.from(JSON.stringify({ t, s: s || '', e: Date.now() + TK_TTL })).toString('base64url'); return p + '.' + tkMac(p); }
+function readTk(k){
+  const i = String(k || '').lastIndexOf('.'); if(i < 1) return null;
+  const p = k.slice(0, i), m = k.slice(i + 1);
+  if(m.length !== 22 || !crypto.timingSafeEqual(Buffer.from(m), Buffer.from(tkMac(p)))) return null;
+  try{ const o = JSON.parse(Buffer.from(p, 'base64url').toString('utf8')); return o && okTok(o.t) && Date.now() < o.e ? o : null; }catch(e){ return null; }
+}
+const last4 = (v) => { const d = digits(v); return d.length >= 4 ? d.slice(-4) : ''; };
+// 가린 화면: 연락처·이메일은 비우고 끝 4자리만(ph4). 저장 때 비워 보내면 기존 값 유지
+function maskP(p){ const o = Object.assign({}, p); o.ph4 = last4(p.phone); o.hasEmail = !!p.email; o.phone = ''; o.email = ''; return o; }
+let GCACHE = { at: 0, all: null };
+async function groupsCached(){
+  if(!GCACHE.all || Date.now() - GCACHE.at > 60 * 1000) GCACHE = { at: Date.now(), all: (await fb('GET', 'groups')) || {} };
+  return GCACHE.all;
+}
+
 // 대표자·담당자가 나중에 고친 명단과 어긋나는 동행인 응답은 지운다(나중에 저장한 쪽이 이긴다)
 function syncCans(g){
   if(!g.cans) return g;
@@ -207,12 +234,13 @@ function syncCans(g){
   if(Object.keys(out).length) g.cans = out; else delete g.cans;
   return g;
 }
-function compView(g, meta, code, slot){
+function compView(g, meta, code, slot, masked){
   const s = compState(g, slot), base = s.cur || { name: slot, title: '', org: g.rep.org || '', phone: '' };
   const ph = isPH(slot);
+  const me = { name: ph && base.name === slot ? '' : base.name, ph, title: base.title || '', org: base.org || g.rep.org || '', phone: base.phone || '', email: base.email || '' };
   return {
     ok: true, mode: 'comp', c: code, event: EVENT, closed: !!(meta && meta.closed),
-    me: { name: ph && base.name === slot ? '' : base.name, ph, title: base.title || '', org: base.org || g.rep.org || '', phone: base.phone || '', email: base.email || '' },
+    me: masked ? maskP(me) : me, masked: !!masked,
     host: g.rep.name, status: s.status, answered: s.status !== 'pending', updatedAt: s.at,
   };
 }
@@ -235,9 +263,25 @@ module.exports = async (req, res) => {
   try{
     if(!SS()) return res.status(200).json({ ok: false, error: "서버 설정이 끝나지 않았어요(SESSION_SECRET)." });
 
+    // ── 공통 링크: 이름으로 찾기 — 같은 이름이 여럿이면 소속·일행 이름만 보여 주고 고르게 한다 ──
+    if(op === 'find'){
+      const q = normName(req.query.name);
+      if(q.length < 2) return res.status(200).json({ ok: false, error: '성함을 입력해 주세요.' });
+      const all = await groupsCached(), list = [];
+      Object.keys(all).forEach(t => { const g = all[t]; if(!g || !g.rep || g.test) return;
+        if(normName(g.rep.name) === q) list.push({ k: mkTk(t, ''), role: 'rep', name: g.rep.name, org: g.rep.org || '', n: compSlots(g).length });
+        compSlots(g).forEach(s => { const cur = (g.comps || []).find(c => slotOf(c) === s), nm = cur ? cur.name : s;
+          if(!isPH(nm) && normName(nm) === q) list.push({ k: mkTk(t, s), role: 'comp', name: nm, org: (cur && cur.org) || g.rep.org || '', host: g.rep.name }); }); });
+      return res.status(200).json({ ok: true, event: EVENT, list: list.slice(0, 10) });
+    }
+    // 찾은 뒤 표(k)로 들어온 손님: 대표자 = get/save, 동행인 = cget/csave 로 넘긴다(연락처는 가려서)
+    const TK = readTk(req.method === 'GET' ? req.query.k : body.k);
+    const masked = !!TK;
+    if(TK && TK.s && (op === 'get' || op === 'save')) return res.status(200).json({ ok: false, error: 'link' });
+
     // ── 손님 ──
     if(op === 'get' || op === 'save'){
-      let t = req.method === 'GET' ? req.query.t : body.t;
+      let t = TK ? TK.t : (req.method === 'GET' ? req.query.t : body.t);
       // 초단축 링크 hakdongmap.kr/<토큰 앞 6자>(이벤터스 직함 칸 길이 제한, 2026-10-30) → 전체 토큰으로 찾아 준다
       const sc = req.method === 'GET' ? String(req.query.s || '') : '';
       if(!okTok(t) && /^[A-Za-z0-9_-]{6}$/.test(sc)) t = await shortToTok(sc);
@@ -251,7 +295,7 @@ module.exports = async (req, res) => {
           try{ const o = (await raw('GET', 'o/' + gid(t))) || {}; const now = Date.now();
             await raw('PUT', 'o/' + gid(t), { first: o.first || now, last: now, n: (o.n || 0) + 1 }); }catch(e){}
         }
-        return res.status(200).json(Object.assign(guestView(g, meta), { t }));
+        return res.status(200).json(masked ? guestView(g, meta, true) : Object.assign(guestView(g, meta), { t }));   // 공통 링크엔 토큰을 돌려주지 않는다
       }
 
       if(req.method !== 'POST') return res.status(405).json({ ok: false });
@@ -267,7 +311,9 @@ module.exports = async (req, res) => {
       (g.comps || []).forEach(c => { if(c && c.from) phs[c.from] = c; });
       const comps = [];
       (Array.isArray(body.comps) ? body.comps : []).slice(0, 30).forEach(x => {
-        const nm = str(x && x.name, 40), from = str(x && x.from, 40), phone = digits(x && x.phone);
+        const nm = str(x && x.name, 40), from = str(x && x.from, 40);
+        // 공통 링크(가린 화면)에서 연락처를 비워 보내면 등록된 번호 유지
+        const phone = digits(x && x.phone) || (masked ? (((from && phs[from]) || allow[nm] || {}).phone || '') : '');
         const org = (o) => (x && x.org !== undefined) ? { org: str(x.org, 80) } : (o ? { org: o } : {});   // 소속: 손님이 적은 값, 안 보냈으면 기존 값
         const title = (o) => (x && x.title !== undefined) ? { title: str(x.title, 40) } : (o ? { title: o } : {});   // 직책도 같은 방식
         const mail = (o) => { const e = str(x && x.email, 120).trim().toLowerCase(); return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) ? { email: e } : (o ? { email: o } : {}); };   // 동행인 이메일(2026-11-03): 비워 보내면 기존 값
@@ -283,7 +329,7 @@ module.exports = async (req, res) => {
       const sub = g.sub || null;
       const now = Date.now();
       const next = Object.assign({}, g, {
-        status, rep: Object.assign({}, g.rep, { phone: rep.phone }, body.rep && body.rep.org !== undefined ? { org: rep.org } : {}, body.rep && body.rep.title !== undefined ? { title: rep.title } : {}),
+        status, rep: Object.assign({}, g.rep, { phone: rep.phone || (masked ? g.rep.phone || '' : '') }, body.rep && body.rep.org !== undefined ? { org: rep.org } : {}, body.rep && body.rep.title !== undefined ? { title: rep.title } : {}),
         sub, updatedAt: now, updatedBy: 'guest', answeredAt: now,
       });
       next.comps = fillOrg(comps, next.rep.org);
@@ -292,15 +338,19 @@ module.exports = async (req, res) => {
       const em = body.rep && typeof body.rep.email === 'string' ? str(body.rep.email, 120).trim().toLowerCase() : '';
       if(em && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) next.email = em;
       await fb('PUT', `groups/${t}`, next);
-      await fb('POST', `log/${t}`, { at: now, by: 'guest', status, n: (status === 'yes' ? 1 : 0) + comps.length, sub: sub ? sub.name : '', comps: comps.map(c => c.name).join(', ') });
-      return res.status(200).json(guestView(next, meta));
+      await fb('POST', `log/${t}`, { at: now, by: 'guest', status, n: (status === 'yes' ? 1 : 0) + comps.length, sub: sub ? sub.name : '', comps: comps.map(c => c.name).join(', '), via: masked ? 'common' : undefined });
+      GCACHE.at = 0;
+      return res.status(200).json(guestView(next, meta, masked));
     }
 
     // ── 동행인(자기 링크) — 자기 참석 여부·연락처만. 대표자·다른 동행인 정보는 안 보인다 ──
     if(op === 'cget' || op === 'csave'){
-      const code = String((req.method === 'GET' ? req.query.c : body.c) || '');
-      if(!okC(code)) return res.status(200).json({ ok: false, error: 'link' });
-      const hit = await codeToSlot(code);
+      let code = String((req.method === 'GET' ? req.query.c : body.c) || ''), hit = null;
+      if(TK && TK.s){ hit = { t: TK.t, slot: TK.s }; code = ccode(TK.t, TK.s); }   // 공통 링크로 찾은 동행인
+      else{
+        if(!okC(code)) return res.status(200).json({ ok: false, error: 'link' });
+        hit = await codeToSlot(code);
+      }
       if(!hit) return res.status(200).json({ ok: false, error: 'link' });
       const { t, slot } = hit;
       const g = await fb('GET', `groups/${t}`);
@@ -311,7 +361,7 @@ module.exports = async (req, res) => {
           try{ const k = 'c' + gid(t + '|' + slot); const o = (await raw('GET', 'o/' + k)) || {}; const now = Date.now();
             await raw('PUT', 'o/' + k, { first: o.first || now, last: now, n: (o.n || 0) + 1, t: gid(t) }); }catch(e){}
         }
-        return res.status(200).json(compView(g, meta, code, slot));
+        return res.status(200).json(compView(g, meta, masked ? '' : code, slot, masked));
       }
       if(req.method !== 'POST') return res.status(405).json({ ok: false });
       if(meta.closed) return res.status(200).json({ ok: false, error: '응답이 마감되었어요. 변경이 필요하면 담당자에게 연락해 주세요.' });
@@ -319,7 +369,7 @@ module.exports = async (req, res) => {
       if(!status) return res.status(200).json({ ok: false, error: '참석 여부를 선택해 주세요.' });
       const me = body.me || {}, s = compState(g, slot);
       const base = s.cur || allowedComps(g)[slot] || { name: slot, title: '', org: g.rep.org || '', phone: '' };
-      const p = Object.assign({}, base, { phone: digits(me.phone) });
+      const p = Object.assign({}, base, { phone: digits(me.phone) || (masked ? base.phone || '' : '') });
       if(me.org !== undefined) p.org = str(me.org, 80);
       if(me.title !== undefined) p.title = str(me.title, 40);
       const em = str(me.email, 120).trim().toLowerCase(); if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) p.email = em;
@@ -332,7 +382,8 @@ module.exports = async (req, res) => {
         updatedBy: g.updatedBy || 'guest-comp' });   // 처음 손댄 게 동행인이면 명단 가져오기가 덮어쓰지 않게 표시
       await fb('PUT', `groups/${t}`, next);
       await fb('POST', `log/${t}`, { at: now, by: 'guest-comp', status: next.status || 'pending', n: (next.status === 'yes' ? 1 : 0) + next.comps.length, sub: '', comps: next.comps.map(c => c.name).join(', '), who: p.name, v: status });
-      return res.status(200).json(compView(next, meta, code, slot));
+      GCACHE.at = 0;
+      return res.status(200).json(compView(next, meta, masked ? '' : code, slot, masked));
     }
 
     // ── 관리자 ──

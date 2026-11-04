@@ -113,6 +113,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
       <p class="state" id="state">불러오는 중…</p>
     </div>
     <div class="tools">
+      <button class="btn pri" id="btnCommon" title="모두에게 같은 링크 — 열면 '성함이 어떻게 되시나요?'부터 시작해 명단에서 찾아 본인/동행인 화면으로">🔗 공통 링크 복사 <span style="opacity:.75;font-weight:500">hakdongmap.kr/rsvp</span></button>
       <label class="btn" style="display:inline-flex;align-items:center">명단 엑셀 가져오기<input type="file" id="file" accept=".xlsx,.xls,.csv" hidden></label>
       <label class="btn" style="display:inline-flex;align-items:center" title="이벤터스 참가자 리스트(참석/불참 상태) 또는 '참석 확정 여부 · 발송 여부' 열이 있는 담당자 정리 엑셀 — 이벤터스 응답·발송 문제를 기존 그룹에 반영(새 그룹은 안 만듦)">현황 엑셀 반영<input type="file" id="fileSt" accept=".xlsx,.xls" hidden></label>
       <label class="btn" style="display:inline-flex;align-items:center" title="설문 응답 엑셀(성함·연락처·이메일)의 이메일로 명단 이메일을 맞춤 — 미리보기 후 저장">설문 이메일 반영<input type="file" id="fileEm" accept=".xlsx,.xls" hidden></label>
@@ -121,7 +122,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
       <button class="btn" id="btnXlsx" title="요약 · 응답 현황(그룹별) · 참석 확정 · 전체(사람별) · 개인 링크">응답 현황 엑셀</button>
       <button class="btn" id="btnCsv">.csv</button>
       <button class="btn" id="btnEventus" title="참석 확정자만, 이벤터스 '참가자리스트 엑셀 등록하기' 양식">이벤터스 등록 양식</button>
-      <button class="btn" id="btnEventusLink" title="그룹마다 대표자 한 줄(동행인 행 없음, 불참 포함)을 이벤터스 엑셀 등록 양식으로 — 직함 칸에 대표자 개인 링크(https:// 없이), 동행인이 있으면 그룹명 '동행인 있음'">이벤터스 등록용(대표자·링크)</button>
+      <button class="btn" id="btnEventusLink" title="그룹마다 대표자 한 줄(동행인 행 없음, 불참 포함)을 이벤터스 엑셀 등록 양식으로 — 직함 = 실제 직책, 동행인이 있으면 그룹명 '동행인 있음', 휴대전화·이메일이 없거나 겹치면 017 가상번호·@aqara.kr 임시 주소">이벤터스 등록용(대표자)</button>
       <button class="btn" id="btnClose"></button>
       <button class="btn danger" id="btnReset" title="모든 응답을 미응답으로 되돌림(링크는 유지)">응답 초기화</button>
       <button class="btn" id="btnReload" title="30초마다 자동으로 새로 불러와요">새로고침</button>
@@ -923,15 +924,25 @@ function eventusDownload(mode){
 }
 // 이벤터스 등록용 — 개인 링크(2026-11-04 요청): 명단 전체를 '사람별'과 같은 순서로, 직함 칸 = 각자의 개인 링크(https:// 없이).
 // 그룹명: 명단에 동행인이 있는 그룹은 '동행인 있음', 혼자면 '기본 티켓'. 이메일이 없거나 앞사람과 겹치면 rsvpNNN@aqara.kr 임시 주소(이벤터스 필수 칸).
+// 공통 링크 복사(2026-11-04)
+$('#btnCommon').onclick = async () => {
+  const u = 'https://hakdongmap.kr/rsvp';
+  try{ await navigator.clipboard.writeText(u); toast('공통 링크를 복사했어요: ' + u); }
+  catch(e){ prompt('아래 링크를 복사해 주세요', u); }
+};
 $('#btnEventusLink').onclick = () => {
-  const rows = [], seen = new Set(); let tmp = 0;
+  // 이벤터스 필수·중복 불가: 휴대전화 없거나 앞사람과 겹치면 017 가상번호(0170000NNNN), 이메일도 같은 방식으로 rsvpNNN@aqara.kr (2026-11-04 사용자 지정)
+  const rows = [], seen = new Set(), seenTel = new Set(); let tmp = 0, fake = 0;
   list().slice().sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
     // 2026-11-04 사용자 지정: 동행인이 있는 그룹도 대표자 이름 한 줄만(동행인 행 없음) — 그룹당 1줄
     const grp = rosterN(g) > 1 ? '기본 카테고리||동행인 있음' : EVENTUS_GROUP;
     let em = String(g.email || '').trim().toLowerCase().replace(/\.co\.comkr$/, '.co.kr');   // 흔한 오타(…co.comkr) 바로잡기
     if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(em) || seen.has(em)) em = '';
     if(em) seen.add(em); else em = 'rsvp' + String(++tmp).padStart(3, '0') + '@aqara.kr';
-    rows.push([g.rep.name, em, telDigits(g.rep.phone), grp, g.rep.org || '', linkOf(g.t).replace(/^https?:\/\//, '')]);
+    let tel = telDigits(g.rep.phone);
+    if(!/^0\d{8,10}$/.test(tel) || seenTel.has(tel)) tel = '';
+    if(tel) seenTel.add(tel); else { do { tel = '0170000' + String(++fake).padStart(4, '0'); } while(seenTel.has(tel)); seenTel.add(tel); }
+    rows.push([g.rep.name, em, tel, grp, g.rep.org || '', g.rep.title || '']);   // 직함 = 실제 직책(공통 링크라 개인 링크 안 넣음)
   });
   if(!rows.length) return toast('내려받을 사람이 없어요');
   const head1 = EVENTUS_HEAD1.slice(); head1[3] = head1[3].replace(EVENTUS_GROUP, '기본 카테고리||1102 RSVP\n기본 카테고리||동행인 있음\n' + EVENTUS_GROUP);
@@ -942,7 +953,7 @@ $('#btnEventusLink').onclick = () => {
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
   XLSX.writeFile(wb, `참가자리스트_엑셀등록하기_대표자_${rows.length}그룹_${stamp()}.xlsx`);
-  toast(`${rows.length}그룹(대표자) 내려받음 · 동행인 있음 ${rows.filter(r => r[3].includes('동행인')).length}` + (tmp ? ` · 임시 이메일 ${tmp}명` : ''));
+  toast(`${rows.length}그룹(대표자) 내려받음 · 동행인 있음 ${rows.filter(r => r[3].includes('동행인')).length}` + (tmp ? ` · 임시 이메일 ${tmp}명` : '') + (fake ? ` · 017 가상번호 ${fake}명` : ''));
 };
 function toCsv(rows){
   if(!rows.length) return '';
