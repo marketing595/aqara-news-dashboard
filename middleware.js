@@ -59,6 +59,12 @@ export default async function middleware(req){
       const dest = new URL('/rsvp.html?t=' + rm0[1], url0.origin);
       return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
     }
+    // 동행인 개인 링크(2026-11-04): hakdongmap.kr/c/<7자> — 동행인 본인 이름으로 열린다
+    const cm0 = url0.pathname.match(/^\/c\/([A-Za-z0-9_-]{7})\/?$/);
+    if(cm0){
+      const dest = new URL('/rsvp.html?c=' + cm0[1], url0.origin);
+      return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
+    }
     if(url0.pathname === '/api/rsvp'){
       const dest = new URL('/api/db' + url0.search, url0.origin);
       dest.searchParams.set('rsvp', '1');
@@ -81,6 +87,11 @@ export default async function middleware(req){
   const rm = url0.pathname.match(/^\/r\/([A-Za-z0-9_-]{12})\/?$/);
   if(rm){
     const dest = new URL('/rsvp.html?t=' + rm[1], url0.origin);
+    return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
+  }
+  const cm = url0.pathname.match(/^\/c\/([A-Za-z0-9_-]{7})\/?$/);
+  if(cm){
+    const dest = new URL('/rsvp.html?c=' + cm[1], url0.origin);
     return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
   }
   // RSVP API: /api/rsvp → /api/db?rsvp=1 (Vercel Hobby 함수 12개 제한이라 db.js가 대신 처리). 로그인 검사는 _rsvp.js가 op별로 직접 한다.

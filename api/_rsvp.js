@@ -160,14 +160,60 @@ function allowedComps(g){
   return m;
 }
 // 손님에게 돌려줄 값 — 이메일·메모·원본은 빼고. removed = 명단에 있었지만 지금 빠진 동행인(되돌리기용)
+// cans = 동행인이 자기 링크로 직접 답한 것 { 자리 이름: 'yes'|'no' } — 대표자 화면에서 미리 골라 보여 준다
 function guestView(g, meta){
-  const now = (g.comps || []).map(c => c.name);
+  const now = (g.comps || []).map(c => c.name), cans = {};
+  Object.keys(g.cans || {}).forEach(s => { if(g.cans[s] && g.cans[s].v) cans[s] = g.cans[s].v; });
   return {
     ok: true, event: EVENT, closed: !!(meta && meta.closed),
     rep: { name: g.rep.name, title: g.rep.title || '', org: g.rep.org || '', phone: g.rep.phone || '', email: g.email || '' },
     sub: g.sub || null, comps: fillOrg(g.comps, g.rep.org), status: g.status || 'pending',
     removed: Object.keys(allowedComps(g)).filter(n => !now.includes(n)),
-    updatedAt: g.updatedAt || 0, answered: !!g.answeredAt,
+    updatedAt: g.updatedAt || 0, answered: !!g.answeredAt, cans,
+  };
+}
+
+// ── 동행인 개인 링크(2026-11-04): hakdongmap.kr/c/<7자> ──
+// 대표자 링크를 동행인에게 그대로 주면 대표자 이름으로 열려서, 동행인마다 자기 이름으로 열리는 링크를 따로 준다.
+// 코드 = HMAC(그룹 토큰 + 자리 이름) 앞 7자 → 저장할 필요가 없고, 그룹 토큰을 몰라도 대표자 화면은 못 연다.
+// 자리 이름 = 처음 명단 이름(이름 미기재 자리는 c.from). 담당자가 동행인 이름을 고치면 링크도 바뀐다.
+const slotOf = (c) => (c && (c.from || c.name)) || '';
+function compSlots(g){
+  return [...new Set([...String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(Boolean), ...(g.comps || []).map(slotOf).filter(Boolean)])];
+}
+const ccode = (t, slot) => crypto.createHmac('sha256', SS()).update('c:' + t + '|' + slot).digest('base64url').slice(0, 7);
+const okC = (s) => /^[A-Za-z0-9_-]{7}$/.test(String(s || ''));
+let CMAP = { at: 0, m: {} };
+async function codeToSlot(code){
+  if(Date.now() - CMAP.at > 5 * 60 * 1000 || !CMAP.m[code]){
+    const all = (await fb('GET', 'groups')) || {}, m = {};
+    Object.keys(all).forEach(t => { const g = all[t]; if(!g || !g.rep) return; compSlots(g).forEach(s => { m[ccode(t, s)] = { t, slot: s }; }); });
+    CMAP = { at: Date.now(), m };
+  }
+  return CMAP.m[code] || null;
+}
+// 동행인 한 명의 현재 상태: 본인이 답했으면 그 값, 아니면 대표자/담당자가 답한 그룹 기준(명단에 남아 있으면 참석)
+function compState(g, slot){
+  const cur = (g.comps || []).find(c => slotOf(c) === slot) || null;
+  const a = (g.cans || {})[slot];
+  const status = a && a.v ? a.v : ((g.status === 'yes' || g.status === 'no') ? (cur ? 'yes' : 'no') : 'pending');
+  return { cur, status, at: a && a.at ? a.at : 0 };
+}
+// 대표자·담당자가 나중에 고친 명단과 어긋나는 동행인 응답은 지운다(나중에 저장한 쪽이 이긴다)
+function syncCans(g){
+  if(!g.cans) return g;
+  const going = new Set((g.comps || []).map(slotOf)), out = {};
+  Object.keys(g.cans).forEach(s => { const a = g.cans[s]; if(a && (a.v === 'yes') === going.has(s)) out[s] = a; });
+  if(Object.keys(out).length) g.cans = out; else delete g.cans;
+  return g;
+}
+function compView(g, meta, code, slot){
+  const s = compState(g, slot), base = s.cur || { name: slot, title: '', org: g.rep.org || '', phone: '' };
+  const ph = isPH(slot);
+  return {
+    ok: true, mode: 'comp', c: code, event: EVENT, closed: !!(meta && meta.closed),
+    me: { name: ph && base.name === slot ? '' : base.name, ph, title: base.title || '', org: base.org || g.rep.org || '', phone: base.phone || '', email: base.email || '' },
+    host: g.rep.name, status: s.status, answered: s.status !== 'pending', updatedAt: s.at,
   };
 }
 
@@ -241,12 +287,52 @@ module.exports = async (req, res) => {
         sub, updatedAt: now, updatedBy: 'guest', answeredAt: now,
       });
       next.comps = fillOrg(comps, next.rep.org);
+      syncCans(next);
       // 이메일(2026-11-03): 손님이 적은 값이 형식에 맞으면 저장, 비워 보내면 기존 값 유지
       const em = body.rep && typeof body.rep.email === 'string' ? str(body.rep.email, 120).trim().toLowerCase() : '';
       if(em && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) next.email = em;
       await fb('PUT', `groups/${t}`, next);
       await fb('POST', `log/${t}`, { at: now, by: 'guest', status, n: (status === 'yes' ? 1 : 0) + comps.length, sub: sub ? sub.name : '', comps: comps.map(c => c.name).join(', ') });
       return res.status(200).json(guestView(next, meta));
+    }
+
+    // ── 동행인(자기 링크) — 자기 참석 여부·연락처만. 대표자·다른 동행인 정보는 안 보인다 ──
+    if(op === 'cget' || op === 'csave'){
+      const code = String((req.method === 'GET' ? req.query.c : body.c) || '');
+      if(!okC(code)) return res.status(200).json({ ok: false, error: 'link' });
+      const hit = await codeToSlot(code);
+      if(!hit) return res.status(200).json({ ok: false, error: 'link' });
+      const { t, slot } = hit;
+      const g = await fb('GET', `groups/${t}`);
+      if(!g || !g.rep || !compSlots(g).includes(slot) || ccode(t, slot) !== code) return res.status(200).json({ ok: false, error: 'link' });
+      const meta = (await fb('GET', 'meta')) || {};
+      if(op === 'cget'){
+        if(!sessionEmail(req)){
+          try{ const k = 'c' + gid(t + '|' + slot); const o = (await raw('GET', 'o/' + k)) || {}; const now = Date.now();
+            await raw('PUT', 'o/' + k, { first: o.first || now, last: now, n: (o.n || 0) + 1, t: gid(t) }); }catch(e){}
+        }
+        return res.status(200).json(compView(g, meta, code, slot));
+      }
+      if(req.method !== 'POST') return res.status(405).json({ ok: false });
+      if(meta.closed) return res.status(200).json({ ok: false, error: '응답이 마감되었어요. 변경이 필요하면 담당자에게 연락해 주세요.' });
+      const status = body.status === 'yes' || body.status === 'no' ? body.status : '';
+      if(!status) return res.status(200).json({ ok: false, error: '참석 여부를 선택해 주세요.' });
+      const me = body.me || {}, s = compState(g, slot);
+      const base = s.cur || allowedComps(g)[slot] || { name: slot, title: '', org: g.rep.org || '', phone: '' };
+      const p = Object.assign({}, base, { phone: digits(me.phone) });
+      if(me.org !== undefined) p.org = str(me.org, 80);
+      if(me.title !== undefined) p.title = str(me.title, 40);
+      const em = str(me.email, 120).trim().toLowerCase(); if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) p.email = em;
+      if(isPH(slot)){ const nm = str(me.name, 40); if(nm) p.name = nm; if(p.name !== slot) p.from = slot; else delete p.from; }
+      // 명단 순서를 지키며 이 사람만 넣고/뺀다
+      const comps = (g.comps || []).slice(), i = comps.findIndex(c => slotOf(c) === slot);
+      if(status === 'yes'){ if(i >= 0) comps[i] = p; else comps.push(p); } else if(i >= 0) comps.splice(i, 1);
+      const now = Date.now();
+      const next = Object.assign({}, g, { comps: fillOrg(comps, g.rep.org), cans: Object.assign({}, g.cans, { [slot]: { v: status, at: now } }), updatedAt: now,
+        updatedBy: g.updatedBy || 'guest-comp' });   // 처음 손댄 게 동행인이면 명단 가져오기가 덮어쓰지 않게 표시
+      await fb('PUT', `groups/${t}`, next);
+      await fb('POST', `log/${t}`, { at: now, by: 'guest-comp', status: next.status || 'pending', n: (next.status === 'yes' ? 1 : 0) + next.comps.length, sub: '', comps: next.comps.map(c => c.name).join(', '), who: p.name, v: status });
+      return res.status(200).json(compView(next, meta, code, slot));
     }
 
     // ── 관리자 ──
@@ -257,9 +343,11 @@ module.exports = async (req, res) => {
       const [groups, meta, opens, sent] = await Promise.all([fb("GET", "groups"), fb("GET", "meta"), raw('GET', 'o'), raw('GET', 's')]);
       const log = await logsFor(Object.keys(groups || {}));
       // 문자 발송·링크 열람 기록을 그룹에 붙여 준다(저장은 따로: s/<gid>, o/<gid>)
-      Object.keys(groups || {}).forEach(t => { const k = gid(t);
-        if(opens && opens[k]) groups[t].open = opens[k];
-        if(sent && sent[k]) groups[t].sent = sent[k]; });
+      Object.keys(groups || {}).forEach(t => { const k = gid(t), g = groups[t];
+        if(opens && opens[k]) g.open = opens[k];
+        if(sent && sent[k]) g.sent = sent[k];
+        // 동행인 개인 링크 코드 { 자리 이름: 7자 } + 동행인 링크 열람
+        if(g && g.rep){ g.clinks = {}; g.copen = {}; compSlots(g).forEach(s => { g.clinks[s] = ccode(t, s); const o = opens && opens['c' + gid(t + '|' + s)]; if(o) g.copen[s] = o; }); } });
       return res.status(200).json({ ok: true, email, groups: groups || {}, meta: meta || {}, log: log || {}, locked: true });
     }
     if(req.method !== 'POST') return res.status(405).json({ ok: false });
@@ -324,7 +412,7 @@ module.exports = async (req, res) => {
           if(g.updatedBy === 'guest' || (g.updatedBy && !mine && (g.status || 'pending') !== 'pending')) kept++;
           else{
             g.status = x.status;
-            if(Array.isArray(x.comps)){ const keep = x.comps.map(n => str(n, 40)); g.comps = (g.comps || []).filter(c => keep.includes(c.name) || (c.from && keep.includes(c.from))); }
+            if(Array.isArray(x.comps)){ const keep = x.comps.map(n => str(n, 40)); g.comps = (g.comps || []).filter(c => keep.includes(c.name) || (c.from && keep.includes(c.from))); syncCans(g); }
             g.src = str(x.src, 40) || '담당자 엑셀'; g.updatedAt = now; g.updatedBy = email;
             logs.push([x.t, { at: now, by: email, status: g.status, n: (g.status === 'yes' ? 1 : 0) + (g.comps || []).length, sub: '', comps: (g.comps || []).map(c => c.name).join(', '), src: g.src }]);
             applied++;
@@ -378,6 +466,7 @@ module.exports = async (req, res) => {
         email: typeof body.email === 'string' ? str(body.email, 120).trim().toLowerCase() : (g.email || ''),   // 2026-11-03 담당자가 이메일 입력·수정
         updatedAt: now, updatedBy: email,
       });
+      syncCans(next);
       await fb('PUT', `groups/${body.t}`, next);
       await fb('POST', `log/${body.t}`, { at: now, by: email, status: next.status, n: (next.status === 'yes' ? 1 : 0) + (next.status === 'no' || next.status === 'yes' ? next.comps.length : 0), sub: next.sub ? next.sub.name : '', comps: next.comps.map(c => c.name).join(', ') });
       return res.status(200).json({ ok: true, group: next });
@@ -451,7 +540,7 @@ module.exports = async (req, res) => {
         const names = String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(Boolean);
         const comps = names.map(n => { const c = (g.comps || []).find(x => x.name === n); if(c){ const o = Object.assign({}, c); delete o.from; return o; } return { name: n, title: '', org: g.rep.org || '', phone: '' }; });
         const next = Object.assign({}, g, { status: 'pending', comps, updatedAt: 0 });
-        delete next.answeredAt; delete next.updatedBy; delete next._t;
+        delete next.answeredAt; delete next.updatedBy; delete next._t; delete next.cans;
         patch[t] = next;
       });
       if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);

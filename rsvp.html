@@ -139,6 +139,8 @@ h2{font-size:21px;line-height:1.35;font-weight:700;color:var(--ink);letter-spaci
 let T = (new URLSearchParams(location.search).get('t') || (location.pathname.match(/\/r\/([A-Za-z0-9_-]{12})\/?$/) || [])[1] || '').trim();
 // 초단축 링크 hakdongmap.kr/<6자>: 서버가 전체 토큰을 찾아 돌려준다(저장 때는 전체 토큰 사용)
 const S = (new URLSearchParams(location.search).get('s') || (location.pathname.match(/^\/([A-Za-z0-9_-]{6})\/?$/) || [])[1] || '').trim();
+// 동행인 개인 링크 hakdongmap.kr/c/<7자>(2026-11-04): 동행인 본인 이름으로 열리고 자기 참석 여부만 답한다
+const C = (new URLSearchParams(location.search).get('c') || (location.pathname.match(/^\/c\/([A-Za-z0-9_-]{7})\/?$/) || [])[1] || '').trim();
 let D = null;          // 서버 값
 let F = null;          // 편집 중인 값
 let MODE = 'form';     // form | done
@@ -161,6 +163,7 @@ function showMsg(title, body){
 }
 
 async function load(){
+  if(/^[A-Za-z0-9_-]{7}$/.test(C)) return loadC();
   const full = /^[A-Za-z0-9_-]{12}$/.test(T);
   if(!full && !/^[A-Za-z0-9_-]{6}$/.test(S)) return showMsg('링크를 확인해 주세요', '받으신 문자의 링크를 그대로 눌러 들어와 주세요.');
   try{
@@ -178,8 +181,10 @@ async function load(){
 function setData(j){
   D = j;
   // 본인 참석 여부(status) + 함께 오시는 분 각자의 참석 여부(on). 서버의 comps = 참석하는 동행인, removed = 불참으로 고른 동행인
+  // 동행인이 자기 링크로 먼저 답했으면(cans) 그 값으로 미리 골라 둔다
+  const cans = j.cans || {};
   F = { status: j.status === 'pending' ? '' : j.status, rep: clone(j.rep),
-    people: [...clone(j.comps || []).map(c => Object.assign(withPH(c), { on: j.status === 'pending' ? null : true })),
+    people: [...clone(j.comps || []).map(c => Object.assign(withPH(c), { on: j.status === 'pending' ? (cans[c.from || c.name] ? cans[c.from || c.name] === 'yes' : null) : true })),
              ...clone(j.removed || []).map(n => Object.assign(withPH({ name: n, title: '', org: (j.rep && j.rep.org) || '', phone: '' }), { on: false }))] };
   DIRTY = false;
   const ev = j.event || {};
@@ -340,7 +345,105 @@ function renderDone(){
   const e = $('#editBtn'); if(e) e.onclick = () => { MODE = 'form'; render(); };
 }
 
-$('#saveBtn').onclick = save;
+// ── 동행인 개인 링크 화면 ──
+let CD = null, CF = null;   // 서버 값 / 편집 중인 값
+async function loadC(){
+  try{
+    const r = await fetch('/api/rsvp?op=cget&c=' + encodeURIComponent(C), { cache: 'no-store' });
+    const j = await r.json();
+    if(!j.ok){ return j.error === 'link'
+      ? showMsg('링크를 확인해 주세요', '이 링크로는 참석 정보를 찾을 수 없어요. 받으신 문자의 링크를 그대로 눌러 주세요.')
+      : showMsg('잠시 후 다시 시도해 주세요', esc(j.error || '')); }
+    setC(j); MODE = j.answered ? 'done' : 'form'; renderC();
+  }catch(e){ showMsg('연결이 원활하지 않아요', '잠시 후 새로고침해 주세요.'); }
+}
+function setC(j){
+  CD = j; CF = { status: j.status === 'pending' ? '' : j.status, me: clone(j.me) }; DIRTY = false;
+  const ev = j.event || {};
+  $('#evTitle').textContent = ev.title || 'SMART HOME INTERIOR 2026';
+  $('#evMeta').innerHTML = `${ev.sub ? esc(ev.sub) + '<br>' : ''}<b>일시</b> ${esc(ev.date || '')}<br><b>장소</b> ${esc(ev.place || '')}`;
+}
+function renderC(){
+  if(MODE === 'done') return renderCDone();
+  const ro = CD.closed, me = CF.me, nm = me.name || '';
+  $('#app').innerHTML = `
+    <section class="card">
+      <h2>${nm ? esc(nm) + '님,' : '안녕하세요,'}<br>세미나에 참석하시나요?</h2>
+      <p class="lead">${esc(CD.host)}님 일행으로 초대되셨어요. 참석 여부와 연락처를 알려 주세요.</p>
+      ${ro ? '<div class="closed">응답이 마감되어 지금은 수정할 수 없어요. 변경이 필요하면 담당자에게 연락해 주세요.</div>' : ''}
+      <div class="choice" role="group" aria-label="참석 여부">
+        <button type="button" class="yes" data-cst="yes" aria-pressed="${CF.status === 'yes'}" ${ro ? 'disabled' : ''}>참석합니다</button>
+        <button type="button" class="no" data-cst="no" aria-pressed="${CF.status === 'no'}" ${ro ? 'disabled' : ''}>불참합니다</button>
+      </div>
+      ${CF.status === 'yes' ? `
+      <div class="person" style="margin-top:16px">
+        <div class="p-top"><span class="p-name">${nm ? esc(nm) : '참석자'}<span class="p-tag">본인</span></span></div>
+        ${me.ph ? `<label class="fld"><span>성함<i>*</i></span><input data-m="name" value="${esc(nm)}" placeholder="성함을 적어 주세요" autocomplete="name" ${ro ? 'disabled' : ''}></label>` : ''}
+        <label class="fld"><span>소속</span><input data-m="org" value="${esc(me.org || '')}" placeholder="회사·학교 등" autocomplete="organization" ${ro ? 'disabled' : ''}></label>
+        <label class="fld"><span>직책</span><input data-m="title" value="${esc(me.title || '')}" placeholder="예: 대표, 실장, 디자이너" autocomplete="organization-title" ${ro ? 'disabled' : ''}></label>
+        <label class="fld"><span>연락처<i>*</i></span><input data-m="phone" type="tel" inputmode="numeric" value="${esc(fmtPhone(me.phone))}" placeholder="010-0000-0000" ${ro ? 'disabled' : ''}></label>
+        <label class="fld"><span>이메일</span><input data-m="email" type="email" inputmode="email" value="${esc(me.email || '')}" placeholder="name@example.com" autocomplete="email" ${ro ? 'disabled' : ''}></label>
+        ${QR_NOTE}
+      </div>` : ''}
+    </section>`;
+  const bar = $('#bar');
+  if(ro){ bar.hidden = true; }
+  else{ bar.hidden = false;
+    $('#sum').innerHTML = !CF.status ? '<b>참석 여부를 선택해 주세요</b>' : CF.status === 'yes' ? '<b>참석</b>저장하면 담당자에게 전달돼요' : '<b>불참</b>저장하면 담당자에게 전달돼요';
+    $('#saveBtn').disabled = !CF.status; $('#saveBtn').textContent = CD.answered ? '변경 내용 저장' : '응답 저장하기'; }
+  document.querySelectorAll('[data-cst]').forEach(b => b.onclick = () => { CF.status = b.dataset.cst; DIRTY = true; renderC(); });
+  document.querySelectorAll('[data-m]').forEach(inp => {
+    inp.oninput = () => { DIRTY = true; inp.classList.remove('bad'); CF.me[inp.dataset.m] = inp.value; };
+    if(inp.type === 'tel') inp.onblur = () => { inp.value = fmtPhone(inp.value); };
+  });
+}
+async function saveC(){
+  if(!CF.status) return;
+  if(CF.status === 'yes'){
+    let first = null; const mark = (k) => { const el = document.querySelector(`[data-m="${k}"]`); if(el){ el.classList.add('bad'); if(!first) first = el; } };
+    if(CF.me.ph && !String(CF.me.name || '').trim()) mark('name');
+    if(!String(CF.me.phone || '').replace(/\D/g, '') || !phoneOk(CF.me.phone)) mark('phone');
+    if(CF.me.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(CF.me.email).trim())) mark('email');
+    if(first){ first.focus(); first.scrollIntoView({ block: 'center', behavior: 'smooth' }); toast('빨간 칸을 확인해 주세요'); return; }
+  }
+  const btn = $('#saveBtn'); btn.disabled = true; btn.textContent = '저장 중…';
+  try{
+    const m = CF.me;
+    const r = await fetch('/api/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ op: 'csave', c: C, status: CF.status, me: { name: String(m.name || '').trim(), phone: m.phone, org: m.org || '', title: m.title || '', email: String(m.email || '').trim() } }) });
+    const j = await r.json();
+    if(!j.ok){ toast(j.error || '저장하지 못했어요. 다시 시도해 주세요.'); btn.disabled = false; btn.textContent = '응답 저장하기'; return; }
+    setC(j); MODE = 'done'; renderC(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  }catch(e){ toast('연결이 원활하지 않아요. 다시 시도해 주세요.'); btn.disabled = false; btn.textContent = '응답 저장하기'; }
+}
+function renderCDone(){
+  const yes = CD.status === 'yes', ev = CD.event || {}, nm = CD.me.name || '동행인';
+  const check = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const cross = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>';
+  $('#app').innerHTML = `
+    <section class="card">
+      <div class="done-mark ${yes ? '' : 'no'}">${yes ? check : cross}</div>
+      <h2>${yes ? '참석으로 저장했어요' : '불참으로 저장했어요'}</h2>
+      <p class="lead">${yes ? '입장 큐알코드는 11월 16일 (월)에 입력하신 연락처로 개별 발송됩니다.' : '알려 주셔서 감사합니다.'}</p>
+      <ul class="list"><li><span>${esc(nm)} <span class="p-tag">${esc(CD.host)}님 일행</span></span><span>${yes ? '참석' : '불참'}</span></li></ul>
+      ${CD.closed ? '<div class="closed">응답이 마감되었어요. 변경이 필요하면 담당자에게 연락해 주세요.</div>'
+        : '<button type="button" class="btn ghost" id="editBtn" style="width:100%;margin-top:20px">응답 수정하기</button>'}
+      ${CD.updatedAt ? `<p class="stamp">마지막 저장 ${fmtTime(CD.updatedAt)} · 이 화면을 캡처해 두셔도 좋아요</p>` : ''}
+    </section>
+    ${yes ? `<section class="card">
+      <div class="sec-h" style="margin-bottom:6px"><h3>참석 안내</h3></div>
+      <ul class="list" style="margin-top:6px">
+        <li><span>일시</span><span>${esc(ev.date || '')}</span></li>
+        <li><span>장소</span><span>${esc(ev.place || '')}${ev.addr ? `<br><small>${esc(ev.addr)}</small>` : ''}</span></li>
+      </ul>
+      ${ev.way ? `<p class="note">${esc(ev.way)}</p>` : ''}
+      ${ev.map ? `<a class="btn ghost" href="${esc(ev.map)}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;width:100%;margin-top:14px;text-decoration:none">오시는 길 · 네이버 지도</a>` : ''}
+    </section>` : ''}`;
+  $('#bar').hidden = true;
+  const e = $('#editBtn'); if(e) e.onclick = () => { MODE = 'form'; renderC(); };
+}
+
+$('#saveBtn').onclick = () => (CD ? saveC() : save());
 window.addEventListener('beforeunload', (e) => { if(DIRTY && MODE === 'form'){ e.preventDefault(); e.returnValue = ''; } });
 load();
 </script>
