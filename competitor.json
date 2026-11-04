@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-04 01:18",
+ "generatedAt": "2026-11-05 01:22",
  "brands": [
   {
    "name": "아카라",
@@ -126,10 +126,10 @@
     "아카라 k100",
     "아카라 홈캠",
     "아카라 스위치",
-    "니케 아카라이브",
     "아카라치",
-    "아카라카",
-    "메랜 아카라이브"
+    "아카라이브 핫딜",
+    "니케 아카라이브",
+    "아카라카"
    ],
    "recent": [
     {
@@ -352,7 +352,7 @@
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 온습도계"
+    "헤이홈 스위치"
    ],
    "recent": [
     {
@@ -451,123 +451,115 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69526,
+   "total": 69594,
    "sentiment": {
-    "pos": 25,
-    "neu": 35,
+    "pos": 48,
+    "neu": 12,
     "neg": 0
    },
    "keywords": [
     [
-     "AI",
+     "에어컨",
      61
     ],
     [
-     "삼성전자는",
-     24
+     "원격진단",
+     45
     ],
     [
-     "가전",
-     20
+     "삼성전자서비스",
+     44
     ],
     [
-     "분석",
-     19
+     "AS",
+     44
+    ],
+    [
+     "2년",
+     38
+    ],
+    [
+     "연속",
+     37
+    ],
+    [
+     "1위",
+     33
+    ],
+    [
+     "가전제품",
+     32
+    ],
+    [
+     "HRM",
+     27
+    ],
+    [
+     "상태를",
+     23
+    ],
+    [
+     "고객",
+     22
+    ],
+    [
+     "엔지니어",
+     21
     ],
     [
      "SmartThings",
+     19
+    ],
+    [
+     "AI",
+     19
+    ],
+    [
+     "KS",
+     18
+    ],
+    [
+     "SQI",
+     18
+    ],
+    [
+     "기반의",
+     18
+    ],
+    [
+     "삼성전자서비스는",
      16
-    ],
-    [
-     "케어",
-     15
-    ],
-    [
-     "기능을",
-     12
-    ],
-    [
-     "삼성전자의",
-     11
-    ],
-    [
-     "솔루션을",
-     11
-    ],
-    [
-     "반려동물",
-     11
-    ],
-    [
-     "에너지",
-     10
-    ],
-    [
-     "보험료",
-     10
-    ],
-    [
-     "플랫폼",
-     10
-    ],
-    [
-     "IoT",
-     10
-    ],
-    [
-     "에치와이",
-     9
-    ],
-    [
-     "헥토이노베이션",
-     9
-    ],
-    [
-     "등에",
-     9
-    ],
-    [
-     "결과를",
-     9
     ]
    ],
    "posWords": [
     [
-     "확대",
-     11
-    ],
-    [
-     "만족",
-     8
-    ],
-    [
      "1위",
-     6
+     34
     ],
     [
      "강화",
-     4
+     7
     ],
     [
-     "투자",
-     4
-    ],
-    [
-     "글로벌",
+     "만족",
      3
     ],
     [
-     "공략",
-     2
+     "호평",
+     3
     ],
     [
-     "성장",
+     "혁신",
+     1
+    ],
+    [
+     "수상",
      1
     ]
    ],
    "related": [
-    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스",
+    "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 세탁기",
@@ -575,98 +567,98 @@
     "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스 허브 5세대",
     "삼성 스마트싱스 세탁기 원격",
-    "삼성 스마트싱스 허브 4세대"
+    "삼성 스마트싱스 스위치"
    ],
    "recent": [
     {
-     "title": "삼성전자서비스, 폭염에도 빈틈없는 에어컨 A/S, AI로 서비스 품질 강화",
-     "source": "매일경제",
+     "title": "삼성전자서비스, 2026 KS-SQI 에어컨 AS 부문 2년 연속 1위",
+     "source": "ttlnews.com",
      "date": "2026-11-04",
-     "link": "https://n.news.naver.com/mnews/article/009/0005758578?sid=101"
+     "link": "http://www.ttlnews.com/news/articleView.html?idxno=3158562"
     },
     {
-     "title": "[AIoT 어워드2026] 솔리티, 매터 기반 스마트 도어락",
-     "source": "전자신문",
-     "date": "2026-11-03",
-     "link": "https://n.news.naver.com/mnews/article/030/0003481490?sid=105"
+     "title": "\"애플·삼성 폰으로 직접 연동\"… 솔리티, AIoT 혁신대상 수상",
+     "source": "woodkorea.co.kr",
+     "date": "2026-11-04",
+     "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92360"
     },
     {
-     "title": "[AIoT 어워드2026] 바이텔, 스마트홈 통합 제어 리모컨 '유니버설 리모콘...",
-     "source": "전자신문",
-     "date": "2026-11-03",
-     "link": "https://n.news.naver.com/mnews/article/030/0003481487?sid=105"
+     "title": "삼성전자서비스, 에어컨 AS 2년 연속 '1위'...AI 기술로 고객 만족 높였...",
+     "source": "insight.co.kr",
+     "date": "2026-11-04",
+     "link": "https://www.insight.co.kr/news/580548"
     },
     {
-     "title": "삼성전자, 2032년 117조 스마트 가전시장 정조준…스마트싱스·AI로 승부",
-     "source": "mydaily.co.kr",
-     "date": "2026-11-03",
-     "link": "https://n.news.naver.com/mnews/article/117/0004121255?sid=105"
+     "title": "삼성전자서비스, 한국서비스품질지수 에어컨 AS 부문 2년 연속 1위",
+     "source": "breaknews.com",
+     "date": "2026-11-04",
+     "link": "http://www.breaknews.com/1248429"
     },
     {
-     "title": "정문철 KB라이프 대표, 'KB골든라이프'로 금융·돌봄 연결 [보험사 시니...",
-     "source": "fntimes.com",
-     "date": "2026-11-02",
-     "link": "https://www.fntimes.com/html/view.php?ud=202610221108205302ed56b8e1f8_18"
+     "title": "삼성전자서비스, KS-SQI 에어컨 AS 부문 2년 연속 1위...원격 상담 강화...",
+     "source": "consumernews.co.kr",
+     "date": "2026-11-04",
+     "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=767600"
     },
     {
-     "title": "한화투자증권, 블록체인 데이터 인프라 기업 체인링크와 전략적 파트너...",
-     "source": "rcast.co.kr",
-     "date": "2026-11-01",
-     "link": "https://www.rcast.co.kr/news/articleView.html?idxno=31940"
+     "title": "삼성전자서비스, 서비스품질지수 에어컨 AS 부문 2년 연속 1위",
+     "source": "srtimes.kr",
+     "date": "2026-11-04",
+     "link": "http://www.srtimes.kr/news/articleView.html?idxno=216727"
     },
     {
-     "title": "삼성전자, 갤럭시 이어 AI 가전까지…크리에이터 마케팅 확대",
-     "source": "megaeconomy.co.kr",
-     "date": "2026-11-01",
-     "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065589731417250"
+     "title": "피크, 로봇·기계용 플랫폼에 삼성 스마트싱스 연동 기능 공개",
+     "source": "getnews.co.kr",
+     "date": "2026-11-04",
+     "link": "https://www.getnews.co.kr/news/articleView.html?idxno=885911"
     },
     {
-     "title": "삼성전자 '삼성 크루' 출범…, AI 가전 사용 경험 공유",
-     "source": "newsworks.co.kr",
-     "date": "2026-11-01",
-     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=901531"
+     "title": "삼성전자서비스, 에어컨 AS 품질평가 2년 연속 1위",
+     "source": "m-i.kr",
+     "date": "2026-11-04",
+     "link": "https://www.m-i.kr/news/articleView.html?idxno=2014521"
     },
     {
-     "title": "삼성전자, AI 가전 크리에이터 '삼성 크루' 1기 출범…소비자 공감 콘텐...",
-     "source": "socialvalue.kr",
-     "date": "2026-11-01",
-     "link": "https://www.socialvalue.kr/news/view/1065582715142783"
+     "title": "삼성전자서비스, KS-SQI 에어컨 AS 2년 연속 1위… AI 원격진단 통했다",
+     "source": "mediapen.com",
+     "date": "2026-11-04",
+     "link": "https://www.mediapen.com/news/view/1135001"
     },
     {
-     "title": "\"우리 집 AI 가전 사용기 전한다\"…삼성전자, 크리에이터 30여 명과 협업",
-     "source": "kdfnews.com",
-     "date": "2026-11-01",
-     "link": "http://www.kdfnews.com/news/articleView.html?idxno=190246"
+     "title": "삼성전자서비스, 에어컨 AS 품질 2년 연속 1위…AI 원격진단 강화",
+     "source": "gpkorea.com",
+     "date": "2026-11-04",
+     "link": "https://www.gpkorea.com/news/articleView.html?idxno=148283"
     },
     {
-     "title": "삼성 가전 안전 기능 켜두니 보험료 내려갔다…유럽서 커지는 스마트싱...",
-     "source": "g-enews.com",
-     "date": "2026-11-01",
-     "link": "https://www.g-enews.com/view.php?ud=202611011030421870fbbec65dfb_1"
+     "title": "삼성전자서비스, 에어컨 AS 품질 2년 연속 1위",
+     "source": "gukjenews.com",
+     "date": "2026-11-04",
+     "link": "https://www.gukjenews.com/news/articleView.html?idxno=3742307"
     },
     {
-     "title": "삼성전자, AI 가전 실사용 콘텐츠 확대…'삼성 크루' 출범",
-     "source": "4th.kr",
-     "date": "2026-11-01",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2120865"
+     "title": "삼성전자서비스, 에어컨 AS 2년 연속 1위…\"원격진단 서비스 인정\"",
+     "source": "metroseoul.co.kr",
+     "date": "2026-11-04",
+     "link": "http://www.metroseoul.co.kr/article/20261104500479"
     },
     {
-     "title": "삼성 스마트싱스 API, 11월 4일 유료화…미결제 앱 '12월 15일 차단'",
-     "source": "kpinews.kr",
-     "date": "2026-10-31",
-     "link": "https://www.kpinews.kr/newsView/1065567772741263"
+     "title": "삼성전자서비스, 에어컨 AS 품질 2년 연속 1위…원격진단·구독 서비스 ...",
+     "source": "sisacast.kr",
+     "date": "2026-11-04",
+     "link": "http://www.sisacast.kr/news/articleView.html?idxno=101604"
     },
     {
-     "title": "십일리터, 농식품부 ‘이달의 A-벤처스’ 선정…AI로 반려동물 질환 분...",
-     "source": "venturesquare.net",
-     "date": "2026-10-30",
-     "link": "https://www.venturesquare.net/1124447/"
+     "title": "피크, 로봇·기계용 플랫폼에 삼성 스마트싱스 공개 API 연동 선봬",
+     "source": "apnews.kr",
+     "date": "2026-11-04",
+     "link": "https://www.apnews.kr/news/articleView.html?idxno=3052795"
     },
     {
-     "title": "[Biz&Law] 삼성전자, 美 스마트홈 특허소송 합의 수순…IoT 불확실성 '해...",
-     "source": "the-biz.co.kr",
-     "date": "2026-10-30",
-     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=730344"
+     "title": "[오늘 뭐했니?] 삼성전자·삼성전자서비스",
+     "source": "financialreview.co.kr",
+     "date": "2026-11-04",
+     "link": "http://www.financialreview.co.kr/news/articleView.html?idxno=46030"
     }
    ]
   },
@@ -674,71 +666,63 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78200,
+   "total": 78202,
    "sentiment": {
-    "pos": 22,
-    "neu": 37,
+    "pos": 21,
+    "neu": 38,
     "neg": 1
    },
    "keywords": [
     [
      "AI",
-     69
+     64
     ],
     [
      "LG전자",
-     52
-    ],
-    [
-     "냉장고",
-     34
+     50
     ],
     [
      "ThinQ",
-     31
+     32
+    ],
+    [
+     "냉장고",
+     32
     ],
     [
      "냉동",
-     28
-    ],
-    [
-     "와인",
-     25
+     26
     ],
     [
      "AI홈",
      24
     ],
     [
-     "육류",
-     24
+     "와인",
+     23
     ],
     [
      "보관",
-     24
+     23
     ],
     [
      "모드를",
-     24
-    ],
-    [
-     "하칸에는",
      23
     ],
     [
-     "기능과",
-     23
+     "육류",
+     22
     ],
     [
      "선택할",
-     23
+     22
     ],
     [
-     "밀키트",
+     "하칸에는",
      21
     ],
     [
-     "오토",
+     "기능과",
      21
     ],
     [
@@ -746,18 +730,26 @@
      20
     ],
     [
-     "김치",
+     "오토",
      20
     ],
     [
+     "밀키트",
+     19
+    ],
+    [
+     "김치",
+     19
+    ],
+    [
      "서랍형",
-     20
+     18
     ]
    ],
    "posWords": [
     [
      "강화",
-     9
+     8
     ],
     [
      "확대",
@@ -776,31 +768,43 @@
      2
     ],
     [
+     "혁신",
+     1
+    ],
+    [
      "투자",
      1
     ],
     [
      "주목",
      1
-    ],
-    [
-     "개선",
-     1
     ]
    ],
    "related": [
+    "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐 세탁기",
     "lg 씽큐 티비연결",
+    "lg 씽큐 세탁기",
     "lg 씽큐 허브",
     "lg 씽큐 냉장고",
     "lg 씽큐 와이파이",
-    "lg 씽큐 에어컨",
     "lg 씽큐 연결",
     "lg 씽큐 온도",
-    "lg 씽큐 초기화"
+    "lg 씽큐 에어컨"
    ],
    "recent": [
+    {
+     "title": "삼성전자, CES 2027 단독 전시관서 차세대 로봇 공개?",
+     "source": "choicenews.co.kr",
+     "date": "2026-11-04",
+     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=172904"
+    },
+    {
+     "title": "“불편은 미리, 해결은 빠르게”… AI로 서비스 혁신",
+     "source": "donga.com",
+     "date": "2026-11-04",
+     "link": "https://n.news.naver.com/mnews/article/020/0003759889?sid=101"
+    },
     {
      "title": "LG전자 류재철 CEO \"AI홈 다음 표준은 돌봄\"…애플·MS 손잡고 가사노동...",
      "source": "joongangenews.com",
@@ -878,18 +882,6 @@
      "source": "itdaily.kr",
      "date": "2026-11-02",
      "link": "https://www.itdaily.kr/news/articleView.html?idxno=242622"
-    },
-    {
-     "title": "류재철 LG전자 CEO, AI 홈 생태계 확장…가사 부담 줄이기 초점",
-     "source": "insightkorea.co.kr",
-     "date": "2026-11-02",
-     "link": "https://www.insightkorea.co.kr/news/articleView.html?idxno=257819"
-    },
-    {
-     "title": "류재철 LG전자 사장 “AI홈, 연결 넘어 돌봄으로”… 애플과 생태계 확...",
-     "source": "biz.chosun.com",
-     "date": "2026-11-02",
-     "link": "https://n.news.naver.com/mnews/article/366/0001201994?sid=105"
     }
    ]
   },
@@ -897,222 +889,222 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76376,
+   "total": 76394,
    "sentiment": {
-    "pos": 17,
+    "pos": 13,
     "neu": 30,
-    "neg": 13
+    "neg": 17
    },
    "keywords": [
     [
      "AI",
-     43
+     38
     ],
     [
      "아래는",
-     12
+     17
     ],
     [
      "기사를",
-     12
-    ],
-    [
-     "번역",
-     12
-    ],
-    [
-     "으로",
-     12
+     17
     ],
     [
      "번역한",
-     12
+     17
     ],
     [
      "기사의",
-     11
+     17
     ],
     [
      "전문",
-     11
+     17
+    ],
+    [
+     "번역",
+     16
+    ],
+    [
+     "으로",
+     16
     ],
     [
      "입니다",
-     10
-    ],
-    [
-     "모바일",
-     10
+     15
     ],
     [
      "break9874",
-     9
+     13
     ],
     [
      "naver",
-     9
+     13
     ],
     [
      "com",
-     9
+     13
     ],
     [
      "구글번역",
-     9
+     12
+    ],
+    [
+     "번역에",
+     11
+    ],
+    [
+     "오류가",
+     11
     ],
     [
      "이해도",
-     8
+     10
     ],
     [
      "높이기를",
-     8
+     10
     ],
     [
      "노력하고",
-     8
-    ],
-    [
-     "있습니다",
-     8
+     10
     ]
    ],
    "posWords": [
+    [
+     "성장",
+     4
+    ],
     [
      "글로벌",
      4
     ],
     [
-     "성장",
+     "수상",
      3
     ],
     [
-     "투자",
+     "개선",
      3
+    ],
+    [
+     "혁신",
+     2
+    ],
+    [
+     "파트너십",
+     2
     ],
     [
      "돌파",
-     3
-    ],
-    [
-     "흥행",
      2
     ],
     [
-     "1위",
-     2
-    ],
-    [
-     "기대",
-     2
-    ],
-    [
-     "수상",
+     "계약",
      2
     ]
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈",
     "구글 홈 화면 삭제",
     "구글 홈 허브",
+    "구글 홈",
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 연결",
     "구글 홈 미니 1세대",
-    "구글 홈화면빼는법",
-    "구글 홈화면 없애기"
+    "구글 홈화면 없애기",
+    "구글 홈 연결"
    ],
    "recent": [
     {
-     "title": "‘알고리즘’에 질린 AI 연구자…‘나만의 유튜브’ 만들었다",
-     "source": "nongmin.com",
-     "date": "2026-11-03",
-     "link": "https://n.news.naver.com/mnews/article/662/0000107556?sid=105"
+     "title": "바이낸스 63억 달러 도난은 하루 사건 아니었다…6월부터 엔지니어 3명...",
+     "source": "wikitree.co.kr",
+     "date": "2026-11-04",
+     "link": "https://www.wikitree.co.kr/articles/1171914"
     },
     {
-     "title": "[위클리AI] 구글·오픈AI·아마존, 업무에서 일상까지 AI 쓰임새 넓혔다",
-     "source": "it.donga.com",
-     "date": "2026-11-03",
-     "link": "https://it.donga.com/109832/"
+     "title": "\"애플·삼성 폰으로 직접 연동\"… 솔리티, AIoT 혁신대상 수상",
+     "source": "woodkorea.co.kr",
+     "date": "2026-11-04",
+     "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92360"
     },
     {
-     "title": "음악·게임 사업 동반 흥행한 하이브, 연매출 '5조 클럽' 시대 연다(종합...",
-     "source": "techm.kr",
-     "date": "2026-11-03",
-     "link": "https://www.techm.kr/news/articleView.html?idxno=156869"
-    },
-    {
-     "title": "칩값이 문제네…애플의 찜찜한 어닝 서프라이즈",
-     "source": "fortunekorea.co.kr",
-     "date": "2026-11-03",
-     "link": "https://www.fortunekorea.co.kr/news/articleView.html?idxno=54608"
-    },
-    {
-     "title": "애플, 첫 가정용 로봇 출시 지연…하드웨어 완성에도 AI 개발 난항",
-     "source": "aitimes.com",
-     "date": "2026-11-03",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=216946"
-    },
-    {
-     "title": "삼성 뉴스, 12월 21일부터 갤럭시폰에서 못 본다… 커뮤니티 ‘삼성 멤...",
-     "source": "biz.chosun.com",
-     "date": "2026-11-03",
-     "link": "https://n.news.naver.com/mnews/article/366/0001202264?sid=105"
-    },
-    {
-     "title": "애플, 아이폰·맥 판매 호조에도 성장 둔화…중국 매출 기대 이하",
-     "source": "aitimes.com",
-     "date": "2026-11-03",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=216941"
-    },
-    {
-     "title": "쿠팡, “수험생 응원부터 홈파티까지”..스위트샵 기획전 진행",
+     "title": "이디야커피, 정관장 남자농구·여자배구단과 파트너십",
      "source": "breaknews.com",
-     "date": "2026-11-03",
-     "link": "http://www.breaknews.com/1247932"
+     "date": "2026-11-04",
+     "link": "http://www.breaknews.com/1248428"
     },
     {
-     "title": "애플, 폴더블폰 생산·메모리 확보 '이중고'",
-     "source": "thelec.kr",
-     "date": "2026-11-03",
-     "link": "https://www.thelec.kr/news/articleView.html?idxno=64780"
-    },
-    {
-     "title": "[유통레이더] 아성다이소, 파파존스, CJ제일제당, 골프존, 소노시즌, 씰...",
-     "source": "daily.hankooki.com",
-     "date": "2026-11-03",
-     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1421059"
-    },
-    {
-     "title": "“아이팟에 총까지 쐈는데”…메모리값 폭등에 애플도 이익률 하락",
-     "source": "donga.com",
-     "date": "2026-11-03",
-     "link": "https://n.news.naver.com/mnews/article/020/0003759691?sid=104"
-    },
-    {
-     "title": "[AIoT 어워드2026] 솔리티, 매터 기반 스마트 도어락",
-     "source": "전자신문",
-     "date": "2026-11-03",
-     "link": "https://n.news.naver.com/mnews/article/030/0003481490?sid=105"
-    },
-    {
-     "title": "[AIoT 어워드2026] 바이텔, 스마트홈 통합 제어 리모컨 '유니버설 리모콘...",
-     "source": "전자신문",
-     "date": "2026-11-03",
-     "link": "https://n.news.naver.com/mnews/article/030/0003481487?sid=105"
-    },
-    {
-     "title": "한우자조금, '2026 제9회 전국한우요리경연대회' 개최…40팀 수상",
+     "title": "LG헬로비전, 3분기 영업수익 2262억원…전년대비 24.2% 감소",
      "source": "breaknews.com",
-     "date": "2026-11-03",
-     "link": "http://www.breaknews.com/1247842"
+     "date": "2026-11-04",
+     "link": "http://www.breaknews.com/1248421"
     },
     {
-     "title": "파파존스, 피자 구매시 아이브 한정판 포토카드 쏜다",
+     "title": "홈플러스, 5~11일 신선식품·생필품 할인 행사",
      "source": "breaknews.com",
-     "date": "2026-11-03",
-     "link": "http://www.breaknews.com/1247837"
+     "date": "2026-11-04",
+     "link": "http://www.breaknews.com/1248424"
+    },
+    {
+     "title": "캣츠아이 ‘Animal’, 美 빌보드 ‘핫 100’ 27위 차지..14주째 순위권",
+     "source": "breaknews.com",
+     "date": "2026-11-04",
+     "link": "http://www.breaknews.com/1248410"
+    },
+    {
+     "title": "LG유플러스, 연간 영업익 1조원 돌파 가시권…파주에 엔비디아 '베라 루...",
+     "source": "joongangenews.com",
+     "date": "2026-11-04",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=561150"
+    },
+    {
+     "title": "하이브, BTS 투어 성과에 3분기 매출 1조 5257억·영업이익 1885억원",
+     "source": "breaknews.com",
+     "date": "2026-11-04",
+     "link": "http://www.breaknews.com/1248372"
+    },
+    {
+     "title": "금호건설, 구미 ‘형곡 센트럴 아테라’ 11월 6일 견본주택 개관… 본격...",
+     "source": "breaknews.com",
+     "date": "2026-11-04",
+     "link": "http://www.breaknews.com/1248340"
+    },
+    {
+     "title": "대형마트 불공정 90% ‘홈플러스’..납품대금 지연에 수수료 ‘이중고’",
+     "source": "breaknews.com",
+     "date": "2026-11-04",
+     "link": "http://www.breaknews.com/1248312"
+    },
+    {
+     "title": "기업 AI 계정 노린 'LLM재킹' 확산…훔친 접근권한 되팔아 수익",
+     "source": "digitaltoday.co.kr",
+     "date": "2026-11-04",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=712548"
+    },
+    {
+     "title": "고려아연 경영권 노린 영풍·MBK, 계약서엔 'MBK 독주'…70만원 콜옵션까...",
+     "source": "joongangenews.com",
+     "date": "2026-11-04",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=561103"
+    },
+    {
+     "title": "메타 '뮤즈' 품은 휴머노이드 구상…가정용 로봇으로 AI 구독 노린다",
+     "source": "digitaltoday.co.kr",
+     "date": "2026-11-04",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=712510"
+    },
+    {
+     "title": "[이슈] '내 PC도 감염?' 니케 런처 감염 우려, 변조 방식부터 대응까지",
+     "source": "inven.co.kr",
+     "date": "2026-11-04",
+     "link": "https://m.sports.naver.com/esports/article/442/0000198501"
+    },
+    {
+     "title": "M83·디블라트, AI 딥페이크 판별 솔루션 ‘안티제니’ 개발",
+     "source": "sentv.co.kr",
+     "date": "2026-11-04",
+     "link": "https://www.sentv.co.kr/article/view/sentv202611040079"
     }
    ]
   }
