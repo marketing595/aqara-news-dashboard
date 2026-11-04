@@ -34,7 +34,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .btn:disabled{opacity:.5;cursor:default}
 .tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 
-.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:16px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:16px}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-align:left;cursor:pointer;transition:border-color .15s}
 .kpi:hover{border-color:var(--line2)}
 .kpi.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc-soft)}
@@ -225,20 +225,26 @@ const sentPend = (g) => isSent(g) && gst(g) === 'pending';   // 보냈는데 아
 
 // 사람 단위 상태(2026-11-05: 총 대상 − 참석 ≠ 미응답 지적) — 명단 인원(rosterN) 전원을 참석/불참/미응답 중 정확히 하나로 센다.
 //  본인(또는 대리) = 그룹 응답 · 동행인 = 자기 링크 응답(cans)이 있으면 그것, 없으면 지금 명단에 있으면 그룹 응답(미응답 그룹이면 미응답), 명단에서 빠졌으면 불참
+// (2026-11-05 재검토) 사람 = '사람별' 시트 한 줄과 똑같이: 본인 1 + 지금 동행인 한 명씩 + 처음 명단에 있었는데 지금 없는 동행인.
+//  (예전엔 이름으로 묶어 셌더니 같은 이름 동행인 2명이 1명으로 줄어드는 등 시트·참석 수와 어긋날 수 있었다)
+// n = 불참이라고 직접 답한 사람(본인·대리, 동행인 자기 링크) / x = 응답 때 명단에서 빠진 동행인(따로 박스, 2026-11-05 요청)
+// cy = 대표자는 미응답인데 동행인이 자기 링크로 '참석'이라고 답한 사람(예전 참석 확정 숫자엔 안 들어갔음)
 function pcount(g){
-  const ans = answered(g), cans = g.cans || {}, cur = new Set((g.comps || []).map(slotOf));
-  const slots = new Set([...String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(Boolean), ...cur]);
-  const r = { y: 0, n: 0, p: 0, yr: 0 };
-  if(!ans) r.p++; else if(g.status === 'yes'){ r.y++; r.yr++; } else r.n++;
-  slots.forEach(s => { const a = cans[s];
-    if(a && (a.v === 'yes' || a.v === 'no')) r[a.v === 'yes' ? 'y' : 'n']++;
-    else if(!cur.has(s)) r.n++;
+  const ans = answered(g), cans = g.cans || {}, comps = g.comps || [];
+  const r = { all: 1, y: 0, n: 0, p: 0, x: 0, yr: 0, cy: 0, nn: [], xn: [] };
+  if(!ans) r.p++; else if(g.status === 'yes'){ r.y++; r.yr++; } else { r.n++; r.nn.push((g.sub && g.sub.name) || g.rep.name); }
+  comps.forEach(c => { const a = cans[slotOf(c)]; r.all++;
+    if(a && a.v === 'no'){ r.n++; r.nn.push(c.name); }
+    else if(a && a.v === 'yes'){ r.y++; if(!ans) r.cy++; }
     else if(ans) r.y++;
     else r.p++; });
+  const now = new Set(comps.flatMap(c => [c.name, c.from].filter(Boolean)));
+  String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(n => n && !now.has(n)).forEach(n => { r.all++;
+    if(cans[n] && cans[n].v === 'no'){ r.n++; r.nn.push(n); } else { r.x++; r.xn.push(n); } });
   return r;
 }
 function stats(){
-  const L = list(); const s = { all: L.length, P: { all: 0, y: 0, n: 0, p: 0, yr: 0 }, yes: 0, yesN: 0, yesC: 0, yesR: 0, no: 0, pending: 0, pendN: 0, chg: 0, sent: 0, open: 0, sentPend: 0, sentPendOpen: 0 };
+  const L = list(); const s = { all: L.length, P: { all: 0, y: 0, n: 0, p: 0, x: 0, yr: 0, cy: 0, roster: 0 }, yes: 0, yesN: 0, yesC: 0, yesR: 0, no: 0, pending: 0, pendN: 0, chg: 0, sent: 0, open: 0, sentPend: 0, sentPendOpen: 0 };
   L.forEach(g => {
     if(isSent(g)) s.sent++;
     if(isOpen(g)) s.open++;
@@ -248,7 +254,9 @@ function stats(){
     else if(gst(g) === 'no') s.no++;
     else { s.pending++; s.pendN += 1 + (g.comps || []).length; }
     if(changed(g)) s.chg++;
-    const c = pcount(g); s.P.all += rosterN(g); s.P.y += c.y; s.P.n += c.n; s.P.p += c.p; s.P.yr += c.yr;
+    const c = pcount(g); s.P.all += c.all; s.P.y += c.y; s.P.n += c.n; s.P.p += c.p; s.P.x += c.x; s.P.yr += c.yr; s.P.cy += c.cy;
+    s.P.roster += rosterN(g);
+    if(c.x) s.xG = (s.xG || 0) + 1;
   });
   return s;
 }
@@ -257,15 +265,21 @@ function paint(){
   const s = stats();
   const P = s.P, pct = (n) => P.all ? (n / P.all * 100) : 0;
   const k = (id, l, v, d) => `<button class="kpi ${FILTER === id ? 'on' : ''}" data-f="${id}"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></button>`;
-  // 네 칸 모두 '명' 기준: 총 대상 = 참석 확정 + 불참 + 미응답 (그룹 수는 아래 작은 글씨)
+  // 모두 '명' 기준: 총 대상 = 참석 확정 + 불참 + 빠진 동행인 + 미응답 (그룹 수는 아래 작은 글씨)
   $('#kpis').innerHTML =
     k('all', '총 대상', `${P.all}<small>명</small>`, `${s.all}그룹 · 응답 ${P.y + P.n}명(${P.all ? Math.round((P.y + P.n) / P.all * 100) : 0}%)`) +
-    k('yes', '참석 확정', `${P.y}<small>명</small>`, `본인 ${P.yr} + 동행 ${P.y - P.yr} · ${s.yes}그룹`) +
-    k('no', '불참', `${P.n}<small>명</small>`, `빠진 동행인 포함 · 전원 불참 ${s.no}그룹`) +
+    k('yes', '참석 확정', `${P.y}<small>명</small>`, `본인 ${P.yr} + 동행 ${P.y - P.yr}` + (P.cy ? ` (대표자 미응답·동행인 직접 참석 ${P.cy})` : '') + ` · ${s.yes}그룹`) +
+    k('no', '불참', `${P.n}<small>명</small>`, `불참이라고 직접 답한 분 · 전원 불참 ${s.no}그룹`) +
+    k('gone', '빠진 동행인', `${P.x}<small>명</small>`, `응답하면서 명단에서 뺀 동행인 · ${s.xG || 0}그룹`) +
     k('pending', '미응답', `${P.p}<small>명</small>`, `${s.pending}그룹 · 그중 링크 열어봄 ${s.pendOpen || 0}`) +
     k('chg', '대리·동행인 변경', `${s.chg}<small>그룹</small>`, '처음 명단과 달라짐');
+  // 검산 줄: 칸 합계와 예전 방식 숫자가 왜 다른지 바로 보이게
+  const chk = [`검산: 참석 ${P.y} + 불참 ${P.n} + 빠진 동행인 ${P.x} + 미응답 ${P.p} = ${P.y + P.n + P.x + P.p}명` + (P.y + P.n + P.x + P.p === P.all ? ' ✓' : ` ≠ 총 ${P.all} ⚠`)];
+  if(P.y !== s.yesN) chk.push(`예전 참석 숫자 ${s.yesN}명과 차이 ${P.y - s.yesN}` + (P.cy ? ` — 대표자는 미응답인데 동행인이 자기 링크로 참석한 ${P.cy}명` : '') + (P.y - s.yesN - P.cy ? ` · 동행인 직접 불참 ${-(P.y - s.yesN - P.cy)}명` : ''));
+  if(P.roster !== P.all) chk.push(`명단 인원(이름 기준 ${P.roster}명)과 사람별 줄 수(${P.all}명) 차이 — 같은 이름 동행인 등`);
+  $('#kpis').insertAdjacentHTML('beforeend', `<div class="full mut" style="grid-column:1/-1;font-size:12px">${esc(chk.join(' · '))}</div>`);
   $('#kpis').insertAdjacentHTML('beforeend', `<div class="full" style="grid-column:1/-1"><div class="prog">
-      <i style="width:${pct(P.y)}%;background:var(--yes)"></i><i style="width:${pct(P.n)}%;background:#9ca3af"></i><i style="width:${pct(P.p)}%;background:#f3c26b"></i></div></div>`);
+      <i style="width:${pct(P.y)}%;background:var(--yes)"></i><i style="width:${pct(P.n)}%;background:#9ca3af"></i><i style="width:${pct(P.x)}%;background:#d1d5db"></i><i style="width:${pct(P.p)}%;background:#f3c26b"></i></div></div>`);
   document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = FILTER === b.dataset.f ? 'all' : b.dataset.f; OPEN = ''; paint(); });
   $('#btnClose').textContent = META.closed ? '응답 다시 열기' : '응답 마감';
   $('#btnClose').classList.toggle('danger', !META.closed);
@@ -367,9 +381,11 @@ window.addEventListener('resize', () => { clearTimeout(drawTimeline.h); drawTime
 function filtered(ignoreComp){
   const q = $('#q').value.trim().toLowerCase().replace(/-/g, '');
   return list().filter(g => {
-    if(FILTER === 'yes' && gst(g) !== 'yes') return false;
-    if(FILTER === 'no' && gst(g) !== 'no') return false;
-    if(FILTER === 'pending' && gst(g) !== 'pending') return false;
+    // (2026-11-05) 카드 숫자(사람 기준)와 맞게: 그 상태인 사람이 한 명이라도 있는 그룹을 보여준다 — 불참엔 '참석 그룹 안에서 빠진 동행인'도 포함
+    if(FILTER === 'yes' && !(pcount(g).y > 0)) return false;
+    if(FILTER === 'no' && !(pcount(g).n > 0)) return false;
+    if(FILTER === 'pending' && !(pcount(g).p > 0)) return false;
+    if(FILTER === 'gone' && !(pcount(g).x > 0)) return false;
     if(FILTER === 'chg' && !changed(g)) return false;
     if(FILTER === 'sentpend' && !sentPend(g)) return false;
     if(!ignoreComp && COMP === 'with' && !withComps(g)) return false;
@@ -389,7 +405,9 @@ function paintRows(){
   $('#seg').innerHTML = [['all', '전체', base.length, `총 ${ppl(base)}명`], ['with', '동행인 있음', W.length, `동행인 포함 ${ppl(W)}명`], ['solo', '혼자 참석', base.length - W.length, '']]
     .map(([k, l, n, p]) => `<button class="${COMP === k ? 'on' : ''}" data-comp="${k}">${l} ${n}${p ? ` <span style="font-weight:500;color:var(--tx3)">(${p})</span>` : ''}</button>`).join('');
   document.querySelectorAll('[data-comp]').forEach(b => b.onclick = () => { COMP = b.dataset.comp; OPEN = ''; paintRows(); });
-  $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', pending: '미응답', sentpend: '보냈는데 미응답', chg: '대리·동행인 변경' })[FILTER] + ` ${L.length}`;
+  const pk = { yes: 'y', no: 'n', pending: 'p', gone: 'x' }[FILTER];
+  $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', gone: '빠진 동행인', pending: '미응답', sentpend: '보냈는데 미응답', chg: '대리·동행인 변경' })[FILTER]
+    + (pk ? ` ${L.reduce((n, g) => n + pcount(g)[pk], 0)}명 · ${L.length}그룹` : ` ${L.length}`);
   if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="11" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
   $('#rows').innerHTML = L.map(g => {
     const st = gst(g);
@@ -400,7 +418,7 @@ function paintRows(){
       <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
       <td class="num">${esc(fmtPhone(g.rep.phone))}<div class="org" style="font-family:inherit">${g.email ? esc(g.email) : '<span style="color:var(--tx3)">이메일 없음</span>'}</div></td>
       <td class="hide-m mut">${esc(g.route || '')}</td>
-      <td><span class="st ${st}">${stLabel(g)}</span>${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
+      <td><span class="st ${st}">${stLabel(g)}</span>${FILTER === 'no' && st !== 'no' ? `<div class="org" style="color:var(--err)">불참 ${esc(pcount(g).nn.join(', '))}</div>` : ''}${FILTER === 'gone' ? `<div class="org" style="color:var(--err)">빠짐 ${esc(pcount(g).xn.join(', '))}</div>` : ''}${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
       <td class="num" style="white-space:nowrap;font-size:12px">${g.created ? fmtTime(g.created) : '<span style="color:var(--tx3)">—</span>'}<div class="org" style="font-family:inherit">${esc(regLabel(g))}</div></td>
       <td class="num" style="white-space:nowrap;font-size:12px">${isSent(g) ? `<b>${fmtTime(g.sent.at)}</b>${g.sent.n > 1 ? ` <span class="mut">(${g.sent.n}회)</span>` : ''}` : '<span style="color:var(--tx3)">안 보냄</span>'}${g.sendNote ? `<br><b style="color:var(--err)">${esc(g.sendNote)}</b> <button class="lk" data-clrnote="${g.t}" title="발송 메모 지우기">✕ 지우기</button>` : ''}</td>
       <td class="mut num" style="white-space:nowrap;font-size:12px">${isOpen(g) ? `<b style="color:var(--ink)">열람</b> ${fmtTime(g.open.last)}${g.open.n > 1 ? ` (${g.open.n}회)` : ''}` : '<span style="color:var(--tx3)">안 열어봄</span>'}</td>
@@ -848,7 +866,7 @@ function personRows(L){
     const now = new Set((g.comps || []).flatMap(c => [c.name, c.from].filter(Boolean)));
     // (2026-11-05) 미응답 그룹이라도 명단에서 빠진 동행인은 불참으로 — 카드 숫자(pcount)와 같은 기준
     String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(n => n && !now.has(n))
-      .forEach(n => out.push(Object.assign({ 상태: '불참', 구분: '동행인', 성함: n, 직책: '', 소속: g.rep.org || '', 연락처: '', 이메일: '' }, base, cmeta(n))));
+      .forEach(n => out.push(Object.assign({ 상태: cans[n] && cans[n].v === 'no' ? '불참' : '빠진 동행인', 구분: '동행인', 성함: n, 직책: '', 소속: g.rep.org || '', 연락처: '', 이메일: '' }, base, cmeta(n))));
   });
   return out;
 }
@@ -870,12 +888,13 @@ function summaryRows(){
   const s = stats(), pct = (n, d) => d ? Math.round(n / d * 100) + '%' : '';
   return [['항목', '값', '설명'],
     ['기준 시각', new Date().toLocaleString('ko-KR'), ''],
-    ['총 대상', s.P.all + '명', `${s.all}그룹 · 참석 확정 + 불참 + 미응답 = 총 대상`],
+    ['총 대상', s.P.all + '명', `${s.all}그룹 · 참석 확정 + 불참 + 빠진 동행인 + 미응답 = 총 대상`],
     ['문자 발송', s.sent + '그룹', pct(s.sent, s.all) + ' (관리 화면에서 보냄으로 표시한 그룹)'],
     ['링크 열람', s.open + '그룹', '발송 대비 ' + pct(s.open, s.sent)],
     ['응답', (s.yes + s.no) + '그룹', '응답률 ' + pct(s.yes + s.no, s.all)],
-    ['참석 확정', s.P.y + '명', `본인 ${s.P.yr} + 동행 ${s.P.y - s.P.yr} · ${s.yes}그룹`],
-    ['불참', s.P.n + '명', `빠진 동행인 포함 · 전원 불참 ${s.no}그룹`],
+    ['참석 확정', s.P.y + '명', `본인 ${s.P.yr} + 동행 ${s.P.y - s.P.yr}` + (s.P.cy ? ` (대표자 미응답·동행인 직접 참석 ${s.P.cy})` : '') + ` · ${s.yes}그룹`],
+    ['불참', s.P.n + '명', `불참이라고 직접 답한 분 · 전원 불참 ${s.no}그룹`],
+    ['빠진 동행인', s.P.x + '명', `응답하면서 명단에서 뺀 동행인 · ${s.xG || 0}그룹`],
     ['미응답', s.P.p + '명', `${s.pending}그룹`],
     ['대리·동행인 변경', s.chg + '그룹', '처음 명단과 달라짐']];
 }
