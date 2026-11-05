@@ -133,7 +133,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
       <button class="btn" id="btnXlsx" title="요약 · 응답 현황(그룹별) · 참석 확정 · 전체(사람별) · 개인 링크">응답 현황 엑셀</button>
       <button class="btn" id="btnCsv">.csv</button>
       <button class="btn rw" id="btnEventus" title="참석 확정자만, 이벤터스 '참가자리스트 엑셀 등록하기' 양식">이벤터스 등록 양식</button>
-      <button class="btn rw" id="btnEventusLink" title="그룹마다 대표자 한 줄(동행인 행 없음, 불참 포함)을 이벤터스 엑셀 등록 양식으로 — 직함 = 실제 직책, 동행인이 있으면 그룹명 '동행인 있음', 휴대전화·이메일이 없거나 겹치면 017 가상번호·@aqara.kr 임시 주소">이벤터스 등록용(대표자)</button>
+      <button class="btn rw" id="btnEventusLink" title="한 명당 한 줄(QR 하나) — 대표자 + 동행인 각자, 동행인 소속 = 대표자 소속, 그룹명 동행인 있음/기본 티켓, 직함 = 실제 직책. 번호·이메일이 없거나 겹치면 017 가상번호·@aqara.kr 임시 주소(두 번째 시트에 따로 표시)">이벤터스 등록용(대표자+동행인)</button>
       <button class="btn rw" id="btnClose"></button>
       <button class="btn danger rw" id="btnReset" title="모든 응답을 미응답으로 되돌림(링크는 유지)">응답 초기화</button>
       <button class="btn" id="btnReload" title="30초마다 자동으로 새로 불러와요">새로고침</button>
@@ -1088,41 +1088,58 @@ $('#btnViewLink').onclick = async () => {
   show(j.key);
 };
 // 2026-11-04 사용자 요청: 참석/불참/미응답 중 무엇을 넣을지 직접 골라서 받기
+// 2026-11-05 사용자 지정: 한 명당 QR 하나 → 동행인도 한 줄에 한 명씩(소속 = 대표자 소속, 그룹명 '동행인 있음'). 상태는 사람별(동행인은 자기 링크 응답 우선).
+const repSt = (g) => isRej(g) ? 'rej' : (!answered(g) ? 'pending' : (g.status === 'yes' ? 'yes' : 'no'));
+const compSt = (g, c) => { if(isRej(g)) return 'rej'; const a = (g.cans || {})[slotOf(c)]; return a && a.v === 'no' ? 'no' : ((a && a.v === 'yes') || answered(g) ? 'yes' : 'pending'); };
+// 고른 상태(S)에 맞는 사람 목록: [{ g, p(사람), comp(동행인 여부) }] — 대표자(대리 참석이면 대리인) 다음에 그 그룹 동행인
+function eventusPeople(S){
+  const out = [];
+  list().slice().sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
+    if(S.has(repSt(g))) out.push({ g, p: g.sub && g.sub.name ? Object.assign({}, g.rep, g.sub, { email: '' }) : Object.assign({ email: g.email }, g.rep), comp: false });
+    (g.comps || []).forEach(c => { if(S.has(compSt(g, c))) out.push({ g, p: c, comp: true }); });
+  });
+  return out;
+}
 $('#btnEventusLink').onclick = () => {
   const c = stats();
-  modal(`<h3>이벤터스 등록용(대표자)</h3>
-    <p>파일에 넣을 응답 상태를 고르세요. (마케팅 포털 RSVP 응답 기준 · 그룹당 대표자 한 줄)</p>
+  modal(`<h3>이벤터스 등록용(대표자+동행인)</h3>
+    <p>파일에 넣을 응답 상태를 고르세요. 한 명당 한 줄(QR 하나)이에요 — 동행인도 각자 한 줄, 소속은 대표자 소속, 그룹명 '동행인 있음'.<br><span class="mut">상태는 사람별: 동행인은 자기 링크로 답했으면 그 응답, 아니면 그룹 응답을 따라요. 응답 때 명단에서 뺀 동행인은 들어가지 않아요.</span></p>
     <div class="tools" style="margin-top:12px" id="evSt">
-      <label class="btn"><input type="checkbox" value="yes" checked> 참석 ${c.yes}</label>
-      <label class="btn"><input type="checkbox" value="no" checked> 불참 ${c.no}</label>
-      <label class="btn"><input type="checkbox" value="pending" checked> 미응답 ${c.pending}</label>
-      <label class="btn"><input type="checkbox" value="rej"> 참석 거절 ${c.rj || 0}</label>
+      <label class="btn"><input type="checkbox" value="yes" checked> 참석</label>
+      <label class="btn"><input type="checkbox" value="no" checked> 불참</label>
+      <label class="btn"><input type="checkbox" value="pending" checked> 미응답</label>
+      <label class="btn"><input type="checkbox" value="rej"> 참석 거절 ${c.rj || 0}그룹</label>
     </div>
     <div class="prev" id="evPrev"></div>
     <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>닫기</button><button class="btn pri" id="evDl">엑셀 받기</button></div>`);
   const pick = () => new Set([...document.querySelectorAll('#evSt input:checked')].map(b => b.value));
-  const target = () => { const S = pick(); return list().filter(g => S.has(isRej(g) ? 'rej' : gst(g))); };
-  const prev = () => { $('#evPrev').textContent = `${target().length}그룹이 들어가요`; };
+  const prev = () => { const L = eventusPeople(pick()), n = L.filter(x => x.comp).length; $('#evPrev').textContent = `${L.length}명이 들어가요 (대표자 ${L.length - n} · 동행인 ${n})`; };
   document.querySelectorAll('#evSt input').forEach(b => b.onchange = prev); prev();
   $('#evDl').onclick = () => {
-    const S = pick(), L = target(); if(!L.length) return toast('고른 상태에 해당하는 사람이 없어요');
+    const S = pick(), L = eventusPeople(S); if(!L.length) return toast('고른 상태에 해당하는 사람이 없어요');
     eventusRepFile(L, ['yes', 'no', 'pending', 'rej'].filter(k => S.has(k)).map(k => k === 'rej' ? '참석거절' : ST[k]).join('·'));
     closeModal();
   };
 };
 function eventusRepFile(L, tag){
   // 이벤터스 필수·중복 불가: 휴대전화 없거나 앞사람과 겹치면 017 가상번호(0170000NNNN), 이메일도 같은 방식으로 rsvpNNN@aqara.kr (2026-11-04 사용자 지정)
-  const rows = [], seen = new Set(), seenTel = new Set(); let tmp = 0, fake = 0;
-  L.slice().sort((a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko')).forEach(g => {
-    // 2026-11-04 사용자 지정: 동행인이 있는 그룹도 대표자 이름 한 줄만(동행인 행 없음) — 그룹당 1줄
-    const grp = rosterN(g) > 1 ? '기본 카테고리||동행인 있음' : EVENTUS_GROUP;
-    let em = String(g.email || '').trim().toLowerCase().replace(/\.co\.comkr$/, '.co.kr');   // 흔한 오타(…co.comkr) 바로잡기
+  // ⚠️ 017 가상번호인 사람은 이벤터스 문자(QR)를 못 받는다 → '확인 필요' 시트에 따로 적는다(동행인 번호가 대표자 번호로 복사돼 있던 경우 등)
+  const rows = [], chk = [], seen = new Set(), seenTel = new Set(); let tmp = 0, fake = 0;
+  L.forEach(({ g, p, comp }) => {
+    const grp = comp || rosterN(g) > 1 ? '기본 카테고리||동행인 있음' : EVENTUS_GROUP;
+    let em = String(p.email || '').trim().toLowerCase().replace(/\.co\.comkr$/, '.co.kr');   // 흔한 오타(…co.comkr) 바로잡기
+    const em0 = em;
     if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(em) || seen.has(em)) em = '';
     if(em) seen.add(em); else em = 'rsvp' + String(++tmp).padStart(3, '0') + '@aqara.kr';
-    let tel = telDigits(g.rep.phone);
+    let tel = telDigits(p.phone); const tel0 = tel;
     if(!/^0\d{8,10}$/.test(tel) || seenTel.has(tel)) tel = '';
     if(tel) seenTel.add(tel); else { do { tel = '0170000' + String(++fake).padStart(4, '0'); } while(seenTel.has(tel)); seenTel.add(tel); }
-    rows.push([g.rep.name, em, tel, grp, g.rep.org || '', g.rep.title || '']);   // 직함 = 실제 직책(공통 링크라 개인 링크 안 넣음)
+    const org = comp ? (g.rep.org || p.org || '') : (p.org || g.rep.org || '');   // 동행인 소속 = 대표자 소속(사용자 지정)
+    rows.push([p.name, em, tel, grp, org, p.title || '']);   // 직함 = 실제 직책
+    if(tel.startsWith('0170000') || em.endsWith('@aqara.kr')) chk.push({ 이름: p.name, 구분: comp ? '동행인' : '대표자', 대표자: g.rep.name, 소속: org,
+      '파일 휴대전화': tel, '원래 번호': tel0 ? (tel0 === tel ? '' : tel0 + (seenTel.has(tel0) ? ' (앞사람과 겹침)' : ' (형식 오류)')) : '없음',
+      '파일 이메일': em, '원래 이메일': em0 && em0 !== em ? em0 + (seen.has(em0) ? ' (앞사람과 겹침)' : ' (형식 오류)') : (em0 ? '' : '없음'),
+      비고: tel.startsWith('0170000') ? '⚠️ 가상번호라 QR 문자를 못 받아요 — 실제 번호를 받아 고쳐 주세요' : '임시 이메일(문자 발송에는 지장 없음)' });
   });
   if(!rows.length) return toast('내려받을 사람이 없어요');
   const head1 = EVENTUS_HEAD1.slice(); head1[3] = head1[3].replace(EVENTUS_GROUP, '기본 카테고리||1102 RSVP\n기본 카테고리||동행인 있음\n' + EVENTUS_GROUP);
@@ -1132,9 +1149,11 @@ function eventusRepFile(L, tag){
   rows.forEach((r, i) => { const a = XLSX.utils.encode_cell({ r: i + 2, c: 2 }); if(ws[a]){ ws[a].t = 's'; ws[a].z = '@'; } });
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  if(chk.length){ const w2 = XLSX.utils.json_to_sheet(chk); w2['!cols'] = [12, 8, 12, 22, 16, 26, 26, 30, 50].map(w => ({ wch: w })); XLSX.utils.book_append_sheet(wb, w2, '확인 필요(올리지 않음)'); }
+  const nC = L.filter(x => x.comp).length;
   const tg = tag && tag !== '참석·불참·미응답' ? tag + '_' : '';
-  XLSX.writeFile(wb, `참가자리스트_엑셀등록하기_대표자_${tg}${rows.length}그룹_${stamp()}.xlsx`);
-  toast(`${tag ? tag + ' ' : ''}${rows.length}그룹(대표자) 내려받음 · 동행인 있음 ${rows.filter(r => r[3].includes('동행인')).length}` + (tmp ? ` · 임시 이메일 ${tmp}명` : '') + (fake ? ` · 017 가상번호 ${fake}명` : ''));
+  XLSX.writeFile(wb, `참가자리스트_엑셀등록하기_대표자+동행인_${tg}${rows.length}명_${stamp()}.xlsx`);
+  toast(`${tag ? tag + ' ' : ''}${rows.length}명 내려받음(대표자 ${rows.length - nC} · 동행인 ${nC})` + (fake ? ` · ⚠️ 017 가상번호 ${fake}명` : '') + (tmp ? ` · 임시 이메일 ${tmp}명` : '') + (chk.length ? ' — 두 번째 시트 확인' : ''));
 }
 function toCsv(rows){
   if(!rows.length) return '';
