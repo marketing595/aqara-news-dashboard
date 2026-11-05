@@ -107,6 +107,13 @@ export default async function middleware(req){
     dest.searchParams.set('rsvp', '1');
     return new Response(null, { headers: { 'x-middleware-rewrite': dest.toString() } });
   }
+  // RSVP 보기 전용 공유 링크(2026-11-05): /rsvp-view?v=<키> → rsvp-admin.html(보기 모드). 화면 파일에는 데이터가 없고,
+  //  명단은 api/rsvp가 키를 확인해야만 내준다(수정 op는 로그인 필요). 키는 관리 화면에서 바꾸거나 끌 수 있다.
+  const vk = /^[A-Za-z0-9_-]{20}$/.test(url0.searchParams.get('v') || '');
+  if(vk && url0.pathname === '/rsvp-admin.html') return;   // 리라이트 뒤 다시 들어와도 통과
+  if(vk && url0.pathname === '/rsvp-view'){
+    return new Response(null, { headers: { 'x-middleware-rewrite': new URL('/rsvp-admin.html' + url0.search, url0.origin).toString() } });
+  }
   const CID = process.env.GOOGLE_CLIENT_ID, SECRET = process.env.SESSION_SECRET;
   if(!CID || !SECRET) return;                 // 미설정 → 개방(설정 전 잠금 방지)
   const payload = await verifySession(getCookie(req,'__sess'), SECRET);

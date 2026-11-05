@@ -67,7 +67,8 @@ const digits = (v) => String(v || '').replace(/\D/g, '').slice(0, 15);
 const SS = () => (process.env.SESSION_SECRET || '').trim();
 const ROOT = () => 'rsvpx_' + crypto.createHmac('sha256', SS()).update('rsvp-root').digest('hex').slice(0, 24);
 const KEY = () => crypto.createHash('sha256').update(SS() + 'rsvp').digest();
-const gid = (t) => crypto.createHmac('sha256', SS()).update('g:' + t).digest('hex').slice(0, 20);   // 토큰도 경로에 그대로 쓰지 않는다
+const viewKey = (gen) => crypto.createHmac('sha256', SS()).update('view:' + (gen || 0)).digest('base64url').slice(0, 20);   // 보기 전용 공유 링크 키
+const gid = (t) =>crypto.createHmac('sha256', SS()).update('g:' + t).digest('hex').slice(0, 20);   // 토큰도 경로에 그대로 쓰지 않는다
 function enc(obj){
   const iv = crypto.randomBytes(12), c = crypto.createCipheriv('aes-256-gcm', KEY(), iv);
   const ct = Buffer.concat([c.update(JSON.stringify(obj), 'utf8'), c.final()]);
@@ -386,6 +387,21 @@ module.exports = async (req, res) => {
       return res.status(200).json(compView(next, meta, masked ? '' : code, slot, masked));
     }
 
+    // ── 보기 전용 공유 링크(2026-11-05): /rsvp-view?v=<키> — 로그인 없이 목록만 읽는다(수정·삭제·가져오기 op는 아래 관리자 검사에 막힘) ──
+    //  키 = HMAC(SESSION_SECRET, 'view:'+meta.viewGen) 앞 20자. 관리 화면 [새 키로 바꾸기]를 누르면 예전 링크는 바로 막힌다.
+    //  손님 개인 링크(토큰)·동행인 링크 코드는 내보내지 않는다(그룹 키 = gid) → 이 링크로 손님 화면에 들어가 응답을 고칠 수 없다.
+    if(op === 'list' && req.method === 'GET' && req.query.v){
+      const [groups, meta, opens, sent] = await Promise.all([fb('GET', 'groups'), fb('GET', 'meta'), raw('GET', 'o'), raw('GET', 's')]);
+      const m = meta || {};
+      if(!m.viewOn || String(req.query.v) !== viewKey(m.viewGen)) return res.status(401).json({ ok: false, error: '보기 전용 링크가 만료됐어요. 담당자에게 새 링크를 받아 주세요.' });
+      const ts = Object.keys(groups || {}), log = await logsFor(ts), G = {}, L = {};
+      ts.forEach(t => { const g = Object.assign({}, groups[t]), k = gid(t);
+        if(opens && opens[k]) g.open = opens[k];
+        if(sent && sent[k]) g.sent = sent[k];
+        G[k] = g; if(log[t]) L[k] = log[t]; });
+      return res.status(200).json({ ok: true, viewOnly: true, groups: G, meta: { closed: !!m.closed }, log: L, locked: true });
+    }
+
     // ── 관리자 ──
     const email = sessionEmail(req);
     if(!email) return res.status(401).json({ ok: false, error: '@' + DOMAIN + ' 로그인이 필요합니다.' });
@@ -623,6 +639,14 @@ module.exports = async (req, res) => {
       }
       await Promise.all([raw('DELETE', 'x/' + k), raw('DELETE', 'l/' + k), raw('DELETE', 'o/' + k), raw('DELETE', 's/' + k)]);
       return res.status(200).json({ ok: true });
+    }
+    // 보기 전용 링크: {} = 지금 키(없으면 켬) · { regen:true } = 새 키(예전 링크 막힘) · { off:true } = 끄기
+    if(op === 'viewkey'){
+      const m = (await fb('GET', 'meta')) || {};
+      if(body.off){ await fb('PATCH', 'meta', { viewOn: false }); return res.status(200).json({ ok: true, off: true }); }
+      const gen = (m.viewGen || 0) + (body.regen ? 1 : 0);
+      if(body.regen || !m.viewOn) await fb('PATCH', 'meta', { viewOn: true, viewGen: gen, viewBy: email, viewAt: Date.now() });
+      return res.status(200).json({ ok: true, key: viewKey(gen) });
     }
     if(op === 'meta'){
       await fb('PATCH', 'meta', { closed: !!body.closed, by: email, at: Date.now() });

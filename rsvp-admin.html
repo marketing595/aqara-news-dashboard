@@ -99,6 +99,9 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .warn{background:#fff4e0;border:1px solid #f3d29a;color:#7a4a00;border-radius:10px;padding:9px 12px;font-size:12.5px;margin-top:12px}
 .empty{padding:40px;text-align:center;color:var(--tx3)}
 [hidden]{display:none!important}
+.ro .rw{display:none!important}
+.ro .tbl tr.g{cursor:default}
+.robadge{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:99px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:600;vertical-align:3px}
 .tlb{padding:12px 14px 10px}
 .tlsum{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--tx2)}
 .tlsum b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums;margin-right:2px}
@@ -119,26 +122,27 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
       <p class="state" id="state">불러오는 중…</p>
     </div>
     <div class="tools">
-      <button class="btn pri" id="btnCommon" title="모두에게 같은 링크 — 열면 '성함이 어떻게 되시나요?'부터 시작해 명단에서 찾아 본인/동행인 화면으로">🔗 공통 링크 복사 <span style="opacity:.75;font-weight:500">hakdongmap.kr/rsvp</span></button>
-      <label class="btn" style="display:inline-flex;align-items:center">명단 엑셀 가져오기<input type="file" id="file" accept=".xlsx,.xls,.csv" hidden></label>
-      <label class="btn" style="display:inline-flex;align-items:center" title="이벤터스 참가자 리스트(참석/불참 상태) 또는 '참석 확정 여부 · 발송 여부' 열이 있는 담당자 정리 엑셀 — 이벤터스 응답·발송 문제를 기존 그룹에 반영(새 그룹은 안 만듦)">현황 엑셀 반영<input type="file" id="fileSt" accept=".xlsx,.xls" hidden></label>
-      <label class="btn" style="display:inline-flex;align-items:center" title="설문 응답 엑셀(성함·연락처·이메일)의 이메일로 명단 이메일을 맞춤 — 미리보기 후 저장">설문 이메일 반영<input type="file" id="fileEm" accept=".xlsx,.xls" hidden></label>
-      <label class="btn" style="display:inline-flex;align-items:center;color:#b42318" title="참석을 받지 않을 사람 명단 엑셀(성함 필수 · 연락처·소속·이메일·사유 있으면 사용) — 명단과 맞춰 '참석 거절'로 표시, 명단에 없는 사람은 골라서 새로 추가">거절 명단 엑셀 올리기<input type="file" id="fileRej" accept=".xlsx,.xls,.csv" hidden></label>
-      <button class="btn" id="btnLinks">링크·문자 추출</button>
-      <button class="btn" id="btnSentAt" title="외부 도구(이벤터스 등)로 문자를 보낸 시각을 명단 전체의 '마지막 문자 전송'으로 기록">마지막 문자 시각 입력</button>
+      <button class="btn pri rw" id="btnCommon" title="모두에게 같은 링크 — 열면 '성함이 어떻게 되시나요?'부터 시작해 명단에서 찾아 본인/동행인 화면으로">🔗 공통 링크 복사 <span style="opacity:.75;font-weight:500">hakdongmap.kr/rsvp</span></button>
+      <button class="btn rw" id="btnViewLink" title="로그인 없이 명단·현황만 볼 수 있는 링크(수정·삭제·가져오기 불가, 손님 개인 링크도 안 보임)">👁 보기 전용 링크</button>
+      <label class="btn rw" style="display:inline-flex;align-items:center">명단 엑셀 가져오기<input type="file" id="file" accept=".xlsx,.xls,.csv" hidden></label>
+      <label class="btn rw" style="display:inline-flex;align-items:center" title="이벤터스 참가자 리스트(참석/불참 상태) 또는 '참석 확정 여부 · 발송 여부' 열이 있는 담당자 정리 엑셀 — 이벤터스 응답·발송 문제를 기존 그룹에 반영(새 그룹은 안 만듦)">현황 엑셀 반영<input type="file" id="fileSt" accept=".xlsx,.xls" hidden></label>
+      <label class="btn rw" style="display:inline-flex;align-items:center" title="설문 응답 엑셀(성함·연락처·이메일)의 이메일로 명단 이메일을 맞춤 — 미리보기 후 저장">설문 이메일 반영<input type="file" id="fileEm" accept=".xlsx,.xls" hidden></label>
+      <label class="btn rw" style="display:inline-flex;align-items:center;color:#b42318" title="참석을 받지 않을 사람 명단 엑셀(성함 필수 · 연락처·소속·이메일·사유 있으면 사용) — 명단과 맞춰 '참석 거절'로 표시, 명단에 없는 사람은 골라서 새로 추가">거절 명단 엑셀 올리기<input type="file" id="fileRej" accept=".xlsx,.xls,.csv" hidden></label>
+      <button class="btn rw" id="btnLinks">링크·문자 추출</button>
+      <button class="btn rw" id="btnSentAt" title="외부 도구(이벤터스 등)로 문자를 보낸 시각을 명단 전체의 '마지막 문자 전송'으로 기록">마지막 문자 시각 입력</button>
       <button class="btn" id="btnXlsx" title="요약 · 응답 현황(그룹별) · 참석 확정 · 전체(사람별) · 개인 링크">응답 현황 엑셀</button>
       <button class="btn" id="btnCsv">.csv</button>
-      <button class="btn" id="btnEventus" title="참석 확정자만, 이벤터스 '참가자리스트 엑셀 등록하기' 양식">이벤터스 등록 양식</button>
-      <button class="btn" id="btnEventusLink" title="그룹마다 대표자 한 줄(동행인 행 없음, 불참 포함)을 이벤터스 엑셀 등록 양식으로 — 직함 = 실제 직책, 동행인이 있으면 그룹명 '동행인 있음', 휴대전화·이메일이 없거나 겹치면 017 가상번호·@aqara.kr 임시 주소">이벤터스 등록용(대표자)</button>
-      <button class="btn" id="btnClose"></button>
-      <button class="btn danger" id="btnReset" title="모든 응답을 미응답으로 되돌림(링크는 유지)">응답 초기화</button>
+      <button class="btn rw" id="btnEventus" title="참석 확정자만, 이벤터스 '참가자리스트 엑셀 등록하기' 양식">이벤터스 등록 양식</button>
+      <button class="btn rw" id="btnEventusLink" title="그룹마다 대표자 한 줄(동행인 행 없음, 불참 포함)을 이벤터스 엑셀 등록 양식으로 — 직함 = 실제 직책, 동행인이 있으면 그룹명 '동행인 있음', 휴대전화·이메일이 없거나 겹치면 017 가상번호·@aqara.kr 임시 주소">이벤터스 등록용(대표자)</button>
+      <button class="btn rw" id="btnClose"></button>
+      <button class="btn danger rw" id="btnReset" title="모든 응답을 미응답으로 되돌림(링크는 유지)">응답 초기화</button>
       <button class="btn" id="btnReload" title="30초마다 자동으로 새로 불러와요">새로고침</button>
     </div>
   </div>
 
   <div class="tools" style="margin-top:14px;justify-content:space-between">
     <div class="seg" id="viewSeg"></div>
-    <button class="btn pri" id="btnAdd">+ 직접 입력</button>
+    <button class="btn pri rw" id="btnAdd">+ 직접 입력</button>
   </div>
   <div id="warn"></div>
   <div class="kpis" id="kpis"></div>
@@ -147,11 +151,11 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
   <div class="panel">
     <div class="ph">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div><button class="btn" id="btnTabXlsx" title="지금 고른 탭(전체/동행인 있음/혼자 참석)과 위 카드 필터·검색 결과만 엑셀로">이 탭 엑셀 받기</button></div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option></select><button class="btn" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option></select><button class="btn rw" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
     </div>
     <div style="overflow:auto;max-height:72vh">
       <table class="tbl">
-        <thead><tr><th>초대받은 분</th><th>연락처 · 이메일</th><th class="hide-m">초청 경로</th><th>상태</th><th>등록일시</th><th>마지막 문자 전송</th><th>링크 열람</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th>링크</th></tr></thead>
+        <thead><tr><th>초대받은 분</th><th>연락처 · 이메일</th><th class="hide-m">초청 경로</th><th>상태</th><th>등록일시</th><th>마지막 문자 전송</th><th>링크 열람</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th class="rw">링크</th></tr></thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
@@ -174,6 +178,9 @@ const ST = { yes: '참석', no: '불참', pending: '미응답' };
 function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('on'), 2200); }
 
 let G = {}, META = {}, LOG = {}, FILTER = 'all', COMP = 'all', OPEN = '', EDITING = false;
+// 보기 전용(2026-11-05): /rsvp-view?v=<키> 로 열면 수정 버튼(.rw)을 다 숨기고 목록·현황만 보여 준다. 서버도 키로는 목록만 준다.
+const VK = new URLSearchParams(location.search).get('v') || '', RO = !!VK;
+if(RO){ document.documentElement.classList.add('ro'); document.title = '세미나 RSVP 현황(보기 전용)'; }
 // 동행인 탭: 명단에 동행인을 적었던 그룹(지금 다 뺐어도 포함) / 혼자 오는 그룹
 const withComps = (g) => (g.comps || []).length > 0 || ((g.orig && g.orig.n) || 1) > 1;
 // 명단 인원 = 본인 + (처음 명단 동행인 ∪ 지금 동행인). 불참으로 고른 동행인도 명단엔 남는다(2026-11-02: 614명이 608명으로 보인다는 지적)
@@ -181,12 +188,13 @@ const rosterN = (g) => 1 + new Set([...String((g.orig && g.orig.comps) || '').sp
 // 손님에게 보내는 링크는 짧은 도메인(2026-10-30, 이벤터스 직함 칸 길이 제한). middleware가 hakdongmap.kr/r/ 도 RSVP로 보낸다
 // → 다시 더 짧게: https://hakdongmap.kr/<토큰 앞 6자> (28자). 앞 6자가 겹치는 그룹이 있으면 그 그룹만 긴 주소로.
 const linkOf = (t) => {
+  if(RO) return '';   // 보기 전용엔 손님 링크가 없다(서버가 토큰을 안 줌)
   const k = t.slice(0, 6), dup = Object.keys(G).some(x => x !== t && x.slice(0, 6) === k);
   return dup ? 'https://hakdongmap.kr/r/' + t : 'https://hakdongmap.kr/' + k;   // 28자(이벤터스 개인화 변수 영문 30자 제한)
 };
 // 동행인 개인 링크(2026-11-04): https://hakdongmap.kr/c/<7자> — 서버가 목록에 g.clinks{자리 이름: 코드}로 준다
 const slotOf = (c) => (c && (c.from || c.name)) || '';
-const clinkOf = (g, slot) => (g.clinks && g.clinks[slot]) ? 'https://hakdongmap.kr/c/' + g.clinks[slot] : linkOf(g.t);
+const clinkOf = (g, slot) => RO ? '' : (g.clinks && g.clinks[slot]) ? 'https://hakdongmap.kr/c/' + g.clinks[slot] : linkOf(g.t);
 const byLabel = (g) => g.updatedBy === 'guest' ? '본인' : (g.updatedBy === 'guest-comp' ? '동행인 본인' : (g.updatedBy || ''));
 
 async function api(body){
@@ -195,10 +203,11 @@ async function api(body){
 }
 async function load(){
   try{
-    const r = await fetch('/api/rsvp?op=list', { cache: 'no-store' });
+    const r = await fetch('/api/rsvp?op=list' + (RO ? '&v=' + encodeURIComponent(VK) : ''), { cache: 'no-store' });
     const j = await r.json();
     if(!j.ok){ $('#state').innerHTML = `<b class="bad">${esc(j.error || '불러오기 실패')}</b>`; return; }
     G = j.groups || {}; META = j.meta || {}; LOG = j.log || {};
+    if(RO){ $('#state').innerHTML = `<span class="robadge">보기 전용</span> 수정할 수 없는 공유 화면이에요 · 30초마다 자동 갱신 · ${fmtTime(Date.now())} 기준`; paint(); return; }
     $('#state').innerHTML = `${esc(j.email)} · 개인정보 보호 ${j.locked === true ? '<b>정상(암호화 저장)</b>' : '<b class="bad">확인 필요</b>'} · ${fmtTime(Date.now())} 기준`;
     paint();
   }catch(e){ $('#state').innerHTML = '<b class="bad">연결 실패</b>'; }
@@ -447,16 +456,16 @@ function paintRows(){
       <td class="hide-m mut">${esc(g.route || '')}</td>
       <td><span class="st ${st}">${stLabel(g)}</span>${isRej(g) ? `<div class="org" style="color:#b42318">${esc(g.rejected.why || '사유 없음')}${g.status === 'yes' || g.status === 'no' ? ` · 손님 응답: ${ST[g.status]}` : ''}</div>` : ''}${FILTER === 'no' ? (() => { const c = pcount(g); return (st !== 'no' && c.nn.length ? `<div class="org" style="color:var(--err)">불참 ${esc(c.nn.join(', '))}</div>` : '') + (c.xn.length ? `<div class="org" style="color:var(--err)">명단에서 뺌 ${esc(c.xn.join(', '))}</div>` : ''); })() : ''}${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
       <td class="num" style="white-space:nowrap;font-size:12px">${g.created ? fmtTime(g.created) : '<span style="color:var(--tx3)">—</span>'}<div class="org" style="font-family:inherit">${esc(regLabel(g))}</div></td>
-      <td class="num" style="white-space:nowrap;font-size:12px">${isSent(g) ? `<b>${fmtTime(g.sent.at)}</b>${g.sent.n > 1 ? ` <span class="mut">(${g.sent.n}회)</span>` : ''}` : '<span style="color:var(--tx3)">안 보냄</span>'}${g.sendNote ? `<br><b style="color:var(--err)">${esc(g.sendNote)}</b> <button class="lk" data-clrnote="${g.t}" title="발송 메모 지우기">✕ 지우기</button>` : ''}</td>
+      <td class="num" style="white-space:nowrap;font-size:12px">${isSent(g) ? `<b>${fmtTime(g.sent.at)}</b>${g.sent.n > 1 ? ` <span class="mut">(${g.sent.n}회)</span>` : ''}` : '<span style="color:var(--tx3)">안 보냄</span>'}${g.sendNote ? `<br><b style="color:var(--err)">${esc(g.sendNote)}</b> <button class="lk rw" data-clrnote="${g.t}" title="발송 메모 지우기">✕ 지우기</button>` : ''}</td>
       <td class="mut num" style="white-space:nowrap;font-size:12px">${isOpen(g) ? `<b style="color:var(--ink)">열람</b> ${fmtTime(g.open.last)}${g.open.n > 1 ? ` (${g.open.n}회)` : ''}` : '<span style="color:var(--tx3)">안 열어봄</span>'}</td>
       <td class="num">${now === '' ? `<span class="mut">예상 ${orig}</span>` : (orig !== '' && orig !== now ? `<span class="mut">${orig} →</span> <b>${now}</b>` : `<b>${now}</b>`)}</td>
       <td class="hide-m comps">${g.sub && g.sub.name ? `<span class="tag t-sub" style="margin-left:0">대리</span> ${esc(g.sub.name)}${comps ? ' · ' : ''}` : ''}${comps || '<span class="mut">—</span>'}</td>
       <td class="mut num">${g.updatedAt ? fmtTime(g.updatedAt) + (g.updatedBy === 'guest' ? ' · 본인' : (g.updatedBy === 'guest-comp' ? ' · 동행인' : ' · 담당')) : ''}</td>
-      <td style="white-space:nowrap"><button class="lk" data-copy="${g.t}">복사</button><a class="lk" href="/r/${g.t}" target="_blank" rel="noopener">열기</a><button class="lk" data-del="${g.t}" style="color:var(--err)" title="휴지통으로 — 휴지통에서 복원할 수 있어요">삭제</button></td>
+      <td class="rw" style="white-space:nowrap"><button class="lk" data-copy="${g.t}">복사</button><a class="lk" href="/r/${g.t}" target="_blank" rel="noopener">열기</a><button class="lk" data-del="${g.t}" style="color:var(--err)" title="휴지통으로 — 휴지통에서 복원할 수 있어요">삭제</button></td>
     </tr>${OPEN === g.t ? editRow(g) : ''}`;
   }).join('');
   document.querySelectorAll('tr.g').forEach(tr => tr.onclick = (e) => {
-    if(e.target.closest('[data-copy],[data-del],a')) return;
+    if(RO || e.target.closest('[data-copy],[data-del],a')) return;   // 보기 전용은 펼쳐서 고치는 칸이 없다
     OPEN = OPEN === tr.dataset.t ? '' : tr.dataset.t; paintRows();
   });
   document.querySelectorAll('[data-copy]').forEach(b => b.onclick = async () => { await navigator.clipboard.writeText(linkOf(b.dataset.copy)); toast('링크를 복사했어요'); });
@@ -1057,6 +1066,24 @@ $('#btnCommon').onclick = async () => {
   const u = 'https://hakdongmap.kr/rsvp';
   try{ await navigator.clipboard.writeText(u); toast('공통 링크를 복사했어요: ' + u); }
   catch(e){ prompt('아래 링크를 복사해 주세요', u); }
+};
+// 보기 전용 공유 링크(2026-11-05): 로그인 없이 목록·현황만. [새 키로 바꾸기] = 예전 링크 즉시 막힘, [끄기] = 링크 사용 중지
+$('#btnViewLink').onclick = async () => {
+  const j = await api({ op: 'viewkey' }); if(!j.ok) return toast(j.error || '링크를 못 만들었어요');
+  const show = (key) => {
+    const u = location.origin + '/rsvp-view?v=' + key;
+    modal(`<h3>👁 보기 전용 링크</h3>
+      <p class="mut" style="margin:6px 0 10px">로그인 없이 명단·응답 현황만 볼 수 있어요. 수정·삭제·가져오기 버튼이 없고, 손님 개인 링크도 보이지 않아요.<br>단 이름·연락처·이메일이 보이니 필요한 사람에게만 보내 주세요.</p>
+      <input class="search" id="vlU" value="${esc(u)}" readonly style="width:100%" onclick="this.select()">
+      <div class="tools" style="margin-top:14px;justify-content:space-between"><div><button class="btn danger" id="vlNew" title="지금 링크는 바로 막히고 새 링크가 만들어져요">새 키로 바꾸기</button> <button class="btn" id="vlOff" title="보기 전용 링크를 모두 막아요(다시 누르면 새로 켜져요)">링크 끄기</button></div>
+      <div><button class="btn" data-x>닫기</button> <button class="btn pri" id="vlCp">복사</button></div></div>`);
+    $('#vlCp').onclick = async () => { try{ await navigator.clipboard.writeText(u); toast('보기 전용 링크를 복사했어요'); }catch(e){ $('#vlU').select(); } };
+    $('#vlNew').onclick = async () => { if(!confirm('지금 링크는 바로 열리지 않게 돼요. 새 링크로 바꿀까요?')) return;
+      const r = await api({ op: 'viewkey', regen: true }); if(!r.ok) return toast(r.error || '실패'); toast('새 링크로 바꿨어요'); show(r.key); };
+    $('#vlOff').onclick = async () => { if(!confirm('보기 전용 링크를 끌까요? 지금 링크로는 더 이상 볼 수 없어요.')) return;
+      const r = await api({ op: 'viewkey', off: true }); if(!r.ok) return toast(r.error || '실패'); closeModal(); toast('보기 전용 링크를 껐어요'); };
+  };
+  show(j.key);
 };
 // 2026-11-04 사용자 요청: 참석/불참/미응답 중 무엇을 넣을지 직접 골라서 받기
 $('#btnEventusLink').onclick = () => {
