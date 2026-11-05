@@ -9587,7 +9587,7 @@
       box.innerHTML=`<div class="flex items-center justify-end gap-3 flex-wrap mb-2">
           <a href="/rsvp-admin.html" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-[#7C5CFF] text-white text-[13px] font-bold hover:brightness-110 whitespace-nowrap">새 창으로 열기 ↗</a>
         </div>
-        <iframe src="/rsvp-admin.html" title="세미나 참석 확인(RSVP) 관리" class="w-full rounded-2xl border border-slate-200 bg-white" style="height:min(86vh,1000px);min-height:600px"></iframe>`;
+        <iframe src="/rsvp-admin.html?v=${Date.now()}" title="세미나 참석 확인(RSVP) 관리" class="w-full rounded-2xl border border-slate-200 bg-white" style="height:min(86vh,1000px);min-height:600px"></iframe>`;
     }
     /* ===== 🔗 경품 교환권 QR — 공개 페이지 semcopy.html(상품 링크·100% 쿠폰 코드 복사). 문구·URL·공용 코드 = Firebase semcopy/config, 집계 = semcopy/stats/<KST날짜> ===== */
     const SC_FIELDS=[['eyebrow','윗줄 라벨','input'],['title','제목 (줄바꿈 가능)','textarea2'],['desc','설명','textarea2'],['btn','복사 버튼 글자','input'],['url','복사될 URL','input'],['coupon','공용 쿠폰 코드 (교환권마다 다르면 비워 두고 아래 코드별 QR 사용)','input'],['couponNote','코드가 없을 때 안내','input'],['steps','이용 순서 (한 줄에 한 단계, **굵게**)','textarea4']];
