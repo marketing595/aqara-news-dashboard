@@ -593,10 +593,35 @@ module.exports = async (req, res) => {
       if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
       return res.status(200).json({ ok: true, n: Object.keys(patch).length });
     }
+    // 삭제 = 휴지통으로(2026-11-05): 그룹을 x/<gid> 에 암호화해 옮기고 목록에서 뺀다. 변경 이력·발송·열람 기록은 그대로 둬서 복원하면 다 돌아온다.
+    // 휴지통에 있는 동안 개인 링크는 열리지 않는다(groups 에 없으므로).
     if(op === 'delete'){
       if(!okTok(body.t)) return res.status(400).json({ ok: false, error: 't' });
+      const g = await fb('GET', `groups/${body.t}`);
+      if(g) await raw('PUT', 'x/' + gid(body.t), { c: enc(Object.assign({}, g, { _t: body.t, deletedAt: Date.now(), deletedBy: email })) });
       await fb('DELETE', `groups/${body.t}`);
-      await fb('DELETE', `log/${body.t}`);
+      GCACHE.at = 0;
+      return res.status(200).json({ ok: true });
+    }
+    if(op === 'trash'){
+      const all = (await raw('GET', 'x')) || {}, items = [];
+      Object.keys(all).forEach(k => { const g = all[k] && dec(all[k].c); if(g && g._t) items.push(g); });
+      items.sort((a, b) => (b.deletedAt || 0) - (a.deletedAt || 0));
+      return res.status(200).json({ ok: true, items });
+    }
+    if(op === 'restore' || op === 'purge'){
+      if(!okTok(body.t)) return res.status(400).json({ ok: false, error: 't' });
+      const k = gid(body.t), v = await raw('GET', 'x/' + k), g = v && dec(v.c);
+      if(!g) return res.status(404).json({ ok: false, error: '휴지통에 없는 그룹' });
+      if(op === 'restore'){
+        if(await fb('GET', `groups/${body.t}`)) return res.status(200).json({ ok: false, error: '같은 링크의 그룹이 이미 명단에 있어요' });
+        delete g.deletedAt; delete g.deletedBy;
+        await fb('PUT', `groups/${body.t}`, g);
+        await raw('DELETE', 'x/' + k);
+        GCACHE.at = 0;
+        return res.status(200).json({ ok: true, group: g });
+      }
+      await Promise.all([raw('DELETE', 'x/' + k), raw('DELETE', 'l/' + k), raw('DELETE', 'o/' + k), raw('DELETE', 's/' + k)]);
       return res.status(200).json({ ok: true });
     }
     if(op === 'meta'){

@@ -147,7 +147,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
   <div class="panel">
     <div class="ph">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div><button class="btn" id="btnTabXlsx" title="지금 고른 탭(전체/동행인 있음/혼자 참석)과 위 카드 필터·검색 결과만 엑셀로">이 탭 엑셀 받기</button></div>
-      <input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option></select><button class="btn" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
     </div>
     <div style="overflow:auto;max-height:72vh">
       <table class="tbl">
@@ -411,7 +411,16 @@ function filtered(ignoreComp){
     if(!q) return true;
     const hay = [g.rep.name, g.rep.org, g.rep.phone, g.email, g.route, g.sub && g.sub.name, ...(g.comps || []).map(c => c.name)].join(' ').toLowerCase();
     return hay.includes(q);
-  }).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0) || String(a.rep.name).localeCompare(b.rep.name, 'ko'));
+  }).sort(sortFn());
+}
+// 목록 정렬(2026-11-05): 기본 등록일시 최신순, 고른 값은 이 브라우저에 기억
+const nameCmp = (a, b) => String(a.rep.name).localeCompare(b.rep.name, 'ko');
+function sortFn(){
+  const k = $('#sort') ? $('#sort').value : 'reg';
+  if(k === 'reg') return (a, b) => (b.created || 0) - (a.created || 0) || nameCmp(a, b);
+  if(k === 'regAsc') return (a, b) => (a.created || 0) - (b.created || 0) || nameCmp(a, b);
+  if(k === 'name') return nameCmp;
+  return (a, b) => (b.updatedAt || 0) - (a.updatedAt || 0) || nameCmp(a, b);
 }
 
 function paintRows(){
@@ -443,14 +452,15 @@ function paintRows(){
       <td class="num">${now === '' ? `<span class="mut">예상 ${orig}</span>` : (orig !== '' && orig !== now ? `<span class="mut">${orig} →</span> <b>${now}</b>` : `<b>${now}</b>`)}</td>
       <td class="hide-m comps">${g.sub && g.sub.name ? `<span class="tag t-sub" style="margin-left:0">대리</span> ${esc(g.sub.name)}${comps ? ' · ' : ''}` : ''}${comps || '<span class="mut">—</span>'}</td>
       <td class="mut num">${g.updatedAt ? fmtTime(g.updatedAt) + (g.updatedBy === 'guest' ? ' · 본인' : (g.updatedBy === 'guest-comp' ? ' · 동행인' : ' · 담당')) : ''}</td>
-      <td style="white-space:nowrap"><button class="lk" data-copy="${g.t}">복사</button><a class="lk" href="/r/${g.t}" target="_blank" rel="noopener">열기</a></td>
+      <td style="white-space:nowrap"><button class="lk" data-copy="${g.t}">복사</button><a class="lk" href="/r/${g.t}" target="_blank" rel="noopener">열기</a><button class="lk" data-del="${g.t}" style="color:var(--err)" title="휴지통으로 — 휴지통에서 복원할 수 있어요">삭제</button></td>
     </tr>${OPEN === g.t ? editRow(g) : ''}`;
   }).join('');
   document.querySelectorAll('tr.g').forEach(tr => tr.onclick = (e) => {
-    if(e.target.closest('[data-copy],a')) return;
+    if(e.target.closest('[data-copy],[data-del],a')) return;
     OPEN = OPEN === tr.dataset.t ? '' : tr.dataset.t; paintRows();
   });
   document.querySelectorAll('[data-copy]').forEach(b => b.onclick = async () => { await navigator.clipboard.writeText(linkOf(b.dataset.copy)); toast('링크를 복사했어요'); });
+  document.querySelectorAll('[data-del]').forEach(b => b.onclick = (e) => { e.stopPropagation(); delGroup(b.dataset.del); });
   bindEdit();
 }
 
@@ -493,11 +503,7 @@ function bindEdit(){
     const j = await api({ op: 'reject', items: [{ t, on: !un, why }] }); if(!j.ok) return toast(j.error || '실패');
     EDITING = false; toast(un ? '참석 거절을 해제했어요' : '참석 거절로 표시했어요'); load();
   };
-  $('#edDel').onclick = async () => {
-    const g = G[OPEN]; if(!confirm(`${g.rep.name}님 그룹을 삭제할까요? 보낸 링크도 더는 열리지 않아요.`)) return;
-    const j = await api({ op: 'delete', t: OPEN }); if(!j.ok) return toast(j.error || '삭제 실패');
-    delete G[OPEN]; EDITING = false; OPEN = ''; paint(); toast('삭제했어요');
-  };
+  $('#edDel').onclick = () => delGroup(OPEN);
   $('#edSave').onclick = async () => {
     const v = (k) => (box.querySelector(`[data-e="${k}"]`) || {}).value || '';
     const g0 = G[OPEN] || {};
@@ -1248,6 +1254,43 @@ document.addEventListener('click', async (e) => {
   const j = await api({ op: 'sendnote', t, sendNote: '' }); if(!j.ok) return toast(j.error || '실패');
   delete g.sendNote; toast('발송 메모를 지웠어요'); paintRows();
 }, true);
+// 삭제 → 휴지통(2026-11-05). 휴지통에서 복원하면 링크·이력·발송 기록까지 그대로 돌아온다.
+async function delGroup(t){
+  const g = G[t]; if(!g) return;
+  const who = [g.rep.name, ...(g.comps || []).map(c => c.name)].join(', ');
+  if(!confirm(`${g.rep.name}님 그룹(${who})을 휴지통으로 옮길까요?\n휴지통에 있는 동안 보낸 링크는 열리지 않고, 휴지통에서 언제든 복원할 수 있어요.`)) return;
+  const j = await api({ op: 'delete', t }); if(!j.ok) return toast(j.error || '삭제 실패');
+  delete G[t]; EDITING = false; if(OPEN === t) OPEN = ''; paint(); toast('휴지통으로 옮겼어요');
+}
+async function openTrash(){
+  modal(`<h3>🗑 휴지통</h3><div id="trashBody" class="mut">불러오는 중…</div><div class="tools" style="margin-top:12px;justify-content:flex-end"><button class="btn" data-x>닫기</button></div>`);
+  const j = await api({ op: 'trash' });
+  const box = $('#trashBody'); if(!box) return;
+  if(!j.ok){ box.textContent = j.error || '불러오지 못했어요'; return; }
+  if(!j.items.length){ box.textContent = '휴지통이 비어 있어요.'; return; }
+  box.classList.remove('mut');
+  box.innerHTML = `<div class="mut" style="margin-bottom:8px">${j.items.length}그룹 · 복원하면 링크·응답·변경 이력·발송 기록이 그대로 돌아와요.</div>
+    <div style="max-height:55vh;overflow:auto"><table class="tbl"><thead><tr><th>초대받은 분</th><th>동행인</th><th>상태</th><th>등록일시</th><th>삭제</th><th></th></tr></thead><tbody>${j.items.map(g => `<tr>
+      <td><b>${esc(g.rep.name)}</b><div class="org">${esc([g.rep.org, fmtPhone(g.rep.phone)].filter(Boolean).join(' · '))}</div></td>
+      <td>${esc((g.comps || []).map(c => c.name).join(', ')) || '<span class="mut">—</span>'}</td>
+      <td>${esc(ST[g.status] || '미응답')}</td>
+      <td class="num" style="font-size:12px;white-space:nowrap">${g.created ? fmtTime(g.created) : '—'}<div class="org">${esc(regLabel(g))}</div></td>
+      <td class="num" style="font-size:12px;white-space:nowrap">${g.deletedAt ? fmtTime(g.deletedAt) : ''}<div class="org">${esc(String(g.deletedBy || '').split('@')[0])}</div></td>
+      <td style="white-space:nowrap"><button class="btn pri" data-restore="${g._t}">복원</button> <button class="btn danger" data-purge="${g._t}">완전 삭제</button></td></tr>`).join('')}</tbody></table></div>`;
+  const byT = Object.fromEntries(j.items.map(g => [g._t, g]));
+  box.querySelectorAll('[data-restore]').forEach(b => b.onclick = async () => {
+    const t = b.dataset.restore, r = await api({ op: 'restore', t }); if(!r.ok) return toast(r.error || '복원 실패');
+    toast(`${byT[t].rep.name}님 그룹을 복원했어요`); await load(); openTrash();
+  });
+  box.querySelectorAll('[data-purge]').forEach(b => b.onclick = async () => {
+    const t = b.dataset.purge; if(!confirm(`${byT[t].rep.name}님 그룹을 완전히 지울까요? 되돌릴 수 없어요.`)) return;
+    const r = await api({ op: 'purge', t }); if(!r.ok) return toast(r.error || '삭제 실패');
+    toast('완전히 지웠어요'); openTrash();
+  });
+}
+$('#btnTrash').onclick = openTrash;
+try{ const s = localStorage.getItem('rsvpSort'); if(s) $('#sort').value = s; }catch(e){}
+$('#sort').onchange = () => { try{ localStorage.setItem('rsvpSort', $('#sort').value); }catch(e){} OPEN = ''; paintRows(); };
 $('#btnReload').onclick = load;
 $('#q').oninput = () => { OPEN = ''; paintRows(); };
 setInterval(() => { if(!EDITING && !$('#modal').innerHTML && document.visibilityState === 'visible') load(); }, 30000);
