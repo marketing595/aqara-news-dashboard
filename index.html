@@ -9583,11 +9583,18 @@
       box.onfocusout=()=>{ setTimeout(()=>{ if(HK_DIRTY&&!box.contains(document.activeElement)){ hkPaintTable(); hkPaintStats(); } },80); }; }
     /* ===== 🎁 세미나 경품 추첨 (raffle.html 임베드 — 설정·당첨 이력은 브라우저 localStorage에 저장되므로 행사 당일엔 발표 PC에서 실행) ===== */
     /* ===== ✉️ 세미나 참석 확인(RSVP) — rsvp-admin.html 임베드. 손님용 개인 링크(/r/<토큰>)는 로그인 없이 열리고, 개인정보는 api/rsvp → Firebase customerDb/rsvp(익명 차단) ===== */
+    // 보기 전용 링크(2026-11-05 사용자 요청: '새 창으로 열기' → '보기 전용 링크'): 서버에서 키를 받아 /rsvp-view?v=<키> 를 새 창으로.
+    //  팝업 차단을 피하려고 창을 먼저 열고 주소를 나중에 넣는다.
+    async function openRsvpView(){ const w=window.open('about:blank','_blank');
+      try{ const r=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({op:'viewkey'})}); const j=await r.json();
+        if(!j.ok||!j.key) throw new Error(j.error||'키를 못 받았어요');
+        const u=location.origin+'/rsvp-view?v='+j.key; if(w) w.location.href=u; else location.href=u;
+      }catch(e){ if(w) w.close(); alert('보기 전용 링크를 열지 못했어요: '+e.message); } }
     function renderRsvp(){ const box=document.getElementById('rsBody'); if(!box||box.dataset.ok) return; box.dataset.ok='1';
       box.innerHTML=`<div class="flex items-center justify-end gap-3 flex-wrap mb-2">
-          <a href="/rsvp-admin.html" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-[#7C5CFF] text-white text-[13px] font-bold hover:brightness-110 whitespace-nowrap">새 창으로 열기 ↗</a>
+          <button type="button" onclick="openRsvpView()" title="로그인 없이 명단·현황만 보는 공유 링크를 새 창으로 열어요(수정 불가)" class="px-4 py-2 rounded-full bg-[#7C5CFF] text-white text-[13px] font-bold hover:brightness-110 whitespace-nowrap">👁 보기 전용 링크 ↗</button>
         </div>
-        <iframe src="/rsvp-admin.html?v=${Date.now()}" title="세미나 참석 확인(RSVP) 관리" class="w-full rounded-2xl border border-slate-200 bg-white" style="height:min(86vh,1000px);min-height:600px"></iframe>`;
+        <iframe src="/rsvp-admin.html?_=${Date.now()}" title="세미나 참석 확인(RSVP) 관리" class="w-full rounded-2xl border border-slate-200 bg-white" style="height:min(86vh,1000px);min-height:600px"></iframe>`;
     }
     /* ===== 🔗 경품 교환권 QR — 공개 페이지 semcopy.html(상품 링크·100% 쿠폰 코드 복사). 문구·URL·공용 코드 = Firebase semcopy/config, 집계 = semcopy/stats/<KST날짜> ===== */
     const SC_FIELDS=[['eyebrow','윗줄 라벨','input'],['title','제목 (줄바꿈 가능)','textarea2'],['desc','설명','textarea2'],['btn','복사 버튼 글자','input'],['url','복사될 URL','input'],['coupon','공용 쿠폰 코드 (교환권마다 다르면 비워 두고 아래 코드별 QR 사용)','input'],['couponNote','코드가 없을 때 안내','input'],['steps','이용 순서 (한 줄에 한 단계, **굵게**)','textarea4']];
