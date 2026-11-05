@@ -34,7 +34,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .btn:disabled{opacity:.5;cursor:default}
 .tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 
-.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:16px}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:16px}
 /* 큰 네모 안 작은 네모(2026-11-05): 참석 확정 = 본인 · 동행인, 불참 = 본인 · 동행인 */
 .kpi .subs{display:flex;gap:6px;margin-top:8px}
 .kpi .sb{flex:1;min-width:0;background:var(--bg);border-radius:8px;padding:5px 8px}
@@ -288,7 +288,6 @@ function paint(){
     k('no', '불참', `${NO}<small>명</small>`, `전원 불참 ${s.no}그룹`,
       sb('본인', P.nr) + sb('동행인', NO - P.nr, P.x ? `명단에서 뺌 ${P.x}` : '')) +
     k('pending', '미응답', `${P.p}<small>명</small>`, `${s.pending}그룹 · 그중 링크 열어봄 ${s.pendOpen || 0}`) +
-    k('rej', '참석 거절', `${P.rj}<small>명</small>`, `${s.rj || 0}그룹 · 담당자 판단`) +
     k('chg', '대리·동행인 변경', `${s.chg}<small>그룹</small>`, '처음 명단과 달라짐');
   // 검산 줄: 칸 합계와 예전 방식 숫자가 왜 다른지 바로 보이게
   const SUM = P.y + NO + P.p + P.rj;
@@ -897,7 +896,7 @@ $('#fileRej').onchange = async (e) => {
       $('#rjGo').disabled = true;
       const j = await api({ op: 'reject', items, add });
       if(!j.ok){ $('#rjGo').disabled = false; return toast(j.error || '저장 실패'); }
-      closeModal(); toast(`참석 거절 ${j.on}그룹 표시` + (j.added ? ` · 새로 추가 ${j.added}명` : '')); FILTER = 'rej'; load();
+      closeModal(); toast(`참석 거절 ${j.on}그룹 표시` + (j.added ? ` · 새로 추가 ${j.added}명` : '')); load();
     };
   }catch(err){ toast('엑셀을 읽지 못했어요: ' + err.message); }
 };
