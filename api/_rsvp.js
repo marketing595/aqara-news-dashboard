@@ -482,6 +482,35 @@ module.exports = async (req, res) => {
       await Promise.all(logs.map(([t, l]) => fb('POST', `log/${t}`, l)));
       return res.status(200).json({ ok: true, applied, kept, sent: sentN, notes });
     }
+    // 참석 거절(2026-11-05): 담당자가 참석을 받지 않기로 한 그룹. 손님 응답과 상관없이 '참석 거절'로 따로 센다.
+    // items [{ t, on, why }] — on=false 면 해제. add [{ rep, email, why }] — 명단에 없는 사람을 거절 상태로 새로 넣는다(거절 명단 엑셀).
+    if(op === 'reject'){
+      const items = (Array.isArray(body.items) ? body.items : []).filter(x => x && okTok(x.t)).slice(0, 3000);
+      const adds = (Array.isArray(body.add) ? body.add : []).slice(0, 1000);
+      const cur = (await fb('GET', 'groups')) || {}, patch = {}, now = Date.now(); let on = 0, off = 0, added = 0;
+      for(const x of items){
+        const g0 = cur[x.t]; if(!g0 || !g0.rep) continue;
+        const g = Object.assign({}, g0);
+        if(x.on === false){ if(!g.rejected) continue; delete g.rejected; off++; }
+        else { g.rejected = { at: (g0.rejected && g0.rejected.at) || now, by: email, why: str(x.why, 100) }; on++; }
+        g.updatedAt = now; g.updatedBy = g.updatedBy || email;
+        patch[x.t] = g;
+      }
+      const keys = new Set(Object.keys(cur).map(t => cur[t] && cur[t].key).filter(Boolean));
+      for(const x of adds){
+        const rep = cleanPerson(x && x.rep); if(!rep.name) continue;
+        const email2 = str(x.email, 120).toLowerCase();
+        let key = rep.phone ? 'p' + rep.phone : (email2 ? 'e' + email2 : 'n' + (rep.name + '|' + rep.org).replace(/[.#$\[\]\/]/g, ''));
+        if(keys.has(key)) continue; keys.add(key);
+        let t = newTok(); while(cur[t] || patch[t]) t = newTok();
+        patch[t] = { key, email: email2, route: '', vip: false, note: '', orig: { n: 1, comps: '' }, rep, comps: [], sub: null, status: 'pending', created: now, updatedAt: now, updatedBy: email,
+          addedBy: email, regBy: '거절 명단', rejected: { at: now, by: email, why: str(x.why, 100) } };
+        added++;
+      }
+      if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
+      GCACHE.at = 0;
+      return res.status(200).json({ ok: true, on, off, added });
+    }
     // 직접 입력: 한 그룹 추가. test=true 면 테스트 탭 전용(실제 명단·통계·내보내기에서 빠짐)
     if(op === 'add'){
       const rep = cleanPerson(body.rep);
