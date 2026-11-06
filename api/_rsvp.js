@@ -498,6 +498,27 @@ module.exports = async (req, res) => {
       await Promise.all(logs.map(([t, l]) => fb('POST', `log/${t}`, l)));
       return res.status(200).json({ ok: true, applied, kept, sent: sentN, notes });
     }
+    // 일괄 반영(2026-11-07): 담당자가 내보낸 엑셀에 적은 상태·메모를 그대로 반영(손님 응답이 있어도 담당자 지시가 우선).
+    // items [{ t, status:'yes'|'no'|'', memo, flag:'애매'|'' }] — status '' 면 상태는 그대로, flag '' 면 표시 해제
+    if(op === 'bulk'){
+      const items = (Array.isArray(body.items) ? body.items : []).filter(x => x && okTok(x.t)).slice(0, 3000);
+      const cur = (await fb('GET', 'groups')) || {}, patch = {}, logs = [], now = Date.now(); let n = 0;
+      for(const x of items){
+        const g0 = cur[x.t]; if(!g0 || !g0.rep || g0.test) continue;
+        const g = Object.assign({}, g0);
+        if(x.status === 'yes' || x.status === 'no') g.status = x.status;
+        if(typeof x.memo === 'string' && x.memo.trim()) g.memo = str(x.memo, 300);
+        if(x.flag) g.flag = str(x.flag, 10); else delete g.flag;
+        if(JSON.stringify(g) === JSON.stringify(g0)) continue;
+        g.src = '담당자 일괄 반영'; g.updatedAt = now; g.updatedBy = email;
+        patch[x.t] = g; n++;
+        if(g.status !== g0.status) logs.push([x.t, { at: now, by: email, status: g.status, n: (g.status === 'yes' ? 1 : 0) + (g.comps || []).length, sub: g.sub ? g.sub.name : '', comps: (g.comps || []).map(c => c.name).join(', '), src: g.src }]);
+      }
+      if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
+      await Promise.all(logs.map(([t, l]) => fb('POST', `log/${t}`, l)));
+      GCACHE.at = 0;
+      return res.status(200).json({ ok: true, n });
+    }
     // 참석 거절(2026-11-05): 담당자가 참석을 받지 않기로 한 그룹. 손님 응답과 상관없이 '참석 거절'로 따로 센다.
     // items [{ t, on, why }] — on=false 면 해제. add [{ rep, email, why }] — 명단에 없는 사람을 거절 상태로 새로 넣는다(거절 명단 엑셀).
     if(op === 'reject'){

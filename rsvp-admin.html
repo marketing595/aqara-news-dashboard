@@ -130,6 +130,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
       <label class="btn rw" style="display:inline-flex;align-items:center" title="이벤터스 참가자 리스트(참석/불참 상태) 또는 '참석 확정 여부 · 발송 여부' 열이 있는 담당자 정리 엑셀 — 이벤터스 응답·발송 문제를 기존 그룹에 반영(새 그룹은 안 만듦)">현황 엑셀 반영<input type="file" id="fileSt" accept=".xlsx,.xls" hidden></label>
       <label class="btn rw" style="display:inline-flex;align-items:center" title="설문 응답 엑셀(성함·연락처·이메일)의 이메일로 명단 이메일을 맞춤 — 미리보기 후 저장">설문 이메일 반영<input type="file" id="fileEm" accept=".xlsx,.xls" hidden></label>
       <label class="btn rw" style="display:inline-flex;align-items:center;color:#b42318" title="참석을 받지 않을 사람 명단 엑셀(성함 필수 · 연락처·소속·이메일·사유 있으면 사용) — 명단과 맞춰 '참석 거절'로 표시, 명단에 없는 사람은 골라서 새로 추가">거절 명단 엑셀 올리기<input type="file" id="fileRej" accept=".xlsx,.xls,.csv" hidden></label>
+      <label class="btn rw" style="display:inline-flex;align-items:center" title="이 화면에서 내려받은 RSVP 엑셀에 담당자가 고친 상태·메모를 그대로 반영 — '링크' 열로 그룹을 찾고, '처리' 열에 '휴지통'이라고 적은 그룹은 휴지통으로">상태·메모 엑셀 반영<input type="file" id="fileBulk" accept=".xlsx,.xls" hidden></label>
       <button class="btn rw" id="btnLinks">링크·문자 추출</button>
       <button class="btn rw" id="btnSentAt" title="외부 도구(이벤터스 등)로 문자를 보낸 시각을 명단 전체의 '마지막 문자 전송'으로 기록">마지막 문자 시각 입력</button>
       <button class="btn" id="btnXlsx" title="요약 · 응답 현황(그룹별) · 참석 확정 · 전체(사람별) · 개인 링크">응답 현황 엑셀</button>
@@ -321,6 +322,7 @@ function paint(){
   $('#file').parentElement.style.display = VIEW === 'test' ? 'none' : 'inline-flex';
   $('#fileSt').parentElement.style.display = VIEW === 'test' ? 'none' : 'inline-flex';
   $('#fileRej').parentElement.style.display = VIEW === 'test' ? 'none' : 'inline-flex';
+  $('#fileBulk').parentElement.style.display = VIEW === 'test' ? 'none' : 'inline-flex';
   $('#fileEm').parentElement.style.display = VIEW === 'test' ? 'none' : 'inline-flex';
   $('#btnReset').textContent = VIEW === 'test' ? '테스트 응답 초기화' : '응답 초기화';
   $('#btnAdd').textContent = VIEW === 'test' ? '+ 테스트 대상 입력' : '+ 직접 입력';
@@ -458,7 +460,7 @@ function paintRows(){
       <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
       <td class="num">${esc(fmtPhone(g.rep.phone))}<div class="org" style="font-family:inherit">${g.email ? esc(g.email) : '<span style="color:var(--tx3)">이메일 없음</span>'}</div></td>
       <td class="hide-m mut">${esc(g.route || '')}</td>
-      <td><span class="st ${st}">${stLabel(g)}</span>${isRej(g) ? `<div class="org" style="color:#b42318">${esc(g.rejected.why || '사유 없음')}${g.status === 'yes' || g.status === 'no' ? ` · 손님 응답: ${ST[g.status]}` : ''}</div>` : ''}${FILTER === 'no' ? (() => { const c = pcount(g); return (st !== 'no' && c.nn.length ? `<div class="org" style="color:var(--err)">불참 ${esc(c.nn.join(', '))}</div>` : '') + (c.xn.length ? `<div class="org" style="color:var(--err)">명단에서 뺌 ${esc(c.xn.join(', '))}</div>` : ''); })() : ''}${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
+      <td><span class="st ${st}">${stLabel(g)}</span>${g.flag ? ` <span class="st pending" title="${esc(g.memo || '')}">${esc(g.flag)}</span>` : ''}${isRej(g) ? `<div class="org" style="color:#b42318">${esc(g.rejected.why || '사유 없음')}${g.status === 'yes' || g.status === 'no' ? ` · 손님 응답: ${ST[g.status]}` : ''}</div>` : ''}${FILTER === 'no' ? (() => { const c = pcount(g); return (st !== 'no' && c.nn.length ? `<div class="org" style="color:var(--err)">불참 ${esc(c.nn.join(', '))}</div>` : '') + (c.xn.length ? `<div class="org" style="color:var(--err)">명단에서 뺌 ${esc(c.xn.join(', '))}</div>` : ''); })() : ''}${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
       <td class="num" style="white-space:nowrap;font-size:12px">${g.created ? fmtTime(g.created) : '<span style="color:var(--tx3)">—</span>'}<div class="org" style="font-family:inherit">${esc(regLabel(g))}</div></td>
       <td class="num" style="white-space:nowrap;font-size:12px">${isSent(g) ? `<b>${fmtTime(g.sent.at)}</b>${g.sent.n > 1 ? ` <span class="mut">(${g.sent.n}회)</span>` : ''}` : '<span style="color:var(--tx3)">안 보냄</span>'}${g.sendNote ? `<br><b style="color:var(--err)">${esc(g.sendNote)}</b> <button class="lk rw" data-clrnote="${g.t}" title="발송 메모 지우기">✕ 지우기</button>` : ''}</td>
       <td class="mut num" style="white-space:nowrap;font-size:12px">${isOpen(g) ? `<b style="color:var(--ink)">열람</b> ${fmtTime(g.open.last)}${g.open.n > 1 ? ` (${g.open.n}회)` : ''}` : '<span style="color:var(--tx3)">안 열어봄</span>'}</td>
@@ -927,6 +929,67 @@ $('#fileRej').onchange = async (e) => {
   }catch(err){ toast('엑셀을 읽지 못했어요: ' + err.message); }
 };
 const nz2 = (s) => String(s || '').replace(/\s/g, '');
+// ── 상태·메모 엑셀 반영(2026-11-07): 내려받은 RSVP 엑셀(응답 현황=그룹별 시트 우선)에 담당자가 고친 상태·메모·처리를 반영 ──
+//  링크 열(hakdongmap.kr/<6자> 또는 /r/<토큰>)로 그룹을 찾는다. 상태: 참석/불참 → 바꿈, 애매 → '애매' 표시만(상태 그대로).
+//  메모가 있는 줄 또는 처리=휴지통인 줄만 대상. 사람별 시트는 '본인' 줄만 본다.
+function planBulk(wb){
+  const nz = (s) => String(s || '').replace(/\s/g, '');
+  const pri = (s) => s === '관리화면 반영' ? 2 : s === '응답 현황' ? 1 : 0, names = [...wb.SheetNames].sort((a, b) => pri(b) - pri(a));
+  const L = allGroups().filter(g => !g.test);
+  const byShort = {}, byTok = {}; L.forEach(g => { byTok[g.t] = g; (byShort[g.t.slice(0, 6)] = byShort[g.t.slice(0, 6)] || []).push(g); });
+  for(const name of names){
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: '' });
+    const h = rows.findIndex(r => r.map(nz).includes('링크') && r.map(nz).includes('메모'));
+    if(h < 0) continue;
+    const hdr = rows[h].map(nz), C = { link: hdr.indexOf('링크'), st: hdr.indexOf('상태'), memo: hdr.indexOf('메모'), act: hdr.indexOf('처리'), why: hdr.indexOf('사유'), kind: hdr.indexOf('구분'), name: hdr.findIndex(c => c === '초대받은분' || c === '성함') };
+    const cell = (r, k) => C[k] < 0 ? '' : String(r[C[k]] == null ? '' : r[C[k]]).trim();
+    const out = { sheet: name, items: [], trash: [], miss: [] }, seen = new Set();
+    rows.slice(h + 1).forEach(r => {
+      if(C.kind >= 0 && cell(r, 'kind') && cell(r, 'kind') !== '본인') return;
+      const memo = cell(r, 'memo'), act = cell(r, 'act');
+      if(!memo && !/휴지통|삭제/.test(act)) return;
+      const lk = cell(r, 'link'), m = /hakdongmap\.kr\/r\/([A-Za-z0-9_-]{8,})/.exec(lk) || /hakdongmap\.kr\/([A-Za-z0-9_-]{6})(?![A-Za-z0-9_-])/.exec(lk);
+      const g = m ? (byTok[m[1]] || ((byShort[m[1]] || []).length === 1 ? byShort[m[1]][0] : null)) : null;
+      if(!g){ out.miss.push({ name: cell(r, 'name'), link: lk }); return; }
+      if(seen.has(g.t)) return; seen.add(g.t);
+      if(/휴지통|삭제/.test(act)){ out.trash.push({ g, why: cell(r, 'why') || memo }); return; }
+      const s = cell(r, 'st'), status = s === '참석' ? 'yes' : s === '불참' ? 'no' : '';
+      out.items.push({ g, status, flag: s === '애매' ? '애매' : '', memo, s });
+    });
+    return out;
+  }
+  return null;
+}
+$('#fileBulk').onchange = async (e) => {
+  const f = e.target.files[0]; e.target.value = ''; if(!f) return;
+  try{
+    const P = planBulk(XLSX.read(await f.arrayBuffer(), { type: 'array' }));
+    if(!P) return toast('‘링크’와 ‘메모’ 머리글이 있는 시트를 찾지 못했어요');
+    const cur = (g) => `<span class="st ${gst(g)}">${stLabel(g)}</span>`;
+    const to = (x) => x.status ? `<span class="st ${x.status}">${ST[x.status]}</span>` : x.flag ? `<span class="st pending">애매</span>` : '<span class="mut">상태 그대로</span>';
+    modal(`<h3>상태·메모 엑셀 반영</h3>
+      <p>${esc(f.name)} · ‘${esc(P.sheet)}’ 시트 — 메모가 있는 줄(또는 처리=휴지통)만 반영해요. 손님이 링크로 답한 그룹도 엑셀 내용으로 바꿔요.</p>
+      <div class="prev" style="max-height:52vh;overflow:auto;font-size:12.5px">
+        ${P.items.length ? `<b>상태·메모 반영 ${P.items.length}그룹</b>${P.items.map((x, i) => `<label style="display:block;margin-top:4px"><input type="checkbox" data-bk="${i}" checked> <b>${esc(x.g.rep.name)}</b> <span class="mut">${esc(x.g.rep.org || '')}</span> ${cur(x.g)} → ${to(x)}<div class="org" style="margin-left:22px">${esc(x.memo)}</div></label>`).join('')}` : ''}
+        ${P.trash.length ? `<div style="margin-top:10px"><b style="color:var(--err)">휴지통으로 ${P.trash.length}그룹</b>${P.trash.map((x, i) => `<label style="display:block;margin-top:4px"><input type="checkbox" data-bt="${i}" checked> <b>${esc(x.g.rep.name)}</b> <span class="mut">${esc([x.g.rep.org, fmtPhone(x.g.rep.phone)].filter(Boolean).join(' · '))}</span><div class="org" style="margin-left:22px">${esc(x.why)}</div></label>`).join('')}</div>` : ''}
+        ${P.miss.length ? `<div style="margin-top:10px;color:var(--err)">링크로 그룹을 못 찾음 ${P.miss.length}: ${P.miss.map(x => esc(x.name || x.link)).join(', ')}</div>` : ''}
+        ${!P.items.length && !P.trash.length ? '반영할 줄이 없어요.' : ''}
+      </div>
+      <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>닫기</button>${P.items.length || P.trash.length ? `<button class="btn pri" id="bkGo">반영하기</button>` : ''}</div>`);
+    if(!$('#bkGo')) return;
+    $('#bkGo').onclick = async () => {
+      const items = P.items.filter((x, i) => document.querySelector(`[data-bk="${i}"]`).checked).map(x => ({ t: x.g.t, status: x.status, flag: x.flag, memo: x.memo }));
+      const tr = P.trash.filter((x, i) => document.querySelector(`[data-bt="${i}"]`).checked);
+      if(!items.length && !tr.length) return toast('고른 줄이 없어요');
+      if(tr.length && !confirm(`${tr.length}개 그룹(${tr.map(x => x.g.rep.name).join(', ')})을 휴지통으로 옮길까요?`)) return;
+      $('#bkGo').disabled = true;
+      let n = 0, d = 0;
+      if(items.length){ const j = await api({ op: 'bulk', items }); if(!j.ok){ $('#bkGo').disabled = false; return toast(j.error || '저장 실패'); } n = j.n; }
+      for(const x of tr){ const j = await api({ op: 'delete', t: x.g.t, why: x.why.slice(0, 120) }); if(j.ok){ d++; delete G[x.g.t]; } }
+      closeModal(); OPEN = ''; toast(`상태·메모 ${n}그룹 반영` + (d ? ` · 휴지통 ${d}그룹` : '')); load();
+    };
+  }catch(err){ toast('엑셀을 읽지 못했어요: ' + err.message); }
+};
 $('#fileSt').onchange = async (e) => {
   const f = e.target.files[0]; e.target.value = ''; if(!f) return;
   try{
