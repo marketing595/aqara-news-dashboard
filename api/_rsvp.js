@@ -614,7 +614,7 @@ module.exports = async (req, res) => {
     if(op === 'delete'){
       if(!okTok(body.t)) return res.status(400).json({ ok: false, error: 't' });
       const g = await fb('GET', `groups/${body.t}`);
-      if(g) await raw('PUT', 'x/' + gid(body.t), { c: enc(Object.assign({}, g, { _t: body.t, deletedAt: Date.now(), deletedBy: email })) });
+      if(g) await raw('PUT', 'x/' + gid(body.t), { c: enc(Object.assign({}, g, { _t: body.t, deletedAt: Date.now(), deletedBy: email }, str(body.why, 120) ? { deletedWhy: str(body.why, 120) } : {})) });
       await fb('DELETE', `groups/${body.t}`);
       GCACHE.at = 0;
       return res.status(200).json({ ok: true });
@@ -631,7 +631,7 @@ module.exports = async (req, res) => {
       if(!g) return res.status(404).json({ ok: false, error: '휴지통에 없는 그룹' });
       if(op === 'restore'){
         if(await fb('GET', `groups/${body.t}`)) return res.status(200).json({ ok: false, error: '같은 링크의 그룹이 이미 명단에 있어요' });
-        delete g.deletedAt; delete g.deletedBy;
+        delete g.deletedAt; delete g.deletedBy; delete g.deletedWhy;
         await fb('PUT', `groups/${body.t}`, g);
         await raw('DELETE', 'x/' + k);
         GCACHE.at = 0;

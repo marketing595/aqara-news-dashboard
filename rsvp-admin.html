@@ -151,7 +151,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
   <div class="panel">
     <div class="ph">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div><button class="btn" id="btnTabXlsx" title="지금 고른 탭(전체/동행인 있음/혼자 참석)과 위 카드 필터·검색 결과만 엑셀로">이 탭 엑셀 받기</button></div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option></select><button class="btn rw" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option></select><button class="btn rw" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><button class="btn rw" id="btnDups" title="개별 신청한 사람이 다른 그룹의 동행인으로도 들어가 있는 경우 등 — 골라서 휴지통으로">중복 찾기</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
     </div>
     <div style="overflow:auto;max-height:72vh">
       <table class="tbl">
@@ -1323,7 +1323,7 @@ async function openTrash(){
       <td>${esc((g.comps || []).map(c => c.name).join(', ')) || '<span class="mut">—</span>'}</td>
       <td>${esc(ST[g.status] || '미응답')}</td>
       <td class="num" style="font-size:12px;white-space:nowrap">${g.created ? fmtTime(g.created) : '—'}<div class="org">${esc(regLabel(g))}</div></td>
-      <td class="num" style="font-size:12px;white-space:nowrap">${g.deletedAt ? fmtTime(g.deletedAt) : ''}<div class="org">${esc(String(g.deletedBy || '').split('@')[0])}</div></td>
+      <td class="num" style="font-size:12px;white-space:nowrap">${g.deletedAt ? fmtTime(g.deletedAt) : ''}<div class="org">${esc(String(g.deletedBy || '').split('@')[0])}</div>${g.deletedWhy ? `<div class="org" style="color:var(--err)">${esc(g.deletedWhy)}</div>` : ''}</td>
       <td style="white-space:nowrap"><button class="btn pri" data-restore="${g._t}">복원</button> <button class="btn danger" data-purge="${g._t}">완전 삭제</button></td></tr>`).join('')}</tbody></table></div>`;
   const byT = Object.fromEntries(j.items.map(g => [g._t, g]));
   box.querySelectorAll('[data-restore]').forEach(b => b.onclick = async () => {
@@ -1337,6 +1337,71 @@ async function openTrash(){
   });
 }
 $('#btnTrash').onclick = openTrash;
+
+// 중복 찾기(2026-11-06): ① 개별 그룹 대표자가 다른 그룹의 동행인으로도 있음 ② 두 그룹 대표자 연락처가 같음 → 골라서 개별(겹치는) 그룹을 휴지통으로
+const normOrg = (s) => String(s || '').toLowerCase().replace(/\(주\)|주식회사|㈜|[\s().,·\-]/g, '');
+const orgSame = (a, b) => { a = normOrg(a); b = normOrg(b); return !!a && !!b && (a === b || a.includes(b) || b.includes(a)); };
+const digitsOf = (v) => String(v || '').replace(/\D/g, '');
+function findDups(){
+  const L = list(), out = [], key = new Set();
+  const goingC = (A) => answered(A);   // 응답한 그룹의 명단 동행인 = 참석으로 셈
+  L.forEach(B => {
+    const bp = digitsOf(B.rep.phone), bn = String(B.rep.name || '').trim(); if(!bn) return;
+    L.forEach(A => {
+      if(A === B) return;
+      (A.comps || []).forEach(c => {
+        const cp = digitsOf(c.phone), same = String(c.name || '').trim() === bn;
+        let why = '', strong = true;
+        if(bp.length >= 9 && cp === bp) why = '연락처 같음';
+        else if(same && orgSame(c.org || A.rep.org, B.rep.org)) why = '이름·소속 같음';
+        else if(same && (!cp || !bp)) { why = '이름만 같음(소속 다름)'; strong = false; }
+        if(!why || key.has(B.t + A.t)) return; key.add(B.t + A.t);
+        const warn = [];
+        if(answered(B) && !goingC(A)) warn.push(`개별 그룹만 응답(${stLabel(B)}) — ${A.rep.name} 그룹은 미응답`);
+        if(B.status === 'yes' && answered(A) && A.status === 'no' && !(A.comps || []).length) warn.push('동행인 쪽 그룹은 불참');
+        const extra = (B.comps || []).map(x => x.name).filter(n => !(A.comps || []).some(x => x.name === n) && n !== A.rep.name);
+        if(extra.length) warn.push(`개별 그룹의 동행인 ${extra.join(', ')}은(는) ${A.rep.name} 그룹에 없음`);
+        out.push({ kind: 'comp', drop: B, keep: A, why, strong, warn,
+          desc: `${A.rep.name} 그룹(${A.rep.org || ''} · ${stLabel(A)})의 동행인 ${c.name}${cp ? ' ' + fmtPhone(cp) : ''}` });
+      });
+    });
+  });
+  // 대표자끼리 연락처 같음: 응답한 쪽(둘 다면 최근 변경) 유지
+  const byP = {};
+  L.forEach(g => { const p = digitsOf(g.rep.phone); if(p.length >= 9) (byP[p] = byP[p] || []).push(g); });
+  Object.values(byP).filter(a => a.length > 1).forEach(a => {
+    const s = a.slice().sort((x, y) => (answered(y) - answered(x)) || ((y.updatedAt || 0) - (x.updatedAt || 0)));
+    s.slice(1).forEach(B => { if(key.has(B.t + s[0].t) || key.has(s[0].t + B.t)) return; key.add(B.t + s[0].t);
+      out.push({ kind: 'rep', drop: B, keep: s[0], why: '대표자 연락처 같음', strong: true, warn: answered(B) ? [`지울 쪽도 응답함(${stLabel(B)})`] : [],
+        desc: `${s[0].rep.name} 그룹(${s[0].rep.org || ''} · ${stLabel(s[0])})` }); });
+  });
+  out.forEach(d => { d.on = d.strong && !d.warn.length; });
+  return out.sort((a, b) => (b.on - a.on) || (b.strong - a.strong));
+}
+$('#btnDups').onclick = () => {
+  const D = findDups();
+  if(!D.length) return toast('겹치는 사람이 없어요');
+  modal(`<h3>중복 찾기 · ${D.length}건</h3>
+    <div class="mut" style="margin:4px 0 10px">체크한 줄의 <b>왼쪽 그룹</b>을 휴지통으로 옮기고 오른쪽 그룹은 그대로 둬요. 휴지통에서 언제든 복원할 수 있어요.<br>확실한 건(연락처 같음·이름+소속 같음, 주의 사항 없음)만 미리 체크했어요.</div>
+    <div style="max-height:58vh;overflow:auto"><table class="tbl"><thead><tr><th></th><th>휴지통으로(개별 그룹)</th><th>남길 쪽</th><th>근거</th></tr></thead><tbody>${D.map((d, i) => `<tr>
+      <td><input type="checkbox" data-dup="${i}" ${d.on ? 'checked' : ''}></td>
+      <td><b>${esc(d.drop.rep.name)}</b> <span class="st ${isRej(d.drop) ? 'rej' : gst(d.drop)}">${stLabel(d.drop)}</span><div class="org">${esc([d.drop.rep.org, fmtPhone(d.drop.rep.phone), (d.drop.comps || []).length ? '동행 ' + d.drop.comps.map(c => c.name).join(', ') : ''].filter(Boolean).join(' · '))}</div><div class="org">${d.drop.created ? fmtTime(d.drop.created) + ' ' : ''}${esc(regLabel(d.drop))}</div></td>
+      <td>${esc(d.desc)}</td>
+      <td style="font-size:12px">${d.strong ? '<b>' + esc(d.why) + '</b>' : '<span class="mut">' + esc(d.why) + '</span>'}${d.warn.map(w => `<div style="color:var(--err)">⚠ ${esc(w)}</div>`).join('')}</td></tr>`).join('')}</tbody></table></div>
+    <div class="tools" style="margin-top:12px;justify-content:flex-end"><button class="btn" data-x>닫기</button><button class="btn danger" id="dupGo">체크한 그룹 휴지통으로</button></div>`);
+  $('#dupGo').onclick = async () => {
+    const pick = [...document.querySelectorAll('[data-dup]:checked')].map(b => D[+b.dataset.dup]);
+    const ts = [...new Map(pick.map(d => [d.drop.t, d])).values()];
+    if(!ts.length) return toast('체크한 줄이 없어요');
+    if(!confirm(`${ts.length}개 그룹(${ts.map(d => d.drop.rep.name).join(', ')})을 휴지통으로 옮길까요?`)) return;
+    let n = 0;
+    for(const d of ts){
+      const j = await api({ op: 'delete', t: d.drop.t, why: `중복 — ${d.keep.rep.name} 그룹과 같은 사람(${d.why})` });
+      if(j.ok){ n++; delete G[d.drop.t]; }
+    }
+    closeModal(); OPEN = ''; paint(); toast(`${n}개 그룹을 휴지통으로 옮겼어요`);
+  };
+};
 try{ const s = localStorage.getItem('rsvpSort'); if(s) $('#sort').value = s; }catch(e){}
 $('#sort').onchange = () => { try{ localStorage.setItem('rsvpSort', $('#sort').value); }catch(e){} OPEN = ''; paintRows(); };
 $('#btnReload').onclick = load;
