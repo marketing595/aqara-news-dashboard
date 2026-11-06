@@ -186,6 +186,12 @@ def main():
             periods[key] = summarize(ids, s, until.strftime("%Y-%m-%d"), info)
         mStart = today.replace(day=1).strftime("%Y-%m-%d")
         periods["month"] = summarize(ids, mStart, until.strftime("%Y-%m-%d"), info)
+        # 지난 3개 달(달력 기준 1일~말일) — 월별 비교용, 키 m_YYYY-MM
+        mEnd = today.replace(day=1) - datetime.timedelta(days=1)
+        for _ in range(3):
+            mFirst = mEnd.replace(day=1)
+            periods["m_" + mFirst.strftime("%Y-%m")] = summarize(ids, mFirst.strftime("%Y-%m-%d"), mEnd.strftime("%Y-%m-%d"), info)
+            mEnd = mFirst - datetime.timedelta(days=1)
         # 캠페인 확정 구간 — 리포트에서 캠페인 기간 실적을 그대로 쓰기 위해 고정 구간도 함께 수집
         for key, s, u in CAMPAIGN_RANGES:
             if s <= until.strftime("%Y-%m-%d"):
