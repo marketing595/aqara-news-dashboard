@@ -111,6 +111,8 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .tlc text{font-size:10.5px;fill:var(--tx3);font-family:var(--f)}
 .tltip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;line-height:1.5;padding:7px 10px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-100%);z-index:5}
 @media (max-width:900px){ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))} .edg{grid-template-columns:1fr 1fr} .hide-m{display:none} }
+/* 모바일: 전체/동행인 있음/혼자 참석 바가 오른쪽으로 넘치지 않게 — 화면 폭에 맞추고 버튼 안에서 줄바꿈(2026-11-06) */
+@media (max-width:640px){ .seg{display:flex;width:100%;border-radius:14px} .seg button{flex:1 1 0;min-width:0;height:auto;min-height:30px;padding:5px 6px;white-space:normal;line-height:1.3;border-radius:11px;word-break:keep-all} .seg button span{display:block;font-size:11px} }
 </style>
 </head>
 <body>
