@@ -1320,6 +1320,7 @@ async function delGroup(t){
 }
 async function openTrash(){
   modal(`<h3>🗑 휴지통</h3><div id="trashBody" class="mut">불러오는 중…</div><div class="tools" style="margin-top:12px;justify-content:flex-end"><button class="btn" data-x>닫기</button></div>`);
+  { const bx = $('#modal .box'); if(bx) bx.style.maxWidth = 'min(1200px, 96vw)'; } // 휴지통은 열이 많아 넓게(2026-11-06)
   const j = await api({ op: 'trash' });
   const box = $('#trashBody'); if(!box) return;
   if(!j.ok){ box.textContent = j.error || '불러오지 못했어요'; return; }
@@ -1327,11 +1328,11 @@ async function openTrash(){
   box.classList.remove('mut');
   box.innerHTML = `<div class="mut" style="margin-bottom:8px">${j.items.length}그룹 · 복원하면 링크·응답·변경 이력·발송 기록이 그대로 돌아와요.</div>
     <div style="max-height:55vh;overflow:auto"><table class="tbl"><thead><tr><th>초대받은 분</th><th>동행인</th><th>상태</th><th>등록일시</th><th>삭제</th><th></th></tr></thead><tbody>${j.items.map(g => `<tr>
-      <td><b>${esc(g.rep.name)}</b><div class="org">${esc([g.rep.org, fmtPhone(g.rep.phone)].filter(Boolean).join(' · '))}</div></td>
-      <td>${esc((g.comps || []).map(c => c.name).join(', ')) || '<span class="mut">—</span>'}</td>
-      <td>${esc(ST[g.status] || '미응답')}</td>
+      <td style="white-space:nowrap"><b>${esc(g.rep.name)}</b><div class="org">${esc([g.rep.org, fmtPhone(g.rep.phone)].filter(Boolean).join(' · '))}</div></td>
+      <td style="min-width:120px">${esc((g.comps || []).map(c => c.name).join(', ')) || '<span class="mut">—</span>'}</td>
+      <td style="white-space:nowrap">${esc(ST[g.status] || '미응답')}</td>
       <td class="num" style="font-size:12px;white-space:nowrap">${g.created ? fmtTime(g.created) : '—'}<div class="org">${esc(regLabel(g))}</div></td>
-      <td class="num" style="font-size:12px;white-space:nowrap">${g.deletedAt ? fmtTime(g.deletedAt) : ''}<div class="org">${esc(String(g.deletedBy || '').split('@')[0])}</div>${g.deletedWhy ? `<div class="org" style="color:var(--err)">${esc(g.deletedWhy)}</div>` : ''}</td>
+      <td class="num" style="font-size:12px;white-space:nowrap">${g.deletedAt ? fmtTime(g.deletedAt) : ''}<div class="org">${esc(String(g.deletedBy || '').split('@')[0])}</div>${g.deletedWhy ? `<div class="org" style="color:var(--err);white-space:normal;min-width:280px">${esc(g.deletedWhy)}</div>` : ''}</td>
       <td style="white-space:nowrap"><button class="btn pri" data-restore="${g._t}">복원</button> <button class="btn danger" data-purge="${g._t}">완전 삭제</button></td></tr>`).join('')}</tbody></table></div>`;
   const byT = Object.fromEntries(j.items.map(g => [g._t, g]));
   box.querySelectorAll('[data-restore]').forEach(b => b.onclick = async () => {
