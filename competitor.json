@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-07 00:58",
+ "generatedAt": "2026-11-07 23:55",
  "brands": [
   {
    "name": "아카라",
@@ -127,9 +127,9 @@
     "아카라 홈캠",
     "아카라 스위치",
     "니케 아카라이브",
+    "아카라 l100",
     "아카라이브 핫딜",
-    "아카라치",
-    "원신 아카라이브"
+    "메랜 아카라이브"
    ],
    "recent": [
     {
@@ -451,10 +451,10 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69600,
+   "total": 69601,
    "sentiment": {
-    "pos": 45,
-    "neu": 15,
+    "pos": 44,
+    "neu": 16,
     "neg": 0
    },
    "keywords": [
@@ -574,10 +574,16 @@
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스 허브 5세대",
-    "삼성 스마트싱스 세탁기 원격",
-    "삼성 스마트싱스 공유"
+    "삼성 스마트싱스 스위치",
+    "삼성 스마트싱스 세탁기 원격"
    ],
    "recent": [
+    {
+     "title": "삼성 갤럭시 스마트태그3 미국 판매 시작…아이폰 지원, 컴퍼스 뷰는 갤...",
+     "source": "wikitree.co.kr",
+     "date": "2026-11-07",
+     "link": "https://www.wikitree.co.kr/articles/1172719"
+    },
     {
      "title": "5가지 감지 기능 갖춘 무선 재실센서... 티피링크 타포 T150 [연중기획-I...",
      "source": "ilovepc.co.kr",
@@ -661,12 +667,6 @@
      "source": "m-i.kr",
      "date": "2026-11-04",
      "link": "https://www.m-i.kr/news/articleView.html?idxno=2014521"
-    },
-    {
-     "title": "삼성전자서비스, KS-SQI 에어컨 AS 2년 연속 1위… AI 원격진단 통했다",
-     "source": "mediapen.com",
-     "date": "2026-11-04",
-     "link": "https://www.mediapen.com/news/view/1135001"
     }
    ]
   },
@@ -791,14 +791,14 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐 티비연결",
     "lg 씽큐 냉장고",
+    "lg 씽큐 티비연결",
     "lg 씽큐 세탁기",
-    "lg 씽큐 허브",
-    "lg 씽큐 와이파이",
     "lg 씽큐 연결",
-    "lg 씽큐 초기화",
-    "lg 씽큐 온도"
+    "lg 씽큐 허브",
+    "lg 씽큐 에어컨 연결",
+    "lg 씽큐 와이파이",
+    "lg 씽큐 초기화"
    ],
    "recent": [
     {
@@ -897,16 +897,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76403,
+   "total": 76407,
    "sentiment": {
     "pos": 13,
-    "neu": 31,
-    "neg": 16
+    "neu": 30,
+    "neg": 17
    },
    "keywords": [
     [
      "AI",
-     36
+     34
     ],
     [
      "번역한",
@@ -929,10 +929,6 @@
      17
     ],
     [
-     "입니다",
-     16
-    ],
-    [
      "번역",
      16
     ],
@@ -941,15 +937,19 @@
      16
     ],
     [
-     "break9874",
-     14
-    ],
-    [
      "naver",
-     14
+     15
     ],
     [
      "com",
+     15
+    ],
+    [
+     "입니다",
+     15
+    ],
+    [
+     "break9874",
      14
     ],
     [
@@ -962,7 +962,7 @@
     ],
     [
      "구글번역",
-     12
+     11
     ],
     [
      "이해도",
@@ -987,7 +987,7 @@
      4
     ],
     [
-     "수상",
+     "돌파",
      3
     ],
     [
@@ -999,11 +999,11 @@
      2
     ],
     [
-     "파트너십",
+     "수상",
      2
     ],
     [
-     "돌파",
+     "파트너십",
      2
     ],
     [
@@ -1013,17 +1013,41 @@
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈 허브",
-    "구글 홈 화면 삭제",
     "구글 홈",
+    "구글 홈 화면 삭제",
+    "구글 홈 허브",
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 연결",
     "구글 홈화면 없애기",
-    "구글 홈 어시스턴트",
-    "구글 홈 스피커 연결"
+    "구글 홈 미니 1세대",
+    "구글 홈바탕 빼는법"
    ],
    "recent": [
+    {
+     "title": "메타, AI로 맞춤형 앱 만드는 '뮤즈 스페이스' 출시",
+     "source": "aitimes.com",
+     "date": "2026-11-07",
+     "link": "https://www.aitimes.com/news/articleView.html?idxno=217128"
+    },
+    {
+     "title": "대전하나시티즌, 가시와전 패배 딛고 인천전 승리 정조준",
+     "source": "breaknews.com",
+     "date": "2026-11-07",
+     "link": "http://www.breaknews.com/1249125"
+    },
+    {
+     "title": "[단독] 美 독점 피소 애플의 '물타기'…삼성 90만건 털고도 \"수원 본사 ...",
+     "source": "the-today.com",
+     "date": "2026-11-07",
+     "link": "https://www.the-today.com/news/articleView.html?idxno=93216"
+    },
+    {
+     "title": "아이폰 듀오 최적화 앱 출시 2주 만에 10만 개 돌파…페이팔·스타벅스...",
+     "source": "wikitree.co.kr",
+     "date": "2026-11-07",
+     "link": "https://www.wikitree.co.kr/articles/1172598"
+    },
     {
      "title": "5가지 감지 기능 갖춘 무선 재실센서... 티피링크 타포 T150 [연중기획-I...",
      "source": "ilovepc.co.kr",
@@ -1089,30 +1113,6 @@
      "source": "wikitree.co.kr",
      "date": "2026-11-04",
      "link": "https://www.wikitree.co.kr/articles/1171914"
-    },
-    {
-     "title": "\"애플·삼성 폰으로 직접 연동\"… 솔리티, AIoT 혁신대상 수상",
-     "source": "woodkorea.co.kr",
-     "date": "2026-11-04",
-     "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92360"
-    },
-    {
-     "title": "이디야커피, 정관장 남자농구·여자배구단과 파트너십",
-     "source": "breaknews.com",
-     "date": "2026-11-04",
-     "link": "http://www.breaknews.com/1248428"
-    },
-    {
-     "title": "LG헬로비전, 3분기 영업수익 2262억원…전년대비 24.2% 감소",
-     "source": "breaknews.com",
-     "date": "2026-11-04",
-     "link": "http://www.breaknews.com/1248421"
-    },
-    {
-     "title": "홈플러스, 5~11일 신선식품·생필품 할인 행사",
-     "source": "breaknews.com",
-     "date": "2026-11-04",
-     "link": "http://www.breaknews.com/1248424"
     }
    ]
   }
