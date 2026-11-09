@@ -500,6 +500,30 @@ module.exports = async (req, res) => {
     }
     // 일괄 반영(2026-11-07): 담당자가 내보낸 엑셀에 적은 상태·메모를 그대로 반영(손님 응답이 있어도 담당자 지시가 우선).
     // items [{ t, status:'yes'|'no'|'', memo, flag:'애매'|'' }] — status '' 면 상태는 그대로, flag '' 면 표시 해제
+    // 사람별 참석/불참(2026-11-09, 관리자): { t, slot:''(본인)|동행인 자리 이름, v:'yes'|'no' } — 동행인은 csave와 같은 방식으로 명단에 넣고/뺀다
+    if(op === 'pset'){
+      // 비밀번호 확인(2026-11-09 사용자 지정) — 저장소가 공개라 평문 대신 PBKDF2 값만 둔다
+      const ph = crypto.pbkdf2Sync(String(body.pw || ''), 'aqara-rsvp-pset-2026', 100000, 32, 'sha256');
+      if(!crypto.timingSafeEqual(ph, Buffer.from('a481ea96d324e6c91969b65c4450d7133163a3e2fb815858e65074e247654046', 'hex'))) return res.status(200).json({ ok: false, error: '비밀번호가 맞지 않아요', pw: true });
+      if(!okTok(body.t)) return res.status(400).json({ ok: false, error: 't' });
+      const v = body.v === 'yes' || body.v === 'no' ? body.v : ''; if(!v) return res.status(200).json({ ok: false, error: 'v' });
+      const g = await fb('GET', `groups/${body.t}`); if(!g || !g.rep) return res.status(404).json({ ok: false, error: '없는 그룹' });
+      const slot = str(body.slot, 60), now = Date.now(); let next, who;
+      if(!slot){ next = Object.assign({}, g, { status: v }); who = g.rep.name; }
+      else{
+        if(!compSlots(g).includes(slot)) return res.status(200).json({ ok: false, error: '그 동행인 자리를 찾지 못했어요' });
+        const s = compState(g, slot), base = s.cur || allowedComps(g)[slot] || { name: slot, title: '', org: g.rep.org || '', phone: '' };
+        const comps = (g.comps || []).slice(), i = comps.findIndex(c => slotOf(c) === slot);
+        if(v === 'yes'){ if(i < 0) comps.push(base); } else if(i >= 0) comps.splice(i, 1);
+        next = Object.assign({}, g, { comps: fillOrg(comps, g.rep.org), cans: Object.assign({}, g.cans, { [slot]: { v, at: now, by: email } }) });
+        who = base.name || slot;
+      }
+      next.updatedAt = now; next.updatedBy = email; next.src = '담당자 직접 선택';
+      await fb('PUT', `groups/${body.t}`, next);
+      await fb('POST', `log/${body.t}`, { at: now, by: email, status: next.status || 'pending', n: (next.status === 'yes' ? 1 : 0) + (next.comps || []).length, sub: '', comps: (next.comps || []).map(c => c.name).join(', '), who, v, src: next.src });
+      GCACHE.at = 0;
+      return res.status(200).json({ ok: true, group: next });
+    }
     if(op === 'bulk'){
       const items = (Array.isArray(body.items) ? body.items : []).filter(x => x && okTok(x.t)).slice(0, 3000);
       const cur = (await fb('GET', 'groups')) || {}, patch = {}, logs = [], now = Date.now(); let n = 0;
