@@ -34,7 +34,19 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .btn:disabled{opacity:.5;cursor:default}
 .tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 
-.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:16px}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) minmax(0,1.5fr);gap:10px;margin-top:16px}
+/* 문자/메일 큰 박스(노란색) — 안에 발송 완료·발송 예정 작은 박스(누르면 목록 필터) */
+.kpi.msg{background:#fff8d6;border-color:#f2d36b;cursor:default}
+.kpi.msg:hover{border-color:#f2d36b}
+.kpi.msg .l{color:#8a6a00}
+.kpi.msg .subs{gap:8px;margin-top:10px}
+.kpi.msg .sbb{flex:1;min-width:0;background:#fff;border:1px solid #f2d36b;border-radius:10px;padding:8px 10px;text-align:left;cursor:pointer;font:inherit}
+.kpi.msg .sbb:hover{border-color:#d9a900}
+.kpi.msg .sbb.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc-soft)}
+.kpi.msg .sbb span{font-size:11.5px;color:var(--tx2);font-weight:600}
+.kpi.msg .sbb b{display:block;font-size:22px;font-weight:800;color:var(--ink);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi.msg .sbb b small{font-size:12px;font-weight:600;color:var(--tx2);margin-left:3px}
+.kpi.msg .sbb i{display:block;font-style:normal;font-size:10.5px;color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* 큰 네모 안 작은 네모(2026-11-05): 참석 확정 = 본인 · 동행인, 불참 = 본인 · 동행인 */
 .kpi .subs{display:flex;gap:6px;margin-top:8px}
 .kpi .sb{flex:1;min-width:0;background:var(--bg);border-radius:8px;padding:5px 8px}
@@ -112,7 +124,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .tlc svg{display:block;width:100%;height:220px;overflow:visible}
 .tlc text{font-size:10.5px;fill:var(--tx3);font-family:var(--f)}
 .tltip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;line-height:1.5;padding:7px 10px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-100%);z-index:5}
-@media (max-width:900px){ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))} .edg{grid-template-columns:1fr 1fr} .hide-m{display:none} }
+@media (max-width:900px){ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))} .kpi.msg{grid-column:1/-1} .edg{grid-template-columns:1fr 1fr} .hide-m{display:none} }
 /* 모바일: 전체/동행인 있음/혼자 참석 바가 오른쪽으로 넘치지 않게 — 화면 폭에 맞추고 버튼 안에서 줄바꿈(2026-11-06) */
 @media (max-width:640px){ .seg{display:flex;width:100%;border-radius:14px} .seg button{flex:1 1 0;min-width:0;height:auto;min-height:30px;padding:5px 6px;white-space:normal;line-height:1.3;border-radius:11px;word-break:keep-all} .seg button span{display:block;font-size:11px} }
 </style>
@@ -246,6 +258,7 @@ const regLabel = (g) => g.regBy || (g.addedBy ? '수기 등록' : '엑셀 등록
 const NEW_SINCE = new Date('2026-11-03T11:09:00+09:00').getTime();
 const isNew = (g) => (g.created || 0) > NEW_SINCE;
 const isOpen = (g) => !!(g.open && g.open.first);
+const toSend = (g) => !isSent(g) && !(g && g.rejected) && gst(g) === 'pending';   // 발송 예정 = 아직 안 보냈고 미응답(참석 거절 제외)
 const sentPend = (g) => isSent(g) && gst(g) === 'pending' && !(g && g.rejected);   // 보냈는데 아직 응답 없음 → 재발송·전화 대상
 
 // 사람 단위 상태(2026-11-05: 총 대상 − 참석 ≠ 미응답 지적) — 명단 인원(rosterN) 전원을 참석/불참/미응답 중 정확히 하나로 센다.
@@ -276,6 +289,7 @@ function stats(){
     if(isSent(g)) s.sent++;
     if(isOpen(g)) s.open++;
     if(sentPend(g)){ s.sentPend++; if(isOpen(g)) s.sentPendOpen++; }
+    if(toSend(g)) s.toSend = (s.toSend || 0) + 1;
     if(!isRej(g) && gst(g) === 'pending' && isOpen(g)) s.pendOpen = (s.pendOpen || 0) + 1;
     if(isRej(g)){ s.rj = (s.rj || 0) + 1; }
     else if(gst(g) === 'yes'){ s.yes++; s.yesN += heads(g); s.yesC += (g.comps || []).length; if(g.status === 'yes') s.yesR++; }
@@ -304,7 +318,12 @@ function paint(){
     k('no', '불참', `${NO}<small>명</small>`, `전원 불참 ${s.no}그룹`,
       sb('본인', P.nr) + sb('동행인', NO - P.nr, P.x ? `명단에서 뺌 ${P.x}` : '')) +
     k('pending', '미응답', `${P.p}<small>명</small>`, `${s.pending}그룹 · 그중 링크 열어봄 ${s.pendOpen || 0}`) +
-    k('chg', '대리·동행인 변경', `${s.chg}<small>그룹</small>`, '처음 명단과 달라짐');
+    k('chg', '대리·동행인 변경', `${s.chg}<small>그룹</small>`, '처음 명단과 달라짐') +
+    // 문자/메일 큰 박스(2026-11-10 요청, 노란색): 발송 완료 = '문자 보냄' 기록 있는 그룹 / 발송 예정 = 아직 안 보냈고 미응답(거절 제외) — 링크·문자 추출의 '아직 안 보냄'과 같은 기준
+    `<div class="kpi msg"><div class="l">문자/메일</div><div class="subs">` +
+      `<button class="sbb ${FILTER === 'sent' ? 'on' : ''}" data-f="sent"><span>발송 완료</span><b>${s.sent}<small>그룹</small></b><i title="보낸 그룹 중 링크 열람 ${s.open} · 아직 미응답 ${s.sentPend}">열람 ${s.open} · 미응답 ${s.sentPend}</i></button>` +
+      `<button class="sbb ${FILTER === 'tosend' ? 'on' : ''}" data-f="tosend"><span>발송 예정</span><b>${s.toSend || 0}<small>그룹</small></b><i>아직 안 보냄 · 미응답</i></button>` +
+    `</div><div class="d">전체 ${s.all}그룹 중 발송 ${s.all ? Math.round(s.sent / s.all * 100) : 0}%</div></div>`;
   // 검산 줄: 칸 합계와 예전 방식 숫자가 왜 다른지 바로 보이게
   const SUM = P.y + NO + P.p + P.rj;
   const chk = [`검산: 참석 ${P.y} + 불참 ${NO} + 미응답 ${P.p}` + (P.rj ? ` + 참석 거절 ${P.rj}` : '') + ` = ${SUM}명` + (SUM === P.all ? ' ✓' : ` ≠ 총 ${P.all} ⚠`)];
@@ -423,6 +442,8 @@ function filtered(ignoreComp){
     if(FILTER === 'rej' && !isRej(g)) return false;
     if(FILTER === 'chg' && !changed(g)) return false;
     if(FILTER === 'sentpend' && !sentPend(g)) return false;
+    if(FILTER === 'sent' && !isSent(g)) return false;
+    if(FILTER === 'tosend' && !toSend(g)) return false;
     if(!ignoreComp && COMP === 'with' && !withComps(g)) return false;
     if(!ignoreComp && COMP === 'solo' && withComps(g)) return false;
     if(!q) return true;
@@ -1151,7 +1172,7 @@ function groupRowsWide(L){
 // 탭별 내려받기: 전체 / 동행인 있음 / 혼자 참석 (+ 위 카드 필터·검색이 걸려 있으면 그것도 반영)
 function tabName(){
   const tab = ({ all: '전체', with: '동행인있음', solo: '혼자참석', new: '새신청' })[COMP];
-  const kpi = FILTER === 'all' ? '' : '_' + ({ yes: '참석', no: '불참', pending: '미응답', sentpend: '보냈는데미응답', chg: '변경' })[FILTER];
+  const kpi = FILTER === 'all' ? '' : '_' + ({ yes: '참석', no: '불참', pending: '미응답', sentpend: '보냈는데미응답', chg: '변경', sent: '발송완료', tosend: '발송예정' })[FILTER];
   return `${VIEW === 'test' ? '테스트_' : ''}${tab}${kpi}`;
 }
 const textCol = (ws, re) => { const rg = XLSX.utils.decode_range(ws['!ref']);   // 연락처 칸은 앞자리 0이 안 사라지게 글자로
