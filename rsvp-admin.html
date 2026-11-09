@@ -160,7 +160,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
     </div>
     <div style="overflow:auto;max-height:72vh">
       <table class="tbl">
-        <thead><tr><th>초대받은 분</th><th>연락처 · 이메일</th><th class="hide-m">초청 경로</th><th>상태</th><th class="rw">관리자 제어</th><th>등록일시</th><th>마지막 문자 전송</th><th>링크 열람</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th class="rw">링크</th></tr></thead>
+        <thead><tr><th>초대받은 분</th><th>연락처 · 이메일</th><th class="hide-m">초청 경로</th><th>상태</th><th class="rw">관리자 제어</th><th>등록일시</th><th>링크 열람</th><th>인원</th><th class="hide-m">동행인 / 대리</th><th>마지막 변경</th><th class="rw">링크</th></tr></thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
@@ -453,20 +453,19 @@ function paintRows(){
   const pk = { yes: 'y', no: 'n', pending: 'p', rej: 'rj' }[FILTER];
   $('#listTitle').textContent = ({ all: '전체', yes: '참석', no: '불참', rej: '참석 거절', pending: '미응답', sentpend: '보냈는데 미응답', chg: '대리·동행인 변경' })[FILTER]
     + (pk ? ` ${L.reduce((n, g) => { const c = pcount(g); return n + c[pk] + (pk === 'n' ? c.x : 0); }, 0)}명 · ${L.length}그룹` : ` ${L.length}`);
-  if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="12" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
+  if(!L.length){ $('#rows').innerHTML = `<tr><td colspan="11" class="empty">해당하는 그룹이 없어요.</td></tr>`; return; }
   $('#rows').innerHTML = L.map(g => {
     const st = isRej(g) ? 'rej' : gst(g);
     const orig = g.orig ? g.orig.n : '';
     const now = st === 'pending' ? '' : heads(g);
     const comps = (g.comps || []).map(c => esc(c.name)).join(', ');
     return `<tr class="g" data-t="${g.t}">
-      <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
+      <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div>${g.sendNote ? `<div class="org" style="font-family:inherit"><b style="color:var(--err)">${esc(g.sendNote)}</b> <button class="lk rw" data-clrnote="${g.t}" title="발송 메모 지우기">✕ 지우기</button></div>` : ''}</td>
       <td class="num">${esc(fmtPhone(g.rep.phone))}<div class="org" style="font-family:inherit">${g.email ? esc(g.email) : '<span style="color:var(--tx3)">이메일 없음</span>'}</div></td>
       <td class="hide-m mut">${esc(g.route || '')}</td>
       <td><span class="st ${st}">${stLabel(g)}</span>${g.flag ? ` <span class="st pending" title="${esc(g.memo || '')}">${esc(g.flag)}</span>` : ''}${isRej(g) ? `<div class="org" style="color:#b42318">${esc(g.rejected.why || '사유 없음')}${g.status === 'yes' || g.status === 'no' ? ` · 손님 응답: ${ST[g.status]}` : ''}</div>` : ''}${FILTER === 'no' ? (() => { const c = pcount(g); return (st !== 'no' && c.nn.length ? `<div class="org" style="color:var(--err)">불참 ${esc(c.nn.join(', '))}</div>` : '') + (c.xn.length ? `<div class="org" style="color:var(--err)">명단에서 뺌 ${esc(c.xn.join(', '))}</div>` : ''); })() : ''}${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
       <td class="rw" style="white-space:nowrap"><div class="qs"><button class="lk${g.status === 'yes' ? ' on' : ''}" data-qs="yes" data-t="${g.t}" title="본인 참석 — 비밀번호 필요">참석</button><button class="lk${g.status === 'no' ? ' on' : ''}" data-qs="no" data-t="${g.t}" title="본인 불참 — 비밀번호 필요">불참</button></div></td>
       <td class="num" style="white-space:nowrap;font-size:12px">${g.created ? fmtTime(g.created) : '<span style="color:var(--tx3)">—</span>'}<div class="org" style="font-family:inherit">${esc(regLabel(g))}</div></td>
-      <td class="num" style="white-space:nowrap;font-size:12px">${isSent(g) ? `<b>${fmtTime(g.sent.at)}</b>${g.sent.n > 1 ? ` <span class="mut">(${g.sent.n}회)</span>` : ''}` : '<span style="color:var(--tx3)">안 보냄</span>'}${g.sendNote ? `<br><b style="color:var(--err)">${esc(g.sendNote)}</b> <button class="lk rw" data-clrnote="${g.t}" title="발송 메모 지우기">✕ 지우기</button>` : ''}</td>
       <td class="mut num" style="white-space:nowrap;font-size:12px">${isOpen(g) ? `<b style="color:var(--ink)">열람</b> ${fmtTime(g.open.last)}${g.open.n > 1 ? ` (${g.open.n}회)` : ''}` : '<span style="color:var(--tx3)">안 열어봄</span>'}</td>
       <td class="num">${now === '' ? `<span class="mut">예상 ${orig}</span>` : (orig !== '' && orig !== now ? `<span class="mut">${orig} →</span> <b>${now}</b>` : `<b>${now}</b>`)}</td>
       <td class="hide-m comps">${g.sub && g.sub.name ? `<span class="tag t-sub" style="margin-left:0">대리</span> ${esc(g.sub.name)}${comps ? ' · ' : ''}` : ''}${comps || '<span class="mut">—</span>'}</td>
@@ -499,7 +498,7 @@ function editRow(g){
   const nmOf = (slot) => { const c = (g.comps || []).find(x => slotOf(x) === slot); return c ? c.name : slot; };
   const prow = (slot, name, kind, st) => `<div class="pr"><span class="pk">${kind}</span><b>${esc(name)}</b> <span class="st ${st}">${ST[st]}</span><span class="qs"><button class="lk${st === 'yes' ? ' on' : ''}" data-ps="yes" data-slot="${esc(slot)}">참석</button><button class="lk${st === 'no' ? ' on' : ''}" data-ps="no" data-slot="${esc(slot)}">불참</button></span></div>`;
   const people = `<div class="full ppl"><div style="font-weight:700;margin-bottom:4px">사람별 참석 / 불참 <span class="mut" style="font-weight:400">— 누르면 비밀번호를 물어보고 바로 저장돼요</span></div>${prow('', g.rep.name, '본인', answered(g) ? g.status : 'pending')}${slots.map(s => prow(s, nmOf(s), '동행인', pst(s))).join('')}</div>`;
-  return `<tr class="ed"><td colspan="12"><div class="edg" id="ed">${people}
+  return `<tr class="ed"><td colspan="11"><div class="edg" id="ed">${people}
     <div><label>상태<select data-e="status">${['pending','yes','no'].map(x => `<option value="${x}" ${g.status === x ? 'selected' : ''}>${ST[x]}</option>`).join('')}</select></label></div>
     <div><label>성함<input data-e="rep.name" value="${esc(r.name)}"></label></div>
     <div><label>소속<input data-e="rep.org" value="${esc(r.org)}"></label></div>
