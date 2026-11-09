@@ -155,7 +155,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 
   <div class="panel">
     <div class="ph">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div><button class="btn" id="btnTabXlsx" title="지금 고른 탭(전체/동행인 있음/혼자 참석)과 위 카드 필터·검색 결과만 엑셀로">이 탭 엑셀 받기</button></div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div><button class="btn" id="btnTabXlsx" title="지금 고른 탭·카드 필터·검색 결과를 그룹당 1줄로 — 동행인은 오른쪽으로 한 명씩 칸(성함·상태·직책·소속·연락처·이메일)을 나눠 넣어요">이 탭 엑셀 (그룹별)</button><button class="btn" id="btnTabXlsxP" title="지금 고른 탭·카드 필터·검색 결과를 사람당 1줄로 — 동행인도 명수만큼 각자 한 줄">이 탭 엑셀 (사람별)</button></div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option><option value="st">상태순(참석→불참→미응답)</option><option value="stNo">상태순(불참→참석→미응답)</option></select><button class="btn rw" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><button class="btn rw" id="btnDups" title="개별 신청한 사람이 다른 그룹의 동행인으로도 들어가 있는 경우 등 — 골라서 휴지통으로">중복 찾기</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
     </div>
     <div style="overflow:auto;max-height:72vh">
@@ -1128,16 +1128,46 @@ $('#btnXlsx').onclick = () => {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(linkRows(list())), '개인 링크');
   XLSX.writeFile(wb, `RSVP_세미나_응답현황_${stamp()}.xlsx`);
 };
+// 그룹의 동행인을 사람마다(현재 동행인 + 처음 명단에서 빠진 동행인) — 상태 기준은 personRows와 같음
+function compList(g){
+  const ans = answered(g), cans = g.cans || {}, rj = isRej(g);
+  const out = (g.comps || []).map(c => { const a = cans[slotOf(c)];
+    return { 성함: c.name, 상태: rj ? '참석 거절' : a ? ST[a.v] : (ans ? '참석' : ST.pending), 직책: c.title || '', 소속: c.org || g.rep.org || '', 연락처: telDigits(c.phone), 이메일: c.email || '' }; });
+  const now = new Set((g.comps || []).flatMap(c => [c.name, c.from].filter(Boolean)));
+  String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(n => n && !now.has(n))
+    .forEach(n => out.push({ 성함: n, 상태: rj ? '참석 거절' : (cans[n] && cans[n].v === 'no' ? '불참' : '불참(명단에서 뺌)'), 직책: '', 소속: g.rep.org || '', 연락처: '', 이메일: '' }));
+  return out;
+}
+// 그룹별(동행인 칸 펼침): 응답 현황 한 줄 + '대리 참석' 뒤에 동행인1·2·3… 칸(성함·상태·직책·소속·연락처·이메일)
+function groupRowsWide(L){
+  const src = (L || list()).slice().sort((a, b) => ({ yes: 0, no: 1, pending: 2 })[gst(a)] - ({ yes: 0, no: 1, pending: 2 })[gst(b)] || String(a.rep.name).localeCompare(b.rep.name, 'ko'));
+  const base = groupRows(src), comps = src.map(compList), max = Math.max(0, ...comps.map(c => c.length));
+  const F = ['성함', '상태', '직책', '소속', '연락처', '이메일'];
+  return base.map((r, i) => { const o = {};
+    for(const k of Object.keys(r)){ o[k] = r[k];
+      if(k === '대리 참석') for(let n = 0; n < max; n++){ const c = comps[i][n] || {}; F.forEach(f => { o[`동행인${n + 1} ${f}`] = c[f] || ''; }); } }
+    return o; });
+}
 // 탭별 내려받기: 전체 / 동행인 있음 / 혼자 참석 (+ 위 카드 필터·검색이 걸려 있으면 그것도 반영)
-$('#btnTabXlsx').onclick = () => {
-  const L = filtered(); if(!L.length) return toast('이 탭에 받을 대상이 없어요');
+function tabName(){
   const tab = ({ all: '전체', with: '동행인있음', solo: '혼자참석', new: '새신청' })[COMP];
   const kpi = FILTER === 'all' ? '' : '_' + ({ yes: '참석', no: '불참', pending: '미응답', sentpend: '보냈는데미응답', chg: '변경' })[FILTER];
-  const grp = groupRows(L), ppl = personRows(L);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, fitCols(XLSX.utils.json_to_sheet(grp), grp), '응답 현황');
-  XLSX.utils.book_append_sheet(wb, fitCols(XLSX.utils.json_to_sheet(ppl), ppl), '사람별');
-  XLSX.writeFile(wb, `RSVP_세미나_${VIEW === 'test' ? '테스트_' : ''}${tab}${kpi}_${L.length}그룹_${stamp()}.xlsx`);
+  return `${VIEW === 'test' ? '테스트_' : ''}${tab}${kpi}`;
+}
+const textCol = (ws, re) => { const rg = XLSX.utils.decode_range(ws['!ref']);   // 연락처 칸은 앞자리 0이 안 사라지게 글자로
+  for(let c = rg.s.c; c <= rg.e.c; c++){ const h = ws[XLSX.utils.encode_cell({ r: 0, c })]; if(!h || !re.test(String(h.v))) continue;
+    for(let r = 1; r <= rg.e.r; r++){ const a = XLSX.utils.encode_cell({ r, c }); if(ws[a]){ ws[a].t = 's'; ws[a].v = String(ws[a].v); ws[a].z = '@'; } } } return ws; };
+$('#btnTabXlsx').onclick = () => {
+  const L = filtered(); if(!L.length) return toast('이 탭에 받을 대상이 없어요');
+  const rows = groupRowsWide(L), wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, textCol(fitCols(XLSX.utils.json_to_sheet(rows), rows), /연락처$/), '그룹별(동행인 칸)');
+  XLSX.writeFile(wb, `RSVP_세미나_${tabName()}_그룹별_${L.length}그룹_${stamp()}.xlsx`);
+};
+$('#btnTabXlsxP').onclick = () => {
+  const L = filtered(); if(!L.length) return toast('이 탭에 받을 대상이 없어요');
+  const ppl = personRows(L), wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, textCol(fitCols(XLSX.utils.json_to_sheet(ppl), ppl), /연락처$/), '사람별');
+  XLSX.writeFile(wb, `RSVP_세미나_${tabName()}_사람별_${ppl.length}명_${stamp()}.xlsx`);
 };
 $('#btnCsv').onclick =() => download(`RSVP_세미나_최신명단_${stamp()}.csv`, toCsv(personRows()));
 
