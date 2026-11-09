@@ -258,7 +258,9 @@ const regLabel = (g) => g.regBy || (g.addedBy ? '수기 등록' : '엑셀 등록
 const NEW_SINCE = new Date('2026-11-03T11:09:00+09:00').getTime();
 const isNew = (g) => (g.created || 0) > NEW_SINCE;
 const isOpen = (g) => !!(g.open && g.open.first);
-const toSend = (g) => !isSent(g) && !(g && g.rejected) && gst(g) === 'pending';   // 발송 예정 = 아직 안 보냈고 미응답(참석 거절 제외)
+// 문자/메일(행사 안내) 발송 — RSVP 초대 문자 기록(g.sent, s/)과 따로 g.msg(m/). 2026-11-10 사용자: "아직 아무도 발송 아님, 다 발송 예정, 명수로"
+const isMsg = (g) => !!(g && g.msg && g.msg.at);
+const toSend = (g) => !isMsg(g) && !(g && g.rejected);   // 발송 예정 = 아직 안 보낸 사람 전부(참석 거절 그룹만 제외)
 const sentPend = (g) => isSent(g) && gst(g) === 'pending' && !(g && g.rejected);   // 보냈는데 아직 응답 없음 → 재발송·전화 대상
 
 // 사람 단위 상태(2026-11-05: 총 대상 − 참석 ≠ 미응답 지적) — 명단 인원(rosterN) 전원을 참석/불참/미응답 중 정확히 하나로 센다.
@@ -289,7 +291,6 @@ function stats(){
     if(isSent(g)) s.sent++;
     if(isOpen(g)) s.open++;
     if(sentPend(g)){ s.sentPend++; if(isOpen(g)) s.sentPendOpen++; }
-    if(toSend(g)) s.toSend = (s.toSend || 0) + 1;
     if(!isRej(g) && gst(g) === 'pending' && isOpen(g)) s.pendOpen = (s.pendOpen || 0) + 1;
     if(isRej(g)){ s.rj = (s.rj || 0) + 1; }
     else if(gst(g) === 'yes'){ s.yes++; s.yesN += heads(g); s.yesC += (g.comps || []).length; if(g.status === 'yes') s.yesR++; }
@@ -298,6 +299,7 @@ function stats(){
     if(changed(g)) s.chg++;
     const c = pcount(g); s.P.all += c.all; s.P.y += c.y; s.P.n += c.n; s.P.p += c.p; s.P.x += c.x; s.P.yr += c.yr; s.P.cy += c.cy; s.P.nr += c.nr || 0; s.P.rj += c.rj || 0;
     s.P.roster += rosterN(g);
+    if(isMsg(g)) s.P.msgDone = (s.P.msgDone || 0) + c.all; else if(toSend(g)) s.P.msgTodo = (s.P.msgTodo || 0) + c.all;   // 명 단위(그룹 사람 전부)
     if(c.x) s.xG = (s.xG || 0) + 1;
   });
   return s;
@@ -319,11 +321,11 @@ function paint(){
       sb('본인', P.nr) + sb('동행인', NO - P.nr, P.x ? `명단에서 뺌 ${P.x}` : '')) +
     k('pending', '미응답', `${P.p}<small>명</small>`, `${s.pending}그룹 · 그중 링크 열어봄 ${s.pendOpen || 0}`) +
     k('chg', '대리·동행인 변경', `${s.chg}<small>그룹</small>`, '처음 명단과 달라짐') +
-    // 문자/메일 큰 박스(2026-11-10 요청, 노란색): 발송 완료 = '문자 보냄' 기록 있는 그룹 / 발송 예정 = 아직 안 보냈고 미응답(거절 제외) — 링크·문자 추출의 '아직 안 보냄'과 같은 기준
+    // 문자/메일 큰 박스(2026-11-10, 노란색): 행사 안내 발송 — RSVP 초대 문자 기록과 별개. 명 단위. 줄 펼쳐 [문자/메일 발송 완료로 표시]
     `<div class="kpi msg"><div class="l">문자/메일</div><div class="subs">` +
-      `<button class="sbb ${FILTER === 'sent' ? 'on' : ''}" data-f="sent"><span>발송 완료</span><b>${s.sent}<small>그룹</small></b><i title="보낸 그룹 중 링크 열람 ${s.open} · 아직 미응답 ${s.sentPend}">열람 ${s.open} · 미응답 ${s.sentPend}</i></button>` +
-      `<button class="sbb ${FILTER === 'tosend' ? 'on' : ''}" data-f="tosend"><span>발송 예정</span><b>${s.toSend || 0}<small>그룹</small></b><i>아직 안 보냄 · 미응답</i></button>` +
-    `</div><div class="d">전체 ${s.all}그룹 중 발송 ${s.all ? Math.round(s.sent / s.all * 100) : 0}%</div></div>`;
+      `<button class="sbb ${FILTER === 'sent' ? 'on' : ''}" data-f="sent"><span>발송 완료</span><b>${P.msgDone || 0}<small>명</small></b><i>보낸 사람</i></button>` +
+      `<button class="sbb ${FILTER === 'tosend' ? 'on' : ''}" data-f="tosend"><span>발송 예정</span><b>${P.msgTodo || 0}<small>명</small></b><i>아직 안 보냄${P.rj ? ` · 참석 거절 ${P.rj}명 제외` : ''}</i></button>` +
+    `</div><div class="d">줄을 펼쳐 [문자/메일 발송 완료로 표시]</div></div>`;
   // 검산 줄: 칸 합계와 예전 방식 숫자가 왜 다른지 바로 보이게
   const SUM = P.y + NO + P.p + P.rj;
   const chk = [`검산: 참석 ${P.y} + 불참 ${NO} + 미응답 ${P.p}` + (P.rj ? ` + 참석 거절 ${P.rj}` : '') + ` = ${SUM}명` + (SUM === P.all ? ' ✓' : ` ≠ 총 ${P.all} ⚠`)];
@@ -442,7 +444,7 @@ function filtered(ignoreComp){
     if(FILTER === 'rej' && !isRej(g)) return false;
     if(FILTER === 'chg' && !changed(g)) return false;
     if(FILTER === 'sentpend' && !sentPend(g)) return false;
-    if(FILTER === 'sent' && !isSent(g)) return false;
+    if(FILTER === 'sent' && !isMsg(g)) return false;
     if(FILTER === 'tosend' && !toSend(g)) return false;
     if(!ignoreComp && COMP === 'with' && !withComps(g)) return false;
     if(!ignoreComp && COMP === 'solo' && withComps(g)) return false;
@@ -532,7 +534,7 @@ function editRow(g){
     <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처 / 이메일</span><textarea data-e="comps" rows="${Math.max(3, (g.comps || []).length + 1)}">${esc((g.comps || []).map(c => [c.name, c.title || '', fmtPhone(c.phone) || '', c.email || ''].join(' / ').replace(/( \/ )+$/, '')).join('\n'))}</textarea></label></div>
     <div class="full"><label>담당자 메모<input data-e="memo" value="${esc(g.memo || '')}" placeholder="통화 내용 등(손님에겐 안 보임)"></label></div>
   </div>
-  <div class="tools" style="margin-top:10px"><button class="btn pri" id="edSave">저장</button><button class="btn" id="edCancel">닫기</button><button class="btn" id="edSent">${isSent(g) ? '문자 보냄 표시 해제' : '문자 보냄으로 표시'}</button><button class="btn ${isRej(g) ? '' : 'danger'}" id="edRej">${isRej(g) ? '참석 거절 해제' : '참석 거절로 표시'}</button><span style="flex:1"></span><button class="btn danger" id="edDel">이 그룹 삭제</button></div>
+  <div class="tools" style="margin-top:10px"><button class="btn pri" id="edSave">저장</button><button class="btn" id="edCancel">닫기</button><button class="btn" id="edSent">${isSent(g) ? '문자 보냄 표시 해제' : '문자 보냄으로 표시'}</button><button class="btn" id="edMsg" style="background:#fff8d6;border-color:#f2d36b">${isMsg(g) ? '문자/메일 발송 완료 해제' : '문자/메일 발송 완료로 표시'}</button><button class="btn ${isRej(g) ? '' : 'danger'}" id="edRej">${isRej(g) ? '참석 거절 해제' : '참석 거절로 표시'}</button><span style="flex:1"></span><button class="btn danger" id="edDel">이 그룹 삭제</button></div>
   <div class="logs">처음 명단 ${g.orig ? g.orig.n + '명' + (g.orig.comps ? ' (' + esc(g.orig.comps) + ')' : '') : ''}${g.note ? ' · 비고 ' + esc(g.note) : ''}${logs ? '<br><b>변경 이력</b><br>' + logs : ''}</div>
   </td></tr>`;
 }
@@ -571,6 +573,11 @@ function bindEdit(){
     const t = OPEN, un = isSent(G[t]);
     const j = await api({ op: 'sent', ts: [t], unmark: un }); if(!j.ok) return toast(j.error || '실패');
     EDITING = false; toast(un ? '문자 보냄 표시를 해제했어요' : '문자 보냄으로 표시했어요'); load();
+  };
+  $('#edMsg').onclick = async () => {
+    const t = OPEN, un = isMsg(G[t]);
+    const j = await api({ op: 'msent', ts: [t], unmark: un }); if(!j.ok) return toast(j.error || '실패');
+    EDITING = false; toast(un ? '문자/메일 발송 완료를 해제했어요' : '문자/메일 발송 완료로 표시했어요'); load();
   };
   $('#edRej').onclick = async () => {
     const t = OPEN, g = G[t], un = isRej(g);

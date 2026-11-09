@@ -391,13 +391,14 @@ module.exports = async (req, res) => {
     //  키 = HMAC(SESSION_SECRET, 'view:'+meta.viewGen) 앞 20자. 관리 화면 [새 키로 바꾸기]를 누르면 예전 링크는 바로 막힌다.
     //  손님 개인 링크(토큰)·동행인 링크 코드는 내보내지 않는다(그룹 키 = gid) → 이 링크로 손님 화면에 들어가 응답을 고칠 수 없다.
     if(op === 'list' && req.method === 'GET' && req.query.v){
-      const [groups, meta, opens, sent] = await Promise.all([fb('GET', 'groups'), fb('GET', 'meta'), raw('GET', 'o'), raw('GET', 's')]);
+      const [groups, meta, opens, sent, msg] = await Promise.all([fb('GET', 'groups'), fb('GET', 'meta'), raw('GET', 'o'), raw('GET', 's'), raw('GET', 'm')]);
       const m = meta || {};
       if(!m.viewOn || String(req.query.v) !== viewKey(m.viewGen)) return res.status(401).json({ ok: false, error: '보기 전용 링크가 만료됐어요. 담당자에게 새 링크를 받아 주세요.' });
       const ts = Object.keys(groups || {}), log = await logsFor(ts), G = {}, L = {};
       ts.forEach(t => { const g = Object.assign({}, groups[t]), k = gid(t);
         if(opens && opens[k]) g.open = opens[k];
         if(sent && sent[k]) g.sent = sent[k];
+        if(msg && msg[k]) g.msg = msg[k];   // 문자/메일 발송(m/) — RSVP 초대 문자(s/)와 따로
         G[k] = g; if(log[t]) L[k] = log[t]; });
       return res.status(200).json({ ok: true, viewOnly: true, groups: G, meta: { closed: !!m.closed }, log: L, locked: true });
     }
@@ -407,12 +408,13 @@ module.exports = async (req, res) => {
     if(!email) return res.status(401).json({ ok: false, error: '@' + DOMAIN + ' 로그인이 필요합니다.' });
 
     if(op === 'list'){
-      const [groups, meta, opens, sent] = await Promise.all([fb("GET", "groups"), fb("GET", "meta"), raw('GET', 'o'), raw('GET', 's')]);
+      const [groups, meta, opens, sent, msg] = await Promise.all([fb("GET", "groups"), fb("GET", "meta"), raw('GET', 'o'), raw('GET', 's'), raw('GET', 'm')]);
       const log = await logsFor(Object.keys(groups || {}));
       // 문자 발송·링크 열람 기록을 그룹에 붙여 준다(저장은 따로: s/<gid>, o/<gid>)
       Object.keys(groups || {}).forEach(t => { const k = gid(t), g = groups[t];
         if(opens && opens[k]) g.open = opens[k];
         if(sent && sent[k]) g.sent = sent[k];
+        if(msg && msg[k]) g.msg = msg[k];   // 문자/메일 발송(m/) — RSVP 초대 문자(s/)와 따로
         // 동행인 개인 링크 코드 { 자리 이름: 7자 } + 동행인 링크 열람
         if(g && g.rep){ g.clinks = {}; g.copen = {}; compSlots(g).forEach(s => { g.clinks[s] = ccode(t, s); const o = opens && opens['c' + gid(t + '|' + s)]; if(o) g.copen[s] = o; }); } });
       return res.status(200).json({ ok: true, email, groups: groups || {}, meta: meta || {}, log: log || {}, locked: true });
@@ -421,6 +423,15 @@ module.exports = async (req, res) => {
 
     // 문자 보냄 표시: { ts: [토큰…] } (unmark: true 면 표시 해제). 같은 사람에게 다시 보내면 횟수가 늘어난다.
     // at(ms)을 주면 그 시각을 '마지막 문자 전송'으로 기록(외부 도구로 이미 보낸 시각 입력). 같은 시각을 또 넣어도 횟수는 그대로.
+    // 문자/메일 발송 완료(2026-11-10): RSVP 초대 문자(s/)와 별개인 행사 안내 발송 기록 m/<gid> = { at, by } (unmark면 삭제). 개인정보 없음.
+    if(op === 'msent'){
+      const ts = (Array.isArray(body.ts) ? body.ts : []).filter(okTok).slice(0, 3000);
+      if(!ts.length) return res.status(200).json({ ok: true, n: 0 });
+      const now = Date.now(), patch = {};
+      ts.forEach(t => { patch[gid(t)] = body.unmark ? null : { at: now, by: email }; });
+      await raw('PATCH', 'm', patch);
+      return res.status(200).json({ ok: true, n: ts.length });
+    }
     if(op === 'sent'){
       const ts = (Array.isArray(body.ts) ? body.ts : []).filter(okTok).slice(0, 3000);
       if(!ts.length) return res.status(200).json({ ok: true, n: 0 });
