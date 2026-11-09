@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-02T11:32:55+09:00",
+ "generatedAt": "2026-11-09T11:41:24+09:00",
  "bots": [
   "GPTBot",
   "OAI-SearchBot",
@@ -95,20 +95,10 @@
    "host": "n.news.naver.com",
    "own": false,
    "area": "PR",
-   "blocked": [
-    "GPTBot",
-    "OAI-SearchBot",
-    "PerplexityBot",
-    "ClaudeBot",
-    "Claude-SearchBot",
-    "Google-Extended",
-    "CCBot",
-    "meta-externalagent",
-    "Applebot-Extended"
-   ],
+   "blocked": [],
    "partial": [],
-   "robots": true,
-   "status": 200
+   "robots": false,
+   "status": 0
   }
  ],
  "media": [
@@ -421,7 +411,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9251,
+   "chars": 9253,
    "canonical": "http://www.aqaralife.kr/newsroom",
    "updated": "2026-10-16"
   },
@@ -642,8 +632,8 @@
  "site": {
   "robots": true,
   "robotsSitemapHttp": true,
-  "llms": "nonstandard",
-  "llmsBody": "User-agent: * \r\nAllow: /  \r\nCommercial-use: allowed\r\nResearch-use: allowed",
+  "llms": "markdown",
+  "llmsBody": "# 아카라라이프 Aqaralife\n\n> 나다운 공간을 완성하는 스마트홈 인테리어, 아카라라이프입니다.\n\n## 주요 페이지\n\n- [홈](https://www.aqaralife.kr/)\n- [사이트맵](https://www.aqaralife.kr/sitemap.xml)\n",
   "sitemap": true,
   "sitemapUrls": 53,
   "sitemapHasPosts": false,
