@@ -58,6 +58,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .seg{display:inline-flex;background:#f1f2f4;border-radius:999px;padding:3px;gap:2px}
 .seg button{border:0;background:none;height:28px;padding:0 12px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--tx2);white-space:nowrap}
 .seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.qs{display:inline-flex;gap:2px;margin-right:6px;vertical-align:middle}.qs .lk{border:1px solid var(--line2,#ddd);border-radius:6px;padding:1px 6px;font-size:11.5px;background:#fff}.qs .lk.on{background:var(--ink,#111);color:#fff;border-color:var(--ink,#111)}
 .search:focus{border-color:var(--acc)}
 .tbl{width:100%;border-collapse:collapse}
 .tbl th{font-size:11.5px;color:var(--tx3);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;background:#fff}
@@ -154,7 +155,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
   <div class="panel">
     <div class="ph">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div><button class="btn" id="btnTabXlsx" title="지금 고른 탭(전체/동행인 있음/혼자 참석)과 위 카드 필터·검색 결과만 엑셀로">이 탭 엑셀 받기</button></div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option></select><button class="btn rw" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><button class="btn rw" id="btnDups" title="개별 신청한 사람이 다른 그룹의 동행인으로도 들어가 있는 경우 등 — 골라서 휴지통으로">중복 찾기</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option><option value="st">상태순(참석→불참→미응답)</option><option value="stNo">상태순(불참→참석→미응답)</option></select><button class="btn rw" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><button class="btn rw" id="btnDups" title="개별 신청한 사람이 다른 그룹의 동행인으로도 들어가 있는 경우 등 — 골라서 휴지통으로">중복 찾기</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
     </div>
     <div style="overflow:auto;max-height:72vh">
       <table class="tbl">
@@ -435,6 +436,7 @@ function sortFn(){
   if(k === 'reg') return (a, b) => (b.created || 0) - (a.created || 0) || nameCmp(a, b);
   if(k === 'regAsc') return (a, b) => (a.created || 0) - (b.created || 0) || nameCmp(a, b);
   if(k === 'name') return nameCmp;
+  if(k === 'st' || k === 'stNo'){ const o = k === 'st' ? { yes: 0, no: 1, pending: 2, rej: 3 } : { no: 0, yes: 1, pending: 2, rej: 3 }; return (a, b) => o[isRej(a) ? 'rej' : gst(a)] - o[isRej(b) ? 'rej' : gst(b)] || nameCmp(a, b); }
   return (a, b) => (b.updatedAt || 0) - (a.updatedAt || 0) || nameCmp(a, b);
 }
 
@@ -460,7 +462,7 @@ function paintRows(){
       <td><span class="nm">${esc(g.rep.name)}</span>${g.vip ? '<span class="tag t-vip">VIP</span>' : ''}${changed(g) ? '<span class="tag t-chg">변경</span>' : ''}<div class="org">${esc([g.rep.org, g.rep.title].filter(Boolean).join(' · '))}</div></td>
       <td class="num">${esc(fmtPhone(g.rep.phone))}<div class="org" style="font-family:inherit">${g.email ? esc(g.email) : '<span style="color:var(--tx3)">이메일 없음</span>'}</div></td>
       <td class="hide-m mut">${esc(g.route || '')}</td>
-      <td><span class="st ${st}">${stLabel(g)}</span>${g.flag ? ` <span class="st pending" title="${esc(g.memo || '')}">${esc(g.flag)}</span>` : ''}${isRej(g) ? `<div class="org" style="color:#b42318">${esc(g.rejected.why || '사유 없음')}${g.status === 'yes' || g.status === 'no' ? ` · 손님 응답: ${ST[g.status]}` : ''}</div>` : ''}${FILTER === 'no' ? (() => { const c = pcount(g); return (st !== 'no' && c.nn.length ? `<div class="org" style="color:var(--err)">불참 ${esc(c.nn.join(', '))}</div>` : '') + (c.xn.length ? `<div class="org" style="color:var(--err)">명단에서 뺌 ${esc(c.xn.join(', '))}</div>` : ''); })() : ''}${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
+      <td>${RO ? '' : `<div class="qs rw"><button class="lk${g.status === 'yes' ? ' on' : ''}" data-qs="yes" data-t="${g.t}" title="그룹 전체를 참석으로">참석</button><button class="lk${g.status === 'no' ? ' on' : ''}" data-qs="no" data-t="${g.t}" title="그룹 전체를 불참으로">불참</button></div>`}<span class="st ${st}">${stLabel(g)}</span>${g.flag ? ` <span class="st pending" title="${esc(g.memo || '')}">${esc(g.flag)}</span>` : ''}${isRej(g) ? `<div class="org" style="color:#b42318">${esc(g.rejected.why || '사유 없음')}${g.status === 'yes' || g.status === 'no' ? ` · 손님 응답: ${ST[g.status]}` : ''}</div>` : ''}${FILTER === 'no' ? (() => { const c = pcount(g); return (st !== 'no' && c.nn.length ? `<div class="org" style="color:var(--err)">불참 ${esc(c.nn.join(', '))}</div>` : '') + (c.xn.length ? `<div class="org" style="color:var(--err)">명단에서 뺌 ${esc(c.xn.join(', '))}</div>` : ''); })() : ''}${g.src && g.updatedBy !== 'guest' ? `<div class="org">${esc(g.src)}</div>` : ''}</td>
       <td class="num" style="white-space:nowrap;font-size:12px">${g.created ? fmtTime(g.created) : '<span style="color:var(--tx3)">—</span>'}<div class="org" style="font-family:inherit">${esc(regLabel(g))}</div></td>
       <td class="num" style="white-space:nowrap;font-size:12px">${isSent(g) ? `<b>${fmtTime(g.sent.at)}</b>${g.sent.n > 1 ? ` <span class="mut">(${g.sent.n}회)</span>` : ''}` : '<span style="color:var(--tx3)">안 보냄</span>'}${g.sendNote ? `<br><b style="color:var(--err)">${esc(g.sendNote)}</b> <button class="lk rw" data-clrnote="${g.t}" title="발송 메모 지우기">✕ 지우기</button>` : ''}</td>
       <td class="mut num" style="white-space:nowrap;font-size:12px">${isOpen(g) ? `<b style="color:var(--ink)">열람</b> ${fmtTime(g.open.last)}${g.open.n > 1 ? ` (${g.open.n}회)` : ''}` : '<span style="color:var(--tx3)">안 열어봄</span>'}</td>
@@ -471,8 +473,18 @@ function paintRows(){
     </tr>${OPEN === g.t ? editRow(g) : ''}`;
   }).join('');
   document.querySelectorAll('tr.g').forEach(tr => tr.onclick = (e) => {
-    if(RO || e.target.closest('[data-copy],[data-del],a')) return;   // 보기 전용은 펼쳐서 고치는 칸이 없다
+    if(RO || e.target.closest('[data-copy],[data-del],[data-qs],a')) return;   // 보기 전용은 펼쳐서 고치는 칸이 없다
     OPEN = OPEN === tr.dataset.t ? '' : tr.dataset.t; paintRows();
+  });
+  // 관리자 빠른 참석/불참(2026-11-09): 줄을 펼치지 않고 그룹 상태만 바로 바꾼다(메모·애매 표시는 그대로)
+  document.querySelectorAll('[data-qs]').forEach(b => b.onclick = async (e) => {
+    e.stopPropagation();
+    const t = b.dataset.t, g = G[t], s = b.dataset.qs; if(!g) return;
+    if(g.status === s) return toast(`이미 ${ST[s]}이에요`);
+    if(!confirm(`${g.rep.name}님 그룹${(g.comps || []).length ? '(동행 ' + g.comps.map(c => c.name).join(', ') + ')' : ''}을 '${ST[s]}'으로 바꿀까요?`)) return;
+    const j = await api({ op: 'bulk', items: [{ t, status: s, flag: g.flag || '' }] });
+    if(!j.ok) return toast(j.error || '저장 실패');
+    toast(`${g.rep.name}님 그룹을 ${ST[s]}으로 바꿨어요`); load();
   });
   document.querySelectorAll('[data-copy]').forEach(b => b.onclick = async () => { await navigator.clipboard.writeText(linkOf(b.dataset.copy)); toast('링크를 복사했어요'); });
   document.querySelectorAll('[data-del]').forEach(b => b.onclick = (e) => { e.stopPropagation(); delGroup(b.dataset.del); });
