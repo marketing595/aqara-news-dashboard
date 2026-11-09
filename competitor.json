@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-09 00:18",
+ "generatedAt": "2026-11-10 03:52",
  "brands": [
   {
    "name": "아카라",
@@ -125,11 +125,11 @@
     "아카라",
     "아카라 k100",
     "아카라 홈캠",
-    "아카라 스위치",
     "니케 아카라이브",
-    "아카라치",
-    "원신 아카라이브",
-    "아카라 l100"
+    "아카라 스위치",
+    "아카라 l100",
+    "아카라이브 핫딜",
+    "명조 아카라이브"
    ],
    "recent": [
     {
@@ -351,8 +351,8 @@
     "헤이홈 연결",
     "헤이홈 오프라인",
     "헤이홈 공유",
-    "헤이홈 홈캠 거치대",
-    "헤이홈 카메라"
+    "헤이홈 카메라",
+    "헤이홈 홈캠 거치대"
    ],
    "recent": [
     {
@@ -451,117 +451,117 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69638,
+   "total": 69665,
    "sentiment": {
-    "pos": 22,
-    "neu": 38,
+    "pos": 16,
+    "neu": 44,
     "neg": 0
    },
    "keywords": [
     [
      "현대차",
-     51
+     87
     ],
     [
      "제어하는",
-     40
+     59
     ],
     [
      "차량을",
-     34
-    ],
-    [
-     "플랫폼",
-     32
+     42
     ],
     [
      "홈투카",
-     28
+     42
+    ],
+    [
+     "플랫폼",
+     41
     ],
     [
      "차량",
-     25
+     35
     ],
     [
      "경영진",
-     23
+     34
     ],
     [
      "카투홈",
-     23
-    ],
-    [
-     "에어컨",
-     22
-    ],
-    [
-     "인포테인먼트",
-     21
+     33
     ],
     [
      "삼성전자의",
-     20
+     33
     ],
     [
      "기아",
-     18
-    ],
-    [
-     "교류",
-     17
+     29
     ],
     [
      "원격",
-     16
+     24
     ],
     [
-     "AS",
+     "인포테인먼트",
+     24
+    ],
+    [
+     "서비스를",
+     23
+    ],
+    [
+     "교류",
+     21
+    ],
+    [
+     "가전을",
+     19
+    ],
+    [
+     "서비스도",
+     17
+    ],
+    [
+     "차량에서",
      16
     ],
     [
      "이어",
-     15
-    ],
-    [
-     "서비스를",
-     15
-    ],
-    [
-     "삼성전자서비스",
-     15
+     16
     ]
    ],
    "posWords": [
     [
-     "1위",
-     13
-    ],
-    [
      "확대",
-     8
+     7
     ],
     [
      "강화",
-     5
-    ],
-    [
-     "혁신",
-     2
+     6
     ],
     [
      "계약",
+     3
+    ],
+    [
+     "선도",
      1
     ],
     [
-     "공략",
+     "협업",
      1
     ],
     [
-     "글로벌",
+     "기대",
      1
     ],
     [
-     "수상",
+     "주목",
+     1
+    ],
+    [
+     "첨단",
      1
     ]
    ],
@@ -572,101 +572,101 @@
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 스위치",
+    "삼성 스마트싱스 연결",
+    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 허브 5세대",
-    "삼성 스마트싱스 냉장고",
-    "삼성 스마트싱스 세탁기 원격",
-    "삼성 스마트싱스 업데이트"
+    "삼성 스마트싱스 냉장고"
    ],
    "recent": [
     {
-     "title": "삼성·현대차 경영진 177명 한자리에…미래차 협력 어디까지 확대되나",
-     "source": "jnilbo.com",
-     "date": "2026-11-09",
-     "link": "https://www.jnilbo.com/news/articleView.html?idxno=90000080690"
-    },
-    {
-     "title": "한때 경쟁자서 팀으로…삼성, 현대차 경영진 초청 ‘첫 교류’",
-     "source": "joongang.co.kr",
-     "date": "2026-11-09",
-     "link": "https://n.news.naver.com/mnews/article/025/0003563689?sid=101"
-    },
-    {
-     "title": "이재용·정의선, 첫 부부동반 회동 성사될까… 삼성전자, 현대차그룹 경...",
-     "source": "greened.kr",
-     "date": "2026-11-08",
-     "link": "https://www.greened.kr/news/articleView.html?idxno=354115"
-    },
-    {
-     "title": "삼성·현대차, 170명 규모 첫 교류 행사…경영진·배우자 초청 협력",
-     "source": "biztribune.co.kr",
-     "date": "2026-11-08",
-     "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=362115"
-    },
-    {
-     "title": "삼성·현대차, 사장단 부부동반 '감사데이' 개최…전장·로봇 협력 확대",
-     "source": "ebn.co.kr",
-     "date": "2026-11-08",
-     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1730839"
-    },
-    {
-     "title": "삼성전자·현대차그룹 첫 부부동반 모임…차량 반도체·반도체·파운드...",
-     "source": "seoul.co.kr",
-     "date": "2026-11-08",
-     "link": "https://n.news.naver.com/mnews/article/081/0003696918?sid=101"
-    },
-    {
-     "title": "삼성·현대차, '총수 동맹' 넘어 '경영진 동맹'으로…미래차 원팀 시동",
-     "source": "ajunews.com",
-     "date": "2026-11-08",
-     "link": "https://www.ajunews.com/view/20261108140833518"
-    },
-    {
-     "title": "삼성-현대차그룹 '미래기술 동맹' 강화",
+     "title": "[사설] 삼성·현대차 \"로봇·미래차 원팀 구성\"…시장 선도할 협업 기대",
      "source": "한국경제",
-     "date": "2026-11-08",
-     "link": "https://n.news.naver.com/mnews/article/015/0005351535?sid=101"
+     "date": "2026-11-10",
+     "link": "https://n.news.naver.com/mnews/article/015/0005352058?sid=110"
     },
     {
-     "title": "삼성·현대차 경영진 170명 한자리에…첫 그룹 간 교류 행사",
+     "title": "경쟁자에서 팀으로…삼성, 현대차 경영진 초청 '첫 교류'",
+     "source": "mbnmoney.mbn.co.kr",
+     "date": "2026-11-09",
+     "link": "http://mbnmoney.mbn.co.kr/news/view?news_no=MM1005958640"
+    },
+    {
+     "title": "삼성·현대차 경영진 한자리에… 더 견고해진 '미래기술 동맹'",
+     "source": "asiatoday.co.kr",
+     "date": "2026-11-09",
+     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20261110010003465"
+    },
+    {
+     "title": "삼성전자·현대차 경영진 부부 170명 한자리...피지컬 AI 겨냥 '원팀' 구...",
+     "source": "job-post.co.kr",
+     "date": "2026-11-09",
+     "link": "https://www.job-post.co.kr/news/articleView.html?idxno=237389"
+    },
+    {
+     "title": "공동 TF 꾸린 삼성·현대차…'초협력'으로 中·빅테크 공습 넘는다",
+     "source": "한국경제",
+     "date": "2026-11-09",
+     "link": "https://n.news.naver.com/mnews/article/015/0005351937?sid=101"
+    },
+    {
+     "title": "[비즈 인사이트] 삼성·현대차, 자동차 부품 넘어 로봇·피지컬AI로…협...",
+     "source": "moneystorm.kr",
+     "date": "2026-11-09",
+     "link": "https://www.moneystorm.kr/news/articleView.html?idxno=8232"
+    },
+    {
+     "title": "삼성-현대차그룹, 로봇·에너지 전략적 파트너로… 첨단 산업 '원팀'",
+     "source": "g-enews.com",
+     "date": "2026-11-09",
+     "link": "https://www.g-enews.com/view.php?ud=20261109134826646627fa31d75c_1"
+    },
+    {
+     "title": "재계 1·2위 이재용-정의선, 반도체·배터리 넘어 피지컬 AI도 '맞손'",
+     "source": "insightkorea.co.kr",
+     "date": "2026-11-09",
+     "link": "https://www.insightkorea.co.kr/news/articleView.html?idxno=258464"
+    },
+    {
+     "title": "삼성·현대차, 경영진 177명 첫 대규모 교류…로봇·에너지 협력 모색",
+     "source": "todayeconomic.com",
+     "date": "2026-11-09",
+     "link": "https://www.todayeconomic.com/news/article.html?no=32772"
+    },
+    {
+     "title": "삼성·현대차, 부품 넘어 집·로봇·공장까지…두 그룹이 손잡은 이유",
+     "source": "joseilbo.com",
+     "date": "2026-11-09",
+     "link": "https://n.news.naver.com/mnews/article/123/0002393660?sid=101"
+    },
+    {
+     "title": "삼성·현대차, 첫 그룹 교류 행사…3代 인연 '원팀'으로 잇는다",
      "source": "newsway.co.kr",
-     "date": "2026-11-08",
-     "link": "https://www.newsway.co.kr/news/view?ud=2026110816564899810"
+     "date": "2026-11-09",
+     "link": "https://www.newsway.co.kr/news/view?ud=2026110915453476129"
     },
     {
-     "title": "“현대차, 고마워!” 삼전, 첫 교류행사",
-     "source": "busan.com",
-     "date": "2026-11-08",
-     "link": "https://n.news.naver.com/mnews/article/082/0001406136?sid=101"
+     "title": "이재용·정의선 '원팀' 강화… 삼성·현대차 '미래산업 협력' 본격화",
+     "source": "newscj.com",
+     "date": "2026-11-09",
+     "link": "https://www.newscj.com/news/articleView.html?idxno=3447179"
     },
     {
-     "title": "배터리부터 스마트홈까지…삼성·현대차 ‘기술 동맹’ 확대",
-     "source": "etoday.co.kr",
-     "date": "2026-11-08",
-     "link": "https://www.etoday.co.kr/news/view/2645431"
+     "title": "삼성, 현대차그룹 경영진 177명 한자리…그룹 간 첫 대규모 교류 행사",
+     "source": "cstimes.com",
+     "date": "2026-11-09",
+     "link": "https://www.cstimes.com/news/articleView.html?idxno=727174"
     },
     {
-     "title": "삼성, 현대차에 특별한 '러브콜'…170명 초청한 까닭",
-     "source": "bloter.net",
-     "date": "2026-11-08",
-     "link": "https://n.news.naver.com/mnews/article/293/0000092900?sid=101"
+     "title": "삼성·현대차그룹, 미래 산업 협력 강화…'원팀'으로 동행",
+     "source": "econonews.co.kr",
+     "date": "2026-11-09",
+     "link": "http://www.econonews.co.kr/news/articleView.html?idxno=446920"
     },
     {
-     "title": "이재용·정의선 한자리…삼성·현대차 첫 그룹 교류 행사",
-     "source": "kado.net",
-     "date": "2026-11-08",
-     "link": "https://n.news.naver.com/mnews/article/654/0000209972?sid=101"
-    },
-    {
-     "title": "삼성전자·현대차그룹 첫 경영진 교류 행사…부부 동반 170명 참석",
-     "source": "biz.chosun.com",
-     "date": "2026-11-08",
-     "link": "https://n.news.naver.com/mnews/article/366/0001203314?sid=105"
-    },
-    {
-     "title": "'경쟁에서 미래동맹으로'⋯삼성, 현대차 경영진 '부부 동반' 용인 초청",
-     "source": "autodaily.co.kr",
-     "date": "2026-11-08",
-     "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=601892"
+     "title": "집 500m 앞 가전이 켜진다…삼성·현대차 협력, 부품 넘어 일상으로",
+     "source": "아이뉴스24",
+     "date": "2026-11-09",
+     "link": "https://n.news.naver.com/mnews/article/031/0001073450?sid=101"
     }
    ]
   },
@@ -792,13 +792,13 @@
     "lg 씽큐",
     "lg 씽큐온",
     "lg 씽큐 티비연결",
-    "lg 씽큐 냉장고",
     "lg 씽큐 세탁기",
+    "lg 씽큐 냉장고",
+    "lg 씽큐 초기화",
     "lg 씽큐 연결",
     "lg 씽큐 허브",
-    "lg 씽큐 에어컨 연결",
     "lg 씽큐 와이파이",
-    "lg 씽큐 온도"
+    "lg 씽큐 에어컨 연결"
    ],
    "recent": [
     {
@@ -897,94 +897,94 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76412,
+   "total": 76427,
    "sentiment": {
-    "pos": 11,
-    "neu": 33,
-    "neg": 16
+    "pos": 8,
+    "neu": 34,
+    "neg": 18
    },
    "keywords": [
     [
      "AI",
-     37
+     28
+    ],
+    [
+     "매장",
+     23
+    ],
+    [
+     "마이",
+     15
+    ],
+    [
+     "시크",
+     15
     ],
     [
      "번역한",
-     14
+     15
     ],
     [
      "기사의",
-     14
+     15
     ],
     [
      "전문",
-     14
+     15
     ],
     [
      "아래는",
-     13
+     14
     ],
     [
      "기사를",
-     13
+     14
     ],
     [
      "번역",
-     12
+     13
     ],
     [
      "으로",
-     12
+     13
     ],
     [
      "입니다",
-     12
+     13
     ],
     [
      "naver",
-     11
+     12
     ],
     [
      "com",
+     12
+    ],
+    [
+     "break9874",
      11
     ],
     [
      "번역에",
-     10
+     11
     ],
     [
      "오류가",
+     11
+    ],
+    [
+     "게임",
      10
-    ],
-    [
-     "break9874",
-     10
-    ],
-    [
-     "구글번역",
-     9
-    ],
-    [
-     "이해도",
-     8
-    ],
-    [
-     "높이기를",
-     8
-    ],
-    [
-     "노력하고",
-     8
     ]
    ],
    "posWords": [
     [
      "개선",
-     5
+     4
     ],
     [
      "글로벌",
-     5
+     4
     ],
     [
      "돌파",
@@ -995,20 +995,20 @@
      3
     ],
     [
-     "혁신",
-     2
-    ],
-    [
-     "수상",
-     2
-    ],
-    [
-     "파트너십",
-     2
-    ],
-    [
      "계약",
      2
+    ],
+    [
+     "흥행",
+     2
+    ],
+    [
+     "투자",
+     1
+    ],
+    [
+     "인기",
+     1
     ]
    ],
    "related": [
@@ -1025,94 +1025,94 @@
    ],
    "recent": [
     {
-     "title": "구글북, 분리형 태블릿 확장 예고했지만 홈 화면·앱 트레이는 가로 모...",
-     "source": "wikitree.co.kr",
-     "date": "2026-11-08",
-     "link": "https://www.wikitree.co.kr/articles/1172901"
+     "title": "폐업 위기의 백화점을 살려라…'마이 시크 몰', 양대 앱마켓 정식 출시",
+     "source": "xportsnews.com",
+     "date": "2026-11-09",
+     "link": "https://m.sports.naver.com/esports/article/311/0002078815"
     },
     {
-     "title": "메타, 말로 설명하면 AI가 업무 공간 만든다…'맞춤형 AI 에이전트' 경쟁...",
-     "source": "metroseoul.co.kr",
-     "date": "2026-11-08",
-     "link": "http://www.metroseoul.co.kr/article/20261108500056"
+     "title": "[투자를IT다] 2026년 11월 1주차 IT기업 주요 소식과 시장 전망",
+     "source": "it.donga.com",
+     "date": "2026-11-09",
+     "link": "https://it.donga.com/109879/"
     },
     {
-     "title": "[특파원시선] 샌프란의 안개주의보, 그리고 AI주의보",
-     "source": "연합뉴스",
-     "date": "2026-11-08",
-     "link": "https://n.news.naver.com/mnews/article/001/0016428495?sid=104"
+     "title": "폐업 위기 백화점 살리는 경영 시뮬레이션, '마이 시크 몰' 출시",
+     "source": "thisisgame.com",
+     "date": "2026-11-09",
+     "link": "https://m.sports.naver.com/esports/article/439/0000034292"
     },
     {
-     "title": "메타, 말하면 나만의 AI 비서 만들어준다…‘뮤즈 스페이스’ 공개",
-     "source": "이데일리",
-     "date": "2026-11-08",
-     "link": "https://n.news.naver.com/mnews/article/018/0006405951?sid=105"
+     "title": "백화점 사장이 된다. 캐주얼 경영 시뮬레이션 게임 '마이 시크 몰' 출시",
+     "source": "game.donga.com",
+     "date": "2026-11-09",
+     "link": "https://game.donga.com/125024/"
     },
     {
-     "title": "젠틀몬스터, 삼성·구글 AI 안경 11월 12일 예약 판매…12월 출시",
-     "source": "이데일리",
-     "date": "2026-11-08",
-     "link": "https://n.news.naver.com/mnews/article/018/0006405950?sid=105"
+     "title": "루미노라 인터랙티브, '마이 시크 몰' 서비스 실시",
+     "source": "cstimes.com",
+     "date": "2026-11-09",
+     "link": "https://www.cstimes.com/news/articleView.html?idxno=727179"
     },
     {
-     "title": "메타, AI로 맞춤형 앱 만드는 '뮤즈 스페이스' 출시",
-     "source": "aitimes.com",
-     "date": "2026-11-07",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=217128"
+     "title": "암보험비교사이트 플랜비보험, 안드로이드 앱 1.3.8 업데이트…디자인 ...",
+     "source": "mediafine.co.kr",
+     "date": "2026-11-09",
+     "link": "https://www.mediafine.co.kr/news/articleView.html?idxno=94864"
     },
     {
-     "title": "대전하나시티즌, 가시와전 패배 딛고 인천전 승리 정조준",
+     "title": "차통령, 11월 12일 앱 업데이트로 실시간 보험조회 도입…만기 알림·조...",
+     "source": "mediafine.co.kr",
+     "date": "2026-11-09",
+     "link": "https://www.mediafine.co.kr/news/articleView.html?idxno=94862"
+    },
+    {
+     "title": "루미노라 인터랙티브, 캐주얼 백화점 경영 시뮬레이션 ‘마이 시크 몰’...",
+     "source": "gamechosun.co.kr",
+     "date": "2026-11-09",
+     "link": "https://www.gamechosun.co.kr/webzine/article/view.php?no=227375"
+    },
+    {
+     "title": "[디지털 문단속] #8. 안방 대화가 서버로?... AI 스피커 음성 통제 가이...",
+     "source": "boannews.com",
+     "date": "2026-11-09",
+     "link": "https://www.boannews.com/news/articleView.html?idxno=147113"
+    },
+    {
+     "title": "모바일 경영시뮬레이션 게임 '마이 시크 몰' 출시",
+     "source": "fomos.kr",
+     "date": "2026-11-09",
+     "link": "https://m.sports.naver.com/esports/article/236/0000257928"
+    },
+    {
+     "title": "한샘, 23일까지 블랙프라이데이 '쌤위크'…소파·식탁 최대 50% 할인",
      "source": "breaknews.com",
-     "date": "2026-11-07",
-     "link": "http://www.breaknews.com/1249125"
+     "date": "2026-11-09",
+     "link": "http://www.breaknews.com/1249306"
     },
     {
-     "title": "[단독] 美 독점 피소 애플의 '물타기'…삼성 90만건 털고도 \"수원 본사 ...",
-     "source": "the-today.com",
-     "date": "2026-11-07",
-     "link": "https://www.the-today.com/news/articleView.html?idxno=93216"
+     "title": "이케아 대전점, 19일 문 연다..올해 세 번째 도심형 매장",
+     "source": "breaknews.com",
+     "date": "2026-11-09",
+     "link": "http://www.breaknews.com/1249294"
     },
     {
-     "title": "아이폰 듀오 최적화 앱 출시 2주 만에 10만 개 돌파…페이팔·스타벅스...",
-     "source": "wikitree.co.kr",
-     "date": "2026-11-07",
-     "link": "https://www.wikitree.co.kr/articles/1172598"
+     "title": "루미노라 인터랙티브, 백화점 경영 게임 '마이 시크 몰' 출시",
+     "source": "worktoday.co.kr",
+     "date": "2026-11-09",
+     "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=91700"
     },
     {
-     "title": "5가지 감지 기능 갖춘 무선 재실센서... 티피링크 타포 T150 [연중기획-I...",
-     "source": "ilovepc.co.kr",
-     "date": "2026-11-06",
-     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=61238"
+     "title": "아워홈, 안전불감증에 불법파견 무더기 적발..‘사회적 책임’ 증발 일...",
+     "source": "breaknews.com",
+     "date": "2026-11-09",
+     "link": "http://www.breaknews.com/1249291"
     },
     {
-     "title": "뷰소닉, 4K 홈시네마 빔프로젝터 ‘X100-4K+' 구매 시 윤씨네 스크린 증...",
-     "source": "betanews.net",
-     "date": "2026-11-06",
-     "link": "https://www.betanews.net/article/view/beta202611060115"
-    },
-    {
-     "title": "손가락 위에 AI 비서 띄웠다…화면·조이스틱까지 넣은 스마트 링 등장",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-11-06",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=713306"
-    },
-    {
-     "title": "아이폰 듀오 리뷰 : 329만원짜리 폴더블 아이폰 듀오 “펼치면 최고 접...",
-     "source": "itworld.co.kr",
-     "date": "2026-11-06",
-     "link": "https://www.itworld.co.kr/article/4244946/아이폰-듀오-리뷰-329만원짜리-폴더블-아이폰-듀오-펼.html"
-    },
-    {
-     "title": "게임·정부 홈피서 다운받은 앱도 ‘해킹 통로’",
-     "source": "chosun.com",
-     "date": "2026-11-06",
-     "link": "https://n.news.naver.com/mnews/article/023/0004008043?sid=105"
-    },
-    {
-     "title": "바이라인 옆에 기자상 배지가? \"우리 사이트는 좀 다르다구~\"",
-     "source": "journalist.or.kr",
-     "date": "2026-11-05",
-     "link": "https://n.news.naver.com/mnews/article/127/0000040016?sid=102"
+     "title": "엔비디아 사법 리스크부터 빅테크 '인프라 내재화'까지… 미 증시 주요...",
+     "source": "wowtv.co.kr",
+     "date": "2026-11-09",
+     "link": "https://n.news.naver.com/mnews/article/215/0001272081?sid=101"
     }
    ]
   }
