@@ -1193,7 +1193,10 @@ $('#btnTabXlsx').onclick = () => {
 };
 $('#btnTabXlsxP').onclick = () => {
   const L = filtered(); if(!L.length) return toast('이 탭에 받을 대상이 없어요');
-  const ppl = personRows(L), wb = XLSX.utils.book_new();
+  // 카드 필터(참석/불참/미응답)는 '그 상태인 사람이 있는 그룹'을 고르므로, 사람별 파일엔 그 상태인 사람만 남긴다(2026-11-10: 파일이 화면보다 많다는 지적)
+  const keep = ({ yes: (r) => r.상태 === '참석', no: (r) => r.상태 === '불참', pending: (r) => r.상태 === '미응답' })[FILTER];
+  const ppl = personRows(L).filter(keep || (() => true)), wb = XLSX.utils.book_new();
+  if(!ppl.length) return toast('이 탭에 받을 사람이 없어요');
   XLSX.utils.book_append_sheet(wb, textCol(fitCols(XLSX.utils.json_to_sheet(ppl), ppl), /연락처$/), '사람별');
   XLSX.writeFile(wb, `RSVP_세미나_${tabName()}_사람별_${ppl.length}명_${stamp()}.xlsx`);
 };
