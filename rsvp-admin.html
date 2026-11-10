@@ -34,7 +34,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .btn:disabled{opacity:.5;cursor:default}
 .tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 
-.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) minmax(0,1.5fr);gap:10px;margin-top:16px}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) minmax(0,2fr);gap:10px;margin-top:16px}
 /* 문자/메일 큰 박스(노란색) — 안에 발송 완료·발송 예정 작은 박스(누르면 목록 필터) */
 .kpi.msg{background:#fff8d6;border-color:#f2d36b;cursor:default}
 .kpi.msg:hover{border-color:#f2d36b}
@@ -42,6 +42,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .kpi.msg .subs{gap:8px;margin-top:10px}
 .kpi.msg .sbb{flex:1;min-width:0;background:#fff;border:1px solid #f2d36b;border-radius:10px;padding:8px 10px;text-align:left;cursor:pointer;font:inherit}
 .kpi.msg .sbb:hover{border-color:#d9a900}
+.kpi.msg .sbb.un b{color:#b45309}
 .kpi.msg .sbb.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc-soft)}
 .kpi.msg .sbb span{font-size:11.5px;color:var(--tx2);font-weight:600}
 .kpi.msg .sbb b{display:block;font-size:22px;font-weight:800;color:var(--ink);line-height:1.2;font-variant-numeric:tabular-nums}
@@ -260,7 +261,27 @@ const isNew = (g) => (g.created || 0) > NEW_SINCE;
 const isOpen = (g) => !!(g.open && g.open.first);
 // 문자/메일(행사 안내) 발송 — RSVP 초대 문자 기록(g.sent, s/)과 따로 g.msg(m/). 2026-11-10 사용자: "아직 아무도 발송 아님, 다 발송 예정, 명수로"
 const isMsg = (g) => !!(g && g.msg && g.msg.at);
-const toSend = (g) => !isMsg(g) && !(g && g.rejected);   // 발송 예정 = 아직 안 보낸 사람 전부(참석 거절 그룹만 제외)
+// 사람별(2026-11-10): 발송 명단 엑셀 반영 → g.msg.pp{자리: 'd' 완료 | 'u' 미발송}. 자리 'rep' = 본인(대리).
+//  g.msg.all = 예전 그룹 단위 표시 → 그 그룹에서 응답한(참석·불참) 사람은 완료. 나머지는 발송 예정.
+// 그룹 사람 목록 — pcount·personRows와 같은 기준: { s: 자리, st: y|n|x|p }
+function people(g){
+  const ans = answered(g), cans = g.cans || {}, comps = g.comps || [], out = [];
+  out.push({ s: 'rep', st: !ans ? 'p' : (g.status === 'yes' ? 'y' : 'n') });
+  comps.forEach(c => { const s = slotOf(c), a = cans[s]; out.push({ s, st: a ? (a.v === 'no' ? 'n' : 'y') : (ans ? 'y' : 'p') }); });
+  const now = new Set(comps.flatMap(c => [c.name, c.from].filter(Boolean)));
+  String((g.orig && g.orig.comps) || '').split(', ').map(x => x.trim()).filter(n => n && !now.has(n)).forEach(n => out.push({ s: n, st: cans[n] && cans[n].v === 'no' ? 'n' : 'x' }));
+  return out;
+}
+// 한 사람의 문자/메일 상태: 'd' 발송 완료 / 'u' 미발송 / 'p' 발송 예정 / '' 참석 거절(안 셈)
+function msgSt(g, s, st){
+  if(isRej(g)) return '';
+  const m = g.msg || {}, v = m.pp && m.pp[s];
+  if(v === 'd' || v === 'u') return v;
+  if(m.at && m.all && st !== 'p') return 'd';
+  return 'p';
+}
+const msgCnt = (g) => { const r = { d: 0, u: 0, p: 0 }; people(g).forEach(x => { const v = msgSt(g, x.s, x.st); if(v) r[v]++; }); return r; };
+const MSGL = { d: '발송 완료', u: '미발송', p: '발송 예정' };
 const sentPend = (g) => isSent(g) && gst(g) === 'pending' && !(g && g.rejected);   // 보냈는데 아직 응답 없음 → 재발송·전화 대상
 
 // 사람 단위 상태(2026-11-05: 총 대상 − 참석 ≠ 미응답 지적) — 명단 인원(rosterN) 전원을 참석/불참/미응답 중 정확히 하나로 센다.
@@ -300,8 +321,7 @@ function stats(){
     const c = pcount(g); s.P.all += c.all; s.P.y += c.y; s.P.n += c.n; s.P.p += c.p; s.P.x += c.x; s.P.yr += c.yr; s.P.cy += c.cy; s.P.nr += c.nr || 0; s.P.rj += c.rj || 0;
     s.P.roster += rosterN(g);
     // 명 단위: 발송 완료 그룹은 응답한 사람(참석·불참)만 완료, 그 그룹의 미응답은 아직 예정(2026-11-10 "미응답 제외")
-    if(isMsg(g) && !isRej(g)){ s.P.msgDone = (s.P.msgDone || 0) + c.y + c.n + c.x; s.P.msgTodo = (s.P.msgTodo || 0) + c.p; }
-    else if(toSend(g)) s.P.msgTodo = (s.P.msgTodo || 0) + c.all;
+    { const m = msgCnt(g); s.P.msgDone = (s.P.msgDone || 0) + m.d; s.P.msgUn = (s.P.msgUn || 0) + m.u; s.P.msgTodo = (s.P.msgTodo || 0) + m.p; }
     if(c.x) s.xG = (s.xG || 0) + 1;
   });
   return s;
@@ -326,8 +346,9 @@ function paint(){
     // 문자/메일 큰 박스(2026-11-10, 노란색): 행사 안내 발송 — RSVP 초대 문자 기록과 별개. 명 단위. 줄 펼쳐 [문자/메일 발송 완료로 표시]
     `<div class="kpi msg"><div class="l">문자/메일</div><div class="subs">` +
       `<button class="sbb ${FILTER === 'sent' ? 'on' : ''}" data-f="sent"><span>발송 완료</span><b>${P.msgDone || 0}<small>명</small></b><i>보낸 사람</i></button>` +
-      `<button class="sbb ${FILTER === 'tosend' ? 'on' : ''}" data-f="tosend"><span>발송 예정</span><b>${P.msgTodo || 0}<small>명</small></b><i>아직 안 보냄${P.rj ? ` · 참석 거절 ${P.rj}명 제외` : ''}</i></button>` +
-    `</div><div class="d"><button class="lk rw" id="btnMsgAns" title="지금 참석·불참으로 응답한 사람이 있는 그룹을 모두 '발송 완료'로 — 미응답인 사람은 발송 예정에 남아요">응답자(참석·불참) 발송 완료 처리</button> · 줄을 펼쳐 개별 표시</div></div>`;
+      `<button class="sbb un ${FILTER === 'unsent' ? 'on' : ''}" data-f="unsent"><span>미발송</span><b>${P.msgUn || 0}<small>명</small></b><i>응답했지만 연락처 없음·중복</i></button>` +
+      `<button class="sbb ${FILTER === 'tosend' ? 'on' : ''}" data-f="tosend"><span>발송 예정</span><b>${P.msgTodo || 0}<small>명</small></b><i>미응답·새 응답${P.rj ? ` · 참석 거절 ${P.rj}명 제외` : ''}</i></button>` +
+    `</div><div class="d"><button class="lk rw" id="btnMsgAns" title="보낸 명단(사람별 엑셀, 여러 개 한 번에)을 올리면: 참석·불참 중 번호나 이메일이 있고 겹치지 않는 사람 = 발송 완료, 둘 다 없거나 다른 사람과 겹치는 사람 = 미발송">발송 명단 엑셀 반영</button><input type="file" id="fMsg" accept=".xlsx,.xls" multiple hidden></div></div>`;
   // 검산 줄: 칸 합계와 예전 방식 숫자가 왜 다른지 바로 보이게
   const SUM = P.y + NO + P.p + P.rj;
   const chk = [`검산: 참석 ${P.y} + 불참 ${NO} + 미응답 ${P.p}` + (P.rj ? ` + 참석 거절 ${P.rj}` : '') + ` = ${SUM}명` + (SUM === P.all ? ' ✓' : ` ≠ 총 ${P.all} ⚠`)];
@@ -338,14 +359,48 @@ function paint(){
       <i style="width:${pct(P.y)}%;background:var(--yes)"></i><i style="width:${pct(NO)}%;background:#9ca3af"></i><i style="width:${pct(P.p)}%;background:#f3c26b"></i><i style="width:${pct(P.rj)}%;background:#e8a0a0"></i></div></div>`);
   document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = FILTER === b.dataset.f ? 'all' : b.dataset.f; OPEN = ''; paint(); });
   // 응답자 발송 완료 처리(2026-11-10): 참석·불참 응답한 사람이 있는 그룹(거절 제외, 아직 표시 안 된 것) → op msent
-  if($('#btnMsgAns')) $('#btnMsgAns').onclick = async (e) => {
-    e.stopPropagation();
-    const T = list().filter(g => !isRej(g) && !isMsg(g) && (() => { const c = pcount(g); return c.y + c.n + c.x > 0; })());
-    if(!T.length) return toast('새로 표시할 응답자 그룹이 없어요');
-    const n = T.reduce((a, g) => { const c = pcount(g); return a + c.y + c.n + c.x; }, 0);
-    if(!confirm(`참석·불참으로 응답한 ${n}명(${T.length}그룹)을 '문자/메일 발송 완료'로 표시할까요?\n미응답인 사람은 발송 예정에 남아요.`)) return;
-    const j = await api({ op: 'msent', ts: T.map(g => g.t) }); if(!j.ok) return toast(j.error || '실패');
-    toast(`발송 완료 ${n}명(${j.n}그룹) 표시했어요`); load();
+  // 발송 명단 엑셀 반영(2026-11-10 사용자): 사람별 엑셀(참석·불참 파일 여러 개 한 번에)의 참석·불참 줄 →
+  //  번호·이메일이 둘 다 없거나, 번호나 이메일이 다른 줄과 겹치면 = 미발송 / 그 밖 = 발송 완료. 미응답 줄은 건드리지 않음(발송 예정).
+  //  사람 찾기: 링크 열(…/c/<코드> = 동행인 자리, …/<앞6자> 또는 /r/<토큰> = 그룹) + 구분(본인·대리 = rep, 동행인 = 이름)
+  if($('#btnMsgAns')) $('#btnMsgAns').onclick = (e) => { e.stopPropagation(); $('#fMsg').value = ''; $('#fMsg').click(); };
+  if($('#fMsg')) $('#fMsg').onclick = (e) => e.stopPropagation();
+  if($('#fMsg')) $('#fMsg').onchange = async (e) => {
+    const files = [...e.target.files]; if(!files.length) return;
+    const rows = [];
+    for(const f of files){ const wb = XLSX.read(await f.arrayBuffer(), { type: 'array' });
+      const ws = wb.Sheets['사람별'] || wb.Sheets[wb.SheetNames[0]];
+      XLSX.utils.sheet_to_json(ws, { defval: '' }).forEach(r => rows.push(r)); }
+    const R = rows.filter(r => r.상태 === '참석' || r.상태 === '불참');
+    if(!R.length) return toast('참석·불참 줄이 없어요 — 사람별 엑셀인지 확인해 주세요');
+    const ph = (r) => { const d = telDigits(r.연락처); return d.length >= 9 ? d : ''; }, em = (r) => /@/.test(String(r.이메일)) ? String(r.이메일).trim().toLowerCase() : '';
+    const cnt = {}; R.forEach(r => { [ph(r) && 'p' + ph(r), em(r) && 'e' + em(r)].filter(Boolean).forEach(k => cnt[k] = (cnt[k] || 0) + 1); });
+    const byC = {}; Object.keys(G).forEach(t => Object.entries(G[t].clinks || {}).forEach(([s, c]) => byC[c] = { t, s }));
+    const by6 = {}; Object.keys(G).forEach(t => { const k = t.slice(0, 6); by6[k] = by6[k] ? '-' : t; });
+    const items = {}, miss = [], noC = [], dup = []; let nd = 0;
+    R.forEach(r => {
+      const L = String(r.링크 || '').trim(); let t = '', s = '';
+      let m = L.match(/\/c\/([A-Za-z0-9_-]{7})\b/);
+      if(m && byC[m[1]]){ t = byC[m[1]].t; s = byC[m[1]].s; }
+      else if((m = L.match(/\/r\/([A-Za-z0-9_-]+)/)) && G[m[1]]) t = m[1];
+      else if((m = L.match(/hakdongmap\.kr\/([A-Za-z0-9_-]{6})$/)) && by6[m[1]] && by6[m[1]] !== '-') t = by6[m[1]];
+      if(t && !s){ const g = G[t], nm = String(r.성함).trim();
+        if(/본인|대리/.test(r.구분)) s = 'rep';
+        else { const c = (g.comps || []).find(c => c.name === nm || slotOf(c) === nm); s = c ? slotOf(c) : (people(g).some(x => x.s === nm) ? nm : ''); } }
+      if(!t || !s){ miss.push(`${r.성함}(${r.소속 || ''})`); return; }
+      const p = ph(r), q = em(r); let v = 'd';
+      if(!p && !q){ v = 'u'; noC.push(r.성함); }
+      else if((p && cnt['p' + p] > 1) || (q && cnt['e' + q] > 1)){ v = 'u'; dup.push(`${r.성함}(${p && cnt['p' + p] > 1 ? '번호' : '이메일'} 겹침)`); }
+      else nd++;
+      (items[t] = items[t] || {})[s] = v;
+    });
+    const n = Object.values(items).reduce((a, o) => a + Object.keys(o).length, 0);
+    if(!n) return toast('명단에서 찾은 사람이 없어요');
+    const more = (a) => a.slice(0, 12).join(', ') + (a.length > 12 ? ` 외 ${a.length - 12}명` : '');
+    if(!confirm(`발송 명단 ${R.length}명(참석·불참)\n\n· 발송 완료 ${nd}명\n· 미발송 ${noC.length + dup.length}명\n   - 번호·이메일 둘 다 없음 ${noC.length}명\n   - 번호·이메일 겹침 ${dup.length}명: ${more(dup)}` +
+      (miss.length ? `\n· 포털에서 못 찾음 ${miss.length}명(반영 안 함): ${more(miss)}` : '') + `\n\n이대로 표시할까요? 미응답·이후 새 응답자는 발송 예정에 남아요.`)) return;
+    const list2 = Object.keys(items).map(t => ({ t, p: items[t] }));
+    for(let i = 0; i < list2.length; i += 200){ const j = await api({ op: 'msentp', items: list2.slice(i, i + 200) }); if(!j.ok) return toast(j.error || '실패'); }
+    toast(`발송 완료 ${nd}명 · 미발송 ${noC.length + dup.length}명 표시했어요`); load();
   };
   $('#btnClose').textContent = META.closed ? '응답 다시 열기' : '응답 마감';
   $('#btnClose').classList.toggle('danger', !META.closed);
@@ -456,8 +511,9 @@ function filtered(ignoreComp){
     if(FILTER === 'rej' && !isRej(g)) return false;
     if(FILTER === 'chg' && !changed(g)) return false;
     if(FILTER === 'sentpend' && !sentPend(g)) return false;
-    if(FILTER === 'sent' && !isMsg(g)) return false;
-    if(FILTER === 'tosend' && !(toSend(g) || (isMsg(g) && !isRej(g) && pcount(g).p > 0))) return false;
+    if(FILTER === 'sent' && !(msgCnt(g).d > 0)) return false;
+    if(FILTER === 'unsent' && !(msgCnt(g).u > 0)) return false;
+    if(FILTER === 'tosend' && !(msgCnt(g).p > 0)) return false;
     if(!ignoreComp && COMP === 'with' && !withComps(g)) return false;
     if(!ignoreComp && COMP === 'solo' && withComps(g)) return false;
     if(!q) return true;
@@ -1121,6 +1177,8 @@ function personRows(L){
     // (2026-11-05) 미응답 그룹이라도 명단에서 빠진 동행인은 불참으로 — 카드 숫자(pcount)와 같은 기준
     String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(n => n && !now.has(n))
       .forEach(n => out.push(Object.assign({ 상태: '불참', 구분: cans[n] && cans[n].v === 'no' ? '동행인' : '동행인(명단에서 뺌)', 성함: n, 직책: '', 소속: g.rep.org || '', 연락처: '', 이메일: '' }, base, cmeta(n))));
+    // 문자/메일 발송 상태(사람별) — people(g)와 줄 순서가 같다(본인 → 동행인 → 빠진 동행인)
+    const ppl = people(g); out.slice(i0).forEach((r, k) => { const x = ppl[k]; r['문자/메일'] = x ? (MSGL[msgSt(g, x.s, x.st)] || '') : ''; });
     // 참석 거절 그룹은 그룹 사람 모두 '참석 거절'(카드 숫자와 같은 기준) + 사유
     if(isRej(g)) out.slice(i0).forEach(r => { r.상태 = '참석 거절'; r['거절 사유'] = g.rejected.why || ''; });
   });
@@ -1206,7 +1264,8 @@ $('#btnTabXlsx').onclick = () => {
 $('#btnTabXlsxP').onclick = () => {
   const L = filtered(); if(!L.length) return toast('이 탭에 받을 대상이 없어요');
   // 카드 필터(참석/불참/미응답)는 '그 상태인 사람이 있는 그룹'을 고르므로, 사람별 파일엔 그 상태인 사람만 남긴다(2026-11-10: 파일이 화면보다 많다는 지적)
-  const keep = ({ yes: (r) => r.상태 === '참석', no: (r) => r.상태 === '불참', pending: (r) => r.상태 === '미응답' })[FILTER];
+  const keep = ({ yes: (r) => r.상태 === '참석', no: (r) => r.상태 === '불참', pending: (r) => r.상태 === '미응답',
+    sent: (r) => r['문자/메일'] === MSGL.d, unsent: (r) => r['문자/메일'] === MSGL.u, tosend: (r) => r['문자/메일'] === MSGL.p })[FILTER];
   const ppl = personRows(L).filter(keep || (() => true)), wb = XLSX.utils.book_new();
   if(!ppl.length) return toast('이 탭에 받을 사람이 없어요');
   XLSX.utils.book_append_sheet(wb, textCol(fitCols(XLSX.utils.json_to_sheet(ppl), ppl), /연락처$/), '사람별');

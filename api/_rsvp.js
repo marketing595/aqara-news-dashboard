@@ -187,6 +187,14 @@ const slotOf = (c) => (c && (c.from || c.name)) || '';
 function compSlots(g){
   return [...new Set([...String((g.orig && g.orig.comps) || '').split(', ').map(s => s.trim()).filter(Boolean), ...(g.comps || []).map(slotOf).filter(Boolean)])];
 }
+// 문자/메일 사람별 발송 기록(2026-11-10): m/<gid>/p/<해시> = 'd'(발송 완료) | 'u'(미발송). 이름은 m/에 평문으로 남기지 않으려 해시 키로 저장.
+//  'rep' = 본인(대리 포함), 그 밖은 동행인 자리 이름(compSlots). 목록 줄 땐 pp{자리: 값}으로 풀어 준다.
+const mkey = (t, slot) => crypto.createHmac('sha256', SS()).update('m:' + t + '|' + slot).digest('base64url').slice(0, 12);
+function msgView(t, g, m){
+  const out = { at: m.at, by: m.by, all: !!m.all || !m.p };   // all = 예전 그룹 단위 표시(응답한 사람 전원 완료)
+  if(m.p && g && g.rep){ out.pp = {}; ['rep', ...compSlots(g)].forEach(s => { const v = m.p[mkey(t, s)]; if(v) out.pp[s] = v; }); }
+  return out;
+}
 const ccode = (t, slot) => crypto.createHmac('sha256', SS()).update('c:' + t + '|' + slot).digest('base64url').slice(0, 7);
 const okC = (s) => /^[A-Za-z0-9_-]{7}$/.test(String(s || ''));
 let CMAP = { at: 0, m: {} };
@@ -399,7 +407,7 @@ module.exports = async (req, res) => {
       ts.forEach(t => { const g = Object.assign({}, groups[t]), k = gid(t);
         if(opens && opens[k]) g.open = opens[k];
         if(sent && sent[k]) g.sent = sent[k];
-        if(msg && msg[k]) g.msg = msg[k];   // 문자/메일 발송(m/) — RSVP 초대 문자(s/)와 따로
+        if(msg && msg[k]) g.msg = msgView(t, g, msg[k]);   // 문자/메일 발송(m/) — RSVP 초대 문자(s/)와 따로
         G[k] = g; if(log[t]) L[k] = log[t]; });
       return res.status(200).json({ ok: true, viewOnly: true, groups: G, meta: { closed: !!m.closed }, log: L, locked: true });
     }
@@ -415,7 +423,7 @@ module.exports = async (req, res) => {
       Object.keys(groups || {}).forEach(t => { const k = gid(t), g = groups[t];
         if(opens && opens[k]) g.open = opens[k];
         if(sent && sent[k]) g.sent = sent[k];
-        if(msg && msg[k]) g.msg = msg[k];   // 문자/메일 발송(m/) — RSVP 초대 문자(s/)와 따로
+        if(msg && msg[k]) g.msg = msgView(t, g, msg[k]);   // 문자/메일 발송(m/) — RSVP 초대 문자(s/)와 따로
         // 동행인 개인 링크 코드 { 자리 이름: 7자 } + 동행인 링크 열람
         if(g && g.rep){ g.clinks = {}; g.copen = {}; compSlots(g).forEach(s => { g.clinks[s] = ccode(t, s); const o = opens && opens['c' + gid(t + '|' + s)]; if(o) g.copen[s] = o; }); } });
       return res.status(200).json({ ok: true, email, groups: groups || {}, meta: meta || {}, log: log || {}, locked: true });
@@ -436,11 +444,23 @@ module.exports = async (req, res) => {
       if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
       return res.status(200).json({ ok: true, n: names.length, names });
     }
+    // 사람별 표시: { items: [{ t, p: { 자리: 'd'|'u' } }] } — 발송 결과 엑셀 반영. 다른 사람 기록은 그대로 둔다(경로별 PATCH)
+    if(op === 'msentp'){
+      const items = (Array.isArray(body.items) ? body.items : []).filter(x => x && okTok(x.t) && x.p && typeof x.p === 'object').slice(0, 3000);
+      if(!items.length) return res.status(200).json({ ok: true, n: 0 });
+      const now = Date.now(), patch = {}; let n = 0;
+      items.forEach(x => { const k = gid(x.t);
+        Object.keys(x.p).slice(0, 50).forEach(s => { const v = x.p[s]; if(v !== 'd' && v !== 'u' && v !== null) return;
+          patch[k + '/p/' + mkey(x.t, String(s))] = v; n++; });
+        patch[k + '/at'] = now; patch[k + '/by'] = email; patch[k + '/all'] = null; });
+      await raw('PATCH', 'm', patch);
+      return res.status(200).json({ ok: true, n, g: items.length });
+    }
     if(op === 'msent'){
       const ts = (Array.isArray(body.ts) ? body.ts : []).filter(okTok).slice(0, 3000);
       if(!ts.length) return res.status(200).json({ ok: true, n: 0 });
       const now = Date.now(), patch = {};
-      ts.forEach(t => { patch[gid(t)] = body.unmark ? null : { at: now, by: email }; });
+      ts.forEach(t => { patch[gid(t)] = body.unmark ? null : { at: now, by: email, all: true }; });
       await raw('PATCH', 'm', patch);
       return res.status(200).json({ ok: true, n: ts.length });
     }
