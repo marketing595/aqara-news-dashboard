@@ -168,7 +168,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
   <div class="panel">
     <div class="ph">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div><button class="btn" id="btnTabXlsx" title="지금 고른 탭·카드 필터·검색 결과를 그룹당 1줄로 — 동행인은 오른쪽으로 한 명씩 칸(성함·상태·직책·소속·연락처·이메일)을 나눠 넣어요">이 탭 엑셀 (그룹별)</button><button class="btn" id="btnTabXlsxP" title="지금 고른 탭·카드 필터·검색 결과를 사람당 1줄로 — 동행인도 명수만큼 각자 한 줄">이 탭 엑셀 (사람별)</button></div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option><option value="st">상태순(참석→불참→미응답)</option><option value="stNo">상태순(불참→참석→미응답)</option></select><button class="btn rw" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><button class="btn rw" id="btnDups" title="개별 신청한 사람이 다른 그룹의 동행인으로도 들어가 있는 경우 등 — 골라서 휴지통으로">중복 찾기</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option><option value="st">상태순(참석→불참→미응답)</option><option value="stNo">상태순(불참→참석→미응답)</option></select><button class="btn rw" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><button class="btn rw" id="btnDups" title="개별 신청한 사람이 다른 그룹의 동행인으로도 들어가 있는 경우 등 — 골라서 휴지통으로">중복 찾기</button><button class="btn rw" id="btnFixPh" title="엑셀에서 앞자리 0이 빠져 10으로 시작하는 휴대폰 번호(본인·대리·동행인)를 010으로 고쳐 저장">번호 앞 0 고치기</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
     </div>
     <div style="overflow:auto;max-height:72vh">
       <table class="tbl">
@@ -1511,6 +1511,15 @@ async function openTrash(){
 }
 $('#btnTrash').onclick = openTrash;
 
+// 번호 앞 0 고치기(2026-11-10): 저장된 휴대폰이 10xxxxxxxx(10자리)인 본인·대리·동행인을 010…으로 — 서버 op fixphones
+$('#btnFixPh').onclick = async () => {
+  const bad = [];
+  list().forEach(g => [g.rep, g.sub, ...(g.comps || [])].forEach(p => { if(p && p.name && /^10\d{8}$/.test(String(p.phone || '').replace(/\D/g, ''))) bad.push(`${p.name}(${g.rep.name} 그룹) ${p.phone} → 0${String(p.phone).replace(/\D/g, '')}`); }));
+  if(!bad.length) return toast('앞자리 0이 빠진 번호가 없어요');
+  if(!confirm(`앞자리 0이 빠진 번호 ${bad.length}명을 010으로 고칠까요?\n\n${bad.join('\n')}`)) return;
+  const j = await api({ op: 'fixphones' }); if(!j.ok) return toast(j.error || '실패');
+  toast(`번호 ${j.n}명 고쳤어요` + (j.names && j.names.length ? ': ' + j.names.join(', ') : '')); load();
+};
 // 중복 찾기(2026-11-06): ① 개별 그룹 대표자가 다른 그룹의 동행인으로도 있음 ② 두 그룹 대표자 연락처가 같음 → 골라서 개별(겹치는) 그룹을 휴지통으로
 const normOrg = (s) => String(s || '').toLowerCase().replace(/\(주\)|주식회사|㈜|[\s().,·\-]/g, '');
 const orgSame = (a, b) => { a = normOrg(a); b = normOrg(b); return !!a && !!b && (a === b || a.includes(b) || b.includes(a)); };

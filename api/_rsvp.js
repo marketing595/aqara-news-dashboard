@@ -425,6 +425,17 @@ module.exports = async (req, res) => {
     // 문자 보냄 표시: { ts: [토큰…] } (unmark: true 면 표시 해제). 같은 사람에게 다시 보내면 횟수가 늘어난다.
     // at(ms)을 주면 그 시각을 '마지막 문자 전송'으로 기록(외부 도구로 이미 보낸 시각 입력). 같은 시각을 또 넣어도 횟수는 그대로.
     // 문자/메일 발송 완료(2026-11-10): RSVP 초대 문자(s/)와 별개인 행사 안내 발송 기록 m/<gid> = { at, by } (unmark면 삭제). 개인정보 없음.
+    // 번호 앞 0 고치기(2026-11-10): 저장된 휴대폰 10xxxxxxxx → 010xxxxxxxx (본인·대리·동행인)
+    if(op === 'fixphones'){
+      const cur = (await fb('GET', 'groups')) || {}, patch = {}, names = [], now = Date.now();
+      const fx = (p, g) => { if(p && p.phone && /^10\d{8}$/.test(String(p.phone).replace(/\D/g, ''))){ p.phone = '0' + String(p.phone).replace(/\D/g, ''); names.push(p.name || '?'); return true; } return false; };
+      Object.keys(cur).forEach(t => { const g0 = cur[t]; if(!g0 || !g0.rep) return;
+        const g = JSON.parse(JSON.stringify(g0)); let ch = false;
+        [g.rep, g.sub, ...(g.comps || [])].forEach(p => { if(fx(p)) ch = true; });
+        if(ch){ g.updatedAt = now; patch[t] = g; } });
+      if(Object.keys(patch).length) await fb('PATCH', 'groups', patch);
+      return res.status(200).json({ ok: true, n: names.length, names });
+    }
     if(op === 'msent'){
       const ts = (Array.isArray(body.ts) ? body.ts : []).filter(okTok).slice(0, 3000);
       if(!ts.length) return res.status(200).json({ ok: true, n: 0 });
