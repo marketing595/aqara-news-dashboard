@@ -56,7 +56,8 @@ function sessionEmail(req){
 const okTok = (s) => /^[A-Za-z0-9_-]{12}$/.test(String(s || ''));
 const newTok = () => crypto.randomBytes(9).toString('base64url');   // 12자
 const str = (v, n) => String(v == null ? '' : v).trim().slice(0, n || 100);
-const digits = (v) => String(v || '').replace(/\D/g, '').slice(0, 15);
+// 엑셀 숫자 칸에서 앞 0이 빠진 휴대폰(10xxxxxxxx, 10자리)은 0을 붙여 저장(2026-11-10)
+const digits = (v) => { const d = String(v || '').replace(/\D/g, '').slice(0, 15); return /^10\d{8}$/.test(d) ? '0' + d : d; };
 
 // ── 저장소: 암호화 + 익명 로그인 ──
 // FIREBASE_DB_SECRET(관리자 키)이 유효하지 않아(2026-10-29 확인: Permission denied) 관리자 키 없이 동작하게 바꿨다.
