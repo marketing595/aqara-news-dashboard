@@ -299,7 +299,9 @@ function stats(){
     if(changed(g)) s.chg++;
     const c = pcount(g); s.P.all += c.all; s.P.y += c.y; s.P.n += c.n; s.P.p += c.p; s.P.x += c.x; s.P.yr += c.yr; s.P.cy += c.cy; s.P.nr += c.nr || 0; s.P.rj += c.rj || 0;
     s.P.roster += rosterN(g);
-    if(isMsg(g)) s.P.msgDone = (s.P.msgDone || 0) + c.all; else if(toSend(g)) s.P.msgTodo = (s.P.msgTodo || 0) + c.all;   // 명 단위(그룹 사람 전부)
+    // 명 단위: 발송 완료 그룹은 응답한 사람(참석·불참)만 완료, 그 그룹의 미응답은 아직 예정(2026-11-10 "미응답 제외")
+    if(isMsg(g) && !isRej(g)){ s.P.msgDone = (s.P.msgDone || 0) + c.y + c.n + c.x; s.P.msgTodo = (s.P.msgTodo || 0) + c.p; }
+    else if(toSend(g)) s.P.msgTodo = (s.P.msgTodo || 0) + c.all;
     if(c.x) s.xG = (s.xG || 0) + 1;
   });
   return s;
@@ -325,7 +327,7 @@ function paint(){
     `<div class="kpi msg"><div class="l">문자/메일</div><div class="subs">` +
       `<button class="sbb ${FILTER === 'sent' ? 'on' : ''}" data-f="sent"><span>발송 완료</span><b>${P.msgDone || 0}<small>명</small></b><i>보낸 사람</i></button>` +
       `<button class="sbb ${FILTER === 'tosend' ? 'on' : ''}" data-f="tosend"><span>발송 예정</span><b>${P.msgTodo || 0}<small>명</small></b><i>아직 안 보냄${P.rj ? ` · 참석 거절 ${P.rj}명 제외` : ''}</i></button>` +
-    `</div><div class="d">줄을 펼쳐 [문자/메일 발송 완료로 표시]</div></div>`;
+    `</div><div class="d"><button class="lk rw" id="btnMsgAns" title="지금 참석·불참으로 응답한 사람이 있는 그룹을 모두 '발송 완료'로 — 미응답인 사람은 발송 예정에 남아요">응답자(참석·불참) 발송 완료 처리</button> · 줄을 펼쳐 개별 표시</div></div>`;
   // 검산 줄: 칸 합계와 예전 방식 숫자가 왜 다른지 바로 보이게
   const SUM = P.y + NO + P.p + P.rj;
   const chk = [`검산: 참석 ${P.y} + 불참 ${NO} + 미응답 ${P.p}` + (P.rj ? ` + 참석 거절 ${P.rj}` : '') + ` = ${SUM}명` + (SUM === P.all ? ' ✓' : ` ≠ 총 ${P.all} ⚠`)];
@@ -335,6 +337,16 @@ function paint(){
   $('#kpis').insertAdjacentHTML('beforeend', `<div class="full" style="grid-column:1/-1"><div class="prog">
       <i style="width:${pct(P.y)}%;background:var(--yes)"></i><i style="width:${pct(NO)}%;background:#9ca3af"></i><i style="width:${pct(P.p)}%;background:#f3c26b"></i><i style="width:${pct(P.rj)}%;background:#e8a0a0"></i></div></div>`);
   document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = FILTER === b.dataset.f ? 'all' : b.dataset.f; OPEN = ''; paint(); });
+  // 응답자 발송 완료 처리(2026-11-10): 참석·불참 응답한 사람이 있는 그룹(거절 제외, 아직 표시 안 된 것) → op msent
+  if($('#btnMsgAns')) $('#btnMsgAns').onclick = async (e) => {
+    e.stopPropagation();
+    const T = list().filter(g => !isRej(g) && !isMsg(g) && (() => { const c = pcount(g); return c.y + c.n + c.x > 0; })());
+    if(!T.length) return toast('새로 표시할 응답자 그룹이 없어요');
+    const n = T.reduce((a, g) => { const c = pcount(g); return a + c.y + c.n + c.x; }, 0);
+    if(!confirm(`참석·불참으로 응답한 ${n}명(${T.length}그룹)을 '문자/메일 발송 완료'로 표시할까요?\n미응답인 사람은 발송 예정에 남아요.`)) return;
+    const j = await api({ op: 'msent', ts: T.map(g => g.t) }); if(!j.ok) return toast(j.error || '실패');
+    toast(`발송 완료 ${n}명(${j.n}그룹) 표시했어요`); load();
+  };
   $('#btnClose').textContent = META.closed ? '응답 다시 열기' : '응답 마감';
   $('#btnClose').classList.toggle('danger', !META.closed);
   const nTest = allGroups().filter(g => g.test).length;
@@ -445,7 +457,7 @@ function filtered(ignoreComp){
     if(FILTER === 'chg' && !changed(g)) return false;
     if(FILTER === 'sentpend' && !sentPend(g)) return false;
     if(FILTER === 'sent' && !isMsg(g)) return false;
-    if(FILTER === 'tosend' && !toSend(g)) return false;
+    if(FILTER === 'tosend' && !(toSend(g) || (isMsg(g) && !isRej(g) && pcount(g).p > 0))) return false;
     if(!ignoreComp && COMP === 'with' && !withComps(g)) return false;
     if(!ignoreComp && COMP === 'solo' && withComps(g)) return false;
     if(!q) return true;
