@@ -1,11 +1,11 @@
 {
- "generatedAt": "2026-11-11 01:27",
+ "generatedAt": "2026-11-12 01:15",
  "brands": [
   {
    "name": "아카라",
    "me": true,
    "query": "아카라 스마트홈",
-   "total": 1549,
+   "total": 1552,
    "sentiment": {
     "pos": 26,
     "neu": 34,
@@ -17,20 +17,20 @@
      30
     ],
     [
-     "IoT",
-     26
-    ],
-    [
      "인테리어",
-     23
+     28
     ],
     [
-     "도어락",
+     "IoT",
      23
     ],
     [
      "AIoT",
      22
+    ],
+    [
+     "도어락",
+     20
     ],
     [
      "공간디자인",
@@ -49,10 +49,6 @@
      14
     ],
     [
-     "조명",
-     12
-    ],
-    [
      "공간",
      11
     ],
@@ -61,16 +57,20 @@
      11
     ],
     [
-     "L100",
+     "조명",
      11
+    ],
+    [
+     "쇼룸",
+     10
     ],
     [
      "실습실",
      10
     ],
     [
-     "이상헌",
-     9
+     "L100",
+     10
     ],
     [
      "프로안심",
@@ -128,10 +128,28 @@
     "아카라 스위치",
     "니케 아카라이브",
     "아카라 l100",
-    "아카라이브 핫딜",
-    "아카라치"
+    "원신 아카라이브",
+    "아카라이브 핫딜"
    ],
    "recent": [
+    {
+     "title": "2026 홈·테이블데코페어, 12월17일 코엑스서 개막",
+     "source": "imwood.co.kr",
+     "date": "2026-11-11",
+     "link": "https://www.imwood.co.kr/news/articleView.html?idxno=42330"
+    },
+    {
+     "title": "아카라라이프, 논현동 가구거리 쇼룸 정보 담은 안내 지도 공개",
+     "source": "beyondpost.co.kr",
+     "date": "2026-11-11",
+     "link": "http://www.beyondpost.co.kr/view.php?ud=20261111153049405746a9e4dd7f_30"
+    },
+    {
+     "title": "\"논현동 인테리어 거리 한눈에\"... 아카라라이프, '학동역 인테리어 투...",
+     "source": "thepowernews.co.kr",
+     "date": "2026-11-11",
+     "link": "https://www.thepowernews.co.kr/view.php?ud=20261111131542693337600e7ec7_7"
+    },
     {
      "title": "\"익숙한 공간서 가치를 다시 찾다\"… '2026 서울 홈·테이블데코페어', ...",
      "source": "digitalchosun.dizzo.com",
@@ -203,24 +221,6 @@
      "source": "beyondpost.co.kr",
      "date": "2026-10-12",
      "link": "http://www.beyondpost.co.kr/view.php?ud=20261012083437472146a9e4dd7f_30"
-    },
-    {
-     "title": "아카라라이프 ‘프로안심 서비스’, 고객 만족도 평점 4.9 인포그래픽 공...",
-     "source": "seoul.co.kr",
-     "date": "2026-10-08",
-     "link": "https://n.news.naver.com/mnews/article/081/0003687312?sid=101"
-    },
-    {
-     "title": "“마감재만으론 계약 안 나와요”… 인테리어 디자이너들이 '스마트홈'...",
-     "source": "전자신문",
-     "date": "2026-09-29",
-     "link": "https://n.news.naver.com/mnews/article/030/0003470830?sid=101"
-    },
-    {
-     "title": "가톨릭대, 국내 최초 'AIoT 디자인 실습실' 개소…스마트 공간디자인 교...",
-     "source": "bizwnews.com",
-     "date": "2026-09-21",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=147033"
     }
    ]
   },
@@ -228,11 +228,11 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 984,
+   "total": 986,
    "sentiment": {
     "pos": 15,
-    "neu": 45,
-    "neg": 0
+    "neu": 44,
+    "neg": 1
    },
    "keywords": [
     [
@@ -252,11 +252,11 @@
      27
     ],
     [
-     "실시간",
-     24
+     "영상",
+     25
     ],
     [
-     "영상",
+     "실시간",
      24
     ],
     [
@@ -284,10 +284,6 @@
      20
     ],
     [
-     "Hejhome",
-     20
-    ],
-    [
      "통화",
      20
     ],
@@ -305,6 +301,10 @@
     ],
     [
      "에이블",
+     19
+    ],
+    [
+     "베이비브레짜",
      19
     ]
    ],
@@ -355,6 +355,18 @@
     "헤이홈캠"
    ],
    "recent": [
+    {
+     "title": "KISA, 시중 IP카메라 10종 보안 점검...3개 제품 미흡",
+     "source": "지디넷",
+     "date": "2026-11-11",
+     "link": "https://n.news.naver.com/mnews/article/092/0002444935?sid=105"
+    },
+    {
+     "title": "가정용 IP카메라 10개 제품 보안 점검…3개 제품서 영상 유출 가능 취약...",
+     "source": "e-science.co.kr",
+     "date": "2026-11-11",
+     "link": "https://www.e-science.co.kr/news/articleView.html?idxno=139505"
+    },
     {
      "title": "★★ 2년 연속 수상 - [2026 고객신뢰도 1위 프리미엄 브랜드] 고퀄",
      "source": "forbeskorea.co.kr",
@@ -432,18 +444,6 @@
      "source": "gokorea.kr",
      "date": "2026-10-01",
      "link": "https://www.gokorea.kr/news/articleView.html?idxno=880235"
-    },
-    {
-     "title": "제110회 코베 베이비페어&유아교육전, 10월 8~11일 킨텍스서 개최",
-     "source": "globalepic.co.kr",
-     "date": "2026-10-01",
-     "link": "http://www.globalepic.co.kr/view.php?ud=2026100117091236139aeda69934_29"
-    },
-    {
-     "title": "제110회 코베 베이비페어&유아교육전, 오는 10월 8일~11일 킨텍스서 최대...",
-     "source": "gosiweek.com",
-     "date": "2026-10-01",
-     "link": "https://www.gosiweek.com/article/1065600661913645"
     }
    ]
   },
@@ -451,90 +451,90 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69671,
+   "total": 69677,
    "sentiment": {
-    "pos": 17,
-    "neu": 43,
+    "pos": 18,
+    "neu": 42,
     "neg": 0
    },
    "keywords": [
     [
      "현대차",
-     82
+     78
     ],
     [
      "제어하는",
-     53
-    ],
-    [
-     "홈투카",
-     39
+     46
     ],
     [
      "플랫폼",
-     37
+     34
     ],
     [
-     "차량을",
-     36
-    ],
-    [
-     "차량",
-     33
+     "홈투카",
+     34
     ],
     [
      "삼성전자의",
+     32
+    ],
+    [
+     "차량을",
      31
     ],
     [
+     "차량",
+     30
+    ],
+    [
      "카투홈",
-     29
-    ],
-    [
-     "경영진",
-     28
-    ],
-    [
-     "기아",
      25
     ],
     [
-     "인포테인먼트",
-     22
+     "경영진",
+     24
     ],
     [
-     "원격",
-     22
+     "기아",
+     21
     ],
     [
      "서비스를",
-     22
+     20
     ],
     [
-     "교류",
-     18
+     "원격",
+     20
     ],
     [
      "협력",
-     16
+     18
+    ],
+    [
+     "인포테인먼트",
+     17
+    ],
+    [
+     "교류",
+     14
     ],
     [
      "가전을",
-     16
+     13
     ],
     [
      "차량에서",
-     15
+     13
     ],
     [
      "지난해",
-     14
+     13
     ]
    ],
    "posWords": [
     [
      "확대",
-     7
+     8
     ],
     [
      "강화",
@@ -567,17 +567,53 @@
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 허브",
     "삼성 스마트싱스",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 스위치",
-    "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 세탁기 원격",
     "삼성 스마트싱스 냉장고",
-    "삼성 스마트싱스 허브 5세대"
+    "삼성 스마트싱스 허브 5세대",
+    "삼성 스마트싱스 공유"
    ],
    "recent": [
+    {
+     "title": "ABB·삼성전자, 상업용 건물 통합 IoT 솔루션 확대…설비·에너지 동시 ...",
+     "source": "econovill.com",
+     "date": "2026-11-11",
+     "link": "https://www.econovill.com/news/articleView.html?idxno=756831"
+    },
+    {
+     "title": "ABB-삼성전자, 상업용 건물 통합 관리 솔루션 협력",
+     "source": "thelec.kr",
+     "date": "2026-11-11",
+     "link": "https://www.thelec.kr/news/articleView.html?idxno=65256"
+    },
+    {
+     "title": "삼성·현대차 로봇부품 동맹 확대",
+     "source": "smedaily.co.kr",
+     "date": "2026-11-11",
+     "link": "http://www.smedaily.co.kr/news/articleView.html?idxno=366013"
+    },
+    {
+     "title": "\"크기보다 실속 택했다\"…중국 저가 공세에 29입방피트 꺼내든 삼성의 ...",
+     "source": "g-enews.com",
+     "date": "2026-11-11",
+     "link": "https://www.g-enews.com/view.php?ud=202611111052079872fbbec65dfb_1"
+    },
+    {
+     "title": "‘차와 집 연결’ 삼성·현대차…‘에너지 관리’로 협력 넓히나",
+     "source": "ekn.kr",
+     "date": "2026-11-11",
+     "link": "https://www.ekn.kr/web/view.php?key=20261111023058090"
+    },
+    {
+     "title": "ABB·삼성전자, 상업용 건물 통합 IoT 솔루션 협력",
+     "source": "g-enews.com",
+     "date": "2026-11-11",
+     "link": "https://www.g-enews.com/view.php?ud=202611110846518214112616b072_1"
+    },
     {
      "title": "삼성·현대가 보여준 피지컬AI 합종연횡 시대…기업 '코피티션' 본격화",
      "source": "greened.kr",
@@ -631,42 +667,6 @@
      "source": "asiatoday.co.kr",
      "date": "2026-11-09",
      "link": "https://www.asiatoday.co.kr/kn/view.php?key=20261110010003465"
-    },
-    {
-     "title": "삼성전자·현대차 경영진 부부 170명 한자리...피지컬 AI 겨냥 '원팀' 구...",
-     "source": "job-post.co.kr",
-     "date": "2026-11-09",
-     "link": "https://www.job-post.co.kr/news/articleView.html?idxno=237389"
-    },
-    {
-     "title": "공동 TF 꾸린 삼성·현대차…'초협력'으로 中·빅테크 공습 넘는다",
-     "source": "한국경제",
-     "date": "2026-11-09",
-     "link": "https://n.news.naver.com/mnews/article/015/0005351937?sid=101"
-    },
-    {
-     "title": "[비즈 인사이트] 삼성·현대차, 자동차 부품 넘어 로봇·피지컬AI로…협...",
-     "source": "moneystorm.kr",
-     "date": "2026-11-09",
-     "link": "https://www.moneystorm.kr/news/articleView.html?idxno=8232"
-    },
-    {
-     "title": "삼성-현대차그룹, 로봇·에너지 전략적 파트너로… 첨단 산업 '원팀'",
-     "source": "g-enews.com",
-     "date": "2026-11-09",
-     "link": "https://www.g-enews.com/view.php?ud=20261109134826646627fa31d75c_1"
-    },
-    {
-     "title": "재계 1·2위 이재용-정의선, 반도체·배터리 넘어 피지컬 AI도 '맞손'",
-     "source": "insightkorea.co.kr",
-     "date": "2026-11-09",
-     "link": "https://www.insightkorea.co.kr/news/articleView.html?idxno=258464"
-    },
-    {
-     "title": "삼성·현대차, 경영진 177명 첫 대규모 교류…로봇·에너지 협력 모색",
-     "source": "todayeconomic.com",
-     "date": "2026-11-09",
-     "link": "https://www.todayeconomic.com/news/article.html?no=32772"
     }
    ]
   },
@@ -674,113 +674,113 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78208,
+   "total": 78239,
    "sentiment": {
-    "pos": 21,
-    "neu": 39,
+    "pos": 16,
+    "neu": 44,
     "neg": 0
    },
    "keywords": [
     [
-     "AI",
-     55
+     "LG전자",
+     57
     ],
     [
-     "LG전자",
-     46
+     "시간을",
+     35
+    ],
+    [
+     "정수기",
+     27
     ],
     [
      "ThinQ",
-     33
+     26
     ],
     [
-     "냉장고",
+     "밝기",
+     25
+    ],
+    [
+     "작동",
      25
     ],
     [
      "AI홈",
-     24
-    ],
-    [
-     "냉동",
-     22
+     21
     ],
     [
      "류재철",
      20
     ],
     [
-     "와인",
+     "색상과",
      19
     ],
     [
-     "모드를",
+     "알려주는",
      19
-    ],
-    [
-     "육류",
-     18
-    ],
-    [
-     "보관",
-     18
-    ],
-    [
-     "하칸에는",
-     18
-    ],
-    [
-     "선택할",
-     18
     ],
     [
      "LG전자는",
-     17
+     18
     ],
     [
-     "기능과",
-     17
+     "설정할",
+     18
     ],
     [
-     "오토",
-     17
-    ],
-    [
-     "김치",
+     "AI",
      16
     ],
     [
-     "서랍형",
-     16
+     "무드",
+     14
+    ],
+    [
+     "퓨리케어",
+     14
+    ],
+    [
+     "신모델",
+     13
+    ],
+    [
+     "앱을",
+     13
+    ],
+    [
+     "조명의",
+     13
     ]
    ],
    "posWords": [
     [
-     "확대",
-     6
-    ],
-    [
      "강화",
-     6
-    ],
-    [
-     "선도",
      4
     ],
     [
-     "1위",
+     "계약",
      3
     ],
     [
-     "협업",
+     "확대",
+     3
+    ],
+    [
+     "혁신",
      2
+    ],
+    [
+     "프리미엄",
+     1
     ],
     [
      "성장",
      1
     ],
     [
-     "혁신",
+     "1위",
      1
     ],
     [
@@ -791,105 +791,105 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐 세탁기",
-    "lg 씽큐 티비연결",
     "lg 씽큐 냉장고",
-    "lg 씽큐 초기화",
+    "lg 씽큐 티비연결",
+    "lg 씽큐 세탁기",
     "lg 씽큐 허브",
     "lg 씽큐 연결",
     "lg 씽큐 와이파이",
-    "lg 씽큐 온도"
+    "lg 씽큐 온도",
+    "lg 씽큐 에어컨"
    ],
    "recent": [
     {
-     "title": "대기업 연말 인사 시즌 본격화...삼성·LG 등 '삼말사초' 승진 여부 촉각",
-     "source": "wolyo.co.kr",
-     "date": "2026-11-10",
-     "link": "https://www.wolyo.co.kr/news/articleView.html?idxno=320297"
-    },
-    {
-     "title": "[기업家] LG전자 ⑰ㅣ 가전 넘어 AI·전장·로봇으로…미래 성장동력 가...",
-     "source": "cbci.co.kr",
-     "date": "2026-11-09",
-     "link": "https://www.cbci.co.kr/news/articleView.html?idxno=624580"
-    },
-    {
-     "title": "[경제일보] 아파트·상업시설 AI로 통합 관리… 삼성·LG, B2B로 판 키운...",
+     "title": "[아주초대석] 집 한 채 넘어 주택단지로… \"내년 30·40평대 출시 목표\"",
      "source": "ajunews.com",
-     "date": "2026-11-06",
-     "link": "https://www.ajunews.com/view/20261105163049745"
+     "date": "2026-11-11",
+     "link": "https://www.ajunews.com/view/20261111092722261"
     },
     {
-     "title": "욕실 환기가전 온풍 경쟁…설치 편의성, 원격제어 특화 기능으로 신규 ...",
-     "source": "전자신문",
-     "date": "2026-11-05",
-     "link": "https://n.news.naver.com/mnews/article/030/0003482722?sid=105"
+     "title": "천원권보다 좁은 정수기…LG전자, 국내 최소 폭 신제품 선봬",
+     "source": "cnet.co.kr",
+     "date": "2026-11-11",
+     "link": "https://www.cnet.co.kr/view/?no=20261111172548"
     },
     {
-     "title": "[인터뷰]“첫 달은 LG 로고 가립시다”…가전 명가 LG전자, 걸그룹 키운...",
-     "source": "view.asiae.co.kr",
-     "date": "2026-11-05",
-     "link": "https://n.news.naver.com/mnews/article/277/0005838535?sid=101"
-    },
-    {
-     "title": "코웨이, 한국서비스품질지수 정수기·공기청정기 AS 1위…비결은?",
-     "source": "choicenews.co.kr",
-     "date": "2026-11-05",
-     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=172933"
-    },
-    {
-     "title": "삼성전자, CES 2027 단독 전시관서 차세대 로봇 공개?",
-     "source": "choicenews.co.kr",
-     "date": "2026-11-04",
-     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=172904"
-    },
-    {
-     "title": "“불편은 미리, 해결은 빠르게”… AI로 서비스 혁신",
-     "source": "donga.com",
-     "date": "2026-11-04",
-     "link": "https://n.news.naver.com/mnews/article/020/0003759889?sid=101"
-    },
-    {
-     "title": "LG전자 류재철 CEO \"AI홈 다음 표준은 돌봄\"…애플·MS 손잡고 가사노동...",
+     "title": "LG전자, 폭 13.2cm 초슬림 정수기 선봬…냉수·온수 8단계 온도 선택",
      "source": "joongangenews.com",
-     "date": "2026-11-03",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=560571"
+     "date": "2026-11-11",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=562840"
     },
     {
-     "title": "원림, 화려한 투자포트폴리오 주목",
+     "title": "LG전자, 폭 13.2㎝ '퓨리케어 슬림맞춤 정수기' 신모델 출시",
+     "source": "pointdaily.co.kr",
+     "date": "2026-11-11",
+     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=325614"
+    },
+    {
+     "title": "좁은 공간에도 맞춤 온도…LG전자, '퓨리케어 슬림맞춤 정수기' 출시",
+     "source": "ziksir.com",
+     "date": "2026-11-11",
+     "link": "https://www.ziksir.com/news/articleView.html?idxno=152956"
+    },
+    {
+     "title": "[신제품] 지폐보다 얇은 폭…LG전자, '퓨리케어 슬림맞춤 정수기' 출시",
+     "source": "financialpost.co.kr",
+     "date": "2026-11-11",
+     "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=300079"
+    },
+    {
+     "title": "“좁은 틈에도 쏙” LG전자, 가로 13.2㎝ 초슬림 정수기 신모델 출시",
      "source": "biz.heraldcorp.com",
-     "date": "2026-11-03",
-     "link": "https://n.news.naver.com/mnews/article/016/0002717874?sid=101"
+     "date": "2026-11-11",
+     "link": "https://n.news.naver.com/mnews/article/016/0002722128?sid=101"
     },
     {
-     "title": "류재철 LG전자 사장의 AI 홈 비전 “연결 넘어 배려로… ‘피지컬 AI’로...",
-     "source": "dnews.co.kr",
-     "date": "2026-11-02",
-     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611021752422610279"
+     "title": "LG전자, 폭 13.2cm 퓨리케어 슬림맞춤 정수기 신모델 출시",
+     "source": "koreareport.co.kr",
+     "date": "2026-11-11",
+     "link": "https://www.koreareport.co.kr/news/articleView.html?idxno=54574"
     },
     {
-     "title": "류재철 LG전자 사장 \"AI홈 다음 표준은 '돌봄'…결정권, 고객에게\"",
-     "source": "news1.kr",
-     "date": "2026-11-02",
-     "link": "https://n.news.naver.com/mnews/article/421/0009265619?sid=101"
+     "title": "[산업계 동향] 삼성전자ㆍLG전자ㆍ롯데이노베이트 (11.11)",
+     "source": "weeklytoday.com",
+     "date": "2026-11-11",
+     "link": "http://www.weeklytoday.com/news/articleView.html?idxno=801719"
     },
     {
-     "title": "류재철 LG전자 사장 \"AI 홈, 단순 가전 연결 넘어 실질적 편리함 제공해...",
-     "source": "뉴시스",
-     "date": "2026-11-02",
-     "link": "https://n.news.naver.com/mnews/article/003/0014296172?sid=101"
+     "title": "좁은 주방에도 쏙…LG전자, 폭 13.2cm 초슬림 정수기 출시",
+     "source": "worktoday.co.kr",
+     "date": "2026-11-11",
+     "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=91844"
     },
     {
-     "title": "LG전자 류재철 “AI홈, 연결 넘어 돌봄으로”…생태계 확장 지속",
-     "source": "newstomato.com",
-     "date": "2026-11-02",
-     "link": "http://www.newstomato.com/ReadNews.aspx?no=1318972&inflow=N"
+     "title": "LG전자, 정수기 온도 선택 폭 넓혔다…고객 83.6% 혼합 출수",
+     "source": "m-i.kr",
+     "date": "2026-11-11",
+     "link": "https://www.m-i.kr/news/articleView.html?idxno=2017119"
     },
     {
-     "title": "LG전자 대표 류재철 AI홈 비전 공개, \"가전 연결 넘어 가사노동 해방으...",
-     "source": "businesspost.co.kr",
-     "date": "2026-11-02",
-     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=450954"
+     "title": "LG전자, 천원권 지폐보다 좁은 정수기 출시…온도 맞춤 기능 강화",
+     "source": "businessplus.kr",
+     "date": "2026-11-11",
+     "link": "https://www.businessplus.kr/news/articleView.html?idxno=119641"
+    },
+    {
+     "title": "가전부터 모바일 B2B 솔루션까지… LG전자, 일상·상업 공간 혁신 가속",
+     "source": "newscj.com",
+     "date": "2026-11-11",
+     "link": "https://www.newscj.com/news/articleView.html?idxno=3447729"
+    },
+    {
+     "title": "LG전자, 폭 13.2㎝ 초슬림 정수기 출시⋯물 온도 8단계 조절",
+     "source": "아이뉴스24",
+     "date": "2026-11-11",
+     "link": "https://n.news.naver.com/mnews/article/031/0001073985?sid=101"
+    },
+    {
+     "title": "LG전자, 이페이퍼 디스플레이 관리 앱 '사이니지매니저' 출시",
+     "source": "srtimes.kr",
+     "date": "2026-11-11",
+     "link": "http://www.srtimes.kr/news/articleView.html?idxno=217272"
     }
    ]
   },
@@ -897,11 +897,11 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76440,
+   "total": 76450,
    "sentiment": {
-    "pos": 9,
-    "neu": 32,
-    "neg": 19
+    "pos": 12,
+    "neu": 31,
+    "neg": 17
    },
    "keywords": [
     [
@@ -910,55 +910,47 @@
     ],
     [
      "AI",
-     19
-    ],
-    [
-     "번역한",
-     16
-    ],
-    [
-     "기사의",
-     16
-    ],
-    [
-     "전문",
-     16
-    ],
-    [
-     "아래는",
-     15
-    ],
-    [
-     "기사를",
-     15
+     20
     ],
     [
      "마이",
-     15
+     16
     ],
     [
      "시크",
      15
     ],
     [
-     "번역",
+     "번역한",
      14
+    ],
+    [
+     "기사의",
+     14
+    ],
+    [
+     "전문",
+     14
+    ],
+    [
+     "아래는",
+     13
+    ],
+    [
+     "기사를",
+     13
+    ],
+    [
+     "번역",
+     13
     ],
     [
      "으로",
-     14
+     13
     ],
     [
      "입니다",
-     14
-    ],
-    [
-     "naver",
-     12
-    ],
-    [
-     "com",
-     12
+     13
     ],
     [
      "번역에",
@@ -974,40 +966,48 @@
     ],
     [
      "높이기를",
-     10
+     11
+    ],
+    [
+     "노력하고",
+     11
+    ],
+    [
+     "있습니다",
+     11
     ]
    ],
    "posWords": [
     [
-     "돌파",
-     4
-    ],
-    [
-     "개선",
-     4
-    ],
-    [
-     "파트너십",
-     2
-    ],
-    [
-     "계약",
-     2
-    ],
-    [
      "강화",
-     1
-    ],
-    [
-     "투자",
-     1
-    ],
-    [
-     "인기",
-     1
+     3
     ],
     [
      "글로벌",
+     3
+    ],
+    [
+     "투자",
+     3
+    ],
+    [
+     "파트너십",
+     3
+    ],
+    [
+     "확대",
+     2
+    ],
+    [
+     "돌파",
+     2
+    ],
+    [
+     "개선",
+     2
+    ],
+    [
+     "성장",
      1
     ]
    ],
@@ -1015,15 +1015,75 @@
     "구글 홈 스피커",
     "구글 홈",
     "구글 홈 허브",
-    "구글 홈 화면 삭제",
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 연결",
     "구글 홈 미니 1세대",
     "구글 홈 스피커 연결",
-    "구글 홈 연결"
+    "구글 홈바탕 빼는법",
+    "구글 홈 미니 2세대"
    ],
    "recent": [
+    {
+     "title": "픽셀폰 홈 화면 꾸미기 기능 강화…구글, 안드로이드 17 QPR2 출시",
+     "source": "kbench.com",
+     "date": "2026-11-11",
+     "link": "https://kbench.com/?q=node/283259"
+    },
+    {
+     "title": "[IT는 지금] 카카오, 홍콩·싱가포르서 해외 IR…글로벌 투자자와 인적...",
+     "source": "dealsite.co.kr",
+     "date": "2026-11-11",
+     "link": "https://dealsite.co.kr/articles/172524"
+    },
+    {
+     "title": "통신 3사 3분기 실적 희비…SKT·LGU+ 웃었지만 KT만 매출·영업익 동반...",
+     "source": "joongangenews.com",
+     "date": "2026-11-11",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=563005"
+    },
+    {
+     "title": "\"명상하는 나라 만들겠다\" 김주환 연세대 교수, 명상 대중화 위한 AI명상...",
+     "source": "interview365.com",
+     "date": "2026-11-11",
+     "link": "http://www.interview365.com/news/articleView.html?idxno=112344"
+    },
+    {
+     "title": "삼성·현대차 로봇부품 동맹 확대",
+     "source": "smedaily.co.kr",
+     "date": "2026-11-11",
+     "link": "http://www.smedaily.co.kr/news/articleView.html?idxno=366013"
+    },
+    {
+     "title": "‘공시의무보다 엄격’ 코스피 상장사 101곳, 깐깐한 현미경 투자 심의",
+     "source": "breaknews.com",
+     "date": "2026-11-11",
+     "link": "http://www.breaknews.com/1250075"
+    },
+    {
+     "title": "진천 HR FC, 지역 대표 축구단 입지 강화..K4리그 단독 2위로 시즌 마감",
+     "source": "breaknews.com",
+     "date": "2026-11-11",
+     "link": "http://www.breaknews.com/1249975"
+    },
+    {
+     "title": "충북 주민 숙원 결실… 오송역서 인천국제공항 시외버스 탄다",
+     "source": "breaknews.com",
+     "date": "2026-11-11",
+     "link": "http://www.breaknews.com/1249974"
+    },
+    {
+     "title": "10월 CPI 여파 속 뉴욕증시 흔들…빅테크 7인방 엇갈린 행보 [ 美증시 특...",
+     "source": "wowtv.co.kr",
+     "date": "2026-11-11",
+     "link": "https://n.news.naver.com/mnews/article/215/0001272353?sid=101"
+    },
+    {
+     "title": "구글 11월 픽셀 드롭, 픽셀 11 제미나이 인텔리전스 픽셀 10으로 확대…...",
+     "source": "wikitree.co.kr",
+     "date": "2026-11-11",
+     "link": "https://www.wikitree.co.kr/articles/1173548"
+    },
     {
      "title": "홍천군, 강원FC와 ‘강원 FS’ 연고지 및 홈경기 유치 협약 체결",
      "source": "breaknews.com",
@@ -1053,66 +1113,6 @@
      "source": "thepublic.kr",
      "date": "2026-11-10",
      "link": "https://www.thepublic.kr/news/articleView.html?idxno=325857"
-    },
-    {
-     "title": "화성FC, 축구 산업 진로특강 ‘오렌지드림’ 첫선",
-     "source": "breaknews.com",
-     "date": "2026-11-10",
-     "link": "http://www.breaknews.com/1249788"
-    },
-    {
-     "title": "돈 내고 감옥에 갇히고, 절벽에 매달려 잔다… 상상 초월 세계의 이색 ...",
-     "source": "wikitree.co.kr",
-     "date": "2026-11-10",
-     "link": "https://www.wikitree.co.kr/articles/1173171"
-    },
-    {
-     "title": "KT, 3분기 매출 6조9975억원·영업이익 5053억원 기록",
-     "source": "breaknews.com",
-     "date": "2026-11-10",
-     "link": "http://www.breaknews.com/1249730"
-    },
-    {
-     "title": "부유세로 가는 시장의 길",
-     "source": "newscham.net",
-     "date": "2026-11-10",
-     "link": "https://newscham.net/130150/"
-    },
-    {
-     "title": "루미노라 인터랙티브, 백화점 경영 게임 '마이 시크 몰' 출시",
-     "source": "the-biz.co.kr",
-     "date": "2026-11-10",
-     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=730981"
-    },
-    {
-     "title": "춘천시민축구단, 31일 올 시즌 마지막 홈경기 출격",
-     "source": "breaknews.com",
-     "date": "2026-11-10",
-     "link": "http://www.breaknews.com/1249627"
-    },
-    {
-     "title": "[Who Is ?] 윤상현 CJENM 대표이사",
-     "source": "businesspost.co.kr",
-     "date": "2026-11-10",
-     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=451462"
-    },
-    {
-     "title": "고정밀 구글맵 상륙 초읽기… 韓 3사 “이용자 묶어라” 지도 전쟁",
-     "source": "chosun.com",
-     "date": "2026-11-10",
-     "link": "https://n.news.naver.com/mnews/article/023/0004008729?sid=105"
-    },
-    {
-     "title": "폐업 위기의 백화점을 살려라…'마이 시크 몰', 양대 앱마켓 정식 출시",
-     "source": "xportsnews.com",
-     "date": "2026-11-09",
-     "link": "https://m.sports.naver.com/esports/article/311/0002078815"
-    },
-    {
-     "title": "[투자를IT다] 2026년 11월 1주차 IT기업 주요 소식과 시장 전망",
-     "source": "it.donga.com",
-     "date": "2026-11-09",
-     "link": "https://it.donga.com/109879/"
     }
    ]
   }
