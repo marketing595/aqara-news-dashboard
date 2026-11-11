@@ -9694,7 +9694,7 @@
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div class="min-w-0">
             <p class="text-[11px] font-extrabold tracking-wider" style="color:#E65100">AQARA LIFE · 쇼룸 유입 캠페인</p>
-            <h2 class="text-[22px] sm:text-[26px] font-extrabold text-ink leading-tight mt-0.5">🗺 ${esc(HK.title||'학동 스마트 인테리어 MAP')}</h2>
+            <h2 class="text-[22px] sm:text-[26px] font-extrabold text-ink leading-tight mt-0.5">🗺 ${esc(HK.title||'학동역 인테리어 투어 맵')}</h2>
             <p class="text-[13px] text-slate-500 mt-1 max-w-[760px]">${esc(HK.subtitle||'')} · 아카라라이프 쇼룸을 <b>Special Highlight</b>로 두고, 학동역~도산대로 쇼룸 ${(HK.spots||[]).length-1}곳을 카테고리별로 안내합니다. 방문 혜택: ${(HK.benefits||[]).map(b=>esc(b.t)).join(' / ')}.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
@@ -9721,7 +9721,7 @@
       </div>
       <div class="card p-3 mb-4">
         <p class="text-[12px] text-slate-500 px-2 pb-2">공개 페이지 미리보기 <span class="text-slate-400">(실제 방문객이 보는 화면 · 폭 좁히면 모바일 레이아웃)</span></p>
-        <iframe id="hkFrame" src="hakdong.html" title="학동 스마트 인테리어 MAP 미리보기" class="w-full rounded-xl border border-[#E6E6E3] bg-white" style="height:760px"></iframe>
+        <iframe id="hkFrame" src="hakdong.html" title="학동역 인테리어 투어 맵 미리보기" class="w-full rounded-xl border border-[#E6E6E3] bg-white" style="height:760px"></iframe>
       </div>`;
       hkPaintConn(); hkPaintStats(); hkPaintTable();
     }
