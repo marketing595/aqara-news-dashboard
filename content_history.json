@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-11 11:17",
+ "generatedAt": "2026-11-12 02:28",
  "months": [
   {
    "month": "2021-03",
@@ -320,8 +320,15 @@
    "month": "2026-10",
    "blog": 8,
    "youtube": 6,
-   "instagram": 23,
-   "total": 37
+   "instagram": 22,
+   "total": 36
+  },
+  {
+   "month": "2026-11",
+   "blog": 1,
+   "youtube": 0,
+   "instagram": 1,
+   "total": 2
   }
  ]
 }
