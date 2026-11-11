@@ -125,6 +125,9 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
 .prow .ord{display:flex;flex-direction:column}
 .mini{border:none;background:none;color:var(--ptx3);cursor:pointer;font-size:12px;line-height:1.2;padding:1px}
 .mini:hover{color:var(--ptx)}
+.sfxpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.sfxpad button{height:36px;border-radius:10px;border:1px solid var(--pline);background:var(--pcard);color:var(--ptx);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.sfxpad button:hover{border-color:var(--ptx3)}
 .mini.del:hover{color:var(--err)}
 .addp{width:100%;height:38px;border-radius:10px;border:1px dashed var(--pline);background:none;color:var(--ptx2);font-size:14px;font-weight:600;cursor:pointer}
 .addp:hover{color:var(--ptx);border-color:var(--acc)}
@@ -223,7 +226,16 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
       <div class="sub">쉼표로 구분하고, 범위는 400-440처럼 입력하세요.</div>
     </div>
     <div class="field">
-      <label class="chk"><input type="checkbox" id="inSound"> 효과음</label>
+      <label class="chk"><input type="checkbox" id="inSound"> 효과음 (음향 큐시트 SFX)</label>
+      <div class="row" style="margin-top:8px"><span style="white-space:nowrap;font-size:13px">음량</span><input type="range" id="inVol" min="0" max="100" step="5" style="flex:1;accent-color:var(--acc)"><span id="volView" style="width:40px;text-align:right;font-size:13px"></span></div>
+      <div class="sub">추첨 버튼을 누르면 드럼롤이 나오고 '쾅'에 맞춰 번호가 멈춰요(1등은 12초, 나머지 6초). 다 멈추면 당첨 팡파르. 효과음을 끄면 예전처럼 짧게 돌아요.</div>
+      <div class="sfxpad">
+        <button data-sfx="drum6">▶ 드럼롤 6초</button><button data-sfx="drum12">▶ 드럼롤 12초</button><button data-sfx="fanfare">▶ 팡파르</button>
+        <button data-sfx="chime">▶ 안내 차임(끝)</button><button data-sfx="reentry">▶ 재입장 알림</button><button data-sfx="stop">■ 정지</button>
+      </div>
+      <div class="sub">음향 점검·휴식 시간 안내용으로 바로 틀 수 있어요.</div>
+    </div>
+    <div class="field">
       <div class="sub">이미 당첨된 번호(불참 포함)는 다른 경품에서도 다시 뽑히지 않아요. 당첨자가 자리에 없으면 번호 아래 [불참]을 누르세요. 그 자리만 비고, 버튼을 누르면 빈자리 인원만큼 재추첨해요. 잘못 눌렀으면 당첨 이력에서 ↺ 로 되돌릴 수 있어요.</div>
     </div>
   </div>
@@ -450,7 +462,32 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
       o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime + d);
     } catch(e){}
   }
-  function fanfare(){ [523,659,784,1047].forEach(function(f,i){ setTimeout(function(){ beep(f,.35,'triangle',.08); }, i*110); }); }
+  /* 음향 큐시트 SFX (web/sfx). 드럼롤 '쾅' = 6.0초 / 12.0초 지점 (파형으로 확인) */
+  var SFX = { chime:'sfx/sfx04-chime.mp3', drum6:'sfx/sfx05-drumroll6.mp3', drum12:'sfx/sfx06-drumroll12.mp3', fanfare:'sfx/sfx07-fanfare.mp3', reentry:'sfx/sfx08-reentry.mp3' };
+  var BANG = { drum6:6000, drum12:12000 };
+  var AU = {};
+  for (var sk in SFX){ AU[sk] = new Audio(SFX[sk]); AU[sk].preload = 'auto'; }
+  if (S.vol == null) S.vol = 100;
+  function stopAll(){ for (var k in AU){ try { AU[k].pause(); AU[k].currentTime = 0; } catch(e){} } }
+  /* 재생 → 실제로 소리가 시작되면 Promise resolve (실패 시 reject) */
+  function play(name){
+    if (!S.sound || !AU[name]) return Promise.reject();
+    var a = AU[name];
+    try { a.pause(); a.currentTime = 0; } catch(e){}
+    a.volume = Math.max(0, Math.min(1, (S.vol|0) / 100));
+    var pr = a.play();
+    return pr && pr.then ? pr : Promise.resolve();
+  }
+  function fanfare(){ play('fanfare').catch(function(){ [523,659,784,1047].forEach(function(f,i){ setTimeout(function(){ beep(f,.35,'triangle',.08); }, i*110); }); }); }
+  document.querySelectorAll('[data-sfx]').forEach(function(b){
+    b.onclick = function(){
+      var k = b.getAttribute('data-sfx');
+      if (k === 'stop'){ stopAll(); return; }
+      if (spinning) return;
+      if (!S.sound){ toast('효과음이 꺼져 있어요'); return; }
+      stopAll(); play(k).catch(function(){ toast('재생 실패 — 네트워크를 확인하세요'); });
+    };
+  });
 
   /* ── 추첨 ── */
   function act(){
@@ -475,9 +512,20 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
 
     var all = $('reels').querySelectorAll('.reel'), reels = [];
     for (var i = prev.length; i < all.length; i++){ all[i].classList.remove('blank'); all[i].classList.add('spin'); reels.push(all[i]); }
-    var BASE = 2200, GAP = n > 3 ? 500 : 800;
-    if (n === 1 && /1/.test(p.rank)) BASE = 3500;   // 1등은 조금 더 길게
+    var GAP = n > 3 ? 500 : 800;
+    var big = /^\s*1\s*등/.test(p.rank);             // 1등 = 긴 드럼롤(12초)
+    var FALLBACK = (big && n === 1) ? 3500 : 2200;    // 효과음 없을 때
+    var drum = big ? 'drum12' : 'drum6';
+    var useSfx = !!S.sound;
+    var BASE = useSfx ? BANG[drum] : FALLBACK;        // 첫 번호가 '쾅'에 멈춤
     var t0 = performance.now(), lastTick = reels.map(function(){ return 0; }), done = 0;
+    if (useSfx){
+      stopAll();
+      play(drum).then(function(){
+        // 음원이 실제로 시작된 시점에 맞춰 다시 맞춤 (로딩 지연 보정)
+        if (done === 0) t0 = performance.now() - (AU[drum].currentTime || 0) * 1000;
+      }, function(){ useSfx = false; BASE = FALLBACK; });
+    }
 
     function frame(now){
       var el = now - t0;
@@ -488,7 +536,7 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
           r.classList.remove('spin'); r.classList.add('win', 'fresh');
           r.firstChild.textContent = winners[i];
           armSlot(r, winners[i]);
-          beep(880, .18, 'square', .06);
+          if (!(useSfx && i === 0)) beep(880, .18, 'square', .06);   // 첫 번호는 드럼롤 '쾅'이 대신
           done++; continue;
         }
         // 멈출 시점이 가까울수록 느려짐
@@ -497,7 +545,7 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
         if (now - lastTick[i] >= interval){
           lastTick[i] = now;
           r.firstChild.textContent = pl[rnd(pl.length)];
-          if (i === done) beep(300 + rnd(200), .03, 'square', .02);
+          if (i === done && !useSfx) beep(300 + rnd(200), .03, 'square', .02);
         }
       }
       if (done < n) requestAnimationFrame(frame);
@@ -512,7 +560,8 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
         nums: winners.map(function(w){ return {n:w, v:false}; }) });
       spinning = false; $('btnDraw').disabled = false; document.body.classList.remove('spinning');
       save(); paint(false);
-      fanfare(); confetti();
+      confetti();
+      setTimeout(fanfare, useSfx && n === 1 ? 400 : 0);   // '쾅' 직후 겹치지 않게 살짝 뒤에
     }
   }
 
@@ -552,6 +601,12 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
     else { el.value = S[key]; el.oninput = function(){ S[key] = num ? (parseInt(el.value,10) || 0) : el.value; save(); paint(false); }; }
   }
   bind('inEvent','event'); bind('inStart','start',1); bind('inEnd','end',1); bind('inExclude','exclude'); bind('inSound','sound');
+  (function(){
+    var v = $('inVol'), vv = $('volView');
+    v.value = S.vol; vv.textContent = S.vol + '%';
+    v.oninput = function(){ S.vol = parseInt(v.value,10) || 0; vv.textContent = S.vol + '%'; for (var k in AU) AU[k].volume = S.vol/100; save(); };
+  })();
+  $('inSound').addEventListener('change', function(){ if (!S.sound) stopAll(); });
 
   /* 경품 편집 */
   function prizeRows(){
