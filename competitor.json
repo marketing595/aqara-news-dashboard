@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-12 01:15",
+ "generatedAt": "2026-11-13 01:51",
  "brands": [
   {
    "name": "아카라",
@@ -121,15 +121,15 @@
    ],
    "related": [
     "아카라이브",
-    "아카라 도어락",
     "아카라",
+    "아카라 도어락",
     "아카라 k100",
     "아카라 홈캠",
     "아카라 스위치",
     "니케 아카라이브",
+    "아카라이브 핫딜",
     "아카라 l100",
-    "원신 아카라이브",
-    "아카라이브 핫딜"
+    "원신 아카라이브"
    ],
    "recent": [
     {
@@ -228,68 +228,40 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 986,
+   "total": 1013,
    "sentiment": {
-    "pos": 15,
-    "neu": 44,
-    "neg": 1
+    "pos": 6,
+    "neu": 41,
+    "neg": 13
    },
    "keywords": [
     [
-     "홈캠",
-     38
+     "이글루",
+     37
     ],
     [
-     "움직임",
+     "브이스타캠",
      35
     ],
     [
-     "KT",
+     "파인뷰",
+     34
+    ],
+    [
+     "보안",
      32
-    ],
-    [
-     "모바일",
-     27
-    ],
-    [
-     "영상",
-     25
-    ],
-    [
-     "실시간",
-     24
-    ],
-    [
-     "감지",
-     23
-    ],
-    [
-     "양방향",
-     22
-    ],
-    [
-     "알림",
-     22
-    ],
-    [
-     "음성",
-     21
     ],
     [
      "베이비페어",
      20
     ],
     [
-     "아기상어",
-     20
+     "홈카메라",
+     19
     ],
     [
-     "통화",
-     20
-    ],
-    [
-     "프라이버시",
-     20
+     "아이피타임",
+     19
     ],
     [
      "코베",
@@ -306,15 +278,43 @@
     [
      "베이비브레짜",
      19
+    ],
+    [
+     "로보뷰",
+     18
+    ],
+    [
+     "모윰",
+     17
+    ],
+    [
+     "4개",
+     16
+    ],
+    [
+     "샤오미",
+     15
+    ],
+    [
+     "영상",
+     15
+    ],
+    [
+     "육아",
+     15
+    ],
+    [
+     "밤부베베",
+     15
     ]
    ],
    "posWords": [
     [
-     "협업",
-     5
+     "우수",
+     8
     ],
     [
-     "수상",
+     "개선",
      2
     ],
     [
@@ -322,12 +322,12 @@
      2
     ],
     [
-     "확대",
-     2
+     "인기",
+     1
     ],
     [
-     "투자",
-     2
+     "수상",
+     1
     ],
     [
      "1위",
@@ -338,7 +338,7 @@
      1
     ],
     [
-     "계약",
+     "확대",
      1
     ]
    ],
@@ -356,94 +356,94 @@
    ],
    "recent": [
     {
-     "title": "KISA, 시중 IP카메라 10종 보안 점검...3개 제품 미흡",
-     "source": "지디넷",
-     "date": "2026-11-11",
-     "link": "https://n.news.naver.com/mnews/article/092/0002444935?sid=105"
+     "title": "\"집에 오면 수건 덮고 코드 뽑는다\"…우리 집 홈카메라, 누군가 훔쳐볼...",
+     "source": "abcn.kr",
+     "date": "2026-11-12",
+     "link": "https://www.abcn.kr/news/articleView.html?idxno=94462"
     },
     {
-     "title": "가정용 IP카메라 10개 제품 보안 점검…3개 제품서 영상 유출 가능 취약...",
-     "source": "e-science.co.kr",
-     "date": "2026-11-11",
-     "link": "https://www.e-science.co.kr/news/articleView.html?idxno=139505"
+     "title": "\"내 사생활 털렸네\"…거실 홈캠 10종 모두 '위험'",
+     "source": "한국경제",
+     "date": "2026-11-12",
+     "link": "https://n.news.naver.com/mnews/article/015/0005353386?sid=102"
     },
     {
-     "title": "★★ 2년 연속 수상 - [2026 고객신뢰도 1위 프리미엄 브랜드] 고퀄",
-     "source": "forbeskorea.co.kr",
-     "date": "2026-11-02",
-     "link": "https://www.forbeskorea.co.kr/news/articleView.html?idxno=402763"
+     "title": "보안 취약점 노출된 IP 카메라… 일부는 사생활 침해 가능성도",
+     "source": "viva100.com",
+     "date": "2026-11-12",
+     "link": "https://www.viva100.com/article/20261112501127"
     },
     {
-     "title": "‘제111회 코엑스 코베 베이비페어’ 개막…출산·육아용품 한자리",
-     "source": "siminilbo.co.kr",
-     "date": "2026-10-29",
-     "link": "https://www.siminilbo.co.kr/news/newsview.php?ncode=1160292626204918"
+     "title": "홈캠의 불편한 진실...IP카메라 곳곳 보안 구멍",
+     "source": "00news.co.kr",
+     "date": "2026-11-12",
+     "link": "http://www.00news.co.kr/news/articleView.html?idxno=107996"
     },
     {
-     "title": "‘제111회 코엑스 코베 베이비페어’ 개막...출산·육아 브랜드 한자리...",
-     "source": "beyondpost.co.kr",
-     "date": "2026-10-29",
-     "link": "http://www.beyondpost.co.kr/view.php?ud=2026102915061413339aeda69934_30"
+     "title": "가정용 IP카메라, 보안 '취약'..., 영상·저장 성능도 천차만별",
+     "source": "ccdn.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.ccdn.co.kr/news/articleView.html?idxno=1110774"
     },
     {
-     "title": "제111회 코엑스 코베 베이비페어 29일 개막…11월1일까지",
-     "source": "babytimes.co.kr",
-     "date": "2026-10-29",
-     "link": "http://www.babytimes.co.kr/news/articleView.html?idxno=74496"
+     "title": "IP카메라 보안 허술···원격 조작·영상 탈취 노출",
+     "source": "ktv.go.kr",
+     "date": "2026-11-12",
+     "link": "https://www.ktv.go.kr/content/view?content_id=763908"
     },
     {
-     "title": "'제8회 글로벌 베이비페어', 11월 19일 코엑스서 개최… 130개 브랜드 참...",
-     "source": "kids.donga.com",
-     "date": "2026-10-28",
-     "link": "https://kids.donga.com/news/articleView.html?idxno=170150"
+     "title": "KISA, 가정용 IP카메라 3종서 영상 무단 다운로드 등 취약점 발견",
+     "source": "디지털타임스",
+     "date": "2026-11-12",
+     "link": "https://n.news.naver.com/mnews/article/029/0003058820?sid=105"
     },
     {
-     "title": "육아 브랜드 총집합…전국 최대 규모 ‘코엑스 코베 베이비페어’ 10월...",
+     "title": "KISA “시중 판매 IP카메라서 보안 취약점 발견”",
+     "source": "busan.com",
+     "date": "2026-11-12",
+     "link": "https://n.news.naver.com/mnews/article/082/0001406897?sid=101"
+    },
+    {
+     "title": "영유아 안전 확인하는 홈카메라, 보안 취약점 드러나…영상 무단 유출 ...",
      "source": "ibabynews.com",
-     "date": "2026-10-26",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=156206"
+     "date": "2026-11-12",
+     "link": "https://www.ibabynews.com/news/articleView.html?idxno=156853"
     },
     {
-     "title": "'코엑스 코베 베이비페어' 10월 29일부터 나흘간 개최",
-     "source": "babytimes.co.kr",
-     "date": "2026-10-22",
-     "link": "http://www.babytimes.co.kr/news/articleView.html?idxno=74439"
+     "title": "IP카메라 10종 보안 점검 '우수' 0개…로보뷰·브이스타캠·파인뷰 '미흡...",
+     "source": "cstimes.com",
+     "date": "2026-11-12",
+     "link": "https://www.cstimes.com/news/articleView.html?idxno=727716"
     },
     {
-     "title": "육아 브랜드 총집합…'코엑스 코베 베이비페어' 10월 29일부터 나흘간 ...",
-     "source": "sisunnews.co.kr",
-     "date": "2026-10-22",
-     "link": "http://www.sisunnews.co.kr/news/articleView.html?idxno=248206"
+     "title": "“생중계 되는 우리집 사생활?” 홈캠 10개 중 3개 보안 허술",
+     "source": "khan.co.kr",
+     "date": "2026-11-12",
+     "link": "https://n.news.naver.com/mnews/article/032/0003482286?sid=101"
     },
     {
-     "title": "'코엑스 코베 베이비페어' 10월 29일 개막…육아·유아교육 브랜드 한자...",
-     "source": "gokorea.kr",
-     "date": "2026-10-22",
-     "link": "https://www.gokorea.kr/news/articleView.html?idxno=882346"
+     "title": "로보뷰·브이스타캠·파인뷰 홈캠 '사생활 노출' 우려",
+     "source": "safetimes.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.safetimes.co.kr/news/articleView.html?idxno=247443"
     },
     {
-     "title": "일산 킨텍스 코베 베이비페어 개최…400여 개 육아 브랜드·임신출산 정...",
-     "source": "gosiweek.com",
-     "date": "2026-10-08",
-     "link": "https://www.gosiweek.com/article/1065598363076006"
+     "title": "누군가 몰래 우리 집 들여다봤을까… 홈캠 보안 구멍 숭숭",
+     "source": "hankookilbo.com",
+     "date": "2026-11-12",
+     "link": "https://n.news.naver.com/mnews/article/469/0000965212?sid=101"
     },
     {
-     "title": "일산 킨텍스 코베 베이비페어 개최...임신·출산·양육 지원정책 특별관...",
-     "source": "thepowernews.co.kr",
-     "date": "2026-10-08",
-     "link": "https://www.thepowernews.co.kr/view.php?ud=202610081550591849aeda69934_7"
+     "title": "안심하려 들인 홈카메라 사생활 노출 우려?",
+     "source": "newsclaim.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3082388"
     },
     {
-     "title": "‘제109회 부산 코베 베이비페어&유아교육전’ 벡스코서 개막",
-     "source": "globalepic.co.kr",
-     "date": "2026-10-01",
-     "link": "http://www.globalepic.co.kr/view.php?ud=202610011837015449aeda69934_29"
-    },
-    {
-     "title": "부울경 최대 육아 박람회 '제109회 부산 코베 베이비페어', 벡스코서 개...",
-     "source": "gokorea.kr",
-     "date": "2026-10-01",
-     "link": "https://www.gokorea.kr/news/articleView.html?idxno=880235"
+     "title": "카메라 원격 조작 취약점 등 발견... 한국소비자원·KISA, IP 카메라 보안...",
+     "source": "boannews.com",
+     "date": "2026-11-12",
+     "link": "https://www.boannews.com/news/articleView.html?idxno=147208"
     }
    ]
   },
@@ -451,76 +451,72 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69677,
+   "total": 69680,
    "sentiment": {
-    "pos": 18,
-    "neu": 42,
+    "pos": 20,
+    "neu": 40,
     "neg": 0
    },
    "keywords": [
     [
      "현대차",
-     78
+     74
     ],
     [
      "제어하는",
-     46
-    ],
-    [
-     "플랫폼",
-     34
+     43
     ],
     [
      "홈투카",
-     34
-    ],
-    [
-     "삼성전자의",
      32
     ],
     [
-     "차량을",
+     "플랫폼",
      31
     ],
     [
-     "차량",
+     "삼성전자의",
      30
     ],
     [
+     "차량을",
+     28
+    ],
+    [
+     "차량",
+     27
+    ],
+    [
      "카투홈",
-     25
+     23
     ],
     [
      "경영진",
-     24
+     23
     ],
     [
      "기아",
-     21
+     20
     ],
     [
      "서비스를",
-     20
-    ],
-    [
-     "원격",
-     20
-    ],
-    [
-     "협력",
      18
     ],
     [
-     "인포테인먼트",
+     "원격",
+     18
+    ],
+    [
+     "협력",
      17
+    ],
+    [
+     "인포테인먼트",
+     15
     ],
     [
      "교류",
      14
-    ],
-    [
-     "가전을",
-     13
     ],
     [
      "차량에서",
@@ -528,6 +524,10 @@
     ],
     [
      "지난해",
+     13
+    ],
+    [
+     "3월에는",
      13
     ]
    ],
@@ -538,7 +538,7 @@
     ],
     [
      "강화",
-     6
+     7
     ],
     [
      "계약",
@@ -547,6 +547,10 @@
     [
      "첨단",
      2
+    ],
+    [
+     "개선",
+     1
     ],
     [
      "선도",
@@ -559,25 +563,39 @@
     [
      "기대",
      1
-    ],
-    [
-     "주목",
-     1
     ]
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 스위치",
-    "삼성 스마트싱스 오류",
+    "삼성 스마트싱스 연결",
     "삼성 스마트싱스 세탁기 원격",
-    "삼성 스마트싱스 냉장고",
     "삼성 스마트싱스 허브 5세대",
-    "삼성 스마트싱스 공유"
+    "삼성 스마트싱스 아이폰"
    ],
    "recent": [
+    {
+     "title": "표준 스마트홈 규격 'Matter' 지원 로봇청소기... '티피링크 타포 RV30 맥...",
+     "source": "ilovepc.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=61321"
+    },
+    {
+     "title": "[디지털 문단속] #9. 로봇청소기 지도 데이터, 외부 클라우드 전송 막는...",
+     "source": "boannews.com",
+     "date": "2026-11-12",
+     "link": "https://www.boannews.com/news/articleView.html?idxno=147141"
+    },
+    {
+     "title": "AI 홈·강화유리난간 적용 ‘신문 대상 웰라움 라시엘’… 김해 신문동...",
+     "source": "megaeconomy.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065578079367890"
+    },
     {
      "title": "ABB·삼성전자, 상업용 건물 통합 IoT 솔루션 확대…설비·에너지 동시 ...",
      "source": "econovill.com",
@@ -649,24 +667,6 @@
      "source": "peoplewatch.co.kr",
      "date": "2026-11-10",
      "link": "https://www.peoplewatch.co.kr/article/view/ppw202611100001"
-    },
-    {
-     "title": "[사설] 삼성·현대차 \"로봇·미래차 원팀 구성\"…시장 선도할 협업 기대",
-     "source": "한국경제",
-     "date": "2026-11-10",
-     "link": "https://n.news.naver.com/mnews/article/015/0005352058?sid=110"
-    },
-    {
-     "title": "경쟁자에서 팀으로…삼성, 현대차 경영진 초청 '첫 교류'",
-     "source": "mbnmoney.mbn.co.kr",
-     "date": "2026-11-09",
-     "link": "http://mbnmoney.mbn.co.kr/news/view?news_no=MM1005958640"
-    },
-    {
-     "title": "삼성·현대차 경영진 한자리에… 더 견고해진 '미래기술 동맹'",
-     "source": "asiatoday.co.kr",
-     "date": "2026-11-09",
-     "link": "https://www.asiatoday.co.kr/kn/view.php?key=20261110010003465"
     }
    ]
   },
@@ -674,28 +674,28 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78239,
+   "total": 78242,
    "sentiment": {
-    "pos": 16,
-    "neu": 44,
+    "pos": 15,
+    "neu": 45,
     "neg": 0
    },
    "keywords": [
     [
      "LG전자",
-     57
+     54
     ],
     [
      "시간을",
      35
     ],
     [
-     "정수기",
-     27
+     "ThinQ",
+     29
     ],
     [
-     "ThinQ",
-     26
+     "정수기",
+     27
     ],
     [
      "밝기",
@@ -703,14 +703,10 @@
     ],
     [
      "작동",
-     25
+     24
     ],
     [
-     "AI홈",
-     21
-    ],
-    [
-     "류재철",
+     "AI",
      20
     ],
     [
@@ -718,20 +714,24 @@
      19
     ],
     [
-     "알려주는",
-     19
-    ],
-    [
-     "LG전자는",
-     18
-    ],
-    [
      "설정할",
      18
     ],
     [
-     "AI",
-     16
+     "알려주는",
+     18
+    ],
+    [
+     "LG전자는",
+     17
+    ],
+    [
+     "류재철",
+     17
+    ],
+    [
+     "AI홈",
+     17
     ],
     [
      "무드",
@@ -791,16 +791,34 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐 냉장고",
-    "lg 씽큐 티비연결",
     "lg 씽큐 세탁기",
+    "lg 씽큐 티비연결",
+    "lg 씽큐 냉장고",
+    "lg 씽큐 초기화",
     "lg 씽큐 허브",
     "lg 씽큐 연결",
-    "lg 씽큐 와이파이",
     "lg 씽큐 온도",
-    "lg 씽큐 에어컨"
+    "lg 씽큐 와이파이"
    ],
    "recent": [
+    {
+     "title": "AI를 도입하는 시대에서 성과를 만드는 시대로…아이벡스 프론티어 2026",
+     "source": "venturesquare.net",
+     "date": "2026-11-12",
+     "link": "https://www.venturesquare.net/1127921/"
+    },
+    {
+     "title": "아이벡스, 산업용 피지컬 AI 양산 해법 제시…\"PoC 넘어 현장 적용\"",
+     "source": "epnc.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.epnc.co.kr/news/articleView.html?idxno=409683"
+    },
+    {
+     "title": "아이벡스 \"단일 책임·폐루프 구조로 피지컬 AI PoC를 양산으로 잇는다...",
+     "source": "datanet.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.datanet.co.kr/news/articleView.html?idxno=300088"
+    },
     {
      "title": "[아주초대석] 집 한 채 넘어 주택단지로… \"내년 30·40평대 출시 목표\"",
      "source": "ajunews.com",
@@ -872,24 +890,6 @@
      "source": "businessplus.kr",
      "date": "2026-11-11",
      "link": "https://www.businessplus.kr/news/articleView.html?idxno=119641"
-    },
-    {
-     "title": "가전부터 모바일 B2B 솔루션까지… LG전자, 일상·상업 공간 혁신 가속",
-     "source": "newscj.com",
-     "date": "2026-11-11",
-     "link": "https://www.newscj.com/news/articleView.html?idxno=3447729"
-    },
-    {
-     "title": "LG전자, 폭 13.2㎝ 초슬림 정수기 출시⋯물 온도 8단계 조절",
-     "source": "아이뉴스24",
-     "date": "2026-11-11",
-     "link": "https://n.news.naver.com/mnews/article/031/0001073985?sid=101"
-    },
-    {
-     "title": "LG전자, 이페이퍼 디스플레이 관리 앱 '사이니지매니저' 출시",
-     "source": "srtimes.kr",
-     "date": "2026-11-11",
-     "link": "http://www.srtimes.kr/news/articleView.html?idxno=217272"
     }
    ]
   },
@@ -897,11 +897,11 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76450,
+   "total": 76462,
    "sentiment": {
-    "pos": 12,
-    "neu": 31,
-    "neg": 17
+    "pos": 11,
+    "neu": 35,
+    "neg": 14
    },
    "keywords": [
     [
@@ -922,68 +922,68 @@
     ],
     [
      "번역한",
-     14
+     12
     ],
     [
      "기사의",
-     14
+     12
     ],
     [
      "전문",
-     14
-    ],
-    [
-     "아래는",
-     13
-    ],
-    [
-     "기사를",
-     13
-    ],
-    [
-     "번역",
-     13
-    ],
-    [
-     "으로",
-     13
+     12
     ],
     [
      "입니다",
-     13
+     11
     ],
     [
      "번역에",
-     12
+     11
     ],
     [
      "오류가",
-     12
+     11
+    ],
+    [
+     "아래는",
+     11
+    ],
+    [
+     "기사를",
+     11
+    ],
+    [
+     "번역",
+     11
+    ],
+    [
+     "으로",
+     11
+    ],
+    [
+     "화면",
+     10
     ],
     [
      "구글번역",
-     11
+     10
     ],
     [
      "높이기를",
-     11
+     10
     ],
     [
      "노력하고",
-     11
-    ],
-    [
-     "있습니다",
-     11
+     10
     ]
    ],
    "posWords": [
     [
      "강화",
-     3
+     4
     ],
     [
-     "글로벌",
+     "확대",
      3
     ],
     [
@@ -991,11 +991,15 @@
      3
     ],
     [
-     "파트너십",
-     3
+     "성장",
+     2
     ],
     [
-     "확대",
+     "글로벌",
+     2
+    ],
+    [
+     "파트너십",
      2
     ],
     [
@@ -1003,11 +1007,7 @@
      2
     ],
     [
-     "개선",
-     2
-    ],
-    [
-     "성장",
+     "수상",
      1
     ]
    ],
@@ -1020,10 +1020,82 @@
     "구글 홈 미니 연결",
     "구글 홈 미니 1세대",
     "구글 홈 스피커 연결",
-    "구글 홈바탕 빼는법",
-    "구글 홈 미니 2세대"
+    "구글 홈 미니 2세대",
+    "구글 홈바탕 빼는법"
    ],
    "recent": [
+    {
+     "title": "[패트롤] 광명시-부천시-시흥시-안산시-안양시",
+     "source": "ekn.kr",
+     "date": "2026-11-12",
+     "link": "https://www.ekn.kr/web/view.php?key=20261112020389066"
+    },
+    {
+     "title": "표준 스마트홈 규격 'Matter' 지원 로봇청소기... '티피링크 타포 RV30 맥...",
+     "source": "ilovepc.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=61321"
+    },
+    {
+     "title": "티피링크, 매터 지원 로봇청소기 '타포 RV30 맥스 플러스 Gen2' 출시",
+     "source": "datanet.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.datanet.co.kr/news/articleView.html?idxno=300110"
+    },
+    {
+     "title": "영남이공대, 삼성웰스토리·발렉스서비스 채용설명회 열려…올해만 21개...",
+     "source": "breaknews.com",
+     "date": "2026-11-12",
+     "link": "http://www.breaknews.com/1250560"
+    },
+    {
+     "title": "자동차보험비교사이트 차통령, 안드로이드·iOS 앱 연속 업데이트…알림...",
+     "source": "woodkorea.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92521"
+    },
+    {
+     "title": "실비보험비교사이트 플랜비보험, 카카오톡 간편 보험료확인 도입…앱 연...",
+     "source": "woodkorea.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92522"
+    },
+    {
+     "title": "[산업소식] LGU+, '심플리. U+'로 레드닷 본상",
+     "source": "4th.kr",
+     "date": "2026-11-12",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2121678"
+    },
+    {
+     "title": "[Game & Now] 크래프톤·플레이디·카카오게임즈, 게임·광고·사회공헌...",
+     "source": "ebn.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1731380"
+    },
+    {
+     "title": "[게임업계 소식] 펄어비스 ‘붉은사막’, 골든 조이스틱 어워드 2026 ‘올...",
+     "source": "viva100.com",
+     "date": "2026-11-12",
+     "link": "https://www.viva100.com/article/20261112500374"
+    },
+    {
+     "title": "[오늘의 신문] 美 대중국 반도체 통제 강화·엔비디아 3중 조사...한국 ...",
+     "source": "kor.theasian.asia",
+     "date": "2026-11-12",
+     "link": "http://kor.theasian.asia/archives/421462"
+    },
+    {
+     "title": "AI가 기계어까지 검증…딥마인드, 알파프루프 코드 공개",
+     "source": "digitaltoday.co.kr",
+     "date": "2026-11-12",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=714772"
+    },
+    {
+     "title": "[THE CEO] 구광모 LG그룹 회장",
+     "source": "the-biz.co.kr",
+     "date": "2026-11-12",
+     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=729921"
+    },
     {
      "title": "픽셀폰 홈 화면 꾸미기 기능 강화…구글, 안드로이드 17 QPR2 출시",
      "source": "kbench.com",
@@ -1041,78 +1113,6 @@
      "source": "joongangenews.com",
      "date": "2026-11-11",
      "link": "https://www.joongangenews.com/news/articleView.html?idxno=563005"
-    },
-    {
-     "title": "\"명상하는 나라 만들겠다\" 김주환 연세대 교수, 명상 대중화 위한 AI명상...",
-     "source": "interview365.com",
-     "date": "2026-11-11",
-     "link": "http://www.interview365.com/news/articleView.html?idxno=112344"
-    },
-    {
-     "title": "삼성·현대차 로봇부품 동맹 확대",
-     "source": "smedaily.co.kr",
-     "date": "2026-11-11",
-     "link": "http://www.smedaily.co.kr/news/articleView.html?idxno=366013"
-    },
-    {
-     "title": "‘공시의무보다 엄격’ 코스피 상장사 101곳, 깐깐한 현미경 투자 심의",
-     "source": "breaknews.com",
-     "date": "2026-11-11",
-     "link": "http://www.breaknews.com/1250075"
-    },
-    {
-     "title": "진천 HR FC, 지역 대표 축구단 입지 강화..K4리그 단독 2위로 시즌 마감",
-     "source": "breaknews.com",
-     "date": "2026-11-11",
-     "link": "http://www.breaknews.com/1249975"
-    },
-    {
-     "title": "충북 주민 숙원 결실… 오송역서 인천국제공항 시외버스 탄다",
-     "source": "breaknews.com",
-     "date": "2026-11-11",
-     "link": "http://www.breaknews.com/1249974"
-    },
-    {
-     "title": "10월 CPI 여파 속 뉴욕증시 흔들…빅테크 7인방 엇갈린 행보 [ 美증시 특...",
-     "source": "wowtv.co.kr",
-     "date": "2026-11-11",
-     "link": "https://n.news.naver.com/mnews/article/215/0001272353?sid=101"
-    },
-    {
-     "title": "구글 11월 픽셀 드롭, 픽셀 11 제미나이 인텔리전스 픽셀 10으로 확대…...",
-     "source": "wikitree.co.kr",
-     "date": "2026-11-11",
-     "link": "https://www.wikitree.co.kr/articles/1173548"
-    },
-    {
-     "title": "홍천군, 강원FC와 ‘강원 FS’ 연고지 및 홈경기 유치 협약 체결",
-     "source": "breaknews.com",
-     "date": "2026-11-10",
-     "link": "http://www.breaknews.com/1249939"
-    },
-    {
-     "title": "이란이 ‘공범이 되지 말라’고 한 다음 날, 국무회의는 청해부대를 호...",
-     "source": "newscham.net",
-     "date": "2026-11-10",
-     "link": "https://newscham.net/130154/"
-    },
-    {
-     "title": "[ICT 종합] 로지텍 코리아 및 AMD 소식 외",
-     "source": "gamevu.co.kr",
-     "date": "2026-11-10",
-     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=62147"
-    },
-    {
-     "title": "구글TV 품은 4K 레이저 프로젝터, 뷰소닉 ‘LX720-4K·LX750-4K’",
-     "source": "betanews.net",
-     "date": "2026-11-10",
-     "link": "https://www.betanews.net/article/view/beta202611100139"
-    },
-    {
-     "title": "고정밀 지도 상륙 초읽기…네·카·T맵, 구글 공세 맞서 '초정밀 맞대응...",
-     "source": "thepublic.kr",
-     "date": "2026-11-10",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=325857"
     }
    ]
   }
