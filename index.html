@@ -9542,6 +9542,27 @@
       if(box.classList.contains('hidden')||box.dataset.done) return;
       const draw=()=>{ try{ box.querySelector('.qr').innerHTML=''; new QRCode(box.querySelector('.qr'),{text:hkUrl()+'?ref=qr',width:168,height:168,colorDark:'#1D1D1F',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); box.dataset.done='1'; }catch(e){ box.querySelector('.qr').textContent='QR 생성 실패'; } };
       if(window.QRCode) draw(); else { const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s.onload=draw; s.onerror=()=>{ box.querySelector('.qr').textContent='QR 라이브러리 로드 실패'; }; document.head.appendChild(s); } }
+    /* 일별 방문 그래프 — hakdong/stats/<날짜>/{view,qr}. 집계 시작일(2026-10-16)부터 오늘까지, 최대 최근 45일. 막대=방문, 아래 보라 구간=그중 QR 스캔 */
+    function hkDailyChart(today){
+      const start='2026-10-16', days=[]; let d=new Date(today+'T00:00:00Z');
+      for(let i=0;i<45;i++){ const k=d.toISOString().slice(0,10); if(k<start) break; days.unshift(k); d=new Date(d.getTime()-864e5); }
+      if(!days.length) return '';
+      const rows=days.map(k=>{ const v=HK_ST[k]||{}; return {k,view:v.view||0,qr:Math.min(v.qr||0,v.view||0)}; });
+      const max=Math.max(1,...rows.map(r=>r.view)), tot=rows.reduce((a,r)=>a+r.view,0), avg=(tot/rows.length).toFixed(1);
+      const best=rows.reduce((a,r)=>r.view>a.view?r:a,rows[0]), H=120, wd=k=>'일월화수목금토'[new Date(k+'T00:00:00Z').getUTCDay()];
+      const bars=rows.map((r,i)=>{ const h=Math.round(r.view/max*H), q=r.view?Math.round(r.qr/r.view*h):0, isT=r.k===today, we=/[토일]/.test(wd(r.k));
+        const lab=(i===0||i===rows.length-1||r.k.endsWith('-01')||(rows.length-1-i)%7===0)?`${+r.k.slice(5,7)}/${+r.k.slice(8)}`:'';
+        return `<div class="flex-1 min-w-0 flex flex-col items-center justify-end" title="${r.k}(${wd(r.k)}) 방문 ${r.view}회${r.qr?' · QR '+r.qr:''}">
+          <span class="hidden md:block text-[9.5px] num ${isT?'text-[#7C5CFF] font-bold':'text-slate-400'} leading-none mb-0.5">${r.view||''}</span>
+          <div class="w-full max-w-[18px] rounded-t-[3px] flex flex-col justify-end overflow-hidden" style="height:${Math.max(h,r.view?2:0)}px;background:${isT?'#7C5CFF':'#C9CDD4'}">${q?`<div style="height:${q}px;background:${isT?'#5B3FD9':'#7C5CFF'}"></div>`:''}</div>
+          <div class="w-full border-t ${we?'border-slate-300':'border-[#E6E6E3]'}"></div>
+          <span class="text-[9.5px] num text-slate-400 h-3 leading-3 mt-0.5 whitespace-nowrap">${lab}</span></div>`; }).join('');
+      return `<div class="rounded-xl border border-[#E6E6E3] bg-white p-3 mt-2">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mb-2">
+          <p class="text-[12px] font-bold text-ink">일별 지도 방문 <span class="font-normal text-slate-400">· 최근 ${rows.length}일</span></p>
+          <p class="text-[11px] text-slate-400">하루 평균 <b class="text-ink num">${avg}</b>회 · 최고 <b class="text-ink num">${best.view}</b>회(${+best.k.slice(5,7)}/${+best.k.slice(8)}) ·
+            <span class="inline-block w-2 h-2 rounded-sm align-middle" style="background:#C9CDD4"></span> 방문 <span class="inline-block w-2 h-2 rounded-sm align-middle ml-1" style="background:#7C5CFF"></span> 그중 QR</p></div>
+        <div class="flex items-end gap-[3px]" style="height:${H+30}px">${bars}</div></div>`; }
     function hkPaintStats(){ const el=document.getElementById('hkStats'); if(!el||!HK) return;
       const sp=hkSpots(), shown=sp.filter(s=>!s.hide), cps=Object.entries(HK_CP).map(([code,v])=>Object.assign({code},v||{})).sort((a,b)=>(b.ts||0)-(a.ts||0));
       const today=kstToday(), kd=t=>{ const d=new Date((t||0)+9*36e5); return d.toISOString().slice(0,10); };
@@ -9559,6 +9580,7 @@
         ${fun('② 지도 페이지 방문',sum('view',all)+'회',sum('view',mon),sum('view',tdy))}${arrow}
         ${fun('③ 웰컴 쿠폰 발급',cps.length+'건',cMonth,cToday,'QR 경유 '+cQr)}${arrow}
         ${fun('④ 쇼룸 방문 · 쿠폰 사용',used.length+'명',uMonth,uToday,cps.length?'사용률 '+Math.round(used.length/cps.length*100)+'%':'')}</div>
+        ${hkDailyChart(today)}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
         ${tile('공개 중인 스팟',shown.length+'곳',(HK.categories||[]).map(c=>`<span style="color:${c.color}">●</span>${shown.filter(s=>s.cat===c.id).length}`).join(' '))}
         ${tile('숨긴 스팟',sp.filter(s=>s.hide).length+'곳','표에서 다시 켤 수 있어요')}</div>
