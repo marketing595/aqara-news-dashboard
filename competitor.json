@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-13 01:51",
+ "generatedAt": "2026-11-14 01:30",
  "brands": [
   {
    "name": "아카라",
@@ -121,15 +121,15 @@
    ],
    "related": [
     "아카라이브",
-    "아카라",
     "아카라 도어락",
+    "아카라",
     "아카라 k100",
     "아카라 홈캠",
     "아카라 스위치",
     "니케 아카라이브",
-    "아카라이브 핫딜",
     "아카라 l100",
-    "원신 아카라이브"
+    "아카라이브 핫딜",
+    "명조 아카라이브"
    ],
    "recent": [
     {
@@ -228,28 +228,36 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 1013,
+   "total": 1017,
    "sentiment": {
-    "pos": 6,
-    "neu": 41,
-    "neg": 13
+    "pos": 5,
+    "neu": 38,
+    "neg": 17
    },
    "keywords": [
     [
      "이글루",
-     37
+     42
     ],
     [
      "브이스타캠",
-     35
+     39
     ],
     [
      "파인뷰",
-     34
+     38
     ],
     [
      "보안",
-     32
+     36
+    ],
+    [
+     "아이피타임",
+     23
+    ],
+    [
+     "로보뷰",
+     20
     ],
     [
      "베이비페어",
@@ -257,10 +265,6 @@
     ],
     [
      "홈카메라",
-     19
-    ],
-    [
-     "아이피타임",
      19
     ],
     [
@@ -280,31 +284,27 @@
      19
     ],
     [
-     "로보뷰",
-     18
+     "샤오미",
+     17
+    ],
+    [
+     "4개",
+     17
     ],
     [
      "모윰",
      17
     ],
     [
-     "4개",
-     16
-    ],
-    [
-     "샤오미",
+     "타포",
      15
     ],
     [
-     "영상",
+     "제품은",
      15
     ],
     [
      "육아",
-     15
-    ],
-    [
-     "밤부베베",
      15
     ]
    ],
@@ -315,10 +315,6 @@
     ],
     [
      "개선",
-     2
-    ],
-    [
-     "글로벌",
      2
     ],
     [
@@ -338,6 +334,10 @@
      1
     ],
     [
+     "글로벌",
+     1
+    ],
+    [
      "확대",
      1
     ]
@@ -346,15 +346,39 @@
     "헤이홈",
     "헤이홈 홈캠",
     "헤이홈 sd카드",
-    "헤이홈 거치대",
     "헤이홈 중국",
+    "헤이홈 거치대",
     "헤이홈 연결",
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈캠"
+    "헤이홈 프로"
    ],
    "recent": [
+    {
+     "title": "집에 ‘이것’ 뒀을 뿐인데 “남이 안방 훤히 훔쳐보는 수준”…10개 제...",
+     "source": "서울경제",
+     "date": "2026-11-13",
+     "link": "https://n.news.naver.com/mnews/article/011/0004682046?sid=102"
+    },
+    {
+     "title": "\"가정용 홈캠, 사생활 유출 취약점 확인\"",
+     "source": "insight.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.insight.co.kr/news/581858"
+    },
+    {
+     "title": "\"집 안 지키려다 사생활 털릴라\"…홈캠 10개 중 3개 보안 취약",
+     "source": "srtimes.kr",
+     "date": "2026-11-13",
+     "link": "http://www.srtimes.kr/news/articleView.html?idxno=217468"
+    },
+    {
+     "title": "\"아기·강아지 보려다 집 털린다\"…해킹 무방비 홈캠 10종, 살아남은 제...",
+     "source": "news.tvchosun.com",
+     "date": "2026-11-13",
+     "link": "https://n.news.naver.com/mnews/article/448/0000650744?sid=102"
+    },
     {
      "title": "\"집에 오면 수건 덮고 코드 뽑는다\"…우리 집 홈카메라, 누군가 훔쳐볼...",
      "source": "abcn.kr",
@@ -420,30 +444,6 @@
      "source": "khan.co.kr",
      "date": "2026-11-12",
      "link": "https://n.news.naver.com/mnews/article/032/0003482286?sid=101"
-    },
-    {
-     "title": "로보뷰·브이스타캠·파인뷰 홈캠 '사생활 노출' 우려",
-     "source": "safetimes.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.safetimes.co.kr/news/articleView.html?idxno=247443"
-    },
-    {
-     "title": "누군가 몰래 우리 집 들여다봤을까… 홈캠 보안 구멍 숭숭",
-     "source": "hankookilbo.com",
-     "date": "2026-11-12",
-     "link": "https://n.news.naver.com/mnews/article/469/0000965212?sid=101"
-    },
-    {
-     "title": "안심하려 들인 홈카메라 사생활 노출 우려?",
-     "source": "newsclaim.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3082388"
-    },
-    {
-     "title": "카메라 원격 조작 취약점 등 발견... 한국소비자원·KISA, IP 카메라 보안...",
-     "source": "boannews.com",
-     "date": "2026-11-12",
-     "link": "https://www.boannews.com/news/articleView.html?idxno=147208"
     }
    ]
   },
@@ -451,105 +451,109 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69680,
+   "total": 69716,
    "sentiment": {
-    "pos": 20,
-    "neu": 40,
+    "pos": 11,
+    "neu": 49,
     "neg": 0
    },
    "keywords": [
     [
-     "현대차",
-     74
-    ],
-    [
-     "제어하는",
-     43
-    ],
-    [
-     "홈투카",
-     32
-    ],
-    [
-     "플랫폼",
-     31
-    ],
-    [
-     "삼성전자의",
-     30
-    ],
-    [
-     "차량을",
-     28
-    ],
-    [
-     "차량",
-     27
-    ],
-    [
-     "카투홈",
-     23
-    ],
-    [
-     "경영진",
-     23
-    ],
-    [
-     "기아",
-     20
+     "삼성화재",
+     61
     ],
     [
      "서비스를",
+     32
+    ],
+    [
+     "화재",
+     29
+    ],
+    [
+     "누수",
+     29
+    ],
+    [
+     "배너를",
+     27
+    ],
+    [
+     "현대차",
+     23
+    ],
+    [
+     "삼성화재는",
+     21
+    ],
+    [
+     "위험",
+     21
+    ],
+    [
+     "진단",
+     21
+    ],
+    [
+     "우리집진단",
+     20
+    ],
+    [
+     "CU",
+     19
+    ],
+    [
+     "모바일",
+     19
+    ],
+    [
+     "이용한",
      18
     ],
     [
-     "원격",
+     "기프트카드",
      18
     ],
     [
-     "협력",
+     "플랫폼",
      17
     ],
     [
-     "인포테인먼트",
+     "건물",
      15
     ],
     [
-     "교류",
+     "주택",
      14
     ],
     [
-     "차량에서",
-     13
-    ],
-    [
-     "지난해",
-     13
-    ],
-    [
-     "3월에는",
+     "문화상품권과",
      13
     ]
    ],
    "posWords": [
     [
      "확대",
-     8
-    ],
-    [
-     "강화",
-     7
-    ],
-    [
-     "계약",
-     3
+     4
     ],
     [
      "첨단",
      2
     ],
     [
+     "투자",
+     1
+    ],
+    [
+     "글로벌",
+     1
+    ],
+    [
      "개선",
+     1
+    ],
+    [
+     "강화",
      1
     ],
     [
@@ -558,10 +562,6 @@
     ],
     [
      "협업",
-     1
-    ],
-    [
-     "기대",
      1
     ]
    ],
@@ -572,101 +572,101 @@
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 스위치",
-    "삼성 스마트싱스 연결",
-    "삼성 스마트싱스 세탁기 원격",
+    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 허브 5세대",
-    "삼성 스마트싱스 아이폰"
+    "삼성 스마트싱스 아이폰",
+    "삼성 스마트싱스 세탁기 원격"
    ],
    "recent": [
     {
-     "title": "표준 스마트홈 규격 'Matter' 지원 로봇청소기... '티피링크 타포 RV30 맥...",
-     "source": "ilovepc.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=61321"
+     "title": "[위클리오늘] 삼성화재, 삼성전자 스마트싱스 앱서 '착!한 우리집진단'...",
+     "source": "weeklytoday.com",
+     "date": "2026-11-13",
+     "link": "http://www.weeklytoday.com/news/articleView.html?idxno=802031"
     },
     {
-     "title": "[디지털 문단속] #9. 로봇청소기 지도 데이터, 외부 클라우드 전송 막는...",
-     "source": "boannews.com",
-     "date": "2026-11-12",
-     "link": "https://www.boannews.com/news/articleView.html?idxno=147141"
+     "title": "'스마트싱스로 우리집 위험 확인'…삼성화재, 안전진단 서비스 연계",
+     "source": "financialpost.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=300846"
     },
     {
-     "title": "AI 홈·강화유리난간 적용 ‘신문 대상 웰라움 라시엘’… 김해 신문동...",
-     "source": "megaeconomy.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065578079367890"
+     "title": "삼성화재, 스마트싱스서 '착!한 우리집진단' 제공",
+     "source": "pointdaily.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=325943"
     },
     {
-     "title": "ABB·삼성전자, 상업용 건물 통합 IoT 솔루션 확대…설비·에너지 동시 ...",
-     "source": "econovill.com",
-     "date": "2026-11-11",
-     "link": "https://www.econovill.com/news/articleView.html?idxno=756831"
+     "title": "삼성화재, 스마트싱스서 주택 화재·누수 위험 진단 서비스 제공",
+     "source": "ziksir.com",
+     "date": "2026-11-13",
+     "link": "https://www.ziksir.com/news/articleView.html?idxno=153299"
     },
     {
-     "title": "ABB-삼성전자, 상업용 건물 통합 관리 솔루션 협력",
-     "source": "thelec.kr",
-     "date": "2026-11-11",
-     "link": "https://www.thelec.kr/news/articleView.html?idxno=65256"
+     "title": "삼성화재, 스마트싱스서 우리집 화재·누수 위험 진단 서비스 제공",
+     "source": "e-science.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.e-science.co.kr/news/articleView.html?idxno=139744"
     },
     {
-     "title": "삼성·현대차 로봇부품 동맹 확대",
-     "source": "smedaily.co.kr",
-     "date": "2026-11-11",
-     "link": "http://www.smedaily.co.kr/news/articleView.html?idxno=366013"
-    },
-    {
-     "title": "\"크기보다 실속 택했다\"…중국 저가 공세에 29입방피트 꺼내든 삼성의 ...",
-     "source": "g-enews.com",
-     "date": "2026-11-11",
-     "link": "https://www.g-enews.com/view.php?ud=202611111052079872fbbec65dfb_1"
-    },
-    {
-     "title": "‘차와 집 연결’ 삼성·현대차…‘에너지 관리’로 협력 넓히나",
+     "title": "[보험·카드사 풍향계] 삼성화재, ‘착!한 우리집진단’ 서비스 선봬 外",
      "source": "ekn.kr",
-     "date": "2026-11-11",
-     "link": "https://www.ekn.kr/web/view.php?key=20261111023058090"
+     "date": "2026-11-13",
+     "link": "https://www.ekn.kr/web/view.php?key=20261113025449508"
     },
     {
-     "title": "ABB·삼성전자, 상업용 건물 통합 IoT 솔루션 협력",
-     "source": "g-enews.com",
-     "date": "2026-11-11",
-     "link": "https://www.g-enews.com/view.php?ud=202611110846518214112616b072_1"
+     "title": "삼성화재, 스마트싱스 연계해 주택 화재·누수 위험 진단",
+     "source": "뉴시스",
+     "date": "2026-11-13",
+     "link": "https://n.news.naver.com/mnews/article/003/0014321360?sid=101"
     },
     {
-     "title": "삼성·현대가 보여준 피지컬AI 합종연횡 시대…기업 '코피티션' 본격화",
-     "source": "greened.kr",
-     "date": "2026-11-10",
-     "link": "https://www.greened.kr/news/articleView.html?idxno=354286"
+     "title": "삼성화재, 스마트싱스 통해 주택 화재·누수 위험 알려준다",
+     "source": "ftoday.co.kr",
+     "date": "2026-11-13",
+     "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=369699"
     },
     {
-     "title": "[줌인] 삼성·현대차 '원팀' 선언의 의미…부품 공급 넘어 미래차 기술...",
-     "source": "dailypop.kr",
-     "date": "2026-11-10",
-     "link": "http://www.dailypop.kr/news/articleView.html?idxno=104375"
+     "title": "삼성화재, 삼성전자 스마트싱스 앱서 '주택 화재·누수 위험' 진단",
+     "source": "insnews.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.insnews.co.kr/news/articleView.html?idxno=93833"
     },
     {
-     "title": "[삼성전자] C랩 스타트업 30개사 데모데이·천장형 디지털 엑스레이 출...",
-     "source": "webeconomy.co.kr",
-     "date": "2026-11-10",
-     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2368201"
+     "title": "삼성화재, 삼성전자 스마트싱스와 제휴…주택 화재·누수 위험 진단",
+     "source": "cnbizm.com",
+     "date": "2026-11-13",
+     "link": "https://www.cnbizm.com/news/articleView.html?idxno=321427"
     },
     {
-     "title": "삼성전자 베트남, KiN호텔그룹과 협력…숙박 공간서 AI 가전 체험 서비...",
-     "source": "파이낸셜뉴스",
-     "date": "2026-11-10",
-     "link": "https://n.news.naver.com/mnews/article/014/0005601997?sid=101"
+     "title": "삼성화재, 스마트싱스 앱서 주택 화재·누수 위험 진단 '착!한 우리집진...",
+     "source": "nextdaily.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.nextdaily.co.kr/news/articleView.html?idxno=254899"
     },
     {
-     "title": "삼성은 기술 공급망, 현대차는 모빌리티 플랫폼…맞물린 미래사업 전략",
-     "source": "press9.kr",
-     "date": "2026-11-10",
-     "link": "http://www.press9.kr/news/articleView.html?idxno=85899"
+     "title": "[금융 브리핑] 한화생명·삼성화재·KB손해보험",
+     "source": "niceeconomy.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.niceeconomy.co.kr/news/articleView.html?idxno=91811"
     },
     {
-     "title": "현대차를 안방에 부른 삼성…이재용의 미래차 구상은 어디까지",
-     "source": "peoplewatch.co.kr",
-     "date": "2026-11-10",
-     "link": "https://www.peoplewatch.co.kr/article/view/ppw202611100001"
+     "title": "[금융계 동향] 한국투자증권·미래에셋증권·삼성화재",
+     "source": "iminju.net",
+     "date": "2026-11-13",
+     "link": "http://www.iminju.net/news/articleView.html?idxno=172461"
+    },
+    {
+     "title": "\"기본정보 입력으로 주택화재·누수위험 진단\" 삼성화재 '착!한 우리집진...",
+     "source": "catchnews.kr",
+     "date": "2026-11-13",
+     "link": "https://www.catchnews.kr/news/articleView.html?idxno=130489"
+    },
+    {
+     "title": "보험업계 '착!한 우리집진단' 서비스 제공...'보조기기 지원금특약' 배...",
+     "source": "wsobi.com",
+     "date": "2026-11-13",
+     "link": "http://www.wsobi.com/news/articleView.html?idxno=321744"
     }
    ]
   },
@@ -674,7 +674,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78242,
+   "total": 78243,
    "sentiment": {
     "pos": 15,
     "neu": 45,
@@ -683,7 +683,7 @@
    "keywords": [
     [
      "LG전자",
-     54
+     53
     ],
     [
      "시간을",
@@ -714,24 +714,24 @@
      19
     ],
     [
+     "LG전자는",
+     18
+    ],
+    [
      "설정할",
      18
     ],
     [
-     "알려주는",
-     18
+     "AI홈",
+     17
     ],
     [
-     "LG전자는",
+     "알려주는",
      17
     ],
     [
      "류재철",
-     17
-    ],
-    [
-     "AI홈",
-     17
+     16
     ],
     [
      "무드",
@@ -792,15 +792,21 @@
     "lg 씽큐",
     "lg 씽큐온",
     "lg 씽큐 세탁기",
-    "lg 씽큐 티비연결",
     "lg 씽큐 냉장고",
-    "lg 씽큐 초기화",
+    "lg 씽큐 티비연결",
     "lg 씽큐 허브",
+    "lg 씽큐 초기화",
     "lg 씽큐 연결",
-    "lg 씽큐 온도",
+    "lg 씽큐 에어컨 연결",
     "lg 씽큐 와이파이"
    ],
    "recent": [
+    {
+     "title": "인공지능이 집을 이해하기 시작했다…AI홈, 생활·공간 관리로 진화",
+     "source": "asiatime.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.asiatime.co.kr/article/20261113500236"
+    },
     {
      "title": "AI를 도입하는 시대에서 성과를 만드는 시대로…아이벡스 프론티어 2026",
      "source": "venturesquare.net",
@@ -884,12 +890,6 @@
      "source": "m-i.kr",
      "date": "2026-11-11",
      "link": "https://www.m-i.kr/news/articleView.html?idxno=2017119"
-    },
-    {
-     "title": "LG전자, 천원권 지폐보다 좁은 정수기 출시…온도 맞춤 기능 강화",
-     "source": "businessplus.kr",
-     "date": "2026-11-11",
-     "link": "https://www.businessplus.kr/news/articleView.html?idxno=119641"
     }
    ]
   },
@@ -897,11 +897,11 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76462,
+   "total": 76472,
    "sentiment": {
-    "pos": 11,
-    "neu": 35,
-    "neg": 14
+    "pos": 14,
+    "neu": 33,
+    "neg": 13
    },
    "keywords": [
     [
@@ -910,7 +910,7 @@
     ],
     [
      "AI",
-     20
+     17
     ],
     [
      "마이",
@@ -922,27 +922,27 @@
     ],
     [
      "번역한",
-     12
+     13
     ],
     [
      "기사의",
-     12
+     13
     ],
     [
      "전문",
-     12
+     13
     ],
     [
      "입니다",
-     11
+     13
     ],
     [
      "번역에",
-     11
+     13
     ],
     [
      "오류가",
-     11
+     13
     ],
     [
      "아래는",
@@ -961,29 +961,33 @@
      11
     ],
     [
-     "화면",
-     10
-    ],
-    [
      "구글번역",
-     10
+     11
     ],
     [
      "높이기를",
-     10
+     11
     ],
     [
      "노력하고",
-     10
+     11
+    ],
+    [
+     "있습니다",
+     11
     ]
    ],
    "posWords": [
     [
      "강화",
-     4
+     5
     ],
     [
      "확대",
+     4
+    ],
+    [
+     "글로벌",
      3
     ],
     [
@@ -995,35 +999,91 @@
      2
     ],
     [
-     "글로벌",
-     2
-    ],
-    [
      "파트너십",
      2
     ],
     [
-     "돌파",
-     2
+     "인기",
+     1
     ],
     [
-     "수상",
+     "1위",
      1
     ]
    ],
    "related": [
-    "구글 홈 스피커",
     "구글 홈",
+    "구글 홈 스피커",
     "구글 홈 허브",
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 연결",
     "구글 홈 미니 1세대",
-    "구글 홈 스피커 연결",
     "구글 홈 미니 2세대",
-    "구글 홈바탕 빼는법"
+    "구글 홈바탕 빼는법",
+    "구글 홈 스피커 연결"
    ],
    "recent": [
+    {
+     "title": "[게임뉴스] 카카오게임즈 및 라인게임즈 소식 외",
+     "source": "gamevu.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=62281"
+    },
+    {
+     "title": "네이버, 수능 앞두고 입시 콘텐츠 확대…'환산 점수 계산' 서비스 추가",
+     "source": "breaknews.com",
+     "date": "2026-11-13",
+     "link": "http://www.breaknews.com/1250924"
+    },
+    {
+     "title": "대구시의회 건설교통위, 도시건설국 행감서 '군부대 이전·서대구역 환...",
+     "source": "breaknews.com",
+     "date": "2026-11-13",
+     "link": "http://www.breaknews.com/1250817"
+    },
+    {
+     "title": "티피링크 타포, 흡입력 높인 로봇청소기 신제품 출시",
+     "source": "lawissue.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.lawissue.co.kr/view.php?ud=202611131403307282204ead0791_12"
+    },
+    {
+     "title": "인공지능이 집을 이해하기 시작했다…AI홈, 생활·공간 관리로 진화",
+     "source": "asiatime.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.asiatime.co.kr/article/20261113500236"
+    },
+    {
+     "title": "티피링크, 매터 지원 로봇청소기 출시…흡입력∙호환성 강화",
+     "source": "it-b.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.it-b.co.kr/news/articleView.html?idxno=90678"
+    },
+    {
+     "title": "파이어플라이즈 '프레드', 240개 이상 도구 연결해 이메일·슬랙까지",
+     "source": "coinreaders.com",
+     "date": "2026-11-13",
+     "link": "http://coinreaders.com/269906"
+    },
+    {
+     "title": "티피링크 타포, 매터(Matter) 지원 로봇청소기 'Tapo RV30 Max Plus Gen 2' 출...",
+     "source": "boannews.com",
+     "date": "2026-11-13",
+     "link": "https://www.boannews.com/news/articleView.html?idxno=147244"
+    },
+    {
+     "title": "티피링크, 매터 지원 로봇청소기 '타포 RV30 맥스 플러스 젠2' 출시",
+     "source": "epnc.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.epnc.co.kr/news/articleView.html?idxno=409731"
+    },
+    {
+     "title": "애플 홈뷰 리뷰, 시리 AI는 차고문·현관문 못 열어…12월 업데이트로 고...",
+     "source": "wikitree.co.kr",
+     "date": "2026-11-13",
+     "link": "https://www.wikitree.co.kr/articles/1174222"
+    },
     {
      "title": "[패트롤] 광명시-부천시-시흥시-안산시-안양시",
      "source": "ekn.kr",
@@ -1053,66 +1113,6 @@
      "source": "woodkorea.co.kr",
      "date": "2026-11-12",
      "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92521"
-    },
-    {
-     "title": "실비보험비교사이트 플랜비보험, 카카오톡 간편 보험료확인 도입…앱 연...",
-     "source": "woodkorea.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92522"
-    },
-    {
-     "title": "[산업소식] LGU+, '심플리. U+'로 레드닷 본상",
-     "source": "4th.kr",
-     "date": "2026-11-12",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2121678"
-    },
-    {
-     "title": "[Game & Now] 크래프톤·플레이디·카카오게임즈, 게임·광고·사회공헌...",
-     "source": "ebn.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1731380"
-    },
-    {
-     "title": "[게임업계 소식] 펄어비스 ‘붉은사막’, 골든 조이스틱 어워드 2026 ‘올...",
-     "source": "viva100.com",
-     "date": "2026-11-12",
-     "link": "https://www.viva100.com/article/20261112500374"
-    },
-    {
-     "title": "[오늘의 신문] 美 대중국 반도체 통제 강화·엔비디아 3중 조사...한국 ...",
-     "source": "kor.theasian.asia",
-     "date": "2026-11-12",
-     "link": "http://kor.theasian.asia/archives/421462"
-    },
-    {
-     "title": "AI가 기계어까지 검증…딥마인드, 알파프루프 코드 공개",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=714772"
-    },
-    {
-     "title": "[THE CEO] 구광모 LG그룹 회장",
-     "source": "the-biz.co.kr",
-     "date": "2026-11-12",
-     "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=729921"
-    },
-    {
-     "title": "픽셀폰 홈 화면 꾸미기 기능 강화…구글, 안드로이드 17 QPR2 출시",
-     "source": "kbench.com",
-     "date": "2026-11-11",
-     "link": "https://kbench.com/?q=node/283259"
-    },
-    {
-     "title": "[IT는 지금] 카카오, 홍콩·싱가포르서 해외 IR…글로벌 투자자와 인적...",
-     "source": "dealsite.co.kr",
-     "date": "2026-11-11",
-     "link": "https://dealsite.co.kr/articles/172524"
-    },
-    {
-     "title": "통신 3사 3분기 실적 희비…SKT·LGU+ 웃었지만 KT만 매출·영업익 동반...",
-     "source": "joongangenews.com",
-     "date": "2026-11-11",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=563005"
     }
    ]
   }
