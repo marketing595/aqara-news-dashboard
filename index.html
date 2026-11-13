@@ -10400,7 +10400,7 @@
     function wkHasContent(w){ if(!w||typeof w!=='object') return false; if((typeof w.insight==='string'&&w.insight.trim())||(typeof w.summary==='string'&&w.summary.trim())) return true; return ['done','plan','issue','check'].some(function(k){ return w[k]&&typeof w[k]==='object'&&Object.keys(w[k]).length; }); }
     function wkAttach(){ if(!wkUseFB()||!wkCur) return; wkDetach(); wkWireConn();
       wkWeekRef=WK_DB.ref('weekly/'+wkCur);
-      wkWeekRef.on('value', function(snap){ wkFbErr=false; const remote=snap.val(); const local=weeklyData[wkCur]; if((remote==null||(typeof remote==='object'&&!Object.keys(remote).length)) && wkHasContent(local)){ try{ WK_DB.ref('weekly/'+wkCur).set(local); }catch(e){} } else { weeklyData[wkCur]=remote||{}; } wkAfterSnap(); }, function(err){ wkFbErr=true; console.warn('DB 읽기 권한 오류:',err&&err.message); wkStampUpdated(); renderMktWeekly(); });
+      wkWeekRef.on('value', function(snap){ wkFbErr=false; const remote=snap.val(); const local=weeklyData[wkCur]; if((remote==null||(typeof remote==='object'&&!Object.keys(remote).length)) && wkHasContent(local)){ try{ WK_DB.ref('weekly/'+wkCur).set(local); }catch(e){} } else { wkOnRemoteWeek(remote||{}); } wkAfterSnap(); }, function(err){ wkFbErr=true; console.warn('DB 읽기 권한 오류:',err&&err.message); wkStampUpdated(); renderMktWeekly(); });
       if(!wkProjRef){ wkProjRef=WK_DB.ref('projects'); wkProjRef.on('value', function(snap){ wkProjects=snap.val()||{}; wkAfterSnap(); }, function(err){ wkFbErr=true; console.warn('DB 읽기 권한 오류:',err&&err.message); }); } }
     function wkDetach(){ if(wkWeekRef){ try{wkWeekRef.off();}catch(e){} wkWeekRef=null; } }
     function wkStampUpdated(){ const el=document.getElementById('wkUpdated'); if(!el) return; const d=new Date(); el.textContent='마지막 갱신 '+d.getHours()+'시 '+d.getMinutes()+'분 '+d.getSeconds()+'초'; }
@@ -10452,7 +10452,9 @@
     function wkWireFocus(){ if(wkFocusWired) return; const b=wkBody(); if(!b) return; wkFocusWired=true;
       b.addEventListener('focusout', function(){ Object.keys(wkDeb).forEach(wkFlushPath); setTimeout(function(){ if(!wkFocused() && wkPendingSnap){ wkPendingSnap=false; renderMktWeekly(); } }, 80); });
       b.addEventListener('compositionstart', function(){ wkComposing=true; });
-      b.addEventListener('compositionend', function(){ wkComposing=false; setTimeout(function(){ if(wkPendingSnap && !wkComposing){ wkPendingSnap=false; if(wkFocused()) wkRerenderKeepFocus(); else renderMktWeekly(); } }, 60); });
+      b.addEventListener('compositionend', function(){ wkComposing=false; setTimeout(function(){
+          const a=document.activeElement, ap=a&&a.dataset&&a.dataset.path; if(ap && wkEd[ap] && !wkComposing) wkMergeIn(ap, wkSrvGet(ap));   // 조합 중 보류했던 남의 수정 합치기
+          if(wkPendingSnap && !wkComposing){ wkPendingSnap=false; if(wkFocused()) wkRerenderKeepFocus(); else renderMktWeekly(); } }, 60); });
       // 붙여넣기: 서식·폰트 제거하고 순수 텍스트로 삽입 → 필드 폰트(Pretendard)로 통일
       b.addEventListener('paste', function(e){ const t=e.target; if(!t||!t.isContentEditable) return; e.preventDefault(); let text=''; try{ text=((e.clipboardData||window.clipboardData).getData('text/plain'))||''; }catch(_){}
         let ok=false; try{ ok=document.execCommand('insertText', false, text); }catch(_){}
@@ -10464,8 +10466,81 @@
     function wkLocalSet(path,val){ const parts=path.split('/'); if(parts[0]==='projects'){ setNested(wkProjects,parts.slice(1),val); } else if(parts[0]==='weekly'){ const wk=parts[1]; weeklyData[wk]=weeklyData[wk]||{}; setNested(weeklyData[wk],parts.slice(2),val); } }
     function wkGetPath(path){ const parts=path.split('/'); let o=parts[0]==='projects'?wkProjects:(parts[0]==='weekly'?(weeklyData[parts[1]]||{}):null); const start=parts[0]==='projects'?1:2; for(let i=start;i<parts.length;i++){ o=o&&o[parts[i]]; } return (o==null?null:o); }
     function wkApply(updates,noRender){ for(const p in updates){ wkLocalSet(p,updates[p]); } if(wkUseFB()){ wkTrack(WK_DB.ref().update(updates)); } wkPersistLocal(); wkRenderSave(); if(!noRender) renderMktWeekly(); }
-    function wkSetText(path,val){ wkLocalSet(path,val); clearTimeout(wkDeb[path]); wkDeb[path]=setTimeout(function(){ wkFlushPath(path); },250); wkRenderSave(); }
-    function wkFlushPath(path){ clearTimeout(wkDeb[path]); delete wkDeb[path]; const v=wkGetPath(path); if(wkUseFB()){ const u={}; u[path]=(v==null?'':v); wkTrack(WK_DB.ref().update(u)); } wkPersistLocal(); wkRenderSave(); }
+    /* ===== 같은 칸 동시 편집 (2026-11-13) =====================================
+       예전엔 칸 전체를 통째로 덮어써서, 두 사람이 같은 칸을 고치면 나중에 저장한 사람 글만 남았다.
+       이제 칸마다 '마지막으로 서버와 맞춘 내용(base)'을 기억해 두고
+         · 저장할 때: 서버의 현재 내용에 '내가 base에서 바꾼 부분'만 얹는다(Firebase 트랜잭션 → 동시에 저장해도 유실 없음)
+         · 남의 수정이 올 때: 내 화면 칸에 '남이 바꾼 부분'만 얹고, 커서는 글자가 밀린 만큼 같이 옮긴다
+       한글 조합 중에는 칸을 건드리지 않고 조합이 끝난 직후 합친다. */
+    let wkSrv={}, wkSrvWk=null;                 // 서버 기준 이번 주 데이터(내 미전송 수정이 섞이지 않은 사본)
+    const wkEd={};                // 편집 중인 칸: {base, busy, again}
+    function wkSrvGet(path){ const parts=path.split('/'); if(parts[0]!=='weekly'||parts[1]!==wkCur) return null; let o=wkSrv; for(let i=2;i<parts.length;i++){ o=o&&o[parts[i]]; } return (o==null?null:o); }
+    function wkSrvSet(path,val){ const parts=path.split('/'); if(parts[0]!=='weekly'||parts[1]!==wkCur) return; setNested(wkSrv,parts.slice(2),val); }
+    // 3-way 병합: base에서 내가 바꾼 구간과 상대가 바꾼 구간을 둘 다 반영
+    function wkDiff(a,b){ let p=0; const m=Math.min(a.length,b.length); while(p<m && a.charCodeAt(p)===b.charCodeAt(p)) p++; let s=0; while(s<m-p && a.charCodeAt(a.length-1-s)===b.charCodeAt(b.length-1-s)) s++; return {s:p, e:a.length-s, ins:b.slice(p,b.length-s)}; }
+    function wkMerge3(base,mine,theirs){ base=base==null?'':String(base); mine=mine==null?'':String(mine); theirs=theirs==null?'':String(theirs);
+      if(mine===base||mine===theirs) return theirs; if(theirs===base) return mine;
+      const A=wkDiff(base,mine), B=wkDiff(base,theirs);
+      if(A.e<=B.s){ return base.slice(0,A.s)+A.ins+base.slice(A.e,B.s)+B.ins+base.slice(B.e); }      // 내 수정이 앞
+      if(B.e<=A.s){ return base.slice(0,B.s)+B.ins+base.slice(B.e,A.s)+A.ins+base.slice(A.e); }      // 상대 수정이 앞
+      // 같은 구간을 둘 다 고친 드문 경우 → 둘 다 남긴다(상대 → 내 순서)
+      const s=Math.min(A.s,B.s), e=Math.max(A.e,B.e);
+      return base.slice(0,s)+theirs.slice(s,theirs.length-(base.length-e))+mine.slice(s,mine.length-(base.length-e))+base.slice(e); }
+    function wkElOf(path){ const b=wkBody(); return b?b.querySelector('[data-path="'+path.replace(/"/g,'\\"')+'"]'):null; }
+    function wkElVal(el){ return el.tagName==='INPUT'?el.value:(el.dataset.rich?wkSanitize(el.innerHTML):el.innerText); }
+    function wkElText(el){ return el.tagName==='INPUT'?el.value:(el.textContent||''); }
+    // 칸 화면 갱신 — 커서가 있는 칸이면 남이 내 커서 앞을 고친 만큼 커서를 밀어 준다
+    function wkElPut(el,val){ const act=(el===document.activeElement); const before=wkElText(el); const caret=act?wkCaretGet(el):null;
+      if(el.tagName==='INPUT') el.value=val; else if(/\/summary$/.test(el.dataset.path)) el.innerHTML=wkSumRich(val); else if(el.dataset.rich) el.innerHTML=wkRich(val); else el.innerText=val;
+      if(caret){ const d=wkDiff(before,wkElText(el)); const delta=d.ins.length-(d.e-d.s);
+        const mv=function(x){ return (d.e<=x)?x+delta:(d.s<x?d.s+d.ins.length:x); };   // 커서 앞에서 바뀐 만큼 이동
+        wkCaretSet(el,{s:mv(caret.s),e:mv(caret.e)}); } }
+    // 서버에서 새 값이 왔을 때(내가 편집 중인 칸만) 병합
+    function wkMergeIn(path,theirs){ const ed=wkEd[path]; if(!ed||ed.busy) return;
+      const el=wkElOf(path); if(el && el===document.activeElement && wkComposing){ wkPendingSnap=true; return; }   // 조합 중엔 보류
+      const mine=String((el?wkElVal(el):wkGetPath(path))||''); theirs=(theirs==null?'':String(theirs));
+      const merged=wkMerge3(ed.base,mine,theirs); ed.base=theirs;
+      wkLocalSet(path,merged); if(el && wkElVal(el)!==merged) wkElPut(el,merged);
+      if(merged!==theirs){ if(!wkDeb[path]) wkDeb[path]=setTimeout(function(){ wkFlushPath(path); },150); }
+      else if(!wkDeb[path]) delete wkEd[path]; }
+    function wkOnRemoteWeek(remote){
+      // 커서만 두고 아직 안 고친 칸도 남의 수정을 받아야 한다 → 직전 서버값을 base로 편집 목록에 올린다
+      const a=document.activeElement, ap=a&&a.dataset&&a.dataset.path;
+      if(wkSrvWk===wkCur && ap && !wkEd[ap] && ap.indexOf('weekly/'+wkCur+'/')===0 && wkBody() && wkBody().contains(a)){ const sv=wkSrvGet(ap); wkEd[ap]={base:(sv==null?'':String(sv))}; }
+      wkSrv=JSON.parse(JSON.stringify(remote||{})); wkSrvWk=wkCur;
+      const keep={}; Object.keys(wkEd).forEach(function(p){ if(p.indexOf('weekly/'+wkCur+'/')===0) keep[p]=wkGetPath(p); });
+      weeklyData[wkCur]=remote||{};
+      Object.keys(keep).forEach(function(p){ if(keep[p]!=null) wkLocalSet(p,keep[p]); });   // 내 미전송 내용은 일단 유지
+      Object.keys(keep).forEach(function(p){ wkMergeIn(p, wkSrvGet(p)); }); }
+    function wkSetText(path,val){ wkLocalSet(path,val);
+      if(!wkEd[path]){ const sv=wkSrvGet(path); wkEd[path]={base:(sv==null?'':String(sv))}; }
+      if(!wkDeb[path]) wkDeb[path]=setTimeout(function(){ wkFlushPath(path); },250);   // 계속 타이핑해도 0.25초마다 전송
+      wkRenderSave(); }
+    function wkFlushPath(path){ clearTimeout(wkDeb[path]); delete wkDeb[path]; const v=wkGetPath(path); wkPersistLocal();
+      if(!wkUseFB()){ wkRenderSave(); return; }
+      const ed=wkEd[path];
+      if(!ed){ const u={}; u[path]=(v==null?'':v); wkTrack(WK_DB.ref().update(u)); wkRenderSave(); return; }
+      if(ed.busy){ ed.again=true; wkRenderSave(); return; }
+      const mine=(v==null?'':String(v)), base=ed.base, isItem=/\/(done|plan|issue|check)\/[^/]+\//.test(path);
+      ed.busy=true;
+      const p=WK_DB.ref(path).transaction(function(cur){
+        if(cur==null && isItem && base!=='') return;          // 그사이 항목이 삭제됨 → 되살리지 않음
+        return wkMerge3(base,mine,cur==null?'':String(cur)); });
+      wkTrack(p);
+      p.then(function(res){
+        if(!res.committed){ ed.busy=false; delete wkEd[path]; return; }
+        // 저장 완료 직후 '지금 알고 있는 가장 최신 서버값'을 다시 읽는다 — 완료 응답과 상대 수정이 거의 동시에 오면
+        // res.snapshot은 내 저장 시점 값이라, 그걸로 화면을 덮으면 상대 수정이 다음 입력 때까지 안 보였다
+        return WK_DB.ref(path).once('value').then(function(s){ ed.busy=false; wkAfterCommit(path,ed,mine,s.val()); }); }, function(){ ed.busy=false; }); }
+    function wkAfterCommit(path,ed,mine,sv){
+        const srv=String(sv==null?'':sv); wkSrvSet(path,srv);
+        const el=wkElOf(path); const now=String((el?wkElVal(el):wkGetPath(path))||'');
+        if(el && el===document.activeElement && wkComposing){ ed.base=mine; ed.again=true; wkPendingSnap=true; return; }   // 조합 끝나고 다시
+        const merged=(now===mine)?srv:wkMerge3(mine,now,srv); ed.base=srv;
+        wkLocalSet(path,merged); if(el && wkElVal(el)!==merged) wkElPut(el,merged); wkPersistLocal();
+        if(merged!==srv || ed.again){ ed.again=false; if(!wkDeb[path]) wkDeb[path]=setTimeout(function(){ wkFlushPath(path); },150); }
+        else delete wkEd[path];
+        wkRenderSave(); }
     // 저장 상태 표시 (자동저장이 진행 중인지/완료됐는지)
     function wkTrack(p){ wkInflight++; wkRenderSave(); const done=function(){ wkInflight=Math.max(0,wkInflight-1); wkRenderSave(); }; if(p&&p.then){ p.then(function(){ wkFbErr=false; done(); }, function(e){ wkFbErr=true; console.warn('저장 실패(권한?):',e&&e.message); done(); }); } else { done(); } }
     function wkDirtyState(){ return Object.keys(wkDeb).length>0 || wkInflight>0; }
