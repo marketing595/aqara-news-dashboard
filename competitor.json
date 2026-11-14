@@ -1,24 +1,24 @@
 {
- "generatedAt": "2026-11-14 01:30",
+ "generatedAt": "2026-11-15 00:09",
  "brands": [
   {
    "name": "아카라",
    "me": true,
    "query": "아카라 스마트홈",
-   "total": 1552,
+   "total": 1553,
    "sentiment": {
-    "pos": 26,
-    "neu": 34,
+    "pos": 25,
+    "neu": 35,
     "neg": 0
    },
    "keywords": [
     [
-     "AI",
-     30
+     "인테리어",
+     31
     ],
     [
-     "인테리어",
-     28
+     "AI",
+     30
     ],
     [
      "IoT",
@@ -33,12 +33,12 @@
      20
     ],
     [
-     "공간디자인",
+     "전문기업",
      17
     ],
     [
-     "전문기업",
-     16
+     "공간디자인",
+     17
     ],
     [
      "AX",
@@ -49,15 +49,15 @@
      14
     ],
     [
+     "조명",
+     12
+    ],
+    [
      "공간",
      11
     ],
     [
      "시스템",
-     11
-    ],
-    [
-     "조명",
      11
     ],
     [
@@ -121,17 +121,23 @@
    ],
    "related": [
     "아카라이브",
-    "아카라 도어락",
     "아카라",
+    "아카라 도어락",
     "아카라 k100",
     "아카라 홈캠",
     "아카라 스위치",
-    "니케 아카라이브",
     "아카라 l100",
     "아카라이브 핫딜",
-    "명조 아카라이브"
+    "니케 아카라이브",
+    "원신 아카라이브"
    ],
    "recent": [
+    {
+     "title": "아카라라이프, '학동역 투어 지도' 공개…'논현동 인테리어 성지 한눈에...",
+     "source": "bizwnews.com",
+     "date": "2026-11-14",
+     "link": "http://www.bizwnews.com/news/articleView.html?idxno=151895"
+    },
     {
      "title": "2026 홈·테이블데코페어, 12월17일 코엑스서 개막",
      "source": "imwood.co.kr",
@@ -215,12 +221,6 @@
      "source": "asiatime.co.kr",
      "date": "2026-10-12",
      "link": "https://www.asiatime.co.kr/article/20261012500039"
-    },
-    {
-     "title": "아카라라이프, 스마트 도어락 설치·앱 연동 원스톱 지원",
-     "source": "beyondpost.co.kr",
-     "date": "2026-10-12",
-     "link": "http://www.beyondpost.co.kr/view.php?ud=20261012083437472146a9e4dd7f_30"
     }
    ]
   },
@@ -352,7 +352,7 @@
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 프로"
+    "헤이홈 보안"
    ],
    "recent": [
     {
@@ -422,16 +422,16 @@
      "link": "https://n.news.naver.com/mnews/article/029/0003058820?sid=105"
     },
     {
-     "title": "KISA “시중 판매 IP카메라서 보안 취약점 발견”",
-     "source": "busan.com",
-     "date": "2026-11-12",
-     "link": "https://n.news.naver.com/mnews/article/082/0001406897?sid=101"
-    },
-    {
      "title": "영유아 안전 확인하는 홈카메라, 보안 취약점 드러나…영상 무단 유출 ...",
      "source": "ibabynews.com",
      "date": "2026-11-12",
      "link": "https://www.ibabynews.com/news/articleView.html?idxno=156853"
+    },
+    {
+     "title": "KISA “시중 판매 IP카메라서 보안 취약점 발견”",
+     "source": "busan.com",
+     "date": "2026-11-12",
+     "link": "https://n.news.naver.com/mnews/article/082/0001406897?sid=101"
     },
     {
      "title": "IP카메라 10종 보안 점검 '우수' 0개…로보뷰·브이스타캠·파인뷰 '미흡...",
@@ -451,7 +451,7 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69716,
+   "total": 69717,
    "sentiment": {
     "pos": 11,
     "neu": 49,
@@ -460,7 +460,7 @@
    "keywords": [
     [
      "삼성화재",
-     61
+     62
     ],
     [
      "서비스를",
@@ -468,35 +468,35 @@
     ],
     [
      "화재",
-     29
+     31
     ],
     [
      "누수",
-     29
+     31
     ],
     [
      "배너를",
      27
     ],
     [
-     "현대차",
-     23
+     "위험",
+     22
+    ],
+    [
+     "진단",
+     22
+    ],
+    [
+     "우리집진단",
+     21
     ],
     [
      "삼성화재는",
      21
     ],
     [
-     "위험",
+     "현대차",
      21
-    ],
-    [
-     "진단",
-     21
-    ],
-    [
-     "우리집진단",
-     20
     ],
     [
      "CU",
@@ -507,6 +507,10 @@
      19
     ],
     [
+     "플랫폼",
+     18
+    ],
+    [
      "이용한",
      18
     ],
@@ -515,16 +519,12 @@
      18
     ],
     [
-     "플랫폼",
+     "건물",
      17
     ],
     [
-     "건물",
-     15
-    ],
-    [
      "주택",
-     14
+     16
     ],
     [
      "문화상품권과",
@@ -567,17 +567,23 @@
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 스위치",
+    "삼성 스마트싱스 도어락",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 허브 5세대",
-    "삼성 스마트싱스 아이폰",
-    "삼성 스마트싱스 세탁기 원격"
+    "삼성 스마트싱스 아이폰"
    ],
    "recent": [
+    {
+     "title": "삼성화재, 삼성전자 스마트싱스와 주택 화재·누수 위험 진단 서비스",
+     "source": "webeconomy.co.kr",
+     "date": "2026-11-14",
+     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2374428"
+    },
     {
      "title": "[위클리오늘] 삼성화재, 삼성전자 스마트싱스 앱서 '착!한 우리집진단'...",
      "source": "weeklytoday.com",
@@ -661,12 +667,6 @@
      "source": "catchnews.kr",
      "date": "2026-11-13",
      "link": "https://www.catchnews.kr/news/articleView.html?idxno=130489"
-    },
-    {
-     "title": "보험업계 '착!한 우리집진단' 서비스 제공...'보조기기 지원금특약' 배...",
-     "source": "wsobi.com",
-     "date": "2026-11-13",
-     "link": "http://www.wsobi.com/news/articleView.html?idxno=321744"
     }
    ]
   },
@@ -674,10 +674,10 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78243,
+   "total": 78244,
    "sentiment": {
-    "pos": 15,
-    "neu": 45,
+    "pos": 14,
+    "neu": 46,
     "neg": 0
    },
    "keywords": [
@@ -714,15 +714,11 @@
      19
     ],
     [
-     "LG전자는",
-     18
-    ],
-    [
      "설정할",
      18
     ],
     [
-     "AI홈",
+     "LG전자는",
      17
     ],
     [
@@ -730,8 +726,12 @@
      17
     ],
     [
+     "AI홈",
+     15
+    ],
+    [
      "류재철",
-     16
+     15
     ],
     [
      "무드",
@@ -764,11 +764,11 @@
      3
     ],
     [
-     "확대",
-     3
+     "혁신",
+     2
     ],
     [
-     "혁신",
+     "확대",
      2
     ],
     [
@@ -791,16 +791,22 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
+    "lg 씽큐 티비연결",
     "lg 씽큐 세탁기",
     "lg 씽큐 냉장고",
-    "lg 씽큐 티비연결",
     "lg 씽큐 허브",
     "lg 씽큐 초기화",
     "lg 씽큐 연결",
-    "lg 씽큐 에어컨 연결",
-    "lg 씽큐 와이파이"
+    "lg 씽큐 와이파이",
+    "lg 씽큐 에어컨 연결"
    ],
    "recent": [
+    {
+     "title": "[비즈톡톡] 스피커 구멍 없앤 아이패드 미니… 스마트폰서 자취 감춘 ‘...",
+     "source": "biz.chosun.com",
+     "date": "2026-11-14",
+     "link": "https://n.news.naver.com/mnews/article/366/0001204716?sid=105"
+    },
     {
      "title": "인공지능이 집을 이해하기 시작했다…AI홈, 생활·공간 관리로 진화",
      "source": "asiatime.co.kr",
@@ -884,12 +890,6 @@
      "source": "worktoday.co.kr",
      "date": "2026-11-11",
      "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=91844"
-    },
-    {
-     "title": "LG전자, 정수기 온도 선택 폭 넓혔다…고객 83.6% 혼합 출수",
-     "source": "m-i.kr",
-     "date": "2026-11-11",
-     "link": "https://www.m-i.kr/news/articleView.html?idxno=2017119"
     }
    ]
   },
@@ -897,16 +897,16 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76472,
+   "total": 76477,
    "sentiment": {
-    "pos": 14,
-    "neu": 33,
-    "neg": 13
+    "pos": 15,
+    "neu": 34,
+    "neg": 11
    },
    "keywords": [
     [
      "매장",
-     23
+     22
     ],
     [
      "AI",
@@ -921,60 +921,60 @@
      15
     ],
     [
+     "타포",
+     12
+    ],
+    [
+     "매터",
+     10
+    ],
+    [
      "번역한",
-     13
+     10
     ],
     [
      "기사의",
-     13
+     10
     ],
     [
      "전문",
-     13
+     10
     ],
     [
      "입니다",
-     13
+     10
     ],
     [
      "번역에",
-     13
+     10
     ],
     [
      "오류가",
-     13
+     10
+    ],
+    [
+     "제미나이",
+     10
+    ],
+    [
+     "화면",
+     9
+    ],
+    [
+     "게임",
+     9
+    ],
+    [
+     "지도",
+     8
+    ],
+    [
+     "11월",
+     8
     ],
     [
      "아래는",
-     11
-    ],
-    [
-     "기사를",
-     11
-    ],
-    [
-     "번역",
-     11
-    ],
-    [
-     "으로",
-     11
-    ],
-    [
-     "구글번역",
-     11
-    ],
-    [
-     "높이기를",
-     11
-    ],
-    [
-     "노력하고",
-     11
-    ],
-    [
-     "있습니다",
-     11
+     8
     ]
    ],
    "posWords": [
@@ -995,6 +995,10 @@
      3
     ],
     [
+     "인기",
+     2
+    ],
+    [
      "성장",
      2
     ],
@@ -1003,27 +1007,53 @@
      2
     ],
     [
-     "인기",
-     1
-    ],
-    [
      "1위",
      1
     ]
    ],
    "related": [
-    "구글 홈",
     "구글 홈 스피커",
+    "구글 홈",
     "구글 홈 허브",
     "구글 홈 미니",
     "구글 홈페이지",
-    "구글 홈 미니 연결",
     "구글 홈 미니 1세대",
-    "구글 홈 미니 2세대",
+    "구글 홈 미니 연결",
     "구글 홈바탕 빼는법",
-    "구글 홈 스피커 연결"
+    "구글 홈 미니 2세대",
+    "구글 홈바 삭제 방법"
    ],
    "recent": [
+    {
+     "title": "tvOS 27.2.1로 구형 애플TV 4K도 시리 AI 지원…설정서 직접 켜야 한다",
+     "source": "wikitree.co.kr",
+     "date": "2026-11-14",
+     "link": "https://www.wikitree.co.kr/articles/1174640"
+    },
+    {
+     "title": "구글 지도 빗장 풀렸다…티맵·네이버·카카오 '내비 삼국지' 흔들까",
+     "source": "뉴시스",
+     "date": "2026-11-14",
+     "link": "https://n.news.naver.com/mnews/article/003/0014321886?sid=105"
+    },
+    {
+     "title": "타포, 매터 지원 로봇청소기 'Tapo RV30 Max Plus Gen 2' 출시",
+     "source": "slist.kr",
+     "date": "2026-11-14",
+     "link": "https://www.slist.kr/news/articleView.html?idxno=781629"
+    },
+    {
+     "title": "예산별로 고르는 '롤렉스 데이트저스트'를 대신할 시계 7",
+     "source": "esquirekorea.co.kr",
+     "date": "2026-11-14",
+     "link": "https://www.esquirekorea.co.kr/article/1913045"
+    },
+    {
+     "title": "연말 종료 바이브… 내 재생목록, 다른 음악 앱으로 옮기려면",
+     "source": "it.chosun.com",
+     "date": "2026-11-14",
+     "link": "https://it.chosun.com/news/articleView.html?idxno=3000000001015"
+    },
     {
      "title": "[게임뉴스] 카카오게임즈 및 라인게임즈 소식 외",
      "source": "gamevu.co.kr",
@@ -1083,36 +1113,6 @@
      "source": "wikitree.co.kr",
      "date": "2026-11-13",
      "link": "https://www.wikitree.co.kr/articles/1174222"
-    },
-    {
-     "title": "[패트롤] 광명시-부천시-시흥시-안산시-안양시",
-     "source": "ekn.kr",
-     "date": "2026-11-12",
-     "link": "https://www.ekn.kr/web/view.php?key=20261112020389066"
-    },
-    {
-     "title": "표준 스마트홈 규격 'Matter' 지원 로봇청소기... '티피링크 타포 RV30 맥...",
-     "source": "ilovepc.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=61321"
-    },
-    {
-     "title": "티피링크, 매터 지원 로봇청소기 '타포 RV30 맥스 플러스 Gen2' 출시",
-     "source": "datanet.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.datanet.co.kr/news/articleView.html?idxno=300110"
-    },
-    {
-     "title": "영남이공대, 삼성웰스토리·발렉스서비스 채용설명회 열려…올해만 21개...",
-     "source": "breaknews.com",
-     "date": "2026-11-12",
-     "link": "http://www.breaknews.com/1250560"
-    },
-    {
-     "title": "자동차보험비교사이트 차통령, 안드로이드·iOS 앱 연속 업데이트…알림...",
-     "source": "woodkorea.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92521"
     }
    ]
   }
