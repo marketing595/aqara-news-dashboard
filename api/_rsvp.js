@@ -409,7 +409,10 @@ module.exports = async (req, res) => {
         if(sent && sent[k]) g.sent = sent[k];
         if(msg && msg[k]) g.msg = msgView(t, g, msg[k]);   // 문자/메일 발송(m/) — RSVP 초대 문자(s/)와 따로
         G[k] = g; if(log[t]) L[k] = log[t]; });
-      const vipR = await raw('GET', 'v'), vipD = (vipR && dec(vipR.c)) || {};\n      // VIP 명단은 보기 전용에도 보여 주되 RSVP 그룹 연결은 gid로 바꿔 준다(토큰 숨김)\n      const vipV = (vipD.items || []).map(x => Object.assign({}, x, { link: x.link && x.link !== '-' ? gid(x.link) : x.link }));\n      return res.status(200).json({ ok: true, viewOnly: true, groups: G, meta: { closed: !!m.closed }, log: L, locked: true, vip: vipV });
+      const vipR = await raw('GET', 'v'), vipD = (vipR && dec(vipR.c)) || {};
+      // VIP 명단은 보기 전용에도 보여 주되 RSVP 그룹 연결은 gid로 바꿔 준다(토큰 숨김)
+      const vipV = (vipD.items || []).map(x => Object.assign({}, x, { link: x.link && x.link !== '-' ? gid(x.link) : x.link }));
+      return res.status(200).json({ ok: true, viewOnly: true, groups: G, meta: { closed: !!m.closed }, log: L, locked: true, vip: vipV });
     }
 
     // ── 관리자 ──
@@ -426,7 +429,8 @@ module.exports = async (req, res) => {
         if(msg && msg[k]) g.msg = msgView(t, g, msg[k]);   // 문자/메일 발송(m/) — RSVP 초대 문자(s/)와 따로
         // 동행인 개인 링크 코드 { 자리 이름: 7자 } + 동행인 링크 열람
         if(g && g.rep){ g.clinks = {}; g.copen = {}; compSlots(g).forEach(s => { g.clinks[s] = ccode(t, s); const o = opens && opens['c' + gid(t + '|' + s)]; if(o) g.copen[s] = o; }); } });
-      const vipR = await raw('GET', 'v'), vipD = (vipR && dec(vipR.c)) || {};\n      return res.status(200).json({ ok: true, email, groups: groups || {}, meta: meta || {}, log: log || {}, locked: true, vip: vipD.items || [], vipAt: vipD.at || 0, vipBy: vipD.by || '' });
+      const vipR = await raw('GET', 'v'), vipD = (vipR && dec(vipR.c)) || {};
+      return res.status(200).json({ ok: true, email, groups: groups || {}, meta: meta || {}, log: log || {}, locked: true, vip: vipD.items || [], vipAt: vipD.at || 0, vipBy: vipD.by || '' });
     }
     if(req.method !== 'POST') return res.status(405).json({ ok: false });
 
