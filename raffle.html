@@ -229,7 +229,7 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
     <div class="field">
       <label class="chk"><input type="checkbox" id="inSound"> 효과음 (음향 큐시트 SFX)</label>
       <div class="row" style="margin-top:8px"><span style="white-space:nowrap;font-size:13px">음량</span><input type="range" id="inVol" min="0" max="100" step="5" style="flex:1;accent-color:var(--acc)"><span id="volView" style="width:40px;text-align:right;font-size:13px"></span></div>
-      <div class="sub">추첨 버튼을 누르면 드럼롤이 나오고 '쾅'에 맞춰 번호가 멈춰요(1등은 12초, 나머지 6초). 다 멈추면 당첨 팡파르. 효과음을 끄면 예전처럼 짧게 돌아요.</div>
+      <div class="sub">추첨 버튼을 누르면 드럼롤이 나오고 '쾅'에 맞춰 번호가 멈춰요(1등은 6초, 나머지 3초). 다 멈추면 당첨 팡파르. 효과음을 끄면 예전처럼 짧게 돌아요.</div>
       <div class="sfxpad">
         <button data-sfx="drum6">▶ 드럼롤 6초</button><button data-sfx="drum12">▶ 드럼롤 12초</button><button data-sfx="fanfare">▶ 팡파르</button>
         <button data-sfx="chime">▶ 안내 차임(끝)</button><button data-sfx="reentry">▶ 재입장 알림</button><button data-sfx="stop">■ 정지</button>
@@ -466,15 +466,17 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
   /* 음향 큐시트 SFX (web/sfx). 드럼롤 '쾅' = 6.0초 / 12.0초 지점 (파형으로 확인) */
   var SFX = { chime:'sfx/sfx04-chime.mp3', drum6:'sfx/sfx05-drumroll6.mp3', drum12:'sfx/sfx06-drumroll12.mp3', fanfare:'sfx/sfx07-fanfare.mp3', reentry:'sfx/sfx08-reentry.mp3' };
   var BANG = { drum6:6000, drum12:12000 };
+  /* 2026-11-17 '너무 오래 걸린다' → 드럼롤을 중간부터 틀어 '쾅'까지 대기 절반(일반 3초 / 1등 6초) */
+  var WAIT = { drum6:3000, drum12:6000 };
   var AU = {};
   for (var sk in SFX){ AU[sk] = new Audio(SFX[sk]); AU[sk].preload = 'auto'; }
   if (S.vol == null) S.vol = 100;
   function stopAll(){ for (var k in AU){ try { AU[k].pause(); AU[k].currentTime = 0; } catch(e){} } }
   /* 재생 → 실제로 소리가 시작되면 Promise resolve (실패 시 reject) */
-  function play(name){
+  function play(name, fromMs){
     if (!S.sound || !AU[name]) return Promise.reject();
     var a = AU[name];
-    try { a.pause(); a.currentTime = 0; } catch(e){}
+    try { a.pause(); a.currentTime = (fromMs || 0) / 1000; } catch(e){}
     a.volume = Math.max(0, Math.min(1, (S.vol|0) / 100));
     var pr = a.play();
     return pr && pr.then ? pr : Promise.resolve();
@@ -513,18 +515,19 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
 
     var all = $('reels').querySelectorAll('.reel'), reels = [];
     for (var i = prev.length; i < all.length; i++){ all[i].classList.remove('blank'); all[i].classList.add('spin'); reels.push(all[i]); }
-    var GAP = n > 3 ? 500 : 800;
+    var GAP = n > 3 ? 350 : 550;
     var big = /^\s*1\s*등/.test(p.rank);             // 1등 = 긴 드럼롤(12초)
-    var FALLBACK = (big && n === 1) ? 3500 : 2200;    // 효과음 없을 때
+    var FALLBACK = (big && n === 1) ? 2500 : 1500;    // 효과음 없을 때
     var drum = big ? 'drum12' : 'drum6';
     var useSfx = !!S.sound;
-    var BASE = useSfx ? BANG[drum] : FALLBACK;        // 첫 번호가 '쾅'에 멈춤
+    var SKIP = BANG[drum] - WAIT[drum];                // 드럼롤 앞부분 건너뜀
+    var BASE = useSfx ? WAIT[drum] : FALLBACK;        // 첫 번호가 '쾅'에 멈춤
     var t0 = performance.now(), lastTick = reels.map(function(){ return 0; }), done = 0;
     if (useSfx){
       stopAll();
-      play(drum).then(function(){
+      play(drum, SKIP).then(function(){
         // 음원이 실제로 시작된 시점에 맞춰 다시 맞춤 (로딩 지연 보정)
-        if (done === 0) t0 = performance.now() - (AU[drum].currentTime || 0) * 1000;
+        if (done === 0) t0 = performance.now() - Math.max(0, (AU[drum].currentTime || 0) * 1000 - SKIP);
       }, function(){ useSfx = false; BASE = FALLBACK; });
     }
 
