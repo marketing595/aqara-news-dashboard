@@ -409,7 +409,7 @@ module.exports = async (req, res) => {
         if(sent && sent[k]) g.sent = sent[k];
         if(msg && msg[k]) g.msg = msgView(t, g, msg[k]);   // 문자/메일 발송(m/) — RSVP 초대 문자(s/)와 따로
         G[k] = g; if(log[t]) L[k] = log[t]; });
-      return res.status(200).json({ ok: true, viewOnly: true, groups: G, meta: { closed: !!m.closed }, log: L, locked: true });
+      const vipR = await raw('GET', 'v'), vipD = (vipR && dec(vipR.c)) || {};\n      // VIP 명단은 보기 전용에도 보여 주되 RSVP 그룹 연결은 gid로 바꿔 준다(토큰 숨김)\n      const vipV = (vipD.items || []).map(x => Object.assign({}, x, { link: x.link && x.link !== '-' ? gid(x.link) : x.link }));\n      return res.status(200).json({ ok: true, viewOnly: true, groups: G, meta: { closed: !!m.closed }, log: L, locked: true, vip: vipV });
     }
 
     // ── 관리자 ──
@@ -426,7 +426,7 @@ module.exports = async (req, res) => {
         if(msg && msg[k]) g.msg = msgView(t, g, msg[k]);   // 문자/메일 발송(m/) — RSVP 초대 문자(s/)와 따로
         // 동행인 개인 링크 코드 { 자리 이름: 7자 } + 동행인 링크 열람
         if(g && g.rep){ g.clinks = {}; g.copen = {}; compSlots(g).forEach(s => { g.clinks[s] = ccode(t, s); const o = opens && opens['c' + gid(t + '|' + s)]; if(o) g.copen[s] = o; }); } });
-      return res.status(200).json({ ok: true, email, groups: groups || {}, meta: meta || {}, log: log || {}, locked: true });
+      const vipR = await raw('GET', 'v'), vipD = (vipR && dec(vipR.c)) || {};\n      return res.status(200).json({ ok: true, email, groups: groups || {}, meta: meta || {}, log: log || {}, locked: true, vip: vipD.items || [], vipAt: vipD.at || 0, vipBy: vipD.by || '' });
     }
     if(req.method !== 'POST') return res.status(405).json({ ok: false });
 
@@ -735,6 +735,17 @@ module.exports = async (req, res) => {
       const gen = (m.viewGen || 0) + (body.regen ? 1 : 0);
       if(body.regen || !m.viewOn) await fb('PATCH', 'meta', { viewOn: true, viewGen: gen, viewBy: email, viewAt: Date.now() });
       return res.status(200).json({ ok: true, key: viewKey(gen) });
+    }
+    // VIP 명단(2026-11-16): 일반 RSVP 명단과 따로 관리하는 VIP(연사·KOSID 등). 통째로 저장, 암호화(v = { c }).
+    //  항목 { id, name, title, org, cat(구분), seat(좌석), status(yes/no/pending), phone, memo, link(RSVP 그룹 토큰 | '-'=연결 안 함 | ''=자동) }
+    if(op === 'vipset'){
+      const S = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n);
+      const items = (Array.isArray(body.items) ? body.items : []).slice(0, 300).map((x, i) => ({
+        id: S(x.id, 24) || ('v' + Date.now().toString(36) + i), name: S(x.name, 40), title: S(x.title, 40), org: S(x.org, 80),
+        cat: S(x.cat, 30), seat: S(x.seat, 20), status: ['yes', 'no'].includes(x.status) ? x.status : 'pending',
+        phone: S(x.phone, 30), memo: S(x.memo, 300), link: x.link === '-' ? '-' : (okTok(x.link) ? x.link : ''), ord: Number(x.ord) || i })).filter(x => x.name);
+      await raw('PUT', 'v', { c: enc({ items, at: Date.now(), by: email }) });
+      return res.status(200).json({ ok: true, n: items.length });
     }
     if(op === 'meta'){
       await fb('PATCH', 'meta', { closed: !!body.closed, by: email, at: Date.now() });

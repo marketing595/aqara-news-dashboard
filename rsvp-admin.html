@@ -125,6 +125,34 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
 .tlc svg{display:block;width:100%;height:220px;overflow:visible}
 .tlc text{font-size:10.5px;fill:var(--tx3);font-family:var(--f)}
 .tltip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;line-height:1.5;padding:7px 10px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-100%);z-index:5}
+/* VIP(2026-11-16): 주황 음영 — 위 VIP 박스 · VIP 탭 */
+.vipbar{margin-top:16px;background:#fff1e3;border:1px solid #f5b878;border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;cursor:pointer;transition:border-color .15s}
+.vipbar:hover{border-color:#e8892b}
+.vipbar .l{font-size:12px;font-weight:700;color:#b45309}
+.vipbar .v{font-size:26px;font-weight:800;color:var(--ink);line-height:1.15;font-variant-numeric:tabular-nums}
+.vipbar .v small{font-size:13px;font-weight:600;color:var(--tx2);margin-left:3px}
+.vipbar .chips{display:flex;gap:6px;flex-wrap:wrap}
+.vipbar .chip{background:#fff;border:1px solid #f5c999;border-radius:10px;padding:5px 10px;font-size:11.5px;color:var(--tx2);font-weight:600}
+.vipbar .chip b{font-size:15px;color:var(--ink);margin-left:3px;font-variant-numeric:tabular-nums}
+.vipbar .go{margin-left:auto;font-size:12.5px;font-weight:700;color:#b45309;white-space:nowrap}
+.seg button.vipon{background:#ffe4c7;color:#9a4a07}
+.seg button.vipon.on{background:#f59e42;color:#fff}
+.vipp{border-color:#f5b878}
+.vipp .ph{background:#fff1e3;border-radius:14px 14px 0 0}
+.viptb th{background:#fff7ef!important}
+.viptb td{background:#fffaf5}
+.viptb tr.seat1 td:first-child{box-shadow:inset 3px 0 0 #f59e42}
+.viptb tr.seat2 td:first-child{box-shadow:inset 3px 0 0 #f5c999}
+.viptb input,.viptb select{font:inherit;font-size:12.5px;border:1px solid transparent;background:transparent;border-radius:6px;padding:3px 6px;width:100%;min-width:60px}
+.viptb input:hover,.viptb select:hover{border-color:#f5c999;background:#fff}
+.viptb input:focus,.viptb select:focus{border-color:#e8892b;background:#fff;outline:none}
+.viptb .vst{display:inline-flex;gap:2px}
+.viptb .vst button{border:1px solid #f0d2b0;background:#fff;border-radius:6px;padding:2px 7px;font-size:11.5px;font-weight:600;color:var(--tx2);white-space:nowrap}
+.viptb .vst button.on.yes{background:var(--yes);border-color:var(--yes);color:#fff}
+.viptb .vst button.on.no{background:#6b7280;border-color:#6b7280;color:#fff}
+.viptb .vst button.on.pending{background:#f3c26b;border-color:#f3c26b;color:#3d2a00}
+.t-vip2{background:#f59e42;color:#fff}
+.ro .viptb input,.ro .viptb select{pointer-events:none}
 @media (max-width:900px){ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))} .kpi.msg{grid-column:1/-1} .edg{grid-template-columns:1fr 1fr} .hide-m{display:none} }
 /* 모바일: 전체/동행인 있음/혼자 참석 바가 오른쪽으로 넘치지 않게 — 화면 폭에 맞추고 버튼 안에서 줄바꿈(2026-11-06) */
 @media (max-width:640px){ .seg{display:flex;width:100%;border-radius:14px} .seg button{flex:1 1 0;min-width:0;height:auto;min-height:30px;padding:5px 6px;white-space:normal;line-height:1.3;border-radius:11px;word-break:keep-all} .seg button span{display:block;font-size:11px} }
@@ -164,10 +192,25 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
     <button class="btn pri rw" id="btnAdd">+ 직접 입력</button>
   </div>
   <div id="warn"></div>
+  <div id="vipBar"></div>
   <div class="kpis" id="kpis"></div>
   <div class="panel tl" id="tl" hidden><div class="ph"><h2 id="tlTitle">응답 타임라인</h2><div class="seg" id="tlSeg"></div></div><div class="tlb"><div class="tlsum" id="tlSum"></div><div class="tlc" id="tlChart"></div></div></div>
 
-  <div class="panel">
+  <div class="panel vipp" id="vipPanel" hidden>
+    <div class="ph">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="vipTitle">⭐ VIP</h2><div class="seg" id="vipSeg"></div></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn rw" id="btnVipPaste" title="VIP 명단 표(연사·아카라라이프·KOSID 칸 + '1열:' '2열:' 좌석 줄)를 그대로 붙여 넣으면 성함·소속·구분·좌석을 나눠 넣어요">VIP 명단 붙여넣기</button><button class="btn rw" id="btnVipAdd">+ VIP 한 명 추가</button><button class="btn" id="btnVipXlsx">VIP 엑셀</button></div>
+    </div>
+    <div style="overflow:auto;max-height:72vh">
+      <table class="tbl viptb">
+        <thead><tr><th>좌석</th><th>구분</th><th>성함</th><th>직함</th><th>소속</th><th>참석</th><th>연락처</th><th>RSVP 명단</th><th>메모</th><th class="rw"></th></tr></thead>
+        <tbody id="vipRows"></tbody>
+      </table>
+    </div>
+    <div class="mut" id="vipNote" style="font-size:12px;padding:10px 14px"></div>
+  </div>
+
+  <div class="panel" id="mainPanel">
     <div class="ph">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="listTitle">전체</h2><div class="seg" id="seg"></div><button class="btn" id="btnTabXlsx" title="지금 고른 탭·카드 필터·검색 결과를 그룹당 1줄로 — 동행인은 오른쪽으로 한 명씩 칸(성함·상태·직책·소속·연락처·이메일)을 나눠 넣어요">이 탭 엑셀 (그룹별)</button><button class="btn" id="btnTabXlsxP" title="지금 고른 탭·카드 필터·검색 결과를 사람당 1줄로 — 동행인도 명수만큼 각자 한 줄">이 탭 엑셀 (사람별)</button></div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sort" class="btn" title="목록 정렬"><option value="reg">등록일시 최신순</option><option value="regAsc">등록일시 오래된순</option><option value="upd">마지막 변경순</option><option value="name">이름순</option><option value="st">상태순(참석→불참→미응답)</option><option value="stNo">상태순(불참→참석→미응답)</option></select><button class="btn rw" id="btnTrash" title="삭제한 그룹 — 복원하거나 완전히 지울 수 있어요">🗑 휴지통</button><button class="btn rw" id="btnDups" title="개별 신청한 사람이 다른 그룹의 동행인으로도 들어가 있는 경우 등 — 골라서 휴지통으로">중복 찾기</button><button class="btn rw" id="btnFixPh" title="엑셀에서 앞자리 0이 빠져 10으로 시작하는 휴대폰 번호(본인·대리·동행인)를 010으로 고쳐 저장">번호 앞 0 고치기</button><input class="search" id="q" placeholder="이름·소속·연락처·동행인 검색"></div>
@@ -227,7 +270,7 @@ async function load(){
     const r = await fetch('/api/rsvp?op=list' + (RO ? '&v=' + encodeURIComponent(VK) : ''), { cache: 'no-store' });
     const j = await r.json();
     if(!j.ok){ $('#state').innerHTML = `<b class="bad">${esc(j.error || '불러오기 실패')}</b>`; return; }
-    G = j.groups || {}; META = j.meta || {}; LOG = j.log || {};
+    G = j.groups || {}; META = j.meta || {}; LOG = j.log || {}; VIPS = j.vip || [];
     if(RO){ $('#state').innerHTML = `<span class="robadge">보기 전용</span> 수정할 수 없는 공유 화면이에요 · 30초마다 자동 갱신 · ${fmtTime(Date.now())} 기준`; paint(); return; }
     $('#state').innerHTML = `${esc(j.email)} · 개인정보 보호 ${j.locked === true ? '<b>정상(암호화 저장)</b>' : '<b class="bad">확인 필요</b>'} · ${fmtTime(Date.now())} 기준`;
     paint();
@@ -251,7 +294,7 @@ const stLabel = (g) => isRej(g) ? '참석 거절' : (g.status === 'no' && heads(
 // VIEW: 'real' = 실제 명단 / 'test' = 테스트 탭. 테스트 그룹(g.test)은 실제 통계·목록·내보내기·이벤터스에서 빠진다.
 let VIEW = 'real';
 const allGroups = () => Object.keys(G).map(t => Object.assign({ t }, G[t])).filter(g => g.rep);
-function list(){ return allGroups().filter(g => !!g.test === (VIEW === 'test')); }
+function list(){ if(VIEW === 'test') return allGroups().filter(g => g.test); const V = vipTokens(); return allGroups().filter(g => !g.test && (VIEW === 'vip' ? V.has(g.t) : !V.has(g.t))); }   // VIP(2026-11-16)와 연결된 그룹은 실제 명단에서 빠진다
 // 문자 발송(sent: 담당자가 '보냄'으로 표시) · 링크 열람(open: 손님이 링크를 연 기록)
 const isSent = (g) => !!(g.sent && g.sent.at);
 // 새 신청 = 마지막 전체 발송(2026-11-03 11:09) 뒤에 명단에 들어온 그룹. 탭은 사용자 요청으로 없앴고(대신 '등록일시' 열), 이벤터스 가져오기에서 동행인 붙일 그룹 찾을 때만 쓴다.
@@ -326,6 +369,180 @@ function stats(){
     if(c.x) s.xG = (s.xG || 0) + 1;
   });
   return s;
+}
+
+// ── VIP(2026-11-16 사용자 요청): 연사·KOSID 등 VIP는 일반 RSVP 명단과 따로 본다 ──
+//  서버 v/ (암호화) = [{ id, name, title, org, cat, seat, status, phone, memo, link, ord }]. link: RSVP 그룹 토큰 · '-' = 연결 안 함 · '' = 자동(같은 이름 그룹이 하나뿐이면)
+//  RSVP 명단에 같은 사람이 있으면 그 그룹은 '실제 명단'(목록·카드·엑셀·이벤터스)에서 빠지고 VIP 탭에만 보인다.
+let VIPS = [], VIPF = 'all';
+const nmKey = (s) => String(s || '').replace(/\s+/g, '');
+const VIP_ROW_ORDER = (v) => [/^1/.test(v.seat) ? 0 : /^2/.test(v.seat) ? 1 : v.seat ? 2 : 3, v.ord || 0];
+function vipCands(v){ return allGroups().filter(g => !g.test && nmKey(g.rep.name) === nmKey(v.name)); }
+function vipLink(v){
+  if(v.link === '-') return null;
+  if(v.link && G[v.link]) return Object.assign({ t: v.link }, G[v.link]);
+  if(v.link) return null;
+  const c = vipCands(v); return c.length === 1 ? c[0] : null;
+}
+const vipTokens = () => new Set(VIPS.map(vipLink).filter(Boolean).map(g => g.t));
+// 참석: 담당자가 VIP 탭에서 고른 값이 우선, 없으면 연결된 RSVP 응답
+function vipSt(v){
+  if(v.status === 'yes' || v.status === 'no') return { v: v.status, src: '' };
+  const g = vipLink(v);
+  if(g && answered(g)) return { v: g.status === 'yes' ? 'yes' : 'no', src: 'RSVP 응답' };
+  return { v: 'pending', src: '' };
+}
+const VST = { yes: '참석', no: '불참', pending: '미확인' };
+function vipSorted(){ return VIPS.slice().sort((a, b) => { const x = VIP_ROW_ORDER(a), y = VIP_ROW_ORDER(b); return x[0] - y[0] || String(a.seat).localeCompare(String(b.seat), 'ko') || x[1] - y[1]; }); }
+function vipStats(){
+  const s = { all: VIPS.length, yes: 0, no: 0, pending: 0, cat: {}, seat: {} };
+  VIPS.forEach(v => { s[vipSt(v).v]++; const c = v.cat || '구분 없음', t = v.seat || '좌석 미정'; s.cat[c] = (s.cat[c] || 0) + 1; s.seat[t] = (s.seat[t] || 0) + 1; });
+  return s;
+}
+const catRank = (k) => ({ '연사': 0, '아카라라이프': 1, 'KOSID': 2, '구분 없음': 9 })[k] ?? 5;
+const catOrder = (o) => Object.keys(o).sort((a, b) => catRank(a) - catRank(b) || a.localeCompare(b, 'ko'));
+const seatOrder = (o) => Object.keys(o).sort((a, b) => (a === '좌석 미정') - (b === '좌석 미정') || a.localeCompare(b, 'ko', { numeric: true }));
+function paintVipBar(){
+  if(VIEW === 'test'){ $('#vipBar').innerHTML = ''; return; }
+  const s = vipStats();
+  const chip = (l, n) => `<span class="chip">${esc(l)}<b>${n}</b></span>`;
+  $('#vipBar').innerHTML = `<div class="vipbar" id="vipBarBox" title="VIP 탭 열기/닫기">
+    <div><div class="l">⭐ VIP</div><div class="v">${s.all}<small>명</small></div></div>
+    <div class="chips">${chip('참석', s.yes)}${chip('불참', s.no)}${chip('미확인', s.pending)}</div>
+    <div class="chips">${catOrder(s.cat).map(k => chip(k, s.cat[k])).join('')}</div>
+    <div class="chips">${seatOrder(s.seat).map(k => chip(k, s.seat[k])).join('')}</div>
+    <div class="go">${VIEW === 'vip' ? '← 실제 명단으로' : 'VIP 탭 보기 →'}</div></div>`;
+  $('#vipBarBox').onclick = () => { VIEW = VIEW === 'vip' ? 'real' : 'vip'; FILTER = 'all'; OPEN = ''; paint(); };
+}
+let vipSaveH = 0;
+async function vipSave(now){
+  clearTimeout(vipSaveH);
+  const go = async () => { const j = await api({ op: 'vipset', items: VIPS }); if(!j.ok) return toast(j.error || 'VIP 저장 실패'); toast('VIP 저장했어요'); };
+  if(now) return go();
+  vipSaveH = setTimeout(go, 400);
+}
+function paintVip(){
+  const act = document.activeElement;
+  if(act && $('#vipPanel').contains(act) && /INPUT|SELECT/.test(act.tagName)) return;   // 고치는 중엔 30초 새로고침이 덮지 않게
+  const s = vipStats();
+  const segs = [['all', '전체', s.all], ...seatOrder(s.seat).map(k => ['seat:' + k, k, s.seat[k]]), ...catOrder(s.cat).map(k => ['cat:' + k, k, s.cat[k]])];
+  if(!segs.some(x => x[0] === VIPF)) VIPF = 'all';
+  $('#vipSeg').innerHTML = segs.map(([k, l, n]) => `<button class="${VIPF === k ? 'on' : ''}" data-vf="${esc(k)}">${esc(l)} ${n}</button>`).join('');
+  document.querySelectorAll('[data-vf]').forEach(b => b.onclick = () => { VIPF = b.dataset.vf; paintVip(); });
+  const L = vipSorted().filter(v => VIPF === 'all' || (VIPF.startsWith('seat:') ? (v.seat || '좌석 미정') === VIPF.slice(5) : (v.cat || '구분 없음') === VIPF.slice(4)));
+  $('#vipTitle').textContent = `⭐ VIP ${L.length}명`;
+  const cats = catOrder(Object.assign({ '연사': 1, '아카라라이프': 1, 'KOSID': 1 }, s.cat)).filter(k => k !== '구분 없음');
+  const seats = seatOrder(Object.assign({ '1열': 1, '2열': 1 }, s.seat)).filter(k => k !== '좌석 미정');
+  const inp = (v, f, ph) => `<input data-vid="${esc(v.id)}" data-vk="${f}" value="${esc(v[f] || '')}" placeholder="${ph || ''}"${RO ? ' readonly' : ''}>`;
+  const sel = (v, f, opts) => `<select data-vid="${esc(v.id)}" data-vk="${f}"${RO ? ' disabled' : ''}><option value=""></option>${opts.map(o => `<option${o === v[f] ? ' selected' : ''}>${esc(o)}</option>`).join('')}${v[f] && !opts.includes(v[f]) ? `<option selected>${esc(v[f])}</option>` : ''}<option value="__new">직접 입력…</option></select>`;
+  $('#vipRows').innerHTML = !L.length ? `<tr><td colspan="10" class="empty">${VIPS.length ? '해당하는 VIP가 없어요.' : '아직 VIP 명단이 없어요. 오른쪽 위 <b>VIP 명단 붙여넣기</b>로 표를 그대로 붙여 넣어 주세요.'}</td></tr>` : L.map(v => {
+    const st = vipSt(v), g = vipLink(v), cand = vipCands(v);
+    let rs;
+    if(g) rs = `<span class="tag t-vip2" style="margin-left:0">연결</span> ${esc(g.rep.org || '')} · RSVP ${esc(stLabel(g))}${RO ? '' : ` <button class="lk rw" data-vunlink="${esc(v.id)}" title="RSVP 명단의 그 그룹과 다른 사람이면 연결 끊기(그 그룹은 실제 명단으로 돌아감)">✕</button>`}`;
+    else if(v.link === '-') rs = `<span class="mut">연결 안 함</span>${RO ? '' : ` <button class="lk rw" data-vrelink="${esc(v.id)}">다시 찾기</button>`}`;
+    else if(cand.length > 1) rs = RO ? `<span class="mut">같은 이름 ${cand.length}그룹</span>` : `<select data-vpick="${esc(v.id)}"><option value="">같은 이름 ${cand.length}그룹 — 고르기</option>${cand.map(c => `<option value="${esc(c.t)}">${esc(c.rep.name)} · ${esc(c.rep.org || '')} · ${esc(stLabel(c))}</option>`).join('')}<option value="-">해당 없음</option></select>`;
+    else rs = '<span class="mut">명단에 없음</span>';
+    return `<tr class="${/^1/.test(v.seat) ? 'seat1' : /^2/.test(v.seat) ? 'seat2' : ''}">
+      <td style="min-width:80px">${sel(v, 'seat', seats)}</td>
+      <td style="min-width:130px">${sel(v, 'cat', cats)}</td>
+      <td style="min-width:90px;font-weight:700">${inp(v, 'name')}</td>
+      <td style="min-width:70px">${inp(v, 'title')}</td>
+      <td style="min-width:130px">${inp(v, 'org')}</td>
+      <td><span class="vst">${['yes', 'no', 'pending'].map(k => `<button class="${st.v === k ? 'on ' + k : ''}" data-vst="${esc(v.id)}" data-v="${k}"${RO ? ' disabled' : ''}>${VST[k]}</button>`).join('')}</span>${st.src ? `<div class="mut" style="font-size:10.5px">${st.src}</div>` : ''}</td>
+      <td style="min-width:110px">${inp(v, 'phone', '연락처')}</td>
+      <td style="font-size:12px;min-width:150px">${rs}</td>
+      <td style="min-width:140px">${inp(v, 'memo', '메모')}</td>
+      <td class="rw" style="white-space:nowrap"><button class="lk" data-vdel="${esc(v.id)}" title="VIP에서 빼기" style="color:var(--err)">삭제</button></td></tr>`;
+  }).join('');
+  const byId = (id) => VIPS.find(x => x.id === id);
+  document.querySelectorAll('#vipRows [data-vk]').forEach(el => el.onchange = () => {
+    const v = byId(el.dataset.vid); if(!v) return; let val = el.value;
+    if(val === '__new'){ val = (prompt(el.dataset.vk === 'seat' ? '좌석 이름(예: 3열)' : '구분 이름') || '').trim(); if(!val){ el.blur(); paintVip(); return; } }
+    v[el.dataset.vk] = val.trim();
+    if(el.dataset.vk === 'name') v.link = '';   // 이름 바꾸면 RSVP 연결 다시 찾기
+    el.blur(); vipSave(true); paint();
+  });
+  document.querySelectorAll('#vipRows [data-vst]').forEach(b => b.onclick = () => { const v = byId(b.dataset.vst); if(!v) return; v.status = b.dataset.v; vipSave(true); paint(); });
+  document.querySelectorAll('#vipRows [data-vunlink]').forEach(b => b.onclick = () => { const v = byId(b.dataset.vunlink); if(!v) return; v.link = '-'; vipSave(true); paint(); });
+  document.querySelectorAll('#vipRows [data-vrelink]').forEach(b => b.onclick = () => { const v = byId(b.dataset.vrelink); if(!v) return; v.link = ''; vipSave(true); paint(); });
+  document.querySelectorAll('#vipRows [data-vpick]').forEach(el => el.onchange = () => { const v = byId(el.dataset.vpick); if(!v || !el.value) return; v.link = el.value; el.blur(); vipSave(true); paint(); });
+  document.querySelectorAll('#vipRows [data-vdel]').forEach(b => b.onclick = () => { const v = byId(b.dataset.vdel); if(!v || !confirm(`${v.name} 님을 VIP 명단에서 뺄까요?\n(RSVP 명단에 연결된 그룹이 있으면 실제 명단으로 돌아가요)`)) return; VIPS = VIPS.filter(x => x !== v); vipSave(true); paint(); });
+  const linked = VIPS.map(vipLink).filter(Boolean).length;
+  $('#vipNote').innerHTML = `RSVP 명단에 같은 이름으로 있는 VIP ${linked}명은 <b>실제 명단</b>(카드·목록·엑셀·이벤터스)에서 빠지고 여기서만 보여요. 다른 사람이면 ✕로 연결을 끊어 주세요.${RO ? '' : ' 칸을 눌러 바로 고치면 저장돼요.'}`;
+}
+// VIP 표 붙여넣기: 머리글 줄(연사 / 아카라라이프 / KOSID …) 아래 '이름/소속 직함' 칸 + '1열:' '2열:' 다음 줄의 이름들 = 좌석
+const TITLE_RE = /^(대표|회장|부회장|전무|상무|이사|고문|소장|사장|부사장|교수|원장|실장|팀장|부장|본부장|대표이사|위원|위원장|명예회장|센터장|총괄)$/;
+function parseVipText(text){
+  const lines = String(text || '').replace(/\r/g, '').split('\n');
+  const cells = (l) => (l.includes('\t') ? l.split('\t') : l.split(/ {4}/)).map(x => x.trim());
+  // 좌석 줄: '1열: …' 다음 줄의 이름들
+  const seatOf = {}; let cur = '';
+  lines.forEach(l => { const m = l.match(/^\s*(\d+)\s*열/); if(m){ cur = m[1] + '열'; return; }
+    if(cur && l.trim()){ l.trim().split(/[\s,·]+/).forEach(n => { if(/^[가-힣]{2,4}$/.test(n)) seatOf[n] = cur; }); cur = ''; } });
+  const seatNames = Object.keys(seatOf);
+  // 머리글 줄(구분)
+  const hi = lines.findIndex(l => /연사|KOSID|아카라/.test(l) && !l.includes('/') && cells(l).filter(Boolean).length >= 2);
+  const out = [];
+  const one = (raw, cat) => {
+    raw = raw.replace(/\s+/g, ' ').trim(); if(!raw || /^\d+$/.test(raw)) return;
+    let name = seatNames.find(n => raw.includes(n)) || '';
+    const parts = raw.split('/').map(s => s.trim()), left = parts[0], right = parts.slice(1).join(' ');
+    if(!name) name = left.split(' ').find(w => /^[가-힣]{2,4}$/.test(w) && !TITLE_RE.test(w)) || left.split(' ')[0];
+    const rest = (left.replace(name, '') + ' ' + right).replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
+    out.push({ name, title: rest.filter(w => TITLE_RE.test(w)).join(' '), org: rest.filter(w => !TITLE_RE.test(w)).join(' '), cat: cat || '', seat: seatOf[name] || '' });
+  };
+  if(hi >= 0){
+    const H = cells(lines[hi]);
+    for(let i = hi + 1; i < lines.length; i++){
+      const l = lines[i]; if(/^\s*\d+\s*열/.test(l)) break;
+      const C = cells(l); if(!C.some(Boolean) || C.every(c => !c || /^\d+$/.test(c))) continue;
+      C.forEach((c, j) => { if(c) one(c, H[j] || ''); });
+    }
+  } else {
+    // 머리글이 없으면 한 줄에 한 명: 이름/소속 직함 [탭 구분 탭 좌석]
+    let skip = false;
+    lines.forEach(l => { if(/^\s*\d+\s*열/.test(l)){ skip = true; return; } if(skip){ if(l.trim()) skip = false; return; }
+      const C = cells(l).filter(Boolean); if(C[0] && /[가-힣]/.test(C[0])){ one(C[0], C[1] || ''); if(C[2]) out[out.length - 1].seat = C[2]; } });
+  }
+  // 좌석 줄에만 있고 표에 없는 이름도 넣는다
+  seatNames.forEach(n => { if(!out.some(v => v.name === n)) out.push({ name: n, title: '', org: '', cat: '', seat: seatOf[n] }); });
+  const seen = new Set(); return out.filter(v => v.name && !seen.has(v.name) && seen.add(v.name));
+}
+function vipPasteModal(){
+  modal(`<h3 style="margin:0 0 6px">VIP 명단 붙여넣기</h3>
+    <div class="mut" style="margin-bottom:8px">엑셀·메모의 VIP 표를 그대로 붙여 넣으세요. 첫 줄 <b>연사 / 아카라라이프 / KOSID</b> 같은 머리글이 <b>구분</b>, 그 아래 <b>이름/소속 직함</b> 칸이 사람, <b>1열:</b> <b>2열:</b> 다음 줄의 이름들이 <b>좌석</b>이 돼요.</div>
+    <textarea id="vipTxt" style="width:100%;height:180px;font:inherit;font-size:12.5px;border:1px solid var(--line2);border-radius:10px;padding:10px;box-sizing:border-box"></textarea>
+    <div id="vipPrev" style="max-height:38vh;overflow:auto;margin-top:8px"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap">
+      <button class="btn" data-x>닫기</button><button class="btn" id="vipAddGo" disabled>추가(같은 이름은 갱신)</button><button class="btn pri" id="vipRepGo" disabled>이 명단으로 바꾸기</button></div>`);
+  { const bx = $('#modal .box'); if(bx) bx.style.maxWidth = 'min(860px, 96vw)'; }
+  let P = [];
+  $('#vipTxt').oninput = () => { P = parseVipText($('#vipTxt').value);
+    $('#vipAddGo').disabled = $('#vipRepGo').disabled = !P.length;
+    $('#vipPrev').innerHTML = P.length ? `<div class="mut" style="margin-bottom:4px">${P.length}명 인식 — 틀린 칸은 넣은 뒤 표에서 바로 고칠 수 있어요</div><table class="tbl"><thead><tr><th>좌석</th><th>구분</th><th>성함</th><th>직함</th><th>소속</th></tr></thead><tbody>${P.map(v => `<tr><td>${esc(v.seat)}</td><td>${esc(v.cat)}</td><td><b>${esc(v.name)}</b></td><td>${esc(v.title)}</td><td>${esc(v.org)}</td></tr>`).join('')}</tbody></table>` : ''; };
+  const apply = (replace) => {
+    if(replace && VIPS.length && !confirm(`지금 VIP ${VIPS.length}명을 이 명단 ${P.length}명으로 바꿀까요?\n(같은 이름의 참석·연락처·메모는 이어서 유지)`)) return;
+    const base = replace ? [] : VIPS.slice(); let ord = base.reduce((m, v) => Math.max(m, v.ord || 0), 0);
+    P.forEach(p => { const old = base.find(v => nmKey(v.name) === nmKey(p.name));
+      if(old) Object.keys(p).forEach(k => { if(p[k]) old[k] = p[k]; });
+      else { const prev = VIPS.find(v => nmKey(v.name) === nmKey(p.name)) || {};
+        base.push(Object.assign({ id: prev.id || 'v' + Math.random().toString(36).slice(2, 10), status: prev.status || 'pending', phone: prev.phone || '', memo: prev.memo || '', link: prev.link || '' }, p, { ord: ++ord })); } });
+    VIPS = base; closeModal(); VIEW = 'vip'; VIPF = 'all'; paint(); vipSave(true);
+  };
+  $('#vipAddGo').onclick = () => apply(false);
+  $('#vipRepGo').onclick = () => apply(true);
+}
+function vipAddOne(){
+  const name = (prompt('VIP 성함') || '').trim(); if(!name) return;
+  if(VIPS.some(v => nmKey(v.name) === nmKey(name))) return toast('이미 VIP 명단에 있어요');
+  VIPS.push({ id: 'v' + Math.random().toString(36).slice(2, 10), name, title: '', org: '', cat: '', seat: '', status: 'pending', phone: '', memo: '', link: '', ord: VIPS.reduce((m, v) => Math.max(m, v.ord || 0), 0) + 1 });
+  VIEW = 'vip'; VIPF = 'all'; paint(); vipSave(true);
+}
+function vipXlsx(){
+  const rows = vipSorted().map(v => { const g = vipLink(v), st = vipSt(v);
+    return { 좌석: v.seat || '', 구분: v.cat || '', 성함: v.name, 직함: v.title || '', 소속: v.org || '', 참석: VST[st.v] + (st.src ? `(${st.src})` : ''), 연락처: v.phone || '', 'RSVP 명단': g ? `${g.rep.name} · ${g.rep.org || ''} · ${stLabel(g)}` : '', 메모: v.memo || '' }; });
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), 'VIP');
+  XLSX.writeFile(wb, `RSVP_세미나_VIP_${rows.length}명_${stamp()}.xlsx`);
 }
 
 function paint(){
@@ -406,7 +623,7 @@ function paint(){
   $('#btnClose').textContent = META.closed ? '응답 다시 열기' : '응답 마감';
   $('#btnClose').classList.toggle('danger', !META.closed);
   const nTest = allGroups().filter(g => g.test).length;
-  $('#viewSeg').innerHTML = `<button class="${VIEW === 'real' ? 'on' : ''}" data-view="real">실제 명단 ${allGroups().length - nTest}</button><button class="${VIEW === 'test' ? 'on' : ''}" data-view="test">🧪 테스트 ${nTest}</button>`;
+  $('#viewSeg').innerHTML = `<button class="${VIEW === 'real' ? 'on' : ''}" data-view="real">실제 명단 ${allGroups().length - nTest - vipTokens().size}</button><button class="vipon ${VIEW === 'vip' ? 'on' : ''}" data-view="vip">⭐ VIP ${VIPS.length}</button><button class="${VIEW === 'test' ? 'on' : ''}" data-view="test">🧪 테스트 ${nTest}</button>`;
   document.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { VIEW = b.dataset.view; FILTER = 'all'; COMP = 'all'; OPEN = ''; paint(); });
   // 테스트 탭에선 실제 명단용 버튼(가져오기·이벤터스·마감)을 숨기고, 초기화는 테스트 그룹만
   ['#btnEventus', '#btnEventusLink', '#btnClose', '#btnSentAt'].forEach(s => { $(s).style.display = VIEW === 'test' ? 'none' : ''; });
@@ -421,6 +638,14 @@ function paint(){
     : META.closed ? '<div class="warn">응답이 마감된 상태입니다. 손님은 링크에서 보기만 할 수 있어요.</div>'
     : (!s.all ?'<div class="warn">아직 명단이 없습니다. 오른쪽 위 <b>명단 엑셀 가져오기</b>로 RSVP 명단 파일(참석자 명단 시트)을 올려 주세요.</div>' : '');
   drawTimeline();
+  // VIP(2026-11-16): 위 주황 VIP 박스 + VIP 탭이면 일반 카드·타임라인·목록 대신 VIP 표
+  paintVipBar();
+  const isVip = VIEW === 'vip';
+  $('#kpis').style.display = isVip ? 'none' : '';
+  $('#mainPanel').style.display = isVip ? 'none' : '';
+  $('#vipPanel').hidden = !isVip;
+  $('#btnAdd').style.visibility = isVip ? 'hidden' : '';
+  if(isVip){ $('#tl').hidden = true; $('#warn').innerHTML = ''; paintVip(); return; }
   paintRows();
 }
 
@@ -1585,6 +1810,9 @@ async function openTrash(){
   });
 }
 $('#btnTrash').onclick = openTrash;
+$('#btnVipPaste').onclick = vipPasteModal;
+$('#btnVipAdd').onclick = vipAddOne;
+$('#btnVipXlsx').onclick = vipXlsx;
 
 // 번호 앞 0 고치기(2026-11-10): 저장된 휴대폰이 10xxxxxxxx(10자리)인 본인·대리·동행인을 010…으로 — 서버 op fixphones
 $('#btnFixPh').onclick = async () => {
