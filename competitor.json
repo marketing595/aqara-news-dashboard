@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-16 00:41",
+ "generatedAt": "2026-11-17 03:38",
  "brands": [
   {
    "name": "아카라",
@@ -121,15 +121,15 @@
    ],
    "related": [
     "아카라이브",
-    "아카라",
     "아카라 도어락",
+    "아카라",
     "아카라 k100",
     "아카라 홈캠",
     "아카라 스위치",
     "명조 아카라이브",
     "아카라 l100",
-    "니케 아카라이브",
-    "원신 아카라이브"
+    "원신 아카라이브",
+    "니케 아카라이브"
    ],
    "recent": [
     {
@@ -228,7 +228,7 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 1018,
+   "total": 1020,
    "sentiment": {
     "pos": 5,
     "neu": 38,
@@ -237,38 +237,38 @@
    "keywords": [
     [
      "이글루",
-     44
-    ],
-    [
-     "브이스타캠",
-     40
+     48
     ],
     [
      "파인뷰",
-     40
+     42
+    ],
+    [
+     "브이스타캠",
+     41
     ],
     [
      "보안",
-     35
+     37
     ],
     [
      "아이피타임",
-     24
+     26
     ],
     [
      "로보뷰",
      21
     ],
     [
-     "베이비페어",
-     20
-    ],
-    [
-     "홈카메라",
+     "4개",
      19
     ],
     [
-     "코베",
+     "샤오미",
+     19
+    ],
+    [
+     "홈카메라",
      19
     ],
     [
@@ -284,27 +284,27 @@
      19
     ],
     [
-     "샤오미",
+     "제품은",
      18
     ],
     [
-     "4개",
+     "베이비페어",
      18
+    ],
+    [
+     "타포",
+     17
+    ],
+    [
+     "코베",
+     17
     ],
     [
      "모윰",
      17
     ],
     [
-     "타포",
-     16
-    ],
-    [
-     "제품은",
-     16
-    ],
-    [
-     "육아",
+     "노출된",
      15
     ]
    ],
@@ -348,9 +348,21 @@
     "헤이홈 공유",
     "헤이홈 오프라인",
     "헤이홈 카메라",
-    "헤이홈 보안"
+    "헤이홈 프로"
    ],
    "recent": [
+    {
+     "title": "우리 집 홈캠 안전할까… IP카메라 10종 보안 점검 결과는?",
+     "source": "ggilbo.com",
+     "date": "2026-11-17",
+     "link": "https://www.ggilbo.com/news/articleView.html?idxno=1192885"
+    },
+    {
+     "title": "\"우리 집 안방이 실시간으로..\" 가정용 CCTV로 사생활 뚫린다",
+     "source": "todayeconomic.com",
+     "date": "2026-11-16",
+     "link": "https://www.todayeconomic.com/news/article.html?no=32841"
+    },
     {
      "title": "IP카메라 보안 '빨간불'...영상 탈취 위험 3종은?",
      "source": "hansbiz.co.kr",
@@ -424,22 +436,10 @@
      "link": "https://n.news.naver.com/mnews/article/029/0003058820?sid=105"
     },
     {
-     "title": "영유아 안전 확인하는 홈카메라, 보안 취약점 드러나…영상 무단 유출 ...",
-     "source": "ibabynews.com",
-     "date": "2026-11-12",
-     "link": "https://www.ibabynews.com/news/articleView.html?idxno=156853"
-    },
-    {
      "title": "KISA “시중 판매 IP카메라서 보안 취약점 발견”",
      "source": "busan.com",
      "date": "2026-11-12",
      "link": "https://n.news.naver.com/mnews/article/082/0001406897?sid=101"
-    },
-    {
-     "title": "IP카메라 10종 보안 점검 '우수' 0개…로보뷰·브이스타캠·파인뷰 '미흡...",
-     "source": "cstimes.com",
-     "date": "2026-11-12",
-     "link": "https://www.cstimes.com/news/articleView.html?idxno=727716"
     }
    ]
   },
@@ -447,222 +447,202 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69721,
+   "total": 69829,
    "sentiment": {
-    "pos": 9,
-    "neu": 51,
+    "pos": 3,
+    "neu": 57,
     "neg": 0
    },
    "keywords": [
     [
-     "삼성화재",
-     72
+     "수능",
+     69
     ],
     [
-     "화재",
+     "사용",
+     51
+    ],
+    [
+     "연결된",
+     47
+    ],
+    [
+     "시스템에어컨의",
+     45
+    ],
+    [
+     "상태와",
+     40
+    ],
+    [
+     "긴급",
+     39
+    ],
+    [
+     "원격으로",
+     35
+    ],
+    [
+     "상담사가",
      34
     ],
     [
-     "누수",
-     34
-    ],
-    [
-     "서비스를",
+     "설정을",
      33
     ],
     [
-     "배너를",
+     "점검",
+     32
+    ],
+    [
+     "시험장",
      31
     ],
     [
-     "진단",
-     25
+     "원격진단",
+     31
     ],
     [
-     "우리집진단",
-     24
+     "고사장",
+     29
     ],
     [
-     "위험",
-     23
+     "LG전자",
+     28
     ],
     [
-     "삼성화재는",
-     23
+     "시스템에어컨",
+     27
     ],
     [
-     "CU",
-     22
+     "AI로",
+     27
     ],
     [
-     "모바일",
-     22
+     "SmartThings",
+     26
     ],
     [
-     "이용한",
-     21
-    ],
-    [
-     "기프트카드",
-     21
-    ],
-    [
-     "주택",
-     19
-    ],
-    [
-     "플랫폼",
-     18
-    ],
-    [
-     "건물",
-     17
-    ],
-    [
-     "현대차",
-     17
-    ],
-    [
-     "문화상품권과",
-     15
+     "AI",
+     26
     ]
    ],
    "posWords": [
     [
-     "확대",
-     3
-    ],
-    [
-     "투자",
-     1
-    ],
-    [
-     "글로벌",
-     1
-    ],
-    [
-     "개선",
-     1
-    ],
-    [
      "강화",
+     2
+    ],
+    [
+     "혁신",
      1
     ],
     [
-     "첨단",
-     1
-    ],
-    [
-     "선도",
-     1
-    ],
-    [
-     "협업",
+     "수상",
      1
     ]
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
+    "삼성 스마트싱스",
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스 오류",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 도어락",
     "삼성 스마트싱스 냉장고",
-    "삼성 스마트싱스 홈캠"
+    "삼성 스마트싱스 홈캠",
+    "삼성 스마트싱스 도어락"
    ],
    "recent": [
     {
-     "title": "삼성화재, 스마트싱스서 주택 화재·누수 위험 진단…안전관리 정보 제...",
-     "source": "seoultimes.news",
-     "date": "2026-11-15",
-     "link": "https://www.seoultimes.news/news/article.html?no=2000102219"
+     "title": "삼성·LG전자, 수능 앞두고 고사장 냉난방 점검… 긴급 대응체계 가동",
+     "source": "디지털타임스",
+     "date": "2026-11-16",
+     "link": "https://n.news.naver.com/mnews/article/029/0003059478?sid=101"
     },
     {
-     "title": "\"스마트홈에서 누리는 주거 안전 진단\"… 삼성화재, 삼성전자 '스마트싱...",
-     "source": "dailysmart.co.kr",
-     "date": "2026-11-15",
-     "link": "http://www.dailysmart.co.kr/news/articleView.html?idxno=132493"
+     "title": "삼성전자, 수능날 고사장 시스템에어컨 전담팀 운영… 사전 점검도",
+     "source": "tournews21.com",
+     "date": "2026-11-16",
+     "link": "https://www.tournews21.com/news/articleView.html?idxno=148532"
     },
     {
-     "title": "우리집 화재·누수 위험은…삼성화재, 스마트싱스에 '착!한 우리집진단...",
+     "title": "삼성전자, 수능 대비 전담 서비스팀 꾸려",
+     "source": "kfenews.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=668173"
+    },
+    {
+     "title": "삼성전자, 수능 시험장 냉난방 긴급 대응체계 가동…AI 원격진단·전담...",
+     "source": "joongangenews.com",
+     "date": "2026-11-16",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=563970"
+    },
+    {
+     "title": "삼성전자, 수능 시험장 난방 점검·긴급 대응 지원",
+     "source": "bizwork.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.bizwork.co.kr/news/articleView.html?idxno=420884"
+    },
+    {
+     "title": "[TOP's Pick] [전자·IT] LG전자, 휴머노이드 로봇 품질 경쟁력 강화 나서...",
+     "source": "topdaily.kr",
+     "date": "2026-11-16",
+     "link": "https://www.topdaily.kr/articles/112929"
+    },
+    {
+     "title": "삼성전자, 수능 당일 '긴급 서비스팀 운영'…고사장 시스템에어컨 특별...",
      "source": "thepublic.kr",
-     "date": "2026-11-15",
-     "link": "https://www.thepublic.kr/news/articleView.html?idxno=326724"
+     "date": "2026-11-16",
+     "link": "https://www.thepublic.kr/news/articleView.html?idxno=326919"
     },
     {
-     "title": "삼성화재, 스마트싱스에서 주택 화재·누수 진단 서비스 제공",
-     "source": "bizwnews.com",
-     "date": "2026-11-15",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=151889"
+     "title": "[포토뉴스] 삼성전자, 수능 고사장 시스템에어컨 긴급 서비스 운영",
+     "source": "cnbnews.com",
+     "date": "2026-11-16",
+     "link": "https://www.cnbnews.com/news/articleView.html?idxno=1024013"
     },
     {
-     "title": "삼성화재, 삼성전자 스마트싱스와 주택 화재·누수 위험 진단 서비스",
-     "source": "webeconomy.co.kr",
-     "date": "2026-11-14",
-     "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2374428"
+     "title": "LG·삼성전자, 수능 시험장 냉난방기 사전 점검…당일 긴급대응",
+     "source": "gpkorea.com",
+     "date": "2026-11-16",
+     "link": "https://www.gpkorea.com/news/articleView.html?idxno=148670"
     },
     {
-     "title": "[위클리오늘] 삼성화재, 삼성전자 스마트싱스 앱서 '착!한 우리집진단'...",
-     "source": "weeklytoday.com",
-     "date": "2026-11-13",
-     "link": "http://www.weeklytoday.com/news/articleView.html?idxno=802031"
+     "title": "삼성전자, 수능 고사장 시스템에어컨 사전 점검…시험 당일 긴급 대응팀...",
+     "source": "thefirstmedia.net",
+     "date": "2026-11-16",
+     "link": "http://www.thefirstmedia.net/news/articleView.html?idxno=213753"
     },
     {
-     "title": "'스마트싱스로 우리집 위험 확인'…삼성화재, 안전진단 서비스 연계",
-     "source": "financialpost.co.kr",
-     "date": "2026-11-13",
-     "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=300846"
+     "title": "삼성전자, CES 2027 혁신상 19건 수상…수능 고사장 긴급 서비스도 준비",
+     "source": "sateconomy.co.kr",
+     "date": "2026-11-16",
+     "link": "https://sateconomy.co.kr/news/view/1065595338232839"
     },
     {
-     "title": "삼성화재, 스마트싱스서 '착!한 우리집진단' 제공",
-     "source": "pointdaily.co.kr",
-     "date": "2026-11-13",
-     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=325943"
+     "title": "삼성‧LG전자, 수능 시험장 시스템에어컨 점검…전담‧비상체계 가동",
+     "source": "it-b.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.it-b.co.kr/news/articleView.html?idxno=90709"
     },
     {
-     "title": "삼성화재, 스마트싱스서 주택 화재·누수 위험 진단 서비스 제공",
-     "source": "ziksir.com",
-     "date": "2026-11-13",
-     "link": "https://www.ziksir.com/news/articleView.html?idxno=153299"
+     "title": "삼성·LG, 수능 고사장 시스템에어컨 사전 점검·긴급 대응 나선다",
+     "source": "dnews.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611161144029370214"
     },
     {
-     "title": "삼성화재, 스마트싱스서 우리집 화재·누수 위험 진단 서비스 제공",
-     "source": "e-science.co.kr",
-     "date": "2026-11-13",
-     "link": "https://www.e-science.co.kr/news/articleView.html?idxno=139744"
+     "title": "삼성전자서비스, 수능 고사장 시스템에어컨 긴급 서비스 지원",
+     "source": "public25.com",
+     "date": "2026-11-16",
+     "link": "https://www.public25.com/news/articleView.html?idxno=58554"
     },
     {
-     "title": "[보험·카드사 풍향계] 삼성화재, ‘착!한 우리집진단’ 서비스 선봬 外",
-     "source": "ekn.kr",
-     "date": "2026-11-13",
-     "link": "https://www.ekn.kr/web/view.php?key=20261113025449508"
-    },
-    {
-     "title": "삼성화재, 스마트싱스 연계해 주택 화재·누수 위험 진단",
-     "source": "뉴시스",
-     "date": "2026-11-13",
-     "link": "https://n.news.naver.com/mnews/article/003/0014321360?sid=101"
-    },
-    {
-     "title": "삼성화재, 스마트싱스 통해 주택 화재·누수 위험 알려준다",
-     "source": "ftoday.co.kr",
-     "date": "2026-11-13",
-     "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=369699"
-    },
-    {
-     "title": "삼성화재, 삼성전자 스마트싱스 앱서 '주택 화재·누수 위험' 진단",
-     "source": "insnews.co.kr",
-     "date": "2026-11-13",
-     "link": "https://www.insnews.co.kr/news/articleView.html?idxno=93833"
-    },
-    {
-     "title": "삼성화재, 삼성전자 스마트싱스와 제휴…주택 화재·누수 위험 진단",
-     "source": "cnbizm.com",
-     "date": "2026-11-13",
-     "link": "https://www.cnbizm.com/news/articleView.html?idxno=321427"
+     "title": "[산업 브리핑] 롯데그룹·CJ그룹·LG전자·삼성전자",
+     "source": "niceeconomy.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.niceeconomy.co.kr/news/articleView.html?idxno=91833"
     }
    ]
   },
@@ -670,16 +650,16 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78244,
+   "total": 78249,
    "sentiment": {
-    "pos": 14,
-    "neu": 46,
+    "pos": 16,
+    "neu": 44,
     "neg": 0
    },
    "keywords": [
     [
      "LG전자",
-     53
+     49
     ],
     [
      "시간을",
@@ -702,10 +682,6 @@
      24
     ],
     [
-     "AI",
-     20
-    ],
-    [
      "색상과",
      19
     ],
@@ -718,16 +694,12 @@
      17
     ],
     [
+     "AI",
+     16
+    ],
+    [
      "알려주는",
-     17
-    ],
-    [
-     "AI홈",
-     15
-    ],
-    [
-     "류재철",
-     15
+     16
     ],
     [
      "무드",
@@ -748,11 +720,23 @@
     [
      "조명의",
      13
+    ],
+    [
+     "플랫폼",
+     12
+    ],
+    [
+     "출하가는",
+     12
     ]
    ],
    "posWords": [
     [
      "강화",
+     6
+    ],
+    [
+     "확대",
      4
     ],
     [
@@ -764,8 +748,8 @@
      2
     ],
     [
-     "확대",
-     2
+     "돌파",
+     1
     ],
     [
      "프리미엄",
@@ -778,25 +762,57 @@
     [
      "1위",
      1
-    ],
-    [
-     "투자",
-     1
     ]
    ],
    "related": [
     "lg 씽큐온",
     "lg 씽큐 티비연결",
     "lg 씽큐 세탁기",
-    "lg 씽큐 냉장고",
     "lg 씽큐 허브",
-    "lg 씽큐 초기화",
+    "lg 씽큐 냉장고",
     "lg 씽큐 와이파이",
+    "lg 씽큐 초기화",
     "lg 씽큐 연결",
     "lg 씽큐 에어컨 연결",
     "lg씽큐"
    ],
    "recent": [
+    {
+     "title": "애플 '아이폰 듀오' 최적화 앱 20만개 돌파…지원 생태계 확대",
+     "source": "머니투데이",
+     "date": "2026-11-16",
+     "link": "https://n.news.naver.com/mnews/article/008/0005441928?sid=105"
+    },
+    {
+     "title": "LG이노텍, 스마트홈 카메라용 통신모듈 개발……차량 넘어 가전으로",
+     "source": "이데일리",
+     "date": "2026-11-16",
+     "link": "https://n.news.naver.com/mnews/article/018/0006410644?sid=101"
+    },
+    {
+     "title": "진화한 LG이노텍 '스마트홈 통신모듈', LG전자 홈로봇에 탑재될까",
+     "source": "sisajournal-e.com",
+     "date": "2026-11-16",
+     "link": "https://www.sisajournal-e.com/news/articleView.html?idxno=425061"
+    },
+    {
+     "title": "밥맛 잡은 쿠쿠, 우리 집까지 책임진다…'스마트 홈' 승부수",
+     "source": "financialpost.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=301121"
+    },
+    {
+     "title": "[짓는집? 집도 배달받는 시대, 모듈러주택]-② 종합선물세트? 집 사니 가...",
+     "source": "handmk.com",
+     "date": "2026-11-16",
+     "link": "https://www.handmk.com/news/articleView.html?idxno=45051"
+    },
+    {
+     "title": "류재철 LG전자 대표 1년, 본업 실적 챙기고 '로봇·AIDC' 미래 준비도 착...",
+     "source": "consumernews.co.kr",
+     "date": "2026-11-16",
+     "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=768249"
+    },
     {
      "title": "[비즈톡톡] 스피커 구멍 없앤 아이패드 미니… 스마트폰서 자취 감춘 ‘...",
      "source": "biz.chosun.com",
@@ -850,42 +866,6 @@
      "source": "pointdaily.co.kr",
      "date": "2026-11-11",
      "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=325614"
-    },
-    {
-     "title": "좁은 공간에도 맞춤 온도…LG전자, '퓨리케어 슬림맞춤 정수기' 출시",
-     "source": "ziksir.com",
-     "date": "2026-11-11",
-     "link": "https://www.ziksir.com/news/articleView.html?idxno=152956"
-    },
-    {
-     "title": "[신제품] 지폐보다 얇은 폭…LG전자, '퓨리케어 슬림맞춤 정수기' 출시",
-     "source": "financialpost.co.kr",
-     "date": "2026-11-11",
-     "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=300079"
-    },
-    {
-     "title": "“좁은 틈에도 쏙” LG전자, 가로 13.2㎝ 초슬림 정수기 신모델 출시",
-     "source": "biz.heraldcorp.com",
-     "date": "2026-11-11",
-     "link": "https://n.news.naver.com/mnews/article/016/0002722128?sid=101"
-    },
-    {
-     "title": "LG전자, 폭 13.2cm 퓨리케어 슬림맞춤 정수기 신모델 출시",
-     "source": "koreareport.co.kr",
-     "date": "2026-11-11",
-     "link": "https://www.koreareport.co.kr/news/articleView.html?idxno=54574"
-    },
-    {
-     "title": "[산업계 동향] 삼성전자ㆍLG전자ㆍ롯데이노베이트 (11.11)",
-     "source": "weeklytoday.com",
-     "date": "2026-11-11",
-     "link": "http://www.weeklytoday.com/news/articleView.html?idxno=801719"
-    },
-    {
-     "title": "좁은 주방에도 쏙…LG전자, 폭 13.2cm 초슬림 정수기 출시",
-     "source": "worktoday.co.kr",
-     "date": "2026-11-11",
-     "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=91844"
     }
    ]
   },
@@ -893,32 +873,64 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76478,
+   "total": 76486,
    "sentiment": {
-    "pos": 15,
-    "neu": 34,
+    "pos": 16,
+    "neu": 33,
     "neg": 11
    },
    "keywords": [
     [
-     "매장",
-     18
-    ],
-    [
      "AI",
-     17
+     19
     ],
     [
-     "마이",
-     14
-    ],
-    [
-     "시크",
+     "번역한",
      13
+    ],
+    [
+     "기사의",
+     13
+    ],
+    [
+     "전문",
+     13
+    ],
+    [
+     "입니다",
+     12
     ],
     [
      "타포",
      12
+    ],
+    [
+     "아래는",
+     11
+    ],
+    [
+     "기사를",
+     11
+    ],
+    [
+     "번역",
+     11
+    ],
+    [
+     "으로",
+     11
+    ],
+    [
+     "번역에",
+     11
+    ],
+    [
+     "오류가",
+     11
+    ],
+    [
+     "구글번역",
+     10
     ],
     [
      "화면",
@@ -929,48 +941,16 @@
      10
     ],
     [
-     "번역한",
-     10
-    ],
-    [
-     "기사의",
-     10
-    ],
-    [
-     "전문",
-     10
-    ],
-    [
-     "입니다",
-     10
-    ],
-    [
-     "번역에",
-     10
-    ],
-    [
-     "오류가",
-     10
-    ],
-    [
      "제미나이",
      10
     ],
     [
-     "지도",
-     8
+     "높이기를",
+     9
     ],
     [
-     "11월",
-     8
-    ],
-    [
-     "아래는",
-     8
-    ],
-    [
-     "기사를",
-     8
+     "노력하고",
+     9
     ]
    ],
    "posWords": [
@@ -987,10 +967,6 @@
      3
     ],
     [
-     "투자",
-     3
-    ],
-    [
      "인기",
      2
     ],
@@ -999,11 +975,15 @@
      2
     ],
     [
+     "투자",
+     2
+    ],
+    [
      "파트너십",
      2
     ],
     [
-     "1위",
+     "첨단",
      1
     ]
    ],
@@ -1014,12 +994,60 @@
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 1세대",
-    "구글 홈 미니 연결",
     "구글 홈 미니 2세대",
+    "구글 홈바 삭제 방법",
     "구글 홈바탕 빼는법",
-    "구글 홈바 삭제 방법"
+    "구글 홈 허브 3세대"
    ],
    "recent": [
+    {
+     "title": "충남교육청, 휴머노이드 로봇 활용 '미래 AI 직업교육' 첫발",
+     "source": "breaknews.com",
+     "date": "2026-11-16",
+     "link": "http://www.breaknews.com/1251358"
+    },
+    {
+     "title": "스타벅스-헬로키티, 크리스마스 콜라보 제품 출시",
+     "source": "breaknews.com",
+     "date": "2026-11-16",
+     "link": "http://www.breaknews.com/1251314"
+    },
+    {
+     "title": "미국 가정용 보안 시스템, 집 안을 날아다니는 카메라까지 출시",
+     "source": "dream.kotra.or.kr",
+     "date": "2026-11-16",
+     "link": "http://dream.kotra.or.kr/kotranews/cms/news/actionKotraBoardDetail.do?SITE_NO=3&MENU_ID=180&CONTENTS_NO=1&bbsGbn=243&bbsSn=243&pNttSn=245230"
+    },
+    {
+     "title": "김은중호, 17일 천안서 멕시코와 재대결…쿠팡플레이 생중계",
+     "source": "breaknews.com",
+     "date": "2026-11-16",
+     "link": "http://www.breaknews.com/1251271"
+    },
+    {
+     "title": "규제에 발 묶인 자율주행 불구 '동맹이냐 대결이냐' 모빌리티 경쟁 후끈",
+     "source": "womentimes.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=107974"
+    },
+    {
+     "title": "와이파이 이름 하나로 두 대역 연결하는 밴드 스티어링",
+     "source": "vegannews.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.vegannews.co.kr/news/article.html?no=405828"
+    },
+    {
+     "title": "인쿠시・하효림 다 아니었다…김연경 가르침 받더니, 프로 복귀 성공한...",
+     "source": "wikitree.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.wikitree.co.kr/articles/1174884"
+    },
+    {
+     "title": "구글 딥마인드, 도면·임상 영상 읽는 실무형 벤치마크 공개",
+     "source": "digitaltoday.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=715579"
+    },
     {
      "title": "내 의지력 대신 설정, 바꾸면 버려지는 시간 줄어드는 스마트폰 사용법...",
      "source": "gqkorea.co.kr",
@@ -1061,54 +1089,6 @@
      "source": "gamevu.co.kr",
      "date": "2026-11-13",
      "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=62281"
-    },
-    {
-     "title": "네이버, 수능 앞두고 입시 콘텐츠 확대…'환산 점수 계산' 서비스 추가",
-     "source": "breaknews.com",
-     "date": "2026-11-13",
-     "link": "http://www.breaknews.com/1250924"
-    },
-    {
-     "title": "대구시의회 건설교통위, 도시건설국 행감서 '군부대 이전·서대구역 환...",
-     "source": "breaknews.com",
-     "date": "2026-11-13",
-     "link": "http://www.breaknews.com/1250817"
-    },
-    {
-     "title": "티피링크 타포, 흡입력 높인 로봇청소기 신제품 출시",
-     "source": "lawissue.co.kr",
-     "date": "2026-11-13",
-     "link": "https://www.lawissue.co.kr/view.php?ud=202611131403307282204ead0791_12"
-    },
-    {
-     "title": "인공지능이 집을 이해하기 시작했다…AI홈, 생활·공간 관리로 진화",
-     "source": "asiatime.co.kr",
-     "date": "2026-11-13",
-     "link": "https://www.asiatime.co.kr/article/20261113500236"
-    },
-    {
-     "title": "티피링크, 매터 지원 로봇청소기 출시…흡입력∙호환성 강화",
-     "source": "it-b.co.kr",
-     "date": "2026-11-13",
-     "link": "https://www.it-b.co.kr/news/articleView.html?idxno=90678"
-    },
-    {
-     "title": "파이어플라이즈 '프레드', 240개 이상 도구 연결해 이메일·슬랙까지",
-     "source": "coinreaders.com",
-     "date": "2026-11-13",
-     "link": "http://coinreaders.com/269906"
-    },
-    {
-     "title": "티피링크 타포, 매터(Matter) 지원 로봇청소기 'Tapo RV30 Max Plus Gen 2' 출...",
-     "source": "boannews.com",
-     "date": "2026-11-13",
-     "link": "https://www.boannews.com/news/articleView.html?idxno=147244"
-    },
-    {
-     "title": "티피링크, 매터 지원 로봇청소기 '타포 RV30 맥스 플러스 젠2' 출시",
-     "source": "epnc.co.kr",
-     "date": "2026-11-13",
-     "link": "https://www.epnc.co.kr/news/articleView.html?idxno=409731"
     }
    ]
   }
