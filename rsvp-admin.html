@@ -199,7 +199,7 @@ h1{font-size:20px;font-weight:800;color:var(--ink)}
   <div class="panel vipp" id="vipPanel" hidden>
     <div class="ph">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="vipTitle">⭐ VIP</h2><div class="seg" id="vipSeg"></div></div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn rw" id="btnVipPaste" title="VIP 명단 표(연사·아카라라이프·KOSID 칸 + '1열:' '2열:' 좌석 줄)를 그대로 붙여 넣으면 성함·소속·구분·좌석을 나눠 넣어요">VIP 명단 붙여넣기</button><button class="btn rw" id="btnVipAdd">+ VIP 한 명 추가</button><button class="btn" id="btnVipXlsx">VIP 엑셀</button></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn rw" id="btnVipPaste" title="VIP 명단 표(연사·아카라라이프·KOSID 칸 + '1열:' '2열:' 좌석 줄)를 그대로 붙여 넣으면 성함·소속·구분·좌석을 나눠 넣어요">VIP 명단 붙여넣기</button><label class="btn rw" style="display:inline-flex;align-items:center;cursor:pointer" title="한 줄에 한 명(성함·직함·소속·구분·좌석·참석·연락처·메모 머리글 — [VIP 엑셀]로 받은 파일도 그대로 가능) 또는 연사/KOSID 표 모양 엑셀">VIP 엑셀 올리기<input type="file" id="fileVip" accept=".xlsx,.xls,.csv" hidden></label><button class="btn rw" id="btnVipAdd">+ VIP 한 명 추가</button><button class="btn" id="btnVipXlsx">VIP 엑셀</button></div>
     </div>
     <div style="overflow:auto;max-height:72vh">
       <table class="tbl viptb">
@@ -508,19 +508,22 @@ function parseVipText(text){
   seatNames.forEach(n => { if(!out.some(v => v.name === n)) out.push({ name: n, title: '', org: '', cat: '', seat: seatOf[n] }); });
   const seen = new Set(); return out.filter(v => v.name && !seen.has(v.name) && seen.add(v.name));
 }
-function vipPasteModal(){
-  modal(`<h3 style="margin:0 0 6px">VIP 명단 붙여넣기</h3>
+function vipPasteModal(initP, src){
+  modal(`<h3 style="margin:0 0 6px">${initP ? `VIP 명단 엑셀 — ${esc(src || "")}` : "VIP 명단 붙여넣기"}</h3>
     <div class="mut" style="margin-bottom:8px">엑셀·메모의 VIP 표를 그대로 붙여 넣으세요. 첫 줄 <b>연사 / 아카라라이프 / KOSID</b> 같은 머리글이 <b>구분</b>, 그 아래 <b>이름/소속 직함</b> 칸이 사람, <b>1열:</b> <b>2열:</b> 다음 줄의 이름들이 <b>좌석</b>이 돼요.</div>
-    <textarea id="vipTxt" style="width:100%;height:180px;font:inherit;font-size:12.5px;border:1px solid var(--line2);border-radius:10px;padding:10px;box-sizing:border-box"></textarea>
+    <textarea id="vipTxt" style="${initP ? "display:none;" : ""}width:100%;height:180px;font:inherit;font-size:12.5px;border:1px solid var(--line2);border-radius:10px;padding:10px;box-sizing:border-box"></textarea>
     <div id="vipPrev" style="max-height:38vh;overflow:auto;margin-top:8px"></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap">
       <button class="btn" data-x>닫기</button><button class="btn" id="vipAddGo" disabled>추가(같은 이름은 갱신)</button><button class="btn pri" id="vipRepGo" disabled>이 명단으로 바꾸기</button></div>`);
   { const bx = $('#modal .box'); if(bx) bx.style.maxWidth = 'min(860px, 96vw)'; }
   let P = [];
-  $('#vipTxt').oninput = () => { P = parseVipText($('#vipTxt').value);
+  const show = () => {
     $('#vipAddGo').disabled = $('#vipRepGo').disabled = !P.length;
-    $('#vipPrev').innerHTML = P.length ? `<div class="mut" style="margin-bottom:4px">${P.length}명 인식 — 틀린 칸은 넣은 뒤 표에서 바로 고칠 수 있어요</div><table class="tbl"><thead><tr><th>좌석</th><th>구분</th><th>성함</th><th>직함</th><th>소속</th></tr></thead><tbody>${P.map(v => `<tr><td>${esc(v.seat)}</td><td>${esc(v.cat)}</td><td><b>${esc(v.name)}</b></td><td>${esc(v.title)}</td><td>${esc(v.org)}</td></tr>`).join('')}</tbody></table>` : ''; };
+    $('#vipPrev').innerHTML = P.length ? `<div class="mut" style="margin-bottom:4px">${P.length}명 인식 — 틀린 칸은 넣은 뒤 표에서 바로 고칠 수 있어요</div><table class="tbl"><thead><tr><th>좌석</th><th>구분</th><th>성함</th><th>직함</th><th>소속</th><th>참석</th><th>연락처</th><th>메모</th></tr></thead><tbody>${P.map(v => `<tr><td>${esc(v.seat || "")}</td><td>${esc(v.cat || "")}</td><td><b>${esc(v.name)}</b></td><td>${esc(v.title || "")}</td><td>${esc(v.org || "")}</td><td>${v.status ? VST[v.status] : ""}</td><td>${esc(v.phone || "")}</td><td>${esc(v.memo || "")}</td></tr>`).join('')}</tbody></table>` : (initP ? '<div class="warn">엑셀에서 VIP를 찾지 못했어요. 머리글에 <b>성함</b>(또는 이름) 칸이 있는지, 또는 연사/KOSID 표 모양인지 확인해 주세요.</div>' : ''); };
+  $('#vipTxt').oninput = () => { P = parseVipText($('#vipTxt').value); show(); };
+  if(initP){ P = initP; show(); }
   const apply = (replace) => {
+    P = P.map(p => { const o = {}; Object.keys(p).forEach(k => { if(p[k] !== '' && p[k] != null) o[k] = p[k]; }); return o; });
     if(replace && VIPS.length && !confirm(`지금 VIP ${VIPS.length}명을 이 명단 ${P.length}명으로 바꿀까요?\n(같은 이름의 참석·연락처·메모는 이어서 유지)`)) return;
     const base = replace ? [] : VIPS.slice(); let ord = base.reduce((m, v) => Math.max(m, v.ord || 0), 0);
     P.forEach(p => { const old = base.find(v => nmKey(v.name) === nmKey(p.name));
@@ -531,6 +534,32 @@ function vipPasteModal(){
   };
   $('#vipAddGo').onclick = () => apply(false);
   $('#vipRepGo').onclick = () => apply(true);
+}
+// VIP 명단 엑셀(2026-11-17): ① 한 줄에 한 명(머리글에 성함/이름 + 직함·소속·구분·좌석·참석·연락처·메모 — [VIP 엑셀]로 받은 파일 그대로 가능)
+//  ② 붙여넣기와 같은 표 모양(연사/아카라라이프/KOSID 칸 + 1열:/2열: 줄) → 시트를 탭 글자로 바꿔 parseVipText
+function parseVipSheet(ws){
+  const A = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', raw: false }).map(r => r.map(c => String(c == null ? '' : c).trim()));
+  const hi = A.findIndex(r => r.some(c => /^(성함|이름|성명)$/.test(c)));
+  if(hi < 0) return parseVipText(A.map(r => r.join('\t')).join('\n'));
+  const H = A[hi], col = (re) => H.findIndex(c => re.test(c));
+  const c = { name: col(/^(성함|이름|성명)$/), title: col(/직함|직책|직급/), org: col(/소속|회사|기관/), cat: col(/구분|분류|그룹/), seat: col(/좌석|자리|열$/),
+    status: col(/참석/), phone: col(/연락처|휴대|전화|번호/), memo: col(/메모|비고/) };
+  return A.slice(hi + 1).map(r => { const g = (k) => c[k] >= 0 ? (r[c[k]] || '') : '';
+    const st = g('status'); let nm = g('name').replace(/\s+/g, ' '), title = g('title');
+    const m = nm.match(/^(\S+)\s+(대표|회장|전무|상무|이사|고문|소장|교수|원장|실장|팀장|부장)$/); if(m && !title){ nm = m[1]; title = m[2]; }
+    return { name: nm, title, org: g('org'), cat: g('cat'), seat: /^\d+$/.test(g('seat')) ? g('seat') + '열' : g('seat'),
+      status: /불참/.test(st) ? 'no' : /참석/.test(st) ? 'yes' : '', phone: g('phone').replace(/[^\d-]/g, ''), memo: g('memo') }; })
+    .filter(v => v.name && /[가-힣A-Za-z]/.test(v.name));
+}
+async function vipExcel(file){
+  try{
+    const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
+    const names = wb.SheetNames.slice().sort((a, b) => /vip/i.test(b) - /vip/i.test(a));   // 'VIP' 시트 먼저
+    let P = [];
+    for(const n of names){ P = parseVipSheet(wb.Sheets[n]); if(P.length) break; }
+    const seen = new Set(); P = P.filter(v => !seen.has(nmKey(v.name)) && seen.add(nmKey(v.name)));
+    vipPasteModal(P, file.name);
+  }catch(e){ toast('엑셀을 읽지 못했어요: ' + (e.message || e)); }
 }
 function vipAddOne(){
   const name = (prompt('VIP 성함') || '').trim(); if(!name) return;
@@ -1812,6 +1841,7 @@ async function openTrash(){
 $('#btnTrash').onclick = openTrash;
 $('#btnVipPaste').onclick = vipPasteModal;
 $('#btnVipAdd').onclick = vipAddOne;
+$('#fileVip').onchange = (e) => { const f = e.target.files[0]; e.target.value = ''; if(f) vipExcel(f); };
 $('#btnVipXlsx').onclick = vipXlsx;
 
 // 번호 앞 0 고치기(2026-11-10): 저장된 휴대폰이 10xxxxxxxx(10자리)인 본인·대리·동행인을 010…으로 — 서버 op fixphones
