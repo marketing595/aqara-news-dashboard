@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-09 15:01",
+ "generatedAt": "2026-11-16 15:09",
  "keywords": [
   "부동산",
   "아파트 분양",
@@ -24,23 +24,24 @@
   {
    "beat": "AI",
    "press": "00news.co.kr",
-   "reporter": "김수연",
+   "reporter": "이민섭",
    "email": "press@00news.co.kr",
-   "title": "[2027 수능] AI 시대 수험생 '체크리스트'",
-   "link": "http://www.00news.co.kr/news/articleView.html?idxno=107850",
-   "date": "2026-11-09",
+   "title": "수능 '쾌적함'도 실력...삼성·LG, 공조 관리 총력",
+   "link": "http://www.00news.co.kr/news/articleView.html?idxno=108074",
+   "date": "2026-11-16",
    "beats": [
-    "AI"
+    "AI",
+    "경쟁사"
    ]
   },
   {
    "beat": "AI",
-   "press": "beyondpost.co.kr",
-   "reporter": "김신",
-   "email": "bp_ks@beyondpost.co.kr",
-   "title": "생성형 AI 광고 공모전 ‘대한민국 AI광고대상’, 14개사 참여 속 개막",
-   "link": "http://www.beyondpost.co.kr/view.php?ud=202611091302495889aeda69934_30",
-   "date": "2026-11-09",
+   "press": "4th.kr",
+   "reporter": "이현민",
+   "email": "4th.realty@gmail.com",
+   "title": "아파트 배송부터 무인 경비까지..호반그룹, 로봇 기술 실증 확대",
+   "link": "http://www.4th.kr/news/articleView.html?idxno=2121917",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
@@ -48,11 +49,23 @@
   {
    "beat": "AI",
    "press": "boannews.com",
-   "reporter": "조재호",
-   "email": "zephyr@boannews.com",
-   "title": "[디지털 문단속] #8. 안방 대화가 서버로?... AI 스피커 음성 통제 가이...",
-   "link": "https://www.boannews.com/news/articleView.html?idxno=147113",
-   "date": "2026-11-09",
+   "reporter": "강초희",
+   "email": "choh@boannews.com",
+   "title": "티피링크 타포, 유·무선 전원 지원 스마트 비디오 도어벨 'Tapo D235L' 출...",
+   "link": "https://www.boannews.com/news/articleView.html?idxno=147287",
+   "date": "2026-11-16",
+   "beats": [
+    "AI"
+   ]
+  },
+  {
+   "beat": "AI",
+   "press": "cstimes.com",
+   "reporter": "이필립",
+   "email": "support@dable.io",
+   "title": "퀄컴, '퀄컴 인 유어 라이프 2026' 개최…에이전틱 AI 기술 소개",
+   "link": "https://www.cstimes.com/news/articleView.html?idxno=728015",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
@@ -60,71 +73,96 @@
   {
    "beat": "AI",
    "press": "econovill.com",
-   "reporter": "활경제부",
-   "email": "parkse@econovill.com",
-   "title": "[유통 브리프] CU, 하이트진로, BBQ치킨, 소노인터",
-   "link": "https://www.econovill.com/news/articleView.html?idxno=756514",
-   "date": "2026-11-09",
+   "reporter": "최진홍",
+   "email": "rgdsz@econovill.com",
+   "title": "[IT큐레이션] SOOP이 힘껏 날아올라 강스파이크 때려넣은 이유",
+   "link": "https://www.econovill.com/news/articleView.html?idxno=757394",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "fomos.kr",
-   "reporter": "강미화",
-   "email": "support@dable.io",
-   "title": "호요버스 \"신작 2종 지스타 공개…韓 이용자 목소리 직접 들을 것\"",
-   "link": "https://www.fomos.kr/redirect/news_view?news_cate_id=7&entry_id=157220",
-   "date": "2026-11-09",
+   "press": "efnews.co.kr",
+   "reporter": "황병우",
+   "email": "eva2014az@naver.com",
+   "title": "LG전자 테네시 공장, 세탁가전 누적 생산 1천만대…美 시장 입지 강화",
+   "link": "http://www.efnews.co.kr/news/articleView.html?idxno=133987",
+   "date": "2026-11-15",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "g-enews.com",
-   "reporter": "박상휘",
-   "email": "shpark03@g-enews.com",
-   "title": "AI 인프라 수요에 광물 가격도 고공행진…반도체 소재 원가 지속 상승",
-   "link": "https://www.g-enews.com/view.php?ud=20261109142539739327fa31d75c_1",
-   "date": "2026-11-09",
+   "press": "enewstoday.co.kr",
+   "reporter": "권오경",
+   "email": "kok7201@naver.com",
+   "title": "서울시립대, 글로벌 디자인상 휩쓴 청년 디자이너 11인 졸업작품전 개최",
+   "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2492979",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "gameple.co.kr",
-   "reporter": "정준혁",
-   "email": "game@gameple.co.kr",
-   "title": "호요버스 \"거대한 서사 대신, 작은 별의 일상으로\"",
-   "link": "https://www.gameple.co.kr/news/articleView.html?idxno=216918",
-   "date": "2026-11-09",
+   "press": "finomy.com",
+   "reporter": "최예헌",
+   "email": "neon414@finomy.com",
+   "title": "삼성전자·LG전자, 수능 고사장 난방 점검···AI 진단·긴급 대응",
+   "link": "http://www.finomy.com/news/articleView.html?idxno=266747",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "경쟁사"
+   ]
+  },
+  {
+   "beat": "AI",
+   "press": "globale.co.kr",
+   "reporter": "류지상",
+   "email": "rjs9430@gmail.com",
+   "title": "[산업pick] 무리한 상용화의 대가?···가스공사, LNG선 화물창 결함 배...",
+   "link": "https://www.globale.co.kr/news/articleView.html?idxno=41673",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "gameshot.net",
+   "press": "goodnews1.com",
+   "reporter": "최상경",
+   "email": "cs_kyoung@goodtv.co.kr",
+   "title": "시험장까지 파고든 AI 안경…커닝 수법 진화, 대책은 제자리",
+   "link": "https://www.goodnews1.com/news/articleView.html?idxno=466241",
+   "date": "2026-11-16",
+   "beats": [
+    "AI"
+   ]
+  },
+  {
+   "beat": "AI",
+   "press": "greenpostkorea.co.kr",
    "reporter": "",
-   "email": "desk@gameshot.net",
-   "title": "완전히 새로운 도전, 호요버스 신작 2종 공개",
-   "link": "https://www.gameshot.net/common/con_view.php?code=GA6aed770d52abc",
-   "date": "2026-11-09",
+   "email": "greentea@greenpost.kr",
+   "title": "젠슨 황 없는 엔비디아··· AI 깐부 누가 '웃고' 누가 '우나'",
+   "link": "https://www.greenpostkorea.co.kr/news/articleView.html?idxno=308054",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "gamevu.co.kr",
-   "reporter": "박상범",
-   "email": "ytterbia@gamevu.co.kr",
-   "title": "[현장] 호요버스, 신작 2종 공개로 다양한 유저층 공략 나서",
-   "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=62084",
-   "date": "2026-11-09",
+   "press": "hansbiz.co.kr",
+   "reporter": "김종효",
+   "email": "media@dable.io",
+   "title": "소풍커넥트, 유커넥트 데모데이 개최",
+   "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=883466",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
@@ -134,225 +172,266 @@
    "press": "hansbiz.co.kr",
    "reporter": "고예인",
    "email": "media@dable.io",
-   "title": "재계 인사 막 오른다…삼성·LG '새판 짜기' 핵심 코드는",
-   "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=881170",
-   "date": "2026-11-09",
+   "title": "삼성·LG전자, 수능 앞두고 고사장 시스템에어컨 점검 '총력'",
+   "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=883681",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "경쟁사"
+   ]
+  },
+  {
+   "beat": "AI",
+   "press": "huffingtonpost.kr",
+   "reporter": "윤휘종",
+   "email": "huffkorea@gmail.com",
+   "title": "카카오뱅크의 적금은 '이자 수익' 아니라 '쇼핑과 놀이' : 고객 일상 파...",
+   "link": "https://www.huffingtonpost.kr/article/262092",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "ibabynews.com",
-   "reporter": "조성재",
-   "email": "pr@ibabynews.com",
-   "title": "[교육트렌드] 서울 38개 사립초, 2027학년도 신입생 원서접수…최대 3곳...",
-   "link": "https://www.ibabynews.com/news/articleView.html?idxno=156700",
-   "date": "2026-11-09",
+   "press": "idomin.com",
+   "reporter": "주성희",
+   "email": "hear@idomin.com",
+   "title": "경남대 학생 7명, AI로 지역 관광 창업 도전",
+   "link": "https://www.idomin.com/news/articleView.html?idxno=2019635",
+   "date": "2026-11-15",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "ibabynews.com",
-   "reporter": "소장섭",
-   "email": "pr@ibabynews.com",
-   "title": "[가전 트렌드] 바디프랜드, ‘인간공학디자인상(EDA)’ 5년 연속 수상 外",
-   "link": "https://www.ibabynews.com/news/articleView.html?idxno=156689",
-   "date": "2026-11-09",
+   "press": "koit.co.kr",
+   "reporter": "서유덕",
+   "email": "ydseo@koit.co.kr",
+   "title": "퀄컴 인 유어 라이프 2026 성료, 일상 속 에이전틱 AI 경험 선봬",
+   "link": "https://www.koit.co.kr/news/articleView.html?idxno=209937",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "joongangenews.com",
-   "reporter": "엄현식",
-   "email": "eom@joongangenews.com",
-   "title": "내신시험 중 스마트안경 착용 부정행위 4건...교육부 전수조사",
-   "link": "https://www.joongangenews.com/news/articleView.html?idxno=562331",
-   "date": "2026-11-09",
+   "press": "news.tf.co.kr",
+   "reporter": "박지윤",
+   "email": "jiyoon-1031@tf.co.kr",
+   "title": "전지현·안효섭 '완벽한 타인2'로 만날까…\"검토 중\"",
+   "link": "https://news.tf.co.kr/read/entertain/2389315.htm",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "kpenews.com",
-   "reporter": "변동휘",
-   "email": "kkobugi89021@naver.com",
-   "title": "[현장 쏙] 호요버스, 대서사 대신 ‘작은 일상’ 꺼내..신작 2종 들고 지...",
-   "link": "https://kpenews.com/View.aspx?No=4303032",
-   "date": "2026-11-09",
+   "press": "news.tf.co.kr",
+   "reporter": "손원태",
+   "email": "tellme@tf.co.kr",
+   "title": "'적자 꼬리표' 떼어낼까…롯데·신세계, 편의점·이커머스 실적 개선 '주...",
+   "link": "https://news.tf.co.kr/read/economy/2389287.htm",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "ksilbo.co.kr",
-   "reporter": "이형중",
-   "email": "leehj@ksilbo.co.kr",
-   "title": "울산과학대학교, 성인학습자 대상 'AI·DX 기초과정' 운영…학과별 맞춤...",
-   "link": "https://www.ksilbo.co.kr/news/articleView.html?idxno=1071964",
-   "date": "2026-11-09",
+   "press": "platum.kr",
+   "reporter": "",
+   "email": "contact@platum.kr",
+   "title": "발표 전에 투자자와 먼저 짝 맞춘 데모데이, 초기 스타트업 투자 연계",
+   "link": "https://platum.kr/archives/298636",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "mhns.co.kr",
-   "reporter": "허성호",
-   "email": "call0606@naver.com",
-   "title": "대구시 달서구, 12월 5일부터 달서영어도서관 '연말 특강' 다채롭게 열려",
-   "link": "https://www.mhns.co.kr/news/articleView.html?idxno=768210",
-   "date": "2026-11-09",
+   "press": "public25.com",
+   "reporter": "김하성",
+   "email": "sungkim61@public25.com",
+   "title": "소풍커넥트,유망 스타트업 9개사 투자유치 지원…신용보증기금 'U-CONNEC...",
+   "link": "https://www.public25.com/news/articleView.html?idxno=58517",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "news.kbs.co.kr",
-   "reporter": "최준혁",
-   "email": "kbs1234@kbs.co.kr",
-   "title": "잠실구장 ‘찐막’ 매치가 온다…이번 주말 ‘야구 레전드’ 총출동 [이...",
-   "link": "https://news.kbs.co.kr/news/pc/view/view.do?ncd=8707543&ref=A",
-   "date": "2026-11-09",
+   "press": "sisajournal-e.com",
+   "reporter": "고명훈",
+   "email": "komh123@sisajournal-e.com",
+   "title": "진화한 LG이노텍 '스마트홈 통신모듈', LG전자 홈로봇에 탑재될까",
+   "link": "https://www.sisajournal-e.com/news/articleView.html?idxno=425061",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "IT",
+    "경쟁사"
+   ]
+  },
+  {
+   "beat": "AI",
+   "press": "smartbizn.com",
+   "reporter": "김선주",
+   "email": "sunjookim@smartbizn.com",
+   "title": "이디야커피, 디저트 넘어 한 끼 식사까지···푸드 메뉴 19종 개편",
+   "link": "https://www.smartbizn.com/news/articleView.html?idxno=159546",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "newswatch.kr",
-   "reporter": "민서하",
-   "email": "newswatch@newswatch.kr",
-   "title": "삼성 래미안, 목동 첫 진출…13단지 재건축 시공권 확보",
-   "link": "http://www.newswatch.kr/news/articleView.html?idxno=81830",
-   "date": "2026-11-09",
+   "press": "stoo.com",
+   "reporter": "",
+   "email": "ent@stoo.com",
+   "title": "허경환 결혼 임박?…설운도 \"여자친구 있을 것\" 확신 찬 추측(미우새) [...",
+   "link": "http://www.stoo.com/article.php?aid=109925453296",
+   "date": "2026-11-15",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "ohmynews.com",
-   "reporter": "추천연재",
-   "email": "daankal@gmail.com",
-   "title": "매일 쓰는 마스카라 원료, 벌레 씻은 물에서 시작됐습니다 [ 단칼에 끝내...",
-   "link": "https://www.ohmynews.com/NWS_Web/View/at_pg.aspx?CNTN_CD=A0003282928&CMPT_CD=P0010&utm_source=naver&utm_medium=newsearch&utm_campaign=naver_news",
-   "date": "2026-11-09",
+   "press": "thefirstmedia.net",
+   "reporter": "유선이",
+   "email": "ysl-9000@hanmail.net",
+   "title": "\"쇼호스트도 촬영도 없다\"…현대홈쇼핑, 100% AI 방송 첫 도입",
+   "link": "http://www.thefirstmedia.net/news/articleView.html?idxno=213661",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "pinpointnews.co.kr",
-   "reporter": "임지혜",
-   "email": "thekpm1@kakao.com",
-   "title": "스마트홈 시장 확대 기대… 자이에스앤디·한울소재과학에 올라탈까",
-   "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=502366",
-   "date": "2026-11-09",
+   "press": "thelec.kr",
+   "reporter": "정일주",
+   "email": "1week@thelec.kr",
+   "title": "퀄컴, 한국서 '퀄컴 인 유어 라이프 2026' 개최",
+   "link": "https://www.thelec.kr/news/articleView.html?idxno=65459",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "pointdaily.co.kr",
-   "reporter": "손지하",
-   "email": "kojh0124@pointdaily.co.kr",
-   "title": "글로벌 IP 다음은 새로운 세계관…호요버스, 신작 2종 승부수",
-   "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=325249",
-   "date": "2026-11-09",
+   "press": "thevaluenews.co.kr",
+   "reporter": "손민정",
+   "email": "sounds0601@thevaluenews.co.kr",
+   "title": "[전자 레이더] 삼성전자·LG전자, 수능 앞두고 전국 고사장 냉난방 설비...",
+   "link": "http://www.thevaluenews.co.kr/news/view.php?idx=203329",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "경쟁사"
+   ]
+  },
+  {
+   "beat": "AI",
+   "press": "webeconomy.co.kr",
+   "reporter": "김영섭",
+   "email": "ys@newsbest.kr",
+   "title": "롯데그룹, 스타트업 30억원 투자·유통 브랜드 재정비…백화점 디자인 ...",
+   "link": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2372180",
+   "date": "2026-11-15",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "seoulfn.com",
-   "reporter": "권서현",
-   "email": "ksh@seoulfn.com",
-   "title": "[패션브리핑] 이랜드 뉴발란스, '플라잉77 헤비 구스다운' 화보 공개 외",
-   "link": "https://www.seoulfn.com/news/articleView.html?idxno=642275",
-   "date": "2026-11-09",
+   "press": "weekly.hankooki.com",
+   "reporter": "박현영",
+   "email": "hypark@hankooki.com",
+   "title": "[시승기] 볼보 전기차 'ES90'과 'EX90', 속초-강릉 120㎞ 달려보니",
+   "link": "https://weekly.hankooki.com/news/articleView.html?idxno=7193726",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "techm.kr",
-   "reporter": "임경호",
-   "email": "lim@techm.kr",
-   "title": "현대차엔 디지털 트윈, 두산·LG엔 로봇 기술...엔비디아, 韓 기업과 '피...",
-   "link": "https://www.techm.kr/news/articleView.html?idxno=157092",
-   "date": "2026-11-09",
+   "press": "wikitree.co.kr",
+   "reporter": "권미정",
+   "email": "undecided@wikitree.co.kr",
+   "title": "스크래치난 가구 방치하지 말고, ‘이걸’로 살짝만 문질러 보세요…돈...",
+   "link": "https://www.wikitree.co.kr/articles/1174160",
+   "date": "2026-11-15",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "tgdaily.co.kr",
-   "reporter": "이주환",
-   "email": "ejohn@tgdaily.co.kr",
-   "title": "호요버스 '쁘띠 플래닛' 등 2개작 지스타 출품",
-   "link": "https://www.tgdaily.co.kr/news/articleView.html?idxno=407869",
-   "date": "2026-11-09",
+   "press": "wolyo.co.kr",
+   "reporter": "이창현",
+   "email": "chlee3188@naver.com",
+   "title": "삼성·LG, 수능 고사장 시스템에어컨 사전 점검 실시",
+   "link": "https://www.wolyo.co.kr/news/articleView.html?idxno=320568",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "경쟁사"
+   ]
+  },
+  {
+   "beat": "AI",
+   "press": "wolyo.co.kr",
+   "reporter": "육동윤",
+   "email": "ydy332@gmail.com",
+   "title": "질문에 답하던 AI, 행동하는 AI로…퀄컴, 일상의 변화 제시",
+   "link": "https://www.wolyo.co.kr/news/articleView.html?idxno=320551",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "theguru.co.kr",
-   "reporter": "김현수",
-   "email": "mak@theguru.co.kr",
-   "title": "\"삼성증권·토니모리 광고를 AI로\"…마인드스파크, 'AI광고대상' 개최",
-   "link": "https://www.theguru.co.kr/news/article.html?no=109465",
-   "date": "2026-11-09",
+   "press": "worktoday.co.kr",
+   "reporter": "조민준",
+   "email": "pr@worktoday.co.kr",
+   "title": "LG전자 테네시 공장, 세탁가전 누적 생산 1000만대 돌파 … 美 시장 1위...",
+   "link": "http://www.worktoday.co.kr/news/articleView.html?idxno=92028",
+   "date": "2026-11-15",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "thepublic.kr",
-   "reporter": "유수진",
-   "email": "sjn3022@thepublic.kr",
-   "title": "삼성물산, 목동13단지 재건축 수주…목동 첫 래미안 진출",
-   "link": "https://www.thepublic.kr/news/articleView.html?idxno=325630",
-   "date": "2026-11-09",
+   "press": "wsobi.com",
+   "reporter": "",
+   "email": "mjin0407@naver.com",
+   "title": "[가전업계 10월 동향] 코웨이, AI 기술 역량 고도화···글로벌 경쟁력...",
+   "link": "http://www.wsobi.com/news/articleView.html?idxno=321836",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "theviewers.co.kr",
-   "reporter": "전지현",
-   "email": "gee7871@viewers.co.kr",
-   "title": "[유통갤러리] 동서식품, ‘오페라의 유령’ 테마 공간·한정 메뉴 공개...",
-   "link": "https://theviewers.co.kr/View.aspx?No=4303203",
-   "date": "2026-11-09",
-   "beats": [
-    "AI"
-   ]
-  },
-  {
-   "beat": "AI",
-   "press": "tleaves.co.kr",
-   "reporter": "김한준",
-   "email": "khj1981@tleaves.co.kr",
-   "title": "[현장 Q&A] 호요버스, 지스타서 신작 2종 공개 예고...\"이용자 피드백에...",
-   "link": "https://www.tleaves.co.kr/news/articleView.html?idxno=10118",
-   "date": "2026-11-09",
+   "press": "ziksir.com",
+   "reporter": "라지현",
+   "email": "news@ziksir.com",
+   "title": "[유통 직썰] AI 입은 헬스케어 가전, 플랫폼 경쟁 불붙었다",
+   "link": "https://www.ziksir.com/news/articleView.html?idxno=153441",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
@@ -360,71 +439,72 @@
   {
    "beat": "AI",
    "press": "뉴시스",
-   "reporter": "권민지",
+   "reporter": "김상윤",
    "email": "photo@newsis.com",
-   "title": "\"3년 만의 신규 출점\"…롯데마트, 베트남서 대형점포 대신 특화매장 승...",
-   "link": "https://www.newsis.com/view/NISX20261109_0003860486",
-   "date": "2026-11-09",
+   "title": "\"AI 사원 늘어나는데\"…식품업계, 혁신 이면 보안·오류 '숙제'",
+   "link": "https://www.newsis.com/view/NISX20261115_0003868687",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "딜사이트",
-   "reporter": "권재윤",
-   "email": "sangho@dealsite.co.kr",
-   "title": "[오늘의 유통가] CJ올리브영, 美 오프라인 매장 7개로 확대…K뷰티 공략...",
-   "link": "https://dealsite.co.kr/articles/172343",
-   "date": "2026-11-09",
+   "press": "머니투데이",
+   "reporter": "김건우",
+   "email": "media@dable.io",
+   "title": "캠시스, 3분기 누적 영업이익 160억원… 연간 흑자 전환 가시화",
+   "link": "https://www.mt.co.kr/stock/2026/11/16/2026111614520932183",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "AI",
-   "press": "서울신문",
-   "reporter": "김수정",
-   "email": "kcrystal@metroseoul.co.kr",
-   "title": "전국서 AI안경 부정행위 '4건' 적발…교육부, 수능도 \"반입 엄금·수사 ...",
-   "link": "http://www.metroseoul.co.kr/article/20261109500352",
-   "date": "2026-11-09",
+   "press": "아이티데일리",
+   "reporter": "김병주",
+   "email": "kbj1218@itdaily.kr",
+   "title": "수능 한파에 삼성·LG 출동…시스템에어컨 AI로 원격 관리 나서",
+   "link": "https://www.itdaily.kr/news/articleView.html?idxno=242948",
+   "date": "2026-11-16",
    "beats": [
-    "AI"
+    "AI",
+    "경쟁사"
    ]
   },
   {
    "beat": "AI",
-   "press": "연합뉴스",
-   "reporter": "이진욱",
-   "email": "cityboy@yna.co.kr",
-   "title": "수능장에 스마트안경 반입 금지",
-   "link": "https://www.yna.co.kr/view/PYH20261109102600013?input=1196m",
-   "date": "2026-11-09",
-   "beats": [
-    "AI"
-   ]
-  },
-  {
-   "beat": "AI",
-   "press": "이데일리",
-   "reporter": "한광범",
-   "email": "webmaster@edaily.co.kr",
-   "title": "SK 반도체·LG 로봇·네이버 AI…엔비디아, 韓 AI생태계 '밀착'",
-   "link": "https://www.edaily.co.kr/News/Read?newsId=03263606645644080&mediaCodeNo=257&utm_source=naver&utm_medium=referral&utm_campaign=news_syndication&utm_content=original_article",
-   "date": "2026-11-09",
+   "press": "조선일보",
+   "reporter": "",
+   "email": "kso@chosun.com",
+   "title": "강남 1000평 땅 1500억 깎아도 외면…'200억 펜디 주택' 꿈 물거품",
+   "link": "https://realty.chosun.com/site/data/html_dir/2026/11/16/2026111601129.html",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
    "beat": "IT",
-   "press": "datanet.co.kr",
-   "reporter": "강석오",
-   "email": "support@dable.io",
-   "title": "노르딕, 초저전력 SoC 'nRF71' 공개 ··· 와이파이·BLE·스레드와 엣지...",
-   "link": "https://www.datanet.co.kr/news/articleView.html?idxno=215642",
-   "date": "2026-11-05",
+   "press": "boannews.com",
+   "reporter": "엄호식",
+   "email": "eomhs@boannews.com",
+   "title": "티피링크 타포, 매터(Matter) 지원 로봇청소기 'Tapo RV30 Max Plus Gen 2' 출...",
+   "link": "https://www.boannews.com/news/articleView.html?idxno=147244",
+   "date": "2026-11-13",
+   "beats": [
+    "IT"
+   ]
+  },
+  {
+   "beat": "IT",
+   "press": "digitalchosun.dizzo.com",
+   "reporter": "",
+   "email": "cxsh@chosun.com",
+   "title": "\"익숙한 공간서 가치를 다시 찾다\"… '2026 서울 홈·테이블데코페어', ...",
+   "link": "http://digitalchosun.dizzo.com/site/data/html_dir/2026/11/10/2026111080057.html",
+   "date": "2026-11-10",
    "beats": [
     "IT"
    ]
@@ -432,83 +512,71 @@
   {
    "beat": "IT",
    "press": "epnc.co.kr",
-   "reporter": "박규찬",
-   "email": "technomist@techworld.co.kr",
-   "title": "노르딕, 대기전력 20분의 1로 줄인 무선 SoC 공개",
-   "link": "https://www.epnc.co.kr/news/articleView.html?idxno=409319",
-   "date": "2026-11-05",
+   "reporter": "이광재",
+   "email": "techdesk@techworld.co.kr",
+   "title": "티피링크, 매터 지원 로봇청소기 '타포 RV30 맥스 플러스 젠2' 출시",
+   "link": "https://www.epnc.co.kr/news/articleView.html?idxno=409731",
+   "date": "2026-11-13",
    "beats": [
     "IT"
    ]
   },
   {
    "beat": "IT",
-   "press": "goodkyung.com",
-   "reporter": "노진우",
-   "email": "jinrocals@goodkyung.com",
-   "title": "배터리 족쇄 푼 노르딕, 와이파이6에 엣지 AI 심었다",
-   "link": "https://www.goodkyung.com/news/articleView.html?idxno=293146",
-   "date": "2026-11-05",
+   "press": "it-b.co.kr",
+   "reporter": "박미숙",
+   "email": "pms1648@it-b.co.kr",
+   "title": "티피링크, 매터 지원 로봇청소기 출시…흡입력∙호환성 강화",
+   "link": "https://www.it-b.co.kr/news/articleView.html?idxno=90678",
+   "date": "2026-11-13",
    "beats": [
     "IT"
    ]
   },
   {
    "beat": "IT",
-   "press": "hellot.net",
-   "reporter": "김재황",
-   "email": "eltred@hellot.net",
-   "title": "노르딕 nRF71, 외부 AI 칩 없이 NPU 내장…배터리 기기 온디바이스 AI 추...",
-   "link": "https://www.hellot.net/news/article.html?no=116051",
-   "date": "2026-11-05",
+   "press": "itbiznews.com",
+   "reporter": "최태우",
+   "email": "taewoo@itbiznews.com",
+   "title": "저전력RF·엣지AI 단일칩 통합…노르딕세미, 'nRF71 SoC' 정식 공개",
+   "link": "https://www.itbiznews.com/news/articleView.html?idxno=230642",
+   "date": "2026-11-07",
    "beats": [
     "IT"
    ]
   },
   {
    "beat": "IT",
-   "press": "popcornnews.net",
-   "reporter": "김용석",
-   "email": "baroquekim2@popcornnews.net",
-   "title": "[현장] '2026 AIoT 국제전시회' 개막…168개 기업·기관, 379개 부스 참가",
-   "link": "http://www.popcornnews.net/news/articleView.html?idxno=138500",
-   "date": "2026-11-03",
+   "press": "koit.co.kr",
+   "reporter": "이민규",
+   "email": "fatah@koit.co.kr",
+   "title": "와츠매터, '모두스홈 AI Home Core'로 CES 2027 혁신상 수상",
+   "link": "https://www.koit.co.kr/news/articleView.html?idxno=209827",
+   "date": "2026-11-10",
    "beats": [
     "IT"
    ]
   },
   {
    "beat": "IT",
-   "press": "technoa.co.kr",
-   "reporter": "",
-   "email": "softcho@technoa.co.kr",
-   "title": "노르딕 세미컨덕터, 엣지 AI까지 한 번에 돌리는 nRF71 공개",
-   "link": "http://www.technoa.co.kr/news/articleView.html?idxno=101607",
-   "date": "2026-11-05",
+   "press": "slist.kr",
+   "reporter": "김민호",
+   "email": "myno@slist.kr",
+   "title": "타포, 매터 지원 로봇청소기 'Tapo RV30 Max Plus Gen 2' 출시",
+   "link": "https://www.slist.kr/news/articleView.html?idxno=781629",
+   "date": "2026-11-14",
    "beats": [
     "IT"
    ]
   },
   {
    "beat": "IT",
-   "press": "the-today.com",
-   "reporter": "정대민",
-   "email": "dmjeong@the-today.com",
-   "title": "[투데이온] \"틱톡서 터지고 백화점 접수\"…메디큐브·바이오던스, 英 셀...",
-   "link": "https://www.the-today.com/news/articleView.html?idxno=92916",
-   "date": "2026-11-03",
-   "beats": [
-    "IT"
-   ]
-  },
-  {
-   "beat": "IT",
-   "press": "woodkorea.co.kr",
-   "reporter": "이채윤",
-   "email": "kingwood22@naver.com",
-   "title": "\"애플·삼성 폰으로 직접 연동\"… 솔리티, AIoT 혁신대상 수상",
-   "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92360",
-   "date": "2026-11-04",
+   "press": "thelec.kr",
+   "reporter": "전문",
+   "email": "harang@thelec.kr",
+   "title": "와츠매터, 스마트홈 허브로 'CES 2027 혁신상' 수상",
+   "link": "https://www.thelec.kr/news/articleView.html?idxno=65395",
+   "date": "2026-11-13",
    "beats": [
     "IT"
    ]
@@ -538,145 +606,74 @@
    ]
   },
   {
-   "beat": "IT",
-   "press": "전자신문",
-   "reporter": "남궁경",
-   "email": "media@dable.io",
-   "title": "[AIoT 어워드2026] 솔리티, 매터 기반 스마트 도어락",
-   "link": "https://www.etnews.com/20261103000174",
-   "date": "2026-11-03",
-   "beats": [
-    "IT"
-   ]
-  },
-  {
    "beat": "경쟁사",
-   "press": "biztribune.co.kr",
-   "reporter": "이서련",
-   "email": "lsr997@biztribune.co.kr",
-   "title": "삼성·현대차, 170명 규모 첫 교류 행사…경영진·배우자 초청 협력",
-   "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=362115",
-   "date": "2026-11-08",
+   "press": "breaknews.com",
+   "reporter": "정민우",
+   "email": "break9874@naver.com",
+   "title": "삼성전자서비스, 수능 고사장 난방기기 긴급 점검 서비스 운영",
+   "link": "http://www.breaknews.com/1251206",
+   "date": "2026-11-16",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
-   "press": "choicenews.co.kr",
-   "reporter": "홍인표",
-   "email": "iphongchina@naver.com",
-   "title": "코웨이, 한국서비스품질지수 정수기·공기청정기 AS 1위…비결은?",
-   "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=172933",
-   "date": "2026-11-05",
+   "press": "cnbizm.com",
+   "reporter": "황수오",
+   "email": "jongrosuoh@naver.com",
+   "title": "삼성전자, 수능 고사장 시스템에어컨 사전 점검·긴급 대응",
+   "link": "https://www.cnbizm.com/news/articleView.html?idxno=321605",
+   "date": "2026-11-16",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
-   "press": "dailian.co.kr",
-   "reporter": "임채현",
-   "email": "hyun0796@dailian.co.kr",
-   "title": "삼성·현대차, 경영진 첫 교류…반도체·배터리 협력 강화",
-   "link": "https://www.dailian.co.kr/news/view/1712317/?sc=Naver",
-   "date": "2026-11-09",
+   "press": "datanet.co.kr",
+   "reporter": "강석오",
+   "email": "kang@datanet.co.kr",
+   "title": "아이벡스 \"단일 책임·폐루프 구조로 피지컬 AI PoC를 양산으로 잇는다...",
+   "link": "https://www.datanet.co.kr/news/articleView.html?idxno=300088",
+   "date": "2026-11-12",
+   "beats": [
+    "IT",
+    "경쟁사"
+   ]
+  },
+  {
+   "beat": "경쟁사",
+   "press": "ekn.kr",
+   "reporter": "김하나",
+   "email": "uno@ekn.kr",
+   "title": "수능 고사장 시스템에어컨 점검 나선 삼성·LG…“쾌적하게 시험 치르도...",
+   "link": "https://www.ekn.kr/web/view.php?key=20261116024450075",
+   "date": "2026-11-16",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
-   "press": "daily.hankooki.com",
-   "reporter": "이보미",
-   "email": "lbm929@hankooki.com",
-   "title": "LG전자 류재철 \"AI홈, 궁극적 비전은 '가사노동 해방'\"",
-   "link": "https://daily.hankooki.com/news/articleView.html?idxno=1420902",
-   "date": "2026-11-02",
+   "press": "epnc.co.kr",
+   "reporter": "김승기",
+   "email": "techinsight@techworld.co.kr",
+   "title": "아이벡스, 산업용 피지컬 AI 양산 해법 제시…\"PoC 넘어 현장 적용\"",
+   "link": "https://www.epnc.co.kr/news/articleView.html?idxno=409683",
+   "date": "2026-11-12",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
-   "press": "dnews.co.kr",
-   "reporter": "이근우",
-   "email": "gw89@dnews.co.kr",
-   "title": "삼성전자-현대차 그룹간 첫 교류…양사 경영진 170여명 총출동, 이재용...",
-   "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611081015564630080",
-   "date": "2026-11-09",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "dnews.co.kr",
-   "reporter": "열린",
-   "email": "chg@dnews.co.kr",
-   "title": "류재철 LG전자 사장의 AI 홈 비전 “연결 넘어 배려로… ‘피지컬 AI’로...",
-   "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611021752422610279",
-   "date": "2026-11-02",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "ebn.co.kr",
-   "reporter": "신승훈",
-   "email": "shs@ebn.co.kr",
-   "title": "삼성·현대차, 사장단 부부동반 '감사데이' 개최…전장·로봇 협력 확대",
-   "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1730839",
-   "date": "2026-11-08",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "etoday.co.kr",
-   "reporter": "이수진",
-   "email": "email@etoday.co.kr",
-   "title": "류재철 “애플과 스마트홈 기기 공동 개발”…LG전자, AI 홈 생태계 넓힌...",
-   "link": "https://www.etoday.co.kr/news/view/2643161",
-   "date": "2026-11-02",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "greened.kr",
-   "reporter": "이충진",
-   "email": "support@dable.io",
-   "title": "이재용·정의선, 첫 부부동반 회동 성사될까… 삼성전자, 현대차그룹 경...",
-   "link": "https://www.greened.kr/news/articleView.html?idxno=354115",
-   "date": "2026-11-08",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "insight.co.kr",
-   "reporter": "함철민",
-   "email": "chulmin@insight.co.kr",
-   "title": "6년 전 배터리로 만난 삼성·현대차, 이번엔 경영진 배우자까지 한자리...",
-   "link": "https://www.insight.co.kr/news/581161",
-   "date": "2026-11-09",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "jnilbo.com",
-   "reporter": "김현수",
-   "email": "hyeonsu.kim@jnilbo.com",
-   "title": "삼성·현대차 경영진 177명 한자리에…미래차 협력 어디까지 확대되나",
-   "link": "https://www.jnilbo.com/news/articleView.html?idxno=90000080690",
-   "date": "2026-11-09",
+   "press": "handmk.com",
+   "reporter": "전은지",
+   "email": "rosaej@handmk.com",
+   "title": "[짓는집? 집도 배달받는 시대, 모듈러주택]-② 종합선물세트? 집 사니 가...",
+   "link": "https://www.handmk.com/news/articleView.html?idxno=45051",
+   "date": "2026-11-16",
    "beats": [
     "경쟁사"
    ]
@@ -686,9 +683,33 @@
    "press": "joongangenews.com",
    "reporter": "윤남웅",
    "email": "popo@joongangenews.com",
-   "title": "LG전자 류재철 CEO \"AI홈 다음 표준은 돌봄\"…애플·MS 손잡고 가사노동...",
-   "link": "https://www.joongangenews.com/news/articleView.html?idxno=560571",
-   "date": "2026-11-03",
+   "title": "LG전자, 폭 13.2cm 초슬림 정수기 선봬…냉수·온수 8단계 온도 선택",
+   "link": "https://www.joongangenews.com/news/articleView.html?idxno=562840",
+   "date": "2026-11-11",
+   "beats": [
+    "경쟁사"
+   ]
+  },
+  {
+   "beat": "경쟁사",
+   "press": "kihoilbo.co.kr",
+   "reporter": "이세용",
+   "email": "lsy@kihoilbo.co.kr",
+   "title": "삼성전자, 수능 고사장 시스템에어컨 긴급 서비스운영",
+   "link": "https://www.kihoilbo.co.kr/news/articleView.html?idxno=3041017",
+   "date": "2026-11-16",
+   "beats": [
+    "경쟁사"
+   ]
+  },
+  {
+   "beat": "경쟁사",
+   "press": "koreareport.co.kr",
+   "reporter": "임흥열",
+   "email": "yhy@koreareport.co.kr",
+   "title": "LG전자, 폭 13.2cm 퓨리케어 슬림맞춤 정수기 신모델 출시",
+   "link": "https://www.koreareport.co.kr/news/articleView.html?idxno=54574",
+   "date": "2026-11-11",
    "beats": [
     "경쟁사"
    ]
@@ -696,155 +717,71 @@
   {
    "beat": "경쟁사",
    "press": "m-i.kr",
-   "reporter": "안종열",
-   "email": "anjy1995@m-i.kr",
-   "title": "류재철 LG전자 사장 \"AI홈 다음 기준은 돌봄\"",
-   "link": "https://www.m-i.kr/news/articleView.html?idxno=2013340",
-   "date": "2026-11-02",
+   "reporter": "이강민",
+   "email": "cros95@m-i.kr",
+   "title": "수능 고사장 난방 이상 대비…삼성전자, AI 진단·현장 대응 강화",
+   "link": "https://www.m-i.kr/news/articleView.html?idxno=2019123",
+   "date": "2026-11-16",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
-   "press": "newstomato.com",
-   "reporter": "이명신",
-   "email": "sin@etomato.com",
-   "title": "LG전자 류재철 “AI홈, 연결 넘어 돌봄으로”…생태계 확장 지속",
-   "link": "http://www.newstomato.com/ReadNews.aspx?no=1318972&inflow=N",
-   "date": "2026-11-02",
+   "press": "pointdaily.co.kr",
+   "reporter": "권상희",
+   "email": "snowk@pointdaily.co.kr",
+   "title": "LG전자, 폭 13.2㎝ '퓨리케어 슬림맞춤 정수기' 신모델 출시",
+   "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=325614",
+   "date": "2026-11-11",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
-   "press": "sidae.com",
-   "reporter": "정연",
-   "email": "sidae@sidae.com",
-   "title": "삼성전자·현대차 경영진 부부 한자리에…그룹 간 첫 교류 행사",
-   "link": "https://www.sidae.com/article/2026110908310971344",
-   "date": "2026-11-09",
+   "press": "sisaon.co.kr",
+   "reporter": "정세연",
+   "email": "seyeonj@sisaon.co.kr",
+   "title": "LG전자, 로봇산업진흥원과 휴머노이드 안전·품질 협력…SKT, 효성중공업...",
+   "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=206089",
+   "date": "2026-11-16",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
-   "press": "sisajournal.com",
-   "reporter": "김규림",
-   "email": "imkyurim@gmail.com",
-   "title": "삼성·현대차 경영진 부부 170여 명 회동…식구도 '깐부'",
-   "link": "https://www.sisajournal.com/news/articleView.html?idxno=393274",
-   "date": "2026-11-09",
+   "press": "socialvalue.kr",
+   "reporter": "이국열",
+   "email": "lkt838@hanmail.net",
+   "title": "수능 앞두고 삼성·LG, 시험장 냉난방 관리 나서…AI 원격 진단까지 동원",
+   "link": "https://www.socialvalue.kr/news/view/1065579658898456",
+   "date": "2026-11-16",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
-   "press": "thetracker.co.kr",
-   "reporter": "장진",
-   "email": "jjin@thetracker.co.kr",
-   "title": "삼성·현대차, 미래 모빌리티 동맹 강화…반도체서 로봇까지",
-   "link": "https://thetracker.co.kr/View.aspx?No=4303210",
-   "date": "2026-11-09",
+   "press": "thebigdata.co.kr",
+   "reporter": "김다경",
+   "email": "dk@thebigdata.co.kr",
+   "title": "삼성·LG전자, 수능 시험장 시스템에어컨 사전 점검·긴급 서비스 지원",
+   "link": "https://www.thebigdata.co.kr/view.php?ud=2026111611111163000ecbf9426b_23",
+   "date": "2026-11-16",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
-   "press": "wikitree.co.kr",
-   "reporter": "채석원",
-   "email": "jdtimes@wikitree.co.kr",
-   "title": "삼성전자-현대자동차 경영진이 오늘... 이런 일은 정말 처음",
-   "link": "https://www.wikitree.co.kr/articles/1172942",
-   "date": "2026-11-09",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "국민일보",
-   "reporter": "박준상",
-   "email": "junwith@kmib.co.kr",
-   "title": "삼성전자·현대차 경영진 부부 170명 한자리",
-   "link": "https://www.kmib.co.kr/article/20261108501375",
-   "date": "2026-11-09",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "뉴시스",
-   "reporter": "염준호",
-   "email": "photo@newsis.com",
-   "title": "류재철 LG전자 사장 \"AI 홈, 단순 가전 연결 넘어 실질적 편리함 제공해...",
-   "link": "https://www.newsis.com/view/NISX20261102_0003851343",
-   "date": "2026-11-02",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "동아일보",
-   "reporter": "조선희",
-   "email": "hee3110@donga.com",
-   "title": "“불편은 미리, 해결은 빠르게”… AI로 서비스 혁신",
-   "link": "https://www.donga.com/news/Economy/article/all/20261103/134951625/2",
-   "date": "2026-11-04",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "디지털타임스",
-   "reporter": "장우진",
-   "email": "jwj17@dt.co.kr",
-   "title": "류재철 LG전자 CEO \"애플 협업으로 생태계 확장…AI홈 다음은 돌봄\"",
-   "link": "https://www.dt.co.kr/article/12092648?ref=naver",
-   "date": "2026-11-02",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "서울신문",
-   "reporter": "곽소영",
-   "email": "webmaster@seoul.co.kr",
-   "title": "삼성전자·현대차그룹, 첫 부부 동반 모임",
-   "link": "https://www.seoul.co.kr/news/economy/industry/2026/11/09/20261109032002?wlog_tag3=naver",
-   "date": "2026-11-09",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "세계일보",
-   "reporter": "김건호",
-   "email": "scoop3126@segye.com",
-   "title": "삼성전자·현대차, 첫 그룹 차원 경영진 교류",
-   "link": "https://www.segye.com/newsView/20261108509198?OutUrl=naver",
-   "date": "2026-11-09",
-   "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "아시아경제",
-   "reporter": "김진영",
-   "email": "camp@asiae.co.kr",
-   "title": "[인터뷰]“첫 달은 LG 로고 가립시다”…가전 명가 LG전자, 걸그룹 키운...",
-   "link": "https://view.asiae.co.kr/article/2026110509033391104",
-   "date": "2026-11-05",
+   "press": "ziksir.com",
+   "reporter": "성유창",
+   "email": "syc0928@ziksir.com",
+   "title": "좁은 공간에도 맞춤 온도…LG전자, '퓨리케어 슬림맞춤 정수기' 출시",
+   "link": "https://www.ziksir.com/news/articleView.html?idxno=152956",
+   "date": "2026-11-11",
    "beats": [
     "경쟁사"
    ]
@@ -852,229 +789,267 @@
   {
    "beat": "경쟁사",
    "press": "아주경제",
-   "reporter": "김나윤",
-   "email": "kimnayoon@ajunews.com",
-   "title": "삼성·현대차, '총수 동맹' 넘어 '경영진 동맹'으로…미래차 원팀 시동",
-   "link": "https://www.ajunews.com/view/20261108140833518",
-   "date": "2026-11-08",
+   "reporter": "조성준",
+   "email": "critic@ajunews.com",
+   "title": "[아주초대석] 집 한 채 넘어 주택단지로… \"내년 30·40평대 출시 목표\"",
+   "link": "https://www.ajunews.com/view/20261111092722261",
+   "date": "2026-11-11",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
-   "press": "아주경제",
-   "reporter": "김아령",
-   "email": "kimar0604@kyungjeilbo.com",
-   "title": "[경제일보] 아파트·상업시설 AI로 통합 관리… 삼성·LG, B2B로 판 키운...",
-   "link": "https://www.ajunews.com/view/20261105163049745",
-   "date": "2026-11-06",
+   "press": "조선일보",
+   "reporter": "고성민",
+   "email": "kurtgo@chosunbiz.com",
+   "title": "[비즈톡톡] 스피커 구멍 없앤 아이패드 미니… 스마트폰서 자취 감춘 ‘...",
+   "link": "https://biz.chosun.com/it-science/ict/2026/11/14/MDH2N7LF6JHVXLZNAIS5C6MTMA/?utm_source=naver&utm_medium=original&utm_campaign=biz",
+   "date": "2026-11-14",
    "beats": [
-    "경쟁사"
-   ]
-  },
-  {
-   "beat": "경쟁사",
-   "press": "전자신문",
-   "reporter": "류근일",
-   "email": "media@dable.io",
-   "title": "욕실 환기가전 온풍 경쟁…설치 편의성, 원격제어 특화 기능으로 신규 ...",
-   "link": "https://www.etnews.com/20261105000199",
-   "date": "2026-11-05",
-   "beats": [
-    "IT",
     "경쟁사"
    ]
   },
   {
    "beat": "경쟁사",
    "press": "헤럴드경제",
-   "reporter": "조문술",
-   "email": "freiheit@heraldcorp.com",
-   "title": "원림, 화려한 투자포트폴리오 주목",
-   "link": "https://biz.heraldcorp.com/article/10923367?ref=naver",
-   "date": "2026-11-03",
+   "reporter": "김현일",
+   "email": "joze@heraldcorp.com",
+   "title": "“좁은 틈에도 쏙” LG전자, 가로 13.2㎝ 초슬림 정수기 신모델 출시",
+   "link": "https://biz.heraldcorp.com/article/10933845?ref=naver",
+   "date": "2026-11-11",
    "beats": [
     "경쟁사"
    ]
   },
   {
    "beat": "부동산",
-   "press": "apnews.kr",
-   "reporter": "김상진",
-   "email": "press@apnews.kr",
-   "title": "젊은 도시 중심 지방 신도시 분양 시장 눈길… 주요 신규 단지 공급 예...",
-   "link": "https://www.apnews.kr/news/articleView.html?idxno=3052961",
-   "date": "2026-11-09",
+   "press": "abcn.kr",
+   "reporter": "김현수",
+   "email": "home@abcn.kr",
+   "title": "경기 집값 상승률, 서울 첫 추월...강남은 '우수수', 수원·동탄은 신고...",
+   "link": "https://www.abcn.kr/news/articleView.html?idxno=94598",
+   "date": "2026-11-16",
    "beats": [
     "부동산",
-    "스마트홈"
+    "인테리어"
    ]
   },
   {
    "beat": "부동산",
-   "press": "areyou.co.kr",
-   "reporter": "",
+   "press": "arunews.com",
+   "reporter": "홍영주",
+   "email": "hong@arunews.com",
+   "title": "대우건설, 내달 괴정역 푸르지오 더 센트럴 분양",
+   "link": "https://www.arunews.com/news/articleView.html?idxno=69562",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "babytimes.co.kr",
+   "reporter": "전문",
+   "email": "chulli9888@naver.com",
+   "title": "노원구, 재건축 상가 지분 쪼개기 제동…16곳 예정지 행위제한 심의 통...",
+   "link": "http://www.babytimes.co.kr/news/articleView.html?idxno=74681",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "bloter.net",
+   "reporter": "국정근",
    "email": "support@dable.io",
-   "title": "[아유경제_부동산] 서울시, 도시정비사업 속도낸 자치구 5곳ㆍ조합 10곳...",
-   "link": "http://www.areyou.co.kr/news/articleView.html?idxno=96190",
-   "date": "2026-11-09",
+   "title": "한국신용평가, 네이버페이와 '맞손'…신용 리서치를 영상·요약으로 푼...",
+   "link": "https://www.bloter.net/news/articleView.html?idxno=678723",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "arunews.com",
-   "reporter": "",
-   "email": "hyunlaw02@gmail.com",
-   "title": "정비사업 분양가상한제의 구조적 모순과 입법적 개선 방향",
-   "link": "https://www.arunews.com/news/articleView.html?idxno=69232",
-   "date": "2026-11-09",
+   "press": "cstimes.com",
+   "reporter": "정용규",
+   "email": "support@dable.io",
+   "title": "갈매·별내역 생활권 734가구…우미린 더 시그니처 분양",
+   "link": "https://www.cstimes.com/news/articleView.html?idxno=728047",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "arunews.com",
-   "reporter": "이호준",
-   "email": "leejr@arunews.com",
-   "title": "홍 장관 \"주택건설업계와 적극 소통하겠다\"",
-   "link": "https://www.arunews.com/news/articleView.html?idxno=69201",
-   "date": "2026-11-09",
+   "press": "dailycar.co.kr",
+   "reporter": "하가연",
+   "email": "gyha@dailycar.co.kr",
+   "title": "LG전자 테네시 공장, 누적 생산 1천만대 돌파..북미 세탁가전 1위 견인",
+   "link": "https://www.dailycar.co.kr/content/news.html?type=view&autoId=63176",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "bizhankook.com",
-   "reporter": "",
-   "email": "writer@bizhankook.com",
-   "title": "[부동산 인사이트] 코스피 이틀 새 11% 폭락, 부동산은 '다음 차례'일까",
-   "link": "https://bizhankook.com/articles/kospi-crash-real-estate-impact.html",
-   "date": "2026-11-09",
+   "press": "ddaily.co.kr",
+   "reporter": "왕진화",
+   "email": "wjh9080@ddaily.co.kr",
+   "title": "바이오·식품 거쳐 그룹 전략으로…롯데 신유열의 경영 보폭 넓어진다",
+   "link": "https://www.ddaily.co.kr/page/view/2026111614361020443",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "dailian.co.kr",
-   "reporter": "국회에서",
-   "email": "ohs2in@dailian.co.kr",
-   "title": "주진우, 이용철 건축법 위반 의혹 제기…\"불법 컨테이너 건물 설치\"",
-   "link": "https://www.dailian.co.kr/news/view/1712658/?sc=Naver",
-   "date": "2026-11-09",
+   "press": "delighti.co.kr",
+   "reporter": "장영일",
+   "email": "zzang012@daum.net",
+   "title": "서울 집값 상승폭 3개월 연속 둔화…강남·서초 떨어지고 외곽·경기는...",
+   "link": "https://www.delighti.co.kr/news/articleView.html?idxno=125031",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "dailyt.co.kr",
-   "reporter": "이정윤",
-   "email": "dailyt@naver.com",
-   "title": "대곡역 ‘펜타 역세권’ 수혜 품은 고양 능곡3구역, 1258가구 ‘아이파...",
-   "link": "https://www.dailyt.co.kr/newsView/dlt202611090016",
-   "date": "2026-11-09",
+   "press": "e-science.co.kr",
+   "reporter": "김연옥",
+   "email": "yeonok@e-science.co.kr",
+   "title": "우미건설, 구리갈매역세권에 734가구 공급…서울 접근성 갖춘 브랜드 단...",
+   "link": "https://www.e-science.co.kr/news/articleView.html?idxno=139897",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "dkilbo.com",
-   "reporter": "",
-   "email": "6351744@hanmail.net",
-   "title": "영주시, 노후 아파트 등 공동주택 주거환경 개선 사업 추진… 12월 말까...",
-   "link": "https://www.dkilbo.com/news/articleView.html?idxno=560036",
-   "date": "2026-11-09",
+   "press": "e-science.co.kr",
+   "reporter": "홍승환",
+   "email": "mikotona@e-science.co.kr",
+   "title": "세라젬, 국가대표선수촌에 안마의자·의료기기 6대 후원",
+   "link": "https://www.e-science.co.kr/news/articleView.html?idxno=139829",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "dnews.co.kr",
-   "reporter": "황은우",
-   "email": "tuser@dnews.co.kr",
-   "title": "LH 서울본부, '오피스텔' 1000호 특별매입 추진",
-   "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611061731461000036",
-   "date": "2026-11-06",
+   "press": "ebn.co.kr",
+   "reporter": "홍민기",
+   "email": "hmk@ebn.co.kr",
+   "title": "밀레, 주방가전 존재감 줄인다…'인비저블 테크' 3종 제안",
+   "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1731828",
+   "date": "2026-11-16",
    "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "econovill.com",
-   "reporter": "유혜린",
-   "email": "hlrin@econovill.com",
-   "title": "저축은행 대·중견기업 대출 첫 5조 돌파…1년 새 51% 급증",
-   "link": "https://www.econovill.com/news/articleView.html?idxno=756513",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "econovill.com",
-   "reporter": "권일구",
-   "email": "insoo1226@econovill.com",
-   "title": "약 3조원 규모 '세종 스마트시티' 본격화…'세종스마트시티 엘 수자인'...",
-   "link": "https://www.econovill.com/news/articleView.html?idxno=756523",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "econovill.com",
-   "reporter": "양정민",
-   "email": "philip@econovill.com",
-   "title": "TCL, 미니 LED TV 등 최대 26% 할인 나선다",
-   "link": "https://www.econovill.com/news/articleView.html?idxno=756364",
-   "date": "2026-11-08",
-   "beats": [
-    "부동산"
+    "부동산",
+    "인테리어"
    ]
   },
   {
    "beat": "부동산",
    "press": "ekoreanews.co.kr",
-   "reporter": "임장혁",
-   "email": "ymmm70@naver.com",
-   "title": "'비거주 민심' 따라 요동치는 종부세, '수정안도 다시 수정'",
-   "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=89093",
-   "date": "2026-11-09",
+   "reporter": "최윤정",
+   "email": "e-korea@naver.com",
+   "title": "LG전자 주방가전, 미국 '리뷰드닷컴' '2026 올해의 대형가전' 선정",
+   "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=89223",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "geconomy.co.kr",
-   "reporter": "양하영",
-   "email": "golf0030@hanmail.net",
-   "title": "“뜨거운 강남권 분양시장 흥행 릴레이 잇는다”…'디에이치 신반포에...",
-   "link": "https://www.geconomy.co.kr/news/article.html?no=325270",
-   "date": "2026-11-04",
+   "press": "enewstoday.co.kr",
+   "reporter": "백연식",
+   "email": "ybaek@enewstoday.co.kr",
+   "title": "'CES 2027' 혁신상 휩쓴 삼성·LG···AI·디스플레이 기술력 입증",
+   "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2492692",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "gosiweek.com",
-   "reporter": "서광석",
-   "email": "gosiweek@gmail.com",
-   "title": "푸드타파, 음식물처리기 '후회막심' 교체지원금 PROJECT 13일까지",
-   "link": "https://www.gosiweek.com/article/1065601504505673",
-   "date": "2026-11-06",
+   "press": "epnc.co.kr",
+   "reporter": "박규찬",
+   "email": "technomist@techworld.co.kr",
+   "title": "LG전자, 美 세탁가전 시장 1위 굳힌다…테네시 공장 1000만대 생산",
+   "link": "https://www.epnc.co.kr/news/articleView.html?idxno=409798",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "finomy.com",
+   "reporter": "강동현",
+   "email": "ehdgus960311@gmail.com",
+   "title": "과천청사역 한양수자인, 준공 완료 단지 특별분양",
+   "link": "http://www.finomy.com/news/articleView.html?idxno=266781",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "fntimes.com",
+   "reporter": "조범형",
+   "email": "chobh06@fntimes.com",
+   "title": "부천대장 하우스토리 디센트 견본주택 '운집'…사흘간 1만2000명 몰려",
+   "link": "https://www.fntimes.com/html/view.php?ud=202611161420483767048b718333_18",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "greenpostkorea.co.kr",
+   "reporter": "신익훈",
+   "email": "sih@greenpost.kr",
+   "title": "전문가들이 선택한 LG 주방가전··· 인덕션·식기세척기 연속 수상",
+   "link": "https://www.greenpostkorea.co.kr/news/articleView.html?idxno=308049",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "gukjenews.com",
+   "reporter": "손병욱",
+   "email": "tednoma@naver.com",
+   "title": "안양시, 2026 지방자치단체 행정대상 종합대상 수상",
+   "link": "https://www.gukjenews.com/news/articleView.html?idxno=3753201",
+   "date": "2026-11-16",
+   "beats": [
+    "경쟁사",
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "hansbiz.co.kr",
+   "reporter": "김두일",
+   "email": "media@dable.io",
+   "title": "경기도의회 민주당, \"도정현안 집중검증\" 행정사무감사 2차 브리핑",
+   "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=883673",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
@@ -1082,228 +1057,277 @@
   {
    "beat": "부동산",
    "press": "hansbiz.co.kr",
-   "reporter": "한나연",
+   "reporter": "김진영",
    "email": "media@dable.io",
-   "title": "거래는 산본, 가격은 분당…1기 신도시 '엇박자'",
-   "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=881293",
-   "date": "2026-11-09",
+   "title": "세라젬, 태극전사 컨디션 관리 지원…진천선수촌에 제품 후원",
+   "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=883511",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "idaegu.com",
-   "reporter": "이규현",
-   "email": "leekh1220@idaegu.com",
-   "title": "대구 건설·개발 업계 봉사, 사업지 따라 '원정' 나선다",
-   "link": "https://www.idaegu.com/news/articleView.html?idxno=666838",
-   "date": "2026-11-09",
+   "press": "hbnpress.com",
+   "reporter": "정소윤",
+   "email": "woon6728@gmail.com",
+   "title": "서울 노원·중랑구와 인접한 구리 갈매지구… 기업 사옥 입지로 주목",
+   "link": "https://hbnpress.com/news/view/1065592466710954",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "ikld.kr",
-   "reporter": "이경운",
-   "email": "Lkw@ikld.kr",
-   "title": "'엘리프 시흥 더프라임' 견본주택 북적… 개관 첫 주말 7천여 방문객 몰...",
-   "link": "http://www.ikld.kr/news/articleView.html?idxno=343781",
-   "date": "2026-11-09",
+   "press": "hinews.co.kr",
+   "reporter": "오하은",
+   "email": "haeun@hinews.co.kr",
+   "title": "롯데, 돈 되는 계열사 팔아 빚 막는다…바이오에는 다시 수천억 투자",
+   "link": "https://www.hinews.co.kr/view.php?ud=202611161453109145cd8b879b3c_48",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "ilyosisa.co.kr",
-   "reporter": "김성민",
-   "email": "jebo@ilyosisa.co.kr",
-   "title": "<윤준 대표의 부동산 판읽기> 시장은 완화보다 상실을 읽는다",
-   "link": "https://www.ilyosisa.co.kr/news/article.html?no=258813",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "koscaj.com",
-   "reporter": "김경종",
-   "email": "kkj@kosca.or.kr",
-   "title": "경기도, 아파트 공사면적 미리 저장해 보수공사비 산출···'셀프 견적'...",
-   "link": "https://www.koscaj.com/news/articleView.html?idxno=327399",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "mygoyang.com",
-   "reporter": "박상준",
-   "email": "media@dable.io",
-   "title": "일산신도시 재건축 속도전… 백송마을 연내 첫 구역 지정 눈앞",
-   "link": "http://www.mygoyang.com/news/articleView.html?idxno=91125",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "nbntv.co.kr",
-   "reporter": "주현웅",
-   "email": "today@nbntv.co.kr",
-   "title": "현대엔지니어링, '디에이치 신반포에스테라' 일반분양 28세대 입찰",
-   "link": "https://www.nbntv.co.kr/news/articleView.html?idxno=4027121",
-   "date": "2026-11-06",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "news.mtn.co.kr",
-   "reporter": "",
-   "email": "zi@mtn.co.kr",
-   "title": "[단독] 굴릴 돈 느는데…공무원연금 대체투자 인력풀 제자리",
-   "link": "https://news.mtn.co.kr/article/2026110914390942447",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "news2day.co.kr",
-   "reporter": "장수지",
-   "email": "sujitime92@news2day.co.kr",
-   "title": "올리브영·무신사, 오프라인 확장 속도…K뷰티·패션 유통망 넓힌다",
-   "link": "https://www.news2day.co.kr/article/20261109500136",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "newstnt.com",
-   "reporter": "박시영",
-   "email": "ntnt@newstnt.com",
-   "title": "[특징주] 금호건설우, 장중 상한가…이틀 연속 상승세",
-   "link": "https://www.newstnt.com/news/articleView.html?idxno=727435",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "newstomato.com",
-   "reporter": "신태현",
-   "email": "htenglish@etomato.com",
-   "title": "박승원 광명시장 \"AI혁신교육센터, 미래교육도시 출발점\"",
-   "link": "http://www.newstomato.com/ReadNews.aspx?no=1319719&inflow=N",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "newstomato.com",
-   "reporter": "촉구",
-   "email": "juyo9642@etomato.com",
-   "title": "\"필버 대상 아니다\"…민주 서울 의원들, 도정법 본회의 처리 촉구",
-   "link": "http://www.newstomato.com/ReadNews.aspx?no=1319706&inflow=N",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "newsway.co.kr",
-   "reporter": "강민석",
-   "email": "shj7890@newsway.co.kr",
-   "title": "서울 정비사업 1184곳...청약 흥행에 공급 늘리며 '활기'",
-   "link": "https://www.newsway.co.kr/news/view?ud=2026110613521713488",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "newsworks.co.kr",
-   "reporter": "원성훈",
-   "email": "enki0130@newsworks.co.kr",
-   "title": "주진우 \"이용철 후보자 농지에 불법 컨테이너…'건물·대지'로 허위 신...",
-   "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=902432",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "nocutnews.co.kr",
-   "reporter": "고영호",
-   "email": "newsman@cbs.co.kr",
-   "title": "통합특별시, 전세사기 예방 중개사무소 합동점검",
-   "link": "https://www.nocutnews.co.kr/news/6604077?utm_source=naver&utm_medium=article&utm_campaign=20261109144334",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "nocutnews.co.kr",
-   "reporter": "김정록",
-   "email": "rock@cbs.co.kr",
-   "title": "[단독] 이태현 KBS 사장 후보, 서초 아파트 월세 소득 7천만원 뒤늦게 신...",
-   "link": "https://www.nocutnews.co.kr/news/6604075?utm_source=naver&utm_medium=article&utm_campaign=20261109144335",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "opinionnews.co.kr",
-   "reporter": "김기범",
-   "email": "kkb@opinionnews.co.kr",
-   "title": "창신10구역 재개발 '동의서 재징구' 갈등…추진위 \"법적 근거·MOU 조건 ...",
-   "link": "http://www.opinionnews.co.kr/news/articleView.html?idxno=146825",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "sentv.co.kr",
-   "reporter": "박수열",
-   "email": "psy@sedaily.com",
-   "title": "시니어 주거시설 선택 ‘원장 이력’ 주목…케어링 스테이, 의료진 전면...",
-   "link": "https://www.sentv.co.kr/article/view/sentv202611050211",
-   "date": "2026-11-06",
+   "press": "insight.co.kr",
+   "reporter": "함철민",
+   "email": "chulmin@insight.co.kr",
+   "title": "매출은 줄었는데 이익은 두 배 넘게... 롯데건설이 바꾼 것은?",
+   "link": "https://www.insight.co.kr/news/582223",
+   "date": "2026-11-16",
    "beats": [
     "부동산",
-    "스마트홈"
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "jasm.co.kr",
+   "reporter": "허찬회",
+   "email": "jasm77@jasm.co.kr",
+   "title": "안양시, 대한민국 지자체 행정대상 ‘종합대상’ 받았다",
+   "link": "https://www.jasm.co.kr/news/view/325441/?sc=Naver",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "jbnews.com",
+   "reporter": "박상철",
+   "email": "pgija@jbnews.com",
+   "title": "더샵 청주그리니티, 17일 무순위 1세대 청약",
+   "link": "https://www.jbnews.com/news/articleView.html?idxno=1516060",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "jeonmae.co.kr",
+   "reporter": "김종영",
+   "email": "weeklypeople@jeonmae.co.kr",
+   "title": "[기획특집] 김길성 서울 중구청장 \"사람 머무는 중구\"…주거·복지·관광...",
+   "link": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1312223",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "lawissue.co.kr",
+   "reporter": "최영록",
+   "email": "rok@lawissue.co.kr",
+   "title": "두산건설, 성지·궁전아파트 재건축한 ‘두산위브 더포레 성남’ 12월 분...",
+   "link": "https://www.lawissue.co.kr/view.php?ud=20261116112346290267191f6c6e_12",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "m-i.kr",
+   "reporter": "기영미",
+   "email": "lucylucy326@m-i.kr",
+   "title": "[기획] 충당금 갚고 주식투자 성공 등으로 저축은행 수익성 개선",
+   "link": "https://www.m-i.kr/news/articleView.html?idxno=2018893",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "m-i.kr",
+   "reporter": "전길헌",
+   "email": "kiruni2@m-i.kr",
+   "title": "안양시, '2026 대한민국 지방자치단체 행정대상' 종합대상 수상",
+   "link": "https://www.m-i.kr/news/articleView.html?idxno=2019055",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "meconomynews.com",
+   "reporter": "정규호",
+   "email": "jkh@meconomynews.com",
+   "title": "[목동의 경고②] \"무조건 완판\" vs \"현 규제론 장담 못해\"… 전문가들이...",
+   "link": "https://www.meconomynews.com/news/articleView.html?idxno=203664",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "newsclaim.co.kr",
+   "reporter": "국회에서",
+   "email": "newsro1@kakao.com",
+   "title": "조정식 \"미룰 수 없는 개헌\" 주진우 \"뜬금없다\"",
+   "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3082848",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "newsclaim.co.kr",
+   "reporter": "김도희",
+   "email": "kdh2836@newsclaim.co.kr",
+   "title": "LG 주방가전 미국서 통했다… 소비자·전문가 고른 호평",
+   "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3082821",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "newskr.kr",
+   "reporter": "홍미경",
+   "email": "mkhong@newskr.kr",
+   "title": "[분양공고 톺아보기] '아르뮤제자이' 셔틀버스 지원 1년뿐…공용시설 운...",
+   "link": "http://www.newskr.kr/news/articleView.html?idxno=108038",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산",
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "newslock.co.kr",
+   "reporter": "김시윤",
+   "email": "support@dable.io",
+   "title": "두산건설, 두산위브 더포레 성남 162가구 12월 일반분양",
+   "link": "http://www.newslock.co.kr/news/articleView.html?idxno=140148",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "newsquest.co.kr",
+   "reporter": "심민현",
+   "email": "potato418@newsquest.co.kr",
+   "title": "자본비율·1조 순익 얻은 '+1년' 정진완 우리은행장, '비이자 실종·부실...",
+   "link": "https://www.newsquest.co.kr/news/articleView.html?idxno=305114",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "newsroad.co.kr",
+   "reporter": "권원배",
+   "email": "newsroad01@newsroad.co.kr",
+   "title": "\"강남 하이엔드 랜드마크 마지막 5세대\" 디에이치 신반포에스테라, 청약...",
+   "link": "http://www.newsroad.co.kr/news/articleView.html?idxno=67799",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "nextdaily.co.kr",
+   "reporter": "김상희",
+   "email": "press@nextdaily.co.kr",
+   "title": "디에이치 신반포에스테라, 잔여 5세대 임의공급…청약통장 없이 18~19일...",
+   "link": "https://www.nextdaily.co.kr/news/articleView.html?idxno=254932",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "nocutnews.co.kr",
+   "reporter": "김구연",
+   "email": "kimgu88@cbs.co.kr",
+   "title": "'가전 명가' 밀레, 후드·손잡이 없앤 주방가전…공간 활용 극대화",
+   "link": "https://www.nocutnews.co.kr/news/6607279?utm_source=naver&utm_medium=article&utm_campaign=20261116105555",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "obsnews.co.kr",
+   "reporter": "권혁준",
+   "email": "jebo@obs.co.kr",
+   "title": "[99.9MHz]˝도시재생의 핵심은 결국 사람˝… 이재준 수원특례시장, 시민...",
+   "link": "https://www.obsnews.co.kr/news/articleView.html?idxno=1543875",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "pinpointnews.co.kr",
+   "reporter": "전수민",
+   "email": "suminism91@pinpointnews.co.kr",
+   "title": "우미건설, '구리갈매역세권 우미린 더 시그니처' 공급",
+   "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=504546",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "pinpointnews.co.kr",
+   "reporter": "홍지현",
+   "email": "cookingwriter@pinpointnews.co.kr",
+   "title": "세라젬, 진천선수촌 여자선수 숙소 휴게공간에 헬스케어 제품 총 6대 설...",
+   "link": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=504443",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
    ]
   },
   {
    "beat": "부동산",
    "press": "shinailbo.co.kr",
-   "reporter": "김두평",
-   "email": "dpkim@shinailbo.co.kr",
-   "title": "하남시의회, 제354회 임시회 개회…조례안 등 27건 심사",
-   "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5081263",
-   "date": "2026-11-09",
+   "reporter": "전연희",
+   "email": "chun2112369@hanmail.net",
+   "title": "안양시, 규제혁신·적극행정 성과로 행정안전부장관상",
+   "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5083850",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
@@ -1313,120 +1337,124 @@
    "press": "sisaon.co.kr",
    "reporter": "김상원",
    "email": "opallonews@sisaon.co.kr",
-   "title": "IPARK현산, 고양 능곡3구역 재개발 수주",
-   "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=205902",
-   "date": "2026-11-09",
+   "title": "대우건설, 도시정비사업 역대 최대 수주 실적 새로 썼다",
+   "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=206114",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "부동산",
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "smartbizn.com",
+   "reporter": "최형호",
+   "email": "rhyma@smartbizn.com",
+   "title": "성남·판교 직장인 겨냥한 광주 탄벌지구···제일풍경채, 청약일정 돌...",
+   "link": "https://www.smartbizn.com/news/articleView.html?idxno=159594",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "slist.kr",
-   "reporter": "김민호",
-   "email": "myno@slist.kr",
-   "title": "밀레, 조리와 설거지 손 덜어주는 '씽크레스' 주방가전 4종 제안",
-   "link": "https://www.slist.kr/news/articleView.html?idxno=778803",
-   "date": "2026-11-04",
+   "press": "smartbizn.com",
+   "reporter": "양대규",
+   "email": "yangdae@smartbizn.com",
+   "title": "LG전자, 미국 세탁가전 생산 1000만대…현지화 전략으로 북미 1위 굳힌다",
+   "link": "https://www.smartbizn.com/news/articleView.html?idxno=159571",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "경쟁사",
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "srtimes.kr",
+   "reporter": "김동운",
+   "email": "support@dable.io",
+   "title": "금감원, 은행 영업점 불시검사 재개…금융사고 내부통제 살핀다",
+   "link": "http://www.srtimes.kr/news/articleView.html?idxno=217702",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "theviewers.co.kr",
-   "reporter": "문형민",
-   "email": "mhyung13@viewers.co.kr",
-   "title": "왕숙신도시·GTX-B 개발 기대감…남양주 부동산시장 변화 본격화",
-   "link": "https://theviewers.co.kr/View.aspx?No=4303835",
-   "date": "2026-11-09",
+   "press": "todayenergy.kr",
+   "reporter": "임자성",
+   "email": "jslim@tenews.kr",
+   "title": "LG전자, 테네시 공장 세탁가전 누적 생산 1000만 대 돌파",
+   "link": "https://www.todayenergy.kr/news/articleView.html?idxno=305580",
+   "date": "2026-11-16",
    "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "upkoreanews.kr",
+   "reporter": "김가혜",
+   "email": "upkoreakim@upkoreanews.kr",
+   "title": "한화 건설부문, '한화포레나 지제역' 1098가구 분양 현장서 광고물 위법...",
+   "link": "https://www.upkoreanews.kr/news/articleView.html?idxno=101182",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "weeklytoday.com",
+   "reporter": "김인환",
+   "email": "in@onel.kr",
+   "title": "[건설업계 동향] 대우건설ㆍ자이에스앤디ㆍ남광토건(11.16)",
+   "link": "http://www.weeklytoday.com/news/articleView.html?idxno=802194",
+   "date": "2026-11-16",
+   "beats": [
+    "경쟁사",
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "womentimes.co.kr",
+   "reporter": "송현섭",
+   "email": "21cshs@womentimes.co.kr",
+   "title": "우미건설, 신도시 프리미엄 기대 '구리갈매역세권 우미린 더 시그니처'...",
+   "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=107973",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
     "부동산",
     "스마트홈"
    ]
   },
   {
    "beat": "부동산",
-   "press": "theviewers.co.kr",
-   "reporter": "오아름",
-   "email": "ar0707@viewers.co.kr",
-   "title": "[건설 Pick] 삼성물산, 목동13단지 재건축 시공사 선정 外",
-   "link": "https://theviewers.co.kr/View.aspx?No=4303797",
-   "date": "2026-11-09",
-   "beats": [
-    "AI",
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "theviewers.co.kr",
-   "reporter": "백진엽",
-   "email": "jinebito@theviewers.co.kr",
-   "title": "'강남 흥행 이어지나'…현대엔지니어링 '디에이치 신반포에스테라' 입찰...",
-   "link": "https://theviewers.co.kr/View.aspx?No=4300951",
-   "date": "2026-11-06",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "topdaily.kr",
-   "reporter": "이진휘",
-   "email": "hwi@topdaily.co.kr",
-   "title": "[TOP's Pick] [건설] SK에코플랜트, 구성원 가족 초청 도심 플로깅 진행...",
-   "link": "https://www.topdaily.kr/articles/112776",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "weekly.hankooki.com",
-   "reporter": "김택수",
-   "email": "kts@hankooki.com",
-   "title": "수도권 '신규택지' 추가발표…풀어야 할 방정식",
-   "link": "https://weekly.hankooki.com/news/articleView.html?idxno=7192516",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "woodkorea.co.kr",
-   "reporter": "대통령과",
-   "email": "kingwood22@naver.com",
-   "title": "이찬일의 글로벌 경제 브리프 239-1",
-   "link": "https://www.woodkorea.co.kr/news/articleView.html?idxno=92430",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "wsobi.com",
-   "reporter": "",
-   "email": "mjchoi3984@naver.com",
-   "title": "건설업계, 양천구 목동13단지 재건축사업 수주·고양능곡3구역 주택정비...",
-   "link": "http://www.wsobi.com/news/articleView.html?idxno=321316",
-   "date": "2026-11-09",
-   "beats": [
-    "AI",
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
    "press": "뉴스핌",
-   "reporter": "백승은",
-   "email": "100wins@newspim.com",
-   "title": "이달부터 가상자산 민사집행 규정 시행…압류·현금화 절차 마련",
-   "link": "https://www.newspim.com/news/view/20261109000914",
-   "date": "2026-11-09",
+   "reporter": "정태선",
+   "email": "windy@newspim.com",
+   "title": "오중석 시의원 \"재개발 현장 동물구조, 5.7만 청원에 서울시가 답할 차...",
+   "link": "https://www.newspim.com/news/view/20261116000617",
+   "date": "2026-11-16",
+   "beats": [
+    "부동산"
+   ]
+  },
+  {
+   "beat": "부동산",
+   "press": "뉴시스",
+   "reporter": "문영호",
+   "email": "photo@newsis.com",
+   "title": "[안산소식] 탄도항에 해양레저·산업잠수 복합시설 추진 등",
+   "link": "https://www.newsis.com/view/NISX20261116_0003869935",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
@@ -1434,24 +1462,11 @@
   {
    "beat": "부동산",
    "press": "디지털타임스",
-   "reporter": "박영서",
-   "email": "pys@dt.co.kr",
-   "title": "젊은 3040 도시에… 실수요 탄탄한 지방 신도시 분양시장 활기",
-   "link": "https://www.dt.co.kr/article/12093967?ref=naver",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산",
-    "스마트홈"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "딜사이트",
-   "reporter": "송한석",
-   "email": "hansome@dealsite.co.kr",
-   "title": "'소외된' 삼성전자 가전…신뢰도·이익 둘 다 놓쳐",
-   "link": "https://dealsite.co.kr/articles/171976",
-   "date": "2026-11-04",
+   "reporter": "구본규",
+   "email": "qhswls20@dt.co.kr",
+   "title": "아침부터 대기 행렬… ‘가야역롯데캐슬스카이엘’ 신축 전세에 관심",
+   "link": "https://www.dt.co.kr/article/12095396?ref=naver",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
@@ -1459,59 +1474,35 @@
   {
    "beat": "부동산",
    "press": "매일경제",
-   "reporter": "김혜진",
-   "email": "heyjiny@mk.co.kr",
-   "title": "“재건축 아직 멀었으니 고치고 살아야죠”…목동 주민들 찾는다는 ‘이...",
-   "link": "https://www.mk.co.kr/article/12198369",
-   "date": "2026-11-05",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "머니투데이",
    "reporter": "",
-   "email": "media@dable.io",
-   "title": "법무법인 태평양, AI법정책포럼 공동 개최… 에이전틱·피지컬AI 논의",
-   "link": "https://www.mt.co.kr/society/2026/11/09/2026110914101058281",
-   "date": "2026-11-09",
+   "email": "lee.seunghoon@mbn.co.kr",
+   "title": "이도에스테이트, 애비슨영과 '맞손'…국내 상업용 부동산 시장 진출",
+   "link": "http://mbn.mk.co.kr/pages/news/newsView.php?category=mbn00003&news_seq_no=5231100",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "머니투데이",
-   "reporter": "남형도",
-   "email": "media@dable.io",
-   "title": "동남아 데이터센터도 '스톱'…태국 49곳·말레이·인니 중단",
-   "link": "https://www.mt.co.kr/world/2026/11/09/2026110913514124572",
-   "date": "2026-11-09",
+   "press": "매일경제",
+   "reporter": "긴급",
+   "email": "robgud@mk.co.kr",
+   "title": "“서울 분위기 왜 이래”…분양 늘었는데 청약자 반토막",
+   "link": "https://www.mk.co.kr/article/12209912",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "서울경제",
-   "reporter": "김경미",
-   "email": "saint@sedaily.com",
-   "title": "지방 청약자 41% ‘1000가구 이상 대단지’ 쏠려",
-   "link": "https://www.sedaily.com/article/20111947?ref=naver",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "서울신문",
-   "reporter": "이현진",
-   "email": "lhj@metroseoul.co.kr",
-   "title": "재초환 그땐 맞았지만…‘닥공’ 시대엔 공급 걸림돌?",
-   "link": "http://www.metroseoul.co.kr/article/20261109500318",
-   "date": "2026-11-09",
+   "press": "매일경제",
+   "reporter": "긴급",
+   "email": "gobaek@mk.co.kr",
+   "title": "“정부는 닥공 외치는데”…수도권 전세시장에선 여전히 집주인이 ‘갑...",
+   "link": "https://www.mk.co.kr/article/12209885",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
@@ -1519,37 +1510,35 @@
   {
    "beat": "부동산",
    "press": "아시아경제",
-   "reporter": "이상현",
-   "email": "lshb01@asiae.co.kr",
-   "title": "“젊은 도시가 경쟁력”… 3040 눈길 끄는 ‘경북도청 푸르지오 퍼스티...",
-   "link": "https://view.asiae.co.kr/article/2026110913535560465",
-   "date": "2026-11-09",
+   "reporter": "임주형",
+   "email": "skepped@asiae.co.kr",
+   "title": "\"아내 몰래 투자했는데 '반토막' 어쩌죠?\" 40대 남성 사연에…\"아파야 낫...",
+   "link": "https://view.asiae.co.kr/article/2026111614112064194",
+   "date": "2026-11-16",
    "beats": [
-    "부동산",
-    "스마트홈"
+    "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "조선일보",
-   "reporter": "",
-   "email": "hongg@chosun.com",
-   "title": "이상우 \"옆집이 투자자인지 실거주자인지 파악도 못하면 재건축 헛바퀴...",
-   "link": "https://realty.chosun.com/site/data/html_dir/2026/11/09/2026110901747.html",
-   "date": "2026-11-09",
+   "press": "연합뉴스",
+   "reporter": "오진송",
+   "email": "kjhpress@yna.co.kr",
+   "title": "서울 집값 상승폭 석달째 둔화…평균 전셋값 5억원 돌파(종합)",
+   "link": "https://www.yna.co.kr/view/AKR20261116074451003?input=1195m",
+   "date": "2026-11-16",
    "beats": [
-    "부동산",
-    "인테리어"
+    "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "조선일보",
-   "reporter": "",
-   "email": "chan2@chosun.com",
-   "title": "\"뉴타운도 무산, 재개발도 제동\"…18년째 제자리 창신동의 분노 [르포]",
-   "link": "https://realty.chosun.com/site/data/html_dir/2026/11/06/2026110602429.html",
-   "date": "2026-11-09",
+   "press": "이데일리",
+   "reporter": "이다원",
+   "email": "webmaster@edaily.co.kr",
+   "title": "두산건설, 성남 중원구 ‘두산위브 더포레 성남’ 12월 분양",
+   "link": "https://www.edaily.co.kr/News/Read?newsId=02273046645646376&mediaCodeNo=257&utm_source=naver&utm_medium=referral&utm_campaign=news_syndication&utm_content=original_article",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
@@ -1557,47 +1546,61 @@
   {
    "beat": "부동산",
    "press": "조선일보",
-   "reporter": "윤성우",
-   "email": "dub@chosun.com",
-   "title": "창신9구역 재개발, 4000만원 물품 약속 논란… 주민 동의서 다시 받는다",
-   "link": "https://www.chosun.com/national/national_general/2026/11/05/ZPN6GT2W6VHKPB4VMY5E5DOTIE/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news",
-   "date": "2026-11-05",
+   "reporter": "김윤주",
+   "email": "yunj@chosun.com",
+   "title": "10월 경기 집값, 서울보다 더 많이 올라... 2021년 이후 최고 상승률",
+   "link": "https://www.chosun.com/economy/real_estate/2026/11/16/F45RSUHQCBAEZMBVZLGGKYQ27I/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "부동산",
-   "press": "한국일보",
-   "reporter": "",
-   "email": "webmaster@hankookilbo.com",
-   "title": "메타로지, ‘실사 3D공간’ 만들어 웹에서 바로 구동 “종이는 그만”",
-   "link": "https://www.hankookilbo.com/news/article/A2026110615520000412?did=NA",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "헤럴드경제",
-   "reporter": "",
-   "email": "kim3956@heraldcorp.com",
-   "title": "현대엔지니어링, ‘디에이치 신반포에스테라’ 6일 일반분양 입찰 시작",
-   "link": "https://biz.heraldcorp.com/article/10928543?ref=naver",
-   "date": "2026-11-06",
+   "press": "조선일보",
+   "reporter": "정민기",
+   "email": "mingi@chosunbiz.com",
+   "title": "포스코이앤씨, 상봉동 ‘더샵 퍼스트월드 서울’ 오피스텔 308실 공급",
+   "link": "https://biz.chosun.com/industry/business_info/2026/11/16/XZ3TMLLZTNHTZKL4WXL4H5T7WM/?utm_source=naver&utm_medium=original&utm_campaign=biz",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "4th.kr",
-   "reporter": "성은숙",
-   "email": "4th.life01@gmail.com",
-   "title": "[유통소식] 롯데하이마트, '하이마트 블프' 개막…\"연중 최대 규모\"",
-   "link": "http://www.4th.kr/news/articleView.html?idxno=2121295",
-   "date": "2026-11-06",
+   "press": "apnews.kr",
+   "reporter": "김상진",
+   "email": "press@apnews.kr",
+   "title": "비즈빅데이터연구소, 2026년 스마트 아파트 평판 발표… e편한세상 6년 ...",
+   "link": "https://www.apnews.kr/news/articleView.html?idxno=3053003",
+   "date": "2026-11-11",
+   "beats": [
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "asiatime.co.kr",
+   "reporter": "김빛나",
+   "email": "kbn@asiatime.co.kr",
+   "title": "인공지능이 집을 이해하기 시작했다…AI홈, 생활·공간 관리로 진화",
+   "link": "https://www.asiatime.co.kr/article/20261113500236",
+   "date": "2026-11-13",
+   "beats": [
+    "IT",
+    "경쟁사",
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "beyondpost.co.kr",
+   "reporter": "이순곤",
+   "email": "sglee640@beyondpost.co.kr",
+   "title": "아카라라이프, 논현동 가구거리 쇼룸 정보 담은 안내 지도 공개",
+   "link": "http://www.beyondpost.co.kr/view.php?ud=20261111153049405746a9e4dd7f_30",
+   "date": "2026-11-11",
    "beats": [
     "스마트홈"
    ]
@@ -1607,21 +1610,9 @@
    "press": "bizwnews.com",
    "reporter": "손진석",
    "email": "son76153@empas.com",
-   "title": "\"거실 TV로 경복궁 야경 본다\"…LG전자, 'webOS'에 K-헤리티지 이식",
-   "link": "http://www.bizwnews.com/news/articleView.html?idxno=150782",
-   "date": "2026-11-03",
-   "beats": [
-    "스마트홈"
-   ]
-  },
-  {
-   "beat": "스마트홈",
-   "press": "businessplus.kr",
-   "reporter": "김현정",
-   "email": "harika@businessplus.kr",
-   "title": "[잘먹잘살+]쿠팡·라보에이치·뉴발란스·피지오겔·코오롱FnC·배민·바...",
-   "link": "https://www.businessplus.kr/news/articleView.html?idxno=119419",
-   "date": "2026-11-06",
+   "title": "아카라라이프, '학동역 투어 지도' 공개…'논현동 인테리어 성지 한눈에...",
+   "link": "http://www.bizwnews.com/news/articleView.html?idxno=151895",
+   "date": "2026-11-14",
    "beats": [
     "스마트홈"
    ]
@@ -1635,54 +1626,56 @@
    "link": "https://www.cbci.co.kr/news/articleView.html?idxno=624580",
    "date": "2026-11-09",
    "beats": [
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "cnet.co.kr",
+   "reporter": "윤현종",
+   "email": "mandu@cnet.co.kr",
+   "title": "구독 없이 AI로 사람·택배 구분…티피링크 스마트 도어벨 ‘Tapo D235L’...",
+   "link": "https://www.cnet.co.kr/view/?no=20261116144942",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
     "경쟁사",
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "cnbnews.com",
-   "reporter": "김강호",
-   "email": "pkot123@nate.com",
-   "title": "삼성물산 홈닉, 금성백조와 협력해 플랫폼 확장",
-   "link": "https://www.cnbnews.com/news/articleView.html?idxno=1022211",
-   "date": "2026-11-04",
+   "press": "coinreaders.com",
+   "reporter": "김진범",
+   "email": "desk@coinreaders.com",
+   "title": "[AI 라이프스타일] 카메라 보는 AI가 메뉴판 귓속말 통역… 여권·카드 ...",
+   "link": "http://coinreaders.com/270417",
+   "date": "2026-11-15",
    "beats": [
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "dailypop.kr",
+   "press": "consumernews.co.kr",
+   "reporter": "윤서영",
+   "email": "tjyoung828@csnews.co.kr",
+   "title": "류재철 LG전자 대표 1년, 본업 실적 챙기고 '로봇·AIDC' 미래 준비도 착...",
+   "link": "http://www.consumernews.co.kr/news/articleView.html?idxno=768249",
+   "date": "2026-11-16",
+   "beats": [
+    "경쟁사",
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "digitalchosun.dizzo.com",
    "reporter": "",
-   "email": "dailypop@dailypop.kr",
-   "title": "포스코이앤씨, 체감형 조경부터 돌봄·세탁까지…고객 쓴소리 상품 기획...",
-   "link": "http://www.dailypop.kr/news/articleView.html?idxno=103935",
-   "date": "2026-10-30",
-   "beats": [
-    "스마트홈"
-   ]
-  },
-  {
-   "beat": "스마트홈",
-   "press": "ddaily.co.kr",
-   "reporter": "김문기",
-   "email": "moon@ddaily.co.kr",
-   "title": "[알쓸신기] 선 없이 전기를 넘겨준다… 스마트폰 무선 충전의 전자기 유...",
-   "link": "https://www.ddaily.co.kr/page/view/2026110615160797924",
-   "date": "2026-11-07",
-   "beats": [
-    "스마트홈"
-   ]
-  },
-  {
-   "beat": "스마트홈",
-   "press": "delighti.co.kr",
-   "reporter": "장영일",
-   "email": "zzang012@daum.net",
-   "title": "HDC랩스 베스틴, 롯데홈쇼핑 롯데원TV 통해 얼굴인식 도어락 선보여",
-   "link": "https://www.delighti.co.kr/news/articleView.html?idxno=124508",
-   "date": "2026-11-06",
+   "email": "lululala@chosun.com",
+   "title": "네이버, B2B 전용 온라인몰 개설…스마트스토어 판매자 판로 확대",
+   "link": "http://digitalchosun.dizzo.com/site/data/html_dir/2026/11/16/2026111680129.html",
+   "date": "2026-11-16",
    "beats": [
     "스마트홈"
    ]
@@ -1690,47 +1683,35 @@
   {
    "beat": "스마트홈",
    "press": "dnews.co.kr",
-   "reporter": "김태형",
-   "email": "kth@dnews.co.kr",
-   "title": "HDC랩스 베스틴, 롯데홈쇼핑 롯데원TV 통해 ‘400MR(IDL-400MR)’ 선봬",
-   "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611061206465600972",
-   "date": "2026-11-06",
+   "reporter": "최형균",
+   "email": "chg@dnews.co.kr",
+   "title": "[테크 NOW] 네이버",
+   "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611161350259850240",
+   "date": "2026-11-16",
    "beats": [
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "e2news.com",
-   "reporter": "이재욱",
-   "email": "jwlee05077@e2news.com",
-   "title": "HDC랩스 베스틴, 롯데홈쇼핑서 프리미엄 얼굴인식 도어락 '400MR' 선보여",
-   "link": "http://www.e2news.com/news/articleView.html?idxno=335852",
-   "date": "2026-11-06",
+   "press": "dnews.co.kr",
+   "reporter": "장세갑",
+   "email": "csk@dnews.co.kr",
+   "title": "e편한세상, 스마트 아파트 브랜드 평판 6년 연속 1위",
+   "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611101603442140446",
+   "date": "2026-11-11",
    "beats": [
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "enetnews.co.kr",
-   "reporter": "이동준",
-   "email": "media@dable.io",
-   "title": "웨일톤, 홈 웰니스 브랜드 '누오(NUO)' 론칭···첫 제품 '누오 케어매...",
-   "link": "https://www.enetnews.co.kr/news/articleView.html?idxno=56088",
-   "date": "2026-11-06",
-   "beats": [
-    "스마트홈"
-   ]
-  },
-  {
-   "beat": "스마트홈",
-   "press": "financialpost.co.kr",
-   "reporter": "김영명",
-   "email": "paulkim@financialpost.co.kr",
-   "title": "목동13단지 품은 삼성물산...'래미안 모브13'으로 목동 첫 진출",
-   "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=285606",
-   "date": "2026-11-09",
+   "press": "ekn.kr",
+   "reporter": "여헌우",
+   "email": "yes@ekn.kr",
+   "title": "[똑똑한소비] 대상웰라이프, 농심, 하이트진로, 매일유업, CJ제일제당, ...",
+   "link": "https://www.ekn.kr/web/view.php?key=20261116020560167",
+   "date": "2026-11-16",
    "beats": [
     "AI",
     "스마트홈"
@@ -1738,12 +1719,63 @@
   },
   {
    "beat": "스마트홈",
-   "press": "g-enews.com",
-   "reporter": "조용철",
-   "email": "yccho@g-enews.com",
-   "title": "데스커, ‘가구 1번지’ 논현 매장 오픈…B2C·B2B 동시 공략",
-   "link": "https://www.g-enews.com/view.php?ud=202611040826262632a96f092d0c_1",
-   "date": "2026-11-04",
+   "press": "financialpost.co.kr",
+   "reporter": "정대진",
+   "email": "eowls1122@financialpost.co.kr",
+   "title": "네이버, B2B 전용 '네이버플러스 사업자몰' 오픈",
+   "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=301187",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "경쟁사",
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "financialpost.co.kr",
+   "reporter": "송성훈",
+   "email": "hpl2016@financialpost.co.kr",
+   "title": "밥맛 잡은 쿠쿠, 우리 집까지 책임진다…'스마트 홈' 승부수",
+   "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=301121",
+   "date": "2026-11-16",
+   "beats": [
+    "경쟁사",
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "getnews.co.kr",
+   "reporter": "이승원",
+   "email": "news@getnews.co.kr",
+   "title": "e편한세상, 소비자가 선정한 스마트 아파트 6년 연속 1위",
+   "link": "https://www.getnews.co.kr/news/articleView.html?idxno=886737",
+   "date": "2026-11-11",
+   "beats": [
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "ibabynews.com",
+   "reporter": "심주인",
+   "email": "pr@ibabynews.com",
+   "title": "[오늘의브랜드] GS리테일 ‘우리동네GS’, MAU 503만 명 돌파…20대 이용...",
+   "link": "https://www.ibabynews.com/news/articleView.html?idxno=156837",
+   "date": "2026-11-12",
+   "beats": [
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "ilovepc.co.kr",
+   "reporter": "임병선",
+   "email": "LBS83@ilovepc.co.kr",
+   "title": "슬림 플랫 디자인에 2.5G WAN 탑재… ipTIME BE5100plus Wi-Fi 7 공유기",
+   "link": "https://www.ilovepc.co.kr/news/articleView.html?idxno=61314",
+   "date": "2026-11-12",
    "beats": [
     "스마트홈"
    ]
@@ -1762,12 +1794,25 @@
   },
   {
    "beat": "스마트홈",
-   "press": "itbiznews.com",
-   "reporter": "최태우",
-   "email": "taewoo@itbiznews.com",
-   "title": "HDC랩스 베스틴, 롯데홈쇼핑서 얼굴인식 도어락 '400MR' 선보인다",
-   "link": "https://www.itbiznews.com/news/articleView.html?idxno=230547",
-   "date": "2026-11-06",
+   "press": "impacton.net",
+   "reporter": "",
+   "email": "now0806@impacton.net",
+   "title": "아마존, AI로 제품 탄소발자국 자동 산정...소재·제조공정까지 추정",
+   "link": "https://www.impacton.net/news/articleView.html?idxno=30689",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "imwood.co.kr",
+   "reporter": "서범석",
+   "email": "seo@imwood.co.kr",
+   "title": "2026 홈·테이블데코페어, 12월17일 코엑스서 개막",
+   "link": "https://www.imwood.co.kr/news/articleView.html?idxno=42330",
+   "date": "2026-11-11",
    "beats": [
     "IT",
     "스마트홈"
@@ -1775,49 +1820,61 @@
   },
   {
    "beat": "스마트홈",
+   "press": "industrynews.co.kr",
+   "reporter": "한원석",
+   "email": "ws.han@industrynews.co.kr",
+   "title": "퀄컴, 모바일부터 로봇까지 '에이전틱 AI' 기술 방향 제시",
+   "link": "https://www.industrynews.co.kr/news/articleView.html?idxno=89603",
+   "date": "2026-11-16",
+   "beats": [
+    "AI",
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
    "press": "kado.net",
-   "reporter": "",
-   "email": "choigj@kado.net",
-   "title": "어머니·외할머니 폭행 후 '접근금지' 조치 무시한 30대 징역형 집유",
-   "link": "https://www.kado.net/news/articleView.html?idxno=2083180",
-   "date": "2026-11-07",
+   "reporter": "최현정",
+   "email": "hjchoi@kado.net",
+   "title": "어머니·외할머니 폭행 후 '접근금지' 무시한 30대 집유",
+   "link": "https://www.kado.net/news/articleView.html?idxno=2084052",
+   "date": "2026-11-11",
    "beats": [
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "kdfnews.com",
-   "reporter": "박주범",
-   "email": "kdf@kdfnews.com",
-   "title": "[오늘의 신상] 하이트진로·오설록·남양유업·풀무원·커피앳웍스...캔...",
-   "link": "http://www.kdfnews.com/news/articleView.html?idxno=190636",
-   "date": "2026-11-09",
+   "press": "kwnews.co.kr",
+   "reporter": "하위윤",
+   "email": "hwy@kwnews.co.kr",
+   "title": "어머니·외할머니 때리고 ‘접근금지’ 명령까지 무시한 30대 처벌",
+   "link": "https://www.kwnews.co.kr/article/20261110500917",
+   "date": "2026-11-11",
    "beats": [
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "koreareport.co.kr",
-   "reporter": "이정규",
-   "email": "jklee@koreareport.co.kr",
-   "title": "삼성전자, 현대차 경영진 부부동반 공동 행사",
-   "link": "https://www.koreareport.co.kr/news/articleView.html?idxno=54455",
-   "date": "2026-11-09",
+   "press": "mdtoday.co.kr",
+   "reporter": "최민석",
+   "email": "biz@mdtoday.co.kr",
+   "title": "디웨이브, '턱관절의 날' 맞아 데일리이즈 전 품목 할인 행사 진행",
+   "link": "https://www.mdtoday.co.kr/news/articleView.html?idxno=625493",
+   "date": "2026-11-16",
    "beats": [
-    "경쟁사",
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "kr.aving.net",
-   "reporter": "박유진",
-   "email": "yj@aving.net",
-   "title": "[2026 푸드위크 코리아 특별기획관] 진미 별미 美味 4일장...\"지역 특산품...",
-   "link": "https://kr.aving.net/news/articleView.html?idxno=1816772",
-   "date": "2026-11-09",
+   "press": "megaeconomy.co.kr",
+   "reporter": "황성완",
+   "email": "wanza@megaeconomy.co.kr",
+   "title": "네이버, '네이버플러스 사업자몰' 오픈…B2B 판로 지원",
+   "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065590403911135",
+   "date": "2026-11-16",
    "beats": [
     "AI",
     "스마트홈"
@@ -1825,12 +1882,24 @@
   },
   {
    "beat": "스마트홈",
-   "press": "kr.aving.net",
-   "reporter": "이경하",
-   "email": "gemi@aving.net",
-   "title": "[2026 푸드위크 코리아 특별기획관] 2026 해외식품관...\"20개국에서 찾아...",
-   "link": "https://kr.aving.net/news/articleView.html?idxno=1816809",
-   "date": "2026-11-09",
+   "press": "newsq.co.kr",
+   "reporter": "김채완",
+   "email": "chaewankim5@gmail.com",
+   "title": "재건축 없이 신축처럼, 새로운 노후 아파트 변신법 [뉴스Q]",
+   "link": "https://www.newsq.co.kr/news/articleView.html?idxno=500869",
+   "date": "2026-11-13",
+   "beats": [
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "newstnt.com",
+   "reporter": "이상구",
+   "email": "sgllgs@naver.com",
+   "title": "충남교육청, 중학생 AI 직업교육 시작…휴머노이드 로봇 직접 코딩",
+   "link": "https://www.newstnt.com/news/articleView.html?idxno=728606",
+   "date": "2026-11-16",
    "beats": [
     "AI",
     "스마트홈"
@@ -1838,39 +1907,38 @@
   },
   {
    "beat": "스마트홈",
-   "press": "kr.aving.net",
-   "reporter": "최승연",
-   "email": "choevon@gmail.com",
-   "title": "[2026 푸드위크 코리아 특별기획관] 유럽 헤리티지부터 국내 브루어리까...",
-   "link": "https://kr.aving.net/news/articleView.html?idxno=1816808",
-   "date": "2026-11-09",
+   "press": "pointdaily.co.kr",
+   "reporter": "성창훈",
+   "email": "chsung30@hanmail.net",
+   "title": "삼성·현대 이어 GS까지 출격…'무증축 리모델링' 3파전 불붙었다",
+   "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=325923",
+   "date": "2026-11-15",
    "beats": [
     "AI",
-    "스마트홈"
-   ]
-  },
-  {
-   "beat": "스마트홈",
-   "press": "newsclaim.co.kr",
-   "reporter": "김도희",
-   "email": "kdh2836@newsclaim.co.kr",
-   "title": "LG전자 갤러리 플러스 K헤리티지 컬렉션 공개",
-   "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3081129",
-   "date": "2026-11-03",
-   "beats": [
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
    "press": "segyebiz.com",
-   "reporter": "황지혜",
+   "reporter": "현정민",
    "email": "support@dable.io",
-   "title": "마인드스파크, ‘제3회 대한민국 AI광고대상’ 개최...30일 접수 마감",
-   "link": "http://www.segyebiz.com/newsView/20261109510088?OutUrl=naver",
-   "date": "2026-11-09",
+   "title": "[MONEY] 5대 은행 퇴직연금 7년 만에 첫 감소…연말 IRP 넣기 전 ‘점검...",
+   "link": "http://www.segyebiz.com/newsView/20261116510367?OutUrl=naver",
+   "date": "2026-11-16",
    "beats": [
-    "AI",
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "sentv.co.kr",
+   "reporter": "박수열",
+   "email": "psy@sedaily.com",
+   "title": "e편한세상, ‘스마트 아파트 브랜드 평판’ 6년 연속 1위 수성",
+   "link": "https://www.sentv.co.kr/article/view/sentv202611100149",
+   "date": "2026-11-11",
+   "beats": [
     "스마트홈"
    ]
   },
@@ -1879,57 +1947,46 @@
    "press": "smartbizn.com",
    "reporter": "이서윤",
    "email": "awz73@smartbizn.com",
-   "title": "한샘, 서울건축박람회 최대 부스 마련···리하우스 신제품·3D 상담 선...",
-   "link": "https://www.smartbizn.com/news/articleView.html?idxno=158556",
-   "date": "2026-11-05",
+   "title": "한샘, 세라믹 식탁 '디에토' 출시···취향별 조합으로 다이닝 공략",
+   "link": "https://www.smartbizn.com/news/articleView.html?idxno=159496",
+   "date": "2026-11-16",
    "beats": [
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "smartbizn.com",
-   "reporter": "최형호",
-   "email": "rhyma@smartbizn.com",
-   "title": "대우건설, 의정부·마포서 7153억 정비사업 수주···푸르지오 브랜드벨...",
-   "link": "https://www.smartbizn.com/news/articleView.html?idxno=158367",
-   "date": "2026-11-03",
+   "press": "thepowernews.co.kr",
+   "reporter": "황인석",
+   "email": "his@thepowernews.co.kr",
+   "title": "\"논현동 인테리어 거리 한눈에\"... 아카라라이프, '학동역 인테리어 투...",
+   "link": "https://www.thepowernews.co.kr/view.php?ud=20261111131542693337600e7ec7_7",
+   "date": "2026-11-11",
    "beats": [
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "sportsseoul.com",
-   "reporter": "김학수",
-   "email": "jquery@1.11.1.min.js",
-   "title": "[리뷰] 50년 만의 새로운 모습으로 부활하다 – 란치아 감마",
-   "link": "https://www.sportsseoul.com/news/read/1646796?ref=naver",
-   "date": "2026-11-04",
+   "press": "todayeconomic.com",
+   "reporter": "이혜진",
+   "email": "00700hj@todayeconomic.com",
+   "title": "\"우리 집 안방이 실시간으로..\" 가정용 CCTV로 사생활 뚫린다",
+   "link": "https://www.todayeconomic.com/news/article.html?no=32841",
+   "date": "2026-11-16",
    "beats": [
+    "AI",
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "wikileaks-kr.org",
-   "reporter": "이창호",
-   "email": "support@dable.io",
-   "title": "금성백조 아파트에도 삼성물산 '홈닉' 서비스 적용",
-   "link": "https://www.wikileaks-kr.org/news/articleView.html?idxno=194208",
-   "date": "2026-11-04",
-   "beats": [
-    "스마트홈"
-   ]
-  },
-  {
-   "beat": "스마트홈",
-   "press": "womentimes.co.kr",
-   "reporter": "송현섭",
-   "email": "21cshs@womentimes.co.kr",
-   "title": "LG전자, 아트 콘텐츠 서비스 'LG 갤러리 플러스'서 'K-헤리티지 컬렉션'...",
-   "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=107546",
-   "date": "2026-11-03",
+   "press": "wikitree.co.kr",
+   "reporter": "전문",
+   "email": "sh3pt@wikitree.co.kr",
+   "title": "도어락 '건전지'는 문 열어둔 채 갈아보세요…갇힐 일이 없습니다 [생활...",
+   "link": "https://www.wikitree.co.kr/articles/1174641",
+   "date": "2026-11-14",
    "beats": [
     "스마트홈"
    ]
@@ -1943,18 +2000,7 @@
    "link": "https://www.newsis.com/view/NISX20261107_0003858819",
    "date": "2026-11-07",
    "beats": [
-    "스마트홈"
-   ]
-  },
-  {
-   "beat": "스마트홈",
-   "press": "동아일보",
-   "reporter": "김영우",
-   "email": "pengo@itdonga.com",
-   "title": "[강원창업주간] 레이지조 \"2배 자력·도어락 기능 더한 맞춤 디자인 폰...",
-   "link": "https://it.donga.com/109863/",
-   "date": "2026-11-06",
-   "beats": [
+    "AI",
     "스마트홈"
    ]
   },
@@ -1963,9 +2009,22 @@
    "press": "디지털투데이",
    "reporter": "최재원",
    "email": "ittt_0801@d-today.co.kr",
-   "title": "애플 홈뷰, 챗GPT·클로드 품나…새 코드 발견",
-   "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=713816",
-   "date": "2026-11-09",
+   "title": "와이파이 느려지면 2.4GHz부터 확인…공유기 혼잡 줄이는 방법",
+   "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=715695",
+   "date": "2026-11-16",
+   "beats": [
+    "IT",
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "딜사이트",
+   "reporter": "변한석",
+   "email": "serene84@dealsite.co.kr",
+   "title": "[전자는 지금] LG전자, 휴머노이드 로봇 품질 경쟁력 강화 나선다 外",
+   "link": "https://dealsite.co.kr/articles/172822",
+   "date": "2026-11-16",
    "beats": [
     "AI",
     "스마트홈"
@@ -1985,121 +2044,168 @@
   },
   {
    "beat": "스마트홈",
-   "press": "매일경제",
-   "reporter": "이상현",
-   "email": "lee.sanghyun@mk.co.kr",
-   "title": "“어머니·외할머니 폭행하고 또”…인면수심 30대, 징역형 집행유예",
-   "link": "https://www.mk.co.kr/article/12201346",
-   "date": "2026-11-07",
+   "press": "비지니스코리아",
+   "reporter": "이송훈",
+   "email": "shlee@businesskorea.co.kr",
+   "title": "e편한세상, 데이터 기반 스마트 주거 평가서 6년 연속 선두",
+   "link": "https://www.businesskorea.co.kr/news/articleView.html?idxno=280941",
+   "date": "2026-11-11",
    "beats": [
     "스마트홈"
    ]
   },
   {
    "beat": "스마트홈",
-   "press": "서울신문",
-   "reporter": "하승연",
-   "email": "webmaster@seoul.co.kr",
-   "title": "어머니·외할머니 때려 ‘접근금지’ 명령받았는데…베란다 창문으로 집...",
-   "link": "https://www.seoul.co.kr/news/society/law/2026/11/07/20261107500006?wlog_tag3=naver",
-   "date": "2026-11-07",
+   "press": "한국경제",
+   "reporter": "강영연",
+   "email": "yykang@hankyung.com",
+   "title": "증축 없고 공기 짧다…커지는 '리모델링' 시장",
+   "link": "https://www.hankyung.com/article/2026111357061",
+   "date": "2026-11-13",
    "beats": [
     "스마트홈"
    ]
   },
   {
-   "beat": "스마트홈",
-   "press": "연합뉴스",
-   "reporter": "박영서",
-   "email": "conanys@yna.co.kr",
-   "title": "어머니·외할머니 때리고 '접근금지' 명령까지 무시한 30대",
-   "link": "https://www.yna.co.kr/view/AKR20261106170200062?input=1195m",
-   "date": "2026-11-07",
+   "beat": "인테리어",
+   "press": "100ssd.co.kr",
+   "reporter": "김인하",
+   "email": "kih@100ssd.co.kr",
+   "title": "한샘, 영유아 부모 크리에이터 대상 '홈크루' 6기 모집…이달 18일까지",
+   "link": "https://www.100ssd.co.kr/news/articleView.html?idxno=214429",
+   "date": "2026-11-12",
    "beats": [
-    "스마트홈"
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "1conomynews.co.kr",
+   "reporter": "지현호",
+   "email": "0302@1conomynews.co.kr",
+   "title": "이도에스테이트, 애비슨영 손잡고 상업용 부동산 새판 짠다",
+   "link": "https://www.1conomynews.co.kr/news/articleView.html?idxno=51299",
+   "date": "2026-11-16",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "4th.kr",
+   "reporter": "강민혁",
+   "email": "kmh4th@gmail.com",
+   "title": "JT친애저축은행 경영유의..\"지점장, 횡령 알고도 '적정' 보고\"",
+   "link": "http://www.4th.kr/news/articleView.html?idxno=2121944",
+   "date": "2026-11-16",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "asiaa.co.kr",
+   "reporter": "김보람",
+   "email": "gbr-3@asiaa.co.kr",
+   "title": "LH, 남양주왕숙 등 10개 블록 9000호 규모 민간참여 공공주택 공모",
+   "link": "https://www.asiaa.co.kr/news/articleView.html?idxno=271285",
+   "date": "2026-11-16",
+   "beats": [
+    "인테리어"
    ]
   },
   {
    "beat": "인테리어",
    "press": "asiatime.co.kr",
-   "reporter": "김빛나",
-   "email": "kbn@asiatime.co.kr",
-   "title": "크리에이터·대학 캠퍼스…가전업계, 미래 고객 선점 경쟁",
-   "link": "https://www.asiatime.co.kr/article/20261109500291",
-   "date": "2026-11-09",
-   "beats": [
-    "AI",
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "beyondpost.co.kr",
-   "reporter": "박찬성",
-   "email": "bp_pcs@beyondpost.co.kr",
-   "title": "다노날, 두피 자외선 차단제 사용 후 세정 고민에 주목... '스케일링 두...",
-   "link": "http://www.beyondpost.co.kr/view.php?ud=20261109112153582037600e7ec7_30",
-   "date": "2026-11-09",
+   "reporter": "이원일",
+   "email": "201@asiatime.co.kr",
+   "title": "[16일 서울 영등포구] 24개 학교 학무보 소통 간담회 개최 등",
+   "link": "https://www.asiatime.co.kr/article/20261116500330",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "bloter.net",
-   "reporter": "박현준",
-   "email": "support@dable.io",
-   "title": "자사몰 연말 매출 정점은 11월 중순…블랙프라이데이보다 빨라",
-   "link": "https://www.bloter.net/news/articleView.html?idxno=678120",
-   "date": "2026-11-09",
+   "press": "basketkorea.com",
+   "reporter": "손동환",
+   "email": "sdh253@gmail.com",
+   "title": "부천 하나은행, 11월 홈경기 2연전 이벤트 진행",
+   "link": "https://basketkorea.com/news/newsview.php?ncode=1065594044505750",
+   "date": "2026-11-13",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "busan.com",
-   "reporter": "박수빈",
-   "email": "bysue@busan.com",
-   "title": "동래구 인테리어 사무실 화재… 인명 피해 없어",
-   "link": "https://www.busan.com/view/busan/view.php?code=2026110913494133968",
-   "date": "2026-11-09",
+   "press": "biztribune.co.kr",
+   "reporter": "김은서",
+   "email": "eunseobiz@naver.com",
+   "title": "LH, 연말까지 민간참여 공공주택 9000가구 추가 공모… 공급 확대 속도",
+   "link": "http://www.biztribune.co.kr/news/articleView.html?idxno=362561",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "busan.com",
-   "reporter": "김민진",
-   "email": "mjkim@busan.com",
-   "title": "통영 ‘고양이 학교’의 묘한 매력…‘폐교 활용’ 최우수상",
-   "link": "https://www.busan.com/view/busan/view.php?code=2026110816010812494",
-   "date": "2026-11-09",
+   "press": "businessplus.kr",
+   "reporter": "문준혁",
+   "email": "mun2026@businessplus.kr",
+   "title": "[금융권 이모저모]한국투자신탁운용, 美 주식·국채 혼합 ETF 2종에 1조원...",
+   "link": "https://www.businessplus.kr/news/articleView.html?idxno=119916",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "dnews.co.kr",
-   "reporter": "서용원",
-   "email": "anton@dnews.co.kr",
-   "title": "KCC글라스 홈씨씨, 대형 석재 디자인 벽장재 ‘비센티월’ 출시",
-   "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611090856131780130",
-   "date": "2026-11-09",
+   "press": "cnbizm.com",
+   "reporter": "안용호",
+   "email": "ahnsbook@naver.com",
+   "title": "영등포구,  교육 현장의 고민을 듣고 지원 방향을 구체화...'학부모 소통...",
+   "link": "https://www.cnbizm.com/news/articleView.html?idxno=321630",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "e-science.co.kr",
-   "reporter": "김연옥",
-   "email": "yeonok@e-science.co.kr",
-   "title": "한샘, 블랙프라이데이 맞아 '쌤위크' 진행…소파·식탁 등 최대 50% 할인",
-   "link": "https://www.e-science.co.kr/news/articleView.html?idxno=139290",
-   "date": "2026-11-09",
+   "press": "daily.hankooki.com",
+   "reporter": "임유진",
+   "email": "lim0123@hankooki.com",
+   "title": "신보, 마포에 비수도권 스타트업 지원 공간 'NODE' 개관",
+   "link": "https://daily.hankooki.com/news/articleView.html?idxno=1425512",
+   "date": "2026-11-16",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "dkilbo.com",
+   "reporter": "남보수",
+   "email": "bosu888@hanmail.net",
+   "title": "【기획】구미 국가1산단, 50년만의 대변혁...삼성 AI데이터센터부터 4성...",
+   "link": "https://www.dkilbo.com/news/articleView.html?idxno=560859",
+   "date": "2026-11-16",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "ebn.co.kr",
+   "reporter": "이병우",
+   "email": "news7251@ebn.co.kr",
+   "title": "가구 안 팔리고 재고 쌓인다...한샘에 켜진 '돈맥경화' 경고등",
+   "link": "https://www.ebn.co.kr/news/articleView.html?idxno=1731807",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
@@ -2107,181 +2213,120 @@
   {
    "beat": "인테리어",
    "press": "econovill.com",
-   "reporter": "최진홍",
-   "email": "rgdsz@econovill.com",
-   "title": "오늘의집 대형 가습기 검색 475% 급증 \"10월 하순 한파가 월동 준비 불렀...",
-   "link": "https://www.econovill.com/news/articleView.html?idxno=756255",
-   "date": "2026-11-06",
+   "reporter": "양정민",
+   "email": "philip@econovill.com",
+   "title": "다이슨, '보증 연장+2주 무료체험' 프리미엄 케어 프로그램 운영",
+   "link": "https://www.econovill.com/news/articleView.html?idxno=757147",
+   "date": "2026-11-13",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "efnews.co.kr",
-   "reporter": "임영빈",
-   "email": "touchslam@naver.com",
-   "title": "KB국민은행, 강원 자립준비청년 위한 'KB드림홈' 새단장",
-   "link": "http://www.efnews.co.kr/news/articleView.html?idxno=133838",
-   "date": "2026-11-09",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "financialpost.co.kr",
-   "reporter": "임소희",
-   "email": "market@financialpost.co.kr",
-   "title": "KB국민은행, 자립준비청년 위한 'KB드림홈' 새단장 기념식 개최",
-   "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=285595",
-   "date": "2026-11-09",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "ftoday.co.kr",
-   "reporter": "이조은",
-   "email": "joy8282@ftoday.co.kr",
-   "title": "오늘의집, 빨라진 추위에 '집콕 방한템' 검색량 급증…'시즌 기획전' 운...",
-   "link": "http://www.ftoday.co.kr/news/articleView.html?idxno=369135",
-   "date": "2026-11-06",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "gamechosun.co.kr",
-   "reporter": "성수안",
-   "email": "nakir@chosun.com",
-   "title": "루미노라 인터랙티브, 캐주얼 백화점 경영 시뮬레이션 ‘마이 시크 몰’...",
-   "link": "https://www.gamechosun.co.kr/webzine/article/view.php?no=227375",
-   "date": "2026-11-09",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "globalepic.co.kr",
+   "press": "esquirekorea.co.kr",
    "reporter": "",
-   "email": "keehwan.sung@daum.net",
-   "title": "KB국민은행, 자립준비청년 홀로서기 밀착 지원…‘KB드림홈’ 구축",
-   "link": "https://www.globalepic.co.kr/view.php?ud=2026110914192939997cc35ccc5c_29",
-   "date": "2026-11-09",
+   "email": "esquirekorea@hll.kr",
+   "title": "겨울 코디 어렵다면? '영화 속 패션' 따라 입기 5",
+   "link": "https://www.esquirekorea.co.kr/article/1912963",
+   "date": "2026-11-12",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "globalepic.co.kr",
-   "reporter": "",
-   "email": "wow@globalepic.co.kr",
-   "title": "에어비앤비, 조부모의 터전을 여행지로...‘웰컴투 할미우드’ 사연 공...",
-   "link": "https://www.globalepic.co.kr/view.php?ud=2026110516023691069aeda69934_29",
-   "date": "2026-11-05",
+   "press": "hinews.co.kr",
+   "reporter": "박미소",
+   "email": "miso@hinews.co.kr",
+   "title": "명륜당 부당지원 의혹 수사 본격화…오너 일가 대부업체와 가맹점 대출...",
+   "link": "https://www.hinews.co.kr/view.php?ud=202611161338127795cd8b879b3c_48",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "hansbiz.co.kr",
-   "reporter": "김종효",
-   "email": "media@dable.io",
-   "title": "오늘의집, 방한 상품 검색 급증",
-   "link": "http://www.hansbiz.co.kr/news/articleView.html?idxno=880652",
-   "date": "2026-11-06",
+   "press": "idomin.com",
+   "reporter": "이영호",
+   "email": "hoho@idomin.com",
+   "title": "영유아 복합 놀이공간 남해군 다같이키움센터 문 열어",
+   "link": "https://www.idomin.com/news/articleView.html?idxno=2019688",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "insight.co.kr",
-   "reporter": "김나리",
-   "email": "nari.kim@insight.co.kr",
-   "title": "박보검 미용사 자격증 취득...이상이·고경표와 통영서 2호점 출범",
-   "link": "https://www.insight.co.kr/news/581229",
-   "date": "2026-11-09",
+   "press": "jjan.kr",
+   "reporter": "국승호",
+   "email": "cook1991@hanmail.net",
+   "title": "[의문투성이 진안 홍삼스파] (중) 핵심 설비 놔두고 엉뚱한 곳 뜯었다…...",
+   "link": "https://www.jjan.kr/article/20261116500140",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "job-post.co.kr",
-   "reporter": "임택",
-   "email": "it8677@naver.com",
-   "title": "KB국민은행, 자립준비청년 주거환경 개선 지원",
-   "link": "https://www.job-post.co.kr/news/articleView.html?idxno=237288",
-   "date": "2026-11-09",
+   "press": "joongangenews.com",
+   "reporter": "고영규",
+   "email": "midusyk@joongangenews.com",
+   "title": "LH, 하반기 10개 블록 9000호 규모 민간참여사업 공모 실시",
+   "link": "https://www.joongangenews.com/news/articleView.html?idxno=564162",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "kpinews.kr",
-   "reporter": "유태영",
-   "email": "ty@kpinews.kr",
-   "title": "롯데면세점, 인천공항서 '샤넬 홀리데이 메가 포디움' 팝업 선보여",
-   "link": "https://www.kpinews.kr/newsView/1065590103980755",
-   "date": "2026-11-09",
-   "beats": [
-    "AI",
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "lecturernews.com",
-   "reporter": "이미숙",
-   "email": "Kus12suk@naver.com",
-   "title": "'생활의 달인' 은둔식달-보문동 3대 중식당, 남대문 스카프 아저씨, 고군...",
-   "link": "https://www.lecturernews.com/news/articleView.html?idxno=213486",
-   "date": "2026-11-09",
+   "press": "joongboo.com",
+   "reporter": "시민",
+   "email": "ysu453@joongboo.com",
+   "title": "'38억 증액' 인천소상공인복합클러스터, 부실 설계·관리 책임 도마",
+   "link": "https://www.joongboo.com/news/articleView.html?idxno=363742630",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "lecturernews.com",
-   "reporter": "이태훈",
-   "email": "hoseo23@nate.com",
-   "title": "청소년 패션매거진 '미드웨이(MIDWAY)' 11월호 발간...\"깨끗한 에너지·일...",
-   "link": "https://www.lecturernews.com/news/articleView.html?idxno=213266",
-   "date": "2026-11-05",
+   "press": "kbsm.net",
+   "reporter": "김용호",
+   "email": "gyeong7900@daum.net",
+   "title": "구미 국가1산단의 대변혁...삼성 AI데이터센터부터 4성급 호텔까지",
+   "link": "https://www.kbsm.net/news/view.php?idx=541925",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "megaeconomy.co.kr",
-   "reporter": "박성태",
-   "email": "pst2622@naver.com",
-   "title": "부산 북구, 구포역 광장서 ‘취향스테이션 청년마켓’ 성료…청년 창작...",
-   "link": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065589562382945",
-   "date": "2026-11-09",
+   "press": "lawissue.co.kr",
+   "reporter": "편도욱",
+   "email": "toy1000@hanmail.net",
+   "title": "서울카페쇼, 35개국 643개사 참가…2027년 킨텍스서 새 출발",
+   "link": "https://www.lawissue.co.kr/view.php?ud=202611161428297160204ead0791_12",
+   "date": "2026-11-16",
    "beats": [
-    "AI",
+    "IT",
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "moneystorm.kr",
-   "reporter": "이충훈",
-   "email": "lch35mm@moneystorm.kr",
-   "title": "KB국민은행, 자립준비청년 주거환경 지원…'KB드림홈' 새단장",
-   "link": "https://www.moneystorm.kr/news/articleView.html?idxno=8219",
-   "date": "2026-11-09",
+   "press": "m.sports.naver.com",
+   "reporter": "최창환",
+   "email": "doublec@jumpball.co.kr",
+   "title": "‘기프트 룰렛부터 치어리더 팬 사인회까지’ 하나은행, 11월 홈 2연전 이...",
+   "link": "https://m.sports.naver.com/basketball/article/065/0000304552",
+   "date": "2026-11-13",
    "beats": [
     "인테리어"
    ]
@@ -2289,96 +2334,132 @@
   {
    "beat": "인테리어",
    "press": "mydaily.co.kr",
-   "reporter": "강다윤",
-   "email": "k_yo_on@mydaily.co.kr",
-   "title": "'K팝 킹' 엑소, 왕좌는 여전히 굳건했다…'닷' 찍고 약속한 다음 페이지...",
-   "link": "https://www.mydaily.co.kr/page/view/2026110821535534767",
-   "date": "2026-11-08",
+   "reporter": "천주영",
+   "email": "young1997@mydaily.co.kr",
+   "title": "더존하우징, 포브스코리아 '2026 고객신뢰도 1위 프리미엄 브랜드대상'...",
+   "link": "https://www.mydaily.co.kr/page/view/2026111614535637769",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "smartbizn.com",
-   "reporter": "최준",
-   "email": "cjn5164@smartbizn.com",
-   "title": "금융업계, 청년 자립부터 지역 상생까지···사회공헌 보폭 확대",
-   "link": "https://www.smartbizn.com/news/articleView.html?idxno=158848",
-   "date": "2026-11-09",
+   "press": "newscape.co.kr",
+   "reporter": "권진욱",
+   "email": "kwon0726@newscape.co.kr",
+   "title": "임만균 서울시의장, 잠실 마이스·주경기장 현장 안전실태 점검",
+   "link": "http://www.newscape.co.kr/news/articleView.html?idxno=125835",
+   "date": "2026-11-16",
    "beats": [
-    "스마트홈",
+    "경쟁사",
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "socialvalue.kr",
-   "reporter": "변호인",
-   "email": "hireme@nate.com",
-   "title": "KB국민은행, 자립준비청년 생활관 10곳 새단장…지원 규모 10억원으로 확...",
-   "link": "https://www.socialvalue.kr/news/view/1065591022365391",
-   "date": "2026-11-09",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "srtimes.kr",
-   "reporter": "김동운",
-   "email": "support@dable.io",
-   "title": "국민은행, 자립준비청년 주거환경 개선…전국 10개 시설 새단장",
-   "link": "http://www.srtimes.kr/news/articleView.html?idxno=217059",
-   "date": "2026-11-09",
+   "press": "newscj.com",
+   "reporter": "김정자",
+   "email": "newscjtop@naver.com",
+   "title": "LH, 하반기 2조 5000억원 규모 민간참여 공공주택 공모… 9065호 공급 추...",
+   "link": "https://www.newscj.com/news/articleView.html?idxno=3449048",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "the-biz.co.kr",
-   "reporter": "안채영",
-   "email": "acy@the-biz.co.kr",
-   "title": "공사비 부담에… 벽장재 '시공 경쟁', KCC글라스도 가세",
-   "link": "http://www.the-biz.co.kr/news/articleView.html?idxno=730972",
-   "date": "2026-11-09",
+   "press": "newsclaim.co.kr",
+   "reporter": "진재석",
+   "email": "tnrrud2280@hanmail.net",
+   "title": "전북도 대한민국 주거복지문화대상 대상 수상",
+   "link": "https://www.newsclaim.co.kr/news/articleView.html?idxno=3082823",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "thefirstmedia.net",
-   "reporter": "임한희",
-   "email": "dain291@daum.net",
-   "title": "오늘의집, 추위에 방한용품 검색 급증…대형 가습기 475%↑",
-   "link": "http://www.thefirstmedia.net/news/articleView.html?idxno=212942",
-   "date": "2026-11-07",
+   "press": "pointe.co.kr",
+   "reporter": "라명숙",
+   "email": "pointe0303@naver.com",
+   "title": "다이소몰, 크리스마스 기획전…500여 종 시즌 신상 선봬",
+   "link": "https://www.pointe.co.kr/news/articleView.html?idxno=87838",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "thepowernews.co.kr",
-   "reporter": "이경호",
-   "email": "lkh@thepowernews.co.kr",
-   "title": "윤선희 서울시의원, 서울시립미술관 관리비 부과 누락·관리 부실 질타",
-   "link": "https://www.thepowernews.co.kr/view.php?ud=202611091450519960de3f0aa1be_7",
-   "date": "2026-11-09",
+   "press": "ppss.kr",
+   "reporter": "정성남",
+   "email": "csn8013@naver.com",
+   "title": "이성배 서울시의회 부의장 \"잠실 대체야구장 관람객 안전, 셔틀버스 운...",
+   "link": "https://www.ppss.kr/news/articleView.html?idxno=321212",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "theviewers.co.kr",
-   "reporter": "내미림",
-   "email": "mirim705@viewers.co.kr",
-   "title": "[유통갤러리] 롯데百, ‘메이커스 마크 독주’ 팝업 연다 外",
-   "link": "https://theviewers.co.kr/View.aspx?No=4303128",
-   "date": "2026-11-09",
+   "press": "rookie.co.kr",
+   "reporter": "이학철",
+   "email": "moonwalker90@rookie.co.kr",
+   "title": "하나은행 여자농구단, 홈 2연전 맞아 다채로운 이벤트 준비",
+   "link": "http://www.rookie.co.kr/news/articleView.html?idxno=130272",
+   "date": "2026-11-13",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "shinailbo.co.kr",
+   "reporter": "유용준",
+   "email": "yjyou@shinailbo.co.kr",
+   "title": "영종구, 주민 의료접근성 높일 보건소 개소",
+   "link": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5083932",
+   "date": "2026-11-16",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "sportalkorea.com",
+   "reporter": "이정엽",
+   "email": "media@dable.io",
+   "title": "하지원, 우수한 등 치어리더 팬사인회 개최, 하나은행, 14일 홈경기서 다...",
+   "link": "https://www.sportalkorea.com/news/articleView.html?idxno=2025052909553700510",
+   "date": "2026-11-14",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "sportsseoul.com",
+   "reporter": "이소영",
+   "email": "jquery@1.11.1.min.js",
+   "title": "‘하나하나 당기네?’ 치어리더 팬 사인회에 놀러 와!…하나은행, 홈 2연...",
+   "link": "https://www.sportsseoul.com/news/read/1649624?ref=naver",
+   "date": "2026-11-13",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "techholic.co.kr",
+   "reporter": "",
+   "email": "thtower1@techholic.co.kr",
+   "title": "한샘, 커스텀 세라믹 식탁 '디에토' 2종 출시",
+   "link": "http://www.techholic.co.kr/news/articleView.html?idxno=223699",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
@@ -2386,205 +2467,168 @@
   {
    "beat": "인테리어",
    "press": "topstarnews.net",
-   "reporter": "정예린",
+   "reporter": "이수민",
    "email": "reporter@topstarnews.co.kr",
-   "title": "조현아, 올블랙 자켓 스타일링…17kg 감량 후 근황",
-   "link": "https://www.topstarnews.net/news/articleView.html?idxno=16270908",
-   "date": "2026-11-07",
+   "title": "송강, 계단 위 올블랙 비주얼…'하얀 스캔들' 앞두고 여유",
+   "link": "https://www.topstarnews.net/news/articleView.html?idxno=16276482",
+   "date": "2026-11-14",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "viva100.com",
-   "reporter": "안상준",
-   "email": "bridgenewsviva@gmail.com",
-   "title": "스펙보다 경험⋯ 삼성·LG 크리에이터 마케팅, ‘실 사용·소통’ 진화",
-   "link": "https://www.viva100.com/article/20261109500696",
-   "date": "2026-11-09",
+   "press": "topstarnews.net",
+   "reporter": "한서영",
+   "email": "reporter@topstarnews.co.kr",
+   "title": "세븐틴 에스쿱스, 은빛 캐리어와 함께 공항 사로잡은 댄디한 출국룩",
+   "link": "https://www.topstarnews.net/news/articleView.html?idxno=16276144",
+   "date": "2026-11-13",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "topstarnews.net",
+   "reporter": "장영권",
+   "email": "reporter@topstarnews.co.kr",
+   "title": "케플러 샤오팅, 활 시선 고정한 촬영 비하인드",
+   "link": "https://www.topstarnews.net/news/articleView.html?idxno=16275088",
+   "date": "2026-11-12",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "ytn.co.kr",
+   "reporter": "촬영",
+   "email": "social@ytn.co.kr",
+   "title": "'가전'만으로는 안 된다... 가전업계의 새로운 돌파구는? [자막뉴스]",
+   "link": "https://www.ytn.co.kr/_ln/0134_202611131107094556",
+   "date": "2026-11-13",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "ytn.co.kr",
+   "reporter": "차정윤",
+   "email": "jycha@ytn.co.kr",
+   "title": "\"가전 넘어 리빙으로\"...가전업계의 새 승부수",
+   "link": "https://www.ytn.co.kr/_ln/0102_202611130618429844",
+   "date": "2026-11-13",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "머니투데이",
+   "reporter": "이민하",
+   "email": "media@dable.io",
+   "title": "임만균 \"잠실 마이스, 1월 착공 일정 차질 없도록\"…공사현장 점검",
+   "link": "https://www.mt.co.kr/policy/2026/11/16/2026111614500184096",
+   "date": "2026-11-16",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "아시아경제",
+   "reporter": "이날",
+   "email": "blooming@asiae.co.kr",
+   "title": "중국 10월 산업생산·소매판매 둔화…車소비 21.4% 급감",
+   "link": "https://view.asiae.co.kr/article/2026111614251733822",
+   "date": "2026-11-16",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "연합뉴스",
+   "reporter": "박수윤",
+   "email": "jhcho@yna.co.kr",
+   "title": "정부, 워싱턴DC 주미대사관 재건축 추진…3천억원 투입 검토",
+   "link": "https://www.yna.co.kr/view/AKR20261116104800001?input=1195m",
+   "date": "2026-11-16",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "조선일보",
+   "reporter": "정두용",
+   "email": "jdy2230@chosunbiz.com",
+   "title": "다이슨코리아, 직영 매장 고객 서비스 확대… 청소기 보증기간 연장·무...",
+   "link": "https://biz.chosun.com/it-science/ict/2026/11/12/P7DIKIXOMRHBTIPOKICJVOSKUI/?utm_source=naver&utm_medium=original&utm_campaign=biz",
+   "date": "2026-11-12",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "헤럴드경제",
+   "reporter": "장연주",
+   "email": "leechemy@heraldcorp.com",
+   "title": "밀본코리아 오주아, ‘2026 오주아 써밋’ 성황…2027년 신제품 ‘미라...",
+   "link": "https://biz.heraldcorp.com/article/10938666?ref=naver",
+   "date": "2026-11-16",
    "beats": [
     "AI",
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "ziksir.com",
-   "reporter": "라지현",
-   "email": "news@ziksir.com",
-   "title": "한샘, 연말 가구 수요 공략···소파·식탁 최대 50% 할인",
-   "link": "https://www.ziksir.com/news/articleView.html?idxno=152555",
-   "date": "2026-11-09",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "ziksir.com",
-   "reporter": "손성은",
-   "email": "money@ziksir.com",
-   "title": "KB국민은행, 자립준비청년 주거환경 개선…전국 10개 생활관 새단장",
-   "link": "https://www.ziksir.com/news/articleView.html?idxno=152546",
-   "date": "2026-11-09",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "뉴스핌",
-   "reporter": "이석훈",
-   "email": "stpoemseok@newspim.com",
-   "title": "본업 경쟁력 흔들리는 퍼시스…부동산 투자로 돌파구 찾나",
-   "link": "https://www.newspim.com/news/view/20261109000847",
-   "date": "2026-11-09",
-   "beats": [
-    "AI",
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "뉴스핌",
-   "reporter": "정태선",
-   "email": "windy@newspim.com",
-   "title": "이정미 시의원 \"숭례문 조망길 막히면 주변 개발과 연계를\"",
-   "link": "https://www.newspim.com/news/view/20261109000903",
-   "date": "2026-11-09",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "뉴시스",
-   "reporter": "송연주",
-   "email": "photo@newsis.com",
-   "title": "\"아파트 5000가구 입주 시장\"…설레는 가구업계",
-   "link": "https://www.newsis.com/view/NISX20261106_0003858136",
-   "date": "2026-11-08",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "디지털투데이",
-   "reporter": "이지영",
-   "email": "ljy@d-today.co.kr",
-   "title": "KB국민은행, 자립준비청년 주거환경 개선…'KB드림홈' 새단장",
-   "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=713798",
-   "date": "2026-11-09",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "서울신문",
-   "reporter": "안상미",
-   "email": "smahn1@metroseoul.co.kr",
-   "title": "KB국민은행, 자립준비청년 지원 'KB드림홈' 새단장",
-   "link": "http://www.metroseoul.co.kr/article/20261109500304",
-   "date": "2026-11-09",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "서울신문",
-   "reporter": "전국부",
-   "email": "webmaster@seoul.co.kr",
-   "title": "론진, 2026 마스터 컬렉션 론칭 이벤트 개최",
-   "link": "https://www.seoul.co.kr/news/economy/2026/11/06/20261106500187?wlog_tag3=naver",
-   "date": "2026-11-06",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "전자신문",
-   "reporter": "현대인",
-   "email": "media@dable.io",
-   "title": "오늘의집, 홈&리빙 크리에이터 10명에 1000만원 지원…'2026 올해의집' 어...",
-   "link": "https://www.etnews.com/20261109000274",
-   "date": "2026-11-09",
-   "beats": [
-    "인테리어"
-   ]
-  },
-  {
-   "beat": "인테리어",
-   "press": "전자신문",
-   "reporter": "류태웅",
-   "email": "media@dable.io",
-   "title": "KB국민은행, 자립준비청년 'KB드림홈' 10곳 새단장…지원 10억원으로 확...",
-   "link": "https://www.etnews.com/20261109000318",
-   "date": "2026-11-09",
-   "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "AI",
-   "press": "매일경제",
-   "reporter": "남우현",
+   "press": "dnews.co.kr",
+   "reporter": "김옥찬",
    "email": "",
-   "title": "코스피 5000도 불안한데 7100 간다고?…대신證 “반도체 유망”",
-   "link": "https://www.mk.co.kr/article/12202411",
-   "date": "2026-11-09",
+   "title": "[부산ㆍ경남 대학 브리핑 모음(11월16일)] 경상국립대, 19개 대학과 대학...",
+   "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611141053427920032",
+   "date": "2026-11-16",
    "beats": [
     "AI"
    ]
   },
   {
-   "beat": "경쟁사",
-   "press": "중앙일보",
-   "reporter": "박영우",
+   "beat": "AI",
+   "press": "뉴시스",
+   "reporter": "김경택",
    "email": "",
-   "title": "한때 경쟁자서 팀으로…삼성, 현대차 경영진 초청 ‘첫 교류’",
-   "link": "https://www.joongang.co.kr/article/25476802",
-   "date": "2026-11-09",
+   "title": "바로팜, ‘K-뷰티 약국 밸류업 심포지엄' 개최",
+   "link": "https://www.newsis.com/view/NISX20261116_0003869780",
+   "date": "2026-11-16",
    "beats": [
-    "경쟁사"
+    "AI"
+   ]
+  },
+  {
+   "beat": "AI",
+   "press": "파이낸셜뉴스",
+   "reporter": "윤홍집",
+   "email": "",
+   "title": "모바일 넘어 자동차·로봇까지…퀄컴, 에이전틱 AI 생태계 확장",
+   "link": "https://www.fnnews.com/news/202611160925383207",
+   "date": "2026-11-16",
+   "beats": [
+    "AI"
    ]
   },
   {
    "beat": "부동산",
-   "press": "inews365.com",
-   "reporter": "주진석",
+   "press": "뉴시스",
+   "reporter": "변해정",
    "email": "",
-   "title": "괴산군, 내년도 개별주택가격 산정 위한 특성 조사 착수",
-   "link": "https://www.inews365.com/news/article.html?no=942785",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "매일경제",
-   "reporter": "김중황",
-   "email": "",
-   "title": "“한 달 27시간 길에서 보낸다”…청약 인기 아파트 공통점은 ‘직주근...",
-   "link": "https://www.mk.co.kr/article/12202371",
-   "date": "2026-11-09",
-   "beats": [
-    "부동산"
-   ]
-  },
-  {
-   "beat": "부동산",
-   "press": "서울신문",
-   "reporter": "박재홍",
-   "email": "",
-   "title": "“정비사업 더 빠르게” 동작, 원스톱 행정지원체계 가동",
-   "link": "https://www.seoul.co.kr/news/publicnews/2026/11/09/20261109500148?wlog_tag3=naver",
-   "date": "2026-11-09",
+   "title": "두산건설, '두산위브 더포레 성남' 12월 분양…162가구 일반분양",
+   "link": "https://www.newsis.com/view/NISX20261116_0003869500",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
@@ -2592,11 +2636,11 @@
   {
    "beat": "부동산",
    "press": "파이낸셜뉴스",
-   "reporter": "권준호",
+   "reporter": "김현선",
    "email": "",
-   "title": "전국구 청약 가능...'평택 고덕 우미린 더 프리미어' 10일 1순위 접수",
-   "link": "https://www.fnnews.com/news/202611091443261585",
-   "date": "2026-11-09",
+   "title": "지방 신도시도 ‘중심부 쏠림’…행정·상업·교육 품은 ‘원스톱 생활...",
+   "link": "https://www.fnnews.com/news/202611161102529280",
+   "date": "2026-11-16",
    "beats": [
     "부동산"
    ]
@@ -2606,33 +2650,57 @@
    "press": "economist.co.kr",
    "reporter": "이용우",
    "email": "",
-   "title": "HDC랩스 베스틴, 롯데원TV서 얼굴인식 도어락 ‘400MR’ 선보여",
-   "link": "https://economist.co.kr/article/view/ecn202611060010",
-   "date": "2026-11-06",
+   "title": "e편한세상, ‘스마트 아파트 브랜드 평판’ 6년 연속 1위",
+   "link": "https://economist.co.kr/article/view/ecn202611100062",
+   "date": "2026-11-11",
+   "beats": [
+    "스마트홈"
+   ]
+  },
+  {
+   "beat": "스마트홈",
+   "press": "경향신문",
+   "reporter": "정례",
+   "email": "",
+   "title": "​아이프칠드런과 자이에스앤디가 예술로 어린이들의 상상력 키워준다",
+   "link": "https://www.khan.co.kr/article/202611161425018",
+   "date": "2026-11-16",
    "beats": [
     "스마트홈"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "inews365.com",
-   "reporter": "어전략팀",
+   "press": "economist.co.kr",
+   "reporter": "정지은",
    "email": "",
-   "title": "기후위기의 청구서를 다음 세대에 넘길 것인가",
-   "link": "https://www.inews365.com/news/article.html?no=942778",
-   "date": "2026-11-09",
+   "title": "\"58세에 첫 내 집 마련\" 김광규, 이사 간 아파트값 얼마길래?",
+   "link": "https://economist.co.kr/article/view/ecn202611160018",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
   },
   {
    "beat": "인테리어",
-   "press": "파이낸셜뉴스",
-   "reporter": "장유하",
+   "press": "ngonews.kr",
+   "reporter": "고석태",
    "email": "",
-   "title": "'5성급 호텔'의 포근함… 집으로 가져갈까 [Weekend 호텔]",
-   "link": "https://www.fnnews.com/news/202611051818054901",
-   "date": "2026-11-06",
+   "title": "인천 영종구보건소, 청사 확장·리모델링 마치고 본관·별관 체제 공식...",
+   "link": "https://www.ngonews.kr/news/articleView.html?idxno=243288",
+   "date": "2026-11-16",
+   "beats": [
+    "인테리어"
+   ]
+  },
+  {
+   "beat": "인테리어",
+   "press": "ohmynews.com",
+   "reporter": "추천연재",
+   "email": "",
+   "title": "\"주문 안 해도 돼요, 앉았다 가세요\" 함양 '청소년 웰컴존'",
+   "link": "https://www.ohmynews.com/NWS_Web/View/at_pg.aspx?CNTN_CD=A0003285316&CMPT_CD=P0010&utm_source=naver&utm_medium=newsearch&utm_campaign=naver_news",
+   "date": "2026-11-16",
    "beats": [
     "인테리어"
    ]
