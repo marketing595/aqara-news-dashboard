@@ -854,7 +854,7 @@ function editRow(g){
     <div><label>대리 소속<input data-e="sub.org" value="${esc(s.org || '')}"></label></div>
     <div><label>대리 연락처<input data-e="sub.phone" value="${esc(fmtPhone(s.phone || ''))}"></label></div>
     <div><label>직책(초대받은 분)<input data-e="rep.title" value="${esc(r.title)}"></label></div>
-    <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처 / 이메일</span><textarea data-e="comps" rows="${Math.max(3, (g.comps || []).length + 1)}">${esc((g.comps || []).map(c => [c.name, c.title || '', fmtPhone(c.phone) || '', c.email || ''].join(' / ').replace(/( \/ )+$/, '')).join('\n'))}</textarea></label></div>
+    <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처 / 이메일 — 직책은 빼도 되고, 번호·이메일은 순서 상관없이 알아서 들어가요</span><textarea data-e="comps" rows="${Math.max(3, (g.comps || []).length + 1)}">${esc((g.comps || []).map(c => [c.name, c.title || '', fmtPhone(c.phone) || '', c.email || ''].join(' / ').replace(/( \/ )+$/, '')).join('\n'))}</textarea></label></div>
     <div class="full"><label>담당자 메모<input data-e="memo" value="${esc(g.memo || '')}" placeholder="통화 내용 등(손님에겐 안 보임)"></label></div>
   </div>
   <div class="tools" style="margin-top:10px"><button class="btn pri" id="edSave">저장</button><button class="btn" id="edCancel">닫기</button><button class="btn" id="edSent">${isSent(g) ? '문자 보냄 표시 해제' : '문자 보냄으로 표시'}</button><button class="btn" id="edMsg" style="background:#fff8d6;border-color:#f2d36b">${isMsg(g) ? '문자/메일 발송 완료 해제' : '문자/메일 발송 완료로 표시'}</button><button class="btn ${isRej(g) ? '' : 'danger'}" id="edRej">${isRej(g) ? '참석 거절 해제' : '참석 거절로 표시'}</button><span style="flex:1"></span><button class="btn danger" id="edDel">이 그룹 삭제</button></div>
@@ -914,8 +914,8 @@ function bindEdit(){
   $('#edSave').onclick = async () => {
     const v = (k) => (box.querySelector(`[data-e="${k}"]`) || {}).value || '';
     const g0 = G[OPEN] || {};
-    const comps = v('comps').split('\n').map(l => l.split('/').map(x => x.trim())).filter(a => a[0])
-      .map(a => ({ name: a[0], title: a[1] || '', phone: a[2] || '', email: a[3] || '', org: (g0.comps || []).map(c => c.name === a[0] ? c.org : '').find(Boolean) || '' }));   // 기존 동행인 소속 유지, 없으면 서버가 대표 소속으로 채움
+    const comps = parseCompLines(v('comps'))
+      .map(p => Object.assign(p, { org: (g0.comps || []).map(c => c.name === p.name ? c.org : '').find(Boolean) || '' }));   // 기존 동행인 소속 유지, 없으면 서버가 대표 소속으로 채움
     const body = { op: 'admin-save', t: OPEN, status: v('status'),
       rep: { name: v('rep.name'), org: v('rep.org'), title: v('rep.title'), phone: v('rep.phone') },
       sub: v('sub.name') ? { name: v('sub.name'), org: v('sub.org'), phone: v('sub.phone') } : null,
@@ -924,6 +924,18 @@ function bindEdit(){
     const j = await api(body); if(!j.ok) return toast(j.error || '저장 실패');
     G[OPEN] = Object.assign(j.group, { sent: G[OPEN].sent, open: G[OPEN].open }); EDITING = false; toast('저장했어요'); paint();
   };
+}
+
+// 동행인 입력칸(한 줄에 한 명, '/'로 칸 나눔) → [{name,title,phone,email}]
+// 첫 칸은 성함, 나머지는 순서와 상관없이 번호처럼 생긴 칸 = 연락처, @ 있는 칸 = 이메일, 남은 칸 = 직책
+// (2026-11-17: '강주희 / 010-5611-8875'처럼 직책 없이 적으면 번호가 직책으로 들어가던 문제)
+function parseCompLines(text){
+  const isTel = (s) => /^[\d\s()+.\-]+$/.test(s) && s.replace(/\D/g, '').length >= 9;
+  return String(text || '').split('\n').map(l => l.split('/').map(x => x.trim())).filter(a => a[0]).map(a => {
+    const p = { name: a[0], title: '', phone: '', email: '' };
+    a.slice(1).filter(Boolean).forEach(x => { if(!p.phone && isTel(x)) p.phone = x; else if(!p.email && x.includes('@')) p.email = x; else if(!p.title) p.title = x; });
+    return p;
+  });
 }
 
 // ── 엑셀 가져오기 ──
@@ -1756,14 +1768,14 @@ $('#btnAdd').onclick = () => {
       <div><label>연락처<input data-a="phone" placeholder="010-0000-0000"></label></div>
       <div><label>이메일<input data-a="email"></label></div>
       <div><label>초청 경로<input data-a="route" value="${test ? '테스트' : ''}"></label></div>
-      <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처 / 이메일</span> (없으면 비워 두기)<textarea data-a="comps" rows="3" style="height:auto;padding:6px 9px"></textarea></label></div>
+      <div class="full"><label>동행인 — 한 줄에 한 명 · <span style="font-weight:400">성함 / 직책 / 연락처 / 이메일 — 직책은 빼도 되고, 번호·이메일은 순서 상관없이 알아서 들어가요</span> (없으면 비워 두기)<textarea data-a="comps" rows="3" style="height:auto;padding:6px 9px"></textarea></label></div>
     </div>
     <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-x>닫기</button><button class="btn pri" id="addGo">${test ? '테스트 링크 만들기' : '명단에 추가'}</button></div>
     <div id="addOut"></div>`);
   $('#addGo').onclick = async () => {
     const v = (k) => ($(`[data-a="${k}"]`) || {}).value || '';
     if(!v('name').trim()) return toast('성함을 입력해 주세요');
-    const comps = v('comps').split('\n').map(l => l.split('/').map(x => x.trim())).filter(a => a[0]).map(a => ({ name: a[0], title: a[1] || '', phone: a[2] || '', email: a[3] || '', org: v('org') }));
+    const comps = parseCompLines(v('comps')).map(p => Object.assign(p, { org: v('org') }));
     $('#addGo').disabled = true;
     const j = await api({ op: 'add', test, rep: { name: v('name'), title: v('title'), org: v('org'), phone: v('phone') }, email: v('email'), route: v('route'), comps });
     $('#addGo').disabled = false;
