@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-17 03:38",
+ "generatedAt": "2026-11-18 02:39",
  "brands": [
   {
    "name": "아카라",
@@ -127,8 +127,8 @@
     "아카라 홈캠",
     "아카라 스위치",
     "명조 아카라이브",
-    "아카라 l100",
     "원신 아카라이브",
+    "아카라 l100",
     "니케 아카라이브"
    ],
    "recent": [
@@ -345,8 +345,8 @@
     "헤이홈 중국",
     "헤이홈 거치대",
     "헤이홈 연결",
-    "헤이홈 공유",
     "헤이홈 오프라인",
+    "헤이홈 공유",
     "헤이홈 카메라",
     "헤이홈 프로"
    ],
@@ -447,51 +447,39 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69829,
+   "total": 69834,
    "sentiment": {
-    "pos": 3,
-    "neu": 57,
+    "pos": 6,
+    "neu": 54,
     "neg": 0
    },
    "keywords": [
     [
      "수능",
-     69
+     67
     ],
     [
      "사용",
-     51
+     48
     ],
     [
      "연결된",
-     47
+     44
     ],
     [
      "시스템에어컨의",
-     45
+     42
     ],
     [
      "상태와",
-     40
+     37
     ],
     [
      "긴급",
-     39
-    ],
-    [
-     "원격으로",
      35
     ],
     [
-     "상담사가",
-     34
-    ],
-    [
-     "설정을",
-     33
-    ],
-    [
-     "점검",
+     "원격으로",
      32
     ],
     [
@@ -499,41 +487,57 @@
      31
     ],
     [
-     "원격진단",
+     "점검",
      31
+    ],
+    [
+     "원격진단",
+     30
+    ],
+    [
+     "설정을",
+     30
+    ],
+    [
+     "상담사가",
+     30
     ],
     [
      "고사장",
      29
     ],
     [
-     "LG전자",
+     "SmartThings",
      28
+    ],
+    [
+     "LG전자",
+     27
     ],
     [
      "시스템에어컨",
      27
     ],
     [
-     "AI로",
+     "AI",
      27
     ],
     [
-     "SmartThings",
-     26
-    ],
-    [
-     "AI",
-     26
+     "가전제품",
+     25
     ]
    ],
    "posWords": [
     [
      "강화",
-     2
+     3
     ],
     [
      "혁신",
+     2
+    ],
+    [
+     "개선",
      1
     ],
     [
@@ -543,17 +547,47 @@
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 냉장고",
+    "삼성 스마트싱스 스위치",
+    "삼성 스마트싱스 도어락",
     "삼성 스마트싱스 홈캠",
-    "삼성 스마트싱스 도어락"
+    "삼성 스마트싱스 냉장고"
    ],
    "recent": [
+    {
+     "title": "삼성전자·LG전자 \"수능 고사장, 시스템에어컨 이상 무\"",
+     "source": "techm.kr",
+     "date": "2026-11-17",
+     "link": "https://www.techm.kr/news/articleView.html?idxno=157432"
+    },
+    {
+     "title": "삼성전자·LG전자, 수능 앞두고 시험장 에어컨 점검 나서",
+     "source": "dailypop.kr",
+     "date": "2026-11-17",
+     "link": "http://www.dailypop.kr/news/articleView.html?idxno=104636"
+    },
+    {
+     "title": "[넥스트 K-브랜드 대상] 미래 삶의 질 좌우하는 스마트폰…62.2% 선택",
+     "source": "news.dealsitetv.com",
+     "date": "2026-11-17",
+     "link": "https://news.dealsitetv.com/articles/178431"
+    },
+    {
+     "title": "[넥스트 K-브랜드 대상] 전자부터 금융까지…8관왕 ‘삼성 생태계’ 저...",
+     "source": "news.dealsitetv.com",
+     "date": "2026-11-17",
+     "link": "https://news.dealsitetv.com/articles/178560"
+    },
+    {
+     "title": "[Who Is ?] 정종민 CJCGV 대표이사",
+     "source": "businesspost.co.kr",
+     "date": "2026-11-17",
+     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=451037"
+    },
     {
      "title": "삼성·LG전자, 수능 앞두고 고사장 냉난방 점검… 긴급 대응체계 가동",
      "source": "디지털타임스",
@@ -567,16 +601,16 @@
      "link": "https://www.tournews21.com/news/articleView.html?idxno=148532"
     },
     {
-     "title": "삼성전자, 수능 대비 전담 서비스팀 꾸려",
-     "source": "kfenews.co.kr",
-     "date": "2026-11-16",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=668173"
-    },
-    {
      "title": "삼성전자, 수능 시험장 냉난방 긴급 대응체계 가동…AI 원격진단·전담...",
      "source": "joongangenews.com",
      "date": "2026-11-16",
      "link": "https://www.joongangenews.com/news/articleView.html?idxno=563970"
+    },
+    {
+     "title": "삼성전자, 수능 대비 전담 서비스팀 꾸려",
+     "source": "kfenews.co.kr",
+     "date": "2026-11-16",
+     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=668173"
     },
     {
      "title": "삼성전자, 수능 시험장 난방 점검·긴급 대응 지원",
@@ -613,36 +647,6 @@
      "source": "thefirstmedia.net",
      "date": "2026-11-16",
      "link": "http://www.thefirstmedia.net/news/articleView.html?idxno=213753"
-    },
-    {
-     "title": "삼성전자, CES 2027 혁신상 19건 수상…수능 고사장 긴급 서비스도 준비",
-     "source": "sateconomy.co.kr",
-     "date": "2026-11-16",
-     "link": "https://sateconomy.co.kr/news/view/1065595338232839"
-    },
-    {
-     "title": "삼성‧LG전자, 수능 시험장 시스템에어컨 점검…전담‧비상체계 가동",
-     "source": "it-b.co.kr",
-     "date": "2026-11-16",
-     "link": "https://www.it-b.co.kr/news/articleView.html?idxno=90709"
-    },
-    {
-     "title": "삼성·LG, 수능 고사장 시스템에어컨 사전 점검·긴급 대응 나선다",
-     "source": "dnews.co.kr",
-     "date": "2026-11-16",
-     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611161144029370214"
-    },
-    {
-     "title": "삼성전자서비스, 수능 고사장 시스템에어컨 긴급 서비스 지원",
-     "source": "public25.com",
-     "date": "2026-11-16",
-     "link": "https://www.public25.com/news/articleView.html?idxno=58554"
-    },
-    {
-     "title": "[산업 브리핑] 롯데그룹·CJ그룹·LG전자·삼성전자",
-     "source": "niceeconomy.co.kr",
-     "date": "2026-11-16",
-     "link": "https://www.niceeconomy.co.kr/news/articleView.html?idxno=91833"
     }
    ]
   },
@@ -650,16 +654,16 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78249,
+   "total": 78253,
    "sentiment": {
-    "pos": 16,
-    "neu": 44,
+    "pos": 17,
+    "neu": 43,
     "neg": 0
    },
    "keywords": [
     [
      "LG전자",
-     49
+     45
     ],
     [
      "시간을",
@@ -667,7 +671,7 @@
     ],
     [
      "ThinQ",
-     29
+     31
     ],
     [
      "정수기",
@@ -690,16 +694,16 @@
      18
     ],
     [
-     "LG전자는",
+     "AI",
      17
     ],
     [
-     "AI",
+     "LG전자는",
      16
     ],
     [
      "알려주는",
-     16
+     15
     ],
     [
      "무드",
@@ -722,22 +726,22 @@
      13
     ],
     [
-     "플랫폼",
+     "출하가는",
      12
     ],
     [
-     "출하가는",
+     "구독",
      12
     ]
    ],
    "posWords": [
     [
      "강화",
-     6
+     7
     ],
     [
      "확대",
-     4
+     5
     ],
     [
      "계약",
@@ -746,6 +750,10 @@
     [
      "혁신",
      2
+    ],
+    [
+     "협업",
+     1
     ],
     [
      "돌파",
@@ -758,25 +766,45 @@
     [
      "성장",
      1
-    ],
-    [
-     "1위",
-     1
     ]
    ],
    "related": [
+    "lg 씽큐",
     "lg 씽큐온",
     "lg 씽큐 티비연결",
+    "lg 씽큐 냉장고",
     "lg 씽큐 세탁기",
     "lg 씽큐 허브",
-    "lg 씽큐 냉장고",
     "lg 씽큐 와이파이",
-    "lg 씽큐 초기화",
     "lg 씽큐 연결",
-    "lg 씽큐 에어컨 연결",
-    "lg씽큐"
+    "lg 씽큐 초기화",
+    "lg 씽큐 에어컨 연결"
    ],
    "recent": [
+    {
+     "title": "LG, 계열사 협업으로 'AI 3축' 승부…전문가 \"엔비디아 의존, 이익의 질...",
+     "source": "newsworks.co.kr",
+     "date": "2026-11-17",
+     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=903310"
+    },
+    {
+     "title": "1인 가구 증가, 소형 김치냉장고 주도권 레이스 [뉴스Q]",
+     "source": "newsq.co.kr",
+     "date": "2026-11-17",
+     "link": "https://www.newsq.co.kr/news/articleView.html?idxno=500912"
+    },
+    {
+     "title": "LG이노텍, 스마트홈용 초소형 통신모듈 개발···사업 영역 확대",
+     "source": "seoulfn.com",
+     "date": "2026-11-17",
+     "link": "https://www.seoulfn.com/news/articleView.html?idxno=643042"
+    },
+    {
+     "title": "GS건설, 생활패턴 따라 조명·환기 조절하는 'AI 홈'… 내년 하반기 첫선",
+     "source": "ajunews.com",
+     "date": "2026-11-17",
+     "link": "https://www.ajunews.com/view/20261117092822149"
+    },
     {
      "title": "애플 '아이폰 듀오' 최적화 앱 20만개 돌파…지원 생태계 확대",
      "source": "머니투데이",
@@ -842,30 +870,6 @@
      "source": "datanet.co.kr",
      "date": "2026-11-12",
      "link": "https://www.datanet.co.kr/news/articleView.html?idxno=300088"
-    },
-    {
-     "title": "[아주초대석] 집 한 채 넘어 주택단지로… \"내년 30·40평대 출시 목표\"",
-     "source": "ajunews.com",
-     "date": "2026-11-11",
-     "link": "https://www.ajunews.com/view/20261111092722261"
-    },
-    {
-     "title": "천원권보다 좁은 정수기…LG전자, 국내 최소 폭 신제품 선봬",
-     "source": "cnet.co.kr",
-     "date": "2026-11-11",
-     "link": "https://www.cnet.co.kr/view/?no=20261111172548"
-    },
-    {
-     "title": "LG전자, 폭 13.2cm 초슬림 정수기 선봬…냉수·온수 8단계 온도 선택",
-     "source": "joongangenews.com",
-     "date": "2026-11-11",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=562840"
-    },
-    {
-     "title": "LG전자, 폭 13.2㎝ '퓨리케어 슬림맞춤 정수기' 신모델 출시",
-     "source": "pointdaily.co.kr",
-     "date": "2026-11-11",
-     "link": "https://www.pointdaily.co.kr/news/articleView.html?idxno=325614"
     }
    ]
   },
@@ -873,67 +877,35 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76486,
+   "total": 76501,
    "sentiment": {
-    "pos": 16,
-    "neu": 33,
-    "neg": 11
+    "pos": 15,
+    "neu": 37,
+    "neg": 8
    },
    "keywords": [
     [
      "AI",
-     19
-    ],
-    [
-     "번역한",
-     13
-    ],
-    [
-     "기사의",
-     13
-    ],
-    [
-     "전문",
-     13
-    ],
-    [
-     "입니다",
-     12
+     22
     ],
     [
      "타포",
      12
     ],
     [
-     "아래는",
+     "번역한",
      11
     ],
     [
-     "기사를",
+     "기사의",
      11
     ],
     [
-     "번역",
+     "전문",
      11
     ],
     [
-     "으로",
-     11
-    ],
-    [
-     "번역에",
-     11
-    ],
-    [
-     "오류가",
-     11
-    ],
-    [
-     "구글번역",
-     10
-    ],
-    [
-     "화면",
+     "입니다",
      10
     ],
     [
@@ -941,22 +913,54 @@
      10
     ],
     [
+     "아래는",
+     9
+    ],
+    [
+     "기사를",
+     9
+    ],
+    [
+     "번역",
+     9
+    ],
+    [
+     "으로",
+     9
+    ],
+    [
+     "번역에",
+     9
+    ],
+    [
+     "오류가",
+     9
+    ],
+    [
+     "화면",
+     9
+    ],
+    [
+     "구글번역",
+     8
+    ],
+    [
+     "Matter",
+     8
+    ],
+    [
      "제미나이",
-     10
+     8
     ],
     [
-     "높이기를",
-     9
-    ],
-    [
-     "노력하고",
-     9
+     "이해도",
+     7
     ]
    ],
    "posWords": [
     [
-     "강화",
-     5
+     "투자",
+     4
     ],
     [
      "확대",
@@ -964,26 +968,26 @@
     ],
     [
      "글로벌",
+     4
+    ],
+    [
+     "강화",
+     4
+    ],
+    [
+     "성장",
      3
     ],
     [
      "인기",
-     2
-    ],
-    [
-     "성장",
-     2
-    ],
-    [
-     "투자",
-     2
-    ],
-    [
-     "파트너십",
-     2
+     3
     ],
     [
      "첨단",
+     1
+    ],
+    [
+     "1위",
      1
     ]
    ],
@@ -997,98 +1001,98 @@
     "구글 홈 미니 2세대",
     "구글 홈바 삭제 방법",
     "구글 홈바탕 빼는법",
-    "구글 홈 허브 3세대"
+    "구글 홈 스피커 연결"
    ],
    "recent": [
     {
-     "title": "충남교육청, 휴머노이드 로봇 활용 '미래 AI 직업교육' 첫발",
-     "source": "breaknews.com",
-     "date": "2026-11-16",
-     "link": "http://www.breaknews.com/1251358"
+     "title": "\"북한, 시스템 아닌 사람의 '신뢰'를 해킹한다\"",
+     "source": "datanet.co.kr",
+     "date": "2026-11-18",
+     "link": "https://www.datanet.co.kr/news/articleView.html?idxno=300260"
     },
     {
-     "title": "스타벅스-헬로키티, 크리스마스 콜라보 제품 출시",
-     "source": "breaknews.com",
-     "date": "2026-11-16",
-     "link": "http://www.breaknews.com/1251314"
+     "title": "뉴욕증시 개장 전 특징주...루멘텀·셀라스라이프사이언스·엔비디아↑...",
+     "source": "newspim.com",
+     "date": "2026-11-17",
+     "link": "https://www.newspim.com/news/view/20261117001380"
     },
     {
-     "title": "미국 가정용 보안 시스템, 집 안을 날아다니는 카메라까지 출시",
-     "source": "dream.kotra.or.kr",
-     "date": "2026-11-16",
-     "link": "http://dream.kotra.or.kr/kotranews/cms/news/actionKotraBoardDetail.do?SITE_NO=3&MENU_ID=180&CONTENTS_NO=1&bbsGbn=243&bbsSn=243&pNttSn=245230"
+     "title": "[청약통장, 사라지는 사다리] 하루 349좌씩 증발… '내 집 마련 필수품'...",
+     "source": "joongboo.com",
+     "date": "2026-11-17",
+     "link": "https://www.joongboo.com/news/articleView.html?idxno=363742808"
     },
     {
-     "title": "김은중호, 17일 천안서 멕시코와 재대결…쿠팡플레이 생중계",
-     "source": "breaknews.com",
-     "date": "2026-11-16",
-     "link": "http://www.breaknews.com/1251271"
+     "title": "방송 후원·게임은 남성, 패션·홈쇼핑은 여성… 브랜드별 카드 결제 성...",
+     "source": "platum.kr",
+     "date": "2026-11-17",
+     "link": "https://platum.kr/archives/298809"
     },
     {
-     "title": "규제에 발 묶인 자율주행 불구 '동맹이냐 대결이냐' 모빌리티 경쟁 후끈",
-     "source": "womentimes.co.kr",
-     "date": "2026-11-16",
-     "link": "https://www.womentimes.co.kr/news/articleView.html?idxno=107974"
+     "title": "용사·마왕 클리셰 비틀기...1인 개발 방치형 디펜스 RPG '마왕하기 싫었...",
+     "source": "gamechosun.co.kr",
+     "date": "2026-11-17",
+     "link": "https://www.gamechosun.co.kr/webzine/article/view.php?no=227736"
     },
     {
-     "title": "와이파이 이름 하나로 두 대역 연결하는 밴드 스티어링",
-     "source": "vegannews.co.kr",
-     "date": "2026-11-16",
-     "link": "https://www.vegannews.co.kr/news/article.html?no=405828"
-    },
-    {
-     "title": "인쿠시・하효림 다 아니었다…김연경 가르침 받더니, 프로 복귀 성공한...",
-     "source": "wikitree.co.kr",
-     "date": "2026-11-16",
-     "link": "https://www.wikitree.co.kr/articles/1174884"
-    },
-    {
-     "title": "구글 딥마인드, 도면·임상 영상 읽는 실무형 벤치마크 공개",
+     "title": "AI 해커에 개인정보 100만건 노출…대만 기업들, 사이버 공격 비상",
      "source": "digitaltoday.co.kr",
-     "date": "2026-11-16",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=715579"
+     "date": "2026-11-17",
+     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=716113"
     },
     {
-     "title": "내 의지력 대신 설정, 바꾸면 버려지는 시간 줄어드는 스마트폰 사용법...",
-     "source": "gqkorea.co.kr",
-     "date": "2026-11-15",
-     "link": "https://www.gqkorea.co.kr/2026/11/15/%eb%82%b4-%ec%9d%98%ec%a7%80%eb%a0%a5-%eb%8c%80%ec%8b%a0-%ec%84%a4%ec%a0%95-%eb%b0%94%ea%be%b8%eb%a9%b4-%eb%b2%84%eb%a0%a4%ec%a7%80%eb%8a%94-%ec%8b%9c%ea%b0%84-%ec%a4%84%ec%96%b4%eb%93%9c%eb%8a%94/?utm_source=naver&utm_medium=partnership"
+     "title": "엔비디아(NVDA), 젠슨 황 사임 후 첫 실적…가이던스 146조 원 시험대",
+     "source": "coinreaders.com",
+     "date": "2026-11-17",
+     "link": "http://coinreaders.com/270915"
     },
     {
-     "title": "tvOS 27.2.1로 구형 애플TV 4K도 시리 AI 지원…설정서 직접 켜야 한다",
-     "source": "wikitree.co.kr",
-     "date": "2026-11-14",
-     "link": "https://www.wikitree.co.kr/articles/1174640"
+     "title": "30대그룹, “지갑 닫아도 AI에는 풀었다”..2년 반동안 1.1조원 베팅",
+     "source": "breaknews.com",
+     "date": "2026-11-17",
+     "link": "http://www.breaknews.com/1251620"
     },
     {
-     "title": "구글 지도 빗장 풀렸다…티맵·네이버·카카오 '내비 삼국지' 흔들까",
-     "source": "뉴시스",
-     "date": "2026-11-14",
-     "link": "https://n.news.naver.com/mnews/article/003/0014321886?sid=105"
+     "title": "네이버, 크리에이터 콘텐츠 더 추천해준다..베타 테스트 시작",
+     "source": "breaknews.com",
+     "date": "2026-11-17",
+     "link": "http://www.breaknews.com/1251597"
     },
     {
-     "title": "타포, 매터 지원 로봇청소기 'Tapo RV30 Max Plus Gen 2' 출시",
-     "source": "slist.kr",
-     "date": "2026-11-14",
-     "link": "https://www.slist.kr/news/articleView.html?idxno=781629"
+     "title": "집 나간 크리스마스 소비자들이 찾는 '이곳'",
+     "source": "ditoday.com",
+     "date": "2026-11-17",
+     "link": "https://ditoday.com/%ec%a7%91-%eb%82%98%ea%b0%84-%ed%81%ac%eb%a6%ac%ec%8a%a4%eb%a7%88%ec%8a%a4-%ec%86%8c%eb%b9%84%ec%9e%90%eb%93%a4%ec%9d%b4-%ec%b0%be%eb%8a%94-%ec%9d%b4%ea%b3%b3/"
     },
     {
-     "title": "예산별로 고르는 '롤렉스 데이트저스트'를 대신할 시계 7",
-     "source": "esquirekorea.co.kr",
-     "date": "2026-11-14",
-     "link": "https://www.esquirekorea.co.kr/article/1913045"
+     "title": "남성은 SOOP·넥슨, 여성은 지그재그…결제 데이터 확 갈렸다",
+     "source": "한국경제",
+     "date": "2026-11-17",
+     "link": "https://n.news.naver.com/mnews/article/015/0005354674?sid=105"
     },
     {
-     "title": "연말 종료 바이브… 내 재생목록, 다른 음악 앱으로 옮기려면",
-     "source": "it.chosun.com",
-     "date": "2026-11-14",
-     "link": "https://it.chosun.com/news/articleView.html?idxno=3000000001015"
+     "title": "[알쓸신잡] \"DM은 필요한데 릴스는 싫어요\"…앱 대신 기능 제한하는 방...",
+     "source": "dailypop.kr",
+     "date": "2026-11-17",
+     "link": "http://www.dailypop.kr/news/articleView.html?idxno=104572"
     },
     {
-     "title": "[게임뉴스] 카카오게임즈 및 라인게임즈 소식 외",
-     "source": "gamevu.co.kr",
-     "date": "2026-11-13",
-     "link": "https://www.gamevu.co.kr/news/articleView.html?idxno=62281"
+     "title": "플랜비보험, 카카오톡 간편 보험료 확인·실시간 조회 도입…안드로이...",
+     "source": "isplus.com",
+     "date": "2026-11-17",
+     "link": "https://n.news.naver.com/mnews/article/241/0003542074?sid=105"
+    },
+    {
+     "title": "[미국 특징주] 버크셔, 델타항공 지분 10% 가까이 확대",
+     "source": "newspim.com",
+     "date": "2026-11-17",
+     "link": "https://www.newspim.com/news/view/20261117000097"
+    },
+    {
+     "title": "\"피부과에서 바른 화장품, 이젠 먹는다\"…K-뷰티가 키운 PDRN 열풍",
+     "source": "news1.kr",
+     "date": "2026-11-17",
+     "link": "https://n.news.naver.com/mnews/article/421/0009292539?sid=101"
     }
    ]
   }
