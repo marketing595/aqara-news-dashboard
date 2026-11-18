@@ -229,7 +229,7 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
     <div class="field">
       <label class="chk"><input type="checkbox" id="inSound"> 효과음 (음향 큐시트 SFX)</label>
       <div class="row" style="margin-top:8px"><span style="white-space:nowrap;font-size:13px">음량</span><input type="range" id="inVol" min="0" max="100" step="5" style="flex:1;accent-color:var(--acc)"><span id="volView" style="width:40px;text-align:right;font-size:13px"></span></div>
-      <div class="sub">추첨 버튼을 누르면 드럼롤이 나오고 '쾅'에 맞춰 번호가 멈춰요(1등은 6초, 나머지 3초). 다 멈추면 당첨 팡파르. 효과음을 끄면 예전처럼 짧게 돌아요.</div>
+      <div class="sub">추첨 버튼을 누르면 드럼롤이 나오고 '쾅'에 맞춰 번호가 멈춰요(1등·2등·3등 모두 3초). 다 멈추면 당첨 팡파르. 효과음을 끄면 예전처럼 짧게 돌아요.</div>
       <div class="sfxpad">
         <button data-sfx="drum6">▶ 드럼롤 6초</button><button data-sfx="drum12">▶ 드럼롤 12초</button><button data-sfx="fanfare">▶ 팡파르</button>
         <button data-sfx="chime">▶ 안내 차임(끝)</button><button data-sfx="reentry">▶ 재입장 알림</button><button data-sfx="stop">■ 정지</button>
@@ -467,7 +467,8 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
   var SFX = { chime:'sfx/sfx04-chime.mp3', drum6:'sfx/sfx05-drumroll6.mp3', drum12:'sfx/sfx06-drumroll12.mp3', fanfare:'sfx/sfx07-fanfare.mp3', reentry:'sfx/sfx08-reentry.mp3' };
   var BANG = { drum6:6000, drum12:12000 };
   /* 2026-11-17 '너무 오래 걸린다' → 드럼롤을 중간부터 틀어 '쾅'까지 대기 절반(일반 3초 / 1등 6초) */
-  var WAIT = { drum6:3000, drum12:6000 };
+  /* 2026-11-18 '1등 텀 너무 길다' → 1등도 2등과 같은 3초 (12초 드럼롤의 마지막 3초만 재생) */
+  var WAIT = { drum6:3000, drum12:3000 };
   var AU = {};
   for (var sk in SFX){ AU[sk] = new Audio(SFX[sk]); AU[sk].preload = 'auto'; }
   if (S.vol == null) S.vol = 100;
@@ -517,7 +518,7 @@ body.spinning .absent,body.spinning .redrawAll{visibility:hidden}
     for (var i = prev.length; i < all.length; i++){ all[i].classList.remove('blank'); all[i].classList.add('spin'); reels.push(all[i]); }
     var GAP = n > 3 ? 350 : 550;
     var big = /^\s*1\s*등/.test(p.rank);             // 1등 = 긴 드럼롤(12초)
-    var FALLBACK = (big && n === 1) ? 2500 : 1500;    // 효과음 없을 때
+    var FALLBACK = 1500;                              // 효과음 없을 때 (1등도 동일)
     var drum = big ? 'drum12' : 'drum6';
     var useSfx = !!S.sound;
     var SKIP = BANG[drum] - WAIT[drum];                // 드럼롤 앞부분 건너뜀
