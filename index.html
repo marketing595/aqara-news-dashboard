@@ -9701,7 +9701,7 @@
       const card=(href,ic,t,d,lock)=>`<a href="${href}" target="_blank" rel="noopener" class="block rounded-2xl border border-slate-200 bg-white p-3 hover:border-[#7C5CFF]"><b class="text-[14px] font-extrabold text-ink">${ic} ${t}</b><span class="block text-[12px] text-slate-500 mt-0.5">${d}</span>${lock?'<span class="text-[11px] font-bold text-amber-600">로그인 필요</span>':'<span class="text-[11px] font-bold text-emerald-600">링크만 있으면 열림</span>'}</a>`;
       box.innerHTML=`<div class="flex items-center justify-between gap-3 flex-wrap mb-3">
           <div><h2 class="text-[18px] font-extrabold text-ink">🎛 세미나 운영 콘솔 · 11/19</h2>
-            <p class="text-[12px] text-slate-500 mt-0.5">큐시트 F 기준 진행·음향 보드·마이크·사운드체크·비상 대응. <b>링크만 있으면 로그인 없이</b> 열려요. 음향 PC에서 <b>오퍼레이터 모드</b>를 켜면 큐를 넘길 때 모든 스태프 화면이 따라가요.</p></div>
+            <p class="text-[12px] text-slate-500 mt-0.5">큐시트 F 기준 진행·음향 보드·마이크·사운드체크·비상 대응. <b>링크만 있으면 로그인 없이</b> 열려요. 재생 버튼을 누르면 그 기기에서 바로 소리가 나고, 누가 큐를 넘기든 모든 스태프 화면이 따라가요.</p></div>
           <div class="flex gap-2"><button onclick="navigator.clipboard.writeText('${url}');this.textContent='복사됨 ✓'" class="px-4 py-2 rounded-full border border-[#7C5CFF] text-[#7C5CFF] text-[13px] font-bold whitespace-nowrap">스태프 링크 복사</button>
           <a href="/semops.html" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-[#7C5CFF] text-white text-[13px] font-bold hover:brightness-110 whitespace-nowrap">새 창으로 열기 ↗</a></div>
         </div>

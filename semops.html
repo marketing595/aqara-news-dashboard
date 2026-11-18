@@ -182,7 +182,6 @@ h2.sec{font-size:15px;font-weight:900;margin:18px 0 10px;color:var(--tx2)}
     <div class="ttl"><b>SMART HOME INTERIOR 2026 · 운영 콘솔</b><span>11월 19일(목) 코엑스 401호 · 큐시트 F 기준</span></div>
     <div class="clock" id="clock">--:--:--</div>
     <span class="pill" id="sync"><span class="dot" id="syncDot"></span><span id="syncTx">연결 중</span></span>
-    <button class="pill" id="opBtn" title="음향·스크린 오퍼레이터만 켜세요">🎚 오퍼레이터 모드</button>
   </div>
   <nav class="tabs" id="tabs">
     <button class="tab on" data-tab="live">▶ 진행</button>
@@ -325,7 +324,6 @@ function fade(a, to, ms, done){
 }
 function play(k){
   var s = BYK[k]; if (!s) return;
-  if (!isOp()){ toast('소리는 오퍼레이터 모드에서만 나요'); return; }
   var a = audioOf(s); if (!a){ toast(k + ' 파일이 아직 없어요 — 음향 보드에서 넣어 주세요'); return; }
   if (s.kind === 'bgm'){
     if (playing[k]){ stop(k); return; }
@@ -374,7 +372,7 @@ function sndBtn(k, small){
 /* ── 상태 / 실시간 ── */
 var ST = { live:0, chk:{} };
 var view = null;        // null = 라이브 따라감, 숫자 = 미리보기
-function isOp(){ return ls('op') === '1'; }
+function isOp(){ return true; }   // 2026-11-18 오퍼레이터 모드 삭제 — 누구나 재생·큐 이동
 function curIdx(){ return view == null ? ST.live : view; }
 
 function renderList(){
@@ -424,8 +422,8 @@ function renderNow(){
   var ks = cueSounds(c), note = cueNote(c);
   $('cueSnd').innerHTML = (ks.length ? ks.map(function(k){ return sndBtn(k); }).join('') : '<div class="empty">이 큐에 걸린 음향 없음</div>') +
     (note ? '<div class="warnbox">' + esc(note).replace(/\n/g, '<br>') + '</div>' : '') +
-    (op ? '' : '<p class="hint">소리는 오퍼레이터 모드를 켠 기기에서만 나요.</p>');
-  $('opHint').textContent = op ? '🎚 이 기기에서 재생' : '';
+    '<p class="hint">누르면 지금 이 기기에서 소리가 나요.</p>';
+  $('opHint').textContent = '';
   var n = CUES[i + 1];
   $('nextCue').innerHTML = n ? '<div class="seg">' + esc(n.no ? n.no + '. ' : '') + esc(n.seg) + (n.t ? ' <span style="color:var(--tx2);font-weight:700">' + esc(n.t) + '</span>' : '') + '</div>' +
     '<div class="meta">' + esc([n.sb && ('스탠바이: ' + n.sb), n.go && ('GO: ' + n.go), cueSounds(n).length && ('음향: ' + cueSounds(n).join(', '))].filter(Boolean).join('\n')) + '</div>' : '<div class="empty">마지막 큐</div>';
@@ -515,10 +513,10 @@ $('cueList').addEventListener('mouseleave', function(){ listHover = false; });
 document.addEventListener('keydown', function(e){
   if (/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
   if (e.key === 'Escape'){ stopAll(); return; }
+  var s = SND.filter(function(x){ return x.key === e.key; })[0]; if (s){ e.preventDefault(); play(s.k); return; }
   if (!isOp()) return;
   if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'PageDown'){ e.preventDefault(); goNext(); return; }
   if (e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); goTo(curIdx() - 1); return; }
-  var s = SND.filter(function(x){ return x.key === e.key; })[0]; if (s){ e.preventDefault(); play(s.k); }
 });
 
 function tab(n){
@@ -532,15 +530,6 @@ volTx();
 $('volSfx').oninput = function(){ VOL.sfx = +this.value; ls('vSfx', VOL.sfx); volTx(); Object.keys(playing).forEach(function(k){ if (BYK[k].kind === 'sfx' && AU[k]) AU[k].volume = VOL.sfx / 100; }); };
 $('volBgm').oninput = function(){ VOL.bgm = +this.value; ls('vBgm', VOL.bgm); volTx(); Object.keys(playing).forEach(function(k){ if (BYK[k].kind === 'bgm' && AU[k]){ clearInterval(fades[AU[k]._src]); AU[k].volume = VOL.bgm / 100; } }); };
 
-function paintOp(){ var on = isOp(); $('opBtn').classList.toggle('on', on); $('opBtn').textContent = on ? '🎚 오퍼레이터 ON' : '🎚 오퍼레이터 모드'; }
-$('opBtn').onclick = function(){
-  if (isOp()){ ls('op', '0'); stopAll(); toast('오퍼레이터 모드 끔 — 보기 전용'); }
-  else {
-    if (!confirm('이 기기를 음향·스크린 오퍼레이터로 쓸까요?\n\n· 이 기기에서 소리가 나요\n· 큐를 넘기면 모든 스태프 화면이 같이 넘어가요\n· Space/→ 다음 큐, ← 이전, 1~8 효과음, Esc 전체 정지')) return;
-    ls('op', '1'); preloadAll(); toast('오퍼레이터 모드 ON');
-  }
-  paintOp(); renderNow();
-};
 
 /* ── 진행 이동 + Firebase 동기화 ── */
 var DB = null, me = ls('me') || '';
@@ -598,7 +587,7 @@ $('copyMe').onclick = function(){ try { navigator.clipboard.writeText(location.o
 
 /* 시작 */
 idbOpen().then(function(){ return Promise.all(SND.map(function(s){ return idbGet(s.k).then(function(v){ if (v && v.blob) BLOB[s.k] = { url:URL.createObjectURL(v.blob), name:v.name }; }); })); }).then(function(){ if (isOp()) preloadAll(); paintAll(); });
-paintOp(); paintAll();
+preloadAll(); paintAll();
 var t0 = ls('tab'); if (t0 && $('t-' + t0)) tab(t0);
 if (location.hash && $('t-' + location.hash.slice(1))) tab(location.hash.slice(1));
 })();
