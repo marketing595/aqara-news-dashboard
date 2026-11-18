@@ -49,7 +49,26 @@ main{padding:14px 16px 120px;max-width:1500px;margin:0 auto}
 .hidden{display:none!important}
 
 /* ── 진행(라이브) ── */
-.live{display:grid;grid-template-columns:300px minmax(0,1fr) 340px;gap:14px;align-items:start}.live>*{min-width:0}.nav button:disabled{opacity:.45;cursor:not-allowed}.gonext{white-space:normal;line-height:1.3}
+.live{display:grid;grid-template-columns:270px minmax(0,1fr);gap:14px;align-items:start}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.cols3{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:stretch}
+.col{border-radius:14px;padding:12px 14px;background:var(--card2);border:1px solid var(--line);border-top:4px solid var(--tx3);min-width:0}
+.c-mc{border-top-color:var(--acc)}.c-scr{border-top-color:var(--bgm)}.c-snd{border-top-color:var(--sfx)}
+.colh{font-size:15px;font-weight:900;margin-bottom:10px;display:flex;align-items:baseline;gap:8px}
+.colh small{font-size:11.5px;font-weight:700;color:var(--tx3)}
+.c-mc .colh{color:var(--acc2)}.c-scr .colh{color:var(--bgm)}.c-snd .colh{color:var(--sfx)}
+.scrWhat{font-size:clamp(20px,1.8vw,26px);font-weight:900;letter-spacing:-.02em;line-height:1.25}
+.scrWhat.dim{color:var(--tx2);font-size:18px}
+.keep{font-size:12px;font-weight:800;color:var(--tx3);margin-bottom:4px}
+.files{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.file{font-size:13px;font-weight:800;padding:5px 9px;border-radius:8px;background:color-mix(in srgb,var(--bgm) 16%,var(--card));border:1px solid color-mix(in srgb,var(--bgm) 40%,transparent);font-variant-numeric:tabular-nums}
+.stype{margin-top:10px;font-size:12.5px;font-weight:800;color:var(--tx2)}
+.nextrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid var(--line);background:var(--bg2);font-size:14px}
+.nextrow .nl{font-size:11px;font-weight:900;color:var(--tx3);letter-spacing:.06em}
+.nextrow .t2{color:var(--tx2);font-weight:700;font-variant-numeric:tabular-nums}
+.tag{font-size:12px;font-weight:800;padding:3px 9px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--tx2)}
+.tag.scr{color:var(--bgm)}.tag.snd{color:var(--sfx)}
+.li .ic2{font-size:10px;margin-left:3px;opacity:.8}.live>*{min-width:0}.nav button:disabled{opacity:.45;cursor:not-allowed}.gonext{white-space:normal;line-height:1.3}
 .list{background:var(--card);border:1px solid var(--line);border-radius:14px;max-height:calc(100vh - 150px);overflow:auto;position:sticky;top:120px}
 .li{display:grid;grid-template-columns:22px 30px 44px 1fr;gap:6px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px}
 .li:hover{background:var(--card2)}
@@ -158,8 +177,10 @@ h2.sec{font-size:15px;font-weight:900;margin:18px 0 10px;color:var(--tx2)}
 .nowplay .np button{border:0;background:none;padding:0 0 0 4px;font-weight:900;color:var(--bad)}
 .nowplay .x{margin-left:auto;height:34px;padding:0 14px;border-radius:999px;border:0;background:var(--bad);color:#fff;font-weight:900}
 
+@media (max-width:1280px){ .cols3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)} .c-mc{grid-column:1 / -1} }
 @media (max-width:1100px){
   .live{grid-template-columns:1fr}
+  .cols3{grid-template-columns:1fr}
   .list{position:static;max-height:260px;order:3}
   .side{position:static}
 }
@@ -197,12 +218,6 @@ h2.sec{font-size:15px;font-weight:900;margin:18px 0 10px;color:var(--tx2)}
   <section id="t-live" class="live">
     <div class="list" id="cueList" aria-label="큐 목록"></div>
     <div class="now" id="now"></div>
-    <div class="side">
-      <div class="panel"><h3>이 큐의 음향 <span id="opHint"></span></h3><div id="cueSnd"></div>
-        <button class="stopall" data-stopall>■ 전체 정지 <span class="kbd">Esc</span></button>
-      </div>
-      <div class="panel next"><h3>다음 큐</h3><div id="nextCue"></div></div>
-    </div>
   </section>
 
   <section id="t-sound" class="hidden">
@@ -253,18 +268,18 @@ var CUES = DATA.s1.slice(1).filter(function(r){ return r.B || r.D || r.K; }).map
 
 /* ── 음향 목록 (음원 리스트 시트) ── */
 var SND = [
-  { k:'SFX-01', key:'1', nm:'오프닝', file:'', kind:'sfx' },
-  { k:'SFX-02', key:'2', nm:'연사 등장', file:'', kind:'sfx' },
-  { k:'SFX-03', key:'3', nm:'안내 차임 · 시작', file:'', kind:'sfx' },
+  { k:'SFX-01', key:'1', nm:'오프닝', file:'sfx/sfx01-opening.mp3', kind:'sfx' },
+  { k:'SFX-02', key:'2', nm:'연사 등장', file:'sfx/sfx02-speaker.mp3', kind:'sfx' },
+  { k:'SFX-03', key:'3', nm:'안내 차임 · 시작', file:'sfx/sfx03-chime-start.mp3', kind:'sfx' },
   { k:'SFX-04', key:'4', nm:'안내 차임 · 끝', file:'sfx/sfx04-chime.mp3', kind:'sfx' },
   { k:'SFX-05', key:'5', nm:'드럼롤 6초 (3·2등)', file:'sfx/sfx05-drumroll6.mp3', kind:'sfx' },
   { k:'SFX-06', key:'6', nm:'드럼롤 12초 (1등)', file:'sfx/sfx06-drumroll12.mp3', kind:'sfx' },
   { k:'SFX-07', key:'7', nm:'당첨 팡파르', file:'sfx/sfx07-fanfare.mp3', kind:'sfx' },
   { k:'SFX-08', key:'8', nm:'재입장 알림', file:'sfx/sfx08-reentry.mp3', kind:'sfx' },
-  { k:'BGM-01', nm:'입장 대기', file:'', kind:'bgm' },
-  { k:'BGM-02', nm:'시상 · 박수', file:'', kind:'bgm' },
-  { k:'BGM-03', nm:'휴식 시간', file:'', kind:'bgm' },
-  { k:'BGM-04', nm:'퇴장', file:'', kind:'bgm' }
+  { k:'BGM-01', nm:'입장 대기', file:'sfx/bgm01-lounge.mp3', kind:'bgm' },
+  { k:'BGM-02', nm:'시상 · 박수', file:'sfx/bgm02-award.mp3', kind:'bgm' },
+  { k:'BGM-03', nm:'휴식 시간', file:'sfx/bgm03-break.mp3', kind:'bgm' },
+  { k:'BGM-04', nm:'퇴장', file:'sfx/bgm04-exit.mp3', kind:'bgm' }
 ];
 var BYK = {};
 SND.forEach(function(s){
@@ -380,7 +395,7 @@ function renderList(){
   CUES.forEach(function(c){
     var sec = /Break ①/.test(c.seg) ? 'BREAK ①' : /Break ②/.test(c.seg) ? 'BREAK ②' : /^Closing/.test(c.seg) ? 'CLOSING · 럭키드로우' : /^오픈|^입장|안내 방송/.test(c.seg) ? '입장' : /오프닝|사회자|이상헌|조현이/.test(c.seg) ? '오프닝' : '세션';
     if (sec !== lastSec){ h += '<div class="li sec">' + sec + '</div>'; lastSec = sec; }
-    var snd = cueSounds(c).length ? '<span class="ic">♪' + cueSounds(c).length + '</span>' : '';
+    var snd = (c.mc ? '<span class="ic2">🎤</span>' : '') + (c.led ? '<span class="ic2">🖥</span>' : '') + (cueSounds(c).length ? '<span class="ic">♪' + cueSounds(c).length + '</span>' : '');
     var k = 'cue.' + c.i;
     h += '<div class="li' + (c.i === ST.live ? ' cur' : '') + (view === c.i ? ' view' : '') + (ST.chk[k] ? ' done' : '') + '" data-cue="' + c.i + '">' +
       '<button class="ck' + (ST.chk[k] ? ' on' : '') + '" data-chk="' + k + '" aria-label="완료 체크">' + (ST.chk[k] ? '✓' : '') + '</button>' +
@@ -392,14 +407,24 @@ function renderList(){
 }
 var listHover = false;
 function fmtScript(t){ return esc(t).split('\n').map(function(l){ return /^\s*[#*]/.test(l) || /^\s*\(.*\)\s*$/.test(l) ? '<span class="stage">' + l + '</span>' : l; }).join('\n'); }
-function boxes(c){
-  var h = '';
-  if (c.go) h += '<div class="box go"><h4>GO 사인 · 이 순간 실행</h4><p>' + esc(c.go) + '</p></div>';
-  if (c.sb) h += '<div class="box"><h4>스탠바이 · 미리 준비</h4><p>' + esc(c.sb) + '</p></div>';
-  var led = [c.scr, c.led, c.file, c.ledR].filter(Boolean).filter(function(v, i, a){ return a.indexOf(v) === i; });
-  if (led.length) h += '<div class="box"><h4>LED 화면</h4><p>' + esc(led.join('\n')) + '</p></div>';
-  if (c.memo) h += '<div class="box"><h4>담당 · 메모</h4><p>' + esc(c.memo) + '</p></div>';
-  return h ? '<div class="grid2">' + h + '</div>' : '';
+/* 화면: 이 큐에 LED 지정이 없으면 앞 큐 화면이 그대로 유지됨 */
+function screenOf(i){
+  var c = CUES[i];
+  if (c.led) return { own:true, what:c.led.replace(/^발표 자료 본인이$/, '연사 본인 발표 자료 (PPT)'), files:c.file, type:c.scr || typeOf(i), note:c.ledR };
+  for (var j = i - 1; j >= 0; j--) if (CUES[j].led) return { own:false, what:CUES[j].led, files:CUES[j].file, type:CUES[j].scr || typeOf(j), note:'' , from:CUES[j].no };
+  return null;
+}
+function typeOf(i){ for (var j = i; j >= 0; j--) if (CUES[j].scr) return CUES[j].scr; return ''; }
+function screenHtml(i){
+  var s = screenOf(i);
+  if (!s) return '<div class="empty">지정된 화면 없음</div>';
+  var files = String(s.files || '').split('\n').map(function(x){ return x.trim(); }).filter(Boolean)
+    .filter(function(x, k, a){ return a.indexOf(x) === k && x !== s.what; });
+  return (s.own ? '' : '<div class="keep">↺ ' + esc(s.from ? s.from + '번 큐 ' : '앞 ') + '화면 그대로 유지</div>') +
+    '<div class="scrWhat' + (s.own ? '' : ' dim') + '">' + esc(s.what).replace(/\n/g, '<br>') + '</div>' +
+    (files.length ? '<div class="files">' + files.map(function(f){ return '<span class="file">' + esc(f) + '</span>'; }).join('') + '</div>' : '') +
+    (s.type ? '<div class="stype">' + esc(/multi/i.test(s.type) ? '멀티 스크린 (좌 고정 + 우 변경)' : /single|full/i.test(s.type) ? '풀 스크린 (한 화면)' : s.type) + '</div>' : '') +
+    (s.note ? '<div class="warnbox">' + esc(s.note) + '</div>' : '');
 }
 function renderNow(){
   var i = curIdx(), c = CUES[i]; if (!c) return;
@@ -409,24 +434,34 @@ function renderNow(){
   h += '<div class="nowhd"><span class="badge' + (peek ? ' peek' : '') + '">' + (peek ? '미리보기' : 'NOW') + '</span>' +
        '<span class="big">' + esc(c.no ? c.no + '. ' : '') + esc(c.seg || '(구간 없음)') + '</span>' +
        (c.t ? '<span class="t">' + esc(c.t) + '</span>' : '') + '</div>';
-  h += '<div class="nowbd">' + boxes(c) +
-       '<div><h4 style="margin:0 0 6px;font-size:11.5px;color:var(--tx3);font-weight:800;letter-spacing:.04em">사회자 대본</h4>' +
-       (c.mc ? '<div class="script">' + fmtScript(c.mc) + '</div>' : '<div class="empty">대본 없음</div>') + '</div></div>';
-  var op = isOp();
-  h += '<div class="nav">' +
-       '<button class="back" data-prev ' + (op ? '' : 'disabled') + '>◀ 이전</button>' +
-       (op ? '<button class="gonext" data-next ' + (i >= CUES.length - 1 ? 'disabled' : '') + '>' + (peek ? '이 큐로 진행(LIVE) ▶' : '다음 큐로 GO ▶') + '<span class="kbd">Space</span></button>'
-           : '<button class="gonext" disabled style="font-size:14px">진행은 오퍼레이터가 넘겨요 · 화면이 자동으로 따라가요</button>') + '</div>';
-  $('now').innerHTML = h;
-  // 음향 패널
+  // GO · 스탠바이 · 담당
+  var strip = '';
+  if (c.go) strip += '<div class="box go"><h4>⚡ GO 사인 · 이 순간 실행</h4><p>' + esc(c.go) + '</p></div>';
+  if (c.sb) strip += '<div class="box"><h4>⏳ 스탠바이 · 미리 준비</h4><p>' + esc(c.sb) + '</p></div>';
+  if (c.memo) strip += '<div class="box"><h4>👤 담당 · 메모</h4><p>' + esc(c.memo) + '</p></div>';
+  // 음향
   var ks = cueSounds(c), note = cueNote(c);
-  $('cueSnd').innerHTML = (ks.length ? ks.map(function(k){ return sndBtn(k); }).join('') : '<div class="empty">이 큐에 걸린 음향 없음</div>') +
+  var snd = (ks.length ? ks.map(function(k){ return sndBtn(k); }).join('') : '<div class="empty">이 큐에 거는 음향 없음</div>') +
     (note ? '<div class="warnbox">' + esc(note).replace(/\n/g, '<br>') + '</div>' : '') +
-    '<p class="hint">누르면 지금 이 기기에서 소리가 나요.</p>';
-  $('opHint').textContent = '';
+    '<button class="stopall" data-stopall>■ 전체 정지 <span class="kbd">Esc</span></button>';
+  h += '<div class="nowbd">' + (strip ? '<div class="strip">' + strip + '</div>' : '') +
+       '<div class="cols3">' +
+         '<div class="col c-mc"><div class="colh">🎤 멘트 <small>사회자 대본</small></div>' + (c.mc ? '<div class="script">' + fmtScript(c.mc) + '</div>' : '<div class="empty">멘트 없음</div>') + '</div>' +
+         '<div class="col c-scr"><div class="colh">🖥 화면 <small>LED</small></div>' + screenHtml(i) + '</div>' +
+         '<div class="col c-snd"><div class="colh">🔊 음향 <small>누르면 이 기기에서 재생</small></div>' + snd + '</div>' +
+       '</div></div>';
+  h += '<div class="nav">' +
+       '<button class="back" data-prev>◀ 이전</button>' +
+       '<button class="gonext" data-next ' + (i >= CUES.length - 1 ? 'disabled' : '') + '>' + (peek ? '이 큐로 진행(LIVE) ▶' : '다음 큐로 GO ▶') + '<span class="kbd">Space</span></button></div>';
   var n = CUES[i + 1];
-  $('nextCue').innerHTML = n ? '<div class="seg">' + esc(n.no ? n.no + '. ' : '') + esc(n.seg) + (n.t ? ' <span style="color:var(--tx2);font-weight:700">' + esc(n.t) + '</span>' : '') + '</div>' +
-    '<div class="meta">' + esc([n.sb && ('스탠바이: ' + n.sb), n.go && ('GO: ' + n.go), cueSounds(n).length && ('음향: ' + cueSounds(n).join(', '))].filter(Boolean).join('\n')) + '</div>' : '<div class="empty">마지막 큐</div>';
+  if (n){
+    var ns = screenOf(i + 1);
+    h += '<div class="nextrow"><span class="nl">다음</span><b>' + esc(n.no ? n.no + '. ' : '') + esc(n.seg) + '</b>' + (n.t ? '<span class="t2">' + esc(n.t) + '</span>' : '') +
+      (n.led && ns ? '<span class="tag scr">🖥 ' + esc(ns.what.split('\n')[0]) + '</span>' : '') +
+      cueSounds(n).map(function(k){ return '<span class="tag snd">' + (BYK[k].kind === 'bgm' ? '🎵 ' : '🔊 ') + esc(BYK[k].nm) + '</span>'; }).join('') +
+      (n.sb ? '<span class="tag">⏳ ' + esc(n.sb) + '</span>' : '') + '</div>';
+  }
+  $('now').innerHTML = h;
 }
 
 /* ── 표 탭 ── */
@@ -455,7 +490,7 @@ function renderBoard(){
     var ok = ready(s) && !s.broken, own = !!BLOB[s.k];
     return '<div class="slot" data-drop="' + s.k + '">' + sndBtn(s.k) +
       (s.desc ? '<div class="desc">' + esc(s.desc) + (s.note ? '<br><b>' + esc(s.note) + '</b>' : '') + '</div>' : '') +
-      '<div class="row">' + (ok ? '<span class="chip ok">' + (own ? '✓ 이 기기에 넣은 파일' : '✓ 기본 탑재') + '</span>' : '<span class="chip no">⚠ 파일 없음</span>') +
+      '<div class="row">' + (ok ? '<span class="chip ok">' + (own ? '✓ 이 기기에 넣은 파일' : '✓ 기본 탑재 (모든 기기)') + '</span>' : '<span class="chip no">⚠ 파일 없음</span>') +
       (s.fname ? '<span class="chip">' + esc(s.fname) + '</span>' : '') +
       '<span style="flex:1"></span><label class="lnk" style="cursor:pointer">' + (ok ? '바꾸기' : '파일 넣기') + '<input type="file" accept="audio/*" data-in="' + s.k + '" hidden></label>' +
       (own ? '<button class="lnk" data-rm="' + s.k + '">지우기</button>' : '') + '</div></div>';
