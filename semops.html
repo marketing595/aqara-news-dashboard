@@ -80,6 +80,9 @@ main{padding:14px 16px 120px;max-width:1500px;margin:0 auto}
 .li.cur{background:var(--acc);color:#fff}
 .li.cur .no,.li.cur .tm,.li.cur .ic{color:#fff}
 .li.view:not(.cur){outline:2px solid var(--acc);outline-offset:-2px}
+.lhd{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--line);font-size:12px;font-weight:800;color:var(--tx2)}
+.lhd button{height:28px;padding:0 10px;border-radius:999px;border:1px solid var(--line);background:var(--card2);font-size:12px;font-weight:800}
+.lhd button:disabled{opacity:.4;cursor:default}
 .li.sec{background:var(--bg2);font-size:11px;color:var(--tx3);font-weight:800;letter-spacing:.04em;cursor:default;grid-template-columns:1fr;padding:6px 10px}
 .ck{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--tx3);display:inline-flex;align-items:center;justify-content:center;font-size:12px;background:transparent;padding:0;flex:none}
 .ck.on{background:var(--ok);border-color:var(--ok);color:#fff}
@@ -278,7 +281,7 @@ var SND = [
   { k:'SFX-08', key:'8', nm:'재입장 알림', file:'sfx/sfx08-reentry.mp3', kind:'sfx' },
   { k:'BGM-01', nm:'입장 대기', file:'sfx/bgm01-lounge.mp3', kind:'bgm' },
   { k:'BGM-02', nm:'시상 · 박수', file:'sfx/bgm02-award.mp3', kind:'bgm' },
-  { k:'BGM-03', nm:'휴식 시간', file:'sfx/bgm03-break.mp3', kind:'bgm' },
+  { k:'BGM-03', nm:'휴식 시간', file:'sfx/bgm03-break-v2.mp3', kind:'bgm' },
   { k:'BGM-04', nm:'퇴장', file:'sfx/bgm04-exit.mp3', kind:'bgm' }
 ];
 var BYK = {};
@@ -401,7 +404,8 @@ function renderList(){
       '<button class="ck' + (ST.chk[k] ? ' on' : '') + '" data-chk="' + k + '" aria-label="완료 체크">' + (ST.chk[k] ? '✓' : '') + '</button>' +
       '<span class="no">' + esc(c.no) + '</span><span class="tm">' + esc(c.t || '') + '</span><span class="sg">' + esc(c.seg || '(구간 없음)') + snd + '</span></div>';
   });
-  $('cueList').innerHTML = h;
+  var nDone = Object.keys(ST.chk).filter(function(k){ return /^cue\./.test(k) && ST.chk[k]; }).length;
+  $('cueList').innerHTML = '<div class="lhd"><span>컷 ' + CUES.length + '개 · 체크 ' + nDone + '</span><button data-clrchk ' + (nDone ? '' : 'disabled') + '>체크 모두 해제</button></div>' + h;
   var cur = $('cueList').querySelector('.li.cur');
   if (cur && !listHover){ var L = $('cueList'); var top = cur.offsetTop - L.clientHeight / 3; if (Math.abs(L.scrollTop - top) > 40) L.scrollTop = top; }
 }
@@ -430,8 +434,8 @@ function renderNow(){
   var i = curIdx(), c = CUES[i]; if (!c) return;
   var peek = view != null && view !== ST.live;
   var h = '';
-  if (peek) h += '<div class="peekbar"><span>👀 미리보기 중 — 지금 진행은 ' + esc(CUES[ST.live].no) + '번 「' + esc(CUES[ST.live].seg) + '」</span><button data-back>LIVE로 돌아가기</button></div>';
-  h += '<div class="nowhd"><span class="badge' + (peek ? ' peek' : '') + '">' + (peek ? '미리보기' : 'NOW') + '</span>' +
+  if (peek) h += '<div class="peekbar"><span>👀 다른 컷을 보는 중이에요 · 지금 진행 중인 컷은 ' + esc(CUES[ST.live].no) + '번 「' + esc(CUES[ST.live].seg) + '」</span><button data-back>진행 중인 컷으로 돌아가기</button></div>';
+  h += '<div class="nowhd"><span class="badge' + (peek ? ' peek' : '') + '">' + (peek ? '보는 중' : '진행 중') + '</span>' +
        '<span class="big">' + esc(c.no ? c.no + '. ' : '') + esc(c.seg || '(구간 없음)') + '</span>' +
        (c.t ? '<span class="t">' + esc(c.t) + '</span>' : '') + '</div>';
   // GO · 스탠바이 · 담당
@@ -451,8 +455,8 @@ function renderNow(){
          '<div class="col c-snd"><div class="colh">🔊 음향 <small>누르면 이 기기에서 재생</small></div>' + snd + '</div>' +
        '</div></div>';
   h += '<div class="nav">' +
-       '<button class="back" data-prev>◀ 이전</button>' +
-       '<button class="gonext" data-next ' + (i >= CUES.length - 1 ? 'disabled' : '') + '>' + (peek ? '이 큐로 진행(LIVE) ▶' : '다음 큐로 GO ▶') + '<span class="kbd">Space</span></button></div>';
+       '<button class="back" data-prev>◀ 이전 컷</button>' +
+       '<button class="gonext" data-next ' + (i >= CUES.length - 1 ? 'disabled' : '') + '>' + (peek ? '이 컷으로 이동 ▶' : '다음 컷으로 ▶') + '<span class="kbd">Space</span></button></div>';
   var n = CUES[i + 1];
   if (n){
     var ns = screenOf(i + 1);
@@ -516,7 +520,7 @@ function paintAll(){ renderList(); renderNow(); renderBoard(); renderTables(); p
 
 /* ── 이벤트 ── */
 document.addEventListener('click', function(e){
-  var t = e.target.closest('[data-k],[data-stop],[data-stopall],[data-chk],[data-cue],[data-next],[data-prev],[data-back],[data-rm],.tab');
+  var t = e.target.closest('[data-clrchk],[data-k],[data-stop],[data-stopall],[data-chk],[data-cue],[data-next],[data-prev],[data-back],[data-rm],.tab');
   if (!t) return;
   if (t.hasAttribute('data-chk')){ e.stopPropagation(); setChk(t.getAttribute('data-chk')); return; }
   if (t.hasAttribute('data-k')) return play(t.getAttribute('data-k'));
@@ -525,6 +529,7 @@ document.addEventListener('click', function(e){
   if (t.hasAttribute('data-cue')){ var i = +t.getAttribute('data-cue'); view = i === ST.live ? null : i; renderList(); renderNow(); return; }
   if (t.hasAttribute('data-next')) return goNext();
   if (t.hasAttribute('data-prev')) return goTo(curIdx() - 1);
+  if (t.hasAttribute('data-clrchk')){ clearCueChecks(); return; }
   if (t.hasAttribute('data-back')){ view = null; renderList(); renderNow(); return; }
   if (t.hasAttribute('data-rm')){ var k = t.getAttribute('data-rm'); stop(k, true); if (BLOB[k]) URL.revokeObjectURL(BLOB[k].url); delete BLOB[k]; delete AU[k]; idbPut(k, null).then(paintAll); return; }
   if (t.classList.contains('tab')) return tab(t.getAttribute('data-tab'));
@@ -582,6 +587,12 @@ function goTo(i){
   }
   ls('liveLocal', i);
 }
+function clearCueChecks(){
+  if (!confirm('진행 탭의 체크 표시를 모두 지울까요?\n(모든 스태프 화면에서 같이 지워져요)')) return;
+  var up = {}; Object.keys(ST.chk).forEach(function(k){ if (/^cue\./.test(k)){ delete ST.chk[k]; up[k.replace('.', '_')] = null; } });
+  paintAll(); toast('체크를 모두 해제했어요');
+  if (DB && Object.keys(up).length) DB.ref('semops/chk').update(up).catch(function(){ toast('저장 실패 — 이 화면만 지워졌어요'); });
+}
 function setChk(k){
   var v = !ST.chk[k]; ST.chk[k] = v; paintAll();
   if (DB) DB.ref('semops/chk/' + k.replace('.', '_')).set(v || null).catch(function(){ toast('저장 실패'); });
@@ -600,7 +611,11 @@ if (typeof firebase !== 'undefined'){
     firebase.auth().onAuthStateChanged(function(u){
       if (!u) return;
       DB = firebase.database();
-      DB.ref('.info/connected').on('value', function(s){ s.val() ? sync('ok', '실시간 연결') : sync('bad', '연결 끊김 — 이 화면만'); });
+      // 접속자 수: semops/presence/<uid> (창 닫으면 자동 삭제)
+      var online = false, people = 0, me = DB.ref('semops/presence/' + u.uid);
+      function paintSync(){ online ? sync('ok', people > 1 ? people + '명이 같이 보는 중' : '나 혼자 보는 중') : sync('bad', '⚠ 연결 끊김 — 컷을 넘겨도 다른 사람 화면은 안 바뀌어요'); }
+      DB.ref('.info/connected').on('value', function(s){ online = !!s.val(); if (online){ me.onDisconnect().remove(); me.set({ at:firebase.database.ServerValue.TIMESTAMP }); } paintSync(); });
+      DB.ref('semops/presence').on('value', function(s){ people = s.numChildren(); paintSync(); });
       DB.ref('semops/live').on('value', function(s){ var v = s.val(); if (v && typeof v.i === 'number' && v.i < CUES.length){ var moved = v.i !== ST.live; ST.live = v.i; ls('liveLocal', v.i); if (moved && view === ST.live) view = null; renderList(); renderNow(); } });
       DB.ref('semops/chk').on('value', function(s){ var v = s.val() || {}, o = {}; Object.keys(v).forEach(function(k){ if (v[k]) o[k.replace('_', '.')] = true; }); ST.chk = o; renderList(); renderTables(); });
     });
