@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>세미나 운영 콘솔</title>
+<link rel="icon" href="/favicon-seminar.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<!--
+  세미나 운영 콘솔 (2026-11-18) — SMART HOME INTERIOR 2026 · 11/19 코엑스 401호
+  · 원본: (최종) 11월 세미나_전체 큐시트_F.xlsx 5개 시트를 아래 DATA로 굳힘 (tools 없이 semops.src.html → semops.html 빌드)
+  · 공개 페이지(middleware 제외): 링크 있는 현장 스태프·마케팅팀이 로그인 없이 봄. 개인정보 없음(스태프 이름·대본만)
+  · 실시간: Firebase semops/live(현재 큐), semops/chk/<키>(체크), 익명 로그인
+  · 소리: 이 기기에서만 재생. sfx/*.mp3 기본 탑재 + 없는 파일은 '파일 넣기'로 이 브라우저(IndexedDB)에 저장
+-->
+<style>
+:root{
+  --bg:#0F1012;--bg2:#17181B;--card:#1D1F23;--card2:#25282D;--line:#2E3137;--tx:#F3F3F1;--tx2:#A9ADB4;--tx3:#6E737B;
+  --acc:#FF4D00;--acc2:#FF7A3D;--ok:#2BC48A;--warn:#FFB020;--bad:#FF5A5A;--live:#FF4D00;--sfx:#7C5CFF;--bgm:#1FA3FF;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#F4F3EF;--bg2:#ECEAE4;--card:#FFFFFF;--card2:#F6F5F1;--line:#E2DFD8;--tx:#141414;--tx2:#5B5F66;--tx3:#9A9DA3;
+  }
+}
+:root[data-theme="light"]{--bg:#F4F3EF;--bg2:#ECEAE4;--card:#FFFFFF;--card2:#F6F5F1;--line:#E2DFD8;--tx:#141414;--tx2:#5B5F66;--tx3:#9A9DA3}
+:root[data-theme="dark"]{--bg:#0F1012;--bg2:#17181B;--card:#1D1F23;--card2:#25282D;--line:#2E3137;--tx:#F3F3F1;--tx2:#A9ADB4;--tx3:#6E737B}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:Pretendard,-apple-system,'Malgun Gothic',sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap}
+.ttl{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.ttl b{font-size:16px;font-weight:900;letter-spacing:-.02em}
+.ttl span{font-size:12px;color:var(--tx2);font-weight:600}
+.clock{font-size:26px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.03em;margin-left:auto}
+.pill{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:12.5px;font-weight:800;white-space:nowrap}
+.pill.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--tx3)}
+.dot.ok{background:var(--ok)}.dot.bad{background:var(--bad)}
+.tabs{display:flex;gap:4px;padding:0 12px 8px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{height:36px;padding:0 14px;border-radius:10px;border:0;background:transparent;color:var(--tx2);font-size:14px;font-weight:800;white-space:nowrap}
+.tab.on{background:var(--card2);color:var(--tx)}
+.tab .n{font-size:11px;opacity:.7;margin-left:4px}
+main{padding:14px 16px 120px;max-width:1500px;margin:0 auto}
+.hidden{display:none!important}
+
+/* ── 진행(라이브) ── */
+.live{display:grid;grid-template-columns:300px minmax(0,1fr) 340px;gap:14px;align-items:start}.live>*{min-width:0}.nav button:disabled{opacity:.45;cursor:not-allowed}.gonext{white-space:normal;line-height:1.3}
+.list{background:var(--card);border:1px solid var(--line);border-radius:14px;max-height:calc(100vh - 150px);overflow:auto;position:sticky;top:120px}
+.li{display:grid;grid-template-columns:22px 30px 44px 1fr;gap:6px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px}
+.li:hover{background:var(--card2)}
+.li .no{color:var(--tx3);font-weight:800;font-variant-numeric:tabular-nums}
+.li .tm{color:var(--tx2);font-variant-numeric:tabular-nums;font-size:12px}
+.li .sg{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li .ic{font-size:11px;color:var(--sfx);margin-left:4px}
+.li.done .sg,.li.done .tm{color:var(--tx3);text-decoration:line-through}
+.li.cur{background:var(--acc);color:#fff}
+.li.cur .no,.li.cur .tm,.li.cur .ic{color:#fff}
+.li.view:not(.cur){outline:2px solid var(--acc);outline-offset:-2px}
+.li.sec{background:var(--bg2);font-size:11px;color:var(--tx3);font-weight:800;letter-spacing:.04em;cursor:default;grid-template-columns:1fr;padding:6px 10px}
+.ck{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--tx3);display:inline-flex;align-items:center;justify-content:center;font-size:12px;background:transparent;padding:0;flex:none}
+.ck.on{background:var(--ok);border-color:var(--ok);color:#fff}
+
+.now{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.nowhd{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--bg2);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.badge{font-size:12px;font-weight:900;padding:4px 10px;border-radius:999px;background:var(--live);color:#fff;letter-spacing:.04em}
+.badge.peek{background:var(--card2);color:var(--tx2);border:1px solid var(--line)}
+.nowhd .big{font-size:26px;font-weight:900;letter-spacing:-.03em}
+.nowhd .t{font-size:18px;font-weight:800;color:var(--tx2);font-variant-numeric:tabular-nums}
+.nowbd{padding:16px 18px;display:grid;gap:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.box{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.box h4{margin:0 0 4px;font-size:11.5px;font-weight:800;color:var(--tx3);letter-spacing:.04em}
+.box p{margin:0;font-size:15px;font-weight:700;white-space:pre-wrap;line-height:1.45}
+.box.go{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 14%,var(--card2))}
+.box.go h4{color:var(--acc2)}
+.script{font-size:clamp(17px,1.5vw,21px);line-height:1.7;font-weight:600;white-space:pre-wrap;word-break:keep-all}
+.script .stage{color:var(--warn);font-weight:700;font-size:.85em}
+.empty{color:var(--tx3);font-size:14px}
+.nav{display:flex;gap:10px;padding:0 18px 18px}
+.nav button{height:56px;border-radius:14px;border:1px solid var(--line);background:var(--card2);font-size:16px;font-weight:900;padding:0 18px}
+.nav .gonext{flex:1;background:var(--acc);border-color:var(--acc);color:#fff;font-size:19px}
+.nav .gonext:disabled{opacity:.4}
+.nav .back{background:var(--card2)}
+.kbd{display:inline-block;font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid currentColor;opacity:.75;margin-left:6px;font-weight:700}
+.peekbar{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:10px 18px;background:color-mix(in srgb,var(--warn) 18%,var(--card));font-size:13px;font-weight:800}
+.peekbar button{height:32px;padding:0 12px;border-radius:999px;border:0;background:var(--warn);color:#111;font-weight:900}
+
+.side{display:grid;gap:14px;position:sticky;top:120px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+.panel>h3{margin:0 0 10px;font-size:13px;font-weight:900;color:var(--tx2);display:flex;align-items:center;justify-content:space-between}
+.next .seg{font-size:17px;font-weight:900}
+.next .meta{font-size:12.5px;color:var(--tx2);margin-top:4px;white-space:pre-wrap}
+
+/* ── 사운드 버튼 ── */
+.snd{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;width:100%;text-align:left;border-radius:12px;border:1.5px solid var(--line);background:var(--card2);padding:10px 12px;overflow:hidden}
+.snd+.snd{margin-top:8px}
+.snd .pl{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--sfx);color:#fff;font-size:16px;font-weight:900}
+.snd.bgm .pl{background:var(--bgm)}
+.snd .nm{font-size:15px;font-weight:900;line-height:1.25}
+.snd .nm small{display:block;font-size:11.5px;font-weight:700;color:var(--tx2);margin-top:2px}
+.snd .rt{font-size:11px;font-weight:800;color:var(--tx3);text-align:right;white-space:nowrap}
+.snd .prog{position:absolute;left:0;bottom:0;height:4px;background:var(--sfx);width:0}
+.snd.bgm .prog{background:var(--bgm)}
+.snd.playing{border-color:var(--sfx);background:color-mix(in srgb,var(--sfx) 16%,var(--card2))}
+.snd.bgm.playing{border-color:var(--bgm);background:color-mix(in srgb,var(--bgm) 16%,var(--card2))}
+.snd.playing .pl{animation:pulse 1s infinite}
+.snd.missing{opacity:.55;border-style:dashed}
+.snd.missing .pl{background:var(--tx3)}
+.snd:disabled{cursor:not-allowed}
+@keyframes pulse{50%{transform:scale(.9)}}
+.stopall{width:100%;height:46px;margin-top:10px;border-radius:12px;border:0;background:var(--bad);color:#fff;font-size:15px;font-weight:900}
+.hint{font-size:12px;color:var(--tx3);line-height:1.5;margin-top:8px}
+.warnbox{font-size:12.5px;line-height:1.5;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--warn) 16%,var(--card2));border:1px solid color-mix(in srgb,var(--warn) 45%,transparent);margin-top:8px;font-weight:600}
+
+/* ── 음향 보드 ── */
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.slot{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:8px}
+.slot .snd{margin:0}
+.slot .desc{font-size:12.5px;color:var(--tx2);line-height:1.5}
+.slot .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:11.5px;font-weight:800}
+.chip{padding:3px 8px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--tx2)}
+.chip.ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 50%,transparent)}
+.chip.no{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 50%,transparent)}
+.lnk{background:none;border:0;padding:0;font-size:12px;font-weight:800;color:var(--acc2);text-decoration:underline;text-underline-offset:2px}
+.drop{outline:2px dashed var(--acc);outline-offset:-4px}
+.mixer{display:flex;gap:16px;flex-wrap:wrap;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.mixer label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800}
+.mixer input[type=range]{width:160px;accent-color:var(--acc)}
+.btn{height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--card2);font-size:13px;font-weight:800}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+h2.sec{font-size:15px;font-weight:900;margin:18px 0 10px;color:var(--tx2)}
+
+/* ── 표(마이크·사운드체크·비상) ── */
+.tbl{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:14px}
+.tbl th{background:var(--bg2);text-align:left;font-size:12px;color:var(--tx3);font-weight:800;padding:9px 10px;border-bottom:1px solid var(--line)}
+.tbl td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5;white-space:pre-wrap}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr.done td{color:var(--tx3)}
+.tbl td.k{font-weight:900}
+.cards{display:none}
+
+/* ── 바로가기 ── */
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.lk{display:block;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.lk b{display:block;font-size:16px;font-weight:900}
+.lk span{display:block;font-size:12.5px;color:var(--tx2);margin-top:4px;line-height:1.5}
+.lk i{font-style:normal;font-size:11px;font-weight:800;color:var(--warn)}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:800;transition:.2s;z-index:50;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.nowplay{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--bg2);border-top:1px solid var(--line);padding:8px 16px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:800;flex-wrap:wrap}
+.nowplay .np{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--card2);border:1px solid var(--line)}
+.nowplay .np button{border:0;background:none;padding:0 0 0 4px;font-weight:900;color:var(--bad)}
+.nowplay .x{margin-left:auto;height:34px;padding:0 14px;border-radius:999px;border:0;background:var(--bad);color:#fff;font-weight:900}
+
+@media (max-width:1100px){
+  .live{grid-template-columns:1fr}
+  .list{position:static;max-height:260px;order:3}
+  .side{position:static}
+}
+@media (max-width:640px){
+  .bar{padding:8px 16px}
+  .clock{font-size:20px;margin-left:0}.ttl b{font-size:14px}main{padding:12px 16px 120px}
+  .grid2{grid-template-columns:1fr}
+  .nowhd .big{font-size:21px}
+  .nav button{height:52px;padding:0 12px}
+  .tbl{display:none}
+  .cards{display:grid;gap:10px}
+  .cards .box p{font-size:14px}
+  .mixer input[type=range]{width:120px}
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="bar">
+    <div class="ttl"><b>SMART HOME INTERIOR 2026 · 운영 콘솔</b><span>11월 19일(목) 코엑스 401호 · 큐시트 F 기준</span></div>
+    <div class="clock" id="clock">--:--:--</div>
+    <span class="pill" id="sync"><span class="dot" id="syncDot"></span><span id="syncTx">연결 중</span></span>
+    <button class="pill" id="opBtn" title="음향·스크린 오퍼레이터만 켜세요">🎚 오퍼레이터 모드</button>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-tab="live">▶ 진행</button>
+    <button class="tab" data-tab="sound">🔊 음향 보드</button>
+    <button class="tab" data-tab="mic">🎤 마이크</button>
+    <button class="tab" data-tab="check">✅ 사운드체크</button>
+    <button class="tab" data-tab="sos">🚨 비상 대응</button>
+    <button class="tab" data-tab="links">🔗 바로가기</button>
+  </nav>
+</div>
+
+<main>
+  <section id="t-live" class="live">
+    <div class="list" id="cueList" aria-label="큐 목록"></div>
+    <div class="now" id="now"></div>
+    <div class="side">
+      <div class="panel"><h3>이 큐의 음향 <span id="opHint"></span></h3><div id="cueSnd"></div>
+        <button class="stopall" data-stopall>■ 전체 정지 <span class="kbd">Esc</span></button>
+      </div>
+      <div class="panel next"><h3>다음 큐</h3><div id="nextCue"></div></div>
+    </div>
+  </section>
+
+  <section id="t-sound" class="hidden">
+    <div class="mixer">
+      <label>🔊 효과음 <input type="range" id="volSfx" min="0" max="100"><span id="volSfxTx"></span></label>
+      <label>🎵 BGM <input type="range" id="volBgm" min="0" max="100"><span id="volBgmTx"></span></label>
+      <span class="chip" id="readyChip"></span>
+      <span style="flex:1"></span>
+      <label class="btn" style="cursor:pointer">📁 폴더에서 한 번에 넣기<input type="file" id="dirIn" webkitdirectory multiple hidden></label>
+      <button class="btn" data-stopall>■ 전체 정지</button>
+    </div>
+    <div class="warnbox" id="soundWarn" style="margin:0 0 12px"></div>
+    <h2 class="sec">효과음 (SFX) — 누르면 처음부터 재생, 숫자키 1~8</h2>
+    <div class="board" id="boardSfx"></div>
+    <h2 class="sec">배경음악 (BGM) — 반복 재생, 다시 누르면 서서히 꺼짐</h2>
+    <div class="board" id="boardBgm"></div>
+    <p class="hint" id="soundFoot"></p>
+  </section>
+
+  <section id="t-mic" class="hidden"><div id="micBody"></div></section>
+  <section id="t-check" class="hidden"><div id="checkBody"></div></section>
+  <section id="t-sos" class="hidden"><div id="sosBody"></div></section>
+  <section id="t-links" class="hidden"><div class="links" id="linkBody"></div></section>
+</main>
+
+<div class="nowplay hidden" id="nowplay"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+(function(){
+'use strict';
+var DATA = {"s1":[{"A":"체크","B":"큐","C":"시각","D":"구간","E":"LED 화면","F":"LED 화면","G":"LED 화면","H":"LED 화면","I":"GO 사인 (이 순간 실행)","J":"스탠바이 (미리 준비)","K":"사회자 대본","L":"담당 · 메모"},{"A":"☐","B":"1","D":"오픈 준비","J":"조명: 전체 밝게"},{"A":"☐","B":"2","C":"0.55555555555555558","D":"오픈 준비","E":"full(single) screen","F":"쇼룸 영상","G":"쇼룸 영상","H":"쇼룸 영상","J":"마이크 전부 OFF 확인 · 배터리 새것","L":"고광영"},{"A":"☐","B":"3","C":"0.5625","D":"입장","J":"쇼룸 영상"},{"A":"☐","B":"4","C":"0.57291666666666663","D":"1차 안내 방송","F":"대기 화면","G":"1-1(착석안내_대기)","I":"45분에 수현님 신호","J":"사회자 무대 옆 · MC 마이크 손에","K":"안녕하십니까. 잠시 후 오후 2시부터 「공간 디자인의 새로운 패러다임: SMART HOME INTERIOR 2026 세미나」가 시작됩니다. 본 행사는 입구 등록 데스크에서 사전 발송된 QR코드를 인증하고 명찰을 배부 받으셔야 입장이 가능합니다. 미등록자분들은 먼저 명찰을 수령해 주시기 바라며, 행사 마지막에는 명찰 우상단 번호로 진행되는 럭키 드로우가 준비되어 있으니 참고 부탁드립니다."},{"B":"5","C":"0.57361111111111107","D":"입장","F":"쇼룸 영상","G":"쇼룸 영상","H":"쇼룸 영상"},{"A":"☐","B":"6","C":"0.57986111111111116","D":"2차 안내 방송","F":"대기 화면","G":"1-1(착석안내_대기)","I":"55분에 수현님 신호","K":"행사 시작 5분 전입니다. 아직 등록 데스크에서 QR코드 인증과 명찰 수령을 마치지 않으신 분들은 신속히 등록 후 착석해 주시기 바랍니다. 원활한 진행을 위해 휴대전화는 무음이나 진동으로 전환해 주십시오."},{"A":"☐","B":"7","C":"0.58333333333333337","D":"오프닝 스탠바이","F":"KV 타이틀","G":"1-2(시작)","I":"조명: 객석 어둡게, 무대 밝게"},{"A":"☐","B":"8","C":"0.58333333333333337","D":"오프닝","I":"사운드: SFX-01 오프닝"},{"A":"☐","B":"9","C":"0.58349537037037036","D":"사회자 인사","I":"BGM이 다 꺼지고 1초 정적 후","K":"안녕하십니까. 「공간디자인의 새로운 패러다임, SMART HOME INTERIOR 2026」 세미나에 오신 여러분을 진심으로 환영합니다.\n저는 오늘 사회를 맡은 아카라라이프 스마트홈인테리어 사업부 조수현 프로입니다. (인사)\n최근 우리의 생활 방식이 달라지면서 인테리어의 역할과 가치도 변화하고 있습니다.\n오늘은 다섯 분의 연사와 함께 스마트홈 기술이 공간과 일상을 어떻게 변화시키고, 새로운 비즈니스 기회로 어떻게 이어질 수 있을지 살펴보겠습니다.\n이번 세미나는 아카라라이프와 KOSID가 공동 주최하고, 한국실내디자인학회와 아키랩의 협력으로 마련되었습니다.\n\n앞으로 약 세 시간 동안 이어질 다양한 이야기에 많은 관심 부탁드립니다. \n\n그럼 지금부터 본격적으로 세미나를 시작하겠습니다.","L":"조수현"},{"A":"☐","B":"10","C":"0.58437499999999998","D":"이상헌 브릿지","F":"이상헌","G":"2-1(이상헌대표)","I":"이때 발표 화면 전환","J":"스탠바이","K":"첫 번째 순서로, 아카라라이프 이상헌 대표님께서 「SMART HOME INTERIOR 2026: 공간의 미래를 열다」라는 주제로 오늘 행사의 문을 열어주시겠습니다."},{"B":"11","D":"이상헌 등장","J":"등장","K":"여러분, 큰 박수로 맞아주시기 바랍니다. (박수 → 등단)"},{"A":"☐","B":"12","C":"0.58680555555555558","D":"이상헌 퇴장","K":"네, 이상헌 대표님 감사합니다."},{"A":"☐","B":"13","C":"0.58703703703703702","D":"조현이 브릿지","F":"조현이","G":"2-2(조현이회장)","I":"이때 발표 화면 전환","J":"스탠바이","K":"이어서 오늘 세미나를 더욱 뜻깊게 빛내주실 KOSID 조현이 회장님의 축사 말씀이 있겠습니다."},{"B":"14","D":"조현이 등장","J":"등장","K":"여러분, 조현이 회장님을 따뜻한 박수로 맞아주시기 바랍니다."},{"A":"☐","B":"15","C":"0.59027777777777779","D":"조현이 퇴장","K":"네, 조현이 회장님. 뜻깊은 말씀 감사합니다."},{"B":"16","D":"본격 시작 알림","F":"디자인 세션","G":"3-1(디자인세션시작)","K":"그럼 이제, 스마트홈과 공간의 변화에 대한 구체적인 이야기들을 이어가 보겠습니다."},{"B":"17","C":"0.59062499999999996","D":"오승욱 브릿지","E":"multi-screen","F":"오승욱\n발표 화면 표지","G":"3-2-1(발표 시 좌측 고정화면)\n3-2-2(발표 시 우측 변경화면_오승욱)\n\n오승욱 ppt","I":"이때 발표 화면 전환","J":"스탠바이","K":"첫 번째 키노트 발표는 무아공간 오승욱 대표님께서 맡아주시겠습니다.\n「집은 삶을 따라 진화한다: 변화하는 생활, 확장되는 공간, 그리고 기술의 역할」이라는 주제로, 한국의 주거문화가 어떻게 변화해 왔으며, 앞으로 공간이 담아야 할 본질적인 가치는 무엇인지 함께 살펴보는 시간이 되겠습니다."},{"A":"☐","B":"18","C":"0.59062499999999996","D":"오승욱 등장","F":"발표 자료 본인이","J":"등장","K":"그럼 여러분의 박수와 함께 오승욱 대표님을 무대로 모시겠습니다. (박수 → 등단)"},{"A":"☐","B":"19","C":"—","F":"Q\u0026A 화면","L":"Q\u0026A 마이크와 스피커가 가까우면 하울링 → 바로 볼륨 ↓"},{"A":"☐","B":"20","C":"0.6166666666666667","D":"오승욱 퇴장","F":"엔딩 장면","K":"아쉽지만 시간 관계상 특별한 소통의 시간은 여기까지 갖도록 하겠습니다. 좋은 질문해 주신 분들과 성심껏 답변해 주신 오승욱 대표님께 감사드리며, 다시한번 큰 박수 부탁드리겠습니다."},{"A":"☐","B":"21","C":"0.58333333333333337","D":"Break ①","J":"조명: 전체 밝게"},{"A":"☐","B":"22","C":"0.61805555555555558","D":"Break ① 안내","E":"full(single) screen","F":"Break ①\n휴식 화면","G":"4번 화면 중 시간 맞는 것으로","K":"이어서 잠시 휴식 시간을 갖겠습니다.\n지금부터 약 20분간 휴식한 뒤, ~~시~~분 부터 두 번째 세션을 시작하겠습니다.   (3시15분이 MAX)\n로비에는 아카라라이프의 스마트홈 기술을 직접 경험해 보실 수 있는 체험 공간도 마련되어 있으니, 휴식 시간 동안 자유롭게 둘러보시기 바랍니다.\n궁금하신 점은 현장 담당자에게 편하게 문의해 주시면 됩니다.\n그럼 잠시 후에 다시 뵙겠습니다. 감사합니다."},{"A":"☐","B":"23","D":"Break ①","F":"쇼룸 영상","G":"쇼룸 영상","H":"쇼룸 영상","I":"사회자 멘트 종료"},{"A":"☐","B":"24","C":"0.62986111111111109","D":"Break ① 재입장 안내","F":"Break ①\n휴식 화면","G":"4번 화면 중 시간 맞는 것으로","I":"수현님 신호","J":"사회자 무대 옆 · MC 마이크 손에","K":"잠시 후 다음 세션이 시작됩니다. 로비에 계신 분들은 자리로 돌아와 착석해주시기 바랍니다.","L":"로비에서도 들리는지 확인. 로비 안내: 조수현·양정일"},{"A":"☐","B":"25","C":"0.63194444444444442","D":"Break ① 종료, 재시작","J":"조명: 객석 어둡게, 무대 밝게"},{"B":"26","D":"김경민 브릿지","E":"multi-screen","F":"김경민\n발표 화면 표지","G":"3-2-1(발표 시 좌측 고정화면)\n5-1(발표 시 우측 변경화면_김경민)\n\n김경민 ppt","I":"이때 발표 화면 전환","J":"스탠바이","K":"그럼 지금부터 두 번째 세션을 시작하겠습니다.\n앞선 키노트에서는 우리의 생활 방식이 변화함에 따라, 집과 공간이 어떻게 진화하고 있는지 살펴보았습니다.\n이번 시간은 한 걸음 더 나아가, 스마트홈 기술이 우리의 일상과 공간 경험을 어떻게 변화시킬 수 있을지 이야기 나눠보겠습니다.\n「공간과 마음을 연결하는 알고리즘: 스마트홈이 가져다줄 일상의 변화」라는 주제로, 어나더디 스튜디오의 김경민 디렉터님께서 기술이 공간에 더해졌을 때 우리의 일상과 감성에 어떤 새로운 경험을 만들어낼 수 있을지 발표해주시겠습니다."},{"A":"☐","B":"27","C":"0.63194444444444442","D":"김경민 등장","F":"발표 자료 본인이","J":"등장","K":"그럼 김경민 디렉터님을 무대로 모시겠습니다.\n여러분, 힘찬 박수 부탁드립니다. (박수 → 등단)"},{"A":"☐","B":"28","C":"0.63263888888888886","D":"김경민 퇴장","I":"김경민 디렉터 \"감사합니다\" + 박수","K":"네, 김경민 디렉터님. 좋은 발표 감사합니다.\n스마트홈 기술이 단순한 편리함을 넘어, 우리의 일상과 공간 경험을 더욱 풍요롭게 만들어갈 수 있다는 점을 생각해 볼 수 있는 시간이었습니다."},{"B":"29","D":"송제권 브릿지","F":"송제권\n발표 화면 표지","G":"3-2-1(발표 시 좌측 고정화면)\n5-2(발표 시 우측 변경화면_송제권)\n\n송제권 ppt","I":"이때 발표 화면 전환","J":"스탠바이","K":"이어서 다음 발표를 진행하겠습니다.\n앞서 스마트홈 기술이 우리의 일상과 공간에 가져올 변화를 살펴봤다면, 이번에는 조금 다른 관점에서 인테리어의 미래를 이야기해 보겠습니다.\n다음 연사는 아파트컬처 송제권 대표님이십니다.\n「같은 평면, 다른 집: 인테리어를 잘하는 것은 당연해졌다. 그 다음은 무엇인가?」라는 주제로, 비슷한 구조의 공간 속에서 어떻게 차별화된 가치를 만들어낼 수 있을지 이야기해 주시겠습니다."},{"A":"☐","B":"30","C":"0.64930555555555558","D":"송제권 등장","F":"발표 자료 본인이","J":"등장","K":"그럼 송제권 대표님을 큰 박수로 무대로 모시겠습니다. (박수 → 등단)"},{"A":"☐","B":"31","D":"송제권 퇴장","K":"네, 송제권 대표님. 좋은 말씀 감사합니다.\n단순히 공간을 아름답게 꾸미는 것을 넘어, 앞으로 인테리어가 어떤 새로운 가치를 제안해야 할지 생각해 볼 수 있는 시간이었습니다. (~~가 인상깊었다 소감 한 마디)."},{"A":"☐","B":"32","C":"0.58333333333333337","D":"Break ②","J":"조명: 전체 밝게"},{"B":"33","C":"0.66666666666666663","D":"Break ② 안내","E":"full(single) screen","F":"Break ②\n휴식 화면","G":"6번 화면 중 시간 맞는 것으로","K":"이것으로 두 번째 세션을 마치고, 잠시 휴식 시간을 갖겠습니다.\n지금부터 20분간 휴식한 뒤, ~~시 ~~분에 다음 세션을 시작하겠습니다.  (4시 25분 MAX)\n아직 부스 체험을 하지 못한 분들께서는 행사장 입구 오른쪽에 마련된 아카라라이프 전시 부스 공간에서 직접 아카라라이프의 스마트 스위치와 조명 라인업들을 확인해 보시면 좋을 것 같습니다. 많은 관심 부탁드립니다."},{"A":"☐","B":"34","C":"0.66736111111111107","D":"Break ②","F":"쇼룸 영상","G":"쇼룸 영상","H":"쇼룸 영상"},{"A":"☐","B":"35","C":"0.67847222222222225","D":"Break ② 재입장 안내","F":"Break ②\n휴식 화면","G":"6번 화면 중 시간 맞는 것으로","K":"잠시 후 세미나가 시작됩니다. \n로비와 전시 공간에 계신 참석자 여러분께서는 행사장으로 돌아오셔서 자리에 앉아주시기 바랍니다."},{"A":"☐","B":"36","C":"0.58333333333333337","D":"Break ②","J":"조명: 객석 어둡게, 무대 밝게"},{"B":"37","D":"본격 시작 알림","F":"비즈니스 세션","G":"7-1(비지니스세션시작)","K":"네, 여러분. 휴식 시간 잘 보내셨습니까?\n그럼 지금부터 세 번째 세션을 시작하겠습니다.\n앞선 발표들에서는 변화하는 주거문화와 인테리어의 새로운 가치, 그리고 스마트홈 기술이 공간과 일상에 가져올 변화들을 살펴보았습니다.\n이번에는 이러한 변화를 가능하게 하는 스마트홈 플랫폼의 역할과 미래에 대해 이야기 나눠보겠습니다."},{"A":"☐","B":"38","C":"0.68055555555555558","D":"정재연 브릿지","E":"multi-screen","F":"정재연\n발표 화면 표지","G":"3-2-1(발표 시 좌측 고정화면)\n7-2(발표 시 우측 변경화면_정재연)\n\n정재연 ppt","I":"이때 발표 화면 전환","J":"스탠바이","K":"발표를 맡아주실 분은 바로 삼성전자 AI플랫폼센터 SmartThings팀 정재연 부사장님이십니다. 「공간이 삶을 이해하는 방식, SmartThings: 스마트홈 플랫폼이 그리는 공간과 일상」이라는 주제로, 스마트홈 플랫폼이 우리의 공간과 일상을 어떻게 연결하고 변화시켜 나갈지 말씀해 주시겠습니다."},{"B":"39","D":"정재연 등장","F":"발표 자료 본인이","J":"등장","K":"그럼 정재연 부사장님을 무대로 모시겠습니다.\n여러분, 큰 박수로 맞아주시기 바랍니다. (박수 → 등단)"},{"A":"☐","B":"40","C":"0.68090277777777775","D":"정재연 퇴장","K":"네, 정재연 부사장님. 좋은 말씀 감사합니다.\n공간과 일상을 잇는 플랫폼의 시선에서, 스마트홈이 이미 우리 생활의 기반이 되어가고 있다는 것을 확인할 수 있었던 시간이었습니다. (현장 수정 가능)"},{"B":"41","D":"최웅열 브릿지","F":"최웅열\n발표 화면 표지","G":"3-2-1(발표 시 좌측 고정화면)\n7-3(발표 시 우측 변경화면_최웅열)\n\n최웅열 ppt","I":"이때 발표 화면 전환","J":"스탠바이","K":"이제 오늘 세미나의 마지막 발표를 앞두고 있습니다.\n지금까지 스마트홈이 가져올 공간의 변화와 기술의 가능성을 살펴봤다면, 마지막 순서에서는 이러한 변화가 실제 인테리어 비즈니스에 어떤 기회가 될 수 있을지 알아보겠습니다. \n\n오늘의 마지막 연사는 아카라라이프 스마트홈 인테리어 사업부 최웅열 사업부장님이십니다. 「수주 경쟁력과 객단가를 높이는 새로운 사업 공식, 스마트홈 인테리어」라는 주제로, 인테리어 기업들이 현장에서 마주하는 현실적인 고민부터, 아카라라이프와의 협업을 통해 새로운 사업 기회를 만들어가는 방법까지 구체적으로 소개해 주시겠습니다."},{"B":"42","C":"0.70138888888888884","D":"최웅열 등장","F":"발표 자료 본인이","J":"등장","K":"그럼 최웅열 사업부장님을 무대로 모시겠습니다.\n힘찬 박수 부탁드립니다.  (박수 → 등단)"},{"A":"☐","B":"43","C":"0.71527777777777779","D":"최웅열 퇴장","K":"네, 최웅열 사업부장님 감사합니다."},{"B":"45","C":"0.71527777777777779","D":"Closing_마무리 멘트","E":"full(single) screen","F":"KV 타이틀","G":"8(세션 종료)","K":"오늘 다섯 분의 연사와 함께 스마트홈 인테리어가 가져올 공간의 변화와 새로운 가능성을 살펴보았습니다.\n오늘 나눈 이야기들이 단순한 인사이트를 넘어, 여러분의 실제 비즈니스와 현장에서 새로운 기회를 만들어가는 데 도움이 되기를 바랍니다."},{"A":"☐","B":"46","D":"Closing_참석자 혜택 안내","F":"→ 클로징 화면","G":"9(모든참석자선물 안내)","J":"럭키드로우 추첨함·당첨 화면 · 드럼롤 큐 걸어두기","K":"이어서 오늘 참석해 주신 여러분을 위해 아카라라이프에서 준비한 특별한 혜택을 안내해 드리겠습니다.\n먼저, 행사 종료 후 퇴장하실 때 로비에서 참석자 전원께 기프트 백을 증정해 드릴 예정입니다.\n특히 기프트 백에는 오늘 세미나에 참석하신 인테리어 업체를 위한 특별 혜택 쿠폰이 포함되어 있습니다.\n오늘 세미나 이후 아카라라이프와 첫 스마트홈 인테리어 현장을 함께 진행하시는 업체에는 150만 원 상당의 현장 설계 자동화 서비스와 25만 원 상당의 스마트 허브 M3를 지원해 드립니다.\n\n자세한 혜택과 이용 방법은 기프트 백에 포함된 상품권 뒷면을 참고해 주시면 감사하겠습니다."},{"A":"☐","B":"44","C":"0.71527777777777779","J":"조명: 전체 밝게"},{"B":"47","D":"Closing_럭키드로우 안내","F":"→ 럭키드로우","G":"99(럭키드로우)","K":"자, 이제 오늘 행사의 마지막 순서이자, 많은 분들이 기다리셨을 럭키드로우 시간입니다!\n오늘은 아카라라이프의 스마트 도어락부터 디바이스 최대 70% 할인권까지, 다양한 경품을 준비했습니다.\n추첨에 앞서 먼저 여러분의 럭키드로우 번호를 확인해 주시기 바랍니다.\n명찰 오른쪽 상단에 보시면 \u00272026\u0027이라는 숫자 아래에 흰색 숫자 스티커가 부착되어 있을 텐데, 바로 그 숫자가 오늘의 행운 번호입니다.\n럭키드로우의 원활한 진행을 위해 두 가지 안내 말씀드리겠습니다.\n먼저, 당첨 번호가 호명되었을 때 해당 당첨자분께서 자리에 계시지 않으면 재추첨을 진행할 예정입니다.\n재추첨이 진행되는 순간 기존 당첨 번호는 무효 처리되오니, 행운의 기회를 놓치지 않도록 추첨이 끝날 때까지 자리를 지켜주시기 바랍니다.\n또한 각 등수별 당첨자분들과 무대에서 시상을 마친 뒤 함께 단체 기념사진을 촬영할 예정입니다. 사진 촬영까지 마치신 후 자리로 돌아가 주시면 감사하겠습니다.\n그럼 이제 본격적으로 행운의 주인공을 만나보겠습니다.\n오늘 경품 시상은 아카라라이프 김현철 대표님께서 직접 진행해 주시겠습니다.\n대표님께서는 무대 단상으로 올라와 주시기 바랍니다.\n여러분, 김현철 대표님께 큰 박수 부탁드립니다! (박수 → 대표님 등단)"},{"A":"☐","B":"48","C":"0.71250000000000002","D":"Closing_럭키드로우 안내\n\n럭키드로우 3등 추첨~시상~퇴장\n(L100 5명)","F":"→ 추첨 화면","G":"→ 추첨 화면","H":"럭키드로우 추첨 화면","I":"\"3등, 아카라라이프 스마트 도어락 L100! 다섯 분을 뽑겠습니다\"","J":"추첨자(대표 또는 VIP) 무대로","K":"먼저, 3등 경품을 추첨하겠습니다. 오늘의 3등 경품은 아카라 스마트 도어락 L100 교환권입니다.\n자, 그럼 3등 추첨을…. 진행하겠습니다!!\n#추첨 프로그램 오퍼레이터가 돌리고\n네, 000번, 000번, 000번, 000번, 000번, 000번 총 5분이 당첨되었습니다. \n\n#번호 호명\n000번 어디 계신가요? 손을 들어주시기 바랍니다. \n#당첨자 손 들고 \n넵 단상으로 올라와 주세요. \n (거수자 확인하고) 넵 교환권 수령을 위해 당첨자는 단상으로 올라와 주시기 바랍니다. \n\n*교환권 전달은 상헌님이 전달하고 악수 진행 - 이건 올라오는 순서대로 한명씩 주고 악수하고 사진촬영 이상헌 대표님께서 3등 경품 교환권을 직접 전달해 드리겠습니다. 축하드립니다! \n\n김현철 대표님께서 3등 상품을 직접 전달해 드리겠습니다. 축하드립니다! 사용 방법은 교환권 뒷면 내용을 확인해서 사용해 주시기 바랍니다. \n\n네, 3등 당첨되신 분들 축하드립니다. 자리로 돌아가 착석해주시면 감사하겠습니다."},{"A":"☐","B":"49","C":"0.71261574074074074","D":"Closing_럭키드로우 안내\n\n럭키드로우 2등 추첨~시상~퇴장\n(50% 할인 2명)","F":"추첨 화면","G":"추첨 화면","H":"럭키드로우 추첨 화면","K":"다음으로 이제 2등 경품을 추첨하겠습니다. \n2등 상품은 ‘아카라 스마트홈 디바이스 50% 할인권’ 입니다. \n정상가 기준 구매 금액 총 2,000만원 한도 내에서, 50% 할인이 적용됩니다.\n2등 경품은 총 2분이 당첨됩니다.\n자 그러면 2등 추첨을…돌려주세요!\n#무대 뒤에서 오퍼레이터, 추첨 프로그램 돌리고 \n#프로그램 추첨 번호 뜨면  (총 2명)\n네, 2등 당첨자 번호는 000, 000가 나왔습니다. \n000번, 000번 무대 위로 올라와 주세요. \n#만약 둘중 하나 아니면 둘다 자리에 없으면 \n인원수에 맞게 재 추첨\n네 000번 자리에 안 계신가요?\n다른 번호로 추첨을 다시 진행하겠습니다. \n000번 당첨되셨습니다. \n단상으로 올라와서 할인권을 수령해 주시기 바랍니다. \n김현철 대표님께서 2등 상품을 직접 전달해 드리겠습니다. 축하드립니다! 사용 방법은 할인권 뒷면 내용을 확인해서 사용해 주시기 바랍니다. \n*교환권 전달은 상헌님이 전달하고 악수 진행 - 이건 올라오는 순서대로 한명씩 주고 악수하고 사진촬영 후 좌석 돌아가기\n\n네, 2등 경품 당첨자분들도 다시한번 축하드립니다. 자리로 돌아가주시면 감사하겠습니다."},{"A":"☐","B":"50","C":"0.71388888888888891","D":"Closing_럭키드로우 안내\n\n럭키드로우 1등 추첨~시상~퇴장\n(70% 할인 1명)","F":"추첨 화면","G":"추첨 화면","H":"럭키드로우 추첨 화면","K":"그럼, 마지막으로 대망의 1등 경품을 추첨하겠습니다. \n1등 상품은 ‘아카라 스마트홈 디바이스 70% 할인권’ 입니다. \n정상가 기준 구매 금액 2,000만원 한도 내에서, 70% 할인이 적용됩니다. \n그럼 추첨을 진행하겠습니다!\n대망의 1등… 돌려주세요!\n#무대 뒤에서 오퍼레이터, 추첨 프로그램 돌리고 \n#프로그램 추첨 번호 뜨면 \n네, 1등 당첨자 번호는 000가 나왔습니다. \n000번 무대 위로 올라와 주세요. \n#만약 자리에 없으면 \n네 000번 자리에 안 계신가요?\n다른 번호로 추첨을 다시 진행하겠습니다. \n000번 당첨되셨습니다. \n단상으로 올라와서 할인권을 수령해 주시기 바랍니다. \n#당첨자 무대 위 오르면, MC는 1등 교환권 전달하며 \n김현철 대표님께서 1등 상품을 직접 전달해 드리겠습니다. 축하드립니다!  사용 방법은 할인권 뒷면 내용을 확인해서 사용해 주시기 바랍니다."},{"A":"☐","B":"51","C":"0.71458333333333335","D":"Closing_럭키드로우 종료","F":"추첨 화면","G":"추첨 화면","H":"1등 당첨 화면 유지","K":"네, 이것으로 오늘의 럭키드로우를 모두 마치겠습니다. 1/2등 당첨자 분께서는 종료 후 꼭 접수대 방문하셔서 당첨자 정보 등록을 부탁드립니다. \n당첨되신 모든 분들께 다시 한번 축하의 말씀을 드리며, 아쉽게 당첨되지 못하신 분들도 함께해 주셔서 감사드립니다."},{"A":"☐","B":"52","C":"0.72222222222222221","D":"Closing_폐회 선언","F":"종료 비주얼","G":"999(종료_큐알_안내)","K":"이제 오늘 준비된 모든 순서가 마무리되었습니다.\n오늘 세미나가 여러분께 새로운 영감과 비즈니스의 가능성을 발견하는 뜻깊은 시간이 되었기를 바랍니다.\n\n아울러, 오늘 세미나에 대한 여러분의 소중한 의견을 듣고자 간단한 만족도 설문을 준비했습니다. 현재 화면에 보이는 QR코드를 통해 참여하실 수 있으며, 설문 링크도 문자로 보내드릴 예정입니다. 설문에 참여해 주신 분들 중 추첨을 통해 30분께 커피 쿠폰을 증정할 예정이니 많은 참여 부탁드립니다.\n\n퇴장하실 때는 로비에서 준비된 기프트 백을 꼭 수령해 주시고, 아카라라이프 체험 공간도 한 번 더 자유롭게 둘러보시기 바랍니다.\n\n이상으로 「공간디자인의 새로운 패러다임, SMART HOME INTERIOR 2026」 세미나를 모두 마치겠습니다. 지금까지 사회자 조수현 이었습니다. 끝까지 함께해 주신 참석자 여러분께 진심으로 감사드립니다. (인사)"},{"A":"☐","B":"53","C":"0.72291666666666665","D":"Closing_퇴장 안내","K":"[퇴장 안내 — 17:20~17:45, 반복 방송]\n로비에서 참석자 기념품을 나눠드리고 있습니다. 체험 공간과 상담 데스크는 5시 45분까지 운영합니다. 소지품 잘 챙기시기 바랍니다."},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],"s2":[{"A":"체크","B":"코드","C":"파일명","D":"용도","E":"소리 설명","F":"길이","G":"쓰는 큐","H":"볼륨","I":"비고"},{"A":"☐","B":"SFX-01","C":"SFX-01_오프닝.mp3","D":"오프닝 / 선언 마무리","E":"3초 동안 \u0027쉬이익\u0027 올라가다가 \u0027쿵\u0027 + 밝은 화음 잔향","F":"7.5초","G":"8, 11.2","H":"강조","I":"쿵\u0027이 3초 지점. LED 로고를 여기에 맞추기"},{"A":"☐","B":"SFX-02","C":"SFX-02_연사등장.mp3","D":"연사 등장","E":"짧은 \u0027휘익\u0027 + 밝고 맑은 화음 \u0027띠링~\u0027","F":"4.4초","G":"10, 11.1, 12.1, 17.1, 18.1, 22.1, 24.1","H":"보통","I":"\"…모시겠습니다\" 말이 끝나자마자"},{"A":"☐","B":"SFX-03","C":"SFX-03_안내차임_시작.mp3","D":"안내 방송 시작","E":"딩-동-댕\u0027 (내려가는 3음, 공항 안내 방송 느낌)","F":"3.9초","G":"4, 5","H":"보통"},{"A":"☐","B":"SFX-04","C":"SFX-04_안내차임_끝.mp3","D":"안내 방송 끝","E":"댕-동-딩\u0027 (올라가는 3음)","F":"3.7초","G":"4.2, 5.1","H":"보통"},{"A":"☐","B":"SFX-05","C":"SFX-05_드럼롤_짧게6초.mp3","D":"럭키드로우 3·2등","E":"작게 시작해 점점 커지는 스네어 드럼롤 → 6초에 \u0027쾅\u0027 (심벌+북)","F":"9.6초","G":"26, 27","H":"강조","I":"쾅\u0027에 맞춰 이름 발표"},{"A":"☐","B":"SFX-06","C":"SFX-06_드럼롤_길게12초.mp3","D":"럭키드로우 1등","E":"같은 드럼롤 12초 버전 → \u0027쾅\u0027","F":"15.6초","G":"28","H":"강조","I":"가장 긴장감 있게"},{"A":"☐","B":"SFX-07","C":"SFX-07_당첨팡파르.mp3","D":"당첨 발표","E":"빠-바-바-밤!\u0027 4음 + 화음 유지 + 심벌","F":"3.9초","G":"26.1, 27, 28.1","H":"강조"},{"A":"☐","B":"SFX-08","C":"SFX-08_재입장알림.mp3","D":"휴식 끝 알림","E":"부드러운 \u0027띵-동, 띵-동\u0027","F":"3.9초","G":"15, 16, 20, 21","H":"보통","I":"로비에서도 들리게"},{"A":"☐","B":"BGM-01","C":"(직접 선곡)","D":"입장 대기","E":"차분한 라운지 재즈 · 로파이 · 어쿠스틱. 가사 없는 곡. 템포 느린 편 (80~100 BPM)","F":"30분 이상 반복","G":"1~7","H":"배경","I":"예: 유튜브 오디오 보관함에서 \u0027분위기: 차분함 / 장르: 재즈·앰비언트\u0027 필터"},{"A":"☐","B":"BGM-02","C":"(직접 선곡)","D":"시상 · 박수","E":"밝고 경쾌한 업비트 · 가사 없는 곡 (110~125 BPM)","F":"1분 이상","G":"26.2, 27.1, 28.1","H":"보통"},{"A":"☐","B":"BGM-03","C":"(직접 선곡)","D":"휴식 시간","E":"가볍고 밝은 어쿠스틱 팝 · 하우스. 가사 없는 곡 (100~115 BPM)","F":"20분 이상 반복","G":"14.1~17, 19.1~22","H":"보통","I":"로비 체험 분위기 띄우기"},{"A":"☐","B":"BGM-04","C":"(직접 선곡)","D":"퇴장","E":"따뜻하고 여운 있는 피아노 · 어쿠스틱","F":"30분 이상 반복","G":"30~32","H":"보통 → 배경"},{"A":"☐","B":"—","C":"볼륨 기준","D":"배경 = 옆 사람과 편하게 대화 가능 / 보통 = 박수 소리 정도 / 강조 = 장내를 꽉 채우는 정도","E":"—","F":"—","G":"—","H":"—","I":"효과음 8개는 같은 크기로 맞춰 둠 (최대 -6dB). 리허설 때 \u0027보통\u0027 하나만 맞추면 나머지는 그대로"},{"A":"☐","B":"—","C":"저작권","D":"효과음 8개는 직접 만든 소리라 저작권 문제 없음. BGM은 유튜브 오디오 보관함처럼 행사·영상 사용이 허용된 곡으로","E":"—","F":"—","G":"—","H":"—","I":"행사 영상을 SNS에 올릴 때도 문제 없게"},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],"s3":[{"A":"체크","B":"구분","C":"마이크","D":"사용자","E":"쓰는 때","F":"담당","G":"메모"},{"A":"☐","B":"MC","C":"무선 핸드마이크","D":"사회자 조수현","E":"오프닝·연사 소개·휴식 안내·럭키드로우·클로징","F":"조수현","G":"예비 배터리 준비"},{"A":"☐","B":"단상","C":"단상(구즈넥) 또는 핀마이크","D":"연사 7명","E":"각 발표 시간","F":"정여진 (무대·연사·마이크 매니저)","G":"연사가 무대를 돌아다니면 핀마이크 필요 — 사전에 연사별로 확인"},{"A":"☐","B":"Q\u0026A ①","C":"무선 핸드마이크","D":"질문자","E":"Keynote Q\u0026A (14:40 전후), Business Q\u0026A (16:38 전후)","F":"박성범","G":"질문자에게 전달 후 ON"},{"A":"☐","B":"Q\u0026A ②","C":"무선 핸드마이크","D":"질문자","E":"위와 같음","F":"장종영"},{"A":"☐","B":"예비","C":"무선 핸드마이크","D":"—","E":"마이크 고장 대비","F":"정여진","G":"배터리 넣어서 대기"},{"A":"☐","B":"PC","C":"발표 PC 소리 출력","D":"—","E":"발표 영상·오프닝 영상","F":"고광영","G":"노트북 → 믹서 연결, 소리 크기 리허설 때 맞추기"},{"A":"☐","B":"음원","C":"BGM·효과음 재생 기기","D":"—","E":"큐시트 전체","F":"고광영 (코엑스 인계)","G":"노트북 또는 휴대폰. 알림 끄기·비행기 모드"},{"A":"☐","B":"녹음","C":"믹서 출력 → 촬영팀","D":"—","E":"행사 전체","F":"촬영팀 (리빙룸용산)","G":"깔끔한 녹음을 위해 믹서 출력 받기로 미리 협의"},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],"s4":[{"A":"체크","B":"언제","C":"확인할 것","D":"담당"},{"A":"☐","B":"D-7까지","C":"코엑스 401호 기본 음향 장비 확인 (무선마이크 개수, 핀마이크 유무, 믹서 출력 단자)","D":"강유선"},{"A":"☐","B":"D-7까지","C":"연사별로 단상 / 핀마이크 중 원하는 방식, 발표 중 영상·소리 있는지 확인","D":"최웅열"},{"A":"☐","B":"D-7까지","C":"촬영팀과 녹음 방식 협의 (믹서 출력 받기)","D":"MKT"},{"A":"☐","B":"D-3까지","C":"효과음 8개(다운로드 \u003e 11월 세미나 효과음 폴더) + BGM 4곡 선곡 → 재생기와 휴대폰 백업에 저장","D":"MKT"},{"A":"☐","B":"D-3까지","C":"사회자에게 큐시트 공유 — 멘트와 음향 큐 맞추기","D":"정여진"},{"A":"☐","B":"당일 오전","C":"코엑스 담당자에게 음향 콘솔 인계받기","D":"고광영"},{"A":"☐","B":"당일 오전","C":"마이크 전부 소리 내보기 + 객석 맨 뒤에서 들리는지 확인","D":"고광영, 정여진"},{"A":"☐","B":"당일 오전","C":"Q\u0026A 마이크로 객석 곳곳에서 하울링 나는지 확인","D":"박성범, 장종영"},{"A":"☐","B":"당일 오전","C":"발표 PC 영상 소리, 음원 재생 기기 소리 크기 맞추기","D":"고광영"},{"A":"☐","B":"당일 오전","C":"재입장 안내가 로비에서도 들리는지 확인","D":"조수현"},{"A":"☐","B":"당일 오전","C":"예비 배터리·예비 마이크 위치 정해두기","D":"정여진"},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],"s5":[{"A":"체크","B":"상황","C":"바로 할 일","D":"담당","E":"사회자 멘트 (예시)"},{"A":"☐","B":"삐-\u0027 하울링","C":"해당 마이크 채널 볼륨 즉시 ↓ → 마이크를 스피커에서 멀리","D":"고광영 · 마이크 든 사람","E":"—"},{"A":"☐","B":"MC 마이크 안 나옴","C":"예비 마이크 즉시 전달 → 고장 마이크 회수","D":"정여진","E":"—"},{"A":"☐","B":"단상 마이크 안 나옴","C":"예비 핸드마이크를 연사에게 전달","D":"정여진","E":"\"마이크 바로 준비해 드리겠습니다.\""},{"A":"☐","B":"발표 영상 소리 안 나옴","C":"발표PC 채널·노트북 소리 확인. 30초 안에 안 되면 영상 없이 진행","D":"고광영","E":"\"잠시 화면을 준비하는 동안…\" (연사 소개 덧붙이며 시간 벌기)"},{"A":"☐","B":"발표 파일 안 열림","C":"백업 USB로 전환","D":"고광영","E":"\"잠시만 기다려 주시기 바랍니다.\""},{"A":"☐","B":"연사가 시간 초과","C":"LED 쪽 또는 무대 앞에서 \u00275분 / 1분\u0027 카드 보여주기","D":"정여진","E":"—"},{"A":"☐","B":"전체 일정 10분 이상 지연","C":"Break ② 를 20분 → 10분으로 줄이고 재입장 안내 시각 조정","D":"운영팀장","E":"\"휴식 시간은 10분간 진행하겠습니다.\""},{"A":"☐","B":"재입장이 늦음","C":"BGM 유지하며 최대 2분 대기 → 재입장 알림음 한 번 더","D":"고광영 · 조수현","E":"\"곧 시작합니다. 자리로 돌아와 주세요.\""},{"A":"☐","B":"음원 재생기 멈춤","C":"휴대폰 백업 재생 (같은 파일 미리 저장)","D":"고광영","E":"—"},{"A":"☐","B":"럭키드로우 당첨자 불참","C":"\"현장에 안 계시면 다시 추첨합니다\" → 드럼롤 짧게 다시","D":"조수현","E":"\"현장에 계시지 않아 다시 추첨하겠습니다.\""},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]};
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function ls(k, v){ try { if (v === undefined) return localStorage.getItem('semops.' + k); localStorage.setItem('semops.' + k, v); } catch(e){ return null; } }
+var tt; function toast(m){ var e = $('toast'); e.textContent = m; e.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ e.classList.remove('show'); }, 1800); }
+
+/* ── 큐 데이터 ── */
+function hhmm(v){ var f = parseFloat(v); if (!(f > 0 && f < 1)) return ''; var m = Math.round(f * 1440); return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
+var CUES = DATA.s1.slice(1).filter(function(r){ return r.B || r.D || r.K; }).map(function(r, i){
+  return { i:i, no:r.B || '', t:hhmm(r.C), seg:(r.D || (r.F ? r.F.split('\n')[0] : '')).replace(/\n+/g, ' · '), scr:r.E || '', led:r.F || '', file:r.G || '', ledR:r.H || '', go:r.I || '', sb:r.J || '', mc:r.K || '', memo:r.L || '' };
+});
+// 시각이 앞 큐보다 5분 넘게 거꾸로 가면 큐시트 오기(예: Break 14:00)로 보고 숨김
+(function(){ var max = 0; CUES.forEach(function(c){ if (!c.t) return; var m = +c.t.slice(0,2) * 60 + +c.t.slice(3); if (m < max - 5){ c.t = ''; c.tBad = true; } else max = Math.max(max, m); }); })();
+
+/* ── 음향 목록 (음원 리스트 시트) ── */
+var SND = [
+  { k:'SFX-01', key:'1', nm:'오프닝', file:'', kind:'sfx' },
+  { k:'SFX-02', key:'2', nm:'연사 등장', file:'', kind:'sfx' },
+  { k:'SFX-03', key:'3', nm:'안내 차임 · 시작', file:'', kind:'sfx' },
+  { k:'SFX-04', key:'4', nm:'안내 차임 · 끝', file:'sfx/sfx04-chime.mp3', kind:'sfx' },
+  { k:'SFX-05', key:'5', nm:'드럼롤 6초 (3·2등)', file:'sfx/sfx05-drumroll6.mp3', kind:'sfx' },
+  { k:'SFX-06', key:'6', nm:'드럼롤 12초 (1등)', file:'sfx/sfx06-drumroll12.mp3', kind:'sfx' },
+  { k:'SFX-07', key:'7', nm:'당첨 팡파르', file:'sfx/sfx07-fanfare.mp3', kind:'sfx' },
+  { k:'SFX-08', key:'8', nm:'재입장 알림', file:'sfx/sfx08-reentry.mp3', kind:'sfx' },
+  { k:'BGM-01', nm:'입장 대기', file:'', kind:'bgm' },
+  { k:'BGM-02', nm:'시상 · 박수', file:'', kind:'bgm' },
+  { k:'BGM-03', nm:'휴식 시간', file:'', kind:'bgm' },
+  { k:'BGM-04', nm:'퇴장', file:'', kind:'bgm' }
+];
+var BYK = {};
+SND.forEach(function(s){
+  BYK[s.k] = s;
+  var r = DATA.s2.filter(function(x){ return x.B === s.k; })[0] || {};
+  s.fname = r.C || ''; s.use = r.D || ''; s.desc = r.E || ''; s.len = r.F || ''; s.vol = r.H || ''; s.note = r.I || '';
+});
+
+/* 큐 → 음향 (큐시트 문구 기준으로 연결. 음원 리스트의 '쓰는 큐' 번호는 예전 번호라 쓰지 않음) */
+function cueSounds(c){
+  var s = c.seg, o = [];
+  if (/안내 방송/.test(s)) o.push('SFX-03', 'SFX-04');
+  if (/^오픈 준비|^입장/.test(s)) o.push('BGM-01');
+  if (/^오프닝$/.test(s)) o.push('SFX-01');
+  if (/등장$/.test(s)) o.push('SFX-02');
+  if (/재입장/.test(s)) o.push('SFX-08');
+  if (/^Break [①②]( 안내)?$/.test(s)) o.push('BGM-03');
+  if (/럭키드로우 3등|럭키드로우 2등/.test(s)) o.push('SFX-05', 'SFX-07', 'BGM-02');
+  if (/럭키드로우 1등/.test(s)) o.push('SFX-06', 'SFX-07', 'BGM-02');
+  if (/폐회 선언/.test(s)) o.push('SFX-01');
+  if (/퇴장 안내/.test(s)) o.push('BGM-04');
+  return o.filter(function(k, i){ return o.indexOf(k) === i; });
+}
+function cueNote(c){
+  var s = c.seg, n = [];
+  if (/안내 방송/.test(s)) n.push('차임 시작 → 안내 멘트 → 차임 끝');
+  if (/^오프닝$/.test(s)) n.push('BGM 끄고 → SFX-01. "쿵"(3초 지점)에 LED 로고');
+  if (/사회자 인사/.test(s)) n.push('BGM이 다 꺼지고 1초 정적 후 멘트');
+  if (/등장$/.test(s)) n.push('"…모시겠습니다" 말이 끝나자마자');
+  if (/럭키드로우 [123]등/.test(s)) n.push('추첨 페이지가 드럼롤·팡파르를 자동으로 틀어요. 추첨을 같은 PC에서 돌리면 여기서는 드럼롤을 누르지 마세요(소리 겹침). 시상·박수 때 BGM-02.');
+  return n.join('\n');
+}
+
+/* ── 오디오 엔진 ── */
+var VOL = { sfx:+(ls('vSfx') || 90), bgm:+(ls('vBgm') || 45) };
+var AU = {}, BLOB = {}, playing = {};
+var idb = null;
+function idbOpen(){ return new Promise(function(res){ try { var q = indexedDB.open('semops', 1); q.onupgradeneeded = function(){ q.result.createObjectStore('snd'); }; q.onsuccess = function(){ idb = q.result; res(); }; q.onerror = function(){ res(); }; } catch(e){ res(); } }); }
+function idbGet(k){ return new Promise(function(res){ if (!idb) return res(null); try { var g = idb.transaction('snd').objectStore('snd').get(k); g.onsuccess = function(){ res(g.result || null); }; g.onerror = function(){ res(null); }; } catch(e){ res(null); } }); }
+function idbPut(k, v){ return new Promise(function(res){ if (!idb) return res(); try { var tx = idb.transaction('snd', 'readwrite'); if (v == null) tx.objectStore('snd').delete(k); else tx.objectStore('snd').put(v, k); tx.oncomplete = res; tx.onerror = res; } catch(e){ res(); } }); }
+function srcOf(s){ return BLOB[s.k] ? BLOB[s.k].url : s.file; }
+function ready(s){ return !!srcOf(s); }
+function audioOf(s){
+  var src = srcOf(s); if (!src) return null;
+  var a = AU[s.k];
+  if (!a || a._src !== src){ if (a){ try { a.pause(); } catch(e){} } a = new Audio(src); a._src = src; a.preload = 'auto'; a.loop = s.kind === 'bgm'; AU[s.k] = a;
+    a.addEventListener('ended', function(){ if (!a.loop){ delete playing[s.k]; paintPlaying(); } });
+    a.addEventListener('error', function(){ if (s.file && !BLOB[s.k]) { s.broken = true; paintAll(); } });
+  }
+  return a;
+}
+function preloadAll(){ SND.forEach(function(s){ audioOf(s); }); }
+var fades = {};
+function fade(a, to, ms, done){
+  var k = a._src; clearInterval(fades[k]); var from = a.volume, t0 = performance.now();
+  fades[k] = setInterval(function(){ var p = Math.min(1, (performance.now() - t0) / ms); a.volume = Math.max(0, Math.min(1, from + (to - from) * p)); if (p >= 1){ clearInterval(fades[k]); if (done) done(); } }, 40);
+}
+function play(k){
+  var s = BYK[k]; if (!s) return;
+  if (!isOp()){ toast('소리는 오퍼레이터 모드에서만 나요'); return; }
+  var a = audioOf(s); if (!a){ toast(k + ' 파일이 아직 없어요 — 음향 보드에서 넣어 주세요'); return; }
+  if (s.kind === 'bgm'){
+    if (playing[k]){ stop(k); return; }
+    // 다른 BGM은 서서히 끄고 교체
+    Object.keys(playing).forEach(function(x){ if (BYK[x].kind === 'bgm') stop(x); });
+    try { a.currentTime = 0; } catch(e){}
+    a.volume = 0; var p = a.play(); if (p && p.catch) p.catch(function(){ toast('재생 실패 — 화면을 한 번 클릭한 뒤 다시'); });
+    fade(a, VOL.bgm / 100, 1500);
+  } else {
+    try { a.pause(); a.currentTime = 0; } catch(e){}
+    clearInterval(fades[a._src]); a.volume = VOL.sfx / 100;
+    var p2 = a.play(); if (p2 && p2.catch) p2.catch(function(){ toast('재생 실패 — 화면을 한 번 클릭한 뒤 다시'); });
+  }
+  playing[k] = true; paintPlaying();
+}
+function stop(k, fast){
+  var a = AU[k]; delete playing[k];
+  if (a){ if (fast || BYK[k].kind !== 'bgm'){ clearInterval(fades[a._src]); a.pause(); } else fade(a, 0, 1200, function(){ a.pause(); }); }
+  paintPlaying();
+}
+function stopAll(){ Object.keys(AU).forEach(function(k){ stop(k, true); }); playing = {}; paintPlaying(); }
+
+/* 재생 표시 (진행 바) */
+function paintPlaying(){
+  document.querySelectorAll('.snd[data-k]').forEach(function(b){ b.classList.toggle('playing', !!playing[b.getAttribute('data-k')]); });
+  var ks = Object.keys(playing), np = $('nowplay');
+  np.classList.toggle('hidden', !ks.length);
+  np.innerHTML = ks.length ? '<span>재생 중</span>' + ks.map(function(k){ return '<span class="np">' + (BYK[k].kind === 'bgm' ? '🎵 ' : '🔊 ') + esc(k + ' ' + BYK[k].nm) + '<button data-stop="' + k + '" aria-label="정지">■</button></span>'; }).join('') + '<button class="x" data-stopall>■ 전체 정지 (Esc)</button>' : '';
+}
+(function tick(){
+  Object.keys(playing).forEach(function(k){ var a = AU[k]; if (!a || !a.duration) return;
+    var w = (a.currentTime / a.duration * 100) + '%';
+    document.querySelectorAll('.snd[data-k="' + k + '"] .prog').forEach(function(p){ p.style.width = w; }); });
+  document.querySelectorAll('.snd:not(.playing) .prog').forEach(function(p){ p.style.width = '0'; });
+  requestAnimationFrame(tick);
+})();
+
+function sndBtn(k, small){
+  var s = BYK[k], ok = ready(s) && !s.broken;
+  return '<button class="snd ' + s.kind + (ok ? '' : ' missing') + (playing[k] ? ' playing' : '') + '" data-k="' + k + '"' + '>' +
+    '<span class="pl">' + (s.kind === 'bgm' ? '♪' : (s.key || '▶')) + '</span>' +
+    '<span class="nm">' + esc(s.nm) + '<small>' + esc(k) + (s.len ? ' · ' + esc(s.len) : '') + (s.vol ? ' · ' + esc(s.vol) : '') + '</small></span>' +
+    '<span class="rt">' + (ok ? (s.kind === 'bgm' ? '반복' : '') : '파일 없음') + '</span><span class="prog"></span></button>';
+}
+
+/* ── 상태 / 실시간 ── */
+var ST = { live:0, chk:{} };
+var view = null;        // null = 라이브 따라감, 숫자 = 미리보기
+function isOp(){ return ls('op') === '1'; }
+function curIdx(){ return view == null ? ST.live : view; }
+
+function renderList(){
+  var h = '', lastSec = '';
+  CUES.forEach(function(c){
+    var sec = /Break ①/.test(c.seg) ? 'BREAK ①' : /Break ②/.test(c.seg) ? 'BREAK ②' : /^Closing/.test(c.seg) ? 'CLOSING · 럭키드로우' : /^오픈|^입장|안내 방송/.test(c.seg) ? '입장' : /오프닝|사회자|이상헌|조현이/.test(c.seg) ? '오프닝' : '세션';
+    if (sec !== lastSec){ h += '<div class="li sec">' + sec + '</div>'; lastSec = sec; }
+    var snd = cueSounds(c).length ? '<span class="ic">♪' + cueSounds(c).length + '</span>' : '';
+    var k = 'cue.' + c.i;
+    h += '<div class="li' + (c.i === ST.live ? ' cur' : '') + (view === c.i ? ' view' : '') + (ST.chk[k] ? ' done' : '') + '" data-cue="' + c.i + '">' +
+      '<button class="ck' + (ST.chk[k] ? ' on' : '') + '" data-chk="' + k + '" aria-label="완료 체크">' + (ST.chk[k] ? '✓' : '') + '</button>' +
+      '<span class="no">' + esc(c.no) + '</span><span class="tm">' + esc(c.t || '') + '</span><span class="sg">' + esc(c.seg || '(구간 없음)') + snd + '</span></div>';
+  });
+  $('cueList').innerHTML = h;
+  var cur = $('cueList').querySelector('.li.cur');
+  if (cur && !listHover){ var L = $('cueList'); var top = cur.offsetTop - L.clientHeight / 3; if (Math.abs(L.scrollTop - top) > 40) L.scrollTop = top; }
+}
+var listHover = false;
+function fmtScript(t){ return esc(t).split('\n').map(function(l){ return /^\s*[#*]/.test(l) || /^\s*\(.*\)\s*$/.test(l) ? '<span class="stage">' + l + '</span>' : l; }).join('\n'); }
+function boxes(c){
+  var h = '';
+  if (c.go) h += '<div class="box go"><h4>GO 사인 · 이 순간 실행</h4><p>' + esc(c.go) + '</p></div>';
+  if (c.sb) h += '<div class="box"><h4>스탠바이 · 미리 준비</h4><p>' + esc(c.sb) + '</p></div>';
+  var led = [c.scr, c.led, c.file, c.ledR].filter(Boolean).filter(function(v, i, a){ return a.indexOf(v) === i; });
+  if (led.length) h += '<div class="box"><h4>LED 화면</h4><p>' + esc(led.join('\n')) + '</p></div>';
+  if (c.memo) h += '<div class="box"><h4>담당 · 메모</h4><p>' + esc(c.memo) + '</p></div>';
+  return h ? '<div class="grid2">' + h + '</div>' : '';
+}
+function renderNow(){
+  var i = curIdx(), c = CUES[i]; if (!c) return;
+  var peek = view != null && view !== ST.live;
+  var h = '';
+  if (peek) h += '<div class="peekbar"><span>👀 미리보기 중 — 지금 진행은 ' + esc(CUES[ST.live].no) + '번 「' + esc(CUES[ST.live].seg) + '」</span><button data-back>LIVE로 돌아가기</button></div>';
+  h += '<div class="nowhd"><span class="badge' + (peek ? ' peek' : '') + '">' + (peek ? '미리보기' : 'NOW') + '</span>' +
+       '<span class="big">' + esc(c.no ? c.no + '. ' : '') + esc(c.seg || '(구간 없음)') + '</span>' +
+       (c.t ? '<span class="t">' + esc(c.t) + '</span>' : '') + '</div>';
+  h += '<div class="nowbd">' + boxes(c) +
+       '<div><h4 style="margin:0 0 6px;font-size:11.5px;color:var(--tx3);font-weight:800;letter-spacing:.04em">사회자 대본</h4>' +
+       (c.mc ? '<div class="script">' + fmtScript(c.mc) + '</div>' : '<div class="empty">대본 없음</div>') + '</div></div>';
+  var op = isOp();
+  h += '<div class="nav">' +
+       '<button class="back" data-prev ' + (op ? '' : 'disabled') + '>◀ 이전</button>' +
+       (op ? '<button class="gonext" data-next ' + (i >= CUES.length - 1 ? 'disabled' : '') + '>' + (peek ? '이 큐로 진행(LIVE) ▶' : '다음 큐로 GO ▶') + '<span class="kbd">Space</span></button>'
+           : '<button class="gonext" disabled style="font-size:14px">진행은 오퍼레이터가 넘겨요 · 화면이 자동으로 따라가요</button>') + '</div>';
+  $('now').innerHTML = h;
+  // 음향 패널
+  var ks = cueSounds(c), note = cueNote(c);
+  $('cueSnd').innerHTML = (ks.length ? ks.map(function(k){ return sndBtn(k); }).join('') : '<div class="empty">이 큐에 걸린 음향 없음</div>') +
+    (note ? '<div class="warnbox">' + esc(note).replace(/\n/g, '<br>') + '</div>' : '') +
+    (op ? '' : '<p class="hint">소리는 오퍼레이터 모드를 켠 기기에서만 나요.</p>');
+  $('opHint').textContent = op ? '🎚 이 기기에서 재생' : '';
+  var n = CUES[i + 1];
+  $('nextCue').innerHTML = n ? '<div class="seg">' + esc(n.no ? n.no + '. ' : '') + esc(n.seg) + (n.t ? ' <span style="color:var(--tx2);font-weight:700">' + esc(n.t) + '</span>' : '') + '</div>' +
+    '<div class="meta">' + esc([n.sb && ('스탠바이: ' + n.sb), n.go && ('GO: ' + n.go), cueSounds(n).length && ('음향: ' + cueSounds(n).join(', '))].filter(Boolean).join('\n')) + '</div>' : '<div class="empty">마지막 큐</div>';
+}
+
+/* ── 표 탭 ── */
+function table(rows, cols, keyPref){
+  var head = rows[0], body = rows.slice(1).filter(function(r){ return cols.some(function(c){ return r[c]; }); });
+  var t = '<table class="tbl"><thead><tr><th style="width:40px">체크</th>' + cols.map(function(c){ return '<th>' + esc(head[c] || '') + '</th>'; }).join('') + '</tr></thead><tbody>';
+  var cards = '<div class="cards">';
+  body.forEach(function(r, i){
+    var k = keyPref + '.' + i, on = !!ST.chk[k];
+    t += '<tr' + (on ? ' class="done"' : '') + '><td><button class="ck' + (on ? ' on' : '') + '" data-chk="' + k + '">' + (on ? '✓' : '') + '</button></td>' +
+      cols.map(function(c, j){ return '<td' + (j === 0 ? ' class="k"' : '') + '>' + esc(r[c] || '—') + '</td>'; }).join('') + '</tr>';
+    cards += '<div class="box"><h4 style="display:flex;gap:8px;align-items:center"><button class="ck' + (on ? ' on' : '') + '" data-chk="' + k + '">' + (on ? '✓' : '') + '</button>' + esc(r[cols[0]] || '') + '</h4>' +
+      cols.slice(1).filter(function(c){ return r[c]; }).map(function(c){ return '<p><span style="color:var(--tx3);font-size:12px">' + esc(head[c]) + '</span><br>' + esc(r[c]) + '</p>'; }).join('<div style="height:6px"></div>') + '</div>';
+  });
+  return t + '</tbody></table>' + cards + '</div>';
+}
+function renderTables(){
+  $('micBody').innerHTML = table(DATA.s3, ['B','C','D','E','F','G'], 'mic');
+  $('checkBody').innerHTML = table(DATA.s4, ['B','C','D'], 'sc');
+  $('sosBody').innerHTML = table(DATA.s5, ['B','C','D','E'], 'sos');
+}
+
+/* ── 음향 보드 ── */
+function renderBoard(){
+  function slot(s){
+    var ok = ready(s) && !s.broken, own = !!BLOB[s.k];
+    return '<div class="slot" data-drop="' + s.k + '">' + sndBtn(s.k) +
+      (s.desc ? '<div class="desc">' + esc(s.desc) + (s.note ? '<br><b>' + esc(s.note) + '</b>' : '') + '</div>' : '') +
+      '<div class="row">' + (ok ? '<span class="chip ok">' + (own ? '✓ 이 기기에 넣은 파일' : '✓ 기본 탑재') + '</span>' : '<span class="chip no">⚠ 파일 없음</span>') +
+      (s.fname ? '<span class="chip">' + esc(s.fname) + '</span>' : '') +
+      '<span style="flex:1"></span><label class="lnk" style="cursor:pointer">' + (ok ? '바꾸기' : '파일 넣기') + '<input type="file" accept="audio/*" data-in="' + s.k + '" hidden></label>' +
+      (own ? '<button class="lnk" data-rm="' + s.k + '">지우기</button>' : '') + '</div></div>';
+  }
+  $('boardSfx').innerHTML = SND.filter(function(s){ return s.kind === 'sfx'; }).map(slot).join('');
+  $('boardBgm').innerHTML = SND.filter(function(s){ return s.kind === 'bgm'; }).map(slot).join('');
+  var n = SND.filter(function(s){ return ready(s) && !s.broken; }).length;
+  $('readyChip').textContent = '준비 ' + n + ' / ' + SND.length; $('readyChip').className = 'chip ' + (n === SND.length ? 'ok' : 'no');
+  var miss = SND.filter(function(s){ return !(ready(s) && !s.broken); }).map(function(s){ return s.k; });
+  $('soundWarn').innerHTML = miss.length ? '⚠ 아직 없는 음원: <b>' + miss.join(', ') + '</b> — 각 칸의 <b>파일 넣기</b>, 칸 위로 끌어다 놓기, 또는 <b>📁 폴더에서 한 번에 넣기</b>(파일 이름에 SFX-01·BGM-01 같은 코드가 들어 있으면 자동으로 칸을 찾아가요). 넣은 파일은 이 기기 브라우저에 저장돼요.' : '✓ 12개 음원이 모두 준비됐어요.';
+  $('soundWarn').classList.toggle('hidden', false);
+  $('soundFoot').innerHTML = esc(((DATA.s2.filter(function(r){ return r.C === '볼륨 기준'; })[0] || {}).D || '')) + '<br>' + esc(((DATA.s2.filter(function(r){ return r.C === '볼륨 기준'; })[0] || {}).I || ''));
+}
+function codeOf(name){ var m = String(name).toUpperCase().replace(/\s/g, '').match(/(SFX|BGM)[-_]?0?([1-8])/); return m ? m[1] + '-0' + m[2] : null; }
+function putFile(k, f){
+  if (!BYK[k] || !f) return Promise.resolve(false);
+  if (BLOB[k]) URL.revokeObjectURL(BLOB[k].url);
+  BLOB[k] = { url:URL.createObjectURL(f), name:f.name }; BYK[k].broken = false;
+  return idbPut(k, { blob:f, name:f.name }).then(function(){ audioOf(BYK[k]); return true; });
+}
+
+function paintAll(){ renderList(); renderNow(); renderBoard(); renderTables(); paintPlaying(); }
+
+/* ── 이벤트 ── */
+document.addEventListener('click', function(e){
+  var t = e.target.closest('[data-k],[data-stop],[data-stopall],[data-chk],[data-cue],[data-next],[data-prev],[data-back],[data-rm],.tab');
+  if (!t) return;
+  if (t.hasAttribute('data-chk')){ e.stopPropagation(); setChk(t.getAttribute('data-chk')); return; }
+  if (t.hasAttribute('data-k')) return play(t.getAttribute('data-k'));
+  if (t.hasAttribute('data-stop')) return stop(t.getAttribute('data-stop'));
+  if (t.hasAttribute('data-stopall')) return stopAll();
+  if (t.hasAttribute('data-cue')){ var i = +t.getAttribute('data-cue'); view = i === ST.live ? null : i; renderList(); renderNow(); return; }
+  if (t.hasAttribute('data-next')) return goNext();
+  if (t.hasAttribute('data-prev')) return goTo(curIdx() - 1);
+  if (t.hasAttribute('data-back')){ view = null; renderList(); renderNow(); return; }
+  if (t.hasAttribute('data-rm')){ var k = t.getAttribute('data-rm'); stop(k, true); if (BLOB[k]) URL.revokeObjectURL(BLOB[k].url); delete BLOB[k]; delete AU[k]; idbPut(k, null).then(paintAll); return; }
+  if (t.classList.contains('tab')) return tab(t.getAttribute('data-tab'));
+});
+document.addEventListener('change', function(e){
+  var t = e.target;
+  if (t.hasAttribute && t.hasAttribute('data-in')){ putFile(t.getAttribute('data-in'), t.files[0]).then(function(){ toast(t.getAttribute('data-in') + ' 넣었어요'); paintAll(); }); }
+  if (t.id === 'dirIn'){
+    var fs = [].slice.call(t.files).filter(function(f){ return /^audio\//.test(f.type) || /\.(mp3|wav|m4a|aac|ogg)$/i.test(f.name); }), got = [];
+    Promise.all(fs.map(function(f){ var k = codeOf(f.name); if (k){ got.push(k); return putFile(k, f); } })).then(function(){ toast(got.length ? got.length + '개 넣었어요: ' + got.join(', ') : '코드(SFX-01 등)가 들어간 파일 이름을 못 찾았어요'); paintAll(); });
+    t.value = '';
+  }
+});
+document.addEventListener('dragover', function(e){ var s = e.target.closest && e.target.closest('[data-drop]'); if (s){ e.preventDefault(); s.classList.add('drop'); } });
+document.addEventListener('dragleave', function(e){ var s = e.target.closest && e.target.closest('[data-drop]'); if (s) s.classList.remove('drop'); });
+document.addEventListener('drop', function(e){ var s = e.target.closest && e.target.closest('[data-drop]'); if (!s) return; e.preventDefault(); s.classList.remove('drop');
+  var f = e.dataTransfer.files[0]; if (f) putFile(s.getAttribute('data-drop'), f).then(function(){ toast(s.getAttribute('data-drop') + ' 넣었어요'); paintAll(); }); });
+$('cueList').addEventListener('mouseenter', function(){ listHover = true; });
+$('cueList').addEventListener('mouseleave', function(){ listHover = false; });
+
+document.addEventListener('keydown', function(e){
+  if (/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  if (e.key === 'Escape'){ stopAll(); return; }
+  if (!isOp()) return;
+  if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'PageDown'){ e.preventDefault(); goNext(); return; }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); goTo(curIdx() - 1); return; }
+  var s = SND.filter(function(x){ return x.key === e.key; })[0]; if (s){ e.preventDefault(); play(s.k); }
+});
+
+function tab(n){
+  document.querySelectorAll('.tab').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-tab') === n); });
+  ['live','sound','mic','check','sos','links'].forEach(function(x){ $('t-' + x).classList.toggle('hidden', x !== n); });
+  ls('tab', n);
+}
+$('volSfx').value = VOL.sfx; $('volBgm').value = VOL.bgm;
+function volTx(){ $('volSfxTx').textContent = VOL.sfx; $('volBgmTx').textContent = VOL.bgm; }
+volTx();
+$('volSfx').oninput = function(){ VOL.sfx = +this.value; ls('vSfx', VOL.sfx); volTx(); Object.keys(playing).forEach(function(k){ if (BYK[k].kind === 'sfx' && AU[k]) AU[k].volume = VOL.sfx / 100; }); };
+$('volBgm').oninput = function(){ VOL.bgm = +this.value; ls('vBgm', VOL.bgm); volTx(); Object.keys(playing).forEach(function(k){ if (BYK[k].kind === 'bgm' && AU[k]){ clearInterval(fades[AU[k]._src]); AU[k].volume = VOL.bgm / 100; } }); };
+
+function paintOp(){ var on = isOp(); $('opBtn').classList.toggle('on', on); $('opBtn').textContent = on ? '🎚 오퍼레이터 ON' : '🎚 오퍼레이터 모드'; }
+$('opBtn').onclick = function(){
+  if (isOp()){ ls('op', '0'); stopAll(); toast('오퍼레이터 모드 끔 — 보기 전용'); }
+  else {
+    if (!confirm('이 기기를 음향·스크린 오퍼레이터로 쓸까요?\n\n· 이 기기에서 소리가 나요\n· 큐를 넘기면 모든 스태프 화면이 같이 넘어가요\n· Space/→ 다음 큐, ← 이전, 1~8 효과음, Esc 전체 정지')) return;
+    ls('op', '1'); preloadAll(); toast('오퍼레이터 모드 ON');
+  }
+  paintOp(); renderNow();
+};
+
+/* ── 진행 이동 + Firebase 동기화 ── */
+var DB = null, me = ls('me') || '';
+function goNext(){ if (!isOp()) return; var peek = view != null && view !== ST.live; goTo(peek ? view : ST.live + 1); }
+function goTo(i){
+  if (!isOp()) return;
+  if (i < 0 || i >= CUES.length) return;
+  // 지나온 큐는 자동 체크
+  if (i > ST.live) for (var j = ST.live; j < i; j++) ST.chk['cue.' + j] = true;
+  ST.live = i; view = null; paintAll();
+  if (DB){
+    var up = { 'live':{ i:i, by:me || '오퍼레이터', at:firebase.database.ServerValue.TIMESTAMP } };
+    for (var k in ST.chk) if (/^cue\./.test(k) && ST.chk[k]) up['chk/' + k.replace('.', '_')] = true;
+    DB.ref('semops').update(up).catch(function(){ toast('동기화 실패 — 이 화면만 넘어갔어요'); });
+  }
+  ls('liveLocal', i);
+}
+function setChk(k){
+  var v = !ST.chk[k]; ST.chk[k] = v; paintAll();
+  if (DB) DB.ref('semops/chk/' + k.replace('.', '_')).set(v || null).catch(function(){ toast('저장 실패'); });
+}
+function sync(st, tx){ $('syncDot').className = 'dot ' + (st || ''); $('syncTx').textContent = tx; }
+
+ST.live = Math.min(+(ls('liveLocal') || 0), CUES.length - 1);
+if (typeof firebase !== 'undefined'){
+  try {
+    firebase.initializeApp({
+      apiKey:'AIzaSyAs_yQ1fgGKfRDKbkUb0lviIoJ2e00KRGA', authDomain:'aqara-weekly-1227c.firebaseapp.com',
+      databaseURL:'https://aqara-weekly-1227c-default-rtdb.asia-southeast1.firebasedatabase.app', projectId:'aqara-weekly-1227c',
+      storageBucket:'aqara-weekly-1227c.firebasestorage.app', messagingSenderId:'869711080033', appId:'1:869711080033:web:9fc6fb53b272b942085820'
+    });
+    firebase.auth().signInAnonymously().catch(function(){ sync('bad', '오프라인'); });
+    firebase.auth().onAuthStateChanged(function(u){
+      if (!u) return;
+      DB = firebase.database();
+      DB.ref('.info/connected').on('value', function(s){ s.val() ? sync('ok', '실시간 연결') : sync('bad', '연결 끊김 — 이 화면만'); });
+      DB.ref('semops/live').on('value', function(s){ var v = s.val(); if (v && typeof v.i === 'number' && v.i < CUES.length){ var moved = v.i !== ST.live; ST.live = v.i; ls('liveLocal', v.i); if (moved && view === ST.live) view = null; renderList(); renderNow(); } });
+      DB.ref('semops/chk').on('value', function(s){ var v = s.val() || {}, o = {}; Object.keys(v).forEach(function(k){ if (v[k]) o[k.replace('_', '.')] = true; }); ST.chk = o; renderList(); renderTables(); });
+    });
+  } catch(e){ sync('bad', '오프라인'); }
+} else sync('bad', '오프라인');
+
+/* 바로가기 */
+$('linkBody').innerHTML = [
+  ['/raffle.html', '🎁 경품 추첨', '럭키드로우 번호 추첨기. 1·2·3등 모두 3초 드럼롤. 추첨 PC에서 새 창 → 전체화면', '회사 구글 로그인 필요'],
+  ['/semcopy.html', '🔗 경품 교환권 QR 페이지', '당첨자가 QR로 여는 상품 링크·쿠폰 코드 복사 화면', ''],
+  ['/index.html?view=seminar', '📋 11월 세미나 준비(ONLY MKT)', '할 일·간트·예산·채팅', '회사 구글 로그인 필요'],
+  ['/index.html#mkt-rsvp', '✉️ 참석 확인(RSVP) 관리', '참석자 명단·체크인 현황', '회사 구글 로그인 필요']
+].map(function(l){ return '<a class="lk" href="' + l[0] + '" target="_blank" rel="noopener"><b>' + l[1] + '</b><span>' + esc(l[2]) + '</span>' + (l[3] ? '<i>' + l[3] + '</i>' : '') + '</a>'; }).join('') +
+  '<div class="lk" style="cursor:default"><b>📎 이 콘솔 링크</b><span>' + esc(location.origin + '/semops.html') + '</span><button class="btn" style="margin-top:8px" id="copyMe">링크 복사</button></div>';
+$('copyMe').onclick = function(){ try { navigator.clipboard.writeText(location.origin + '/semops.html').then(function(){ toast('링크 복사됨'); }); } catch(e){ toast(location.origin + '/semops.html'); } };
+
+/* 시계 */
+(function clock(){ var d = new Date(); $('clock').textContent = [d.getHours(), d.getMinutes(), d.getSeconds()].map(function(n){ return String(n).padStart(2, '0'); }).join(':'); setTimeout(clock, 1000 - d.getMilliseconds()); })();
+
+/* 시작 */
+idbOpen().then(function(){ return Promise.all(SND.map(function(s){ return idbGet(s.k).then(function(v){ if (v && v.blob) BLOB[s.k] = { url:URL.createObjectURL(v.blob), name:v.name }; }); })); }).then(function(){ if (isOp()) preloadAll(); paintAll(); });
+paintOp(); paintAll();
+var t0 = ls('tab'); if (t0 && $('t-' + t0)) tab(t0);
+if (location.hash && $('t-' + location.hash.slice(1))) tab(location.hash.slice(1));
+})();
+</script>
+</body>
+</html>

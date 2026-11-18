@@ -1339,6 +1339,7 @@
            </div>
            <div class="flex flex-col gap-0.5 min-w-[130px]">
              <p class="text-[11px] font-extrabold text-[#7C5CFF]/60 tracking-wide px-2 pb-1">프로젝트</p>
+             <button id="mktBtn-semops" onclick="mktSub('semops')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🎛 세미나 운영 콘솔</button>
              <button id="mktBtn-seminar" onclick="mktSub('seminar')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">11월 세미나</button>
              <button id="mktBtn-rsvp" onclick="mktSub('rsvp')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">✉️ 세미나 참석 확인(RSVP)</button>
              <button id="mktBtn-raffle" onclick="mktSub('raffle')" class="text-left px-2 py-1 rounded-lg text-[13px] font-medium text-[#5B44C7] hover:bg-[#EDE9FF] whitespace-nowrap">🎁 세미나 경품 추첨</button>
@@ -1377,6 +1378,7 @@
        <div id="view-rsvp" class="hidden"><div id="rsBody"></div></div>
        <div id="view-semcopy" class="hidden"><div id="scBody"></div></div>
        <div id="view-raffle" class="hidden"><div id="rfBody"></div></div>
+       <div id="view-semops" class="hidden"><div id="soBody"></div></div>
        <div id="view-brandbook" class="hidden"><div id="bbBody"></div></div>
        <div id="view-lanseon" class="hidden"><div id="lnBody"></div></div>
        <div id="view-hakmap" class="hidden"><div id="hkBody"></div></div>
@@ -9693,6 +9695,24 @@
       scQrLib().then(async()=>{ const tmp=document.createElement('div'); tmp.style.cssText='position:fixed;left:-9999px'; document.body.appendChild(tmp);
         for(const c of L){ scDraw(tmp,scCodeUrl(c),400); await new Promise(r=>setTimeout(r,120)); scPng(tmp,'QR_'+c.replace(/[^\w\-가-힣]/g,'_')+'.png'); }
         tmp.remove(); }); }
+    /* ===== 🎛 세미나 운영 콘솔 허브 (semops.html 임베드 · 공개 링크 — 현장 스태프용, 2026-11-18) ===== */
+    function renderSemops(){ const box=document.getElementById('soBody'); if(!box||box.dataset.ok) return; box.dataset.ok='1';
+      const url=location.origin+'/semops.html';
+      const card=(href,ic,t,d,lock)=>`<a href="${href}" target="_blank" rel="noopener" class="block rounded-2xl border border-slate-200 bg-white p-3 hover:border-[#7C5CFF]"><b class="text-[14px] font-extrabold text-ink">${ic} ${t}</b><span class="block text-[12px] text-slate-500 mt-0.5">${d}</span>${lock?'<span class="text-[11px] font-bold text-amber-600">로그인 필요</span>':'<span class="text-[11px] font-bold text-emerald-600">링크만 있으면 열림</span>'}</a>`;
+      box.innerHTML=`<div class="flex items-center justify-between gap-3 flex-wrap mb-3">
+          <div><h2 class="text-[18px] font-extrabold text-ink">🎛 세미나 운영 콘솔 · 11/19</h2>
+            <p class="text-[12px] text-slate-500 mt-0.5">큐시트 F 기준 진행·음향 보드·마이크·사운드체크·비상 대응. <b>링크만 있으면 로그인 없이</b> 열려요. 음향 PC에서 <b>오퍼레이터 모드</b>를 켜면 큐를 넘길 때 모든 스태프 화면이 따라가요.</p></div>
+          <div class="flex gap-2"><button onclick="navigator.clipboard.writeText('${url}');this.textContent='복사됨 ✓'" class="px-4 py-2 rounded-full border border-[#7C5CFF] text-[#7C5CFF] text-[13px] font-bold whitespace-nowrap">스태프 링크 복사</button>
+          <a href="/semops.html" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-[#7C5CFF] text-white text-[13px] font-bold hover:brightness-110 whitespace-nowrap">새 창으로 열기 ↗</a></div>
+        </div>
+        <div class="grid gap-2 mb-3" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+          ${card('/semops.html','🎛','운영 콘솔','큐 진행·음향 재생·체크',0)}
+          ${card('/raffle.html','🎁','경품 추첨','럭키드로우 1·2·3등',1)}
+          ${card('/semcopy.html','🔗','교환권 QR 페이지','당첨자용 쿠폰 복사',0)}
+          ${card('/index.html?view=seminar','📋','세미나 준비','할 일·간트·예산',1)}
+        </div>
+        <iframe src="/semops.html" title="세미나 운영 콘솔" allow="autoplay" class="w-full rounded-2xl border border-slate-200 bg-white" style="height:min(82vh,900px);min-height:560px"></iframe>`;
+    }
     function renderRaffle(){ const box=document.getElementById('rfBody'); if(!box||box.dataset.ok) return; box.dataset.ok='1';
       box.innerHTML=`<div class="flex items-center justify-between gap-3 flex-wrap mb-3">
           <div><h2 class="text-[18px] font-extrabold text-ink">🎁 세미나 경품 추첨</h2>
@@ -9783,6 +9803,7 @@
       const rsv=document.getElementById('view-rsvp'); if(rsv) rsv.classList.toggle('hidden', s!=='rsvp');
       const scv=document.getElementById('view-semcopy'); if(scv) scv.classList.toggle('hidden', s!=='semcopy');
       const rfv=document.getElementById('view-raffle'); if(rfv) rfv.classList.toggle('hidden', s!=='raffle');
+      const sov=document.getElementById('view-semops'); if(sov) sov.classList.toggle('hidden', s!=='semops');
       const bbv=document.getElementById('view-brandbook'); if(bbv) bbv.classList.toggle('hidden', s!=='brandbook');
       const lnv=document.getElementById('view-lanseon'); if(lnv) lnv.classList.toggle('hidden', s!=='lanseon');
       const hkv=document.getElementById('view-hakmap'); if(hkv) hkv.classList.toggle('hidden', s!=='hakmap');
@@ -9797,7 +9818,7 @@
       // 종합 리포트 클러스터
       const sr=document.getElementById('subnav-report'); if(sr) sr.classList.toggle('hidden', s!=='report');
       if(s!=='report'){ ['report','campaign','market','competitor','cdj','export','kpi'].forEach(v=>{ const el=document.getElementById('view-'+v); if(el) el.classList.add('hidden'); }); }
-      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','seminar','rsvp','semcopy','raffle','brandbook','lanseon','hakmap','budget','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
+      ['weekly','medialist','calendar','rnr','cdb','insta','blog','thumb','prpitch','ad','semops','seminar','rsvp','semcopy','raffle','brandbook','lanseon','hakmap','budget','report'].forEach(x=>{ const b=document.getElementById('mktBtn-'+x); if(b){ b.className='text-left px-2 py-1 rounded-lg text-[13px] whitespace-nowrap transition-all '+(x===s ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-[#5B44C7] font-medium hover:bg-[#EDE9FF]'); } });
       if(s==='weekly'){ wkOpen(); }
       if(s==='medialist'){ renderMediaList(); }
       if(s==='calendar'){ renderCalendar(); }
@@ -9810,6 +9831,7 @@
       if(s==='rsvp'){ renderRsvp(); }
       if(s==='semcopy'){ renderSemCopy(); }
       if(s==='raffle'){ renderRaffle(); }
+      if(s==='semops'){ renderSemops(); }
       if(s==='brandbook'){ renderBrandbook(); }
       if(s==='lanseon'){ renderLanseon(); }
       if(s==='hakmap'){ renderHakmap(); }
