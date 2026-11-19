@@ -1,51 +1,43 @@
 {
- "generatedAt": "2026-11-19 02:18",
+ "generatedAt": "2026-11-20 02:25",
  "brands": [
   {
    "name": "아카라",
    "me": true,
    "query": "아카라 스마트홈",
-   "total": 1554,
+   "total": 1556,
    "sentiment": {
-    "pos": 26,
-    "neu": 34,
+    "pos": 27,
+    "neu": 33,
     "neg": 0
    },
    "keywords": [
     [
      "인테리어",
-     31
+     32
     ],
     [
      "AI",
-     30
-    ],
-    [
-     "IoT",
-     21
+     29
     ],
     [
      "도어락",
      20
     ],
     [
-     "AIoT",
-     20
+     "IoT",
+     19
     ],
     [
-     "전문기업",
-     16
+     "AIoT",
+     18
     ],
     [
      "AX",
      15
     ],
     [
-     "공간디자인",
-     14
-    ],
-    [
-     "가톨릭대",
+     "전문기업",
      13
     ],
     [
@@ -61,6 +53,10 @@
      11
     ],
     [
+     "KOSID",
+     10
+    ],
+    [
      "쇼룸",
      10
     ],
@@ -69,7 +65,11 @@
      10
     ],
     [
-     "KOSID",
+     "공동",
+     9
+    ],
+    [
+     "이상헌",
      9
     ],
     [
@@ -77,7 +77,7 @@
      9
     ],
     [
-     "실습실",
+     "가톨릭대",
      9
     ],
     [
@@ -92,7 +92,7 @@
     ],
     [
      "글로벌",
-     6
+     7
     ],
     [
      "강화",
@@ -126,12 +126,24 @@
     "아카라 k100",
     "아카라 홈캠",
     "아카라 스위치",
-    "명조 아카라이브",
     "아카라 l100",
-    "니케 아카라이브",
-    "원신 아카라이브"
+    "명조 아카라이브",
+    "아카라이브 핫딜",
+    "아카라카"
    ],
    "recent": [
+    {
+     "title": "[현장에서] \"예쁜 집만으론 안 팔린다\"…인테리어 업계, '스마트홈'으로...",
+     "source": "bizwnews.com",
+     "date": "2026-11-19",
+     "link": "http://www.bizwnews.com/news/articleView.html?idxno=152472"
+    },
+    {
+     "title": "아카라라이프·한국실내건축가협회, '스마트홈 인테리어 2026' 세미나 공...",
+     "source": "머니투데이",
+     "date": "2026-11-19",
+     "link": "https://n.news.naver.com/mnews/article/008/0005443747?sid=101"
+    },
     {
      "title": "KOSID·아카라라이프, ‘스마트홈 인테리어 2026’ 세미나 공동 개최",
      "source": "매일경제",
@@ -209,18 +221,6 @@
      "source": "머니투데이",
      "date": "2026-10-15",
      "link": "https://n.news.naver.com/mnews/article/008/0005427034?sid=101"
-    },
-    {
-     "title": "아카라라이프, 스마트 도어락 'K100 웜다크실버' 한정판 출시",
-     "source": "beyondpost.co.kr",
-     "date": "2026-10-15",
-     "link": "http://www.beyondpost.co.kr/view.php?ud=20261015100631188946a9e4dd7f_30"
-    },
-    {
-     "title": "아카라라이프, '프로안심 서비스' 평가 만족도 4.9점…\"앱 연결도 기사...",
-     "source": "bizwnews.com",
-     "date": "2026-10-13",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=148609"
     }
    ]
   },
@@ -228,7 +228,7 @@
    "name": "헤이홈",
    "me": false,
    "query": "헤이홈",
-   "total": 1021,
+   "total": 1022,
    "sentiment": {
     "pos": 5,
     "neu": 38,
@@ -260,6 +260,10 @@
      21
     ],
     [
+     "베이비페어",
+     19
+    ],
+    [
      "4개",
      19
     ],
@@ -272,19 +276,7 @@
      19
     ],
     [
-     "제품은",
-     18
-    ],
-    [
-     "베이비페어",
-     18
-    ],
-    [
-     "오이스터",
-     18
-    ],
-    [
-     "에이블",
+     "코베",
      18
     ],
     [
@@ -292,16 +284,24 @@
      18
     ],
     [
+     "제품은",
+     18
+    ],
+    [
      "타포",
      17
     ],
     [
-     "코베",
+     "오이스터",
      17
     ],
     [
-     "모윰",
-     16
+     "에이블",
+     17
+    ],
+    [
+     "니스툴그로우",
+     15
     ],
     [
      "노출된",
@@ -347,10 +347,16 @@
     "헤이홈 연결",
     "헤이홈 오프라인",
     "헤이홈 공유",
-    "헤이홈 프로",
-    "헤이홈 카메라"
+    "헤이홈 카메라",
+    "헤이홈 프로"
    ],
    "recent": [
+    {
+     "title": "경기 최대 규모 ‘수원 코베 베이비페어&유아교육전’ 11월 26일부터 29일...",
+     "source": "beyondpost.co.kr",
+     "date": "2026-11-19",
+     "link": "http://www.beyondpost.co.kr/view.php?ud=2026111909504851159aeda69934_30"
+    },
     {
      "title": "[기업동향] 베이비빌리 ‘정보형 라이브커머스’에 시청자 1만명 몰려",
      "source": "viva100.com",
@@ -434,12 +440,6 @@
      "source": "ktv.go.kr",
      "date": "2026-11-12",
      "link": "https://www.ktv.go.kr/content/view?content_id=763908"
-    },
-    {
-     "title": "KISA, 가정용 IP카메라 3종서 영상 무단 다운로드 등 취약점 발견",
-     "source": "디지털타임스",
-     "date": "2026-11-12",
-     "link": "https://n.news.naver.com/mnews/article/029/0003058820?sid=105"
     }
    ]
   },
@@ -447,84 +447,84 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69838,
+   "total": 69845,
    "sentiment": {
-    "pos": 7,
-    "neu": 53,
-    "neg": 0
+    "pos": 8,
+    "neu": 50,
+    "neg": 2
    },
    "keywords": [
     [
      "수능",
-     65
+     59
     ],
     [
      "사용",
-     46
+     41
     ],
     [
      "연결된",
-     42
+     38
     ],
     [
      "시스템에어컨의",
-     39
-    ],
-    [
-     "상태와",
-     35
-    ],
-    [
-     "긴급",
      33
     ],
     [
-     "시험장",
-     32
-    ],
-    [
-     "상담사가",
+     "상태와",
      30
     ],
     [
-     "원격으로",
-     30
-    ],
-    [
-     "원격진단",
+     "긴급",
      29
-    ],
-    [
-     "점검",
-     29
-    ],
-    [
-     "설정을",
-     28
-    ],
-    [
-     "시스템에어컨",
-     27
     ],
     [
      "AI",
      26
     ],
     [
-     "LG전자",
+     "상담사가",
+     26
+    ],
+    [
+     "원격으로",
+     26
+    ],
+    [
+     "시험장",
      25
+    ],
+    [
+     "시스템에어컨",
+     25
+    ],
+    [
+     "점검",
+     25
+    ],
+    [
+     "설정을",
+     25
+    ],
+    [
+     "원격진단",
+     24
     ],
     [
      "고사장",
-     25
+     24
     ],
     [
      "AI로",
-     24
+     21
     ],
     [
      "SmartThings",
-     24
+     21
+    ],
+    [
+     "가전제품",
+     20
     ]
    ],
    "posWords": [
@@ -541,23 +541,69 @@
      2
     ],
     [
+     "프리미엄",
+     1
+    ],
+    [
      "개선",
      1
     ]
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스",
     "삼성 스마트싱스 허브",
+    "삼성 스마트싱스",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 도어락",
     "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 도어락",
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 홈캠",
     "삼성 스마트싱스 세탁기 원격"
    ],
    "recent": [
+    {
+     "title": "성능 넘어 판매까지… 가전업계, 생성형 AI로 공간 맞춤 마케팅",
+     "source": "seoul.co.kr",
+     "date": "2026-11-19",
+     "link": "https://n.news.naver.com/mnews/article/081/0003701255?sid=101"
+    },
+    {
+     "title": "다림질까지 넓어진 의류관리 가전…LG·삼성, 주름 관리 기술 차별화",
+     "source": "asiatime.co.kr",
+     "date": "2026-11-19",
+     "link": "https://www.asiatime.co.kr/article/20261119500406"
+    },
+    {
+     "title": "[단독] 삼성 \"터치스트림, 소송 전 특허 통지 없었다\"…일부 청구 기각...",
+     "source": "the-today.com",
+     "date": "2026-11-19",
+     "link": "https://www.the-today.com/news/articleView.html?idxno=93810"
+    },
+    {
+     "title": "구글에 4518억 평결 낸 터치스트림, 스마트싱스·TV 플러스 제소하자 삼...",
+     "source": "g-enews.com",
+     "date": "2026-11-19",
+     "link": "https://www.g-enews.com/view.php?ud=202611190956554694fbbec65dfb_1"
+    },
+    {
+     "title": "삼성전자, ‘삼성 AI 구독’ 케어 서비스 세분화…방문케어 라이트 도입",
+     "source": "biz.chosun.com",
+     "date": "2026-11-19",
+     "link": "https://n.news.naver.com/mnews/article/366/0001205854?sid=101"
+    },
+    {
+     "title": "[소비자의 선택] 가전 구독 핵심은 A/S…삼성전자서비스, 블루패스 차별...",
+     "source": "cstimes.com",
+     "date": "2026-11-19",
+     "link": "https://www.cstimes.com/news/articleView.html?idxno=728393"
+    },
+    {
+     "title": "[클리프] 테슬라 어디까지 경험해 봤니?",
+     "source": "joongang.co.kr",
+     "date": "2026-11-19",
+     "link": "https://n.news.naver.com/mnews/article/025/0003566326?sid=101"
+    },
     {
      "title": "[삼성전자] CES 혁신상 19개·미국 소비자 매체 TV·오디오 제품 선정…...",
      "source": "webeconomy.co.kr",
@@ -595,58 +641,16 @@
      "link": "http://www.dailypop.kr/news/articleView.html?idxno=104636"
     },
     {
-     "title": "[넥스트 K-브랜드 대상] 미래 삶의 질 좌우하는 스마트폰…62.2% 선택",
-     "source": "news.dealsitetv.com",
-     "date": "2026-11-17",
-     "link": "https://news.dealsitetv.com/articles/178431"
-    },
-    {
      "title": "[넥스트 K-브랜드 대상] 전자부터 금융까지…8관왕 ‘삼성 생태계’ 저...",
      "source": "news.dealsitetv.com",
      "date": "2026-11-17",
      "link": "https://news.dealsitetv.com/articles/178560"
     },
     {
-     "title": "[Who Is ?] 정종민 CJCGV 대표이사",
-     "source": "businesspost.co.kr",
+     "title": "[넥스트 K-브랜드 대상] 미래 삶의 질 좌우하는 스마트폰…62.2% 선택",
+     "source": "news.dealsitetv.com",
      "date": "2026-11-17",
-     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=451037"
-    },
-    {
-     "title": "삼성·LG전자, 수능 앞두고 고사장 냉난방 점검… 긴급 대응체계 가동",
-     "source": "디지털타임스",
-     "date": "2026-11-16",
-     "link": "https://n.news.naver.com/mnews/article/029/0003059478?sid=101"
-    },
-    {
-     "title": "삼성전자, 수능날 고사장 시스템에어컨 전담팀 운영… 사전 점검도",
-     "source": "tournews21.com",
-     "date": "2026-11-16",
-     "link": "https://www.tournews21.com/news/articleView.html?idxno=148532"
-    },
-    {
-     "title": "삼성전자, 수능 시험장 냉난방 긴급 대응체계 가동…AI 원격진단·전담...",
-     "source": "joongangenews.com",
-     "date": "2026-11-16",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=563970"
-    },
-    {
-     "title": "삼성전자, 수능 대비 전담 서비스팀 꾸려",
-     "source": "kfenews.co.kr",
-     "date": "2026-11-16",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=668173"
-    },
-    {
-     "title": "삼성전자, 수능 시험장 난방 점검·긴급 대응 지원",
-     "source": "bizwork.co.kr",
-     "date": "2026-11-16",
-     "link": "https://www.bizwork.co.kr/news/articleView.html?idxno=420884"
-    },
-    {
-     "title": "[TOP's Pick] [전자·IT] LG전자, 휴머노이드 로봇 품질 경쟁력 강화 나서...",
-     "source": "topdaily.kr",
-     "date": "2026-11-16",
-     "link": "https://www.topdaily.kr/articles/112929"
+     "link": "https://news.dealsitetv.com/articles/178431"
     }
    ]
   },
@@ -776,9 +780,9 @@
     "lg 씽큐 와이파이",
     "lg 씽큐 냉장고",
     "lg 씽큐 허브",
-    "lg 씽큐 초기화",
-    "lg 씽큐 에어컨 연결",
-    "lg씽큐앱"
+    "lg 씽큐 연결",
+    "lg 씽큐 영국 국가",
+    "lg 씽큐 초기화"
    ],
    "recent": [
     {
@@ -877,110 +881,106 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76519,
+   "total": 76557,
    "sentiment": {
-    "pos": 15,
-    "neu": 37,
-    "neg": 8
+    "pos": 32,
+    "neu": 24,
+    "neg": 4
    },
    "keywords": [
     [
-     "AI",
-     26
+     "폴스타",
+     36
     ],
     [
-     "타포",
-     12
-    ],
-    [
-     "번역한",
-     10
-    ],
-    [
-     "기사의",
-     10
-    ],
-    [
-     "전문",
-     10
-    ],
-    [
-     "매터",
-     10
-    ],
-    [
-     "미국",
-     9
+     "디지털",
+     31
     ],
     [
      "화면",
-     9
+     29
     ],
     [
-     "입니다",
-     9
+     "호환",
+     26
     ],
     [
-     "번역에",
-     8
+     "안드로이드",
+     23
     ],
     [
-     "오류가",
-     8
+     "공조",
+     23
     ],
     [
-     "주요",
-     8
+     "조작",
+     23
     ],
     [
-     "Matter",
-     8
+     "삼성의",
+     22
     ],
     [
-     "제어",
-     7
+     "갤러리",
+     22
     ],
     [
-     "아래는",
-     7
+     "시스템",
+     21
     ],
     [
-     "기사를",
-     7
+     "업데이트",
+     19
     ],
     [
-     "번역",
-     7
+     "바로가기",
+     19
     ],
     [
-     "으로",
-     7
+     "블랙박스와",
+     18
+    ],
+    [
+     "AI",
+     18
+    ],
+    [
+     "구글과",
+     17
+    ],
+    [
+     "기능을",
+     16
+    ],
+    [
+     "대규모",
+     14
+    ],
+    [
+     "모드",
+     14
     ]
    ],
    "posWords": [
     [
-     "글로벌",
-     3
+     "확대",
+     30
+    ],
+    [
+     "개선",
+     23
+    ],
+    [
+     "강화",
+     7
     ],
     [
      "수상",
      3
     ],
     [
-     "확대",
-     3
-    ],
-    [
-     "인기",
-     3
-    ],
-    [
-     "개선",
-     2
-    ],
-    [
-     "투자",
-     2
+     "글로벌",
+     1
     ],
     [
      "프리미엄",
@@ -989,110 +989,114 @@
     [
      "혁신",
      1
+    ],
+    [
+     "선도",
+     1
     ]
    ],
    "related": [
     "구글 홈 스피커",
     "구글 홈 허브",
     "구글 홈",
-    "구글 홈 미니",
     "구글 홈 화면 삭제",
+    "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 1세대",
-    "구글 홈 미니 2세대",
     "구글 홈바 삭제 방법",
+    "구글 홈 미니 2세대",
     "구글 홈 스피커 연결"
    ],
    "recent": [
     {
-     "title": "[뉴스이슈&비즈] 오늘 수능일, '흑색 연필만'…전자기기 미제출 땐 시험...",
-     "source": "issuenbiz.com",
+     "title": "폴스타, 무선 업데이트 통해 '폴스타 4' 상품성 강화",
+     "source": "digitalchosun.dizzo.com",
      "date": "2026-11-19",
-     "link": "http://www.issuenbiz.com/news/articleView.html?idxno=81742"
+     "link": "http://digitalchosun.dizzo.com/site/data/html_dir/2026/11/19/2026111980222.html"
     },
     {
-     "title": "구글 월렛, 13년 넘어 아이폰 복귀했지만 매장 탭투페이는 빠졌다…이유...",
-     "source": "wikitree.co.kr",
-     "date": "2026-11-18",
-     "link": "https://www.wikitree.co.kr/articles/1175754"
+     "title": "폴스타 4, 대규모 OTA 업데이트…캠핑 모드·디지털 키 기능 확대",
+     "source": "thedrive.co.kr",
+     "date": "2026-11-19",
+     "link": "https://thedrive.co.kr/news/newsview.php?ncode=1065603501884706"
     },
     {
-     "title": "제미나이 ‘태스크’ 무료 개방, 업체 전화·구글페이 결제는 미국 이용...",
-     "source": "wikitree.co.kr",
-     "date": "2026-11-18",
-     "link": "https://www.wikitree.co.kr/articles/1175745"
+     "title": "수험생 겨냥 특별한 혜택…수험표 지참땐 할인",
+     "source": "jndn.com",
+     "date": "2026-11-19",
+     "link": "http://www.jndn.com/article.php?aid=1795077566443429100"
     },
     {
-     "title": "SKT, 'AI-RAN 차량 이송 기술'로 장관상 수상…LG전자, 인간공학디자인상...",
-     "source": "sisaon.co.kr",
-     "date": "2026-11-18",
-     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=206199"
+     "title": "[Car 리포트] 벤츠코리아, 전기 SUV GLB 출시 등",
+     "source": "daily.hankooki.com",
+     "date": "2026-11-19",
+     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1427088"
     },
     {
-     "title": "중고의류 유통 순환 잇는다… B2B 구제도매 앱 '룸포트' 출시",
-     "source": "socialvalue.kr",
-     "date": "2026-11-18",
-     "link": "https://www.socialvalue.kr/news/view/1065596511051465"
+     "title": "‘폴스타 4’ 대규모 무선 업데이트…안드로이드 키 지원 확대",
+     "source": "segye.com",
+     "date": "2026-11-19",
+     "link": "https://n.news.naver.com/mnews/article/022/0004176542?sid=101"
     },
     {
-     "title": "한국티즈, TV와 모바일 잇는 옴니채널 광고",
+     "title": "힙해진 600년 상권…전통시장 남대문의 귀환 [스페셜리포트]",
      "source": "매일경제",
-     "date": "2026-11-18",
-     "link": "https://n.news.naver.com/mnews/article/009/0005765625?sid=101"
+     "date": "2026-11-19",
+     "link": "https://n.news.naver.com/mnews/article/024/0000109752?sid=101"
     },
     {
-     "title": "삼성 스마트싱스도 챗GPT 연동…AI로 가전 제어 확산",
-     "source": "전자신문",
-     "date": "2026-11-18",
-     "link": "https://n.news.naver.com/mnews/article/030/0003487199?sid=105"
+     "title": "'폴스타 4' 소프트웨어 업데이트…캠핑·발렛 모드 도입",
+     "source": "nocutnews.co.kr",
+     "date": "2026-11-19",
+     "link": "https://n.news.naver.com/mnews/article/079/0004211735?sid=103"
     },
     {
-     "title": "[통신 View] 산업 현장부터 미디어·의료·모바일 등 전방위 혁신",
-     "source": "newscj.com",
-     "date": "2026-11-18",
-     "link": "https://www.newscj.com/news/articleView.html?idxno=3449850"
+     "title": "[오토 뉴스브리핑] 기아, '노사 합동 사랑나누기' 기부 캠페인 실시",
+     "source": "asiatime.co.kr",
+     "date": "2026-11-19",
+     "link": "https://www.asiatime.co.kr/article/20261119500266"
     },
     {
-     "title": "이케아 트렌드 선도 '엑스플로어 스튜디오' 강동점에 생긴다",
+     "title": "폴스타 4, 소프트웨어 대규모 업데이트...캠핑 모드·자동 주차 기능 추...",
+     "source": "joongangenews.com",
+     "date": "2026-11-19",
+     "link": "https://www.joongangenews.com/news/articleView.html?idxno=565037"
+    },
+    {
+     "title": "5명이 가상의 손가락 조작하자 AI가 문장으로…GIST 체험기술 공개",
+     "source": "aitimes.com",
+     "date": "2026-11-19",
+     "link": "https://www.aitimes.com/news/articleView.html?idxno=217547"
+    },
+    {
+     "title": "부산창경, 스마트시티 기업 4곳 SCEWC 참가…해외 상담 369만달러",
+     "source": "inthenews.co.kr",
+     "date": "2026-11-19",
+     "link": "https://www.inthenews.co.kr/news/article.html?no=94754"
+    },
+    {
+     "title": "폴스타 4, 무선 업데이트로 신규 편의·주행 기능 추가",
+     "source": "livebiz.today",
+     "date": "2026-11-19",
+     "link": "https://www.livebiz.today/news/articleView.html?idxno=206678"
+    },
+    {
+     "title": "제미나이, 램 2GB 안드로이드 Go폰에서 쓴다…음성 호출은 빠졌다",
+     "source": "coinreaders.com",
+     "date": "2026-11-19",
+     "link": "http://coinreaders.com/271591"
+    },
+    {
+     "title": "이민호·박규영, ‘버츄얼 러브’로 첫 로맨스 호흡..‘현실 앙숙→가상...",
      "source": "breaknews.com",
-     "date": "2026-11-18",
-     "link": "http://www.breaknews.com/1251976"
+     "date": "2026-11-19",
+     "link": "http://www.breaknews.com/1252197"
     },
     {
-     "title": "제미나이 기록 꺼도 대화 약 2개월 저장…구글, 정책 변경",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-11-18",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=716354"
-    },
-    {
-     "title": "구글 메시지 대대적 개편 예고…음성 메시지 듣다 채팅방 옮겨도 'OK'",
-     "source": "kbench.com",
-     "date": "2026-11-18",
-     "link": "https://kbench.com/?q=node/283439"
-    },
-    {
-     "title": "“보여주기식 행정 탈피해야”… 대구시정 전반 매서운 질타와 대안 제...",
-     "source": "breaknews.com",
-     "date": "2026-11-18",
-     "link": "http://www.breaknews.com/1251908"
-    },
-    {
-     "title": "[IT는 지금] SKT, AI-RAN 무인 자율 이송 기술로 전파방송 기술대상 5년 ...",
-     "source": "dealsite.co.kr",
-     "date": "2026-11-18",
-     "link": "https://dealsite.co.kr/articles/173046"
-    },
-    {
-     "title": "[텔코 NOW]SKTㆍKTㆍLGU+",
-     "source": "dnews.co.kr",
-     "date": "2026-11-18",
-     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611181254409950619"
-    },
-    {
-     "title": "\"iM Ground(아엠그라운드) 최애 덕질하기\"…뉴스부터 사진·영상·투표까...",
-     "source": "enews.imbc.com",
-     "date": "2026-11-18",
-     "link": "https://m.entertain.naver.com/article/408/0000328342"
+     "title": "폴스타4, 업데이트로 ‘캠핑·발렛 모드’ 추가…안드로이드폰도 디지털...",
+     "source": "매일경제",
+     "date": "2026-11-19",
+     "link": "https://n.news.naver.com/mnews/article/009/0005766051?sid=103"
     }
    ]
   }
