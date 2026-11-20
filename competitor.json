@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-20 02:25",
+ "generatedAt": "2026-11-21 01:59",
  "brands": [
   {
    "name": "아카라",
@@ -348,7 +348,7 @@
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 프로"
+    "헤이홈 보안"
    ],
    "recent": [
     {
@@ -447,7 +447,7 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69845,
+   "total": 69846,
    "sentiment": {
     "pos": 8,
     "neu": 50,
@@ -456,15 +456,15 @@
    "keywords": [
     [
      "수능",
-     59
+     56
     ],
     [
      "사용",
-     41
+     40
     ],
     [
      "연결된",
-     38
+     37
     ],
     [
      "시스템에어컨의",
@@ -476,7 +476,7 @@
     ],
     [
      "긴급",
-     29
+     28
     ],
     [
      "AI",
@@ -484,14 +484,14 @@
     ],
     [
      "상담사가",
-     26
-    ],
-    [
-     "원격으로",
-     26
+     25
     ],
     [
      "시험장",
+     25
+    ],
+    [
+     "원격으로",
      25
     ],
     [
@@ -500,31 +500,31 @@
     ],
     [
      "점검",
-     25
-    ],
-    [
-     "설정을",
-     25
+     24
     ],
     [
      "원격진단",
-     24
+     23
+    ],
+    [
+     "설정을",
+     23
     ],
     [
      "고사장",
-     24
-    ],
-    [
-     "AI로",
-     21
+     22
     ],
     [
      "SmartThings",
      21
     ],
     [
+     "AI로",
+     19
+    ],
+    [
      "가전제품",
-     20
+     19
     ]
    ],
    "posWords": [
@@ -551,17 +551,23 @@
    ],
    "related": [
     "삼성 스마트싱스 스테이션",
-    "삼성 스마트싱스 허브",
     "삼성 스마트싱스",
-    "삼성 스마트싱스 오류",
+    "삼성 스마트싱스 허브",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 공유",
-    "삼성 스마트싱스 도어락",
+    "삼성 스마트싱스 오류",
     "삼성 스마트싱스 스위치",
+    "삼성 스마트싱스 공유",
     "삼성 스마트싱스 홈캠",
+    "삼성 스마트싱스 도어락",
     "삼성 스마트싱스 세탁기 원격"
    ],
    "recent": [
+    {
+     "title": "가전제품도 인테리어… 디자인 궁합이 뜬다",
+     "source": "seoul.co.kr",
+     "date": "2026-11-20",
+     "link": "https://n.news.naver.com/mnews/article/081/0003701389?sid=101"
+    },
     {
      "title": "성능 넘어 판매까지… 가전업계, 생성형 AI로 공간 맞춤 마케팅",
      "source": "seoul.co.kr",
@@ -641,12 +647,6 @@
      "link": "http://www.dailypop.kr/news/articleView.html?idxno=104636"
     },
     {
-     "title": "[넥스트 K-브랜드 대상] 전자부터 금융까지…8관왕 ‘삼성 생태계’ 저...",
-     "source": "news.dealsitetv.com",
-     "date": "2026-11-17",
-     "link": "https://news.dealsitetv.com/articles/178560"
-    },
-    {
      "title": "[넥스트 K-브랜드 대상] 미래 삶의 질 좌우하는 스마트폰…62.2% 선택",
      "source": "news.dealsitetv.com",
      "date": "2026-11-17",
@@ -658,16 +658,16 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78254,
+   "total": 78256,
    "sentiment": {
-    "pos": 16,
-    "neu": 44,
+    "pos": 18,
+    "neu": 42,
     "neg": 0
    },
    "keywords": [
     [
      "LG전자",
-     44
+     42
     ],
     [
      "시간을",
@@ -675,7 +675,7 @@
     ],
     [
      "ThinQ",
-     32
+     33
     ],
     [
      "정수기",
@@ -694,28 +694,32 @@
      19
     ],
     [
+     "AI",
+     18
+    ],
+    [
      "설정할",
      18
     ],
     [
-     "AI",
-     17
-    ],
-    [
      "LG전자는",
-     16
-    ],
-    [
-     "알려주는",
-     15
+     17
     ],
     [
      "무드",
      14
     ],
     [
+     "알려주는",
+     14
+    ],
+    [
      "퓨리케어",
      14
+    ],
+    [
+     "플랫폼",
+     13
     ],
     [
      "신모델",
@@ -730,10 +734,6 @@
      13
     ],
     [
-     "플랫폼",
-     12
-    ],
-    [
      "출하가는",
      12
     ]
@@ -745,30 +745,30 @@
     ],
     [
      "확대",
-     4
+     5
     ],
     [
      "계약",
      3
     ],
     [
+     "투자",
+     2
+    ],
+    [
      "혁신",
      2
     ],
     [
+     "글로벌",
+     1
+    ],
+    [
+     "공략",
+     1
+    ],
+    [
      "협업",
-     1
-    ],
-    [
-     "돌파",
-     1
-    ],
-    [
-     "프리미엄",
-     1
-    ],
-    [
-     "성장",
      1
     ]
    ],
@@ -785,6 +785,18 @@
     "lg 씽큐 초기화"
    ],
    "recent": [
+    {
+     "title": "LG·카카오·네이버, AI 지분투자 늘렸지만···관건은 '사업화'",
+     "source": "polinews.co.kr",
+     "date": "2026-11-20",
+     "link": "https://www.polinews.co.kr/news/articleView.html?idxno=748822"
+    },
+    {
+     "title": "[IT업계 10월 동향] LG전자, 글로벌 B2B 시장 공략 가속···AI 생태계 확...",
+     "source": "wsobi.com",
+     "date": "2026-11-20",
+     "link": "http://www.wsobi.com/news/articleView.html?idxno=322237"
+    },
     {
      "title": "삼성 스마트싱스도 챗GPT 연동…AI로 가전 제어 확산",
      "source": "전자신문",
@@ -862,18 +874,6 @@
      "source": "asiatime.co.kr",
      "date": "2026-11-13",
      "link": "https://www.asiatime.co.kr/article/20261113500236"
-    },
-    {
-     "title": "AI를 도입하는 시대에서 성과를 만드는 시대로…아이벡스 프론티어 2026",
-     "source": "venturesquare.net",
-     "date": "2026-11-12",
-     "link": "https://www.venturesquare.net/1127921/"
-    },
-    {
-     "title": "아이벡스, 산업용 피지컬 AI 양산 해법 제시…\"PoC 넘어 현장 적용\"",
-     "source": "epnc.co.kr",
-     "date": "2026-11-12",
-     "link": "https://www.epnc.co.kr/news/articleView.html?idxno=409683"
     }
    ]
   },
@@ -881,11 +881,11 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76557,
+   "total": 76567,
    "sentiment": {
     "pos": 32,
-    "neu": 24,
-    "neg": 4
+    "neu": 22,
+    "neg": 6
    },
    "keywords": [
     [
@@ -898,7 +898,7 @@
     ],
     [
      "화면",
-     29
+     27
     ],
     [
      "호환",
@@ -926,22 +926,18 @@
     ],
     [
      "시스템",
-     21
-    ],
-    [
-     "업데이트",
-     19
+     20
     ],
     [
      "바로가기",
      19
     ],
     [
-     "블랙박스와",
+     "업데이트",
      18
     ],
     [
-     "AI",
+     "블랙박스와",
      18
     ],
     [
@@ -953,12 +949,16 @@
      16
     ],
     [
-     "대규모",
+     "AI",
      14
     ],
     [
      "모드",
      14
+    ],
+    [
+     "대규모",
+     13
     ]
    ],
    "posWords": [
@@ -975,12 +975,12 @@
      7
     ],
     [
-     "수상",
-     3
+     "글로벌",
+     2
     ],
     [
-     "글로벌",
-     1
+     "수상",
+     2
     ],
     [
      "프리미엄",
@@ -1008,6 +1008,66 @@
     "구글 홈 스피커 연결"
    ],
    "recent": [
+    {
+     "title": "신작 사전 다운로드·기존작 겨울 이벤트..MMORPG 연말 채비",
+     "source": "4th.kr",
+     "date": "2026-11-20",
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2122338"
+    },
+    {
+     "title": "레이팅랩스, K팝 팬 플랫폼 ‘뮤라팝’ 개편··· 최애 아티스트 설정...",
+     "source": "it.donga.com",
+     "date": "2026-11-20",
+     "link": "https://it.donga.com/109980/"
+    },
+    {
+     "title": "8월 급여 ‘4번 쪼개' 받은 홈플러스 직원…11월 급여 또 체불",
+     "source": "breaknews.com",
+     "date": "2026-11-20",
+     "link": "http://www.breaknews.com/1252758"
+    },
+    {
+     "title": "[게임월드] 넥슨ㆍ엔씨ㆍ넷마블ㆍ펄어비스ㆍ카카오게임즈ㆍ위메이드ㆍ...",
+     "source": "dnews.co.kr",
+     "date": "2026-11-20",
+     "link": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611201602428330971"
+    },
+    {
+     "title": "LH주거복지정보, 대구 주거취약계층 지원 방안 모색…지역 현안 간담회...",
+     "source": "breaknews.com",
+     "date": "2026-11-20",
+     "link": "http://www.breaknews.com/1252666"
+    },
+    {
+     "title": "한국부동산원 '청약홈', 'BEST BRAND 대상' 수상",
+     "source": "breaknews.com",
+     "date": "2026-11-20",
+     "link": "http://www.breaknews.com/1252628"
+    },
+    {
+     "title": "CJ온스타일, 21일 브레빌 반자동 커피머신 첫 판매",
+     "source": "breaknews.com",
+     "date": "2026-11-20",
+     "link": "http://www.breaknews.com/1252622"
+    },
+    {
+     "title": "메타, AI 기기 '뮤즈 참' 300달러에 연말 출시 추진...1년 무료 5G 제공",
+     "source": "aitimes.com",
+     "date": "2026-11-20",
+     "link": "https://www.aitimes.com/news/articleView.html?idxno=217601"
+    },
+    {
+     "title": "[게임 브리핑] 넷마블·펄어비스·컴투스·넥슨",
+     "source": "niceeconomy.co.kr",
+     "date": "2026-11-20",
+     "link": "https://www.niceeconomy.co.kr/news/articleView.html?idxno=91906"
+    },
+    {
+     "title": "[게임업계 소식] 네오위즈 ‘안녕서울: 이태원편’, 2027년 출시 예고 外",
+     "source": "viva100.com",
+     "date": "2026-11-20",
+     "link": "https://www.viva100.com/article/20261120500397"
+    },
     {
      "title": "폴스타, 무선 업데이트 통해 '폴스타 4' 상품성 강화",
      "source": "digitalchosun.dizzo.com",
@@ -1037,66 +1097,6 @@
      "source": "segye.com",
      "date": "2026-11-19",
      "link": "https://n.news.naver.com/mnews/article/022/0004176542?sid=101"
-    },
-    {
-     "title": "힙해진 600년 상권…전통시장 남대문의 귀환 [스페셜리포트]",
-     "source": "매일경제",
-     "date": "2026-11-19",
-     "link": "https://n.news.naver.com/mnews/article/024/0000109752?sid=101"
-    },
-    {
-     "title": "'폴스타 4' 소프트웨어 업데이트…캠핑·발렛 모드 도입",
-     "source": "nocutnews.co.kr",
-     "date": "2026-11-19",
-     "link": "https://n.news.naver.com/mnews/article/079/0004211735?sid=103"
-    },
-    {
-     "title": "[오토 뉴스브리핑] 기아, '노사 합동 사랑나누기' 기부 캠페인 실시",
-     "source": "asiatime.co.kr",
-     "date": "2026-11-19",
-     "link": "https://www.asiatime.co.kr/article/20261119500266"
-    },
-    {
-     "title": "폴스타 4, 소프트웨어 대규모 업데이트...캠핑 모드·자동 주차 기능 추...",
-     "source": "joongangenews.com",
-     "date": "2026-11-19",
-     "link": "https://www.joongangenews.com/news/articleView.html?idxno=565037"
-    },
-    {
-     "title": "5명이 가상의 손가락 조작하자 AI가 문장으로…GIST 체험기술 공개",
-     "source": "aitimes.com",
-     "date": "2026-11-19",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=217547"
-    },
-    {
-     "title": "부산창경, 스마트시티 기업 4곳 SCEWC 참가…해외 상담 369만달러",
-     "source": "inthenews.co.kr",
-     "date": "2026-11-19",
-     "link": "https://www.inthenews.co.kr/news/article.html?no=94754"
-    },
-    {
-     "title": "폴스타 4, 무선 업데이트로 신규 편의·주행 기능 추가",
-     "source": "livebiz.today",
-     "date": "2026-11-19",
-     "link": "https://www.livebiz.today/news/articleView.html?idxno=206678"
-    },
-    {
-     "title": "제미나이, 램 2GB 안드로이드 Go폰에서 쓴다…음성 호출은 빠졌다",
-     "source": "coinreaders.com",
-     "date": "2026-11-19",
-     "link": "http://coinreaders.com/271591"
-    },
-    {
-     "title": "이민호·박규영, ‘버츄얼 러브’로 첫 로맨스 호흡..‘현실 앙숙→가상...",
-     "source": "breaknews.com",
-     "date": "2026-11-19",
-     "link": "http://www.breaknews.com/1252197"
-    },
-    {
-     "title": "폴스타4, 업데이트로 ‘캠핑·발렛 모드’ 추가…안드로이드폰도 디지털...",
-     "source": "매일경제",
-     "date": "2026-11-19",
-     "link": "https://n.news.naver.com/mnews/article/009/0005766051?sid=103"
     }
    ]
   }
