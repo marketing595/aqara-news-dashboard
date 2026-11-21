@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-21 01:59",
+ "generatedAt": "2026-11-22 01:11",
  "brands": [
   {
    "name": "아카라",
@@ -126,9 +126,9 @@
     "아카라 k100",
     "아카라 홈캠",
     "아카라 스위치",
-    "아카라 l100",
     "명조 아카라이브",
-    "아카라이브 핫딜",
+    "아카라 l100",
+    "니케 아카라이브",
     "아카라카"
    ],
    "recent": [
@@ -456,7 +456,7 @@
    "keywords": [
     [
      "수능",
-     56
+     58
     ],
     [
      "사용",
@@ -476,18 +476,14 @@
     ],
     [
      "긴급",
-     28
+     29
     ],
     [
      "AI",
-     26
-    ],
-    [
-     "상담사가",
      25
     ],
     [
-     "시험장",
+     "상담사가",
      25
     ],
     [
@@ -495,11 +491,19 @@
      25
     ],
     [
-     "시스템에어컨",
+     "점검",
      25
     ],
     [
-     "점검",
+     "시험장",
+     24
+    ],
+    [
+     "시스템에어컨",
+     24
+    ],
+    [
+     "설정을",
      24
     ],
     [
@@ -507,12 +511,8 @@
      23
     ],
     [
-     "설정을",
-     23
-    ],
-    [
      "고사장",
-     22
+     23
     ],
     [
      "SmartThings",
@@ -520,7 +520,7 @@
     ],
     [
      "AI로",
-     19
+     20
     ],
     [
      "가전제품",
@@ -553,13 +553,13 @@
     "삼성 스마트싱스 스테이션",
     "삼성 스마트싱스",
     "삼성 스마트싱스 허브",
-    "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 오류",
+    "삼성 스마트싱스 파인드",
+    "삼성 스마트싱스 도어락",
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 공유",
     "삼성 스마트싱스 홈캠",
-    "삼성 스마트싱스 도어락",
-    "삼성 스마트싱스 세탁기 원격"
+    "삼성 스마트싱스 뜻"
    ],
    "recent": [
     {
@@ -775,12 +775,12 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐 세탁기",
     "lg 씽큐 티비연결",
+    "lg 씽큐 세탁기",
+    "lg 씽큐 연결",
     "lg 씽큐 와이파이",
     "lg 씽큐 냉장고",
     "lg 씽큐 허브",
-    "lg 씽큐 연결",
     "lg 씽큐 영국 국가",
     "lg 씽큐 초기화"
    ],
@@ -881,11 +881,11 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76567,
+   "total": 76573,
    "sentiment": {
-    "pos": 32,
-    "neu": 22,
-    "neg": 6
+    "pos": 31,
+    "neu": 24,
+    "neg": 5
    },
    "keywords": [
     [
@@ -925,16 +925,16 @@
      22
     ],
     [
-     "시스템",
-     20
+     "업데이트",
+     19
     ],
     [
      "바로가기",
      19
     ],
     [
-     "업데이트",
-     18
+     "시스템",
+     19
     ],
     [
      "블랙박스와",
@@ -946,10 +946,6 @@
     ],
     [
      "기능을",
-     16
-    ],
-    [
-     "AI",
      14
     ],
     [
@@ -958,6 +954,10 @@
     ],
     [
      "대규모",
+     13
+    ],
+    [
+     "캠핑",
      13
     ]
    ],
@@ -968,7 +968,7 @@
     ],
     [
      "개선",
-     23
+     22
     ],
     [
      "강화",
@@ -985,20 +985,12 @@
     [
      "프리미엄",
      1
-    ],
-    [
-     "혁신",
-     1
-    ],
-    [
-     "선도",
-     1
     ]
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈 허브",
     "구글 홈",
+    "구글 홈 허브",
     "구글 홈 화면 삭제",
     "구글 홈 미니",
     "구글 홈페이지",
@@ -1009,10 +1001,46 @@
    ],
    "recent": [
     {
-     "title": "신작 사전 다운로드·기존작 겨울 이벤트..MMORPG 연말 채비",
-     "source": "4th.kr",
+     "title": "김주환 교수 AI 명상 앱 '인지엄', 세계 140여 개국으로 서비스 확대",
+     "source": "gokorea.kr",
+     "date": "2026-11-21",
+     "link": "https://www.gokorea.kr/news/articleView.html?idxno=886716"
+    },
+    {
+     "title": "결혼 1년여 만에 경사 났다...41세에 엄마 된다는 '유명 여배우'",
+     "source": "wikitree.co.kr",
+     "date": "2026-11-21",
+     "link": "https://www.wikitree.co.kr/articles/1176037"
+    },
+    {
+     "title": "웹툰 속 ‘템빨’ 직접 즐긴다…넥슨, 사전 다운로드 시작[오늘의 게임...",
+     "source": "서울경제",
+     "date": "2026-11-21",
+     "link": "https://n.news.naver.com/mnews/article/011/0004684624?sid=105"
+    },
+    {
+     "title": "‘9경기 무패’ 대전하나시티즌, 강원 잡고 2위 울산 추격 나선다",
+     "source": "breaknews.com",
+     "date": "2026-11-21",
+     "link": "http://www.breaknews.com/1252825"
+    },
+    {
+     "title": "미국증시 다우지수 '뚝'...헬스케어·생필품주 '선방', 경기민감주 '추락...",
+     "source": "choicenews.co.kr",
+     "date": "2026-11-21",
+     "link": "http://www.choicenews.co.kr/news/articleView.html?idxno=173380"
+    },
+    {
+     "title": "[게임리뷰] 위메이드, '나이트 크로우' 연말 주요 업데이트 예고(11월3주...",
+     "source": "theguru.co.kr",
+     "date": "2026-11-21",
+     "link": "https://www.theguru.co.kr/news/article.html?no=110042"
+    },
+    {
+     "title": "8월 급여 ‘4번 쪼개' 받은 홈플러스 직원…11월 급여 또 체불",
+     "source": "breaknews.com",
      "date": "2026-11-20",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2122338"
+     "link": "http://www.breaknews.com/1252758"
     },
     {
      "title": "레이팅랩스, K팝 팬 플랫폼 ‘뮤라팝’ 개편··· 최애 아티스트 설정...",
@@ -1021,10 +1049,10 @@
      "link": "https://it.donga.com/109980/"
     },
     {
-     "title": "8월 급여 ‘4번 쪼개' 받은 홈플러스 직원…11월 급여 또 체불",
-     "source": "breaknews.com",
+     "title": "신작 사전 다운로드·기존작 겨울 이벤트..MMORPG 연말 채비",
+     "source": "4th.kr",
      "date": "2026-11-20",
-     "link": "http://www.breaknews.com/1252758"
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2122338"
     },
     {
      "title": "[게임월드] 넥슨ㆍ엔씨ㆍ넷마블ㆍ펄어비스ㆍ카카오게임즈ㆍ위메이드ㆍ...",
@@ -1061,42 +1089,6 @@
      "source": "niceeconomy.co.kr",
      "date": "2026-11-20",
      "link": "https://www.niceeconomy.co.kr/news/articleView.html?idxno=91906"
-    },
-    {
-     "title": "[게임업계 소식] 네오위즈 ‘안녕서울: 이태원편’, 2027년 출시 예고 外",
-     "source": "viva100.com",
-     "date": "2026-11-20",
-     "link": "https://www.viva100.com/article/20261120500397"
-    },
-    {
-     "title": "폴스타, 무선 업데이트 통해 '폴스타 4' 상품성 강화",
-     "source": "digitalchosun.dizzo.com",
-     "date": "2026-11-19",
-     "link": "http://digitalchosun.dizzo.com/site/data/html_dir/2026/11/19/2026111980222.html"
-    },
-    {
-     "title": "폴스타 4, 대규모 OTA 업데이트…캠핑 모드·디지털 키 기능 확대",
-     "source": "thedrive.co.kr",
-     "date": "2026-11-19",
-     "link": "https://thedrive.co.kr/news/newsview.php?ncode=1065603501884706"
-    },
-    {
-     "title": "수험생 겨냥 특별한 혜택…수험표 지참땐 할인",
-     "source": "jndn.com",
-     "date": "2026-11-19",
-     "link": "http://www.jndn.com/article.php?aid=1795077566443429100"
-    },
-    {
-     "title": "[Car 리포트] 벤츠코리아, 전기 SUV GLB 출시 등",
-     "source": "daily.hankooki.com",
-     "date": "2026-11-19",
-     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1427088"
-    },
-    {
-     "title": "‘폴스타 4’ 대규모 무선 업데이트…안드로이드 키 지원 확대",
-     "source": "segye.com",
-     "date": "2026-11-19",
-     "link": "https://n.news.naver.com/mnews/article/022/0004176542?sid=101"
     }
    ]
   }
