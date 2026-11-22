@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-22 01:11",
+ "generatedAt": "2026-11-23 01:20",
  "brands": [
   {
    "name": "아카라",
@@ -126,10 +126,10 @@
     "아카라 k100",
     "아카라 홈캠",
     "아카라 스위치",
-    "명조 아카라이브",
     "아카라 l100",
-    "니케 아카라이브",
-    "아카라카"
+    "명조 아카라이브",
+    "아카라카",
+    "니케 아카라이브"
    ],
    "recent": [
     {
@@ -348,7 +348,7 @@
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 보안"
+    "헤이홈 as"
    ],
    "recent": [
     {
@@ -447,52 +447,36 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69846,
+   "total": 69848,
    "sentiment": {
-    "pos": 8,
-    "neu": 50,
+    "pos": 9,
+    "neu": 49,
     "neg": 2
    },
    "keywords": [
     [
      "수능",
-     58
+     56
     ],
     [
      "사용",
-     40
+     38
     ],
     [
      "연결된",
-     37
+     35
     ],
     [
      "시스템에어컨의",
-     33
+     31
     ],
     [
      "상태와",
-     30
+     28
     ],
     [
      "긴급",
-     29
-    ],
-    [
-     "AI",
-     25
-    ],
-    [
-     "상담사가",
-     25
-    ],
-    [
-     "원격으로",
-     25
-    ],
-    [
-     "점검",
-     25
+     28
     ],
     [
      "시험장",
@@ -503,24 +487,40 @@
      24
     ],
     [
-     "설정을",
-     24
-    ],
-    [
-     "원격진단",
+     "AI",
      23
     ],
     [
-     "고사장",
+     "상담사가",
+     23
+    ],
+    [
+     "원격으로",
+     23
+    ],
+    [
+     "점검",
      23
     ],
     [
      "SmartThings",
+     22
+    ],
+    [
+     "원격진단",
+     22
+    ],
+    [
+     "설정을",
+     22
+    ],
+    [
+     "고사장",
      21
     ],
     [
      "AI로",
-     20
+     19
     ],
     [
      "가전제품",
@@ -534,7 +534,7 @@
     ],
     [
      "강화",
-     3
+     4
     ],
     [
      "수상",
@@ -555,13 +555,25 @@
     "삼성 스마트싱스 허브",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 파인드",
-    "삼성 스마트싱스 도어락",
-    "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 홈캠",
-    "삼성 스마트싱스 뜻"
+    "삼성 스마트싱스 도어락",
+    "삼성 스마트싱스 세탁기 원격"
    ],
    "recent": [
+    {
+     "title": "보험사, 일상 속 위험진단… 맞춤형 관리 서비스 강화",
+     "source": "insnews.co.kr",
+     "date": "2026-11-23",
+     "link": "https://www.insnews.co.kr/news/articleView.html?idxno=93931"
+    },
+    {
+     "title": "[투데이온] \"암호 비밀성 vs 신호 진위 검증\"…애플·삼성 분실물 추적기...",
+     "source": "the-today.com",
+     "date": "2026-11-22",
+     "link": "https://www.the-today.com/news/articleView.html?idxno=93924"
+    },
     {
      "title": "가전제품도 인테리어… 디자인 궁합이 뜬다",
      "source": "seoul.co.kr",
@@ -639,18 +651,6 @@
      "source": "techm.kr",
      "date": "2026-11-17",
      "link": "https://www.techm.kr/news/articleView.html?idxno=157432"
-    },
-    {
-     "title": "삼성전자·LG전자, 수능 앞두고 시험장 에어컨 점검 나서",
-     "source": "dailypop.kr",
-     "date": "2026-11-17",
-     "link": "http://www.dailypop.kr/news/articleView.html?idxno=104636"
-    },
-    {
-     "title": "[넥스트 K-브랜드 대상] 미래 삶의 질 좌우하는 스마트폰…62.2% 선택",
-     "source": "news.dealsitetv.com",
-     "date": "2026-11-17",
-     "link": "https://news.dealsitetv.com/articles/178431"
     }
    ]
   },
@@ -658,7 +658,7 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78256,
+   "total": 78257,
    "sentiment": {
     "pos": 18,
     "neu": 42,
@@ -667,7 +667,7 @@
    "keywords": [
     [
      "LG전자",
-     42
+     41
     ],
     [
      "시간을",
@@ -694,16 +694,16 @@
      19
     ],
     [
-     "AI",
-     18
-    ],
-    [
      "설정할",
      18
     ],
     [
      "LG전자는",
-     17
+     16
+    ],
+    [
+     "AI",
+     14
     ],
     [
      "무드",
@@ -718,10 +718,6 @@
      14
     ],
     [
-     "플랫폼",
-     13
-    ],
-    [
      "신모델",
      13
     ],
@@ -732,6 +728,10 @@
     [
      "조명의",
      13
+    ],
+    [
+     "플랫폼",
+     12
     ],
     [
      "출하가는",
@@ -775,16 +775,22 @@
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
-    "lg 씽큐 티비연결",
     "lg 씽큐 세탁기",
-    "lg 씽큐 연결",
+    "lg 씽큐 티비연결",
     "lg 씽큐 와이파이",
+    "lg 씽큐 연결",
     "lg 씽큐 냉장고",
     "lg 씽큐 허브",
-    "lg 씽큐 영국 국가",
-    "lg 씽큐 초기화"
+    "lg 씽큐 초기화",
+    "lg 씽큐 영국 국가"
    ],
    "recent": [
+    {
+     "title": "GS건설, 피지컬 AI로 고강도 작업 자동화…안전·원가 경쟁력 확보",
+     "source": "news1.kr",
+     "date": "2026-11-22",
+     "link": "https://n.news.naver.com/mnews/article/421/0009303005?sid=101"
+    },
     {
      "title": "LG·카카오·네이버, AI 지분투자 늘렸지만···관건은 '사업화'",
      "source": "polinews.co.kr",
@@ -868,12 +874,6 @@
      "source": "biz.chosun.com",
      "date": "2026-11-14",
      "link": "https://n.news.naver.com/mnews/article/366/0001204716?sid=105"
-    },
-    {
-     "title": "인공지능이 집을 이해하기 시작했다…AI홈, 생활·공간 관리로 진화",
-     "source": "asiatime.co.kr",
-     "date": "2026-11-13",
-     "link": "https://www.asiatime.co.kr/article/20261113500236"
     }
    ]
   },
@@ -881,10 +881,10 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76573,
+   "total": 76577,
    "sentiment": {
-    "pos": 31,
-    "neu": 24,
+    "pos": 30,
+    "neu": 25,
     "neg": 5
    },
    "keywords": [
@@ -894,11 +894,11 @@
     ],
     [
      "디지털",
-     31
+     30
     ],
     [
      "화면",
-     27
+     26
     ],
     [
      "호환",
@@ -945,19 +945,19 @@
      17
     ],
     [
-     "기능을",
-     14
+     "AI",
+     16
     ],
     [
      "모드",
      14
     ],
     [
-     "대규모",
+     "기능을",
      13
     ],
     [
-     "캠핑",
+     "대규모",
      13
     ]
    ],
@@ -976,30 +976,54 @@
     ],
     [
      "글로벌",
-     2
+     3
+    ],
+    [
+     "호평",
+     1
     ],
     [
      "수상",
-     2
-    ],
-    [
-     "프리미엄",
      1
     ]
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈",
     "구글 홈 허브",
+    "구글 홈",
     "구글 홈 화면 삭제",
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 1세대",
     "구글 홈바 삭제 방법",
     "구글 홈 미니 2세대",
-    "구글 홈 스피커 연결"
+    "구글 홈 미니 초기화"
    ],
    "recent": [
+    {
+     "title": "1,999달러 아이폰 듀오, 힌지는 호평받았지만 터치ID 결제는 절반쯤 실패...",
+     "source": "wikitree.co.kr",
+     "date": "2026-11-23",
+     "link": "https://www.wikitree.co.kr/articles/1176789"
+    },
+    {
+     "title": "[최홍규의 AI 리터러시] AI 음성비서에게만 묻는 아이, 친구에게도 묻게...",
+     "source": "g-enews.com",
+     "date": "2026-11-22",
+     "link": "https://www.g-enews.com/view.php?ud=202611221313348101c5557f8da8_1"
+    },
+    {
+     "title": "[글로벌 줍줍] 백전백패 'AI 커닝' vs 백전백승 '뇌과학 공부법'",
+     "source": "지디넷",
+     "date": "2026-11-22",
+     "link": "https://n.news.naver.com/mnews/article/092/0002446346?sid=105"
+    },
+    {
+     "title": "홍범식의 2년, '2조 베팅'…LGU+, 구광모 AI '수익화 기지'로 우뚝",
+     "source": "apnews.kr",
+     "date": "2026-11-22",
+     "link": "https://www.apnews.kr/news/articleView.html?idxno=3053396"
+    },
     {
      "title": "김주환 교수 AI 명상 앱 '인지엄', 세계 140여 개국으로 서비스 확대",
      "source": "gokorea.kr",
@@ -1007,16 +1031,16 @@
      "link": "https://www.gokorea.kr/news/articleView.html?idxno=886716"
     },
     {
-     "title": "결혼 1년여 만에 경사 났다...41세에 엄마 된다는 '유명 여배우'",
-     "source": "wikitree.co.kr",
-     "date": "2026-11-21",
-     "link": "https://www.wikitree.co.kr/articles/1176037"
-    },
-    {
      "title": "웹툰 속 ‘템빨’ 직접 즐긴다…넥슨, 사전 다운로드 시작[오늘의 게임...",
      "source": "서울경제",
      "date": "2026-11-21",
      "link": "https://n.news.naver.com/mnews/article/011/0004684624?sid=105"
+    },
+    {
+     "title": "결혼 1년여 만에 경사 났다...41세에 엄마 된다는 '유명 여배우'",
+     "source": "wikitree.co.kr",
+     "date": "2026-11-21",
+     "link": "https://www.wikitree.co.kr/articles/1176037"
     },
     {
      "title": "‘9경기 무패’ 대전하나시티즌, 강원 잡고 2위 울산 추격 나선다",
@@ -1037,10 +1061,10 @@
      "link": "https://www.theguru.co.kr/news/article.html?no=110042"
     },
     {
-     "title": "8월 급여 ‘4번 쪼개' 받은 홈플러스 직원…11월 급여 또 체불",
-     "source": "breaknews.com",
+     "title": "신작 사전 다운로드·기존작 겨울 이벤트..MMORPG 연말 채비",
+     "source": "4th.kr",
      "date": "2026-11-20",
-     "link": "http://www.breaknews.com/1252758"
+     "link": "http://www.4th.kr/news/articleView.html?idxno=2122338"
     },
     {
      "title": "레이팅랩스, K팝 팬 플랫폼 ‘뮤라팝’ 개편··· 최애 아티스트 설정...",
@@ -1049,10 +1073,10 @@
      "link": "https://it.donga.com/109980/"
     },
     {
-     "title": "신작 사전 다운로드·기존작 겨울 이벤트..MMORPG 연말 채비",
-     "source": "4th.kr",
+     "title": "8월 급여 ‘4번 쪼개' 받은 홈플러스 직원…11월 급여 또 체불",
+     "source": "breaknews.com",
      "date": "2026-11-20",
-     "link": "http://www.4th.kr/news/articleView.html?idxno=2122338"
+     "link": "http://www.breaknews.com/1252758"
     },
     {
      "title": "[게임월드] 넥슨ㆍ엔씨ㆍ넷마블ㆍ펄어비스ㆍ카카오게임즈ㆍ위메이드ㆍ...",
@@ -1065,30 +1089,6 @@
      "source": "breaknews.com",
      "date": "2026-11-20",
      "link": "http://www.breaknews.com/1252666"
-    },
-    {
-     "title": "한국부동산원 '청약홈', 'BEST BRAND 대상' 수상",
-     "source": "breaknews.com",
-     "date": "2026-11-20",
-     "link": "http://www.breaknews.com/1252628"
-    },
-    {
-     "title": "CJ온스타일, 21일 브레빌 반자동 커피머신 첫 판매",
-     "source": "breaknews.com",
-     "date": "2026-11-20",
-     "link": "http://www.breaknews.com/1252622"
-    },
-    {
-     "title": "메타, AI 기기 '뮤즈 참' 300달러에 연말 출시 추진...1년 무료 5G 제공",
-     "source": "aitimes.com",
-     "date": "2026-11-20",
-     "link": "https://www.aitimes.com/news/articleView.html?idxno=217601"
-    },
-    {
-     "title": "[게임 브리핑] 넷마블·펄어비스·컴투스·넥슨",
-     "source": "niceeconomy.co.kr",
-     "date": "2026-11-20",
-     "link": "https://www.niceeconomy.co.kr/news/articleView.html?idxno=91906"
     }
    ]
   }
