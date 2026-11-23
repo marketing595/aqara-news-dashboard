@@ -6,7 +6,7 @@
   <title>학동역 인테리어 투어 맵 · AqaraLife</title>
   <meta name="description" content="학동역~도산대로 인테리어 거리, 발품 파는 분들을 위한 쇼룸 가이드 지도. 타일·주방·스위치·가구 쇼룸 + 아카라라이프 쇼룸 웰컴 쿠폰." />
   <meta property="og:title" content="학동역 인테리어 투어 맵 · AqaraLife" />
-  <meta property="og:description" content="쇼룸 투어 필수 지도 · 학동 인테리어 발품 길잡이. 아카라라이프 쇼룸에서 커피 한 잔 쉬어가세요." />
+  <meta property="og:description" content="쇼룸 투어 필수 지도 · 학동 인테리어 발품 길잡이. 아카라라이프 쇼룸 웰컴 쿠폰까지 한 번에." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="/favicon-hakdong.png?v=1" type="image/png" />
   <link rel="apple-touch-icon" href="/favicon-hakdong.png?v=1" />
@@ -41,7 +41,7 @@
       --hdr:56px; --pad:20px; --chip:6px;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;height:100%}
+    html,body{margin:0;min-height:100%}
     body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.55;
       -webkit-font-smoothing:antialiased;letter-spacing:-0.01em;word-break:keep-all}
     a{color:inherit;text-decoration:none}
@@ -704,6 +704,8 @@
     document.getElementById('legend').innerHTML=CATS.map(c=>`<div><span class="dot" style="background:${c.color}"></span>${esc(c.ko)}</div>`).join('');
     document.getElementById('bnList').innerHTML=(DATA.benefits||[]).map((b,i)=>`<div class="bn"><div class="ic">${no2(i+1)}</div><div><div class="k">${esc(b.k||'')}</div><b>${esc(b.t)}</b><p>${esc(b.d)}</p>${b.tag?`<span class="tg">${esc(b.tag)}</span>`:''}${b.link?`<a class="bk" href="${esc(b.link)}" target="_blank" rel="noopener">${esc(b.linkLabel||'바로가기')} →</a>`:''}</div></div>`).join('');
     initMap(); applyOver();
+    // 모바일: 고정 중심(PC 기준)이면 쇼룸 핀이 왼쪽 끝에 잘린다 → 처음엔 매장 전체가 보이게 맞춘다
+    if(window.innerWidth<=860&&MAP&&!/[?&](route|cat|spot)=/.test(location.search)) setTimeout(()=>{ if(FILTER!=='all') return; const m=document.getElementById('map'); MAP.setSize(new naver.maps.Size(m.offsetWidth,m.offsetHeight)); const vs=visible(); if(vs.length) fitSpots(vs,28,16); },0);
     const p=new URLSearchParams(location.search);
     if(p.get('route')){ const ids=p.get('route').split(',').map(x=>x.trim()).filter(id=>SPOTS.some(s=>s.id===id));
       if(ids.length){ if(!ROUTE.length||ids.join()===ROUTE.join()){ ROUTE=ids; saveRoute(); } else SHARED=ids; setFilter('route'); } }

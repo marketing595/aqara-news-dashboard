@@ -6,7 +6,7 @@
   "hq": { "lat": 37.51217, "lng": 127.03036 },
   "note": "",
   "categories": [
-    { "id": "iot", "en": "IoT & Smart Home",       "ko": "스마트홈 · 제어",              "color": "#1D1D1F", "desc": "커피 한 잔 하며 경험하는 스마트 스위치·조명·커튼 솔루션" },
+    { "id": "iot", "en": "IoT & Smart Home",       "ko": "스마트홈 · 제어",              "color": "#1D1D1F", "desc": "직접 눌러 보며 경험하는 스마트 스위치·조명·커튼 솔루션" },
     { "id": "mat", "en": "Material",               "ko": "타일 · 바닥재 · 벽지 · 창호",   "color": "#8A5A2A", "desc": "공간의 분위기를 결정짓는 예쁜 타일, 마루, 수입 벽지와 창호" },
     { "id": "san", "en": "Sanitary & Kitchen",     "ko": "주방 · 욕실 · 수전",            "color": "#1F5C7A", "desc": "꿈꾸던 프리미엄 주방과 호텔 같은 욕실 솔루션" },
     { "id": "hdw", "en": "Hardware & Outlet",      "ko": "스위치 · 손잡이 · 디테일",       "color": "#6B6B6B", "desc": "집의 완성도를 높이는 고급 스위치와 문 손잡이" },
