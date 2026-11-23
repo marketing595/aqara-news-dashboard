@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-16T11:45:08+09:00",
+ "generatedAt": "2026-11-23T12:43:37+09:00",
  "bots": [
   "GPTBot",
   "OAI-SearchBot",
@@ -117,7 +117,7 @@
    "label": "전자신문",
    "blocked": [],
    "partial": [],
-   "robots": true
+   "robots": false
   },
   {
    "host": "www.mt.co.kr",
@@ -251,7 +251,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9062,
+   "chars": 9047,
    "canonical": "http://www.aqaralife.kr/",
    "updated": ""
   },
@@ -278,7 +278,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 10059,
+   "chars": 10024,
    "canonical": "http://www.aqaralife.kr/aqaralife",
    "updated": ""
   },
@@ -305,7 +305,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 10059,
+   "chars": 10024,
    "canonical": "http://www.aqaralife.kr/aqaralife",
    "updated": ""
   },
@@ -332,7 +332,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9380,
+   "chars": 9365,
    "canonical": "http://www.aqaralife.kr/111",
    "updated": ""
   },
@@ -343,7 +343,7 @@
    "url": "https://www.aqaralife.kr/smarthome-bible",
    "status": 200,
    "ok": true,
-   "title": "스마트홈 바이블",
+   "title": "스마트홈 바이블(교육)",
    "desc": "스마트홈 바이블",
    "descLen": 8,
    "h1": 0,
@@ -359,7 +359,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9871,
+   "chars": 9860,
    "canonical": "http://www.aqaralife.kr/smarthome-bible",
    "updated": ""
   },
@@ -394,7 +394,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8444,
+   "chars": 8429,
    "canonical": "http://www.aqaralife.kr/blog",
    "updated": "2026-10-16"
   },
@@ -421,7 +421,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 9347,
+   "chars": 9314,
    "canonical": "http://www.aqaralife.kr/newsroom",
    "updated": "2026-10-16"
   },
@@ -448,7 +448,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8212,
+   "chars": 8197,
    "canonical": "http://www.aqaralife.kr/newsletter",
    "updated": ""
   },
@@ -523,7 +523,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 10206,
+   "chars": 10191,
    "canonical": "http://www.aqaralife.kr/si_service",
    "updated": ""
   },
@@ -550,7 +550,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8077,
+   "chars": 8045,
    "canonical": "http://www.aqaralife.kr/case",
    "updated": ""
   },
@@ -580,7 +580,7 @@
    "contentLd": [
     "VideoObject"
    ],
-   "chars": 10425,
+   "chars": 10410,
    "canonical": "http://www.aqaralife.kr/company-platform",
    "updated": ""
   },
@@ -607,7 +607,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 14021,
+   "chars": 14006,
    "canonical": "http://www.aqaralife.kr/inrequest",
    "updated": ""
   },
@@ -634,7 +634,7 @@
     "ShippingService"
    ],
    "contentLd": [],
-   "chars": 8836,
+   "chars": 8804,
    "canonical": "http://www.aqaralife.kr/partnership",
    "updated": ""
   }
