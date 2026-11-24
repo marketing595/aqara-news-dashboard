@@ -1,24 +1,24 @@
 {
- "generatedAt": "2026-11-24 05:17",
+ "generatedAt": "2026-11-25 04:31",
  "brands": [
   {
    "name": "아카라",
    "me": true,
    "query": "아카라 스마트홈",
-   "total": 1557,
+   "total": 1562,
    "sentiment": {
-    "pos": 26,
-    "neu": 34,
+    "pos": 25,
+    "neu": 35,
     "neg": 0
    },
    "keywords": [
     [
      "인테리어",
-     32
+     41
     ],
     [
      "AI",
-     29
+     25
     ],
     [
      "도어락",
@@ -26,38 +26,30 @@
     ],
     [
      "IoT",
-     18
-    ],
-    [
-     "AIoT",
      16
     ],
     [
-     "AX",
-     15
-    ],
-    [
      "전문기업",
-     13
-    ],
-    [
-     "조명",
-     11
+     14
     ],
     [
      "KOSID",
-     10
+     13
+    ],
+    [
+     "AIoT",
+     13
+    ],
+    [
+     "AX",
+     12
+    ],
+    [
+     "세미나",
+     11
     ],
     [
      "쇼룸",
-     10
-    ],
-    [
-     "공간",
-     10
-    ],
-    [
-     "시스템",
      10
     ],
     [
@@ -65,7 +57,15 @@
      10
     ],
     [
+     "서울",
+     9
+    ],
+    [
      "이상헌",
+     9
+    ],
+    [
+     "조명",
      9
     ],
     [
@@ -73,15 +73,15 @@
      9
     ],
     [
-     "업무",
-     9
-    ],
-    [
-     "플랫폼과",
+     "공간",
      8
     ],
     [
-     "기업",
+     "시스템",
+     8
+    ],
+    [
+     "제1회",
      8
     ]
    ],
@@ -95,12 +95,12 @@
      7
     ],
     [
-     "강화",
+     "프리미엄",
      5
     ],
     [
-     "프리미엄",
-     5
+     "강화",
+     4
     ],
     [
      "협업",
@@ -111,11 +111,11 @@
      3
     ],
     [
-     "수상",
+     "성장",
      2
     ],
     [
-     "확대",
+     "수상",
      2
     ]
    ],
@@ -124,14 +124,44 @@
     "아카라",
     "아카라 도어락",
     "아카라 k100",
-    "아카라 스위치",
     "아카라 홈캠",
-    "아카라카",
+    "아카라 스위치",
     "아카라 l100",
+    "아카라카",
     "명조 아카라이브",
     "아카라이브 핫딜"
    ],
    "recent": [
+    {
+     "title": "\"집도 전기차처럼 업데이트 시대\"…스마트홈 인테리어 세미나 성료",
+     "source": "bizwnews.com",
+     "date": "2026-11-24",
+     "link": "http://www.bizwnews.com/news/articleView.html?idxno=152948"
+    },
+    {
+     "title": "아카라라이프·KOSID, ‘스마트홈 인테리어 2026’ 세미나 마무리…AI 기...",
+     "source": "segyebiz.com",
+     "date": "2026-11-24",
+     "link": "http://www.segyebiz.com/newsView/20261124510972?OutUrl=naver"
+    },
+    {
+     "title": "아카라라이프·한국실내건축가협회(KOSID), '스마트홈 인테리어 2026' 세...",
+     "source": "newspim.com",
+     "date": "2026-11-24",
+     "link": "https://www.newspim.com/news/view/20261124000941"
+    },
+    {
+     "title": "아카라라이프·한국실내건축가협회, '스마트홈 인테리어 2026' 세미나 성...",
+     "source": "businesskorea.co.kr",
+     "date": "2026-11-24",
+     "link": "https://www.businesskorea.co.kr/news/articleView.html?idxno=282032"
+    },
+    {
+     "title": "아카라라이프, 스마트홈 인테리어 세미나 개최",
+     "source": "beyondpost.co.kr",
+     "date": "2026-11-24",
+     "link": "http://www.beyondpost.co.kr/view.php?ud=20261124113056315046a9e4dd7f_30"
+    },
     {
      "title": "아카라라이프, '아카라 까사윈 스마트 전동커튼' 정식 출시",
      "source": "thebigdata.co.kr",
@@ -191,36 +221,6 @@
      "source": "ekn.kr",
      "date": "2026-11-10",
      "link": "https://www.ekn.kr/web/view.php?key=20261110029287646"
-    },
-    {
-     "title": "'2026 홈·테이블데코페어' 코엑스서 개막…국내외 500여 브랜드 참여",
-     "source": "slist.kr",
-     "date": "2026-11-10",
-     "link": "https://www.slist.kr/news/articleView.html?idxno=780409"
-    },
-    {
-     "title": "아카라라이프, '스마트홈 인테리어' 강남 쇼룸 개관…'글로벌 쇼룸 모델...",
-     "source": "bizwnews.com",
-     "date": "2026-10-27",
-     "link": "http://www.bizwnews.com/news/articleView.html?idxno=149988"
-    },
-    {
-     "title": "아카라라이프, 주거형 스마트홈 쇼룸 '아카라 스페이스 강남' 개관",
-     "source": "머니투데이",
-     "date": "2026-10-26",
-     "link": "https://n.news.naver.com/mnews/article/008/0005431816?sid=101"
-    },
-    {
-     "title": "아카라라이프, 강남 학동에 주거형 스마트홈 쇼룸 개관",
-     "source": "beyondpost.co.kr",
-     "date": "2026-10-26",
-     "link": "http://www.beyondpost.co.kr/view.php?ud=20261026152451115646a9e4dd7f_30"
-    },
-    {
-     "title": "[현장] \"인플루언서 팬덤을 상품 매출로\", CJ온스타일 힘 싣는 '크리에이...",
-     "source": "businesspost.co.kr",
-     "date": "2026-10-22",
-     "link": "https://www.businesspost.co.kr/BP?command=article_view&num=450025"
     }
    ]
   },
@@ -348,7 +348,7 @@
     "헤이홈 오프라인",
     "헤이홈 공유",
     "헤이홈 카메라",
-    "헤이홈 보안"
+    "헤이홈 프로"
    ],
    "recent": [
     {
@@ -447,84 +447,84 @@
    "name": "삼성 스마트싱스",
    "me": false,
    "query": "삼성 스마트싱스",
-   "total": 69855,
+   "total": 69861,
    "sentiment": {
-    "pos": 12,
-    "neu": 46,
+    "pos": 13,
+    "neu": 45,
     "neg": 2
    },
    "keywords": [
     [
      "수능",
-     48
+     41
     ],
     [
      "사용",
-     33
-    ],
-    [
-     "연결된",
-     30
-    ],
-    [
-     "시스템에어컨의",
-     26
+     28
     ],
     [
      "AI",
-     24
+     25
     ],
     [
-     "상태와",
-     23
+     "연결된",
+     25
     ],
     [
-     "긴급",
-     23
-    ],
-    [
-     "SmartThings",
+     "시스템에어컨의",
      22
     ],
     [
-     "상담사가",
+     "SmartThings",
      20
+    ],
+    [
+     "긴급",
+     19
+    ],
+    [
+     "상태와",
+     18
     ],
     [
      "시험장",
-     20
-    ],
-    [
-     "원격으로",
-     20
+     17
     ],
     [
      "시스템에어컨",
-     20
+     17
     ],
     [
      "고사장",
-     19
-    ],
-    [
-     "설정을",
-     19
+     17
     ],
     [
      "AI로",
-     18
+     16
     ],
     [
      "원격진단",
-     18
+     16
+    ],
+    [
+     "상담사가",
+     16
+    ],
+    [
+     "원격으로",
+     16
     ],
     [
      "점검",
-     18
+     15
     ],
     [
-     "이력을",
+     "설정을",
      15
+    ],
+    [
+     "분석하고",
+     13
     ]
    ],
    "posWords": [
@@ -535,6 +535,10 @@
     [
      "강화",
      4
+    ],
+    [
+     "공략",
+     2
     ],
     [
      "개선",
@@ -555,10 +559,6 @@
     [
      "글로벌",
      1
-    ],
-    [
-     "공략",
-     1
     ]
    ],
    "related": [
@@ -568,12 +568,48 @@
     "삼성 스마트싱스 파인드",
     "삼성 스마트싱스 오류",
     "삼성 스마트싱스 공유",
+    "삼성 스마트싱스 세탁기",
     "삼성 스마트싱스 스위치",
     "삼성 스마트싱스 도어락",
-    "삼성 스마트싱스 세탁기",
-    "삼성 스마트싱스 홈캠"
+    "삼성 스마트싱스 허브 4세대"
    ],
    "recent": [
+    {
+     "title": "[EZ 진단] 분실물 찾던 스마트태그의 진화…삼성, 스마트홈 생태계 넓힌...",
+     "source": "ezyeconomy.com",
+     "date": "2026-11-24",
+     "link": "https://www.ezyeconomy.com/news/articleView.html?idxno=242145"
+    },
+    {
+     "title": "아카라라이프·한국실내건축가협회, '스마트홈 인테리어 2026' 세미나 성...",
+     "source": "businesskorea.co.kr",
+     "date": "2026-11-24",
+     "link": "https://www.businesskorea.co.kr/news/articleView.html?idxno=282032"
+    },
+    {
+     "title": "3개년 기업가치 제고 청사진 가동...삼진, “잉여현금흐름 5% 이상 배당...",
+     "source": "hellot.net",
+     "date": "2026-11-24",
+     "link": "https://www.hellot.net/news/article.html?no=116528"
+    },
+    {
+     "title": "가방·반려동물 위치 확인 더 정밀하게… 삼성전자 '갤럭시 스마트태그...",
+     "source": "kr.aving.net",
+     "date": "2026-11-24",
+     "link": "https://kr.aving.net/news/articleView.html?idxno=1817300"
+    },
+    {
+     "title": "60m 밖 소지품도 '콕'…진화하는 삼성전자 '갤럭시 스마트태그3'",
+     "source": "financialpost.co.kr",
+     "date": "2026-11-24",
+     "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=302660"
+    },
+    {
+     "title": "60m 밖 가방도 찾는다…갤 스마트태그3, 위치 7일 기록[모닝폰]",
+     "source": "이데일리",
+     "date": "2026-11-24",
+     "link": "https://n.news.naver.com/mnews/article/018/0006414454?sid=105"
+    },
     {
      "title": "삼성전자, '갤럭시 스마트태그3' 출시…탐색 거리 3배 확대",
      "source": "news.bbsi.co.kr",
@@ -627,42 +663,6 @@
      "source": "the-today.com",
      "date": "2026-11-22",
      "link": "https://www.the-today.com/news/articleView.html?idxno=93924"
-    },
-    {
-     "title": "가전제품도 인테리어… 디자인 궁합이 뜬다",
-     "source": "seoul.co.kr",
-     "date": "2026-11-20",
-     "link": "https://n.news.naver.com/mnews/article/081/0003701389?sid=101"
-    },
-    {
-     "title": "성능 넘어 판매까지… 가전업계, 생성형 AI로 공간 맞춤 마케팅",
-     "source": "seoul.co.kr",
-     "date": "2026-11-19",
-     "link": "https://n.news.naver.com/mnews/article/081/0003701255?sid=101"
-    },
-    {
-     "title": "다림질까지 넓어진 의류관리 가전…LG·삼성, 주름 관리 기술 차별화",
-     "source": "asiatime.co.kr",
-     "date": "2026-11-19",
-     "link": "https://www.asiatime.co.kr/article/20261119500406"
-    },
-    {
-     "title": "[단독] 삼성 \"터치스트림, 소송 전 특허 통지 없었다\"…일부 청구 기각...",
-     "source": "the-today.com",
-     "date": "2026-11-19",
-     "link": "https://www.the-today.com/news/articleView.html?idxno=93810"
-    },
-    {
-     "title": "구글에 4518억 평결 낸 터치스트림, 스마트싱스·TV 플러스 제소하자 삼...",
-     "source": "g-enews.com",
-     "date": "2026-11-19",
-     "link": "https://www.g-enews.com/view.php?ud=202611190956554694fbbec65dfb_1"
-    },
-    {
-     "title": "삼성전자, ‘삼성 AI 구독’ 케어 서비스 세분화…방문케어 라이트 도입",
-     "source": "biz.chosun.com",
-     "date": "2026-11-19",
-     "link": "https://n.news.naver.com/mnews/article/366/0001205854?sid=101"
     }
    ]
   },
@@ -670,20 +670,20 @@
    "name": "LG 씽큐",
    "me": false,
    "query": "LG 씽큐",
-   "total": 78378,
+   "total": 78383,
    "sentiment": {
-    "pos": 38,
-    "neu": 21,
+    "pos": 42,
+    "neu": 17,
     "neg": 1
    },
    "keywords": [
     [
      "LG전자",
-     67
+     65
     ],
     [
      "AI홈",
-     67
+     65
     ],
     [
      "IoT",
@@ -691,15 +691,15 @@
     ],
     [
      "기기를",
-     48
+     47
+    ],
+    [
+     "AI",
+     46
     ],
     [
      "동남아",
      46
-    ],
-    [
-     "AI",
-     44
     ],
     [
      "가전과",
@@ -707,7 +707,7 @@
     ],
     [
      "싱가포르에",
-     40
+     39
     ],
     [
      "DD",
@@ -718,24 +718,24 @@
      33
     ],
     [
-     "사물인터넷",
+     "6모션",
      33
-    ],
-    [
-     "건조",
-     32
     ],
     [
      "특성에",
      32
     ],
     [
-     "6모션",
+     "건조",
      32
     ],
     [
      "공략",
-     31
+     32
+    ],
+    [
+     "사물인터넷",
+     30
     ],
     [
      "세탁물",
@@ -753,38 +753,68 @@
    "posWords": [
     [
      "공략",
-     32
+     34
     ],
     [
      "확대",
      19
     ],
     [
-     "글로벌",
-     2
-    ],
-    [
      "강화",
-     2
+     4
     ],
     [
      "혁신",
-     1
+     2
+    ],
+    [
+     "글로벌",
+     2
     ]
    ],
    "related": [
     "lg 씽큐",
     "lg 씽큐온",
     "lg 씽큐 세탁기",
-    "lg 씽큐 와이파이",
-    "lg 씽큐 연결",
-    "lg 씽큐 냉장고",
     "lg 씽큐 티비연결",
+    "lg 씽큐 와이파이",
+    "lg 씽큐 냉장고",
+    "lg 씽큐 연결",
     "lg 씽큐 허브",
-    "lg 씽큐온 구매방법",
-    "lg 씽큐 초기화"
+    "lg 씽큐 초기화",
+    "lg 씽큐온 구매방법"
    ],
    "recent": [
+    {
+     "title": "11월 4주 주요 제조업 전망",
+     "source": "laborplus.co.kr",
+     "date": "2026-11-24",
+     "link": "https://www.laborplus.co.kr/news/articleView.html?idxno=41883"
+    },
+    {
+     "title": "70년 가전 노하우에 피지컬 AI 더했다…LG전자, '제로 레이버 홈' 가속",
+     "source": "financialpost.co.kr",
+     "date": "2026-11-24",
+     "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=302885"
+    },
+    {
+     "title": "동남아 관문 싱가포르 공략하는 LG·삼성…가전 넘어 서비스로",
+     "source": "asiatime.co.kr",
+     "date": "2026-11-24",
+     "link": "https://www.asiatime.co.kr/article/20261124500351"
+    },
+    {
+     "title": "[금주의 산업 톡톡] LG그룹, 고객 경험 혁신 및 협력사 상생·관리 강화",
+     "source": "mediawatch.kr",
+     "date": "2026-11-24",
+     "link": "https://www.mediawatch.kr/news/article.html?no=261853"
+    },
+    {
+     "title": "7억 인구 동남아 AI홈 공략 나선 LG전자, 싱가포르에 'AI홈 체험공간' 열...",
+     "source": "kr.aving.net",
+     "date": "2026-11-24",
+     "link": "https://kr.aving.net/news/articleView.html?idxno=1817302"
+    },
     {
      "title": "LG전자, 싱가포르에 'AI홈 체험 거점' 열었다…동남아 7억 시장 공략",
      "source": "apnews.kr",
@@ -844,36 +874,6 @@
      "source": "hbnpress.com",
      "date": "2026-11-23",
      "link": "https://hbnpress.com/news/view/1065599691185362"
-    },
-    {
-     "title": "LG전자, 싱가포르 AI홈 매장 개설",
-     "source": "kfenews.co.kr",
-     "date": "2026-11-23",
-     "link": "https://www.kfenews.co.kr/news/articleView.html?idxno=668547"
-    },
-    {
-     "title": "한컴, AI 워크포스 '노마디안' 미국 사업 본격화…LG전자, 동남아 시장에...",
-     "source": "sisaon.co.kr",
-     "date": "2026-11-23",
-     "link": "https://www.sisaon.co.kr/news/articleView.html?idxno=206320"
-    },
-    {
-     "title": "LG전자, 싱가포르 AI홈 10월 30일 개장…동남아 시장 공략 확대",
-     "source": "sateconomy.co.kr",
-     "date": "2026-11-23",
-     "link": "http://sateconomy.co.kr/news/view/1065594937272374"
-    },
-    {
-     "title": "[민주 IT] 삼성전자·LG전자·한컴",
-     "source": "iminju.net",
-     "date": "2026-11-23",
-     "link": "http://www.iminju.net/news/articleView.html?idxno=172901"
-    },
-    {
-     "title": "LG전자, 싱가포르에 AI홈 거점 구축···동남아 시장 공략 확대",
-     "source": "enewstoday.co.kr",
-     "date": "2026-11-23",
-     "link": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2495827"
     }
    ]
   },
@@ -881,36 +881,20 @@
    "name": "구글홈",
    "me": false,
    "query": "구글 홈",
-   "total": 76597,
+   "total": 76608,
    "sentiment": {
-    "pos": 17,
-    "neu": 33,
-    "neg": 10
+    "pos": 15,
+    "neu": 37,
+    "neg": 8
    },
    "keywords": [
     [
      "AI",
-     18
+     21
     ],
     [
      "으로",
      15
-    ],
-    [
-     "화면",
-     15
-    ],
-    [
-     "안드로이드",
-     14
-    ],
-    [
-     "폴스타",
-     14
-    ],
-    [
-     "TV",
-     13
     ],
     [
      "번역한",
@@ -921,32 +905,12 @@
      12
     ],
     [
-     "조작",
-     12
-    ],
-    [
-     "디지털",
+     "화면",
      12
     ],
     [
      "전문",
      11
-    ],
-    [
-     "호환",
-     11
-    ],
-    [
-     "공조",
-     11
-    ],
-    [
-     "갤러리",
-     11
-    ],
-    [
-     "구글과",
-     10
     ],
     [
      "아래는",
@@ -959,19 +923,59 @@
     [
      "번역",
      10
+    ],
+    [
+     "입니다",
+     10
+    ],
+    [
+     "안드로이드",
+     10
+    ],
+    [
+     "TV",
+     10
+    ],
+    [
+     "naver",
+     9
+    ],
+    [
+     "com",
+     9
+    ],
+    [
+     "아마존",
+     8
+    ],
+    [
+     "break9874",
+     7
+    ],
+    [
+     "구글의",
+     7
+    ],
+    [
+     "바로가기",
+     7
     ]
    ],
    "posWords": [
     [
      "확대",
-     16
+     11
     ],
     [
      "개선",
-     10
+     6
     ],
     [
-     "강화",
+     "수상",
+     4
+    ],
+    [
+     "글로벌",
      4
     ],
     [
@@ -979,31 +983,97 @@
      2
     ],
     [
-     "글로벌",
+     "강화",
      2
     ],
     [
-     "호평",
+     "협업",
      1
     ],
     [
-     "수상",
+     "성장",
      1
     ]
    ],
    "related": [
     "구글 홈 스피커",
-    "구글 홈",
     "구글 홈 허브",
+    "구글 홈",
     "구글 홈 화면 삭제",
     "구글 홈 미니",
     "구글 홈페이지",
     "구글 홈 미니 1세대",
     "구글 홈 미니 2세대",
     "구글 홈바 삭제 방법",
-    "구글 홈 미니 초기화"
+    "구글 홈 스피커 연결"
    ],
    "recent": [
+    {
+     "title": "네이버웹툰, 추천 AI 논문 ‘ACM RecSys 2026’ 산업 트랙 채택",
+     "source": "breaknews.com",
+     "date": "2026-11-24",
+     "link": "http://www.breaknews.com/1253648"
+    },
+    {
+     "title": "11월 4주 주요 제조업 전망",
+     "source": "laborplus.co.kr",
+     "date": "2026-11-24",
+     "link": "https://www.laborplus.co.kr/news/articleView.html?idxno=41883"
+    },
+    {
+     "title": "전국 최다 미분양 평택...반도체 특수에도 효과 미비",
+     "source": "joongboo.com",
+     "date": "2026-11-24",
+     "link": "https://www.joongboo.com/news/articleView.html?idxno=363743505"
+    },
+    {
+     "title": "[재계는 지금] LG유플러스-데이터독, 익시오 장애 대응 시간 85% 단축 外",
+     "source": "dealsite.co.kr",
+     "date": "2026-11-24",
+     "link": "https://dealsite.co.kr/articles/173384"
+    },
+    {
+     "title": "\"다시 새 차 타는 기분인데?\"..'폴스타4' OTA로 상품성 진화",
+     "source": "머니투데이",
+     "date": "2026-11-24",
+     "link": "https://n.news.naver.com/mnews/article/008/0005445656?sid=101"
+    },
+    {
+     "title": "‘연말 콘서트’와 ‘크리스마스 공연’…비슷한 검색어에 숨은 다른 속...",
+     "source": "byline.network",
+     "date": "2026-11-24",
+     "link": "https://byline.network/?p=9004111222628930"
+    },
+    {
+     "title": "[오늘의 브랜드] 한솥도시락, ‘2026 중견기업 성장탑’ 수상…33년 상생...",
+     "source": "ibabynews.com",
+     "date": "2026-11-24",
+     "link": "https://www.ibabynews.com/news/articleView.html?idxno=157244"
+    },
+    {
+     "title": "디지털뉴트리션, 문체부 '스포츠산업 창업도약' 선정...'사운드필' 스포...",
+     "source": "전자신문",
+     "date": "2026-11-24",
+     "link": "https://n.news.naver.com/mnews/article/030/0003488957?sid=105"
+    },
+    {
+     "title": "구글, 스마트홈에 제미나이 전면 도입…네스트 앱·어시스턴트 종료 예...",
+     "source": "kbench.com",
+     "date": "2026-11-24",
+     "link": "https://kbench.com/?q=node/283580"
+    },
+    {
+     "title": "[IT라운지] '무아 '확장·브레인커머스 '필슨 인수'·'쬬르디타운 입주자...",
+     "source": "newsworks.co.kr",
+     "date": "2026-11-24",
+     "link": "https://www.newsworks.co.kr/news/articleView.html?idxno=904155"
+    },
+    {
+     "title": "네이버, 숏폼·UGC 상끌이로 글로벌·커머스 ‘정조준’",
+     "source": "ceoscoredaily.com",
+     "date": "2026-11-24",
+     "link": "https://www.ceoscoredaily.com/page/view/2026112311383442383"
+    },
     {
      "title": "서프샤크 “스마트홈 앱 개인정보 수집 항목, 아마존 알렉사가 최다”",
      "source": "byline.network",
@@ -1027,72 +1097,6 @@
      "source": "breaknews.com",
      "date": "2026-11-23",
      "link": "http://www.breaknews.com/1253164"
-    },
-    {
-     "title": "한화생명, 증여 자산관리 앱 'PLUS 파이' 개편",
-     "source": "breaknews.com",
-     "date": "2026-11-23",
-     "link": "http://www.breaknews.com/1253168"
-    },
-    {
-     "title": "대전 AI중점학교, 지역 AI 교육 거점으로 학생·교원 역량 강화",
-     "source": "breaknews.com",
-     "date": "2026-11-23",
-     "link": "http://www.breaknews.com/1253216"
-    },
-    {
-     "title": "블랙프라이데이 스마트홈 직구 주의보…구매 전 유의할 점은",
-     "source": "ekoreanews.co.kr",
-     "date": "2026-11-23",
-     "link": "https://www.ekoreanews.co.kr/news/articleView.html?idxno=89340"
-    },
-    {
-     "title": "유튜브 앱 아이콘도 취향대로 바꾼다⋯구글, 7가지 디자인 시험 중",
-     "source": "autodaily.co.kr",
-     "date": "2026-11-23",
-     "link": "https://www.autodaily.co.kr/news/articleView.html?idxno=602351"
-    },
-    {
-     "title": "[금융권 이모저모]토스뱅크, AI 결제 3대 조건 제시 外",
-     "source": "businessplus.kr",
-     "date": "2026-11-23",
-     "link": "https://www.businessplus.kr/news/articleView.html?idxno=120329"
-    },
-    {
-     "title": "제미나이에 밀리고 수요 줄고…구글이 2026년 접은 제품·서비스 6가지",
-     "source": "digitaltoday.co.kr",
-     "date": "2026-11-23",
-     "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=717404"
-    },
-    {
-     "title": "[유통레이더] 신세계백화점, 쿠팡, 롯데온, G마켓, 서울신라호텔, 천재...",
-     "source": "daily.hankooki.com",
-     "date": "2026-11-23",
-     "link": "https://daily.hankooki.com/news/articleView.html?idxno=1427778"
-    },
-    {
-     "title": "삼성 TV 플러스, 29일 다이나믹 듀오 콘서트 무료 생중계",
-     "source": "breaknews.com",
-     "date": "2026-11-23",
-     "link": "http://www.breaknews.com/1253090"
-    },
-    {
-     "title": "쿠팡, 대구 시민 600여명 대구FC 홈경기 초청했다",
-     "source": "breaknews.com",
-     "date": "2026-11-23",
-     "link": "http://www.breaknews.com/1253083"
-    },
-    {
-     "title": "아카라라이프, '아카라 까사윈 스마트 전동커튼' 정식 출시",
-     "source": "thebigdata.co.kr",
-     "date": "2026-11-23",
-     "link": "https://www.thebigdata.co.kr/view.php?ud=20261123141410334637600e7ec7_23"
-    },
-    {
-     "title": "영천시 ‘K-POP 돔’ 구상, 구호 넘어 실행으로… 일본 현장서 해법 찾아",
-     "source": "breaknews.com",
-     "date": "2026-11-23",
-     "link": "http://www.breaknews.com/1253054"
     }
    ]
   }
